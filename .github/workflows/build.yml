@@ -10,6 +10,7 @@ on:
       - "submodules/**"
     pull_request:
         types: [opened, synchronize, reopened]
+    workflow_dispatch:
 
 # Env variables
 env:
