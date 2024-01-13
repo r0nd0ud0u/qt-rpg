@@ -9,14 +9,28 @@ set(CMAKE_AUTORCC ON)
 
 set(SOURCES
         src/mainwindow.cpp
+        src/character.cpp
+        src/gamedisplay.cpp
+        src/heroesview.cpp
+        src/hostpage.cpp
+        src/heropanel.cpp
 )
 
 set(HEADERS
         include/mainwindow.h
+        include/character.h
+        include/gamedisplay.h
+        include/heroesview.h
+        include/hostpage.h
+        include/heropanel.h
 )
 
 set(FORMS
         forms/mainwindow.ui
+        forms/gamedisplay.ui
+        forms/heroesview.ui
+        forms/hostpage.ui
+        forms/heropanel.ui
 )
 
 add_library(view STATIC ${SOURCES} ${HEADERS} ${FORMS})

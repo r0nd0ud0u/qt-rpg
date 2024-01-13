@@ -17,5 +17,8 @@ QT_END_NAMESPACE
 
 private:
     Ui::MainWindow *ui;
+
+private slots:
+    void ShowPageGameDisplay();
 };
 #endif // MAINWINDOW_H
