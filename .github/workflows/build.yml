@@ -13,7 +13,6 @@ env:
   BUILD_TYPE: Release
   SONAR_SCANNER_VERSION: 4.7.0.2747
   SONAR_SERVER_URL: "https://sonarcloud.io"
-  BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
   GTEST_OUTPUT: xml:results\output.xml
 
 jobs:
@@ -21,6 +20,8 @@ jobs:
   build-win-mac:
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
+    env:
+      BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
     strategy:
       fail-fast: false
       matrix:
