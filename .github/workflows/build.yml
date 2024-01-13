@@ -41,12 +41,12 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3.3.0
 
-      - name: Create Build Environment
-        run: cmake -E make_directory ${{runner.workspace}}/build
+      #- name: Create Build Environment
+       # run: cmake -E make_directory ${{runner.workspace}}/build
 
       - name: Configure CMake
         shell: bash
-        working-directory: ${{runner.workspace}}/build
+        #working-directory: ${{runner.workspace}}/build
         run: |
           export WORKSPACE_PATH=$(echo "${{runner.workspace}}" | sed 's/\\/\//g')
           cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
@@ -54,7 +54,7 @@ jobs:
       - name: Install sonar-scanner and build-wrapper
         uses: SonarSource/sonarcloud-github-c-cpp@v2.0.2
       - name: Run build-wrapper
-        working-directory: ${{runner.workspace}}/build
+       # working-directory: ${{runner.workspace}}/build
         run: |
           build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build . --config ${{ env.BUILD_TYPE }}
       - name: Run sonar-scanner
@@ -62,7 +62,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          sonar-scanner --define sonar.cfamily.build-wrapper-output="${{runner.workspace}}/build/${{ env.BUILD_WRAPPER_OUT_DIR }}"
+              sonar-scanner --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}"
+          
+       # sonar-scanner --define sonar.cfamily.build-wrapper-output="${{runner.workspace}}/build/${{ env.BUILD_WRAPPER_OUT_DIR }}"
 #      - name: run tests
  #       run: |
   #        ${{runner.workspace}}/build/bin/tests.exe    
