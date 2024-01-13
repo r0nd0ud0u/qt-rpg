@@ -27,8 +27,6 @@ jobs:
         config:
           - name: "Windows (build)"
             os: windows-latest
-    env:
-          BUILD_WRAPPER_DOWNLOAD_URL: ${{ env.SONAR_SERVER_URL }}/static/cpp/build-wrapper-win-x86.zip
     steps:
       - uses: actions/checkout@v4
         with:
