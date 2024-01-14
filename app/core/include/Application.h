@@ -7,6 +7,8 @@
 //#include "Parameters.hpp"
 #include "gamemanager.h"
 
+#include <memory>
+
 class Application : public QApplication
 {
     Q_OBJECT
@@ -22,7 +24,7 @@ public:
    // const Parameters& GetParameters() const { return m_global_ini; }
     void log(const QString& txt);
 
-    GameManager* m_GameManager;
+    std::unique_ptr<GameManager> m_GameManager;
 
 private:
     Application(const Application&) = delete;
