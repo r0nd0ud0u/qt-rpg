@@ -19,6 +19,12 @@ public:
 
     Character* m_Heroe = nullptr;
 
+private slots:
+    void on_pushButton_clicked();
+
+signals:
+    void addStuff();
+
 private:
     Ui::HeroPanel *ui;
 };

@@ -14,6 +14,10 @@ set(SOURCES
         src/heroesview.cpp
         src/hostpage.cpp
         src/heropanel.cpp
+        src/stuff.cpp
+        src/stuffpanel.cpp
+        src/stuffsview.cpp
+        src/channel.cpp
 )
 
 set(HEADERS
@@ -23,6 +27,13 @@ set(HEADERS
         include/heroesview.h
         include/hostpage.h
         include/heropanel.h
+        include/stuff.h
+        include/common.h
+        include/stuffpanel.h
+        include/stuffsview.h
+        include/channel.h
+
+
 )
 
 set(FORMS
@@ -31,10 +42,12 @@ set(FORMS
         forms/heroesview.ui
         forms/hostpage.ui
         forms/heropanel.ui
-)
+        forms/stuffpanel.ui
+        forms/stuffsview.ui
+        forms/channel.ui
+    )
 
 add_library(view STATIC ${SOURCES} ${HEADERS} ${FORMS})
-
 target_include_directories(view PUBLIC include forms)
 
 target_link_libraries(view

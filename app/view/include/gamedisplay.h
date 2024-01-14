@@ -17,6 +17,9 @@ public:
 
 private:
     Ui::GameDisplay *ui;
+
+private slots:
+    void UpdateChannel();
 };
 
 #endif // GAMEDISPLAY_H
