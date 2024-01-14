@@ -2,10 +2,8 @@
 
 #include "character.h"
 
-GameManager::GameManager() {}
-
 void GameManager::InitHeroes(){
-    m_Heroes = new Heroes();
+    m_Heroes = std::make_unique<Heroes>();
 
     Stats stats;
     stats.m_HP = 605;
@@ -23,7 +21,7 @@ void GameManager::InitHeroes(){
     stats.m_regenHP = 4;
     stats.m_regenMana = 25;
     stats.m_regenVigueur = 5;
-    Character* hero1 = new Character("Thalia", characType::Hero, stats);
+    auto* hero1 = new Character("Thalia", characType::Hero, stats);
 
     Stats stats2;
     stats.m_HP = 605;
@@ -41,7 +39,7 @@ void GameManager::InitHeroes(){
     stats.m_regenHP = 4;
     stats.m_regenMana = 25;
     stats.m_regenVigueur = 5;
-    Character* hero2 = new Character("Thalia2", characType::Hero, stats2);
+    auto* hero2 = new Character("Thalia2", characType::Hero, stats2);
 
     Stats stats3;
     stats.m_HP = 605;
@@ -59,7 +57,7 @@ void GameManager::InitHeroes(){
     stats.m_regenHP = 4;
     stats.m_regenMana = 25;
     stats.m_regenVigueur = 5;
-    Character* hero3 = new Character("Thalia3", characType::Hero, stats3);
+    auto* hero3 = new Character("Thalia3", characType::Hero, stats3);
 
     m_Heroes->m_HeroesList.push_back(hero1);
     m_Heroes->m_HeroesList.push_back(hero2);

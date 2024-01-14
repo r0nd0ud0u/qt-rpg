@@ -3,11 +3,13 @@
 
 #include "heroes.h"
 
+#include <memory>
+
 class GameManager
 {
 public:
-    GameManager();
-    Heroes* m_Heroes = nullptr;
+    GameManager() = default;
+    std::unique_ptr<Heroes> m_Heroes = nullptr;
 
     void InitHeroes();
 };
