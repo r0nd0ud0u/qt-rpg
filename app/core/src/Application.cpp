@@ -5,6 +5,7 @@
 #include <QDateTime>
 #include <QDir>
 #include <QMessageBox>
+#include <QTextStream>
 
 // Constructors, destructors
 
