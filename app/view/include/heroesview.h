@@ -28,8 +28,6 @@ private slots:
 private:
     Ui::HeroesView *ui;
 
-    std::vector<HeroPanel*> m_HeroesList;
-
     void InitHeroPanel();
 };
 
