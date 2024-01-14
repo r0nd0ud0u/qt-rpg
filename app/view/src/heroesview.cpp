@@ -25,7 +25,6 @@ void HeroesView::InitHeroPanel() {
       auto *heroPanel = new HeroPanel();
       heroPanel->m_Heroe = it;
       ui->left_heroes_lay->addWidget(heroPanel);
-      m_HeroesList.push_back(heroPanel);
       connect(heroPanel, &HeroPanel::addStuff, this, &HeroesView::Dosomething);
     }
   }
