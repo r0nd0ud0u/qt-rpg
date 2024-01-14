@@ -21,7 +21,7 @@ void GameManager::InitHeroes(){
     stats.m_regenHP = 4;
     stats.m_regenMana = 25;
     stats.m_regenVigueur = 5;
-    auto* hero1 = new Character("Thalia", characType::Hero, stats);
+    const auto hero1 = std::make_unique<Character>("Thalia", characType::Hero, stats);
 
     Stats stats2;
     stats.m_HP = 605;
@@ -39,7 +39,7 @@ void GameManager::InitHeroes(){
     stats.m_regenHP = 4;
     stats.m_regenMana = 25;
     stats.m_regenVigueur = 5;
-    auto* hero2 = new Character("Thalia2", characType::Hero, stats2);
+    const auto hero2 = std::make_unique<Character>("Thalia2", characType::Hero, stats2);
 
     Stats stats3;
     stats.m_HP = 605;
@@ -57,9 +57,9 @@ void GameManager::InitHeroes(){
     stats.m_regenHP = 4;
     stats.m_regenMana = 25;
     stats.m_regenVigueur = 5;
-    auto* hero3 = new Character("Thalia3", characType::Hero, stats3);
+    const auto hero3 = std::make_unique<Character>("Thalia3", characType::Hero, stats3);
 
-    m_Heroes->m_HeroesList.push_back(hero1);
-    m_Heroes->m_HeroesList.push_back(hero2);
-    m_Heroes->m_HeroesList.push_back(hero3);
+    m_Heroes->m_HeroesList.push_back(hero1.get());
+    m_Heroes->m_HeroesList.push_back(hero2.get());
+    m_Heroes->m_HeroesList.push_back(hero3.get());
 }

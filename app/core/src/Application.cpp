@@ -15,8 +15,6 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv) {
 }
 
 Application::~Application() {
-  delete m_GameManager;
-  m_GameManager = nullptr;
 }
 
 Application &Application::GetInstance() { return *g_pApp; }
@@ -42,7 +40,7 @@ Application &Application::GetInstance() { return *g_pApp; }
 // }
 
 void Application::Init() {
-  m_GameManager = new GameManager();
+    m_GameManager = std::make_unique<GameManager>();
   if (m_GameManager != nullptr) {
     m_GameManager->InitHeroes();
   }
