@@ -2,9 +2,8 @@
 #include "ui_heroesview.h"
 
 #include "Application.h"
-#include "heropanel.h"
 
-#include <memory>
+#include "heropanel.h"
 
 HeroesView::HeroesView(QWidget *parent)
     : QWidget(parent), ui(new Ui::HeroesView) {
@@ -20,17 +19,17 @@ void HeroesView::InitHeroPanel() {
   const auto &app = Application::GetInstance();
   if (app.m_GameManager != nullptr && app.m_GameManager->m_Heroes != nullptr) {
     for (const auto &it : app.m_GameManager->m_Heroes->m_HeroesList) {
-      if (it == nullptr) {
-        continue;
-      }
-      auto heroPanel = std::make_shared<HeroPanel>();
+          if(it == nullptr){
+            continue;
+        }
+      auto *heroPanel = new HeroPanel();
       heroPanel->m_Heroe = it;
-      ui->left_heroes_lay->addWidget(heroPanel.get());
-      m_HeroesList.push_back(heroPanel.get());
-      connect(heroPanel.get(), &HeroPanel::addStuff, this,
-              &HeroesView::Dosomething);
+      ui->left_heroes_lay->addWidget(heroPanel);
+      m_HeroesList.push_back(heroPanel);
+      connect(heroPanel, &HeroPanel::addStuff, this, &HeroesView::Dosomething);
     }
   }
 }
+
 
 void HeroesView::Dosomething() { emit SigAddStuff(); }
