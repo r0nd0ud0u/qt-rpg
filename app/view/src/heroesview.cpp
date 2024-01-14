@@ -2,52 +2,38 @@
 #include "heropanel.h"
 #include "ui_heroesview.h"
 
-#include "character.h"
+#include "Application.h"
+
+#include "heroes.h"
+
 #include "heropanel.h"
 
 HeroesView::HeroesView(QWidget *parent)
     : QWidget(parent), ui(new Ui::HeroesView) {
   ui->setupUi(this);
 
-    for (HeroPanel *panel : m_HeroesList){
-        connect(panel, &HeroPanel::addStuff, this, &HeroesView::Dosomething);
-    }
+  InitHeroPanel();
 }
 
 HeroesView::~HeroesView() { delete ui; }
 
-void HeroesView::AddHeroPanel() {
+void HeroesView::InitHeroPanel() {
 
-  HeroPanel *hero1 = new HeroPanel();
-
-  Stats stats;
-  stats.m_HP = 605;
-  stats.m_Mana = 369;
-  stats.m_Vigueur = 126;
-  stats.m_Rage = 0;
-  stats.m_ArmPhy = 80;
-  stats.m_ArmMag = 35;
-  stats.m_powPhy = 10;
-  stats.m_powMag = 138;
-  stats.m_aggro = 0;
-  stats.m_speed = 25;
-  stats.m_CriticalStrike = 20;
-  stats.m_dogde = 10;
-  stats.m_regenHP = 4;
-  stats.m_regenMana = 25;
-  stats.m_regenVigueur = 5;
-
-  hero1->m_Heroe = new Character("Thalia", characType::Hero, stats);
-
-  ui->left_heroes_lay->addWidget(hero1);
-
-  m_HeroesList.push_back(hero1);
-
-  connect(hero1, &HeroPanel::addStuff, this, &HeroesView::Dosomething);
+  const auto &app = Application::GetInstance();
+  if (app.m_GameManager != nullptr && app.m_GameManager->m_Heroes != nullptr) {
+    for (const auto &it : app.m_GameManager->m_Heroes->m_HeroesList) {
+          if(it == nullptr){
+            continue;
+        }
+      HeroPanel *heroPanel = new HeroPanel();
+      heroPanel->m_Heroe = it;
+      ui->left_heroes_lay->addWidget(heroPanel);
+      m_HeroesList.push_back(heroPanel);
+      connect(heroPanel, &HeroPanel::addStuff, this, &HeroesView::Dosomething);
+    }
+  }
 }
 
-void HeroesView::on_pushButton_clicked() { AddHeroPanel(); }
+void HeroesView::on_pushButton_clicked() {}
 
-void HeroesView::Dosomething(){
-    emit SigAddStuff();
-}
+void HeroesView::Dosomething() { emit SigAddStuff(); }

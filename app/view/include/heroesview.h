@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <vector>
 
+#include "character.h"
+
 class HeroPanel;
 
 namespace Ui {
@@ -29,7 +31,7 @@ private:
 
     std::vector<HeroPanel*> m_HeroesList;
 
-    void AddHeroPanel();
+    void InitHeroPanel();
 };
 
 #endif // HEROESVIEW_H
