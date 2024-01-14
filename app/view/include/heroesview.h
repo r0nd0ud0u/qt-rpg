@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <vector>
 
+#include "character.h"
+
 class HeroPanel;
 
 namespace Ui {
@@ -21,15 +23,12 @@ public:
 signals:
     void SigAddStuff();
 private slots:
-    void on_pushButton_clicked();
     void Dosomething();
 
 private:
     Ui::HeroesView *ui;
 
-    std::vector<HeroPanel*> m_HeroesList;
-
-    void AddHeroPanel();
+    void InitHeroPanel();
 };
 
 #endif // HEROESVIEW_H
