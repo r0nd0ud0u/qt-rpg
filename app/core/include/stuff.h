@@ -22,7 +22,7 @@ enum class Body {
 class Stuff
 {
 public:
-    Stuff();
+    Stuff() = default;
 
     Stats m_Stats = {};
     Body m_type;
