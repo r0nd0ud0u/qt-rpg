@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Character::Character(const QString name, const characType type,  const Stats stats):
+Character::Character(const QString name, const characType type,  const Stats& stats):
     m_Name(name),
     m_type(type),
     m_Stats(stats)
