@@ -23,7 +23,6 @@ public:
 signals:
     void SigAddStuff();
 private slots:
-    void on_pushButton_clicked();
     void Dosomething();
 
 private:
