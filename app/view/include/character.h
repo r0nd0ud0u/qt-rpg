@@ -3,6 +3,11 @@
 
 #include <QString>
 #include <vector>
+#include <unordered_map>
+
+#include "Stuff.h"
+#include "common.h"
+
 
 enum class characType {
     Hero,
@@ -15,33 +20,27 @@ struct AttaqueType {
     int aggroCum = 0;
 };
 
+
+
 class Character
 {
 public:
-    Character(QString name, characType type, int hp, int mana, int vigueur, int rage, int armP, int armMag, int powPhy, int powMag, int aggro, int speed, int criticalStrike, int dodge, int regenHp, int regenMana, int regenVigeur);
+    Character(QString name, characType type, Stats stats);
 
     void Attaque(int degat, Character* target);
     void AddAtq (const AttaqueType& atq);
 
+    void AddStuff(Stuff stuff);
+
+    Stats m_Stats;
     QString m_Name = "default";
     characType m_type = characType::Hero;
-    int m_HP = 0;
-    int m_Mana = 0;
-    int m_Vigueur = 0;
-    int m_Rage = 0;
-    int m_ArmPhy = 0;
-    int m_ArmMag = 0;
-    int m_powPhy = 0;
-    int m_powMag = 0;
-    int m_aggro = 0;
-    int m_speed = 0;
-    int m_CriticalStrike  = 0;
-    int m_dogde = 0;
-    int m_regenHP = 0;
-    int m_regenMana = 0;
-    int m_regenVigueur = 0;
+    std::unordered_map<Body, Stuff> m_Stuffs;
 
     std::vector<AttaqueType> attakList;
+
+    int m_Level = 1;
+    int m_Exp = 0;
 
 };
 

@@ -18,8 +18,11 @@ public:
     explicit HeroesView(QWidget *parent = nullptr);
     ~HeroesView();
 
+signals:
+    void SigAddStuff();
 private slots:
     void on_pushButton_clicked();
+    void Dosomething();
 
 private:
     Ui::HeroesView *ui;

@@ -12,3 +12,9 @@ HeroPanel::~HeroPanel()
 {
     delete ui;
 }
+
+void HeroPanel::on_pushButton_clicked()
+{
+    emit addStuff();
+}
+

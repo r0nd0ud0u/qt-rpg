@@ -23,12 +23,36 @@
       <layout class="QHBoxLayout" name="bosses_lay"/>
      </item>
      <item>
-      <widget class="HeroesView" name="widget" native="true"/>
+      <widget class="HeroesView" name="heroes_widget" native="true"/>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="right_layout"/>
+    <layout class="QVBoxLayout" name="right_layout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_4"/>
+       </item>
+       <item>
+        <widget class="QWidget" name="horizontalWidget_3" native="true">
+         <layout class="QHBoxLayout" name="stuff_lay"/>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout"/>
+     </item>
+     <item>
+      <widget class="Channel" name="channel_lay" native="true">
+       <layout class="QHBoxLayout" name="channel"/>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
@@ -37,6 +61,12 @@
    <class>HeroesView</class>
    <extends>QWidget</extends>
    <header location="global">heroesview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Channel</class>
+   <extends>QWidget</extends>
+   <header location="global">channel.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
