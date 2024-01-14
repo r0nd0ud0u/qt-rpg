@@ -1,10 +1,7 @@
 #include "heroesview.h"
-#include "heropanel.h"
 #include "ui_heroesview.h"
 
 #include "Application.h"
-
-#include "heroes.h"
 
 #include "heropanel.h"
 
@@ -25,7 +22,7 @@ void HeroesView::InitHeroPanel() {
           if(it == nullptr){
             continue;
         }
-      HeroPanel *heroPanel = new HeroPanel();
+      auto *heroPanel = new HeroPanel();
       heroPanel->m_Heroe = it;
       ui->left_heroes_lay->addWidget(heroPanel);
       m_HeroesList.push_back(heroPanel);
