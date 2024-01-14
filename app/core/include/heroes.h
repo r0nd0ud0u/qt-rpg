@@ -8,7 +8,7 @@
 class Heroes
 {
 public:
-    Heroes();
+    Heroes() = default;
     std::vector<Character*> m_HeroesList;
 };
 
