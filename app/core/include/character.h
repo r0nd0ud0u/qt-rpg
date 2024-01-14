@@ -25,7 +25,7 @@ struct AttaqueType {
 class Character
 {
 public:
-    Character(const QString name, const characType type, const Stats stats);
+    Character(const QString name, const characType type, const Stats& stats);
 
     void Attaque(int degat, Character* target) const;
     void AddAtq (const AttaqueType& atq);
