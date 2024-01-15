@@ -26,6 +26,7 @@ void HeroesView::InitHeroPanel() {
       heroPanel->m_Heroe = it;
       ui->left_heroes_lay->addWidget(heroPanel);
       connect(heroPanel, &HeroPanel::addStuff, this, &HeroesView::Dosomething);
+      ui->left_heroes_lay->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
     }
   }
 }
