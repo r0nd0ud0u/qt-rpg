@@ -23,11 +23,16 @@ void HeroesView::InitHeroPanel() {
             continue;
         }
       auto *heroPanel = new HeroPanel();
-      heroPanel->m_Heroe = it;
-      ui->left_heroes_lay->addWidget(heroPanel);
+        heroPanel->UpdatePanel(it);
+      ui->left_widget->layout()->addWidget(heroPanel);
+        m_HeroPanels.push_back(heroPanel);
+      heroPanel->SetActive(false);
       connect(heroPanel, &HeroPanel::addStuff, this, &HeroesView::Dosomething);
-      ui->left_heroes_lay->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
+      ui->left_heroes_lay->layout()->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
     }
+   if(!m_HeroPanels.empty()){
+       m_HeroPanels.front()->SetActive(true);
+   }
   }
 }
 
