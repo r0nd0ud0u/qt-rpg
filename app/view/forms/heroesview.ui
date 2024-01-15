@@ -20,18 +20,20 @@
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="right_add_hero_lay">
-     <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>Add hero</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QWidget" name="right_widget" native="true">
+     <layout class="QVBoxLayout" name="right_add_hero_lay">
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Add hero</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>
