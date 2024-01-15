@@ -1,20 +1,39 @@
 #include "heropanel.h"
 #include "ui_heropanel.h"
 
-HeroPanel::HeroPanel(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::HeroPanel)
-{
-    ui->setupUi(this);
+HeroPanel::HeroPanel(QWidget *parent) : QWidget(parent), ui(new Ui::HeroPanel) {
+  ui->setupUi(this);
 }
 
-HeroPanel::~HeroPanel()
-{
-    delete ui;
+HeroPanel::~HeroPanel() { delete ui; }
+
+void HeroPanel::on_pushButton_clicked() { emit addStuff(); }
+
+void HeroPanel::UpdatePanel(Character *hero) {
+  if (hero == nullptr) {
+    return;
+  }
+
+  m_Heroe = hero;
+
+  ui->hero_name->setText(hero->m_Name);
+  ui->hp_Bar->setFormat(QString::number(hero->m_Stats.m_HP) + "/" +
+                        QString::number(hero->m_Stats.m_HP));
+  ui->mana_bar->setFormat(QString::number(hero->m_Stats.m_Mana) + "/" +
+                          QString::number(hero->m_Stats.m_Mana));
+
+  ui->hp_Bar->setStyleSheet("QProgressBar{color: white;} QProgressBar::chunk { "
+                            "background-color: green; border: white;}");
+  ui->mana_bar->setStyleSheet("QProgressBar{color: white;} QProgressBar::chunk "
+                              "{ background-color: blue; border: white;}");
 }
 
-void HeroPanel::on_pushButton_clicked()
-{
-    emit addStuff();
-}
+void HeroPanel::SetActive(bool activated) {
+  if (activated) {
+    setStyleSheet("#left_widget, #right_widget{ background:     #40b1fe;  } "
+                  "#left_widget QLabel{color: white;}");
+  } else
 
+    setStyleSheet("#left_widget, #right_widget{ background:     grey;  } "
+                  "#left_widget QLabel{color: white;}");
+}
