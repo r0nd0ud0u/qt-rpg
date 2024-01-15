@@ -15,7 +15,8 @@ set(SOURCES
         src/heropanel.cpp
         src/stuffpanel.cpp
         src/stuffsview.cpp
-        src/channel.cpp      
+        src/channel.cpp
+        src/CompButtons.cpp
 )
 
 set(HEADERS
@@ -27,6 +28,7 @@ set(HEADERS
         include/stuffpanel.h
         include/stuffsview.h
         include/channel.h
+        include/CompButtons.h
 )
 
 set(FORMS
