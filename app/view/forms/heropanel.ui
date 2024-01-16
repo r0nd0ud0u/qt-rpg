@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>203</height>
+    <height>269</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -90,6 +90,34 @@
       </item>
       <item>
        <widget class="QProgressBar" name="mana_bar">
+        <property name="value">
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="bersecker_label">
+        <property name="text">
+         <string>Bersecker</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QProgressBar" name="bersecker_bar">
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="vigor_label">
+        <property name="text">
+         <string>Vigor</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QProgressBar" name="vigor_bar">
         <property name="value">
          <number>100</number>
         </property>
