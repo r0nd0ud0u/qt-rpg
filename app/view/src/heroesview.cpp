@@ -17,8 +17,8 @@ HeroesView::~HeroesView() { delete ui; }
 void HeroesView::InitHeroPanel() {
 
   const auto &app = Application::GetInstance();
-  if (app.m_GameManager != nullptr && app.m_GameManager->m_Heroes != nullptr) {
-    for (const auto &it : app.m_GameManager->m_Heroes->m_HeroesList) {
+    if (app.m_GameManager != nullptr && app.m_GameManager->m_PlayersManager != nullptr) {
+      for (const auto &it : app.m_GameManager->m_PlayersManager->m_HeroesList) {
           if(it == nullptr){
             continue;
         }

@@ -18,13 +18,13 @@ void HeroPanel::UpdatePanel(Character *hero) {
 
   ui->hero_name->setText(hero->m_Name);
   ui->hp_Bar->setFormat(QString::number(hero->m_Stats.m_HP) + "/" +
-                        QString::number(hero->m_Stats.m_HP));
+                        QString::number(hero->m_Stats.m_HP)+ " %p%");
   ui->mana_bar->setFormat(QString::number(hero->m_Stats.m_Mana) + "/" +
-                          QString::number(hero->m_Stats.m_Mana));
+                          QString::number(hero->m_Stats.m_Mana)+ " %p%");
   ui->bersecker_bar->setFormat(QString::number(hero->m_Stats.m_Bersecker) + "/" +
-                          QString::number(hero->m_Stats.m_Bersecker));
+                          QString::number(hero->m_Stats.m_Bersecker)+ " %p%");
   ui->vigor_bar->setFormat(QString::number(hero->m_Stats.m_Vigor) + "/" +
-                          QString::number(hero->m_Stats.m_Vigor));
+                          QString::number(hero->m_Stats.m_Vigor)+ " %p%");
 
   ui->hp_Bar->setStyleSheet("QProgressBar{color: white;} QProgressBar::chunk { "
                             "background-color: green; border: white;}");
