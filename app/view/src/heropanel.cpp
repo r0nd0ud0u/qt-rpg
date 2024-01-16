@@ -21,11 +21,19 @@ void HeroPanel::UpdatePanel(Character *hero) {
                         QString::number(hero->m_Stats.m_HP));
   ui->mana_bar->setFormat(QString::number(hero->m_Stats.m_Mana) + "/" +
                           QString::number(hero->m_Stats.m_Mana));
+  ui->bersecker_bar->setFormat(QString::number(hero->m_Stats.m_Bersecker) + "/" +
+                          QString::number(hero->m_Stats.m_Bersecker));
+  ui->vigor_bar->setFormat(QString::number(hero->m_Stats.m_Vigor) + "/" +
+                          QString::number(hero->m_Stats.m_Vigor));
 
   ui->hp_Bar->setStyleSheet("QProgressBar{color: white;} QProgressBar::chunk { "
                             "background-color: green; border: white;}");
   ui->mana_bar->setStyleSheet("QProgressBar{color: white;} QProgressBar::chunk "
                               "{ background-color: blue; border: white;}");
+  ui->bersecker_bar->setStyleSheet("QProgressBar{color: black;} QProgressBar::chunk "
+                              "{ background-color: red; border: white;}");
+  ui->vigor_bar->setStyleSheet("QProgressBar{color: black;} QProgressBar::chunk "
+                              "{ background-color: yellow; border: white;}");
 }
 
 void HeroPanel::SetActive(bool activated) {

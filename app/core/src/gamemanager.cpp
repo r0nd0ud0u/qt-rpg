@@ -8,8 +8,8 @@ void GameManager::InitHeroes() {
   Stats stats;
   stats.m_HP = 605;
   stats.m_Mana = 369;
-  stats.m_Vigueur = 126;
-  stats.m_Rage = 0;
+  stats.m_Vigor = 126;
+  stats.m_Bersecker = 0;
   stats.m_ArmPhy = 80;
   stats.m_ArmMag = 35;
   stats.m_powPhy = 10;
@@ -25,8 +25,8 @@ void GameManager::InitHeroes() {
 
   stats.m_HP = 605;
   stats.m_Mana = 369;
-  stats.m_Vigueur = 126;
-  stats.m_Rage = 0;
+  stats.m_Vigor = 126;
+  stats.m_Bersecker = 0;
   stats.m_ArmPhy = 80;
   stats.m_ArmMag = 35;
   stats.m_powPhy = 10;
@@ -42,8 +42,8 @@ void GameManager::InitHeroes() {
 
   stats.m_HP = 605;
   stats.m_Mana = 369;
-  stats.m_Vigueur = 126;
-  stats.m_Rage = 0;
+  stats.m_Vigor = 126;
+  stats.m_Bersecker = 0;
   stats.m_ArmPhy = 80;
   stats.m_ArmMag = 35;
   stats.m_powPhy = 10;

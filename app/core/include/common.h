@@ -4,8 +4,8 @@
 struct Stats{
     int m_HP = 0;
     int m_Mana = 0;
-    int m_Vigueur = 0;
-    int m_Rage = 0;
+    int m_Vigor = 0;
+    int m_Bersecker = 0;
     int m_ArmPhy = 0;
     int m_ArmMag = 0;
     int m_powPhy = 0;
