@@ -29,6 +29,7 @@ private:
     Ui::HeroesView *ui;
 
     void InitHeroPanel();
+    std::vector<HeroPanel*> m_HeroPanels;
 };
 
 #endif // HEROESVIEW_H
