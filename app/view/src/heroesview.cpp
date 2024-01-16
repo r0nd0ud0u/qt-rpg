@@ -28,7 +28,6 @@ void HeroesView::InitHeroPanel() {
         m_HeroPanels.push_back(heroPanel);
       heroPanel->SetActive(false);
       connect(heroPanel, &HeroPanel::addStuff, this, &HeroesView::Dosomething);
-      ui->left_heroes_lay->layout()->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
     }
    if(!m_HeroPanels.empty()){
        m_HeroPanels.front()->SetActive(true);
