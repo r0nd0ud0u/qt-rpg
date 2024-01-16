@@ -8,9 +8,10 @@ set(HEADERS
     include/Stylizertheme.h
     include/gamemanager.h
     include/character.h
-    include/heroes.h
+    include/playersmanager.h
     include/stuff.h
     include/common.h
+
 )
 set(SOURCES
     src/Application.cpp
@@ -19,7 +20,8 @@ set(SOURCES
     src/gamemanager.cpp
     src/character.cpp
     src/stuff.cpp
-    src/heroes.cpp
+    src/playersmanager.cpp
+    src/bosses.cpp
 )
 
 
