@@ -16,6 +16,8 @@ class HeroPanel : public QWidget
 public:
     explicit HeroPanel(QWidget *parent = nullptr);
     ~HeroPanel();
+    void UpdatePanel(Character* hero);
+    void SetActive(bool activated);
 
     Character* m_Heroe = nullptr;
 
@@ -27,6 +29,7 @@ signals:
 
 private:
     Ui::HeroPanel *ui;
+
 };
 
 #endif // HEROPANEL_H

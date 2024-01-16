@@ -32,8 +32,8 @@ void Character::AddStuff(const Stuff& stuff){
 
     m_Stats.m_HP = stuff.m_Stats.m_HP;
     m_Stats.m_Mana = stuff.m_Stats.m_Mana;
-    m_Stats.m_Vigueur = stuff.m_Stats.m_Vigueur;
-    m_Stats.m_Rage = stuff.m_Stats.m_Rage;
+    m_Stats.m_Vigor = stuff.m_Stats.m_Vigor;
+    m_Stats.m_Bersecker = stuff.m_Stats.m_Bersecker;
     m_Stats.m_ArmPhy = stuff.m_Stats.m_ArmPhy;
     m_Stats.m_ArmMag = stuff.m_Stats.m_ArmMag;
     m_Stats.m_powPhy = stuff.m_Stats.m_powPhy;

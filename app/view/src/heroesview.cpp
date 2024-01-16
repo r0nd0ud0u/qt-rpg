@@ -8,7 +8,7 @@
 HeroesView::HeroesView(QWidget *parent)
     : QWidget(parent), ui(new Ui::HeroesView) {
   ui->setupUi(this);
-
+  setStyleSheet("#left_widget{ background:     #808080;} #right_widget{background:     #808080;}");
   InitHeroPanel();
 }
 
@@ -23,10 +23,15 @@ void HeroesView::InitHeroPanel() {
             continue;
         }
       auto *heroPanel = new HeroPanel();
-      heroPanel->m_Heroe = it;
-      ui->left_heroes_lay->addWidget(heroPanel);
+        heroPanel->UpdatePanel(it);
+      ui->left_widget->layout()->addWidget(heroPanel);
+        m_HeroPanels.push_back(heroPanel);
+      heroPanel->SetActive(false);
       connect(heroPanel, &HeroPanel::addStuff, this, &HeroesView::Dosomething);
     }
+   if(!m_HeroPanels.empty()){
+       m_HeroPanels.front()->SetActive(true);
+   }
   }
 }
 
