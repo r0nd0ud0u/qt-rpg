@@ -17,6 +17,8 @@ set(SOURCES
         src/stuffsview.cpp
         src/channel.cpp
         src/CompButtons.cpp
+        src/bossesview.cpp
+        src/bosspanel.cpp
 )
 
 set(HEADERS
@@ -29,6 +31,8 @@ set(HEADERS
         include/stuffsview.h
         include/channel.h
         include/CompButtons.h
+        include/bossesview.h
+        include/bosspanel.h
 )
 
 set(FORMS
@@ -40,6 +44,8 @@ set(FORMS
         forms/stuffpanel.ui
         forms/stuffsview.ui
         forms/channel.ui
+        forms/bossesview.ui
+        forms/bosspanel.ui
     )
 
 add_library(view STATIC ${SOURCES} ${HEADERS} ${FORMS}

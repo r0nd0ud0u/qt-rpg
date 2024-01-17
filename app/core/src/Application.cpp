@@ -42,7 +42,7 @@ Application &Application::GetInstance() { return *g_pApp; }
 void Application::Init() {
     m_GameManager = std::make_unique<GameManager>();
   if (m_GameManager != nullptr) {
-    m_GameManager->InitHeroes();
+    m_GameManager->InitPlayers();
   }
   // ReadGlobalParameters("skycbt-mission-window.ini");
   // QDir logDir(QString::fromStdString(m_global_ini.GLOBAL.m_LOG_PATH));
