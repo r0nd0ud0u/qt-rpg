@@ -18,7 +18,7 @@ class HeroesView : public QWidget
 
 public:
     explicit HeroesView(QWidget *parent = nullptr);
-    ~HeroesView();
+    ~HeroesView() final;
 
 signals:
     void SigAddStuff();

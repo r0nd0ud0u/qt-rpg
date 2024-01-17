@@ -17,7 +17,7 @@ class BossesView : public QWidget
 
 public:
     explicit BossesView(QWidget *parent = nullptr);
-    ~BossesView();
+    ~BossesView() final;
 
 private:
     Ui::BossesView *ui;

@@ -16,6 +16,11 @@ BossesView::BossesView(QWidget *parent) :
 
 BossesView::~BossesView()
 {
+    for(auto* it : m_BossPanels){
+        delete it;
+        it = nullptr;
+    }
+    m_BossPanels.clear();
     delete ui;
 }
 
@@ -32,7 +37,6 @@ void BossesView::InitBossPanels() {
             ui->main_widget->layout()->addWidget(bossPanel);
             m_BossPanels.push_back(bossPanel);
             bossPanel->SetActive(false);
-            //connect(bossPanel, &HeroPanel::addStuff, this, &HeroesView::Dosomething);
         }
         if(!m_BossPanels.empty()){
             m_BossPanels.front()->SetActive(true);

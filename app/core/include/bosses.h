@@ -4,7 +4,7 @@
 class Bosses
 {
 public:
-    Bosses();
+    Bosses() = default;
 };
 
 #endif // BOSSES_H
