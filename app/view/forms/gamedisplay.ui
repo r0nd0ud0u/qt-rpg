@@ -16,11 +16,18 @@
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <layout class="QVBoxLayout" name="left_lay">
+     <property name="spacing">
+      <number>0</number>
+     </property>
      <item>
-      <layout class="QHBoxLayout" name="game_status_lay"/>
+      <layout class="QHBoxLayout" name="game_status_lay">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+      </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="bosses_lay"/>
+      <widget class="BossesView" name="bosses_widget" native="true"/>
      </item>
      <item>
       <widget class="HeroesView" name="heroes_widget" native="true"/>
@@ -67,6 +74,12 @@
    <class>Channel</class>
    <extends>QWidget</extends>
    <header location="global">channel.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BossesView</class>
+   <extends>QWidget</extends>
+   <header location="global">bossesview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
