@@ -13,6 +13,8 @@ HeroesView::HeroesView(QWidget* parent)
   setStyleSheet("#left_widget{ background:     #808080;} "
                 "#right_widget{background:     #808080;}");
   InitHeroPanel();
+
+
 }
 
 HeroesView::~HeroesView()
@@ -42,6 +44,7 @@ HeroesView::InitHeroPanel()
       m_HeroPanels.push_back(heroPanel);
       heroPanel->SetActive(false);
       connect(heroPanel, &HeroPanel::addStuff, this, &HeroesView::Dosomething);
+      connect(heroPanel, &HeroPanel::selectCharacter, this, &HeroesView::SlotClickedOnHeroPanel);
     }
     if (!m_HeroPanels.empty()) {
       m_HeroPanels.front()->SetActive(true);
@@ -54,3 +57,10 @@ HeroesView::Dosomething()
 {
   emit SigAddStuff();
 }
+
+void
+HeroesView::SlotClickedOnHeroPanel(QString name)
+{
+    emit SigClickedOnHeroPanel(name);
+}
+

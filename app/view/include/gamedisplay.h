@@ -15,11 +15,14 @@ public:
     explicit GameDisplay(QWidget *parent = nullptr);
     ~GameDisplay();
 
+signals:
+    void selectCharacter(QString);
 private:
     Ui::GameDisplay *ui;
 
 private slots:
     void UpdateChannel();
+    void UpdateViews(const QString& name);
 };
 
 #endif // GAMEDISPLAY_H
