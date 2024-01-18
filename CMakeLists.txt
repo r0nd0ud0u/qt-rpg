@@ -19,21 +19,29 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Network 
 
 add_subdirectory(app)
 
+set(RESOURCES
+    ${CMAKE_SOURCE_DIR}/resources/resource.qrc
+)
+
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(qt-rpg
         MANUAL_FINALIZATION
         app/core/src/main.cpp
+        ${RESOURCES}
     )
 else()
     if(ANDROID)
         add_library(qt-rpg SHARED
             app/core/src/main.cpp
+            ${RESOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(qt-rpg
             app/core/src/main.cpp
+            ${RESOURCES}
         )
     endif()
 endif()
@@ -46,6 +54,8 @@ target_link_libraries(qt-rpg PRIVATE
     Qt${QT_VERSION_MAJOR}::Sql
     view
 )
+
+
 
 set_target_properties(qt-rpg PROPERTIES
     WIN32_EXECUTABLE TRUE
