@@ -10,6 +10,8 @@ GameDisplay::GameDisplay(QWidget *parent)
     ui->setupUi(this);
 
     connect(ui->heroes_widget, &HeroesView::SigAddStuff, this, &GameDisplay::UpdateChannel);
+
+
 }
 
 GameDisplay::~GameDisplay()
