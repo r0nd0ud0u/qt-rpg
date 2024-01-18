@@ -1,6 +1,8 @@
 #include "heropanel.h"
 #include "ui_heropanel.h"
 
+#include <QDebug>
+
 HeroPanel::HeroPanel(QWidget* parent)
   : QWidget(parent)
   , ui(new Ui::HeroPanel)
@@ -62,4 +64,13 @@ HeroPanel::SetActive(bool activated)
     setStyleSheet("#left_widget, #right_widget{ background:     grey;  } "
                   "#left_widget QLabel{color: white;}");
   }
+}
+
+
+void HeroPanel::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        qDebug("left click");
+        emit selectCharacter(m_Heroe->m_Name);
+    }
 }

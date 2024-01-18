@@ -2,6 +2,7 @@
 #define HEROPANEL_H
 
 #include <QWidget>
+#include <QMouseEvent>
 
 #include "character.h"
 
@@ -18,6 +19,7 @@ public:
     ~HeroPanel();
     void UpdatePanel(Character* hero);
     void SetActive(bool activated);
+    void mousePressEvent(QMouseEvent *event) override;
 
     Character* m_Heroe = nullptr;
 
@@ -26,6 +28,7 @@ private slots:
 
 signals:
     void addStuff();
+    void selectCharacter(QString);
 
 private:
     Ui::HeroPanel *ui;
