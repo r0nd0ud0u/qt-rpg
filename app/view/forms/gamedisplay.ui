@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>899</width>
+    <height>625</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,15 +39,43 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_4"/>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QPushButton" name="pushButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>PushButton</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="QWidget" name="horizontalWidget_3" native="true">
-         <layout class="QHBoxLayout" name="stuff_lay"/>
+        <widget class="StatsView" name="verticalWidget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3"/>
         </widget>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2"/>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="text">
+            <string>PushButton</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </item>
@@ -80,6 +108,12 @@
    <class>BossesView</class>
    <extends>QWidget</extends>
    <header location="global">bossesview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>StatsView</class>
+   <extends>QWidget</extends>
+   <header location="global">statsview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
