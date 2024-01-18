@@ -20,6 +20,7 @@ set(SOURCES
         src/bossesview.cpp
         src/bosspanel.cpp
         src/statsview.cpp
+        src/imgcharacterview.cpp
 )
 
 set(HEADERS
@@ -35,6 +36,7 @@ set(HEADERS
         include/bossesview.h
         include/bosspanel.h
         include/statsview.h
+        include/imgcharacterview.h
 )
 
 set(FORMS
@@ -49,6 +51,7 @@ set(FORMS
         forms/bossesview.ui
         forms/bosspanel.ui
         forms/statsview.ui
+        forms/imgcharacterview.ui
     )
 
 set(RESOURCES
