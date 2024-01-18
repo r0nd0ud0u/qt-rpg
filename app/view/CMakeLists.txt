@@ -51,7 +51,11 @@ set(FORMS
         forms/statsview.ui
     )
 
-add_library(view STATIC ${SOURCES} ${HEADERS} ${FORMS}
+set(RESOURCES
+    ${CMAKE_SOURCE_DIR}/resources/resource.qrc
+)
+
+add_library(view STATIC ${SOURCES} ${HEADERS} ${FORMS} ${RESOURCES}
      )
 target_include_directories(view PUBLIC include forms)
 
