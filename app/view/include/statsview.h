@@ -20,9 +20,11 @@ private:
     Ui::StatsView *ui;
 
     void InitView();
-    QAbstractItemModel *createStatsModel(QObject *parent);
+    QAbstractItemModel *createStatsModel(QObject *parent, QString playerName);
     void addStatRow(QAbstractItemModel *model, const QString &stat,
                             const int value) const;
+private slots:
+    void UpdateStats(QString name);
 };
 
 #endif // STATSVIEW_H
