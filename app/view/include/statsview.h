@@ -2,11 +2,7 @@
 #define STATSVIEW_H
 
 #include <QWidget>
-
-#include <QSqlTableModel>
-
 #include <QStandardItemModel>
-#include <QTime>
 
 namespace Ui {
 class StatsView;
@@ -24,11 +20,9 @@ private:
     Ui::StatsView *ui;
 
     void InitView();
-    void initializeModel(QSqlTableModel *model);
-
-    void addMail(QAbstractItemModel *model, const QString &subject,
-                            const int sender);
-    QAbstractItemModel *createMailModel(QObject *parent);
+    QAbstractItemModel *createStatsModel(QObject *parent);
+    void addStatRow(QAbstractItemModel *model, const QString &stat,
+                            const int value) const;
 };
 
 #endif // STATSVIEW_H
