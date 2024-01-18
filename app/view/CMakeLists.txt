@@ -19,6 +19,7 @@ set(SOURCES
         src/CompButtons.cpp
         src/bossesview.cpp
         src/bosspanel.cpp
+        src/statsview.cpp
 )
 
 set(HEADERS
@@ -33,6 +34,7 @@ set(HEADERS
         include/CompButtons.h
         include/bossesview.h
         include/bosspanel.h
+        include/statsview.h
 )
 
 set(FORMS
@@ -46,6 +48,7 @@ set(FORMS
         forms/channel.ui
         forms/bossesview.ui
         forms/bosspanel.ui
+        forms/statsview.ui
     )
 
 add_library(view STATIC ${SOURCES} ${HEADERS} ${FORMS}
@@ -57,5 +60,6 @@ target_link_libraries(view
     Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Network
+    Qt${QT_VERSION_MAJOR}::Sql
     core
 )
