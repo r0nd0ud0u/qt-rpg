@@ -22,6 +22,7 @@ set(SOURCES
         src/statsview.cpp
         src/imgcharacterview.cpp
         src/ApplicationView.cpp
+        src/equipmentview.cpp
 )
 
 set(HEADERS
@@ -39,6 +40,7 @@ set(HEADERS
         include/statsview.h
         include/imgcharacterview.h
         include/ApplicationView.h
+        include/equipmentview.h
 )
 
 set(FORMS
@@ -54,13 +56,14 @@ set(FORMS
         forms/bosspanel.ui
         forms/statsview.ui
         forms/imgcharacterview.ui
+        forms/equipmentview.ui
     )
 
 set(RESOURCES
     ${CMAKE_SOURCE_DIR}/resources/resource.qrc
 )
 
-add_library(view STATIC ${SOURCES} ${HEADERS} ${FORMS} ${RESOURCES}
+add_library(view STATIC ${SOURCES} ${HEADERS} ${FORMS} ${RESOURCES} 
      )
 target_include_directories(view PUBLIC include forms)
 
