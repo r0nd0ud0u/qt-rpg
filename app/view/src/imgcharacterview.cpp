@@ -16,7 +16,7 @@ ImgCharacterView::~ImgCharacterView() { delete ui; }
 void ImgCharacterView::UpdateView(QString name) {
 
   const auto &app = Application::GetInstance();
-  if (!name.isEmpty() || app.m_GameManager == nullptr ||
+  if (name.isEmpty() || app.m_GameManager == nullptr ||
       app.m_GameManager->m_PlayersManager == nullptr) {
     return;
   }
@@ -31,3 +31,4 @@ void ImgCharacterView::UpdateView(QString name) {
   auto qp = QPixmap(":/" + name + ".png");
   ui->img_label->setPixmap(qp);
   ui->img_label->setScaledContents(true);
+}
