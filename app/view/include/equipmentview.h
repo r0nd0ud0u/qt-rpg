@@ -20,11 +20,11 @@ private:
     Ui::EquipmentView *ui;
 
     void InitView();
-    QAbstractItemModel *createStatsModel(QObject *parent, QString playerName);
-    void addStatRow(QAbstractItemModel *model, const QString &stat,
-                    const int value) const;
+    QAbstractItemModel *createEquipmentModel(QObject *parent, QString playerName);
+    void addEquipmentRow(QAbstractItemModel *model, const QString &body,
+                                        const QString equipmentName) const;
 private slots:
-    void UpdateStats(QString name);
+    void UpdateEquipment(QString name);
 };
 
 #endif // EQUIPMENTVIEW_H
