@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>soringato.jpg</file>
+        <file>Marc.png</file>
+		<file>Seb.png</file>
+		<file>Thalia.png</file>
     </qresource>
 </RCC>

@@ -1,0 +1,28 @@
+#ifndef IMGCHARACTERVIEW_H
+#define IMGCHARACTERVIEW_H
+
+#include <QWidget>
+
+namespace Ui {
+class ImgCharacterView;
+}
+
+class ImgCharacterView : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit ImgCharacterView(QWidget *parent = nullptr);
+    ~ImgCharacterView();
+
+
+private:
+    Ui::ImgCharacterView *ui;
+
+private slots:
+    void UpdateView(QString name);
+
+
+};
+
+#endif // IMGCHARACTERVIEW_H

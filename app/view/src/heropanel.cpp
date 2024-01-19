@@ -63,3 +63,11 @@ HeroPanel::SetActive(bool activated)
                   "#left_widget QLabel{color: white;}");
   }
 }
+
+
+void HeroPanel::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        emit selectCharacter(m_Heroe->m_Name);
+    }
+}

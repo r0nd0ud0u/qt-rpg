@@ -22,8 +22,10 @@ public:
 
 signals:
     void SigAddStuff();
+    void SigClickedOnHeroPanel(QString);
 private slots:
     void Dosomething();
+    void SlotClickedOnHeroPanel(QString name);
 
 private:
     Ui::HeroesView *ui;

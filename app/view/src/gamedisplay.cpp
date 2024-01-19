@@ -10,8 +10,7 @@ GameDisplay::GameDisplay(QWidget *parent)
     ui->setupUi(this);
 
     connect(ui->heroes_widget, &HeroesView::SigAddStuff, this, &GameDisplay::UpdateChannel);
-
-
+    connect(ui->heroes_widget, &HeroesView::SigClickedOnHeroPanel, this, &GameDisplay::UpdateViews);
 }
 
 GameDisplay::~GameDisplay()
@@ -23,3 +22,7 @@ void GameDisplay::UpdateChannel(){
     ui->channel_lay->ShowPageStuffs();
     ui->channel_lay->AddStuff();
 }
+
+void GameDisplay::UpdateViews(const QString& name){
+    emit selectCharacter(name);
+ }
