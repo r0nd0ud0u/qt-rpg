@@ -1,14 +1,3 @@
-/*
- * CompButton.h
- *
- * Copyright (C) SkySoft-ATM - All Rights Reserved
- * Unauthorized copying of this file, via any medium is strictly prohibited
- * Proprietary and confidential
- *
- * Description: Here are different custom button (big primary button,
- * secondary button, color selection button...), extending QPushButton
- */
-
 #ifndef COMPBUTTONS_H
 #define COMPBUTTONS_H
 
