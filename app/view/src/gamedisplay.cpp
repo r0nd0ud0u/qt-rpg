@@ -11,6 +11,8 @@ GameDisplay::GameDisplay(QWidget *parent)
 
     connect(ui->heroes_widget, &HeroesView::SigAddStuff, this, &GameDisplay::UpdateChannel);
     connect(ui->heroes_widget, &HeroesView::SigClickedOnHeroPanel, this, &GameDisplay::UpdateViews);
+
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
 GameDisplay::~GameDisplay()
