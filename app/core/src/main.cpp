@@ -1,6 +1,5 @@
-#include "mainwindow.h"
-
 #include "Application.h"
+#include "ApplicationView.h"
 
 #include "Stylizer.h"
 
@@ -11,7 +10,7 @@ int main(int argc, char *argv[])
 
     Stylizer::SetTheme(StylizerSelector::THEMES::LIGHT);
 
-    MainWindow w;
-    w.show();
+    ApplicationView::GetInstance().StartMainWindow();
+
     return app->exec();
 }
