@@ -40,6 +40,12 @@
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="ImgCharacterView" name="img_char_widget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <layout class="QVBoxLayout" name="image_character_lay"/>
         </widget>
        </item>
@@ -55,15 +61,15 @@
         </widget>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <item>
-          <widget class="QPushButton" name="pushButton_2">
-           <property name="text">
-            <string>PushButton</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <widget class="EquipmentView" name="equipment_widget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2"/>
+        </widget>
        </item>
       </layout>
      </item>
@@ -108,6 +114,12 @@
    <class>ImgCharacterView</class>
    <extends>QWidget</extends>
    <header location="global">imgcharacterview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>EquipmentView</class>
+   <extends>QWidget</extends>
+   <header location="global">equipmentview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
