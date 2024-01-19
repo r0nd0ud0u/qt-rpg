@@ -24,6 +24,7 @@ set(SOURCES
         src/ApplicationView.cpp
         src/equipmentview.cpp
         src/dotview.cpp
+        src/attakview.cpp
 )
 
 set(HEADERS
@@ -43,6 +44,7 @@ set(HEADERS
         include/ApplicationView.h
         include/equipmentview.h
         include/dotview.h
+        include/attakview.h
 )
 
 set(FORMS
@@ -60,13 +62,16 @@ set(FORMS
         forms/imgcharacterview.ui
         forms/equipmentview.ui
         forms/dotview.ui
+        forms/attakview.ui
     )
 
 set(RESOURCES
     ${CMAKE_SOURCE_DIR}/resources/resource.qrc
 )
 
-add_library(view STATIC ${SOURCES} ${HEADERS} ${FORMS} ${RESOURCES} 
+add_library(view STATIC ${SOURCES} ${HEADERS} ${FORMS} ${RESOURCES}
+
+
      )
 target_include_directories(view PUBLIC include forms)
 
