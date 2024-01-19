@@ -3,27 +3,27 @@
 
 
 #include "Application.h"
-
 #include "gamedisplay.h"
+#include "stuff.h"
 
 EquipmentView::EquipmentView(QWidget *parent) : QWidget(parent), ui(new Ui::EquipmentView) {
     ui->setupUi(this);
-    ui->equipment_table->setModel(createStatsModel(parent, ""));
+    ui->equipment_table->setModel(createEquipmentModel(parent, ""));
 
     connect((GameDisplay*)parentWidget(), &GameDisplay::selectCharacter, this,
-            &EquipmentView::UpdateStats);
+            &EquipmentView::UpdateEquipment);
 }
 
 EquipmentView::~EquipmentView() { delete ui; }
 
-void EquipmentView::addStatRow(QAbstractItemModel *model, const QString &subject,
-                           const int sender) const {
+void EquipmentView::addEquipmentRow(QAbstractItemModel *model, const QString &body,
+                           const QString equipmentName) const {
     model->insertRow(0);
-    model->setData(model->index(0, 0), subject);
-    model->setData(model->index(0, 1), sender);
+    model->setData(model->index(0, 0), body);
+    model->setData(model->index(0, 1), equipmentName);
 }
 
-QAbstractItemModel *EquipmentView::createStatsModel(QObject *parent,
+QAbstractItemModel *EquipmentView::createEquipmentModel(QObject *parent,
                                                 QString playerName) {
     auto *model = new QStandardItemModel(0, 2, parent);
 
@@ -52,22 +52,21 @@ QAbstractItemModel *EquipmentView::createStatsModel(QObject *parent,
         }
 
         const auto &hero = heroList[indexPlayer];
-        addStatRow(model, "ArmPhy", hero->m_Stats.m_ArmPhy);
-        addStatRow(model, "ArmMag", hero->m_Stats.m_ArmMag);
-        addStatRow(model, "PowPhy", hero->m_Stats.m_powPhy);
-        addStatRow(model, "PowMag", hero->m_Stats.m_powMag);
-        addStatRow(model, "Aggro", hero->m_Stats.m_aggro);
-        addStatRow(model, "Speed", hero->m_Stats.m_speed);
-        addStatRow(model, "Crit", hero->m_Stats.m_CriticalStrike);
-        addStatRow(model, "Dodge", hero->m_Stats.m_dogde);
-        addStatRow(model, "regenHP", hero->m_Stats.m_regenHP);
-        addStatRow(model, "regenMana", hero->m_Stats.m_regenMana);
-        addStatRow(model, "regenVigor", hero->m_Stats.m_regenVigueur);
+        addEquipmentRow(model, Stuff::GetStringBody(Body::head), hero->m_Stuffs[Body::head].m_Name);
+        addEquipmentRow(model, Stuff::GetStringBody(Body::necklace), hero->m_Stuffs[Body::necklace].m_Name);
+        addEquipmentRow(model, Stuff::GetStringBody(Body::arm_left), hero->m_Stuffs[Body::arm_left].m_Name);
+        addEquipmentRow(model, Stuff::GetStringBody(Body::arm_right), hero->m_Stuffs[Body::arm_right].m_Name);
+        addEquipmentRow(model, Stuff::GetStringBody(Body::weapon_left), hero->m_Stuffs[Body::weapon_left].m_Name);
+        addEquipmentRow(model, Stuff::GetStringBody(Body::weapon_right), hero->m_Stuffs[Body::weapon_right].m_Name);
+        addEquipmentRow(model,Stuff::GetStringBody(Body::chest), hero->m_Stuffs[Body::chest].m_Name);
+        addEquipmentRow(model,Stuff::GetStringBody(Body::ring), hero->m_Stuffs[Body::ring].m_Name);
+        addEquipmentRow(model, Stuff::GetStringBody(Body::pants), hero->m_Stuffs[Body::pants].m_Name);
+        addEquipmentRow(model, Stuff::GetStringBody(Body::shoes), hero->m_Stuffs[Body::shoes].m_Name);
     }
 
     return model;
 }
 
-void EquipmentView::UpdateStats(QString name) {
-    ui->equipment_table->setModel(createStatsModel(parentWidget(),name));
+void EquipmentView::UpdateEquipment(QString name) {
+    ui->equipment_table->setModel(createEquipmentModel(parentWidget(),name));
 }
