@@ -1,11 +1,3 @@
-/*
- * CompButton.h
- *
- *
- * Description: Here are different custom button (big primary button,
- * secondary button, color selection button...), extending QPushButton
- */
-
 #ifndef COMPBUTTONS_H
 #define COMPBUTTONS_H
 
