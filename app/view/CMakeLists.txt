@@ -23,6 +23,7 @@ set(SOURCES
         src/imgcharacterview.cpp
         src/ApplicationView.cpp
         src/equipmentview.cpp
+        src/dotview.cpp
 )
 
 set(HEADERS
@@ -41,6 +42,7 @@ set(HEADERS
         include/imgcharacterview.h
         include/ApplicationView.h
         include/equipmentview.h
+        include/dotview.h
 )
 
 set(FORMS
@@ -57,6 +59,7 @@ set(FORMS
         forms/statsview.ui
         forms/imgcharacterview.ui
         forms/equipmentview.ui
+        forms/dotview.ui
     )
 
 set(RESOURCES

@@ -61,6 +61,11 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="DotView" name="verticalWidget" native="true">
+           <layout class="QVBoxLayout" name="verticalLayout_3"/>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>
@@ -159,11 +164,26 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="talent_tree_button">
+        <property name="text">
+         <string>Arbre de talents</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DotView</class>
+   <extends>QWidget</extends>
+   <header location="global">dotview.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
