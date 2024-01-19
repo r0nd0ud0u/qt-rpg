@@ -9,7 +9,7 @@ StatsView::StatsView(QWidget *parent) : QWidget(parent), ui(new Ui::StatsView) {
   ui->setupUi(this);
   ui->stats_table->setModel(createStatsModel(parent, ""));
 
-  connect((GameDisplay*)parentWidget(), &GameDisplay::selectCharacter, this,
+  connect((GameDisplay *)parentWidget(), &GameDisplay::selectCharacter, this,
           &StatsView::UpdateStats);
 }
 
@@ -17,9 +17,10 @@ StatsView::~StatsView() { delete ui; }
 
 void StatsView::addStatRow(QAbstractItemModel *model, const QString &subject,
                            const int sender) const {
-  model->insertRow(0);
-  model->setData(model->index(0, 0), subject);
-  model->setData(model->index(0, 1), sender);
+  int index = model->rowCount();
+  model->insertRow(index);
+  model->setData(model->index(index, 0), subject);
+  model->setData(model->index(index, 1), sender);
 }
 
 QAbstractItemModel *StatsView::createStatsModel(QObject *parent,
@@ -41,13 +42,13 @@ QAbstractItemModel *StatsView::createStatsModel(QObject *parent,
     }
     int indexPlayer = 0;
     if (!playerName.isEmpty()) {
-        // lambda function to add here
-        for(int i = 0; i < heroList.size(); i++){
-            if(heroList[i]->m_Name == playerName){
-                indexPlayer = i;
-                break;
-            }
+      // lambda function to add here
+      for (int i = 0; i < heroList.size(); i++) {
+        if (heroList[i]->m_Name == playerName) {
+          indexPlayer = i;
+          break;
         }
+      }
     }
 
     const auto &hero = heroList[indexPlayer];
@@ -68,5 +69,5 @@ QAbstractItemModel *StatsView::createStatsModel(QObject *parent,
 }
 
 void StatsView::UpdateStats(QString name) {
-  ui->stats_table->setModel(createStatsModel(parentWidget(),name));
+  ui->stats_table->setModel(createStatsModel(parentWidget(), name));
 }
