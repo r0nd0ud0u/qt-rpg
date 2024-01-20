@@ -33,48 +33,46 @@ QAbstractItemModel *EquipmentView::createEquipmentModel(QObject *parent,
   model->setHeaderData(1, Qt::Horizontal, QObject::tr("Equipement"));
 
   const auto &app = Application::GetInstance();
-  if (app.m_GameManager != nullptr &&
-      app.m_GameManager->m_PlayersManager != nullptr) {
-
-    const auto &heroList = app.m_GameManager->m_PlayersManager->m_HeroesList;
-
-    // Case hero list empty
-    if (heroList.empty()) {
-      return model;
-    }
-    int indexPlayer = 0;
-    if (!playerName.isEmpty()) {
-      // lambda function to add here
-      for (int i = 0; i < heroList.size(); i++) {
-        if (heroList[i]->m_Name == playerName) {
-          indexPlayer = i;
-          break;
-        }
-      }
-    }
-
-    const auto &hero = heroList[indexPlayer];
-    addEquipmentRow(model, Stuff::GetStringBody(Body::head),
-                    hero->m_Stuffs[Body::head].m_Name);
-    addEquipmentRow(model, Stuff::GetStringBody(Body::necklace),
-                    hero->m_Stuffs[Body::necklace].m_Name);
-    addEquipmentRow(model, Stuff::GetStringBody(Body::arm_left),
-                    hero->m_Stuffs[Body::arm_left].m_Name);
-    addEquipmentRow(model, Stuff::GetStringBody(Body::arm_right),
-                    hero->m_Stuffs[Body::arm_right].m_Name);
-    addEquipmentRow(model, Stuff::GetStringBody(Body::weapon_left),
-                    hero->m_Stuffs[Body::weapon_left].m_Name);
-    addEquipmentRow(model, Stuff::GetStringBody(Body::weapon_right),
-                    hero->m_Stuffs[Body::weapon_right].m_Name);
-    addEquipmentRow(model, Stuff::GetStringBody(Body::chest),
-                    hero->m_Stuffs[Body::chest].m_Name);
-    addEquipmentRow(model, Stuff::GetStringBody(Body::ring),
-                    hero->m_Stuffs[Body::ring].m_Name);
-    addEquipmentRow(model, Stuff::GetStringBody(Body::pants),
-                    hero->m_Stuffs[Body::pants].m_Name);
-    addEquipmentRow(model, Stuff::GetStringBody(Body::shoes),
-                    hero->m_Stuffs[Body::shoes].m_Name);
+  if (app.m_GameManager == nullptr ||
+      app.m_GameManager->m_PlayersManager == nullptr) {
+    return nullptr;
   }
+
+  const auto &heroList = app.m_GameManager->m_PlayersManager->m_HeroesList;
+  // Case hero list empty
+  if (heroList.empty()) {
+    return model;
+  }
+  int indexPlayer = 0;
+  // lambda function to add here
+  for (int i = 0; i < heroList.size(); i++) {
+    if (heroList[i]->m_Name == playerName) {
+      indexPlayer = i;
+      break;
+    }
+  }
+
+  const auto &hero = heroList[indexPlayer];
+  addEquipmentRow(model, Stuff::GetStringBody(Body::head),
+                  hero->m_Stuffs[Body::head].m_Name);
+  addEquipmentRow(model, Stuff::GetStringBody(Body::necklace),
+                  hero->m_Stuffs[Body::necklace].m_Name);
+  addEquipmentRow(model, Stuff::GetStringBody(Body::arm_left),
+                  hero->m_Stuffs[Body::arm_left].m_Name);
+  addEquipmentRow(model, Stuff::GetStringBody(Body::arm_right),
+                  hero->m_Stuffs[Body::arm_right].m_Name);
+  addEquipmentRow(model, Stuff::GetStringBody(Body::weapon_left),
+                  hero->m_Stuffs[Body::weapon_left].m_Name);
+  addEquipmentRow(model, Stuff::GetStringBody(Body::weapon_right),
+                  hero->m_Stuffs[Body::weapon_right].m_Name);
+  addEquipmentRow(model, Stuff::GetStringBody(Body::chest),
+                  hero->m_Stuffs[Body::chest].m_Name);
+  addEquipmentRow(model, Stuff::GetStringBody(Body::ring),
+                  hero->m_Stuffs[Body::ring].m_Name);
+  addEquipmentRow(model, Stuff::GetStringBody(Body::pants),
+                  hero->m_Stuffs[Body::pants].m_Name);
+  addEquipmentRow(model, Stuff::GetStringBody(Body::shoes),
+                  hero->m_Stuffs[Body::shoes].m_Name);
 
   return model;
 }
