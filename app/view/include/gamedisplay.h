@@ -24,7 +24,7 @@ private slots:
     void UpdateChannel();
     void UpdateViews(const QString& name);
     void on_attaque_button_clicked();
-    void on_pushButton_2_clicked();
+    void on_bag_button_clicked();
     void on_stackedWidget_currentChanged(int arg1);
 };
 

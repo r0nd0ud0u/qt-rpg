@@ -9,11 +9,9 @@ class GameManager
 {
 public:
     GameManager() = default;
-    std::unique_ptr<PlayersManager> m_PlayersManager = nullptr;
+    PlayersManager* m_PlayersManager = nullptr;
     void InitPlayers();
-private:
-    void InitHeroes();
-    void InitBosses();
+
 };
 
 #endif // GAMEMANAGER_H

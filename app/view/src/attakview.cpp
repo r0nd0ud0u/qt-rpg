@@ -40,7 +40,7 @@ void AttakView::UpdateAttak(QString name){
 
     for (const auto& atk : app.m_GameManager->m_PlayersManager->m_SelectedHero->attakList ) {
         auto* button = new QPushButton();
-        button->setText(atk.name);
+        button->setText(atk.name + " Mana " + QString::number(atk.manaCost) + " Effect: " + atk.effect);
         ui->attak_lay->addWidget(button);
     }
 }
