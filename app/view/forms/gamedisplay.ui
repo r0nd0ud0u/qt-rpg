@@ -40,6 +40,12 @@
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="ImgCharacterView" name="img_char_widget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <layout class="QVBoxLayout" name="image_character_lay"/>
         </widget>
        </item>
@@ -55,20 +61,45 @@
         </widget>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <widget class="EquipmentView" name="equipment_widget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2"/>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="atk_heal_lay">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QPushButton" name="attaque_button">
+           <property name="text">
+            <string>Attaque</string>
+           </property>
+          </widget>
+         </item>
          <item>
           <widget class="QPushButton" name="pushButton_2">
            <property name="text">
-            <string>PushButton</string>
+            <string>Sac</string>
            </property>
           </widget>
          </item>
         </layout>
        </item>
+       <item>
+        <widget class="QStackedWidget" name="stackedWidget">
+         <widget class="AttakView" name="page"/>
+         <widget class="QWidget" name="page_2"/>
+        </widget>
+       </item>
       </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout"/>
      </item>
      <item>
       <widget class="Channel" name="channel_lay" native="true">
@@ -108,6 +139,18 @@
    <class>ImgCharacterView</class>
    <extends>QWidget</extends>
    <header location="global">imgcharacterview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>EquipmentView</class>
+   <extends>QWidget</extends>
+   <header location="global">equipmentview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>AttakView</class>
+   <extends>QWidget</extends>
+   <header location="global">attakview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
