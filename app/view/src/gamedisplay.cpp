@@ -26,6 +26,8 @@ void GameDisplay::UpdateChannel() {
 
 void GameDisplay::UpdateViews(const QString &name) {
   ui->stackedWidget->setCurrentIndex(2);
+    ui->attaque_button->setEnabled(true);
+    ui->bag_button->setEnabled(true);
   const auto &app = Application::GetInstance();
   // lambda function to add here
   for (auto *hero : app.m_GameManager->m_PlayersManager->m_HeroesList) {
@@ -39,10 +41,14 @@ void GameDisplay::UpdateViews(const QString &name) {
 
 void GameDisplay::on_attaque_button_clicked() {
   ui->stackedWidget->setCurrentIndex(0);
+    ui->attaque_button->setEnabled(false);
+  ui->bag_button->setEnabled(true);
 }
 
-void GameDisplay::on_pushButton_2_clicked() {
+void GameDisplay::on_bag_button_clicked() {
   ui->stackedWidget->setCurrentIndex(1);
+    ui->bag_button->setEnabled(false);
+  ui->attaque_button->setEnabled(true);
 }
 
 void GameDisplay::on_stackedWidget_currentChanged(int arg1) {
