@@ -22,6 +22,9 @@ set(SOURCES
         src/statsview.cpp
         src/imgcharacterview.cpp
         src/ApplicationView.cpp
+        src/equipmentview.cpp
+        src/dotview.cpp
+        src/attakview.cpp
 )
 
 set(HEADERS
@@ -39,6 +42,9 @@ set(HEADERS
         include/statsview.h
         include/imgcharacterview.h
         include/ApplicationView.h
+        include/equipmentview.h
+        include/dotview.h
+        include/attakview.h
 )
 
 set(FORMS
@@ -54,6 +60,9 @@ set(FORMS
         forms/bosspanel.ui
         forms/statsview.ui
         forms/imgcharacterview.ui
+        forms/equipmentview.ui
+        forms/dotview.ui
+        forms/attakview.ui
     )
 
 set(RESOURCES
@@ -61,6 +70,8 @@ set(RESOURCES
 )
 
 add_library(view STATIC ${SOURCES} ${HEADERS} ${FORMS} ${RESOURCES}
+
+
      )
 target_include_directories(view PUBLIC include forms)
 

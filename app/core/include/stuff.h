@@ -26,6 +26,9 @@ public:
 
     Stats m_Stats = {};
     Body m_type;
+    QString m_Name;
+
+    static QString GetStringBody(const Body& body);
 };
 
 #endif // STUFF_H
