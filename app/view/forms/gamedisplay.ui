@@ -95,7 +95,8 @@
        </item>
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
-         <widget class="AttakView" name="page"/>
+         <widget class="AttakView" name="attak_page"/>
+         <widget class="QWidget" name="page_3"/>
          <widget class="QWidget" name="page_2"/>
         </widget>
        </item>

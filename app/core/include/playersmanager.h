@@ -9,8 +9,13 @@ class PlayersManager
 {
 public:
     PlayersManager() = default;
+    void InitHeroes();
+    void InitBosses();
+
     std::vector<Character*> m_HeroesList;
     std::vector<Character*> m_BossesList;
+    Character* m_SelectedHero = nullptr;
+
 };
 
 #endif // PLAYERS__MANAGER_H

@@ -23,6 +23,9 @@ private:
 private slots:
     void UpdateChannel();
     void UpdateViews(const QString& name);
+    void on_attaque_button_clicked();
+    void on_pushButton_2_clicked();
+    void on_stackedWidget_currentChanged(int arg1);
 };
 
 #endif // GAMEDISPLAY_H
