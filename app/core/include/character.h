@@ -15,9 +15,11 @@ enum class characType {
 };
 
 struct AttaqueType {
-    std::string name;
+    QString name;
     int damage = 0;
     int aggroCum = 0;
+    QString effect;
+    int manaCost = 0;
 };
 
 
