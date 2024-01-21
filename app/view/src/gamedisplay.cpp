@@ -54,6 +54,6 @@ void GameDisplay::on_bag_button_clicked() {
 void GameDisplay::on_stackedWidget_currentChanged(int arg1) {
   // ui->stackedWidget->
   if (arg1 == 0) {
-    ui->attak_page->UpdateAttak("");
+    ui->attak_page->UpdateAttak();
   }
 }

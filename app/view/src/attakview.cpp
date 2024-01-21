@@ -11,7 +11,7 @@ AttakView::AttakView(QWidget *parent) : QWidget(parent), ui(new Ui::AttakView) {
 
 AttakView::~AttakView() { delete ui; }
 
-void AttakView::UpdateAttak(QString name) {
+void AttakView::UpdateAttak() {
   // remove current buttons
   RemoveAttak();
 
