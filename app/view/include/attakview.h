@@ -14,8 +14,8 @@ class AttakView : public QWidget
 public:
     explicit AttakView(QWidget *parent = nullptr);
     ~AttakView();
-    void AddAttak();
-
+    void UpdateAttak();
+    void RemoveAttak();
 private:
     Ui::AttakView *ui;
 };
