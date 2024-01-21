@@ -74,7 +74,7 @@ void HeroPanel::mousePressEvent(QMouseEvent *event)
     }
 }
 
-void HeroPanel::on_edit_button_clicked()
+void HeroPanel::on_edit_button_clicked() const
 {
     auto& appView = ApplicationView::GetInstance();
     appView.ShowWindow(appView.GetCharacterWindow(), true);

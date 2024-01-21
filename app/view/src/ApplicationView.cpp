@@ -29,7 +29,7 @@ void ApplicationView::StartCharacterWindow() {
     }
 }
 
-void ApplicationView::ShowWindow(QMainWindow *mw, bool show) {
+void ApplicationView::ShowWindow(QMainWindow *mw, bool show) const {
   if (mw != nullptr) {
     if (show)
       mw->show();

@@ -19,7 +19,7 @@ public:
     CharacterWindow* GetCharacterWindow() { return m_Character_Window.get(); }
     void StartMainWindow();
     void StartCharacterWindow();
-    void ShowWindow(QMainWindow* mw, bool show);
+    void ShowWindow(QMainWindow* mw, bool show) const;
 
 private:
     explicit ApplicationView(QObject* parent = nullptr);

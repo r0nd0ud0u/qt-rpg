@@ -26,7 +26,7 @@ public:
 private slots:
     void on_pushButton_clicked();
 
-    void on_edit_button_clicked();
+    void on_edit_button_clicked() const;
 
 signals:
     void addStuff();
