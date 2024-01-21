@@ -1,6 +1,8 @@
 #include "heropanel.h"
 #include "ui_heropanel.h"
 
+#include "ApplicationView.h"
+
 HeroPanel::HeroPanel(QWidget* parent)
   : QWidget(parent)
   , ui(new Ui::HeroPanel)
@@ -71,3 +73,10 @@ void HeroPanel::mousePressEvent(QMouseEvent *event)
         emit selectCharacter(m_Heroe->m_Name);
     }
 }
+
+void HeroPanel::on_edit_button_clicked() const
+{
+    auto& appView = ApplicationView::GetInstance();
+    appView.ShowWindow(appView.GetCharacterWindow(), true);
+}
+
