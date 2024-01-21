@@ -9,12 +9,11 @@ Character::Character(const QString name, const characType type,  const Stats& st
     m_type(type),
     m_Stats(stats)
 {
-
+    m_Inventory.resize(static_cast<int>(InventoryType::enumSize));
 }
 
 void Character::Attaque(int degat, Character* target) const {
     if (target == nullptr) {
-        qDebug("problem");
         return;
     }
 
@@ -45,4 +44,16 @@ void Character::AddStuff(const Stuff& stuff){
     m_Stats.m_regenHP = stuff.m_Stats.m_regenHP;
     m_Stats.m_regenMana = stuff.m_Stats.m_regenMana;
     m_Stats.m_regenVigueur = stuff.m_Stats.m_regenVigueur;
+}
+
+QString Character::GetInventoryString(const InventoryType& type){
+    switch (type) {
+    case InventoryType::healthPotion:
+        return "Potion de vie";
+    case InventoryType::manaPotion:
+        return "Potion de mana";
+    default:
+        break;
+    }
+    return "";
 }

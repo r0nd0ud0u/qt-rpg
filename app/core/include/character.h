@@ -22,6 +22,13 @@ struct AttaqueType {
     int manaCost = 0;
 };
 
+enum class InventoryType{
+    healthPotion,
+    manaPotion,
+    enumSize
+
+};
+
 
 
 class Character
@@ -33,11 +40,14 @@ public:
     void AddAtq (const AttaqueType& atq);
     void AddStuff(const Stuff& stuff);
 
+    static QString GetInventoryString(const InventoryType& type);
+
     QString m_Name = "default";
     characType m_type = characType::Hero;
     Stats m_Stats;
     std::unordered_map<Body, Stuff> m_Stuffs;
     std::vector<AttaqueType> attakList;
+    std::vector<uint8_t> m_Inventory;
     int m_Level = 1;
     int m_Exp = 0;
 

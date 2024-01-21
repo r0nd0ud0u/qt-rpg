@@ -95,9 +95,9 @@
        </item>
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
-         <widget class="AttakView" name="attak_page"/>
-         <widget class="QWidget" name="page_3"/>
-         <widget class="QWidget" name="page_2"/>
+         <widget class="ActionsView" name="attak_page"/>
+         <widget class="QWidget" name="default_page"/>
+         <widget class="ActionsView" name="inventory_page"/>
         </widget>
        </item>
       </layout>
@@ -149,9 +149,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>AttakView</class>
+   <class>ActionsView</class>
    <extends>QWidget</extends>
-   <header location="global">attakview.h</header>
+   <header location="global">actionsview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
