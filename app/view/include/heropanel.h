@@ -26,6 +26,8 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+    void on_edit_button_clicked();
+
 signals:
     void addStuff();
     void selectCharacter(QString);
