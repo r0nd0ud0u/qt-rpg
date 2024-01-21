@@ -25,6 +25,7 @@ set(SOURCES
         src/equipmentview.cpp
         src/dotview.cpp
         src/actionsview.cpp
+        src/characterwindow.cpp
 )
 
 set(HEADERS
@@ -45,6 +46,7 @@ set(HEADERS
         include/equipmentview.h
         include/dotview.h
         include/actionsview.h
+        include/characterwindow.h
 )
 
 set(FORMS
@@ -63,6 +65,7 @@ set(FORMS
         forms/equipmentview.ui
         forms/dotview.ui
         forms/actionsview.ui
+        forms/characterwindow.ui
     )
 
 set(RESOURCES
@@ -70,6 +73,7 @@ set(RESOURCES
 )
 
 add_library(view STATIC ${SOURCES} ${HEADERS} ${FORMS} ${RESOURCES}
+
 
 
      )

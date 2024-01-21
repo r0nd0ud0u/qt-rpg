@@ -11,6 +11,7 @@ int main(int argc, char *argv[])
     Stylizer::SetTheme(StylizerSelector::THEMES::LIGHT);
 
     ApplicationView::GetInstance().StartMainWindow();
+    ApplicationView::GetInstance().StartCharacterWindow();
 
     return app->exec();
 }

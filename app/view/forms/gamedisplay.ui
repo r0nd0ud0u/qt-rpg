@@ -30,7 +30,14 @@
       <widget class="BossesView" name="bosses_widget" native="true"/>
      </item>
      <item>
-      <widget class="HeroesView" name="heroes_widget" native="true"/>
+      <widget class="HeroesView" name="heroes_widget" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
