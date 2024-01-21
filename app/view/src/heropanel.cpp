@@ -54,7 +54,7 @@ HeroPanel::UpdatePanel(Character* hero)
 }
 
 void
-HeroPanel::SetActive(bool activated)
+HeroPanel::SetActive(const bool activated)
 {
   if (activated) {
     setStyleSheet("#left_widget, #right_widget{ background:     #40b1fe;  } "
@@ -66,11 +66,27 @@ HeroPanel::SetActive(bool activated)
   }
 }
 
+void HeroPanel::SetSelected(const bool selected) {
+    QFrame::Shape shape = QFrame::NoFrame;
+    int lineWidth = 0;
+    if(selected) {
+        shape = QFrame::Box;
+        lineWidth = 3;
+    }
+    ui->frame->setFrameShape(shape);
+    ui->frame->setLineWidth(lineWidth);
+
+    // update buttons
+    ui->edit_button->setEnabled(selected);
+    ui->talent_tree_button->setEnabled(selected);
+    ui->stuff_button->setEnabled(selected);
+}
 
 void HeroPanel::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
         emit selectCharacter(m_Heroe->m_Name);
+
     }
 }
 

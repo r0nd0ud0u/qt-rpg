@@ -18,7 +18,8 @@ public:
     explicit HeroPanel(QWidget *parent = nullptr);
     ~HeroPanel();
     void UpdatePanel(Character* hero);
-    void SetActive(bool activated);
+    void SetActive(const bool activated);
+    void SetSelected(const bool selected);
     void mousePressEvent(QMouseEvent *event) override;
 
     Character* m_Heroe = nullptr;
