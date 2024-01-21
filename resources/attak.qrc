@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>attak/Marc.png</file>
+		<file>attak/Seb.png</file>
+		<file>attak/Thalia.png</file>
+    </qresource>
+</RCC>

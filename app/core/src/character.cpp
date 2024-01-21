@@ -57,3 +57,27 @@ QString Character::GetInventoryString(const InventoryType& type){
     }
     return "";
 }
+
+QString Character::GetTargetString(const TargetType& type){
+    switch (type) {
+    case TargetType::ennemy:
+        return "Ennemie";
+    case TargetType::ally:
+        return "Allié";
+    default:
+        break;
+    }
+    return "";
+}
+
+QString Character::GetReachString(const ReachType& type){
+    switch (type) {
+    case ReachType::zone:
+        return "Zone";
+    case ReachType::individual:
+        return "Individuel";
+    default:
+        break;
+    }
+    return "";
+}
