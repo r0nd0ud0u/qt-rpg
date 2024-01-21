@@ -24,7 +24,7 @@ set(SOURCES
         src/ApplicationView.cpp
         src/equipmentview.cpp
         src/dotview.cpp
-        src/attakview.cpp
+        src/actionsview.cpp
 )
 
 set(HEADERS
@@ -44,7 +44,7 @@ set(HEADERS
         include/ApplicationView.h
         include/equipmentview.h
         include/dotview.h
-        include/attakview.h
+        include/actionsview.h
 )
 
 set(FORMS
@@ -62,7 +62,7 @@ set(FORMS
         forms/imgcharacterview.ui
         forms/equipmentview.ui
         forms/dotview.ui
-        forms/attakview.ui
+        forms/actionsview.ui
     )
 
 set(RESOURCES
