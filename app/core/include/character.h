@@ -27,7 +27,7 @@ enum class ReachType{
 };
 
 struct AttaqueType {
-    QString name;
+    QString name = "Atq";
     uint32_t damage = 0;
     uint32_t aggroCum = 0;
     QString effect;

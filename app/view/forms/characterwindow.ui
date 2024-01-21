@@ -17,9 +17,9 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QTabWidget" name="tabWidget">
-      <widget class="EditAttakView" name="tab">
+      <widget class="EditAttakView" name="edit_atk_tab">
        <attribute name="title">
-        <string>Tab 1</string>
+        <string>Attaque</string>
        </attribute>
       </widget>
       <widget class="QWidget" name="tab_2">
@@ -32,7 +32,7 @@
     <item>
      <widget class="QPushButton" name="pushButton">
       <property name="text">
-       <string>PushButton</string>
+       <string>Ok</string>
       </property>
      </widget>
     </item>

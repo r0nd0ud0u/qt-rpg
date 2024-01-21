@@ -2,10 +2,16 @@
 #define EDITATTAKVIEW_H
 
 #include <QWidget>
+#include <QStringListModel>
 
 #include "character.h"
 
 #include <vector>
+
+struct EditAttak{
+    AttaqueType type;
+    bool updated = false;
+};
 
 namespace Ui {
 class EditAttakView;
@@ -18,6 +24,8 @@ class EditAttakView : public QWidget
 public:
     explicit EditAttakView(QWidget *parent = nullptr);
     ~EditAttakView();
+    void InitView();
+    void Save();
 
 private slots:
     void on_apply_button_clicked();
@@ -40,10 +48,18 @@ private slots:
 
     void on_photo_comboBox_currentIndexChanged(int index);
 
+    void on_new_atk_button_clicked();
+
+    void on_ok_button_clicked();
+
 private:
     Ui::EditAttakView *ui;
-    std::vector<AttaqueType> m_AttakList;
-    void UpdateValues(const AttaqueType &selectedAttak);
+    std::vector<EditAttak> m_AttakList;
+    const QString OFFLINE_IMG = "./offlines/attak/img/";
+
+    void UpdateValues(const EditAttak &selectedAttak);
+    void Apply();
+    void OnValueChange();
 };
 
 #endif // EDITATTAKVIEW_H
