@@ -74,9 +74,9 @@ void EditAttakView::Apply() {
       static_cast<TargetType>(ui->target_comboBox->currentIndex());
   curAtk.type.reach =
       static_cast<ReachType>(ui->reach_comboBox->currentIndex());
-  curAtk.type.turnsDuration = ui->duration_spinBox->value();
-  curAtk.type.manaCost = ui->mana_cost_spinBox->value();
-  curAtk.type.aggroCum = ui->rage_aggro_spinBox->value();
+  curAtk.type.turnsDuration = static_cast<uint16_t>(ui->duration_spinBox->value());
+  curAtk.type.manaCost = static_cast<uint16_t>(ui->mana_cost_spinBox->value());
+  curAtk.type.aggroCum = static_cast<uint16_t>(ui->rage_aggro_spinBox->value());
   curAtk.type.namePhoto = ui->photo_comboBox->currentText();
 }
 
@@ -197,31 +197,31 @@ void EditAttakView::OnValueChange()
     m_AttakList[curIndex].updated = true;
 }
 
-void EditAttakView::on_name_lineEdit_textChanged(const QString &arg1) {
+void EditAttakView::on_name_lineEdit_textChanged([[maybe_unused]]const QString &arg1) {
   OnValueChange();
 }
 
-void EditAttakView::on_target_comboBox_currentIndexChanged(int index) {
+void EditAttakView::on_target_comboBox_currentIndexChanged([[maybe_unused]]int index) {
   OnValueChange();
 }
 
-void EditAttakView::on_reach_comboBox_currentIndexChanged(int index) {
+void EditAttakView::on_reach_comboBox_currentIndexChanged([[maybe_unused]]int index) {
   OnValueChange();
 }
 
-void EditAttakView::on_duration_spinBox_valueChanged(int arg1) {
+void EditAttakView::on_duration_spinBox_valueChanged([[maybe_unused]]int arg1) {
   OnValueChange();
 }
 
-void EditAttakView::on_rage_aggro_spinBox_valueChanged(int arg1) {
+void EditAttakView::on_rage_aggro_spinBox_valueChanged([[maybe_unused]]int arg1) {
   OnValueChange();
 }
 
-void EditAttakView::on_mana_cost_spinBox_valueChanged(int arg1) {
+void EditAttakView::on_mana_cost_spinBox_valueChanged([[maybe_unused]]int arg1) {
   OnValueChange();
 }
 
-void EditAttakView::on_photo_comboBox_currentIndexChanged(int index) {
+void EditAttakView::on_photo_comboBox_currentIndexChanged([[maybe_unused]]int index) {
   OnValueChange();
 }
 
@@ -237,7 +237,7 @@ void EditAttakView::on_new_atk_button_clicked() {
   ui->atk_list_view->setCurrentIndex(itemIndex);
   ui->atk_list_view->model()->setData(itemIndex, EditAttak().type.name);
   // update m_AttakList
-  m_AttakList.push_back(EditAttak());
+  m_AttakList.emplace_back(EditAttak());
   m_AttakList.back().updated = true;
   UpdateValues(EditAttak());
 }
