@@ -27,17 +27,16 @@ void EditAttakView::InitView() {
       app.m_GameManager->m_PlayersManager->m_SelectedHero == nullptr) {
     return;
   }
-
-  // Create model
-  auto *model = new QStringListModel(this);
-
-  // Make data
-  QStringList List;
   const auto &selectedHeroAtkList =
       app.m_GameManager->m_PlayersManager->m_SelectedHero->attakList;
   if (selectedHeroAtkList.empty()) {
-    return;
+      return;
   }
+
+  // Create model
+  auto *model = new QStringListModel(this);
+  // Make data
+  QStringList List;
   // Init List and m_AttakList
   m_AttakList.clear();
   for (const auto &atk : selectedHeroAtkList) {
