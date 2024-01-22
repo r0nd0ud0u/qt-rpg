@@ -50,8 +50,6 @@ private slots:
 
     void on_new_atk_button_clicked();
 
-    void on_ok_button_clicked();
-
 private:
     Ui::EditAttakView *ui;
     std::vector<EditAttak> m_AttakList;

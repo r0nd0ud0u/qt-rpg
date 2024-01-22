@@ -62,6 +62,9 @@ void EditAttakView::InitView() {
 void EditAttakView::on_apply_button_clicked() { Apply(); }
 
 void EditAttakView::Apply() {
+   // disable button
+    ui->apply_button->setEnabled(false);
+
   int curIndex = ui->atk_list_view->currentIndex().row();
   auto &curAtk = m_AttakList[curIndex];
 
@@ -78,6 +81,9 @@ void EditAttakView::Apply() {
 }
 
 void EditAttakView::Save() {
+    // apply all the changes
+    Apply();
+
   QFile file;
   QDir logDir;
   logDir.mkpath(".");
@@ -86,19 +92,11 @@ void EditAttakView::Save() {
   if (index > m_AttakList.size()) {
     return;
   }
-  QString logFilePath = logDir.filePath("./offlines/attak/" +
-                                        m_AttakList[index].type.name + ".json");
-  file.setFileName(logFilePath);
-  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-    QMessageBox::information(
-        nullptr, tr("Error log file"),
-        tr("Log file could not be created at %1. No log will be produced.")
-            .arg(logFilePath));
-  } else {
     for (const auto &atk : m_AttakList) {
       if (!atk.updated) {
         continue;
       }
+      // init json doc
       QJsonObject obj;
       obj.insert("name", atk.type.name);
       obj.insert("target", Character::GetTargetString(atk.type.target));
@@ -109,10 +107,19 @@ void EditAttakView::Save() {
       obj.insert("photo", atk.type.namePhoto);
       // output attak json
       QJsonDocument doc(obj);
+
+      QString logFilePath = logDir.filePath("./offlines/attak/" +
+                                            m_AttakList[index].type.name + ".json");
+      file.setFileName(logFilePath);
+      if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+          QMessageBox::information(
+              nullptr, tr("Error log file"),
+              tr("Log file could not be created at %1. No log will be produced.")
+                  .arg(logFilePath));
+      }
       QTextStream out(&file);
       out << doc.toJson() << "\n";
     }
-  }
 }
 
 void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
@@ -167,10 +174,12 @@ void EditAttakView::on_atk_list_view_clicked(const QModelIndex &index) {
       widget->setEnabled(true);
     }
   }
-  ui->apply_button->setEnabled(false);
 
   // update values with the ones from the current selected character
   UpdateValues(selectedAttak);
+
+  // disable apply button
+  ui->apply_button->setEnabled(false);
 }
 
 // form layout value changed
@@ -233,8 +242,4 @@ void EditAttakView::on_new_atk_button_clicked() {
   UpdateValues(EditAttak());
 }
 
-void EditAttakView::on_ok_button_clicked()
-{
-    Save();
-}
 
