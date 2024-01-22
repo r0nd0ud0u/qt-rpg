@@ -2,15 +2,14 @@
 #include "ui_editattakview.h"
 
 // Create output json
-#include <QDateTime>
 #include <QDir>
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMessageBox>
-#include <QXmlStreamReader>
 
+#include "character.h"
 #include <Application.h>
 
 EditAttakView::EditAttakView(QWidget *parent)
@@ -29,9 +28,10 @@ void EditAttakView::InitView() {
   }
   const auto &selectedHeroAtkList =
       app.m_GameManager->m_PlayersManager->m_SelectedHero->attakList;
-  if (selectedHeroAtkList.empty()) {
-      return;
-  }
+
+  // init attributes
+  m_SelectedCharaName =
+      app.m_GameManager->m_PlayersManager->m_SelectedHero->m_Name;
 
   // Create model
   auto *model = new QStringListModel(this);
@@ -54,84 +54,94 @@ void EditAttakView::InitView() {
   ui->atk_list_view->setModel(model);
 
   // Update view
+  if(!m_AttakList.empty()){
   ui->atk_list_view->setCurrentIndex(model->index(0));
-  UpdateValues(m_AttakList.front());
+      UpdateValues(m_AttakList.front());
+  }
   ui->apply_button->setEnabled(false);
 }
 
 void EditAttakView::on_apply_button_clicked() { Apply(); }
 
 void EditAttakView::Apply() {
-   // disable button
-    ui->apply_button->setEnabled(false);
+  // disable button
+  ui->apply_button->setEnabled(false);
 
   int curIndex = ui->atk_list_view->currentIndex().row();
   auto &curAtk = m_AttakList[curIndex];
 
   // atk list of edit attak view
   curAtk.type.name = ui->name_lineEdit->text();
-  curAtk.type.target =
-      static_cast<TargetType>(ui->target_comboBox->currentIndex());
+  curAtk.type.target = AttaqueType::TARGET_TYPES.at(ui->target_comboBox->currentIndex());
   curAtk.type.reach =
-      static_cast<ReachType>(ui->reach_comboBox->currentIndex());
-  curAtk.type.turnsDuration = static_cast<uint16_t>(ui->duration_spinBox->value());
+      AttaqueType::REACH_TYPES.at(ui->reach_comboBox->currentIndex());
+  curAtk.type.turnsDuration =
+      static_cast<uint16_t>(ui->duration_spinBox->value());
   curAtk.type.manaCost = static_cast<uint16_t>(ui->mana_cost_spinBox->value());
   curAtk.type.aggroCum = static_cast<uint16_t>(ui->rage_aggro_spinBox->value());
   curAtk.type.namePhoto = ui->photo_comboBox->currentText();
 }
 
 void EditAttakView::Save() {
-    // apply all the changes
-    Apply();
+  // apply all the changes
+  Apply();
 
   QFile file;
   QDir logDir;
-  logDir.mkpath(".");
-
+  QString pathAtkChara = OFFLINE_ATK + m_SelectedCharaName + "/";
+  logDir.mkpath(pathAtkChara);
   const int index = ui->atk_list_view->currentIndex().row();
   if (index > m_AttakList.size()) {
     return;
   }
-    for (const auto &atk : m_AttakList) {
-      if (!atk.updated) {
-        continue;
-      }
-      // init json doc
-      QJsonObject obj;
-      obj.insert("name", atk.type.name);
-      obj.insert("target", Character::GetTargetString(atk.type.target));
-      obj.insert("reach", Character::GetReachString(atk.type.reach));
-      obj.insert("duration", atk.type.turnsDuration);
-      obj.insert("mana_cost", QString::number(atk.type.manaCost));
-      obj.insert("rage_aggro", QString::number(atk.type.aggroCum));
-      obj.insert("photo", atk.type.namePhoto);
-      // output attak json
-      QJsonDocument doc(obj);
-
-      QString logFilePath = logDir.filePath("./offlines/attak/" +
-                                            m_AttakList[index].type.name + ".json");
-      file.setFileName(logFilePath);
-      if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-          QMessageBox::information(
-              nullptr, tr("Error log file"),
-              tr("Log file could not be created at %1. No log will be produced.")
-                  .arg(logFilePath));
-      }
-      QTextStream out(&file);
-      out << doc.toJson() << "\n";
+  for (const auto &atk : m_AttakList) {
+    if (!atk.updated) {
+      continue;
     }
+    // init json doc
+    QJsonObject obj;
+    obj.insert(ATK_NAME, atk.type.name);
+    obj.insert(ATK_TARGET, atk.type.target);
+    obj.insert(ATK_REACH, atk.type.reach);
+    obj.insert(ATK_DURATION, atk.type.turnsDuration);
+    obj.insert(ATK_MANA_COST, QString::number(atk.type.manaCost));
+    obj.insert(ATK_BERSECK_AGGRO, QString::number(atk.type.aggroCum));
+    obj.insert(ATK_PHOTO, atk.type.namePhoto);
+    obj.insert(ATK_DAMAGE, static_cast<int>(atk.type.damage));
+    // output attak json
+    QJsonDocument doc(obj);
+
+    QString logFilePath =
+        logDir.filePath(pathAtkChara + m_AttakList[index].type.name + ".json");
+    file.setFileName(logFilePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+      QMessageBox::information(
+          nullptr, tr("Error log file"),
+          tr("Log file could not be created at %1. No log will be produced.")
+              .arg(logFilePath));
+    }
+    QTextStream out(&file);
+    out << doc.toJson() << "\n";
+  }
+
+  // update selected character
+  auto &selectedHeroAtkList = Application::GetInstance().m_GameManager->m_PlayersManager->m_SelectedHero->attakList;
+  selectedHeroAtkList.clear();
+  for(const auto atk : m_AttakList){
+      selectedHeroAtkList.push_back(atk.type);
+  }
 }
 
 void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
   ui->name_lineEdit->setText(selectedAttak.type.name);
   ui->target_comboBox->setEnabled(true);
-  for (int i = 0; i < static_cast<int>(TargetType::enumSize); i++) {
+  for (int i = 0; i < AttaqueType::TARGET_TYPES.size(); i++) {
     ui->target_comboBox->addItem(
-        Character::GetTargetString(static_cast<TargetType>(i)));
+        AttaqueType::TARGET_TYPES.at(i));
   }
-  for (int i = 0; i < static_cast<int>(ReachType::enumSize); i++) {
+  for (int i = 0; i < AttaqueType::REACH_TYPES.size(); i++) {
     ui->reach_comboBox->addItem(
-        Character::GetReachString(static_cast<ReachType>(i)));
+          AttaqueType::REACH_TYPES.at(i));
   }
   ui->duration_spinBox->setValue(selectedAttak.type.turnsDuration);
   ui->rage_aggro_spinBox->setValue(selectedAttak.type.aggroCum);
@@ -190,38 +200,45 @@ void EditAttakView::on_photo_comboBox_currentTextChanged(const QString &arg1) {
   ui->img_char->setPixmap(qp);
 }
 
-void EditAttakView::OnValueChange()
-{
+void EditAttakView::OnValueChange() {
+  ui->apply_button->setEnabled(true);
+  const int curIndex = ui->atk_list_view->currentIndex().row();
+  m_AttakList[curIndex].updated = true;
+}
+
+void EditAttakView::on_name_lineEdit_textChanged(
+    const QString &arg1) {
+    ui->atk_list_view->model()->setData(ui->atk_list_view->currentIndex(), arg1);
     ui->apply_button->setEnabled(true);
-    const int curIndex = ui->atk_list_view->currentIndex().row();
-    m_AttakList[curIndex].updated = true;
 }
 
-void EditAttakView::on_name_lineEdit_textChanged([[maybe_unused]]const QString &arg1) {
+void EditAttakView::on_target_comboBox_currentIndexChanged(
+    [[maybe_unused]] int index) {
   OnValueChange();
 }
 
-void EditAttakView::on_target_comboBox_currentIndexChanged([[maybe_unused]]int index) {
+void EditAttakView::on_reach_comboBox_currentIndexChanged(
+    [[maybe_unused]] int index) {
   OnValueChange();
 }
 
-void EditAttakView::on_reach_comboBox_currentIndexChanged([[maybe_unused]]int index) {
+void EditAttakView::on_duration_spinBox_valueChanged(
+    [[maybe_unused]] int arg1) {
   OnValueChange();
 }
 
-void EditAttakView::on_duration_spinBox_valueChanged([[maybe_unused]]int arg1) {
+void EditAttakView::on_rage_aggro_spinBox_valueChanged(
+    [[maybe_unused]] int arg1) {
   OnValueChange();
 }
 
-void EditAttakView::on_rage_aggro_spinBox_valueChanged([[maybe_unused]]int arg1) {
+void EditAttakView::on_mana_cost_spinBox_valueChanged(
+    [[maybe_unused]] int arg1) {
   OnValueChange();
 }
 
-void EditAttakView::on_mana_cost_spinBox_valueChanged([[maybe_unused]]int arg1) {
-  OnValueChange();
-}
-
-void EditAttakView::on_photo_comboBox_currentIndexChanged([[maybe_unused]]int index) {
+void EditAttakView::on_photo_comboBox_currentIndexChanged(
+    [[maybe_unused]] int index) {
   OnValueChange();
 }
 
@@ -241,5 +258,3 @@ void EditAttakView::on_new_atk_button_clicked() {
   m_AttakList.back().updated = true;
   UpdateValues(EditAttak());
 }
-
-

@@ -19,16 +19,6 @@ void PlayersManager::InitHeroes() {
     stats.m_regenMana = 25;
     stats.m_regenVigueur = 5;
     const auto hero1 = new Character("Thalia", characType::Hero, stats);
-    AttaqueType atq1;
-    atq1.name = "atq1";
-    atq1.damage = 100;
-    atq1.effect = "effect";
-    hero1->AddAtq(atq1);
-    AttaqueType atq2;
-    atq2.name = "atq2";
-    atq2.damage = 100;
-    atq2.effect = "effect";
-    hero1->AddAtq(atq2);
 
     stats.m_HP = 605;
     stats.m_Mana = 1369;
@@ -46,10 +36,6 @@ void PlayersManager::InitHeroes() {
     stats.m_regenMana = 215;
     stats.m_regenVigueur = 11;
     const auto hero2 = new Character("Seb", characType::Hero, stats);
-    atq1.name = "heheh";
-    atq2.name = "hahaa";
-    hero2->AddAtq(atq1);
-    hero2->AddAtq(atq2);
 
     stats.m_HP = 2605;
     stats.m_Mana = 2369;
@@ -67,14 +53,14 @@ void PlayersManager::InitHeroes() {
     stats.m_regenMana = 225;
     stats.m_regenVigueur = 25;
     const auto hero3 = new Character("Marc", characType::Hero, stats);
-    atq1.name = "hihih";
-    atq2.name = "hohoh";
-    hero3->AddAtq(atq1);
-    hero3->AddAtq(atq2);
 
     m_HeroesList.push_back(hero1);
     m_HeroesList.push_back(hero2);
     m_HeroesList.push_back(hero3);
+
+    for(const auto& hero : m_HeroesList){
+        hero->LoadAtkJson();
+    }
 }
 
 void PlayersManager::InitBosses() {

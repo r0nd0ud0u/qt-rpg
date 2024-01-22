@@ -14,38 +14,26 @@ enum class characType {
     Boss
 };
 
-enum class TargetType{
-    ennemy,
-    ally,
-    enumSize
-};
-
-enum class ReachType{
-    zone,
-    individual,
-    enumSize
-};
-
-struct AttaqueType {
+class AttaqueType {
+public:
     QString name = "Atq";
     uint32_t damage = 0;
     uint32_t aggroCum = 0;
     QString effect;
     uint32_t manaCost = 0;
-    TargetType target = TargetType::ennemy;
-    ReachType reach = ReachType::individual;
-    uint8_t turnsDuration = 1;
+    QString target = TARGET_ENNEMY;
+    QString reach = REACH_INDIVIDUAL;
+    uint16_t turnsDuration = 1;
     QString namePhoto;
+    static std::vector<QString> TARGET_TYPES;
+    static std::vector<QString> REACH_TYPES;
 };
 
 enum class InventoryType{
     healthPotion,
     manaPotion,
     enumSize
-
 };
-
-
 
 class Character
 {
@@ -55,10 +43,9 @@ public:
     void Attaque(int degat, Character* target) const;
     void AddAtq (const AttaqueType& atq);
     void AddStuff(const Stuff& stuff);
+    void LoadAtkJson();
 
     static QString GetInventoryString(const InventoryType& type);
-    static QString GetTargetString(const TargetType& type);
-    static QString GetReachString(const ReachType& type);
 
     QString m_Name = "default";
     characType m_type = characType::Hero;

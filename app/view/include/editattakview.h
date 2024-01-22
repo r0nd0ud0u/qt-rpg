@@ -53,8 +53,7 @@ private slots:
 private:
     Ui::EditAttakView *ui;
     std::vector<EditAttak> m_AttakList;
-    const QString OFFLINE_IMG = "./offlines/attak/img/";
-
+    QString m_SelectedCharaName;
     void UpdateValues(const EditAttak &selectedAttak);
     void Apply();
     void OnValueChange();
