@@ -34,7 +34,7 @@ struct AttaqueType {
     uint32_t manaCost = 0;
     TargetType target = TargetType::ennemy;
     ReachType reach = ReachType::individual;
-    uint8_t turnsDuration = 1;
+    uint16_t turnsDuration = 1;
     QString namePhoto;
 };
 

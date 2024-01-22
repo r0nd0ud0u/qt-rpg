@@ -30,8 +30,12 @@ void EditAttakView::InitView() {
   const auto &selectedHeroAtkList =
       app.m_GameManager->m_PlayersManager->m_SelectedHero->attakList;
   if (selectedHeroAtkList.empty()) {
-      return;
+    return;
   }
+
+  // init attributes
+  m_SelectedCharaName =
+      app.m_GameManager->m_PlayersManager->m_SelectedHero->m_Name;
 
   // Create model
   auto *model = new QStringListModel(this);
@@ -62,8 +66,8 @@ void EditAttakView::InitView() {
 void EditAttakView::on_apply_button_clicked() { Apply(); }
 
 void EditAttakView::Apply() {
-   // disable button
-    ui->apply_button->setEnabled(false);
+  // disable button
+  ui->apply_button->setEnabled(false);
 
   int curIndex = ui->atk_list_view->currentIndex().row();
   auto &curAtk = m_AttakList[curIndex];
@@ -74,52 +78,53 @@ void EditAttakView::Apply() {
       static_cast<TargetType>(ui->target_comboBox->currentIndex());
   curAtk.type.reach =
       static_cast<ReachType>(ui->reach_comboBox->currentIndex());
-  curAtk.type.turnsDuration = static_cast<uint16_t>(ui->duration_spinBox->value());
+  curAtk.type.turnsDuration =
+      static_cast<uint16_t>(ui->duration_spinBox->value());
   curAtk.type.manaCost = static_cast<uint16_t>(ui->mana_cost_spinBox->value());
   curAtk.type.aggroCum = static_cast<uint16_t>(ui->rage_aggro_spinBox->value());
   curAtk.type.namePhoto = ui->photo_comboBox->currentText();
 }
 
 void EditAttakView::Save() {
-    // apply all the changes
-    Apply();
+  // apply all the changes
+  Apply();
 
   QFile file;
   QDir logDir;
-  logDir.mkpath(".");
-
+  QString pathAtkChara = OFFLINE_ATK + m_SelectedCharaName + "/";
+  logDir.mkpath(pathAtkChara);
   const int index = ui->atk_list_view->currentIndex().row();
   if (index > m_AttakList.size()) {
     return;
   }
-    for (const auto &atk : m_AttakList) {
-      if (!atk.updated) {
-        continue;
-      }
-      // init json doc
-      QJsonObject obj;
-      obj.insert("name", atk.type.name);
-      obj.insert("target", Character::GetTargetString(atk.type.target));
-      obj.insert("reach", Character::GetReachString(atk.type.reach));
-      obj.insert("duration", atk.type.turnsDuration);
-      obj.insert("mana_cost", QString::number(atk.type.manaCost));
-      obj.insert("rage_aggro", QString::number(atk.type.aggroCum));
-      obj.insert("photo", atk.type.namePhoto);
-      // output attak json
-      QJsonDocument doc(obj);
-
-      QString logFilePath = logDir.filePath("./offlines/attak/" +
-                                            m_AttakList[index].type.name + ".json");
-      file.setFileName(logFilePath);
-      if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-          QMessageBox::information(
-              nullptr, tr("Error log file"),
-              tr("Log file could not be created at %1. No log will be produced.")
-                  .arg(logFilePath));
-      }
-      QTextStream out(&file);
-      out << doc.toJson() << "\n";
+  for (const auto &atk : m_AttakList) {
+    if (!atk.updated) {
+      continue;
     }
+    // init json doc
+    QJsonObject obj;
+    obj.insert("name", atk.type.name);
+    obj.insert("target", Character::GetTargetString(atk.type.target));
+    obj.insert("reach", Character::GetReachString(atk.type.reach));
+    obj.insert("duration", atk.type.turnsDuration);
+    obj.insert("mana_cost", QString::number(atk.type.manaCost));
+    obj.insert("rage_aggro", QString::number(atk.type.aggroCum));
+    obj.insert("photo", atk.type.namePhoto);
+    // output attak json
+    QJsonDocument doc(obj);
+
+    QString logFilePath =
+        logDir.filePath(pathAtkChara + m_AttakList[index].type.name + ".json");
+    file.setFileName(logFilePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+      QMessageBox::information(
+          nullptr, tr("Error log file"),
+          tr("Log file could not be created at %1. No log will be produced.")
+              .arg(logFilePath));
+    }
+    QTextStream out(&file);
+    out << doc.toJson() << "\n";
+  }
 }
 
 void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
@@ -190,38 +195,44 @@ void EditAttakView::on_photo_comboBox_currentTextChanged(const QString &arg1) {
   ui->img_char->setPixmap(qp);
 }
 
-void EditAttakView::OnValueChange()
-{
-    ui->apply_button->setEnabled(true);
-    const int curIndex = ui->atk_list_view->currentIndex().row();
-    m_AttakList[curIndex].updated = true;
+void EditAttakView::OnValueChange() {
+  ui->apply_button->setEnabled(true);
+  const int curIndex = ui->atk_list_view->currentIndex().row();
+  m_AttakList[curIndex].updated = true;
 }
 
-void EditAttakView::on_name_lineEdit_textChanged([[maybe_unused]]const QString &arg1) {
+void EditAttakView::on_name_lineEdit_textChanged(
+    [[maybe_unused]] const QString &arg1) {
   OnValueChange();
 }
 
-void EditAttakView::on_target_comboBox_currentIndexChanged([[maybe_unused]]int index) {
+void EditAttakView::on_target_comboBox_currentIndexChanged(
+    [[maybe_unused]] int index) {
   OnValueChange();
 }
 
-void EditAttakView::on_reach_comboBox_currentIndexChanged([[maybe_unused]]int index) {
+void EditAttakView::on_reach_comboBox_currentIndexChanged(
+    [[maybe_unused]] int index) {
   OnValueChange();
 }
 
-void EditAttakView::on_duration_spinBox_valueChanged([[maybe_unused]]int arg1) {
+void EditAttakView::on_duration_spinBox_valueChanged(
+    [[maybe_unused]] int arg1) {
   OnValueChange();
 }
 
-void EditAttakView::on_rage_aggro_spinBox_valueChanged([[maybe_unused]]int arg1) {
+void EditAttakView::on_rage_aggro_spinBox_valueChanged(
+    [[maybe_unused]] int arg1) {
   OnValueChange();
 }
 
-void EditAttakView::on_mana_cost_spinBox_valueChanged([[maybe_unused]]int arg1) {
+void EditAttakView::on_mana_cost_spinBox_valueChanged(
+    [[maybe_unused]] int arg1) {
   OnValueChange();
 }
 
-void EditAttakView::on_photo_comboBox_currentIndexChanged([[maybe_unused]]int index) {
+void EditAttakView::on_photo_comboBox_currentIndexChanged(
+    [[maybe_unused]] int index) {
   OnValueChange();
 }
 
@@ -241,5 +252,3 @@ void EditAttakView::on_new_atk_button_clicked() {
   m_AttakList.back().updated = true;
   UpdateValues(EditAttak());
 }
-
-
