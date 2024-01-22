@@ -19,6 +19,7 @@ public:
     QString name = "Atq";
     uint32_t damage = 0;
     uint32_t heal = 0;
+    uint32_t regenMana = 0;
     uint32_t aggroCum = 0;
     QString effect;
     uint32_t manaCost = 0;

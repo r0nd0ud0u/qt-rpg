@@ -97,6 +97,7 @@ void EditAttakView::Save() {
     obj.insert(ATK_PHOTO, atk.type.namePhoto);
     obj.insert(ATK_DAMAGE, static_cast<int>(atk.type.damage));
     obj.insert(ATK_HEAL, static_cast<int>(atk.type.heal));
+    obj.insert(ATK_REGEN_MANA, static_cast<int>(atk.type.heal));
     // output attak json
     QJsonDocument doc(obj);
 
@@ -154,6 +155,7 @@ void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
   ui->heal_spinBox->setValue(selectedAttak.type.heal);
   ui->damage_spinBox->setValue(selectedAttak.type.damage);
   ui->photo_comboBox->setCurrentText(selectedAttak.type.namePhoto);
+  ui->regen_mana_spinBox->setValue(selectedAttak.type.regenMana);
 }
 
 void EditAttakView::EnableAllWidgets(const bool value) {
@@ -246,6 +248,12 @@ void EditAttakView::on_reach_comboBox_currentTextChanged(const QString &arg1) {
   OnValueChange(GetIndexSelectedRow());
   m_AttakList[GetIndexSelectedRow()].type.reach = arg1;
 }
+
+void EditAttakView::on_regen_mana_spinBox_valueChanged(int arg1)
+{
+    OnValueChange(GetIndexSelectedRow());
+    m_AttakList[GetIndexSelectedRow()].type.regenMana = arg1;
+}
 // end form layout changed
 
 void EditAttakView::on_new_atk_button_clicked() {
@@ -267,3 +275,4 @@ void EditAttakView::on_new_atk_button_clicked() {
     InitComboBoxes();
   }
 }
+
