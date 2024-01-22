@@ -54,9 +54,9 @@ void EditAttakView::InitView() {
   ui->atk_list_view->setModel(model);
 
   // Update view
-  if(!m_AttakList.empty()){
-  ui->atk_list_view->setCurrentIndex(model->index(0));
-      UpdateValues(m_AttakList.front());
+  if (!m_AttakList.empty()) {
+    ui->atk_list_view->setCurrentIndex(model->index(0));
+    UpdateValues(m_AttakList.front());
   }
   ui->apply_button->setEnabled(false);
 }
@@ -72,7 +72,8 @@ void EditAttakView::Apply() {
 
   // atk list of edit attak view
   curAtk.type.name = ui->name_lineEdit->text();
-  curAtk.type.target = AttaqueType::TARGET_TYPES.at(ui->target_comboBox->currentIndex());
+  curAtk.type.target =
+      AttaqueType::TARGET_TYPES.at(ui->target_comboBox->currentIndex());
   curAtk.type.reach =
       AttaqueType::REACH_TYPES.at(ui->reach_comboBox->currentIndex());
   curAtk.type.turnsDuration =
@@ -125,23 +126,23 @@ void EditAttakView::Save() {
   }
 
   // update selected character
-  auto &selectedHeroAtkList = Application::GetInstance().m_GameManager->m_PlayersManager->m_SelectedHero->attakList;
+  auto &selectedHeroAtkList =
+      Application::GetInstance()
+          .m_GameManager->m_PlayersManager->m_SelectedHero->attakList;
   selectedHeroAtkList.clear();
-  for(const auto atk : m_AttakList){
-      selectedHeroAtkList.push_back(atk.type);
+  for (const auto& atk : m_AttakList) {
+    selectedHeroAtkList.push_back(atk.type);
   }
 }
 
 void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
   ui->name_lineEdit->setText(selectedAttak.type.name);
   ui->target_comboBox->setEnabled(true);
-  for (int i = 0; i < AttaqueType::TARGET_TYPES.size(); i++) {
-    ui->target_comboBox->addItem(
-        AttaqueType::TARGET_TYPES.at(i));
+  for (const auto &target : AttaqueType::TARGET_TYPES) {
+    ui->target_comboBox->addItem(target);
   }
-  for (int i = 0; i < AttaqueType::REACH_TYPES.size(); i++) {
-    ui->reach_comboBox->addItem(
-          AttaqueType::REACH_TYPES.at(i));
+  for (const auto &reach : AttaqueType::REACH_TYPES) {
+    ui->reach_comboBox->addItem(reach);
   }
   ui->duration_spinBox->setValue(selectedAttak.type.turnsDuration);
   ui->rage_aggro_spinBox->setValue(selectedAttak.type.aggroCum);
@@ -206,10 +207,9 @@ void EditAttakView::OnValueChange() {
   m_AttakList[curIndex].updated = true;
 }
 
-void EditAttakView::on_name_lineEdit_textChanged(
-    const QString &arg1) {
-    ui->atk_list_view->model()->setData(ui->atk_list_view->currentIndex(), arg1);
-    ui->apply_button->setEnabled(true);
+void EditAttakView::on_name_lineEdit_textChanged(const QString &arg1) {
+  ui->atk_list_view->model()->setData(ui->atk_list_view->currentIndex(), arg1);
+  ui->apply_button->setEnabled(true);
 }
 
 void EditAttakView::on_target_comboBox_currentIndexChanged(

@@ -99,7 +99,7 @@ void Character::LoadAtkJson() {
       atk.manaCost = json[ATK_MANA_COST].toInt();
       atk.reach = json[ATK_REACH].toString();
       atk.target = json[ATK_TARGET].toString();
-      atk.turnsDuration = json[ATK_DURATION].toInt();
+      atk.turnsDuration = static_cast<uint16_t>(json[ATK_DURATION].toInt());
       // Add atk to hero atk list
       AddAtq(atk);
     }
