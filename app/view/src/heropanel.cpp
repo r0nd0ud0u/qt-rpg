@@ -97,3 +97,9 @@ void HeroPanel::on_edit_button_clicked() const
     appView.ShowWindow(appView.GetCharacterWindow(), true);
 }
 
+void HeroPanel::on_edit_button_clicked() const
+{
+    auto& appView = ApplicationView::GetInstance();
+    appView.ShowWindow(appView.GetCharacterWindow(), true);
+}
+

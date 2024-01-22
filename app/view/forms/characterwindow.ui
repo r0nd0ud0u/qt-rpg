@@ -36,11 +36,8 @@
      <widget class="QPushButton" name="pushButton">
       <property name="text">
        <string>Ok</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -53,14 +50,6 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>EditAttakView</class>
-   <extends>QWidget</extends>
-   <header location="global">editattakview.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
