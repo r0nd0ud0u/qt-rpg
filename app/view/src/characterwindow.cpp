@@ -6,9 +6,23 @@ CharacterWindow::CharacterWindow(QWidget *parent)
     , ui(new Ui::CharacterWindow)
 {
     ui->setupUi(this);
+    ui->tabWidget->setCurrentIndex(0);
+
 }
 
 CharacterWindow::~CharacterWindow()
 {
     delete ui;
 }
+
+void CharacterWindow::InitWindow(){
+    ui->tabWidget->setCurrentIndex(0);
+    ui->edit_atk_tab->InitView();
+}
+
+void CharacterWindow::on_pushButton_clicked()
+{
+    ui->edit_atk_tab->Save();
+    hide();
+}
+

@@ -14,6 +14,10 @@ class CharacterWindow : public QMainWindow
 public:
     explicit CharacterWindow(QWidget *parent = nullptr);
     ~CharacterWindow();
+    void InitWindow();
+
+private slots:
+    void on_pushButton_clicked();
 
 private:
     Ui::CharacterWindow *ui;

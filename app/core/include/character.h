@@ -14,12 +14,28 @@ enum class characType {
     Boss
 };
 
+enum class TargetType{
+    ennemy,
+    ally,
+    enumSize
+};
+
+enum class ReachType{
+    zone,
+    individual,
+    enumSize
+};
+
 struct AttaqueType {
-    QString name;
-    int damage = 0;
-    int aggroCum = 0;
+    QString name = "Atq";
+    uint32_t damage = 0;
+    uint32_t aggroCum = 0;
     QString effect;
-    int manaCost = 0;
+    uint32_t manaCost = 0;
+    TargetType target = TargetType::ennemy;
+    ReachType reach = ReachType::individual;
+    uint8_t turnsDuration = 1;
+    QString namePhoto;
 };
 
 enum class InventoryType{
@@ -41,6 +57,8 @@ public:
     void AddStuff(const Stuff& stuff);
 
     static QString GetInventoryString(const InventoryType& type);
+    static QString GetTargetString(const TargetType& type);
+    static QString GetReachString(const ReachType& type);
 
     QString m_Name = "default";
     characType m_type = characType::Hero;

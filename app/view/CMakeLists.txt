@@ -26,6 +26,8 @@ set(SOURCES
         src/dotview.cpp
         src/actionsview.cpp
         src/characterwindow.cpp
+        src/editattakview.cpp
+        src/effectview.cpp
 )
 
 set(HEADERS
@@ -47,6 +49,8 @@ set(HEADERS
         include/dotview.h
         include/actionsview.h
         include/characterwindow.h
+        include/editattakview.h
+        include/effectview.h
 )
 
 set(FORMS
@@ -66,6 +70,8 @@ set(FORMS
         forms/dotview.ui
         forms/actionsview.ui
         forms/characterwindow.ui
+        forms/editattakview.ui
+        forms/effectview.ui
     )
 
 set(RESOURCES
@@ -73,8 +79,6 @@ set(RESOURCES
 )
 
 add_library(view STATIC ${SOURCES} ${HEADERS} ${FORMS} ${RESOURCES}
-
-
 
      )
 target_include_directories(view PUBLIC include forms)
