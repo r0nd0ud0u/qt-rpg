@@ -41,7 +41,6 @@ void EditAttakView::InitView() {
   m_AttakList.clear();
   for (const auto &atk : selectedHeroAtkList) {
     List << atk.name;
-    qDebug() << atk.name;
     EditAttak editAtk;
     editAtk.type = atk;
     m_AttakList.push_back(editAtk);
@@ -56,7 +55,10 @@ void EditAttakView::InitView() {
   // Update view
   if (!m_AttakList.empty()) {
     ui->atk_list_view->setCurrentIndex(model->index(0));
+    InitComboBoxes();
     UpdateValues(m_AttakList.front());
+  } else {
+    EnableAllWidgets(false);
   }
   ui->apply_button->setEnabled(false);
 }
@@ -66,21 +68,6 @@ void EditAttakView::on_apply_button_clicked() { Apply(); }
 void EditAttakView::Apply() {
   // disable button
   ui->apply_button->setEnabled(false);
-
-  int curIndex = ui->atk_list_view->currentIndex().row();
-  auto &curAtk = m_AttakList[curIndex];
-
-  // atk list of edit attak view
-  curAtk.type.name = ui->name_lineEdit->text();
-  curAtk.type.target =
-      AttaqueType::TARGET_TYPES.at(ui->target_comboBox->currentIndex());
-  curAtk.type.reach =
-      AttaqueType::REACH_TYPES.at(ui->reach_comboBox->currentIndex());
-  curAtk.type.turnsDuration =
-      static_cast<uint16_t>(ui->duration_spinBox->value());
-  curAtk.type.manaCost = static_cast<uint16_t>(ui->mana_cost_spinBox->value());
-  curAtk.type.aggroCum = static_cast<uint16_t>(ui->rage_aggro_spinBox->value());
-  curAtk.type.namePhoto = ui->photo_comboBox->currentText();
 }
 
 void EditAttakView::Save() {
@@ -109,11 +96,12 @@ void EditAttakView::Save() {
     obj.insert(ATK_BERSECK_AGGRO, QString::number(atk.type.aggroCum));
     obj.insert(ATK_PHOTO, atk.type.namePhoto);
     obj.insert(ATK_DAMAGE, static_cast<int>(atk.type.damage));
+    obj.insert(ATK_HEAL, static_cast<int>(atk.type.heal));
     // output attak json
     QJsonDocument doc(obj);
 
     QString logFilePath =
-        logDir.filePath(pathAtkChara + m_AttakList[index].type.name + ".json");
+        logDir.filePath(pathAtkChara + atk.type.name + ".json");
     file.setFileName(logFilePath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
       QMessageBox::information(
@@ -130,13 +118,12 @@ void EditAttakView::Save() {
       Application::GetInstance()
           .m_GameManager->m_PlayersManager->m_SelectedHero->attakList;
   selectedHeroAtkList.clear();
-  for (const auto& atk : m_AttakList) {
+  for (const auto &atk : m_AttakList) {
     selectedHeroAtkList.push_back(atk.type);
   }
 }
 
-void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
-  ui->name_lineEdit->setText(selectedAttak.type.name);
+void EditAttakView::InitComboBoxes() {
   ui->target_comboBox->setEnabled(true);
   for (const auto &target : AttaqueType::TARGET_TYPES) {
     ui->target_comboBox->addItem(target);
@@ -144,10 +131,6 @@ void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
   for (const auto &reach : AttaqueType::REACH_TYPES) {
     ui->reach_comboBox->addItem(reach);
   }
-  ui->duration_spinBox->setValue(selectedAttak.type.turnsDuration);
-  ui->rage_aggro_spinBox->setValue(selectedAttak.type.aggroCum);
-  ui->mana_cost_spinBox->setValue(selectedAttak.type.manaCost);
-
   // List all attak png string and add them to photo_comboBox
   QString directoryPath = OFFLINE_IMG; // Replace with the actual path
   QDir directory(directoryPath);
@@ -156,35 +139,40 @@ void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
   }
   QStringList fileList =
       directory.entryList(QDir::Files | QDir::NoDotAndDotDot);
-  qDebug() << "List of files in the directory:";
-  ui->photo_comboBox->clear();
   for (const QString &file : fileList) {
-    qDebug() << file;
     ui->photo_comboBox->addItem(file);
   }
 }
 
-void EditAttakView::on_atk_list_view_clicked(const QModelIndex &index) {
-  const auto &app = Application::GetInstance();
-  if (app.m_GameManager == nullptr ||
-      app.m_GameManager->m_PlayersManager == nullptr ||
-      app.m_GameManager->m_PlayersManager->m_SelectedHero == nullptr) {
-    return;
+void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
+  ui->target_comboBox->setCurrentText(selectedAttak.type.target);
+  ui->reach_comboBox->setCurrentText(selectedAttak.type.reach);
+  ui->name_lineEdit->setText(selectedAttak.type.name);
+  ui->duration_spinBox->setValue(selectedAttak.type.turnsDuration);
+  ui->rage_aggro_spinBox->setValue(selectedAttak.type.aggroCum);
+  ui->mana_cost_spinBox->setValue(selectedAttak.type.manaCost);
+  ui->heal_spinBox->setValue(selectedAttak.type.heal);
+  ui->damage_spinBox->setValue(selectedAttak.type.damage);
+  ui->photo_comboBox->setCurrentText(selectedAttak.type.namePhoto);
+}
+
+void EditAttakView::EnableAllWidgets(const bool value) {
+  for (int i = 0; i < ui->values_form_lay->count(); i++) {
+    auto *widget = ui->values_form_lay->itemAt(i)->widget();
+    if (widget != nullptr) {
+      widget->setEnabled(value);
+    }
   }
+}
+void EditAttakView::on_atk_list_view_clicked(const QModelIndex &index) {
   const int idx = index.row();
-  if (idx >=
-      app.m_GameManager->m_PlayersManager->m_SelectedHero->attakList.size()) {
+  if (idx >= m_AttakList.size()) {
     return;
   }
 
   // enable all widgets of the values form layout to true
   const auto &selectedAttak = m_AttakList[idx];
-  for (int i = 0; i < ui->values_form_lay->count(); i++) {
-    auto *widget = ui->values_form_lay->itemAt(i)->widget();
-    if (widget != nullptr) {
-      widget->setEnabled(true);
-    }
-  }
+  EnableAllWidgets(true);
 
   // update values with the ones from the current selected character
   UpdateValues(selectedAttak);
@@ -199,49 +187,65 @@ void EditAttakView::on_photo_comboBox_currentTextChanged(const QString &arg1) {
   // Update image character
   auto qp = QPixmap(OFFLINE_IMG + arg1);
   ui->img_char->setPixmap(qp);
+  OnValueChange(GetIndexSelectedRow());
+  m_AttakList[GetIndexSelectedRow()].type.namePhoto = arg1;
 }
 
-void EditAttakView::OnValueChange() {
+int EditAttakView::GetIndexSelectedRow() {
+  return ui->atk_list_view->currentIndex().row();
+}
+
+void EditAttakView::OnValueChange(const int index) {
   ui->apply_button->setEnabled(true);
-  const int curIndex = ui->atk_list_view->currentIndex().row();
-  m_AttakList[curIndex].updated = true;
+  m_AttakList[index].updated = true;
 }
 
 void EditAttakView::on_name_lineEdit_textChanged(const QString &arg1) {
   ui->atk_list_view->model()->setData(ui->atk_list_view->currentIndex(), arg1);
   ui->apply_button->setEnabled(true);
-}
-
-void EditAttakView::on_target_comboBox_currentIndexChanged(
-    [[maybe_unused]] int index) {
-  OnValueChange();
-}
-
-void EditAttakView::on_reach_comboBox_currentIndexChanged(
-    [[maybe_unused]] int index) {
-  OnValueChange();
+  m_AttakList[GetIndexSelectedRow()].type.name = ui->name_lineEdit->text();
 }
 
 void EditAttakView::on_duration_spinBox_valueChanged(
     [[maybe_unused]] int arg1) {
-  OnValueChange();
+  OnValueChange(GetIndexSelectedRow());
+  m_AttakList[GetIndexSelectedRow()].type.turnsDuration =
+      ui->duration_spinBox->value();
 }
 
 void EditAttakView::on_rage_aggro_spinBox_valueChanged(
     [[maybe_unused]] int arg1) {
-  OnValueChange();
+  OnValueChange(GetIndexSelectedRow());
+  m_AttakList[GetIndexSelectedRow()].type.aggroCum =
+      ui->rage_aggro_spinBox->value();
 }
 
 void EditAttakView::on_mana_cost_spinBox_valueChanged(
     [[maybe_unused]] int arg1) {
-  OnValueChange();
+  OnValueChange(GetIndexSelectedRow());
+  m_AttakList[GetIndexSelectedRow()].type.manaCost =
+      ui->mana_cost_spinBox->value();
 }
 
-void EditAttakView::on_photo_comboBox_currentIndexChanged(
-    [[maybe_unused]] int index) {
-  OnValueChange();
+void EditAttakView::on_heal_spinBox_valueChanged([[maybe_unused]] int arg1) {
+  OnValueChange(GetIndexSelectedRow());
+  m_AttakList[GetIndexSelectedRow()].type.heal = ui->heal_spinBox->value();
 }
 
+void EditAttakView::on_damage_spinBox_valueChanged(int arg1) {
+  OnValueChange(GetIndexSelectedRow());
+  m_AttakList[GetIndexSelectedRow()].type.damage = arg1;
+}
+
+void EditAttakView::on_target_comboBox_currentTextChanged(const QString &arg1) {
+  OnValueChange(GetIndexSelectedRow());
+  m_AttakList[GetIndexSelectedRow()].type.target = arg1;
+}
+
+void EditAttakView::on_reach_comboBox_currentTextChanged(const QString &arg1) {
+  OnValueChange(GetIndexSelectedRow());
+  m_AttakList[GetIndexSelectedRow()].type.reach = arg1;
+}
 // end form layout changed
 
 void EditAttakView::on_new_atk_button_clicked() {
@@ -254,7 +258,12 @@ void EditAttakView::on_new_atk_button_clicked() {
   ui->atk_list_view->setCurrentIndex(itemIndex);
   ui->atk_list_view->model()->setData(itemIndex, EditAttak().type.name);
   // update m_AttakList
-  m_AttakList.emplace_back(EditAttak());
+  m_AttakList.push_back(EditAttak());
   m_AttakList.back().updated = true;
-  UpdateValues(EditAttak());
+  UpdateValues(m_AttakList.back());
+
+  EnableAllWidgets(true);
+  if (ui->atk_list_view->model()->rowCount() == 1) {
+    InitComboBoxes();
+  }
 }
