@@ -53,6 +53,8 @@ private slots:
 
     void on_reach_comboBox_currentTextChanged(const QString &arg1);
 
+    void on_regen_mana_spinBox_valueChanged(int arg1);
+
 private:
     Ui::EditAttakView *ui;
     std::vector<EditAttak> m_AttakList;

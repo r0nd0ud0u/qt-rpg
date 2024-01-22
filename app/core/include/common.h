@@ -34,6 +34,7 @@ const QString ATK_BERSECK_AGGRO = "Rage aggro";
 const QString ATK_PHOTO = "Photo";
 const QString ATK_DAMAGE = "Dégâts";
 const QString ATK_HEAL = "Soin";
+const QString ATK_REGEN_MANA = "Regen mana";
 const QString ATK_EFFECT = "Effet";
 const QString REACH_ZONE = "Zone";
 const QString REACH_INDIVIDUAL = "Individuel";
