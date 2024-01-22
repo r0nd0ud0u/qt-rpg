@@ -54,9 +54,6 @@ private:
     Ui::EditAttakView *ui;
     std::vector<EditAttak> m_AttakList;
     QString m_SelectedCharaName;
-    const QString OFFLINE_IMG = "./offlines/attak/img/";
-    const QString OFFLINE_ATK = "./offlines/attak/";
-
     void UpdateValues(const EditAttak &selectedAttak);
     void Apply();
     void OnValueChange();

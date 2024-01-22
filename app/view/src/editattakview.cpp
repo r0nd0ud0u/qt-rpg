@@ -2,15 +2,14 @@
 #include "ui_editattakview.h"
 
 // Create output json
-#include <QDateTime>
 #include <QDir>
 #include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMessageBox>
-#include <QXmlStreamReader>
 
+#include "character.h"
 #include <Application.h>
 
 EditAttakView::EditAttakView(QWidget *parent)
@@ -29,9 +28,6 @@ void EditAttakView::InitView() {
   }
   const auto &selectedHeroAtkList =
       app.m_GameManager->m_PlayersManager->m_SelectedHero->attakList;
-  if (selectedHeroAtkList.empty()) {
-    return;
-  }
 
   // init attributes
   m_SelectedCharaName =
@@ -58,8 +54,10 @@ void EditAttakView::InitView() {
   ui->atk_list_view->setModel(model);
 
   // Update view
+  if(!m_AttakList.empty()){
   ui->atk_list_view->setCurrentIndex(model->index(0));
-  UpdateValues(m_AttakList.front());
+      UpdateValues(m_AttakList.front());
+  }
   ui->apply_button->setEnabled(false);
 }
 
@@ -74,10 +72,9 @@ void EditAttakView::Apply() {
 
   // atk list of edit attak view
   curAtk.type.name = ui->name_lineEdit->text();
-  curAtk.type.target =
-      static_cast<TargetType>(ui->target_comboBox->currentIndex());
+  curAtk.type.target = AttaqueType::TARGET_TYPES.at(ui->target_comboBox->currentIndex());
   curAtk.type.reach =
-      static_cast<ReachType>(ui->reach_comboBox->currentIndex());
+      AttaqueType::REACH_TYPES.at(ui->reach_comboBox->currentIndex());
   curAtk.type.turnsDuration =
       static_cast<uint16_t>(ui->duration_spinBox->value());
   curAtk.type.manaCost = static_cast<uint16_t>(ui->mana_cost_spinBox->value());
@@ -103,13 +100,14 @@ void EditAttakView::Save() {
     }
     // init json doc
     QJsonObject obj;
-    obj.insert("name", atk.type.name);
-    obj.insert("target", Character::GetTargetString(atk.type.target));
-    obj.insert("reach", Character::GetReachString(atk.type.reach));
-    obj.insert("duration", atk.type.turnsDuration);
-    obj.insert("mana_cost", QString::number(atk.type.manaCost));
-    obj.insert("rage_aggro", QString::number(atk.type.aggroCum));
-    obj.insert("photo", atk.type.namePhoto);
+    obj.insert(ATK_NAME, atk.type.name);
+    obj.insert(ATK_TARGET, atk.type.target);
+    obj.insert(ATK_REACH, atk.type.reach);
+    obj.insert(ATK_DURATION, atk.type.turnsDuration);
+    obj.insert(ATK_MANA_COST, QString::number(atk.type.manaCost));
+    obj.insert(ATK_BERSECK_AGGRO, QString::number(atk.type.aggroCum));
+    obj.insert(ATK_PHOTO, atk.type.namePhoto);
+    obj.insert(ATK_DAMAGE, static_cast<int>(atk.type.damage));
     // output attak json
     QJsonDocument doc(obj);
 
@@ -125,18 +123,25 @@ void EditAttakView::Save() {
     QTextStream out(&file);
     out << doc.toJson() << "\n";
   }
+
+  // update selected character
+  auto &selectedHeroAtkList = Application::GetInstance().m_GameManager->m_PlayersManager->m_SelectedHero->attakList;
+  selectedHeroAtkList.clear();
+  for(const auto atk : m_AttakList){
+      selectedHeroAtkList.push_back(atk.type);
+  }
 }
 
 void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
   ui->name_lineEdit->setText(selectedAttak.type.name);
   ui->target_comboBox->setEnabled(true);
-  for (int i = 0; i < static_cast<int>(TargetType::enumSize); i++) {
+  for (int i = 0; i < AttaqueType::TARGET_TYPES.size(); i++) {
     ui->target_comboBox->addItem(
-        Character::GetTargetString(static_cast<TargetType>(i)));
+        AttaqueType::TARGET_TYPES.at(i));
   }
-  for (int i = 0; i < static_cast<int>(ReachType::enumSize); i++) {
+  for (int i = 0; i < AttaqueType::REACH_TYPES.size(); i++) {
     ui->reach_comboBox->addItem(
-        Character::GetReachString(static_cast<ReachType>(i)));
+          AttaqueType::REACH_TYPES.at(i));
   }
   ui->duration_spinBox->setValue(selectedAttak.type.turnsDuration);
   ui->rage_aggro_spinBox->setValue(selectedAttak.type.aggroCum);
@@ -202,8 +207,9 @@ void EditAttakView::OnValueChange() {
 }
 
 void EditAttakView::on_name_lineEdit_textChanged(
-    [[maybe_unused]] const QString &arg1) {
-  OnValueChange();
+    const QString &arg1) {
+    ui->atk_list_view->model()->setData(ui->atk_list_view->currentIndex(), arg1);
+    ui->apply_button->setEnabled(true);
 }
 
 void EditAttakView::on_target_comboBox_currentIndexChanged(
