@@ -95,6 +95,7 @@ void Character::LoadAtkJson() {
       atk.namePhoto = json[ATK_PHOTO].toString();
       atk.aggroCum = json[ATK_BERSECK_AGGRO].toInt();
       atk.damage = json[ATK_DAMAGE].toInt();
+      atk.heal = json[ATK_HEAL].toInt();
       atk.effect = json[ATK_EFFECT].toString();
       atk.manaCost = json[ATK_MANA_COST].toInt();
       atk.reach = json[ATK_REACH].toString();
