@@ -26,6 +26,7 @@ public:
     ~EditAttakView();
     void InitView();
     void Save();
+    void InitComboBoxes();
 
 private slots:
     void on_apply_button_clicked();
@@ -36,27 +37,38 @@ private slots:
 
     void on_name_lineEdit_textChanged(const QString &arg1);
 
-    void on_target_comboBox_currentIndexChanged(int index);
-
-    void on_reach_comboBox_currentIndexChanged(int index);
-
     void on_duration_spinBox_valueChanged(int arg1);
 
     void on_rage_aggro_spinBox_valueChanged(int arg1);
 
     void on_mana_cost_spinBox_valueChanged(int arg1);
 
-    void on_photo_comboBox_currentIndexChanged(int index);
-
     void on_new_atk_button_clicked();
+
+    void on_heal_spinBox_valueChanged(int arg1);
+
+    void on_damage_spinBox_valueChanged(int arg1);
+
+    void on_target_comboBox_currentTextChanged(const QString &arg1);
+
+    void on_reach_comboBox_currentTextChanged(const QString &arg1);
+
+    void on_regen_mana_spinBox_valueChanged(int arg1);
+
+    void on_vigor_spinBox_valueChanged(int arg1);
 
 private:
     Ui::EditAttakView *ui;
     std::vector<EditAttak> m_AttakList;
     QString m_SelectedCharaName;
+
     void UpdateValues(const EditAttak &selectedAttak);
     void Apply();
-    void OnValueChange();
+    void OnValueChange(const int index);
+    int GetIndexSelectedRow() const;
+    void EnableAllWidgets(const bool value) const;
+    bool m_FirstShow = false;
+
 };
 
 #endif // EDITATTAKVIEW_H

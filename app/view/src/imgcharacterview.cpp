@@ -28,7 +28,7 @@ void ImgCharacterView::UpdateView(QString name) {
   }
 
   // Update image character
-  auto qp = QPixmap(":/" + name + ".png");
+  auto qp = QPixmap(OFFLINE_IMG + name + ".png");
   ui->img_label->setPixmap(qp);
   ui->img_label->setScaledContents(true);
 }
