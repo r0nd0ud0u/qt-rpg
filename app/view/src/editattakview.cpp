@@ -78,8 +78,8 @@ void EditAttakView::Save() {
   QDir logDir;
   QString pathAtkChara = OFFLINE_ATK + m_SelectedCharaName + "/";
   logDir.mkpath(pathAtkChara);
-  const int index = ui->atk_list_view->currentIndex().row();
-  if (index > m_AttakList.size()) {
+
+  if (const int index = ui->atk_list_view->currentIndex().row();index > m_AttakList.size()) {
     return;
   }
   for (const auto &atk : m_AttakList) {
@@ -164,7 +164,7 @@ void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
   ui->regen_mana_spinBox->setValue(selectedAttak.type.regenMana);
 }
 
-void EditAttakView::EnableAllWidgets(const bool value) {
+void EditAttakView::EnableAllWidgets(const bool value) const {
   for (int i = 0; i < ui->values_form_lay->count(); i++) {
     auto *widget = ui->values_form_lay->itemAt(i)->widget();
     if (widget != nullptr) {
@@ -218,7 +218,7 @@ void EditAttakView::on_photo_comboBox_currentTextChanged(const QString &arg1) {
   m_AttakList[GetIndexSelectedRow()].type.namePhoto = arg1;
 }
 
-int EditAttakView::GetIndexSelectedRow() {
+int EditAttakView::GetIndexSelectedRow() const{
   return ui->atk_list_view->currentIndex().row();
 }
 
@@ -237,7 +237,7 @@ void EditAttakView::on_duration_spinBox_valueChanged(
     [[maybe_unused]] int arg1) {
   OnValueChange(GetIndexSelectedRow());
   m_AttakList[GetIndexSelectedRow()].type.turnsDuration =
-      ui->duration_spinBox->value();
+      static_cast<uint16_t>(ui->duration_spinBox->value());
 }
 
 void EditAttakView::on_rage_aggro_spinBox_valueChanged(
