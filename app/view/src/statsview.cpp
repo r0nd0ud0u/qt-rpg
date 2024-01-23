@@ -51,17 +51,17 @@ QAbstractItemModel *StatsView::createStatsModel(QObject *parent,
   }
 
   const auto &hero = heroList[indexPlayer];
-  addStatRow(model, "ArmPhy", hero->m_Stats.m_ArmPhy);
-  addStatRow(model, "ArmMag", hero->m_Stats.m_ArmMag);
-  addStatRow(model, "PowPhy", hero->m_Stats.m_powPhy);
-  addStatRow(model, "PowMag", hero->m_Stats.m_powMag);
-  addStatRow(model, "Aggro", hero->m_Stats.m_aggro);
-  addStatRow(model, "Speed", hero->m_Stats.m_speed);
-  addStatRow(model, "Crit", hero->m_Stats.m_CriticalStrike);
-  addStatRow(model, "Dodge", hero->m_Stats.m_dogde);
-  addStatRow(model, "regenHP", hero->m_Stats.m_regenHP);
-  addStatRow(model, "regenMana", hero->m_Stats.m_regenMana);
-  addStatRow(model, "regenVigor", hero->m_Stats.m_regenVigueur);
+  addStatRow(model, "ArmPhy", hero->m_Stats.m_ArmPhy.m_Value);
+  addStatRow(model, "ArmMag", hero->m_Stats.m_ArmMag.m_Value);
+  addStatRow(model, "PowPhy", hero->m_Stats.m_powPhy.m_Value);
+  addStatRow(model, "PowMag", hero->m_Stats.m_powMag.m_Value);
+  addStatRow(model, "Aggro", hero->m_Stats.m_aggro.m_Value);
+  addStatRow(model, "Speed", hero->m_Stats.m_speed.m_Value);
+  addStatRow(model, "Crit", hero->m_Stats.m_CriticalStrike.m_Value);
+  addStatRow(model, "Dodge", hero->m_Stats.m_dogde.m_Value);
+  addStatRow(model, "regenHP", hero->m_Stats.m_regenHP.m_Value);
+  addStatRow(model, "regenMana", hero->m_Stats.m_regenMana.m_Value);
+  addStatRow(model, "regenVigor", hero->m_Stats.m_regenVigueur.m_Value);
 
   return model;
 }

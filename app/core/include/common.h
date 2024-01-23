@@ -3,24 +3,49 @@
 
 #include <qobject.h>
 
-struct Stats{
-    int m_HP = 0;
-    int m_Mana = 0;
-    int m_Vigor = 0;
-    int m_Bersecker = 0;
-    int m_ArmPhy = 0;
-    int m_ArmMag = 0;
-    int m_powPhy = 0;
-    double m_powMag = 0;
-    int m_aggro = 0;
-    int m_speed = 0;
-    // critical strike in %
-    int m_CriticalStrike  = 0;
-    // dodge in %
-    double m_dogde = 0;
-    int m_regenHP = 0;
-    double m_regenMana = 0;
-    int m_regenVigueur = 0;
+enum class StatsEnum {
+  hp = 0,
+  mana,
+  vigor,
+  bersecker,
+  armPhy,
+  armMag,
+  powPhy,
+  powMag,
+  aggro,
+  speed,
+  criticalStrike,
+  dodge,
+  regenHp,
+  regenMana,
+  regenVigor
+};
+
+template <class T> class StatsType {
+public:
+  StatsType(StatsEnum type) : m_Type(type) {}
+  T m_Value;
+  StatsEnum m_Type;
+};
+
+struct Stats {
+  StatsType<int> m_HP = StatsType<int>(StatsEnum::hp);
+  StatsType<int> m_Mana = StatsType<int>(StatsEnum::mana);
+  StatsType<int> m_Vigor = StatsType<int>(StatsEnum::vigor);
+  StatsType<int> m_Bersecker = StatsType<int>(StatsEnum::bersecker);
+  StatsType<int> m_ArmPhy = StatsType<int>(StatsEnum::armPhy);
+  StatsType<int> m_ArmMag = StatsType<int>(StatsEnum::armMag);
+  StatsType<int> m_powPhy = StatsType<int>(StatsEnum::powPhy);
+  StatsType<double> m_powMag = StatsType<double>(StatsEnum::powMag);
+  StatsType<int> m_aggro = StatsType<int>(StatsEnum::aggro);
+  StatsType<int> m_speed = StatsType<int>(StatsEnum::criticalStrike);
+  // critical strike in %
+  StatsType<int> m_CriticalStrike = StatsType<int>(StatsEnum::speed);
+  // dodge in %
+  StatsType<double> m_dogde = StatsType<double>(StatsEnum::dodge);
+  StatsType<int> m_regenHP = StatsType<int>(StatsEnum::regenHp);
+  StatsType<double> m_regenMana = StatsType<double>(StatsEnum::regenMana);
+  StatsType<int> m_regenVigueur = StatsType<int>(StatsEnum::regenVigor);
 };
 
 const QString OFFLINE_IMG = "./offlines/attak/img/";
@@ -43,6 +68,5 @@ const QString REACH_ZONE = "Zone";
 const QString REACH_INDIVIDUAL = "Individuel";
 const QString TARGET_ENNEMY = "Ennemie";
 const QString TARGET_ALLY = "Allié";
-
 
 #endif // COMMON_H

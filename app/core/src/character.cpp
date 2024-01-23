@@ -27,7 +27,7 @@ void Character::Attaque(int degat, Character *target) const {
   if (target == nullptr) {
     return;
   }
-  target->m_Stats.m_HP -= degat;
+  target->m_Stats.m_HP.m_Value -= degat;
 }
 
 void Character::AddAtq(const AttaqueType &atq) { attakList.push_back(atq); }
