@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include "character.h"
+#include "effect.h"
 
 class PlayersManager
 {
@@ -14,6 +15,7 @@ public:
 
     std::vector<Character*> m_HeroesList;
     std::vector<Character*> m_BossesList;
+    std::vector<Effect*> m_EffectsList;
     Character* m_SelectedHero = nullptr;
 
 };
