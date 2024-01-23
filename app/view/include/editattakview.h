@@ -65,8 +65,8 @@ private:
     void UpdateValues(const EditAttak &selectedAttak);
     void Apply();
     void OnValueChange(const int index);
-    int GetIndexSelectedRow();
-    void EnableAllWidgets(const bool value);
+    int GetIndexSelectedRow() const;
+    void EnableAllWidgets(const bool value) const;
     bool m_FirstShow = false;
 
 };
