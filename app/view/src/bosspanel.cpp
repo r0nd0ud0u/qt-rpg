@@ -25,8 +25,8 @@ BossPanel::UpdatePanel(Character* boss)
   m_Boss = boss;
 
   ui->name_label->setText(boss->m_Name);
-  ui->hp_bar->setFormat(QString::number(boss->m_Stats.m_HP) + "/" +
-                        QString::number(boss->m_Stats.m_HP) + " %p%");
+  ui->hp_bar->setFormat(QString::number(boss->m_Stats.m_HP.m_Value) + "/" +
+                        QString::number(boss->m_Stats.m_HP.m_Value) + " %p%");
 
   ui->hp_bar->setStyleSheet("QProgressBar{color: white;} QProgressBar::chunk { "
                             "background-color: green; border: white;}");
