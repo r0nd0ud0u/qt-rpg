@@ -22,7 +22,7 @@ void CharacterWindow::InitWindow(){
 
 void CharacterWindow::on_pushButton_clicked()
 {
-    ui->edit_atk_tab->Save();
     hide();
+    ui->edit_atk_tab->Save();
 }
 

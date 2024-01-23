@@ -18,13 +18,16 @@ class AttaqueType {
 public:
     QString name = "Atq";
     uint32_t damage = 0;
+    uint32_t heal = 0;
+    uint32_t regenMana = 0;
     uint32_t aggroCum = 0;
     QString effect;
     uint32_t manaCost = 0;
+    uint32_t vigorCost = 0;
     QString target = TARGET_ENNEMY;
     QString reach = REACH_INDIVIDUAL;
     uint16_t turnsDuration = 1;
-    QString namePhoto;
+    QString namePhoto = "default.png";
     static std::vector<QString> TARGET_TYPES;
     static std::vector<QString> REACH_TYPES;
 };
