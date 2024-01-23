@@ -152,6 +152,7 @@ void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
   ui->duration_spinBox->setValue(selectedAttak.type.turnsDuration);
   ui->rage_aggro_spinBox->setValue(selectedAttak.type.aggroCum);
   ui->mana_cost_spinBox->setValue(selectedAttak.type.manaCost);
+  ui->vigor_cost_spinBox->setValue(selectedAttak.type.vigorCost);
   ui->heal_spinBox->setValue(selectedAttak.type.heal);
   ui->damage_spinBox->setValue(selectedAttak.type.damage);
   ui->photo_comboBox->setCurrentText(selectedAttak.type.namePhoto);
@@ -183,6 +184,25 @@ void EditAttakView::on_atk_list_view_clicked(const QModelIndex &index) {
   ui->apply_button->setEnabled(false);
 }
 
+void EditAttakView::on_new_atk_button_clicked() {
+    // apply button
+    ui->apply_button->setEnabled(true);
+    // add row
+    ui->atk_list_view->model()->insertRow(ui->atk_list_view->model()->rowCount());
+    QModelIndex itemIndex = ui->atk_list_view->model()->index(
+        ui->atk_list_view->model()->rowCount() - 1, 0);
+    ui->atk_list_view->setCurrentIndex(itemIndex);
+    ui->atk_list_view->model()->setData(itemIndex, EditAttak().type.name);
+    // update m_AttakList
+    m_AttakList.push_back(EditAttak());
+    m_AttakList.back().updated = true;
+    UpdateValues(m_AttakList.back());
+
+    EnableAllWidgets(true);
+    if (ui->atk_list_view->model()->rowCount() == 1) {
+        InitComboBoxes();
+    }
+}
 // form layout value changed
 
 void EditAttakView::on_photo_comboBox_currentTextChanged(const QString &arg1) {
@@ -254,25 +274,17 @@ void EditAttakView::on_regen_mana_spinBox_valueChanged(int arg1)
     OnValueChange(GetIndexSelectedRow());
     m_AttakList[GetIndexSelectedRow()].type.regenMana = arg1;
 }
+
+void EditAttakView::on_vigor_spinBox_valueChanged(int arg1)
+{
+    OnValueChange(GetIndexSelectedRow());
+    m_AttakList[GetIndexSelectedRow()].type.vigorCost = arg1;
+}
+}
+
 // end form layout changed
 
-void EditAttakView::on_new_atk_button_clicked() {
-  // apply button
-  ui->apply_button->setEnabled(true);
-  // add row
-  ui->atk_list_view->model()->insertRow(ui->atk_list_view->model()->rowCount());
-  QModelIndex itemIndex = ui->atk_list_view->model()->index(
-      ui->atk_list_view->model()->rowCount() - 1, 0);
-  ui->atk_list_view->setCurrentIndex(itemIndex);
-  ui->atk_list_view->model()->setData(itemIndex, EditAttak().type.name);
-  // update m_AttakList
-  m_AttakList.push_back(EditAttak());
-  m_AttakList.back().updated = true;
-  UpdateValues(m_AttakList.back());
 
-  EnableAllWidgets(true);
-  if (ui->atk_list_view->model()->rowCount() == 1) {
-    InitComboBoxes();
-  }
-}
+
+
 
