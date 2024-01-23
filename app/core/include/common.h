@@ -68,5 +68,6 @@ const QString REACH_ZONE = "Zone";
 const QString REACH_INDIVIDUAL = "Individuel";
 const QString TARGET_ENNEMY = "Ennemie";
 const QString TARGET_ALLY = "Allié";
+const QString TARGET_ALL_HEROES = "Tous les heroes";
 
 #endif // COMMON_H
