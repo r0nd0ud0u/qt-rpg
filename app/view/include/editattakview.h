@@ -67,6 +67,7 @@ private:
     void OnValueChange(const int index);
     int GetIndexSelectedRow();
     void EnableAllWidgets(const bool value);
+    bool m_FirstShow = false;
 
 };
 
