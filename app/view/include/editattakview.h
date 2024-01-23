@@ -55,6 +55,8 @@ private slots:
 
     void on_regen_mana_spinBox_valueChanged(int arg1);
 
+    void on_vigor_spinBox_valueChanged(int arg1);
+
 private:
     Ui::EditAttakView *ui;
     std::vector<EditAttak> m_AttakList;

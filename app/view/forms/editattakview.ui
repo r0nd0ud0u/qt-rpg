@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>346</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -121,10 +121,10 @@
          </property>
         </widget>
        </item>
-       <item row="9" column="1">
+       <item row="10" column="1">
         <widget class="QComboBox" name="photo_comboBox"/>
        </item>
-       <item row="9" column="0">
+       <item row="10" column="0">
         <widget class="QLabel" name="photo_label">
          <property name="text">
           <string>Photo</string>
@@ -140,6 +140,20 @@
        </item>
        <item row="6" column="1">
         <widget class="QSpinBox" name="regen_mana_spinBox"/>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="vigor_label">
+         <property name="text">
+          <string>Coût vigueur</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1">
+        <widget class="QSpinBox" name="vigor_spinBox">
+         <property name="maximum">
+          <number>1000</number>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
