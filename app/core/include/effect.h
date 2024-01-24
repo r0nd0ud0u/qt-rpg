@@ -28,7 +28,7 @@ enum class EffectType{
 
 template <class T> class EffectStat {
 public:
-    EffectStat(EffectType type, QString name, T value) : m_Type(type),m_Name(name), m_Value(value)  {}
+    explicit EffectStat(EffectType type, QString name, T value) : m_Type(type),m_Name(name), m_Value(value)  {}
     T m_Value;
     EffectType m_Type;
     QString m_Name;
@@ -53,8 +53,6 @@ public:
     explicit Effect(QObject *parent = nullptr);
     std::unordered_map<StatsEnum, EffectOnStat> m_EffectOnStats;
     EffectCategory m_Category = EffectCategory::equipment;
-
-signals:
 };
 
 #endif // EFFECT_H

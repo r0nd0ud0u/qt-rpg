@@ -23,7 +23,7 @@ enum class StatsEnum {
 
 template <class T> class StatsType {
 public:
-  StatsType(StatsEnum type) : m_Type(type) {}
+  explicit StatsType(StatsEnum type) : m_Type(type) {}
   T m_Value;
   StatsEnum m_Type;
 };
