@@ -7,6 +7,7 @@
 
 #include "stuff.h"
 #include "common.h"
+#include "effect.h"
 
 
 enum class characType {
@@ -56,6 +57,7 @@ public:
     std::unordered_map<Body, Stuff> m_Stuffs;
     std::vector<AttaqueType> attakList;
     std::vector<uint8_t> m_Inventory;
+    std::vector<Effect*> m_EffectsList;
     int m_Level = 1;
     int m_Exp = 0;
 
