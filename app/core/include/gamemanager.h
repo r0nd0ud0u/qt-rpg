@@ -5,6 +5,13 @@
 
 #include <memory>
 
+
+class GameState{
+public:
+    uint16_t m_CurrentTurnNb = 0;
+    std::unordered_map<QString, int> m_DiedEnnemies; // key name, value turn number
+};
+
 class GameManager
 {
 public:
