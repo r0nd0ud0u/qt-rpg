@@ -127,7 +127,7 @@ void PlayersManager::LoadAllEquipmentsJson() {
         // decode json
         Stuff stuff;
         stuff.m_Name = jsonDoc[EQUIP_NAME].toString();
-        // stats;
+        // Fill stuff stats
         stuff.m_Stats.m_HP.m_Value = jsonDoc[STATS_HP].toInt();
         stuff.m_Stats.m_Mana.m_Value = jsonDoc[STATS_MANA].toInt();
         stuff.m_Stats.m_Vigor.m_Value = jsonDoc[STATS_VIGOR].toInt();

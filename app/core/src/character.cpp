@@ -109,8 +109,7 @@ void Character::LoadAtkJson() {
 void Character::LoadStuffJson() {
   QString directoryPath =
       OFFLINE_WEARING_EQUIPMENT; // Replace with the actual path
-  QDir directory(directoryPath);
-  if (!directory.exists()) {
+  if (QDir directory(directoryPath); !directory.exists()) {
     qDebug() << "Directory does not exist: " << directoryPath;
   }
   QFile json(directoryPath + "/" + m_Name + ".json");
@@ -146,9 +145,9 @@ void Character::LoadStuffJson() {
 void Character::ApplyAllEquipment(
     const std::unordered_map<QString, Stuff> &allEquipMap) {
   for (const auto &[body, equipName] : m_WearingEquipment) {
-        if(equipName.isEmpty()){
-          continue;
-      }
+    if (equipName.isEmpty()) {
+      continue;
+    }
     const auto &equip = allEquipMap.at(equipName);
     m_Stats.m_HP.m_Value += equip.m_Stats.m_HP.m_Value;
     m_Stats.m_Mana.m_Value += equip.m_Stats.m_Mana.m_Value;
