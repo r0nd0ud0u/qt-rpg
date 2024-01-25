@@ -3,7 +3,7 @@
 
 #include "playersmanager.h"
 
-#include <memory.h>
+#include <memory>
 
 class GameState{
 public:
@@ -18,11 +18,11 @@ class GameManager
 public:
     GameManager() = default;
     PlayersManager* m_PlayersManager = nullptr;
-    GameState* m_GameState;
+    std::unique_ptr<GameState> m_GameState;
+
     void InitPlayers();
     Character* GetSelectedHero();
-
-    void ProcessOrderToPlay(std::vector<QString>& orderToPlay);
+    void ProcessOrderToPlay(std::vector<QString>& orderToPlay)const;
 };
 
 #endif // GAMEMANAGER_H

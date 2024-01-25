@@ -62,7 +62,7 @@ void HeroesView::SlotClickedOnHeroPanel(QString name) {
   emit SigClickedOnHeroPanel(name);
 }
 
-void HeroesView::SelectPanel(const QString& heroName){
+void HeroesView::SelectPanel(const QString& heroName) const{
     for(auto* hero : m_HeroPanels){
         if(heroName == hero->m_Heroe->m_Name){
             hero->SetActive(true);
