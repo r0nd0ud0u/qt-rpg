@@ -65,7 +65,7 @@ void GameDisplay::on_bag_button_clicked() {
 }
 
 void GameDisplay::on_stackedWidget_currentChanged(const int arg1) {
-  ui->attak_page->UpdateView(static_cast<ActionsStackedWgType>(arg1));
+  ui->attak_page->UpdateActions(static_cast<ActionsStackedWgType>(arg1));
 }
 
 void GameDisplay::UpdateGameStatus() {

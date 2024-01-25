@@ -5,6 +5,7 @@
 #include "character.h"
 
 #include <QPushButton>
+#include <QStandardItemModel>
 
 ActionsView::ActionsView(QWidget *parent)
     : QWidget(parent), ui(new Ui::ActionsView) {
@@ -13,52 +14,42 @@ ActionsView::ActionsView(QWidget *parent)
 
 ActionsView::~ActionsView() { delete ui; }
 
-void ActionsView::RemoveButtons() {
-  for (int i = 0; i < ui->actions_lay->count(); i++) {
-    auto *widget = ui->actions_lay->itemAt(i)->widget();
-    if (widget == nullptr) {
-      continue;
-    }
-    widget->setParent(nullptr);
-    ui->actions_lay->removeWidget(widget);
-    i--;
-  }
+void ActionsView::addActionRow(QAbstractItemModel *model,
+                               const QString &actionName) const {
+  int index = model->rowCount();
+  model->insertRow(index);
+  model->setData(model->index(index, 0), actionName);
 }
 
-void ActionsView::UpdateView(const ActionsStackedWgType &type) {
-  // remove current buttons
-  RemoveButtons();
-
-  const auto &app = Application::GetInstance();
-  if (app.m_GameManager == nullptr ||
-      app.m_GameManager->m_PlayersManager == nullptr ||
-      app.m_GameManager->m_PlayersManager->m_SelectedHero == nullptr) {
-    return;
-  }
+QAbstractItemModel *ActionsView::createModel(QObject *parent,
+                                             const ActionsStackedWgType &type) {
+  QStandardItemModel *model = nullptr;
+  const auto *selectedHero =
+      Application::GetInstance().m_GameManager->GetSelectedHero();
 
   // attak view
   if (type == ActionsStackedWgType::attak) {
-    for (const auto &atk :
-         app.m_GameManager->m_PlayersManager->m_SelectedHero->attakList) {
-      auto *button = new QPushButton();
-
-      button->setText(atk.name + " Mana " + QString::number(atk.manaCost) +
-                      " Effect: " + atk.effect);
-      ui->actions_lay->addWidget(button);
+    model = new QStandardItemModel(0, 1, parent);
+    for (const auto &atk : selectedHero->attakList) {
+      addActionRow(model, atk.name);
+    }
+  } else if (type == ActionsStackedWgType::inventory) {
+    model = new QStandardItemModel(0, 2, parent);
+    for (size_t i = 0; i < selectedHero->m_Inventory.size(); i++) {
+      addActionRow(model,
+                   Character::GetInventoryString(static_cast<InventoryType>(
+                       selectedHero->m_Inventory.at(i))));
     }
   }
 
-  // inventory view
-  const auto &inventory =
-      app.m_GameManager->m_PlayersManager->m_SelectedHero->m_Inventory;
-  if (type == ActionsStackedWgType::inventory) {
-    for (size_t i = 0; i < inventory.size(); i++) {
-      if (inventory[i] == 0) {
-        continue;
-      }
-      auto *button = new QPushButton();
-      button->setText(Character::GetInventoryString(static_cast<InventoryType>(i)) + " " + QString::number(inventory[i]) + "/" + QString::number(inventory[i]));
-      ui->actions_lay->addWidget(button);
-    }
-  }
+  return model;
+}
+
+void ActionsView::UpdateActions(const ActionsStackedWgType &type) {
+  ui->actions_table_view->setModel(createModel(parentWidget(), type));
+}
+
+void ActionsView::LaunchAttak() {
+  // on who ?
+  // enable buttons on allies or ennemies
 }
