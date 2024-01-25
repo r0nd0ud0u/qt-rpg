@@ -15,12 +15,12 @@ StatsView::StatsView(QWidget *parent) : QWidget(parent), ui(new Ui::StatsView) {
 
 StatsView::~StatsView() { delete ui; }
 
-void StatsView::addStatRow(QAbstractItemModel *model, const QString &subject,
-                           const int sender) const {
+void StatsView::addStatRow(QAbstractItemModel *model, const QString &statsName,
+                           const QVariant &value) const {
   int index = model->rowCount();
   model->insertRow(index);
-  model->setData(model->index(index, 0), subject);
-  model->setData(model->index(index, 1), sender);
+  model->setData(model->index(index, 0), statsName);
+  model->setData(model->index(index, 1), value);
 }
 
 QAbstractItemModel *StatsView::createStatsModel(QObject *parent,
@@ -30,7 +30,8 @@ QAbstractItemModel *StatsView::createStatsModel(QObject *parent,
   model->setHeaderData(0, Qt::Horizontal, QObject::tr("Stats"));
   model->setHeaderData(1, Qt::Horizontal, QObject::tr("Values"));
 
-  const auto* selectedHero = Application::GetInstance().m_GameManager->GetSelectedHero();
+  const auto *selectedHero =
+      Application::GetInstance().m_GameManager->GetSelectedHero();
   addStatRow(model, "ArmPhy", selectedHero->m_Stats.m_ArmPhy.m_Value);
   addStatRow(model, "ArmMag", selectedHero->m_Stats.m_ArmMag.m_Value);
   addStatRow(model, "PowPhy", selectedHero->m_Stats.m_powPhy.m_Value);
