@@ -2,7 +2,7 @@
 
 void GameManager::InitPlayers() {
   // init the game
-    m_GameState = std::make_unique<GameState>();
+  m_GameState = std::make_unique<GameState>();
   // init the players
   m_PlayersManager = new PlayersManager();
   // order is important
@@ -22,4 +22,18 @@ Character *GameManager::GetSelectedHero() {
   }
 
   return m_PlayersManager->m_SelectedHero;
+}
+
+void GameManager::ProcessOrderToPlay(std::vector<QString> &orderToPlay) {
+  // to be improved with stats
+  // one player can play several times as well in different order
+  // random ?
+  orderToPlay.clear();
+
+  for (const auto hero : m_PlayersManager->m_HeroesList) {
+    orderToPlay.push_back(hero->m_Name);
+  }
+  for (const auto boss : m_PlayersManager->m_BossesList) {
+    orderToPlay.push_back(boss->m_Name);
+  }
 }
