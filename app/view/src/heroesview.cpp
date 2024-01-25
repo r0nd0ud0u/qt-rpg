@@ -9,7 +9,7 @@ HeroesView::HeroesView(QWidget *parent)
     : QWidget(parent), ui(new Ui::HeroesView) {
   ui->setupUi(this);
   setStyleSheet("#left_widget{ background:     #808080;} "
-                "#right_widget{background:     #808080;}");
+                "#right_widget{background:     #808080;} QLabel{color: white;}");
   InitHeroPanel();
 }
 
