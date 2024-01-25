@@ -37,6 +37,11 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -71,9 +76,15 @@
          </sizepolicy>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="spacing">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QWidget" name="hero_info" native="true">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <property name="spacing">
+             <number>0</number>
+            </property>
             <item>
              <widget class="QLabel" name="hero_name">
               <property name="sizePolicy">
@@ -84,6 +95,7 @@
               </property>
               <property name="font">
                <font>
+                <pointsize>11</pointsize>
                 <bold>true</bold>
                </font>
               </property>
@@ -96,6 +108,7 @@
              <widget class="QLabel" name="hero_level">
               <property name="font">
                <font>
+                <pointsize>11</pointsize>
                 <bold>true</bold>
                </font>
               </property>
@@ -116,6 +129,7 @@
           <widget class="QLabel" name="hp_label">
            <property name="font">
             <font>
+             <pointsize>9</pointsize>
              <bold>true</bold>
             </font>
            </property>
@@ -126,6 +140,11 @@
          </item>
          <item>
           <widget class="QProgressBar" name="hp_Bar">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
            <property name="value">
             <number>100</number>
            </property>
@@ -138,6 +157,7 @@
           <widget class="QLabel" name="mana_label">
            <property name="font">
             <font>
+             <pointsize>9</pointsize>
              <bold>true</bold>
             </font>
            </property>
@@ -148,6 +168,11 @@
          </item>
          <item>
           <widget class="QProgressBar" name="mana_bar">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
            <property name="value">
             <number>100</number>
            </property>
@@ -157,6 +182,7 @@
           <widget class="QLabel" name="bersecker_label">
            <property name="font">
             <font>
+             <pointsize>9</pointsize>
              <bold>true</bold>
             </font>
            </property>
@@ -167,6 +193,11 @@
          </item>
          <item>
           <widget class="QProgressBar" name="bersecker_bar">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
            <property name="value">
             <number>0</number>
            </property>
@@ -176,6 +207,7 @@
           <widget class="QLabel" name="vigor_label">
            <property name="font">
             <font>
+             <pointsize>9</pointsize>
              <bold>true</bold>
             </font>
            </property>
@@ -186,6 +218,11 @@
          </item>
          <item>
           <widget class="QProgressBar" name="vigor_bar">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
            <property name="value">
             <number>100</number>
            </property>
