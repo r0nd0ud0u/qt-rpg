@@ -62,7 +62,8 @@ ActionsView::createInfoModel(QObject *parent,
   // Get the current atk selected
   const auto *selectedHero =
       Application::GetInstance().m_GameManager->GetSelectedHero();
-  const auto &atkName = ui->actions_table_view->model()->data(m_CurIndex).toString();
+  const auto &atkName =
+      ui->actions_table_view->model()->data(m_CurIndex).toString();
   for (const auto &atk : selectedHero->attakList) {
     if (atk.name == atkName) {
       m_CurAtk = atk;
@@ -71,7 +72,7 @@ ActionsView::createInfoModel(QObject *parent,
   }
 
   if (type == ActionsStackedWgType::attak) {
-      // Fill the attak stats view
+    // Fill the attak stats view
     model = new QStandardItemModel(0, 2, parent);
     addInfoActionRow(model, ATK_TARGET, m_CurAtk.target);
     addInfoActionRow(model, ATK_REACH, m_CurAtk.reach);
