@@ -19,6 +19,7 @@ GameDisplay::GameDisplay(QWidget *parent)
           &GameDisplay::NewRound);
   connect(ui->channel_lay, &Channel::SigNewTurn, this,
           &GameDisplay::StartNewTurn);
+  connect(ui->attak_page, &ActionsView::SigLaunchAttak, this, &GameDisplay::LaunchAttak);
 
   // init display default page
   ui->stackedWidget->setCurrentIndex(
@@ -55,6 +56,7 @@ void GameDisplay::on_attaque_button_clicked() {
       static_cast<int>(ActionsStackedWgType::attak));
   ui->attaque_button->setEnabled(false);
   ui->bag_button->setEnabled(true);
+  ui->attak_page->SetValidateBtnEnabled(false);
 }
 
 void GameDisplay::on_bag_button_clicked() {
@@ -62,6 +64,7 @@ void GameDisplay::on_bag_button_clicked() {
       static_cast<int>(ActionsStackedWgType::inventory));
   ui->bag_button->setEnabled(false);
   ui->attaque_button->setEnabled(true);
+  ui->attak_page->SetValidateBtnEnabled(false);
 }
 
 void GameDisplay::on_stackedWidget_currentChanged(const int arg1) {
@@ -100,4 +103,12 @@ void GameDisplay::StartNewTurn(){
     NewRound();
     // Then, update the display
     UpdateGameStatus();
+}
+
+void GameDisplay::LaunchAttak(const QString& atkName){
+    ui->bag_button->setEnabled(false);
+    ui->attaque_button->setEnabled(false);
+    ui->stackedWidget->setCurrentIndex(
+        static_cast<int>(ActionsStackedWgType::defaultType));
+    // launch atk
 }
