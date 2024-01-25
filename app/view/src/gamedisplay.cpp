@@ -78,13 +78,19 @@ void GameDisplay::UpdateGameStatus() {
 
 void GameDisplay::NewRound(){
     const auto &gs = Application::GetInstance().m_GameManager->m_GameState;
+    // TODO game state , check if boss is dead
     gs->m_CurrentRound++;
     UpdateGameStatus();
     ui->heroes_widget->SelectPanel(gs->m_OrderToPlay.at(gs->m_CurrentRound - 1));
     ui->bosses_widget->SelectPanel(gs->m_OrderToPlay.at(gs->m_CurrentRound - 1));
+
+    // TODO update channel
+    // choice of talent
+    // if dead -> choice to take a potion
 }
 
 void GameDisplay::StartNewTurn(){
+    // TODO game state , check if boss is dead
     const auto &gm = Application::GetInstance().m_GameManager;
     // First process the order
     gm->ProcessOrderToPlay(gm->m_GameState->m_OrderToPlay);
