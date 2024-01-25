@@ -42,7 +42,7 @@ void HeroesView::InitHeroPanel() {
     }
     if (!m_HeroPanels.empty()) {
       m_HeroPanels.front()->SetActive(true);
-        m_HeroPanels.front()->SetSelected(true);
+      m_HeroPanels.front()->SetSelected(true);
     }
   }
 }
