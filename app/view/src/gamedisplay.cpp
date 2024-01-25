@@ -5,6 +5,7 @@
 #include "actionsview.h"
 #include "channel.h"
 #include "heroesview.h"
+#include "heropanel.h"
 
 GameDisplay::GameDisplay(QWidget *parent)
     : QWidget(parent), ui(new Ui::GameDisplay) {
@@ -79,6 +80,7 @@ void GameDisplay::NewRound(){
     const auto &gs = Application::GetInstance().m_GameManager->m_GameState;
     gs->m_CurrentRound++;
     UpdateGameStatus();
+    ui->heroes_widget->SelectPanel(gs->m_OrderToPlay.at(gs->m_CurrentRound - 1));
 }
 
 void GameDisplay::StartNewTurn(){
@@ -86,13 +88,9 @@ void GameDisplay::StartNewTurn(){
     // First process the order
     gm->ProcessOrderToPlay(gm->m_GameState->m_OrderToPlay);
     // Update game state
-    gm->m_GameState->m_CurrentRound = 1;
+    gm->m_GameState->m_CurrentRound = 0;
     gm->m_GameState->m_CurrentTurnNb++;
+    NewRound();
     // Then, update the display
     UpdateGameStatus();
-
-
-
-
-
 }
