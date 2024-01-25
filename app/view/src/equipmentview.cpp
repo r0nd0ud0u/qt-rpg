@@ -53,26 +53,21 @@ QAbstractItemModel *EquipmentView::createEquipmentModel(QObject *parent,
   }
 
   const auto &hero = heroList[indexPlayer];
-  addEquipmentRow(model, Stuff::GetStringBody(Body::head),
-                  hero->m_Stuffs[Body::head].m_Name);
-  addEquipmentRow(model, Stuff::GetStringBody(Body::necklace),
-                  hero->m_Stuffs[Body::necklace].m_Name);
-  addEquipmentRow(model, Stuff::GetStringBody(Body::arm_left),
-                  hero->m_Stuffs[Body::arm_left].m_Name);
-  addEquipmentRow(model, Stuff::GetStringBody(Body::arm_right),
-                  hero->m_Stuffs[Body::arm_right].m_Name);
-  addEquipmentRow(model, Stuff::GetStringBody(Body::weapon_left),
-                  hero->m_Stuffs[Body::weapon_left].m_Name);
-  addEquipmentRow(model, Stuff::GetStringBody(Body::weapon_right),
-                  hero->m_Stuffs[Body::weapon_right].m_Name);
-  addEquipmentRow(model, Stuff::GetStringBody(Body::chest),
-                  hero->m_Stuffs[Body::chest].m_Name);
-  addEquipmentRow(model, Stuff::GetStringBody(Body::ring),
-                  hero->m_Stuffs[Body::ring].m_Name);
-  addEquipmentRow(model, Stuff::GetStringBody(Body::pants),
-                  hero->m_Stuffs[Body::pants].m_Name);
-  addEquipmentRow(model, Stuff::GetStringBody(Body::shoes),
-                  hero->m_Stuffs[Body::shoes].m_Name);
+  addEquipmentRow(model, EQUIP_HEAD, hero->m_WearingEquipment[EQUIP_HEAD]);
+  addEquipmentRow(model, EQUIP_NECKLACE,
+                  hero->m_WearingEquipment[EQUIP_NECKLACE]);
+  addEquipmentRow(model, EQUIP_LEFT_ARM,
+                  hero->m_WearingEquipment[EQUIP_LEFT_ARM]);
+  addEquipmentRow(model, EQUIP_RIGHT_ARM,
+                  hero->m_WearingEquipment[EQUIP_RIGHT_ARM]);
+  addEquipmentRow(model, EQUIP_LEFT_WEAPON,
+                  hero->m_WearingEquipment[EQUIP_LEFT_WEAPON]);
+  addEquipmentRow(model, EQUIP_RIGHT_WEAPON,
+                  hero->m_WearingEquipment[EQUIP_RIGHT_WEAPON]);
+  addEquipmentRow(model, EQUIP_CHEST, hero->m_WearingEquipment[EQUIP_CHEST]);
+  addEquipmentRow(model, EQUIP_RING, hero->m_WearingEquipment[EQUIP_RING]);
+  addEquipmentRow(model, EQUIP_PANTS, hero->m_WearingEquipment[EQUIP_PANTS]);
+  addEquipmentRow(model, EQUIP_SHOES, hero->m_WearingEquipment[EQUIP_SHOES]);
 
   return model;
 }
