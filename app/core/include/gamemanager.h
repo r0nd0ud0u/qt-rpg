@@ -18,7 +18,7 @@ class GameManager
 public:
     GameManager() = default;
     PlayersManager* m_PlayersManager = nullptr;
-    std::unique_ptr<GameState> m_GameState;
+    GameState* m_GameState;
     void InitPlayers();
     Character* GetSelectedHero();
 
