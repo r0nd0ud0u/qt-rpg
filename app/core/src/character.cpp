@@ -116,7 +116,7 @@ void Character::LoadStuffJson() {
   QFile json(directoryPath + "/" + m_Name + ".json");
   if (!json.open(QFile::ReadOnly | QFile::Text)) {
     Application::GetInstance().log(" Could not open the file for reading " +
-                                   directoryPath + "/" + m_Name + ".json");
+                                   directoryPath + m_Name + ".json");
     return;
   } else {
     // Convert json file to QString
