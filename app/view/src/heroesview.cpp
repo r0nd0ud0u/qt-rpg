@@ -36,6 +36,7 @@ void HeroesView::InitHeroPanel() {
       ui->left_widget->layout()->addWidget(heroPanel);
       m_HeroPanels.push_back(heroPanel);
       heroPanel->SetActive(false);
+      heroPanel->SetSelected(false);
       connect(heroPanel, &HeroPanel::addStuff, this, &HeroesView::Dosomething);
       connect(heroPanel, &HeroPanel::selectCharacter, this,
               &HeroesView::SlotClickedOnHeroPanel);
@@ -57,5 +58,6 @@ void HeroesView::SlotClickedOnHeroPanel(QString name) {
       heroPanel->SetSelected(false);
     }
   }
+
   emit SigClickedOnHeroPanel(name);
 }

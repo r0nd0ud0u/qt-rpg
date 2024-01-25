@@ -72,9 +72,10 @@ void HeroPanel::SetSelected(const bool selected) {
     if(selected) {
         shape = QFrame::Box;
         lineWidth = 3;
+        ui->frame->setLineWidth(lineWidth);
     }
     ui->frame->setFrameShape(shape);
-    ui->frame->setLineWidth(lineWidth);
+
 
     // update buttons
     ui->edit_button->setEnabled(selected);
