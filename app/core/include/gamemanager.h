@@ -15,6 +15,7 @@ public:
     GameManager() = default;
     PlayersManager* m_PlayersManager = nullptr;
     void InitPlayers();
+    Character* GetSelectedHero();
 
 };
 

@@ -120,7 +120,6 @@ void Character::LoadStuffJson() {
     return;
   } else {
     // Convert json file to QString
-      qDebug() << "youpi";
     QTextStream out(&json);
     QString msg = out.readAll();
     json.close();

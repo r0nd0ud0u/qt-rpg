@@ -32,42 +32,21 @@ QAbstractItemModel *EquipmentView::createEquipmentModel(QObject *parent,
   model->setHeaderData(0, Qt::Horizontal, QObject::tr("Partie du corps"));
   model->setHeaderData(1, Qt::Horizontal, QObject::tr("Equipement"));
 
-  const auto &app = Application::GetInstance();
-  if (app.m_GameManager == nullptr ||
-      app.m_GameManager->m_PlayersManager == nullptr) {
-    return nullptr;
-  }
-
-  const auto &heroList = app.m_GameManager->m_PlayersManager->m_HeroesList;
-  // Case hero list empty
-  if (heroList.empty()) {
-    return model;
-  }
-  int indexPlayer = 0;
-  // lambda function to add here
-  for (int i = 0; i < heroList.size(); i++) {
-    if (heroList[i]->m_Name == playerName) {
-      indexPlayer = i;
-      break;
-    }
-  }
-
-  const auto &hero = heroList[indexPlayer];
-  addEquipmentRow(model, EQUIP_HEAD, hero->m_WearingEquipment[EQUIP_HEAD]);
+  const auto* selectedHero = Application::GetInstance().m_GameManager->GetSelectedHero();
+  addEquipmentRow(model, EQUIP_HEAD, selectedHero->m_WearingEquipment.at(EQUIP_HEAD));
   addEquipmentRow(model, EQUIP_NECKLACE,
-                  hero->m_WearingEquipment[EQUIP_NECKLACE]);
-  addEquipmentRow(model, EQUIP_LEFT_ARM,
-                  hero->m_WearingEquipment[EQUIP_LEFT_ARM]);
+                  selectedHero->m_WearingEquipment.at(EQUIP_NECKLACE));
+  addEquipmentRow(model, EQUIP_LEFT_ARM, selectedHero->m_WearingEquipment.at(EQUIP_LEFT_ARM));
   addEquipmentRow(model, EQUIP_RIGHT_ARM,
-                  hero->m_WearingEquipment[EQUIP_RIGHT_ARM]);
+                  selectedHero->m_WearingEquipment.at(EQUIP_RIGHT_ARM));
   addEquipmentRow(model, EQUIP_LEFT_WEAPON,
-                  hero->m_WearingEquipment[EQUIP_LEFT_WEAPON]);
+                  selectedHero->m_WearingEquipment.at(EQUIP_LEFT_WEAPON));
   addEquipmentRow(model, EQUIP_RIGHT_WEAPON,
-                  hero->m_WearingEquipment[EQUIP_RIGHT_WEAPON]);
-  addEquipmentRow(model, EQUIP_CHEST, hero->m_WearingEquipment[EQUIP_CHEST]);
-  addEquipmentRow(model, EQUIP_RING, hero->m_WearingEquipment[EQUIP_RING]);
-  addEquipmentRow(model, EQUIP_PANTS, hero->m_WearingEquipment[EQUIP_PANTS]);
-  addEquipmentRow(model, EQUIP_SHOES, hero->m_WearingEquipment[EQUIP_SHOES]);
+                  selectedHero->m_WearingEquipment.at(EQUIP_RIGHT_WEAPON));
+  addEquipmentRow(model, EQUIP_CHEST, selectedHero->m_WearingEquipment.at(EQUIP_CHEST));
+  addEquipmentRow(model, EQUIP_RING, selectedHero->m_WearingEquipment.at(EQUIP_RING));
+  addEquipmentRow(model, EQUIP_PANTS, selectedHero->m_WearingEquipment.at(EQUIP_PANTS));
+  addEquipmentRow(model, EQUIP_SHOES, selectedHero->m_WearingEquipment.at(EQUIP_SHOES));
 
   return model;
 }
