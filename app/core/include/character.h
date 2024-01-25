@@ -48,13 +48,15 @@ public:
     void AddAtq (const AttaqueType& atq);
     void AddStuff(const Stuff& stuff);
     void LoadAtkJson();
+    void LoadStuffJson();
+    void ApplyAllEquipment(const std::unordered_map<QString, Stuff>& allEquipMap);
 
     static QString GetInventoryString(const InventoryType& type);
 
     QString m_Name = "default";
     characType m_type = characType::Hero;
     Stats m_Stats;
-    std::unordered_map<Body, Stuff> m_Stuffs;
+    std::unordered_map<QString, QString> m_WearingEquipment; // key: body, value: equipmentName
     std::vector<AttaqueType> attakList;
     std::vector<uint8_t> m_Inventory;
     std::vector<Effect*> m_EffectsList;

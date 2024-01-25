@@ -3,9 +3,6 @@
 
 #include "playersmanager.h"
 
-#include <memory>
-
-
 class GameState{
 public:
     uint16_t m_CurrentTurnNb = 0;
@@ -18,6 +15,7 @@ public:
     GameManager() = default;
     PlayersManager* m_PlayersManager = nullptr;
     void InitPlayers();
+    Character* GetSelectedHero();
 
 };
 

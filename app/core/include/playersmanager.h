@@ -5,16 +5,20 @@
 
 #include "character.h"
 
+#include <unordered_map>
+
 class PlayersManager
 {
 public:
     PlayersManager() = default;
     void InitHeroes();
     void InitBosses();
+    void LoadAllEquipmentsJson();
 
     std::vector<Character*> m_HeroesList;
     std::vector<Character*> m_BossesList;
     Character* m_SelectedHero = nullptr;
+    std::unordered_map<QString, Stuff> m_Equipments;
 
 };
 
