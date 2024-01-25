@@ -33,6 +33,5 @@ void Channel::on_end_round_button_clicked() {
   } else {
     ui->end_round_button->setEnabled(false);
     ui->next_turn_button->setEnabled(true);
-    emit SigNewTurn();
   }
 }

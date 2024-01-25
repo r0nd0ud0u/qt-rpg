@@ -10,7 +10,7 @@ public:
     uint16_t m_CurrentTurnNb = 0;
     std::unordered_map<QString, int> m_DiedEnnemies; // key name, value turn number
     std::vector<QString> m_OrderToPlay;
-    uint16_t m_CurrentRound = 1; // max value = size of m_OrderToPlay
+    uint16_t m_CurrentRound = 0; // max value = size of m_OrderToPlay
 };
 
 class GameManager
