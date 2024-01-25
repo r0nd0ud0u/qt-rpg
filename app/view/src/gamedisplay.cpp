@@ -16,6 +16,8 @@ GameDisplay::GameDisplay(QWidget *parent)
 
   // init display default page
   ui->stackedWidget->setCurrentIndex(static_cast<int>(ActionsStackedWgType::defaultType));
+  // init status page
+  ui->turn_label->setText("Tour 0");
 }
 
 GameDisplay::~GameDisplay() { delete ui; }
@@ -39,6 +41,7 @@ void GameDisplay::UpdateViews(const QString &name) {
   }
   emit selectCharacter(name);
 }
+
 
 void GameDisplay::on_attaque_button_clicked() {
     ui->stackedWidget->setCurrentIndex(static_cast<int>(ActionsStackedWgType::attak));

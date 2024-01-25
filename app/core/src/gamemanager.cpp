@@ -1,8 +1,9 @@
 #include "gamemanager.h"
 
-#include "Application.h"
-
 void GameManager::InitPlayers() {
+  // init the game
+    m_GameState = std::make_unique<GameState>();
+  // init the players
   m_PlayersManager = new PlayersManager();
   // order is important
   // first equipment
@@ -14,11 +15,11 @@ void GameManager::InitPlayers() {
   m_PlayersManager->m_SelectedHero = m_PlayersManager->m_HeroesList.front();
 }
 
-Character* GameManager::GetSelectedHero(){
-    if (m_PlayersManager == nullptr ||
-        m_PlayersManager->m_SelectedHero == nullptr) {
-        return nullptr;
-    }
+Character *GameManager::GetSelectedHero() {
+  if (m_PlayersManager == nullptr ||
+      m_PlayersManager->m_SelectedHero == nullptr) {
+    return nullptr;
+  }
 
-    return m_PlayersManager->m_SelectedHero;
+  return m_PlayersManager->m_SelectedHero;
 }
