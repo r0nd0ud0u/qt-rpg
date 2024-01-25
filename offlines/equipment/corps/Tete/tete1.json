@@ -1,0 +1,36 @@
+{
+	"Nom": "tete1",
+    "Effets": [
+    {
+      "name": "Molecule Man",
+      "age": 29,
+      "secretIdentity": "Dan Jukes",
+      "powers": ["Radiation resistance", "Turning tiny", "Radiation blast"]
+    },
+    {
+      "name": "Madame Uppercut",
+      "age": 39,
+      "secretIdentity": "Jane Wilson",
+      "powers": [
+        "Million tonne punch",
+        "Damage resistance",
+        "Superhuman reflexes"
+      ]
+    }],
+    "PV": 1000,
+    "Mana": 0,
+    "Vigueur": 0,
+    "Rage": 0,
+    "Armure physique": 0,
+    "Armure magique": 0,
+    "Pouvoir physique": 0,
+    "Pouvoir magique": 0,
+	"Aggro": 0,
+	"Vitesse": 0,
+	"Cout critique": 0,
+	"Esquive": 0,
+	"Regeneration PV": 0,
+	"Regeneration Mana": 0,
+	"Regeneration vigueur": 0
+}
+
