@@ -18,7 +18,7 @@ class BossesView : public QWidget
 public:
     explicit BossesView(QWidget *parent = nullptr);
     ~BossesView() final;
-    void SelectPanel(const QString&) const;
+    void SelectPanel(const QString&);
 
 private:
     Ui::BossesView *ui;

@@ -19,7 +19,7 @@ class HeroesView : public QWidget
 public:
     explicit HeroesView(QWidget *parent = nullptr);
     ~HeroesView() final;
-    void SelectPanel(const QString&) const;
+    void SelectPanel(const QString&);
 
 signals:
     void SigAddStuff();
