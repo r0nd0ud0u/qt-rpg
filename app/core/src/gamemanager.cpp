@@ -2,7 +2,7 @@
 
 void GameManager::InitPlayers() {
   // init the game
-  m_GameState = std::make_unique<GameState>();
+  m_GameState = new GameState();
   // init the players
   m_PlayersManager = new PlayersManager();
   // order is important
