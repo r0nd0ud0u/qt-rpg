@@ -26,9 +26,15 @@
        </property>
        <item>
         <widget class="QLabel" name="turn_label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="font">
           <font>
-           <pointsize>25</pointsize>
+           <pointsize>12</pointsize>
            <bold>true</bold>
           </font>
          </property>
