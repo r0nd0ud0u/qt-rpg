@@ -3,9 +3,6 @@
 
 #include "playersmanager.h"
 
-#include <memory>
-
-
 class GameState{
 public:
     uint16_t m_CurrentTurnNb = 0;

@@ -50,8 +50,11 @@ struct Stats {
 
 const QString OFFLINE_IMG = "./offlines/attak/img/";
 const QString OFFLINE_ATK = "./offlines/attak/";
+const QString OFFLINE_WEARING_EQUIPMENT = "./offlines/equipment/Personnages/";
+const QString OFFLINE_ROOT_EQUIPMENT = "./offlines/equipment/corps/";
 
 // json keys
+// ATK keys
 const QString ATK_NAME = "Nom";
 const QString ATK_TARGET = "Cible";
 const QString ATK_REACH = "Portée";
@@ -64,10 +67,43 @@ const QString ATK_DAMAGE = "Dégâts";
 const QString ATK_HEAL = "Soin";
 const QString ATK_REGEN_MANA = "Regen mana";
 const QString ATK_EFFECT = "Effet";
+// Reach keys
 const QString REACH_ZONE = "Zone";
 const QString REACH_INDIVIDUAL = "Individuel";
+// Target keys
 const QString TARGET_ENNEMY = "Ennemie";
 const QString TARGET_ALLY = "Allié";
 const QString TARGET_ALL_HEROES = "Tous les heroes";
+// Stats keys
+const QString STATS_HP = "PV";
+const QString STATS_MANA = "Mana";
+const QString STATS_VIGOR = "Vigor";
+const QString STATS_BERSECK = "Râge";
+const QString STATS_ARM_PHY = "Armure physique";
+const QString STATS_ARM_MAG = "Armure magique";
+const QString STATS_POW_PHY = "Pouvoir physique";
+const QString STATS_POW_MAG = "Pouvoir magique";
+const QString STATS_AGGRO = "Aggro";
+const QString STATS_SPEED = "Vitesse";
+const QString STATS_CRIT = "Coût critique";
+const QString STATS_DODGE = "Esquive";
+const QString STATS_REGEN_HP = "Regénération PV";
+const QString STATS_REGEN_MANA = "Regénération Mana";
+const QString STATS_REGEN_VIGOR = "Regénération vigueur";
+// equipment keys
+const QString EQUIP_HEAD = "Tête";
+const QString EQUIP_NECKLACE = "Collier";
+const QString EQUIP_CHEST = "Torse";
+const QString EQUIP_PANTS = "Pantalon";
+const QString EQUIP_SHOES = "Chaussures";
+const QString EQUIP_LEFT_ARM = "Bras gauche";
+const QString EQUIP_RIGHT_ARM = "Bras droit";
+const QString EQUIP_LEFT_LEG = "Jambe gauche";
+const QString EQUIP_RIGHT_LEG = "Jambe droite";
+const QString EQUIP_RING = "Anneau";
+const QString EQUIP_NAME = "Nom";
+const QString EQUIP_RIGHT_WEAPON = "Arme gauche";
+const QString EQUIP_LEFT_WEAPON = "Arme droite";
+const QString EQUIP_CATEGORY = "Catégorie";
 
 #endif // COMMON_H

@@ -4,7 +4,6 @@
 #include "common.h"
 
 #include <QString>
-#include <vector>
 
 enum class Body {
     head,
@@ -27,8 +26,7 @@ public:
     Stats m_Stats = {};
     Body m_type;
     QString m_Name;
-
-    static QString GetStringBody(const Body& body);
+    bool m_IsWorn = false;
 };
 
 #endif // STUFF_H
