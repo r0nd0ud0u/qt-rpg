@@ -29,6 +29,7 @@ private slots:
     void on_stackedWidget_currentChanged(const int arg1);
     void StartNewTurn();
     void NewRound();
+    void LaunchAttak(const QString& atkName);
 };
 
 

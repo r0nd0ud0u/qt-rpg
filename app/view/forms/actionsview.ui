@@ -66,9 +66,12 @@
     <layout class="QVBoxLayout" name="target_lay"/>
    </item>
    <item>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="validate_action">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="text">
-      <string>PushButton</string>
+      <string>Valide action</string>
      </property>
     </widget>
    </item>
