@@ -36,11 +36,11 @@ void
 BossPanel::SetActive(bool activated)
 {
   if (activated) {
-    setStyleSheet("#main_widget { background:     #40b1fe;  } "
-                  "#main_widget QLabel{color: white;}");
+    setStyleSheet("#verticalWidget { background:     #40b1fe;  } "
+                  "#verticalWidget QLabel{color: white;}");
   } else {
 
-    setStyleSheet("#main_widget { background:     grey;  } "
-                  "#main_widget QLabel{color: white;}");
+    setStyleSheet("#verticalWidget { background:     grey;  } "
+                  "#verticalWidget QLabel{color: white;}");
   }
 }

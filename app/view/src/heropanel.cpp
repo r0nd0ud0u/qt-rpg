@@ -57,12 +57,10 @@ void
 HeroPanel::SetActive(const bool activated)
 {
   if (activated) {
-    setStyleSheet("#left_widget, #right_widget{ background:     #40b1fe;  } "
-                  "#left_widget QLabel{color: white;}");
+    setStyleSheet("#active_widget{ background:     #40b1fe;  } ");
   } else {
 
-    setStyleSheet("#left_widget, #right_widget{ background:     grey;  } "
-                  "#left_widget QLabel{color: white;}");
+    setStyleSheet("#active_widget{ background:     grey;  } ");
   }
 }
 
