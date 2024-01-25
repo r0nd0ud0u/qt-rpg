@@ -39,7 +39,7 @@ void BossesView::InitBossPanels() {
   }
 }
 
-void BossesView::SelectPanel(const QString &bossName) const {
+void BossesView::SelectPanel(const QString &bossName) {
   for (auto *boss : m_BossPanels) {
     if (bossName == boss->m_Boss->m_Name) {
       boss->SetActive(true);
