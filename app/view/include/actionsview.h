@@ -38,6 +38,7 @@ signals:
   void SigLaunchAttak(const QString &atkName);
   void SigUseObject(const QString &objName);
 
+private slots:
   void on_actions_table_view_clicked(const QModelIndex &index);
   void on_validate_action_clicked();
 };
