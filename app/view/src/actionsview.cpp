@@ -4,7 +4,7 @@
 #include "Application.h"
 #include "character.h"
 
-#include <QPushButton>
+#include <QCheckBox>
 #include <QStandardItemModel>
 
 ActionsView::ActionsView(QWidget *parent)
@@ -103,6 +103,16 @@ void ActionsView::on_actions_table_view_clicked(const QModelIndex &index) {
   m_CurIndex = index;
   ui->atk_stats_table->setModel(createInfoModel(parentWidget(), m_CurType));
   ui->validate_action->setEnabled(true);
+  // Activate target widget
+  InitTargetsWidget();
+}
+
+void ActionsView::ResetActionsParam() {
+  ui->validate_action->setEnabled(false);
+  m_CurIndex = {};
+  m_CurType = ActionsStackedWgType::defaultType;
+  m_CurAtk = {};
+  m_TargetedList.clear();
 }
 
 void ActionsView::on_validate_action_clicked() {
@@ -112,12 +122,50 @@ void ActionsView::on_validate_action_clicked() {
     emit SigUseObject(m_CurAtk.name);
   }
   // reset to init values the members and view
-  ui->validate_action->setEnabled(false);
-  m_CurIndex = {};
-  m_CurType = ActionsStackedWgType::defaultType;
-  m_CurAtk = {};
+  ResetActionsParam();
 }
 
-void ActionsView::SetValidateBtnEnabled(const bool value) {
-  ui->validate_action->setEnabled(value);
+void ActionsView::InitTargetsWidget() {
+  const auto &gm = Application::GetInstance().m_GameManager;
+  const auto *activePlayer = gm->GetCurrentPlayer();
+  if (activePlayer == nullptr) {
+    return;
+  }
+  if (m_CurAtk.target == TARGET_ALLY || m_CurAtk.target == TARGET_ALL_HEROES) {
+    for (const auto &hero : gm->m_PlayersManager->m_HeroesList) {
+      // filter active player in case of TARGET_ALLY
+      if (m_CurAtk.target == TARGET_ALLY &&
+          hero->m_Name == activePlayer->m_Name) {
+        continue;
+      }
+      auto *checkbox = new QCheckBox();
+      checkbox->setText(hero->m_Name);
+      ui->targets_widget->layout()->addWidget(checkbox);
+      // init target
+      TargetInfo target;
+      target.m_Name = hero->m_Name;
+      target.m_IsTargeted = false;
+      m_TargetedList.push_back(target);
+      connect(checkbox, &QCheckBox::stateChanged, this,
+              &ActionsView::UpdateTargetList);
+    }
+  }
+  if (m_CurAtk.target == TARGET_ENNEMY) {
+    // choose boss atk ??
+    for (const auto &boss : gm->m_PlayersManager->m_BossesList) {
+      auto *checkbox = new QCheckBox();
+      checkbox->setText(boss->m_Name);
+      // init target
+      TargetInfo target;
+      target.m_Name = boss->m_Name;
+      target.m_IsTargeted = false;
+      m_TargetedList.push_back(target);
+      connect(checkbox, &QCheckBox::stateChanged, this,
+              &ActionsView::UpdateTargetList);
+    }
+  }
+}
+
+void ActionsView::UpdateTargetList(const int index) {
+  m_TargetedList.at(index).m_IsTargeted = true;
 }
