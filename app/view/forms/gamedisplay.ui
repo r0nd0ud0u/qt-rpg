@@ -127,6 +127,9 @@
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
           <widget class="QPushButton" name="attaque_button">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Attaque</string>
            </property>
@@ -134,6 +137,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="bag_button">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Sac</string>
            </property>

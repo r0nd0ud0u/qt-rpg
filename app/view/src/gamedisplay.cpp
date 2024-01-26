@@ -19,6 +19,8 @@ GameDisplay::GameDisplay(QWidget *parent)
           &GameDisplay::NewRound);
   connect(ui->channel_lay, &Channel::SigNewTurn, this,
           &GameDisplay::StartNewTurn);
+  connect(ui->channel_lay, &Channel::SigEndOfTurn, this,
+          &GameDisplay::StartNewTurn);
   connect(ui->attak_page, &ActionsView::SigLaunchAttak, this, &GameDisplay::LaunchAttak);
 
   // init display default page
@@ -38,8 +40,6 @@ void GameDisplay::UpdateChannel() {
 void GameDisplay::UpdateViews(const QString &name) {
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(ActionsStackedWgType::defaultType));
-  ui->attaque_button->setEnabled(true);
-  ui->bag_button->setEnabled(true);
   const auto &app = Application::GetInstance();
   // lambda function to add here
   for (auto *hero : app.m_GameManager->m_PlayersManager->m_HeroesList) {
@@ -86,7 +86,9 @@ void GameDisplay::NewRound(){
     UpdateGameStatus();
     ui->heroes_widget->ActivatePanel(gs->m_OrderToPlay.at(gs->m_CurrentRound - 1));
     ui->bosses_widget->ActivatePanel(gs->m_OrderToPlay.at(gs->m_CurrentRound - 1));
-
+    // Activate actions buttons
+    ui->bag_button->setEnabled(true);
+    ui->attaque_button->setEnabled(true);
     // TODO update channel
     // choice of talent
     // if dead -> choice to take a potion
@@ -105,9 +107,16 @@ void GameDisplay::StartNewTurn(){
     UpdateGameStatus();
 }
 
+void GameDisplay::EndOfNewTurn(){
+    // Desactivate actions buttons
+    ui->bag_button->setEnabled(false);
+    ui->attaque_button->setEnabled(false);
+}
+
 void GameDisplay::LaunchAttak(const QString& atkName, const std::vector<TargetInfo>& targetList){
     const auto& gm = Application::GetInstance().m_GameManager;
 
+    // Desactivate actions buttons
     ui->bag_button->setEnabled(false);
     ui->attaque_button->setEnabled(false);
     ui->stackedWidget->setCurrentIndex(
