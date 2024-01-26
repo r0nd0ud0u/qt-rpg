@@ -25,7 +25,7 @@ BossPanel::UpdatePanel(Character* boss)
   m_Boss = boss;
 
   ui->name_label->setText(boss->m_Name);
-  ui->hp_bar->setFormat(QString::number(boss->m_Stats.m_HP.m_Value) + "/" +
+  ui->hp_bar->setFormat(QString::number(boss->m_CurrentStats.m_HP.m_Value) + "/" +
                         QString::number(boss->m_Stats.m_HP.m_Value) + " %p%");
 
   ui->hp_bar->setStyleSheet("QProgressBar{color: white;} QProgressBar::chunk { "
@@ -36,11 +36,11 @@ void
 BossPanel::SetActive(bool activated)
 {
   if (activated) {
-    setStyleSheet("#main_widget { background:     #40b1fe;  } "
-                  "#main_widget QLabel{color: white;}");
+    setStyleSheet("#verticalWidget { background:     #40b1fe;  } "
+                  "#verticalWidget QLabel{color: white;}");
   } else {
 
-    setStyleSheet("#main_widget { background:     grey;  } "
-                  "#main_widget QLabel{color: white;}");
+    setStyleSheet("#verticalWidget { background:     grey;  } "
+                  "#verticalWidget QLabel{color: white;}");
   }
 }

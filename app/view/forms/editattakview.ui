@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>346</height>
+    <height>508</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -150,6 +150,20 @@
        </item>
        <item row="9" column="1">
         <widget class="QSpinBox" name="vigor_spinBox">
+         <property name="maximum">
+          <number>1000</number>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="berseck_label">
+         <property name="text">
+          <string>Coût rage</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="1">
+        <widget class="QSpinBox" name="berseck_spinBox">
          <property name="maximum">
           <number>1000</number>
          </property>

@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <vector>
 
-#include "character.h"
 
 class HeroPanel;
 
@@ -19,6 +18,7 @@ class HeroesView : public QWidget
 public:
     explicit HeroesView(QWidget *parent = nullptr);
     ~HeroesView() final;
+    void ActivatePanel(const QString&);
 
 signals:
     void SigAddStuff();
@@ -26,6 +26,7 @@ signals:
 private slots:
     void Dosomething();
     void SlotClickedOnHeroPanel(QString name);
+    void UpdateAllPanels();
 
 private:
     Ui::HeroesView *ui;

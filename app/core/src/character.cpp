@@ -21,16 +21,50 @@ Character::Character(const QString name, const characType type,
                      const Stats &stats)
     : m_Name(name), m_type(type), m_Stats(stats) {
   m_Inventory.resize(static_cast<int>(InventoryType::enumSize));
+
+  // init current stats at full power
+  m_CurrentStats.m_HP = stats.m_HP;
+  m_CurrentStats.m_Mana = stats.m_Mana;
+  m_CurrentStats.m_Bersecker = stats.m_Bersecker;
+  m_CurrentStats.m_Vigor = stats.m_Vigor;
+  m_CurrentStats.m_aggro = stats.m_aggro;
 }
 
-void Character::Attaque(int degat, Character *target) const {
-  if (target == nullptr) {
+void Character::Attaque(const QString &atkName, Character *target) {
+  if (target == nullptr || atkName.isEmpty()) {
     return;
   }
-  target->m_Stats.m_HP.m_Value -= degat;
+
+  const auto &atk = m_AttakList.at(atkName);
+
+  // Stats change on target
+  auto &tarCurHp = target->m_CurrentStats.m_HP.m_Value;
+  if (atk.damage > 0) {
+    tarCurHp = max(0, static_cast<int>(tarCurHp - atk.damage));
+  }
+  if (atk.heal > 0) {
+    tarCurHp = min(target->m_Stats.m_HP.m_Value,
+                   static_cast<int>(tarCurHp + atk.heal));
+  }
 }
 
-void Character::AddAtq(const AttaqueType &atq) { attakList.push_back(atq); }
+void Character::StatsChangeAfterAtk(const QString &atkName) {
+  if (atkName.isEmpty()) {
+    return;
+  }
+  const auto &atk = m_AttakList.at(atkName);
+
+  // Stats change on target
+  m_CurrentStats.m_Mana.m_Value =
+      max(0, static_cast<int>(m_CurrentStats.m_Mana.m_Value - atk.manaCost));
+  m_CurrentStats.m_Vigor.m_Value =
+      max(0, static_cast<int>(m_CurrentStats.m_Vigor.m_Value - atk.vigorCost));
+  m_CurrentStats.m_Bersecker.m_Value =
+      max(0, static_cast<int>(m_CurrentStats.m_Bersecker.m_Value -
+                              atk.berseckCost));
+}
+
+void Character::AddAtq(const AttaqueType &atq) { m_AttakList[atq.name] = atq; }
 
 void Character::AddStuff(const Stuff &stuff) {
   m_Stats.m_HP.m_Value += stuff.m_Stats.m_HP.m_Value;
@@ -91,12 +125,13 @@ void Character::LoadAtkJson() {
       atk.name = json[ATK_NAME].toString();
       atk.namePhoto = json[ATK_PHOTO].toString();
       atk.aggroCum = json[ATK_BERSECK_AGGRO].toInt();
-      atk.damage = json[ATK_DAMAGE].toInt();
+      atk.damage = static_cast<uint32_t>(json[ATK_DAMAGE].toInt());
       atk.heal = json[ATK_HEAL].toInt();
       atk.regenMana = json[ATK_REGEN_MANA].toInt();
       atk.effect = json[ATK_EFFECT].toString();
-      atk.manaCost = json[ATK_MANA_COST].toInt();
-      atk.vigorCost = json[ATK_VIGOR_COST].toInt();
+      atk.manaCost = static_cast<uint32_t>(json[ATK_MANA_COST].toInt());
+      atk.vigorCost = static_cast<uint32_t>(json[ATK_VIGOR_COST].toInt());
+      atk.berseckCost = static_cast<uint32_t>(json[ATK_BERSECK_COST].toInt());
       atk.reach = json[ATK_REACH].toString();
       atk.target = json[ATK_TARGET].toString();
       atk.turnsDuration = static_cast<uint16_t>(json[ATK_DURATION].toInt());
@@ -165,4 +200,28 @@ void Character::ApplyAllEquipment(
     m_Stats.m_regenMana.m_Value += equip.m_Stats.m_regenMana.m_Value;
     m_Stats.m_regenVigueur.m_Value += equip.m_Stats.m_regenVigueur.m_Value;
   }
+}
+
+/////////////////////////////////////////
+/// \brief Character::CanBeLaunched
+/// The attak can be launched if the character has enough mana, vigor and
+/// berseck.
+///
+bool Character::CanBeLaunched(const AttaqueType &atk) const {
+  const auto remainingMana =
+      static_cast<uint32_t>(m_CurrentStats.m_Mana.m_Value);
+  const auto remainingBerseck =
+      static_cast<uint32_t>(m_CurrentStats.m_Bersecker.m_Value);
+  const auto remainingVigor =
+      static_cast<uint32_t>(m_CurrentStats.m_Vigor.m_Value);
+  if (atk.manaCost > 0 && atk.manaCost <= remainingMana) {
+    return true;
+  }
+  if (atk.berseckCost > 0 && atk.berseckCost <= remainingBerseck) {
+    return true;
+  }
+  if (atk.vigorCost > 0 && atk.vigorCost <= remainingVigor) {
+    return true;
+  }
+  return false;
 }

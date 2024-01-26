@@ -150,3 +150,18 @@ void PlayersManager::LoadAllEquipmentsJson() {
     }
   }
 }
+
+Character* PlayersManager::GetCharacterByName(const QString& name){
+    for(auto* boss : m_BossesList){
+        if(name == boss->m_Name){
+            return boss;
+        }
+    }
+    for(auto* hero : m_HeroesList){
+        if(name == hero->m_Name){
+            return hero;
+        }
+    }
+
+    return nullptr;
+}
