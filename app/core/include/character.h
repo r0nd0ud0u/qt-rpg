@@ -45,20 +45,23 @@ class Character
 public:
     Character(const QString name, const characType type, const Stats& stats);
 
-    void Attaque(int degat, Character* target) const;
+    void Attaque(const QString& atkName, Character* target);
+    void StatsChangeAfterAtk(const QString& atkName);
     void AddAtq (const AttaqueType& atq);
     void AddStuff(const Stuff& stuff);
     void LoadAtkJson();
     void LoadStuffJson();
     void ApplyAllEquipment(const std::unordered_map<QString, Stuff>& allEquipMap);
+    bool CanBeLaunched(const AttaqueType &atk)const;
 
     static QString GetInventoryString(const InventoryType& type);
 
     QString m_Name = "default";
     characType m_type = characType::Hero;
     Stats m_Stats;
+    CurrentStats m_CurrentStats;
     std::unordered_map<QString, QString> m_WearingEquipment; // key: body, value: equipmentName
-    std::vector<AttaqueType> attakList;
+    std::unordered_map<QString, AttaqueType> m_AttakList; // key: attak name, value: AttakType struct
     std::vector<uint8_t> m_Inventory;
     std::vector<Effect*> m_EffectsList;
     int m_Level = 1;
