@@ -63,7 +63,9 @@
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="target_lay"/>
+    <widget class="QWidget" name="targets_widget" native="true">
+     <layout class="QVBoxLayout" name="target_lay"/>
+    </widget>
    </item>
    <item>
     <widget class="QPushButton" name="validate_action">
