@@ -1,15 +1,16 @@
 {
-    "Cible": "Ennemie",
-    "Coût de mana": 0,
+    "Cible": "Allié",
+    "Coût de mana": 5,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Durée": 3,
-    "Dégâts": 10,
+    "Dégâts": 0,
+    "Niveau": 1,
     "Nom": "Essence Régénératrice",
-    "Photo": "Azrak Ombresang.png",
-    "Portée": "Zone",
+    "Photo": "Thalia.png",
+    "Portée": "Individuel",
     "Rage aggro": 0,
-    "Regen mana": 0,
-    "Soin": 0
+    "Regen mana": 20,
+    "Soin": 20
 }
 

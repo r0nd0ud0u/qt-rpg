@@ -1,10 +1,11 @@
 {
     "Cible": "Allié",
-    "Coût de mana": 0,
+    "Coût de mana": 3,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Durée": 3,
     "Dégâts": 0,
+    "Niveau": 11,
     "Nom": "Reconnexion Arbustive",
     "Photo": "Thalia.png",
     "Portée": "Individuel",

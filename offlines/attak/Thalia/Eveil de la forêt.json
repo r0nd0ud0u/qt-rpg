@@ -1,16 +1,16 @@
 {
     "Cible": "Allié",
-    "Coût de mana": 8,
+    "Coût de mana": 18,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Durée": 4,
     "Dégâts": 0,
-    "Niveau": 13,
-    "Nom": "Feuillage Réparateur",
+    "Niveau": 14,
+    "Nom": "Eveil de la forêt",
     "Photo": "Thalia.png",
-    "Portée": "Individuel",
+    "Portée": "Zone",
     "Rage aggro": 0,
-    "Regen mana": 60,
-    "Soin": 60
+    "Regen mana": 80,
+    "Soin": 80
 }
 

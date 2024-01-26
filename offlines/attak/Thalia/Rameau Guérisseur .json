@@ -1,12 +1,16 @@
 {
     "Cible": "Allié",
-    "Coût de mana": "0",
+    "Coût de mana": 15,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
     "Durée": 4,
     "Dégâts": 0,
+    "Niveau": 2,
     "Nom": "Rameau Guérisseur ",
     "Photo": "Thalia.png",
     "Portée": "Individuel",
-    "Rage aggro": "0",
-    "Soin": 0
+    "Rage aggro": 0,
+    "Regen mana": 30,
+    "Soin": 30
 }
 
