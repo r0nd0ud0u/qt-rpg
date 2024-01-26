@@ -1,13 +1,18 @@
 {
     "Cible": "Ennemie",
-    "Coût de mana": "0",
+    "Coût de mana": 0,
+    "Coût de rage": 0,
+    "Coût de vigueur": 12,
     "Durée": 1,
-    "Dégâts": 0,
+    "Dégâts": 200,
+    "Niveau": 13,
     "Nom": "Éclipse du Mordor",
     "Photo": "Azrak Ombresang.png",
-    "Portée": "Individuel",
-    "Rage aggro": "0",
+    "Portée": "Zone",
+    "Rage aggro": 0,
     "Regen mana": 0,
+    "Regen rage": 0,
+    "Regen vigueur": 0,
     "Soin": 0
 }
 

@@ -1,13 +1,18 @@
 {
     "Cible": "Ennemie",
-    "Coût de mana": "0",
+    "Coût de mana": 0,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
     "Durée": 1,
-    "Dégâts": 0,
+    "Dégâts": 25,
+    "Niveau": 3,
     "Nom": "Fracas Marteau ",
     "Photo": "Thraïn.png",
-    "Portée": "Individuel",
-    "Rage aggro": "0",
+    "Portée": "Zone",
+    "Rage aggro": 0,
     "Regen mana": 0,
+    "Regen rage": 10,
+    "Regen vigueur": 0,
     "Soin": 0
 }
 

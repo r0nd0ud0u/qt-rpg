@@ -1,12 +1,18 @@
 {
     "Cible": "Allié",
-    "Coût de mana": "0",
+    "Coût de mana": 8,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
     "Durée": 4,
     "Dégâts": 0,
+    "Niveau": 11,
     "Nom": "Feuillage Réparateur",
-    "Photo": "default.png",
+    "Photo": "Thalia.png",
     "Portée": "Individuel",
-    "Rage aggro": "0",
-    "Soin": 0
+    "Rage aggro": 0,
+    "Regen mana": 10,
+    "Regen rage": 0,
+    "Regen vigueur": 0,
+    "Soin": 60
 }
 

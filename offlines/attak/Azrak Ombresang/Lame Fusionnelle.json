@@ -1,13 +1,18 @@
 {
     "Cible": "Ennemie",
-    "Coût de mana": "0",
+    "Coût de mana": 0,
+    "Coût de rage": 0,
+    "Coût de vigueur": 4,
     "Durée": 1,
-    "Dégâts": 0,
+    "Dégâts": 35,
+    "Niveau": 1,
     "Nom": "Lame Fusionnelle",
     "Photo": "Azrak Ombresang.png",
-    "Portée": "Zone",
-    "Rage aggro": "0",
+    "Portée": "Individuel",
+    "Rage aggro": 0,
     "Regen mana": 0,
+    "Regen rage": 0,
+    "Regen vigueur": 0,
     "Soin": 0
 }
 
