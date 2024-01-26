@@ -37,3 +37,16 @@ void GameManager::ProcessOrderToPlay(std::vector<QString> &orderToPlay) {
     orderToPlay.push_back(boss->m_Name);
   }
 }
+
+Character* GameManager::GetCurrentPlayer(){
+    const auto& nameChara = m_GameState->GetCurrentPlayerName();
+    return m_PlayersManager->GetCharacterByName(nameChara);
+}
+
+/////////////////////////////////////////
+/// \brief GameState::GetCurrentPlayerName
+///
+QString GameState::GetCurrentPlayerName(){
+    return (m_CurrentRound > 0) ? m_OrderToPlay.at(m_CurrentRound-1) : "";
+}
+

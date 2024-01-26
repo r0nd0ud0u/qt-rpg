@@ -3,6 +3,9 @@
 
 #include <QWidget>
 
+// for TargetInfo class
+#include "actionsview.h"
+
 namespace Ui {
 class GameDisplay;
 }
@@ -29,7 +32,7 @@ private slots:
     void on_stackedWidget_currentChanged(const int arg1);
     void StartNewTurn();
     void NewRound();
-    void LaunchAttak(const QString& atkName);
+    void LaunchAttak(const QString& atkName, const std::vector<TargetInfo>&);
 };
 
 

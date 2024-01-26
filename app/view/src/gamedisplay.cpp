@@ -56,7 +56,7 @@ void GameDisplay::on_attaque_button_clicked() {
       static_cast<int>(ActionsStackedWgType::attak));
   ui->attaque_button->setEnabled(false);
   ui->bag_button->setEnabled(true);
-  ui->attak_page->SetValidateBtnEnabled(false);
+  ui->attak_page->ResetActionsParam();
 }
 
 void GameDisplay::on_bag_button_clicked() {
@@ -64,7 +64,7 @@ void GameDisplay::on_bag_button_clicked() {
       static_cast<int>(ActionsStackedWgType::inventory));
   ui->bag_button->setEnabled(false);
   ui->attaque_button->setEnabled(true);
-  ui->attak_page->SetValidateBtnEnabled(false);
+  ui->attak_page->ResetActionsParam();
 }
 
 void GameDisplay::on_stackedWidget_currentChanged(const int arg1) {
@@ -105,10 +105,27 @@ void GameDisplay::StartNewTurn(){
     UpdateGameStatus();
 }
 
-void GameDisplay::LaunchAttak(const QString& atkName){
+void GameDisplay::LaunchAttak(const QString& atkName, const std::vector<TargetInfo>& targetList){
+    const auto& gm = Application::GetInstance().m_GameManager;
+
     ui->bag_button->setEnabled(false);
     ui->attaque_button->setEnabled(false);
     ui->stackedWidget->setCurrentIndex(
         static_cast<int>(ActionsStackedWgType::defaultType));
+
+    const auto& nameChara = gm->m_GameState->GetCurrentPlayerName();
+    auto* hero = gm->m_PlayersManager->GetCharacterByName(nameChara);
     // launch atk
+    for(const auto& target : targetList){
+        if(!target.m_IsTargeted){
+            continue;
+        }
+        auto* targetChara = gm->m_PlayersManager->GetCharacterByName(target.m_Name);
+
+        if(hero!= nullptr && targetChara != nullptr){
+            hero->Attaque(atkName, targetChara);
+        }
+    }
+    // Stats change on hero
+    hero->StatsChangeAfterAtk(atkName);
 }

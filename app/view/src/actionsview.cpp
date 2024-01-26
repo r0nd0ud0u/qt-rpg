@@ -33,21 +33,34 @@ void ActionsView::addInfoActionRow(QAbstractItemModel *model,
 QAbstractItemModel *ActionsView::createModel(QObject *parent,
                                              const ActionsStackedWgType &type) {
   QStandardItemModel *model = nullptr;
-  const auto *selectedHero =
-      Application::GetInstance().m_GameManager->GetSelectedHero();
+  const auto *activePlayer =
+      Application::GetInstance().m_GameManager->GetCurrentPlayer();
+  if (activePlayer == nullptr) {
+    return model;
+  }
 
   // attak view
   if (type == ActionsStackedWgType::attak) {
     model = new QStandardItemModel(0, 1, parent);
-    for (const auto &atk : selectedHero->attakList) {
-      addActionRow(model, atk.name);
+    for (const auto &[atkName, atk] : activePlayer->m_AttakList) {
+      addActionRow(model, atkName);
+      // Disable atk with not enough mana
+      // Output the model data to verify the items are disabled
+
+      for (int column = 0; column < model->columnCount(); ++column) {
+        auto *item = model->item(model->rowCount() -1 , column);
+        if (item != nullptr && !activePlayer->CanBeLaunched(atk)) {
+          qDebug() << atkName;
+          item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
+        }
+      }
     }
   } else if (type == ActionsStackedWgType::inventory) {
     model = new QStandardItemModel(0, 2, parent);
-    for (size_t i = 0; i < selectedHero->m_Inventory.size(); i++) {
+    for (size_t i = 0; i < activePlayer->m_Inventory.size(); i++) {
       addActionRow(model,
                    Character::GetInventoryString(static_cast<InventoryType>(
-                       selectedHero->m_Inventory.at(i))));
+                       activePlayer->m_Inventory.at(i))));
     }
   }
 
@@ -59,13 +72,16 @@ ActionsView::createInfoModel(QObject *parent,
                              const ActionsStackedWgType &type) {
   QStandardItemModel *model = nullptr;
 
-  // Get the current atk selected
-  const auto *selectedHero =
-      Application::GetInstance().m_GameManager->GetSelectedHero();
-  const auto &atkName =
+  // Get the current selected atk on current player
+  const auto *activePlayer =
+      Application::GetInstance().m_GameManager->GetCurrentPlayer();
+  if (activePlayer == nullptr) {
+    return model;
+  }
+  const auto &curAtkName =
       ui->actions_table_view->model()->data(m_CurIndex).toString();
-  for (const auto &atk : selectedHero->attakList) {
-    if (atk.name == atkName) {
+  for (const auto &[atkName, atk] : activePlayer->m_AttakList) {
+    if (atkName == curAtkName) {
       m_CurAtk = atk;
       break;
     }
@@ -86,8 +102,8 @@ ActionsView::createInfoModel(QObject *parent,
     addInfoActionRow(model, ATK_REGEN_MANA, m_CurAtk.regenMana);
   } else if (type == ActionsStackedWgType::inventory) {
     model = new QStandardItemModel(0, 1, parent);
-    for (size_t i = 0; i < selectedHero->m_Inventory.size(); i++) {
-      addActionRow(model, selectedHero->m_Inventory.at(i));
+    for (size_t i = 0; i < activePlayer->m_Inventory.size(); i++) {
+      addActionRow(model, activePlayer->m_Inventory.at(i));
     }
   }
 
@@ -118,7 +134,7 @@ void ActionsView::ResetActionsParam() {
 
 void ActionsView::on_validate_action_clicked() {
   if (m_CurType == ActionsStackedWgType::attak) {
-    emit SigLaunchAttak(m_CurAtk.name);
+    emit SigLaunchAttak(m_CurAtk.name, m_TargetedList);
   } else if (m_CurType == ActionsStackedWgType::inventory) {
     emit SigUseObject(m_CurAtk.name);
   }
