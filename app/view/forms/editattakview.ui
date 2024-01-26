@@ -117,7 +117,7 @@
        <item row="8" column="0">
         <widget class="QLabel" name="mana_cost_label">
          <property name="text">
-          <string>Coût mana</string>
+          <string>Coût mana %</string>
          </property>
         </widget>
        </item>
@@ -144,7 +144,7 @@
        <item row="9" column="0">
         <widget class="QLabel" name="vigor_label">
          <property name="text">
-          <string>Coût vigueur</string>
+          <string>Coût vigueur %</string>
          </property>
         </widget>
        </item>

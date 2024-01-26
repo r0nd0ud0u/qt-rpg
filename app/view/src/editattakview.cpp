@@ -178,6 +178,7 @@ void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
   ui->damage_spinBox->setValue(selectedAttak.type.damage);
   ui->photo_comboBox->setCurrentText(selectedAttak.type.namePhoto);
   ui->regen_mana_spinBox->setValue(selectedAttak.type.regenMana);
+  ui->level_spinBox->setValue(selectedAttak.type.level);
 }
 
 void EditAttakView::EnableAllWidgets(const bool value) const {
@@ -306,4 +307,12 @@ void EditAttakView::on_berseck_spinBox_valueChanged(int arg1)
     m_AttakList[GetIndexSelectedRow()].type.berseckCost = arg1;
 }
 
+void EditAttakView::on_level_spinBox_valueChanged(int arg1)
+{
+    OnValueChange(GetIndexSelectedRow());
+    m_AttakList[GetIndexSelectedRow()].type.level = arg1;
+}
 // end form layout changed
+
+
+

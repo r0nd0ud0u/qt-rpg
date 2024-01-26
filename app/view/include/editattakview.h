@@ -59,6 +59,8 @@ private slots:
 
     void on_berseck_spinBox_valueChanged(int arg1);
 
+    void on_level_spinBox_valueChanged(int arg1);
+
 private:
     Ui::EditAttakView *ui;
     std::vector<EditAttak> m_AttakList;
