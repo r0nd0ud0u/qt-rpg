@@ -100,7 +100,7 @@ void EditAttakView::Save() {
     obj.insert(ATK_PHOTO, atk.type.namePhoto);
     obj.insert(ATK_DAMAGE, static_cast<int>(atk.type.damage));
     obj.insert(ATK_HEAL, static_cast<int>(atk.type.heal));
-    obj.insert(ATK_REGEN_MANA, static_cast<int>(atk.type.heal));
+    obj.insert(ATK_REGEN_MANA, static_cast<int>(atk.type.regenMana));
     obj.insert(ATK_LEVEL, static_cast<int>(atk.type.level));
     // output attak json
     QJsonDocument doc(obj);
