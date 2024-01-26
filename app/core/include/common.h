@@ -23,9 +23,17 @@ enum class StatsEnum {
 
 template <class T> class StatsType {
 public:
-  explicit StatsType(StatsEnum type) : m_Type(type) {}
+  explicit StatsType(StatsEnum type) : m_Value(), m_Type(type) {}
   T m_Value;
   StatsEnum m_Type;
+};
+
+struct CurrentStats{
+    StatsType<int> m_HP = StatsType<int>(StatsEnum::hp);
+    StatsType<int> m_Mana = StatsType<int>(StatsEnum::mana);
+    StatsType<int> m_Vigor = StatsType<int>(StatsEnum::vigor);
+    StatsType<int> m_Bersecker = StatsType<int>(StatsEnum::bersecker);
+    StatsType<int> m_aggro = StatsType<int>(StatsEnum::aggro);
 };
 
 struct Stats {
