@@ -30,6 +30,12 @@ Character::Character(const QString name, const characType type,
   m_CurrentStats.m_aggro = stats.m_aggro;
 }
 
+//////
+/// \brief Character::Attaque
+/// HOT by n turns : divided pow by n
+/// \param atkName
+/// \param target
+///
 void Character::Attaque(const QString &atkName, Character *target) {
   if (target == nullptr || atkName.isEmpty()) {
     return;
@@ -40,7 +46,15 @@ void Character::Attaque(const QString &atkName, Character *target) {
   // Stats change on target
   auto &tarCurHp = target->m_CurrentStats.m_HP.m_Value;
   if (atk.damage > 0) {
-    tarCurHp = max(0, static_cast<int>(tarCurHp - atk.damage));
+    int arm = 0;
+    if (atk.manaCost > 0) {
+      arm = m_Stats.m_ArmMag.m_Value;
+    } else if (atk.vigorCost > 0 || atk.berseckCost > 0) {
+      arm = m_Stats.m_ArmPhy.m_Value;
+    }
+
+    const auto damage = atk.damage * (arm / (1000 + arm));
+    tarCurHp = max(0, static_cast<int>(tarCurHp - damage));
   }
   if (atk.heal > 0) {
     tarCurHp = min(target->m_Stats.m_HP.m_Value,
