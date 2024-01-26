@@ -121,6 +121,15 @@ void GameDisplay::EndOfNewTurn() {
       static_cast<int>(ActionsStackedWgType::defaultType));
 }
 
+void GameDisplay::EndOfGame() {
+    // Desactivate actions buttons
+    ui->bag_button->setEnabled(false);
+    ui->attaque_button->setEnabled(false);
+    // default page on action view
+    ui->stackedWidget->setCurrentIndex(
+        static_cast<int>(ActionsStackedWgType::defaultType));
+}
+
 void GameDisplay::LaunchAttak(const QString &atkName,
                               const std::vector<TargetInfo> &targetList) {
   const auto &gm = Application::GetInstance().m_GameManager;
@@ -150,4 +159,32 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   }
   // update views
   emit SigUpdateHeroPanel();
+
+  // check who is dead!
+  for (auto &boss : gm->m_PlayersManager->m_BossesList) {
+    if (boss->m_CurrentStats.m_HP.m_Value == 0) {
+      // next phase
+      emit SigBossDead(boss->m_Name);
+      // delete bosses in player manager
+      delete boss;
+      boss = nullptr;
+
+    }
+  }
+  // Check end of game
+  if(gm->m_PlayersManager->m_BossesList.empty()){
+      // update buttons
+      EndOfGame();
+  }
+
+  uint8_t nbDeadHeroes = 0;
+  for (const auto &hero : gm->m_PlayersManager->m_HeroesList) {
+    if (hero->m_CurrentStats.m_HP.m_Value == 0) {
+      // choose to drink a potion
+      nbDeadHeroes++;
+    }
+  }
+  if (nbDeadHeroes == gm->m_PlayersManager->m_HeroesList.size()) {
+    // end of game
+  }
 }

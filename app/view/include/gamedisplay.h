@@ -21,6 +21,8 @@ public:
 signals:
     void selectCharacter(QString);
     void SigUpdateHeroPanel();
+    void SigBossDead(QString);
+    void SigEndOfGame();
 private:
     Ui::GameDisplay *ui;
     void UpdateGameStatus();
@@ -33,6 +35,7 @@ private slots:
     void on_stackedWidget_currentChanged(const int arg1);
     void StartNewTurn();
     void EndOfNewTurn();
+    void EndOfGame();
     void NewRound();
     void LaunchAttak(const QString& atkName, const std::vector<TargetInfo>&);
 };

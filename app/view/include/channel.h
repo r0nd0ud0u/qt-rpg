@@ -24,6 +24,7 @@ signals:
 private slots:
   void on_next_turn_button_clicked();
   void on_end_round_button_clicked();
+  void EndOfGame();
 
   private:
   Ui::Channel *ui;
