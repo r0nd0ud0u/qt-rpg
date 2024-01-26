@@ -27,6 +27,7 @@ private:
     void InitBossPanels();
 private slots:
     void UpdateAllPanels();
+    void RemoveBoss(QString);
 
 };
 

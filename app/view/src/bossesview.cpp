@@ -2,8 +2,8 @@
 #include "ui_bossesview.h"
 
 #include "Application.h"
-#include "gamedisplay.h"
 #include "bosspanel.h"
+#include "gamedisplay.h"
 
 BossesView::BossesView(QWidget *parent)
     : QWidget(parent), ui(new Ui::BossesView) {
@@ -12,7 +12,10 @@ BossesView::BossesView(QWidget *parent)
       "#main_widget{ background:     #000000;} QLabel{color: white;} ");
   InitBossPanels();
 
-  connect((GameDisplay*)parentWidget(), &GameDisplay::SigUpdateHeroPanel, this, &BossesView::UpdateAllPanels);
+  connect((GameDisplay *)parentWidget(), &GameDisplay::SigUpdateHeroPanel, this,
+          &BossesView::UpdateAllPanels);
+  connect((GameDisplay *)parentWidget(), &GameDisplay::SigBossDead, this,
+          &BossesView::RemoveBoss);
 }
 
 BossesView::~BossesView() {
@@ -29,7 +32,7 @@ void BossesView::InitBossPanels() {
   const auto &app = Application::GetInstance();
   if (app.m_GameManager != nullptr &&
       app.m_GameManager->m_PlayersManager != nullptr) {
-    for (const auto& it : app.m_GameManager->m_PlayersManager->m_BossesList) {
+    for (const auto &it : app.m_GameManager->m_PlayersManager->m_BossesList) {
       if (it == nullptr) {
         continue;
       }
@@ -52,8 +55,22 @@ void BossesView::ActivatePanel(const QString &bossName) {
   }
 }
 
-void BossesView::UpdateAllPanels(){
-    for(auto& panel : m_BossPanels){
-        panel->UpdatePanel(panel->m_Boss);
+void BossesView::UpdateAllPanels() {
+  for (auto &panel : m_BossPanels) {
+    panel->UpdatePanel(panel->m_Boss);
+  }
+}
+
+void BossesView::RemoveBoss(QString bossName) {
+  auto *lay = ui->main_widget->layout();
+  int i = 0;
+  for (auto &it : m_BossPanels) {
+    if (it->m_Boss->m_Name == bossName) {
+      lay->removeWidget(it);
+      delete it;
+      it = nullptr;
+      i++;
+      lay->removeItem(lay->itemAt(i - 1));
     }
+  }
 }
