@@ -1,12 +1,16 @@
 {
     "Cible": "Allié",
-    "Coût de mana": "0",
+    "Coût de mana": 5,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
     "Durée": 1,
     "Dégâts": 0,
+    "Niveau": 6,
     "Nom": "Sève Régénératrice",
     "Photo": "Thalia.png",
     "Portée": "Individuel",
-    "Rage aggro": "0",
-    "Soin": 0
+    "Rage aggro": 0,
+    "Regen mana": 60,
+    "Soin": 60
 }
 
