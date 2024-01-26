@@ -76,6 +76,7 @@ const QString ATK_DAMAGE = "Dégâts";
 const QString ATK_HEAL = "Soin";
 const QString ATK_REGEN_MANA = "Regen mana";
 const QString ATK_EFFECT = "Effet";
+const QString ATK_LEVEL = "Niveau";
 // Reach keys
 const QString REACH_ZONE = "Zone";
 const QString REACH_INDIVIDUAL = "Individuel";

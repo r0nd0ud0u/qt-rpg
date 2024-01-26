@@ -18,6 +18,7 @@ enum class characType {
 class AttaqueType {
 public:
     QString name = "Atq";
+    uint8_t level = 1;
     uint32_t damage = 0;
     uint32_t heal = 0;
     uint32_t regenMana = 0;
