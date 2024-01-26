@@ -130,6 +130,12 @@ void EditAttakView::InitComboBoxes() {
     return;
   }
   m_FirstShow = true;
+
+  // disconnect signals combo boxes
+  disconnect(ui->target_comboBox, &QComboBox::currentTextChanged, nullptr, nullptr);
+  disconnect(ui->reach_comboBox, &QComboBox::currentTextChanged, nullptr, nullptr);
+  disconnect(ui->photo_comboBox, &QComboBox::currentTextChanged, nullptr, nullptr);
+
   ui->target_comboBox->setEnabled(true);
   for (const auto &target : AttaqueType::TARGET_TYPES) {
     ui->target_comboBox->addItem(target);
@@ -148,6 +154,11 @@ void EditAttakView::InitComboBoxes() {
   for (const QString &file : fileList) {
     ui->photo_comboBox->addItem(file);
   }
+
+  // Re-activate them
+  connect(ui->target_comboBox, &QComboBox::currentTextChanged, this, &EditAttakView::on_target_comboBox_currentTextChanged);
+  connect(ui->reach_comboBox, &QComboBox::currentTextChanged, this, &EditAttakView::on_reach_comboBox_currentTextChanged);
+  connect(ui->photo_comboBox, &QComboBox::currentTextChanged, this, &EditAttakView::on_photo_comboBox_currentTextChanged);
 }
 
 void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
