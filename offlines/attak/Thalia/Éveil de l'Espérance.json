@@ -1,12 +1,18 @@
 {
     "Cible": "Allié",
-    "Coût de mana": "0",
-    "Durée": 1,
+    "Coût de mana": 6,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
+    "Durée": 4,
     "Dégâts": 0,
+    "Niveau": 9,
     "Nom": "Éveil de l'Espérance",
-    "Photo": "default.png",
-    "Portée": "Individuel",
-    "Rage aggro": "0",
-    "Soin": 0
+    "Photo": "Thalia.png",
+    "Portée": "Zone",
+    "Rage aggro": 0,
+    "Regen mana": 0,
+    "Regen rage": 0,
+    "Regen vigueur": 0,
+    "Soin": 50
 }
 

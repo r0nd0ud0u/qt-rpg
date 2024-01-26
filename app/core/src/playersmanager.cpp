@@ -47,7 +47,7 @@ void PlayersManager::InitHeroes() {
   stats.m_HP.m_Value = 828;
   stats.m_Mana.m_Value = 0;
   stats.m_Vigor.m_Value = 0;
-  stats.m_Bersecker.m_Value = 20;
+  stats.m_Bersecker.m_Value = 100;
   stats.m_ArmPhy.m_Value = 85;
   stats.m_ArmMag.m_Value = 45;
   stats.m_powPhy.m_Value = 30;
@@ -60,6 +60,7 @@ void PlayersManager::InitHeroes() {
   stats.m_regenMana.m_Value = 0;
   stats.m_regenVigueur.m_Value = 0;
   const auto hero3 = new Character("Thraïn", characType::Hero, stats);
+  hero3->m_CurrentStats.m_Bersecker.m_Value = 20;
 
   m_HeroesList.push_back(hero1);
   m_HeroesList.push_back(hero2);

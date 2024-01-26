@@ -70,12 +70,15 @@ const QString ATK_DURATION = "Durée";
 const QString ATK_MANA_COST = "Coût de mana";
 const QString ATK_VIGOR_COST = "Coût de vigueur";
 const QString ATK_BERSECK_COST = "Coût de rage";
-const QString ATK_BERSECK_AGGRO = "Rage aggro";
+const QString ATK_AGGRO = "Rage aggro";
 const QString ATK_PHOTO = "Photo";
 const QString ATK_DAMAGE = "Dégâts";
 const QString ATK_HEAL = "Soin";
 const QString ATK_REGEN_MANA = "Regen mana";
 const QString ATK_EFFECT = "Effet";
+const QString ATK_LEVEL = "Niveau";
+const QString ATK_REGEN_VIGOR = "Regen vigueur";
+const QString ATK_REGEN_BERSECK = "Regen rage";
 // Reach keys
 const QString REACH_ZONE = "Zone";
 const QString REACH_INDIVIDUAL = "Individuel";
