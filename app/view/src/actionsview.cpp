@@ -96,6 +96,7 @@ ActionsView::createInfoModel(QObject *parent,
     addInfoActionRow(model, ATK_BERSECK_COST, m_CurAtk.berseckCost);
     addInfoActionRow(model, ATK_BERSECK_AGGRO, m_CurAtk.aggroCum);
     addInfoActionRow(model, ATK_DAMAGE, m_CurAtk.damage);
+    addInfoActionRow(model, ATK_LEVEL, m_CurAtk.level);
     addInfoActionRow(model, ATK_HEAL, m_CurAtk.heal);
     addInfoActionRow(model, ATK_REGEN_MANA, m_CurAtk.regenMana);
   } else if (typePage == ActionsStackedWgType::inventory) {

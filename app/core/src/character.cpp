@@ -129,6 +129,7 @@ void Character::LoadAtkJson() {
       atk.heal = json[ATK_HEAL].toInt();
       atk.regenMana = json[ATK_REGEN_MANA].toInt();
       atk.effect = json[ATK_EFFECT].toString();
+      atk.level = static_cast<uint8_t>(json[ATK_LEVEL].toInt());
       atk.manaCost = static_cast<uint32_t>(json[ATK_MANA_COST].toInt());
       atk.vigorCost = static_cast<uint32_t>(json[ATK_VIGOR_COST].toInt());
       atk.berseckCost = static_cast<uint32_t>(json[ATK_BERSECK_COST].toInt());
