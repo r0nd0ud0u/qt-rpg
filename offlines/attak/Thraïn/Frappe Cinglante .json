@@ -1,13 +1,18 @@
 {
     "Cible": "Ennemie",
-    "Coût de mana": "0",
+    "Coût de mana": 0,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
     "Durée": 1,
-    "Dégâts": 0,
+    "Dégâts": 35,
+    "Niveau": 1,
     "Nom": "Frappe Cinglante ",
     "Photo": "Thraïn.png",
-    "Portée": "Zone",
-    "Rage aggro": "0",
+    "Portée": "Individuel",
+    "Rage aggro": 0,
     "Regen mana": 0,
+    "Regen rage": 5,
+    "Regen vigueur": 0,
     "Soin": 0
 }
 

@@ -5,12 +5,14 @@
     "Coût de vigueur": 0,
     "Durée": 4,
     "Dégâts": 0,
-    "Niveau": 14,
+    "Niveau": 13,
     "Nom": "Eveil de la forêt",
     "Photo": "Thalia.png",
     "Portée": "Zone",
     "Rage aggro": 0,
-    "Regen mana": 80,
+    "Regen mana": 0,
+    "Regen rage": 0,
+    "Regen vigueur": 0,
     "Soin": 80
 }
 
