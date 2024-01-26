@@ -124,7 +124,7 @@ void Character::LoadAtkJson() {
       AttaqueType atk;
       atk.name = json[ATK_NAME].toString();
       atk.namePhoto = json[ATK_PHOTO].toString();
-      atk.aggroCum = json[ATK_BERSECK_AGGRO].toInt();
+      atk.aggroCum = json[ATK_AGGRO].toInt();
       atk.damage = static_cast<uint32_t>(json[ATK_DAMAGE].toInt());
       atk.heal = json[ATK_HEAL].toInt();
       atk.regenMana = json[ATK_REGEN_MANA].toInt();
@@ -132,6 +132,8 @@ void Character::LoadAtkJson() {
       atk.level = static_cast<uint8_t>(json[ATK_LEVEL].toInt());
       atk.manaCost = static_cast<uint32_t>(json[ATK_MANA_COST].toInt());
       atk.vigorCost = static_cast<uint32_t>(json[ATK_VIGOR_COST].toInt());
+      atk.regenBerseck = static_cast<uint32_t>(json[ATK_REGEN_BERSECK].toInt());
+      atk.regenVigor = static_cast<uint32_t>(json[ATK_REGEN_VIGOR].toInt());
       atk.berseckCost = static_cast<uint32_t>(json[ATK_BERSECK_COST].toInt());
       atk.reach = json[ATK_REACH].toString();
       atk.target = json[ATK_TARGET].toString();

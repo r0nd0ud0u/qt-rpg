@@ -96,12 +96,14 @@ void EditAttakView::Save() {
     obj.insert(ATK_MANA_COST, static_cast<int>(atk.type.manaCost));
     obj.insert(ATK_VIGOR_COST, static_cast<int>(atk.type.vigorCost));
     obj.insert(ATK_BERSECK_COST, static_cast<int>(atk.type.berseckCost));
-    obj.insert(ATK_BERSECK_AGGRO, static_cast<int>(atk.type.aggroCum));
+    obj.insert(ATK_AGGRO, static_cast<int>(atk.type.aggroCum));
     obj.insert(ATK_PHOTO, atk.type.namePhoto);
     obj.insert(ATK_DAMAGE, static_cast<int>(atk.type.damage));
     obj.insert(ATK_HEAL, static_cast<int>(atk.type.heal));
     obj.insert(ATK_REGEN_MANA, static_cast<int>(atk.type.regenMana));
     obj.insert(ATK_LEVEL, static_cast<int>(atk.type.level));
+    obj.insert(ATK_REGEN_BERSECK, static_cast<int>(atk.type.regenBerseck));
+    obj.insert(ATK_REGEN_VIGOR, static_cast<int>(atk.type.regenVigor));
     // output attak json
     QJsonDocument doc(obj);
 
@@ -170,7 +172,7 @@ void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
   ui->reach_comboBox->setCurrentText(selectedAttak.type.reach);
   ui->name_lineEdit->setText(selectedAttak.type.name);
   ui->duration_spinBox->setValue(selectedAttak.type.turnsDuration);
-  ui->rage_aggro_spinBox->setValue(selectedAttak.type.aggroCum);
+  ui->aggro_spinBox->setValue(selectedAttak.type.aggroCum);
   ui->mana_cost_spinBox->setValue(static_cast<int>(selectedAttak.type.manaCost));
   ui->vigor_spinBox->setValue(selectedAttak.type.vigorCost);
   ui->berseck_spinBox->setValue(selectedAttak.type.berseckCost);
@@ -179,6 +181,8 @@ void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
   ui->photo_comboBox->setCurrentText(selectedAttak.type.namePhoto);
   ui->regen_mana_spinBox->setValue(selectedAttak.type.regenMana);
   ui->level_spinBox->setValue(selectedAttak.type.level);
+  ui->regen_rage_spinBox->setValue(selectedAttak.type.regenBerseck);
+  ui->regen_vigor_spinBox->setValue(selectedAttak.type.regenVigor);
 }
 
 void EditAttakView::EnableAllWidgets(const bool value) const {
@@ -261,7 +265,7 @@ void EditAttakView::on_rage_aggro_spinBox_valueChanged(
     [[maybe_unused]] int arg1) {
   OnValueChange(GetIndexSelectedRow());
   m_AttakList[GetIndexSelectedRow()].type.aggroCum =
-      ui->rage_aggro_spinBox->value();
+      ui->aggro_spinBox->value();
 }
 
 void EditAttakView::on_mana_cost_spinBox_valueChanged(
@@ -312,7 +316,22 @@ void EditAttakView::on_level_spinBox_valueChanged(int arg1)
     OnValueChange(GetIndexSelectedRow());
     m_AttakList[GetIndexSelectedRow()].type.level = arg1;
 }
+
+void EditAttakView::on_regen_rage_spinBox_valueChanged(int arg1)
+{
+    OnValueChange(GetIndexSelectedRow());
+    m_AttakList[GetIndexSelectedRow()].type.regenBerseck = arg1;
+}
+
+
+void EditAttakView::on_regen_vigor_spinBox_valueChanged(int arg1)
+{
+    OnValueChange(GetIndexSelectedRow());
+    m_AttakList[GetIndexSelectedRow()].type.regenVigor = arg1;
+}
+
 // end form layout changed
+
 
 
 

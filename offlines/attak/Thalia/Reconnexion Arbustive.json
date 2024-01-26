@@ -5,12 +5,14 @@
     "Coût de vigueur": 0,
     "Durée": 3,
     "Dégâts": 0,
-    "Niveau": 11,
+    "Niveau": 10,
     "Nom": "Reconnexion Arbustive",
     "Photo": "Thalia.png",
     "Portée": "Individuel",
     "Rage aggro": 0,
-    "Regen mana": 0,
+    "Regen mana": 120,
+    "Regen rage": 0,
+    "Regen vigueur": 0,
     "Soin": 0
 }
 
