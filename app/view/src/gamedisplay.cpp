@@ -84,8 +84,8 @@ void GameDisplay::NewRound(){
     // TODO game state , check if boss is dead
     gs->m_CurrentRound++;
     UpdateGameStatus();
-    ui->heroes_widget->SelectPanel(gs->m_OrderToPlay.at(gs->m_CurrentRound - 1));
-    ui->bosses_widget->SelectPanel(gs->m_OrderToPlay.at(gs->m_CurrentRound - 1));
+    ui->heroes_widget->ActivatePanel(gs->m_OrderToPlay.at(gs->m_CurrentRound - 1));
+    ui->bosses_widget->ActivatePanel(gs->m_OrderToPlay.at(gs->m_CurrentRound - 1));
 
     // TODO update channel
     // choice of talent
