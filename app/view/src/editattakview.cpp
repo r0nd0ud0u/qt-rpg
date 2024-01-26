@@ -314,7 +314,7 @@ void EditAttakView::on_berseck_spinBox_valueChanged(int arg1)
 void EditAttakView::on_level_spinBox_valueChanged(int arg1)
 {
     OnValueChange(GetIndexSelectedRow());
-    m_AttakList[GetIndexSelectedRow()].type.level = arg1;
+    m_AttakList[GetIndexSelectedRow()].type.level = static_cast<uint8_t>(arg1);
 }
 
 void EditAttakView::on_regen_rage_spinBox_valueChanged(int arg1)
