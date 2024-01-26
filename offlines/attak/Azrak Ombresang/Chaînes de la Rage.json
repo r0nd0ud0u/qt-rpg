@@ -1,8 +1,8 @@
 {
     "Cible": "Ennemie",
-    "Coût de mana": "0",
+    "Coût de mana": "20",
     "Durée": 1,
-    "Dégâts": 0,
+    "Dégâts": 50,
     "Nom": "Chaînes de la Rage",
     "Photo": "Azrak Ombresang.png",
     "Portée": "Individuel",
