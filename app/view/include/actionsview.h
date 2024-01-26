@@ -45,7 +45,7 @@ public:
   // Target available of the selected atk
   void InitTargetsWidget();
 signals:
-  void SigLaunchAttak(const QString &atkName);
+  void SigLaunchAttak(const QString &atkName, const std::vector<TargetInfo>& targetList);
   void SigUseObject(const QString &objName);
 
 private slots:
