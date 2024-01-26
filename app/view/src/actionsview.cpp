@@ -50,7 +50,6 @@ QAbstractItemModel *ActionsView::createModel(QObject *parent,
       for (int column = 0; column < model->columnCount(); ++column) {
         auto *item = model->item(model->rowCount() -1 , column);
         if (item != nullptr && !activePlayer->CanBeLaunched(atk)) {
-          qDebug() << atkName;
           item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
         }
       }
