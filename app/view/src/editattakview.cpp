@@ -27,7 +27,7 @@ void EditAttakView::InitView() {
     return;
   }
   const auto &selectedHeroAtkList =
-      app.m_GameManager->m_PlayersManager->m_SelectedHero->attakList;
+      app.m_GameManager->m_PlayersManager->m_SelectedHero->m_AttakList;
 
   // init attributes
   m_SelectedCharaName =
@@ -39,8 +39,8 @@ void EditAttakView::InitView() {
   QStringList List;
   // Init List and m_AttakList
   m_AttakList.clear();
-  for (const auto &atk : selectedHeroAtkList) {
-    List << atk.name;
+  for (const auto &[atkName, atk] : selectedHeroAtkList) {
+    List << atkName;
     EditAttak editAtk;
     editAtk.type = atk;
     m_AttakList.push_back(editAtk);
@@ -79,7 +79,8 @@ void EditAttakView::Save() {
   QString pathAtkChara = OFFLINE_ATK + m_SelectedCharaName + "/";
   logDir.mkpath(pathAtkChara);
 
-  if (const int index = ui->atk_list_view->currentIndex().row();index > m_AttakList.size()) {
+  if (const int index = ui->atk_list_view->currentIndex().row();
+      index > m_AttakList.size()) {
     return;
   }
   for (const auto &atk : m_AttakList) {
@@ -119,15 +120,15 @@ void EditAttakView::Save() {
   // update selected character
   auto &selectedHeroAtkList =
       Application::GetInstance()
-          .m_GameManager->m_PlayersManager->m_SelectedHero->attakList;
+          .m_GameManager->m_PlayersManager->m_SelectedHero->m_AttakList;
   selectedHeroAtkList.clear();
   for (const auto &atk : m_AttakList) {
-    selectedHeroAtkList.push_back(atk.type);
+    selectedHeroAtkList[atk.type.name] = atk.type;
   }
 }
 
 void EditAttakView::InitComboBoxes() {
-    // init only one the combo boxes
+  // init only one the combo boxes
   if (m_FirstShow) {
     return;
   }
@@ -232,7 +233,7 @@ void EditAttakView::on_photo_comboBox_currentTextChanged(const QString &arg1) {
   m_AttakList[GetIndexSelectedRow()].type.namePhoto = arg1;
 }
 
-int EditAttakView::GetIndexSelectedRow() const{
+int EditAttakView::GetIndexSelectedRow() const {
   return ui->atk_list_view->currentIndex().row();
 }
 
