@@ -38,11 +38,14 @@ void Character::Attaque(const QString &atkName, Character *target) {
   const auto &atk = m_AttakList.at(atkName);
 
   // Stats change on target
-  target->m_CurrentStats.m_HP.m_Value = max(
-      0, static_cast<int>(target->m_CurrentStats.m_HP.m_Value - atk.damage));
-  target->m_CurrentStats.m_HP.m_Value =
-      max(target->m_Stats.m_HP.m_Value,
-          static_cast<int>(target->m_CurrentStats.m_HP.m_Value + atk.heal));
+  auto &tarCurHp = target->m_CurrentStats.m_HP.m_Value;
+  if (atk.damage > 0) {
+    tarCurHp = max(0, static_cast<int>(tarCurHp - atk.damage));
+  }
+  if (atk.heal > 0) {
+    tarCurHp = min(target->m_Stats.m_HP.m_Value,
+                   static_cast<int>(tarCurHp + atk.heal));
+  }
 }
 
 void Character::StatsChangeAfterAtk(const QString &atkName) {
@@ -205,10 +208,12 @@ void Character::ApplyAllEquipment(
 /// berseck.
 ///
 bool Character::CanBeLaunched(const AttaqueType &atk) const {
-  const auto remainingMana = static_cast<uint32_t>(m_CurrentStats.m_Mana.m_Value);
+  const auto remainingMana =
+      static_cast<uint32_t>(m_CurrentStats.m_Mana.m_Value);
   const auto remainingBerseck =
       static_cast<uint32_t>(m_CurrentStats.m_Bersecker.m_Value);
-  const auto remainingVigor = static_cast<uint32_t>(m_CurrentStats.m_Vigor.m_Value);
+  const auto remainingVigor =
+      static_cast<uint32_t>(m_CurrentStats.m_Vigor.m_Value);
   if (atk.manaCost > 0 && atk.manaCost <= remainingMana) {
     return true;
   }

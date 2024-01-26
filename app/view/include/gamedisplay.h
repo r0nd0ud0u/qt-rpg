@@ -20,6 +20,7 @@ public:
 
 signals:
     void selectCharacter(QString);
+    void SigUpdateHeroPanel();
 private:
     Ui::GameDisplay *ui;
     void UpdateGameStatus();

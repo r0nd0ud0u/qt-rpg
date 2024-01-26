@@ -30,10 +30,10 @@ void GameManager::ProcessOrderToPlay(std::vector<QString> &orderToPlay) {
   // random ?
   orderToPlay.clear();
 
-  for (const auto hero : m_PlayersManager->m_HeroesList) {
+  for (const auto& hero : m_PlayersManager->m_HeroesList) {
     orderToPlay.push_back(hero->m_Name);
   }
-  for (const auto boss : m_PlayersManager->m_BossesList) {
+  for (const auto& boss : m_PlayersManager->m_BossesList) {
     orderToPlay.push_back(boss->m_Name);
   }
 }
