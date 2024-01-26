@@ -145,8 +145,9 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     }
   }
   // Stats change on hero
-  hero->StatsChangeAfterAtk(atkName);
-  auto *targetChara = gm->m_PlayersManager->GetCharacterByName(targetList.front().m_Name);
+  if (hero != nullptr) {
+    hero->StatsChangeAfterAtk(atkName);
+  }
   // update views
   emit SigUpdateHeroPanel();
 }
