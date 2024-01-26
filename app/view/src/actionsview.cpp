@@ -44,11 +44,9 @@ QAbstractItemModel *ActionsView::createModel(QObject *parent,
     model = new QStandardItemModel(0, 1, parent);
     for (const auto &[atkName, atk] : activePlayer->m_AttakList) {
       addActionRow(model, atkName);
-      // Disable atk with not enough mana
-      // Output the model data to verify the items are disabled
-
+      // disable atk in case of not enough resources, still displayed!
       for (int column = 0; column < model->columnCount(); ++column) {
-        auto *item = model->item(model->rowCount() -1 , column);
+        auto *item = model->item(model->rowCount() - 1, column);
         if (item != nullptr && !activePlayer->CanBeLaunched(atk)) {
           item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
         }

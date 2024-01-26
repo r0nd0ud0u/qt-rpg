@@ -89,6 +89,9 @@ void GameDisplay::NewRound(){
     // Activate actions buttons
     ui->bag_button->setEnabled(true);
     ui->attaque_button->setEnabled(true);
+    // default page on action view
+    ui->stackedWidget->setCurrentIndex(
+        static_cast<int>(ActionsStackedWgType::defaultType));
     // TODO update channel
     // choice of talent
     // if dead -> choice to take a potion
@@ -111,6 +114,9 @@ void GameDisplay::EndOfNewTurn(){
     // Desactivate actions buttons
     ui->bag_button->setEnabled(false);
     ui->attaque_button->setEnabled(false);
+    // default page on action view
+    ui->stackedWidget->setCurrentIndex(
+        static_cast<int>(ActionsStackedWgType::defaultType));
 }
 
 void GameDisplay::LaunchAttak(const QString& atkName, const std::vector<TargetInfo>& targetList){
