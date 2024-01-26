@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>Channel</class>
  <widget class="QWidget" name="Channel">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -17,7 +20,36 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <widget class="StuffsView" name="list_stuffs"/>
-     <widget class="QWidget" name="page_2"/>
+     <widget class="QWidget" name="turn_page">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QPushButton" name="next_turn_button">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>Prochain tour</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="end_round_button">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Fin du round</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListView" name="round_list_view"/>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>

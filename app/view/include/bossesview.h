@@ -18,12 +18,16 @@ class BossesView : public QWidget
 public:
     explicit BossesView(QWidget *parent = nullptr);
     ~BossesView() final;
+    void ActivatePanel(const QString&);
 
 private:
     Ui::BossesView *ui;
     std::vector<BossPanel*> m_BossPanels;
 
     void InitBossPanels();
+private slots:
+    void UpdateAllPanels();
+    void RemoveBoss(QString);
 
 };
 
