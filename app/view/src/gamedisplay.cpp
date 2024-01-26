@@ -112,22 +112,13 @@ void GameDisplay::StartNewTurn() {
   UpdateGameStatus();
 }
 
-void GameDisplay::EndOfNewTurn() {
+void GameDisplay::EndOfGame() {
   // Desactivate actions buttons
   ui->bag_button->setEnabled(false);
   ui->attaque_button->setEnabled(false);
   // default page on action view
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(ActionsStackedWgType::defaultType));
-}
-
-void GameDisplay::EndOfGame() {
-    // Desactivate actions buttons
-    ui->bag_button->setEnabled(false);
-    ui->attaque_button->setEnabled(false);
-    // default page on action view
-    ui->stackedWidget->setCurrentIndex(
-        static_cast<int>(ActionsStackedWgType::defaultType));
 }
 
 void GameDisplay::LaunchAttak(const QString &atkName,
@@ -141,7 +132,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       static_cast<int>(ActionsStackedWgType::defaultType));
 
   const auto &nameChara = gm->m_GameState->GetCurrentPlayerName();
-  auto *hero = gm->m_PlayersManager->GetCharacterByName(nameChara);
+  auto *activatedHero = gm->m_PlayersManager->GetCharacterByName(nameChara);
   // launch atk
   for (const auto &target : targetList) {
     if (!target.m_IsTargeted) {
@@ -149,13 +140,13 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     }
     auto *targetChara = gm->m_PlayersManager->GetCharacterByName(target.m_Name);
 
-    if (hero != nullptr && targetChara != nullptr) {
-      hero->Attaque(atkName, targetChara);
+    if (activatedHero != nullptr && targetChara != nullptr) {
+      activatedHero->Attaque(atkName, targetChara);
     }
   }
   // Stats change on hero
-  if (hero != nullptr) {
-    hero->StatsChangeAfterAtk(atkName);
+  if (activatedHero != nullptr) {
+    activatedHero->StatsChangeAfterAtk(atkName);
   }
   // update views
   emit SigUpdateHeroPanel();
