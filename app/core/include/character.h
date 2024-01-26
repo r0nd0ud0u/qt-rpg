@@ -25,6 +25,7 @@ public:
     QString effect;
     uint32_t manaCost = 0;
     uint32_t vigorCost = 0;
+    uint32_t berseckCost = 0;
     QString target = TARGET_ENNEMY;
     QString reach = REACH_INDIVIDUAL;
     uint16_t turnsDuration = 1;

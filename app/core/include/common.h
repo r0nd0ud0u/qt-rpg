@@ -61,6 +61,7 @@ const QString ATK_REACH = "Portée";
 const QString ATK_DURATION = "Durée";
 const QString ATK_MANA_COST = "Coût de mana";
 const QString ATK_VIGOR_COST = "Coût de vigueur";
+const QString ATK_BERSECK_COST = "Coût de rage";
 const QString ATK_BERSECK_AGGRO = "Rage aggro";
 const QString ATK_PHOTO = "Photo";
 const QString ATK_DAMAGE = "Dégâts";

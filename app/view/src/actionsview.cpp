@@ -79,6 +79,7 @@ ActionsView::createInfoModel(QObject *parent,
     addInfoActionRow(model, ATK_DURATION, m_CurAtk.turnsDuration);
     addInfoActionRow(model, ATK_MANA_COST, m_CurAtk.manaCost);
     addInfoActionRow(model, ATK_VIGOR_COST, m_CurAtk.vigorCost);
+    addInfoActionRow(model, ATK_BERSECK_COST, m_CurAtk.berseckCost);
     addInfoActionRow(model, ATK_BERSECK_AGGRO, m_CurAtk.aggroCum);
     addInfoActionRow(model, ATK_DAMAGE, m_CurAtk.damage);
     addInfoActionRow(model, ATK_HEAL, m_CurAtk.heal);
