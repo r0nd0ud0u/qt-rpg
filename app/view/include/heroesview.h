@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <vector>
 
-#include "character.h"
 
 class HeroPanel;
 
