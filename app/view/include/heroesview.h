@@ -27,6 +27,7 @@ signals:
 private slots:
     void Dosomething();
     void SlotClickedOnHeroPanel(QString name);
+    void UpdateAllPanels();
 
 private:
     Ui::HeroesView *ui;

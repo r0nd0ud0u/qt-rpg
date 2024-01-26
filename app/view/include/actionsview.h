@@ -28,22 +28,21 @@ public:
 
   private:
   Ui::ActionsView *ui;
-  ActionsStackedWgType m_CurType = ActionsStackedWgType::defaultType;
   QModelIndex m_CurIndex;
   AttaqueType m_CurAtk;
   std::vector<TargetInfo> m_TargetedList;
+  ActionsStackedWgType m_CurPage = ActionsStackedWgType::defaultType;
 
   // Table of attaks
-  QAbstractItemModel *createModel(QObject *parent,
-                                  const ActionsStackedWgType &type);
+  QAbstractItemModel *createModel(QObject *parent,const ActionsStackedWgType& typePage);
   void addActionRow(QAbstractItemModel *model, const QVariant &action) const;
   // Table of stats of the selected atk
+  QAbstractItemModel *createInfoModel(QObject *parent,const ActionsStackedWgType& typePage);
   void addInfoActionRow(QAbstractItemModel *model, const QVariant &statsType,
                         const QVariant &value) const;
-  QAbstractItemModel *createInfoModel(QObject *parent,
-                                      const ActionsStackedWgType &type);
   // Target available of the selected atk
   void InitTargetsWidget();
+  void RemoveTargetsWidget();
 signals:
   void SigLaunchAttak(const QString &atkName, const std::vector<TargetInfo>& targetList);
   void SigUseObject(const QString &objName);

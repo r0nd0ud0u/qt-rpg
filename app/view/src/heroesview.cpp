@@ -3,6 +3,7 @@
 
 #include "Application.h"
 
+#include "gamedisplay.h"
 #include "heropanel.h"
 
 HeroesView::HeroesView(QWidget *parent)
@@ -11,6 +12,8 @@ HeroesView::HeroesView(QWidget *parent)
   setStyleSheet("#left_widget{ background:     #808080;} "
                 "#right_widget{background:     #808080;} QLabel{color: white;}");
   InitHeroPanel();
+
+  connect((GameDisplay*)parentWidget(), &GameDisplay::SigUpdateHeroPanel, this, &HeroesView::UpdateAllPanels);
 }
 
 HeroesView::~HeroesView() {
@@ -69,5 +72,11 @@ void HeroesView::ActivatePanel(const QString& heroName){
         } else{
             hero->SetActive(false);
         }
+    }
+}
+
+void HeroesView::UpdateAllPanels(){
+    for(auto& heroPanel : m_HeroPanels){
+        heroPanel->UpdatePanel(heroPanel->m_Heroe);
     }
 }

@@ -25,6 +25,8 @@ private:
     std::vector<BossPanel*> m_BossPanels;
 
     void InitBossPanels();
+private slots:
+    void UpdateAllPanels();
 
 };
 

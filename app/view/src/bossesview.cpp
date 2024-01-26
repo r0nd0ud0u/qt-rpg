@@ -2,6 +2,7 @@
 #include "ui_bossesview.h"
 
 #include "Application.h"
+#include "gamedisplay.h"
 #include "bosspanel.h"
 
 BossesView::BossesView(QWidget *parent)
@@ -10,6 +11,8 @@ BossesView::BossesView(QWidget *parent)
   setStyleSheet(
       "#main_widget{ background:     #000000;} QLabel{color: white;} ");
   InitBossPanels();
+
+  connect((GameDisplay*)parentWidget(), &GameDisplay::SigUpdateHeroPanel, this, &BossesView::UpdateAllPanels);
 }
 
 BossesView::~BossesView() {
@@ -26,7 +29,7 @@ void BossesView::InitBossPanels() {
   const auto &app = Application::GetInstance();
   if (app.m_GameManager != nullptr &&
       app.m_GameManager->m_PlayersManager != nullptr) {
-    for (const auto &it : app.m_GameManager->m_PlayersManager->m_BossesList) {
+    for (const auto& it : app.m_GameManager->m_PlayersManager->m_BossesList) {
       if (it == nullptr) {
         continue;
       }
@@ -47,4 +50,10 @@ void BossesView::ActivatePanel(const QString &bossName) {
       boss->SetActive(false);
     }
   }
+}
+
+void BossesView::UpdateAllPanels(){
+    for(auto& panel : m_BossPanels){
+        panel->UpdatePanel(panel->m_Boss);
+    }
 }
