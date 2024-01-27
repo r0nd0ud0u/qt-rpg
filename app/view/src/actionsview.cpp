@@ -57,10 +57,9 @@ ActionsView::createModel(QObject *parent,
     }
   } else if (typePage == ActionsStackedWgType::inventory) {
     model = new QStandardItemModel(0, 2, parent);
-    for (size_t i = 0; i < m_CurPlayer->m_Inventory.size(); i++) {
-      addActionRow(model,
-                   Character::GetInventoryString(static_cast<InventoryType>(
-                       m_CurPlayer->m_Inventory.at(i))));
+    for (const auto &obj : m_CurPlayer->m_Inventory) {
+      addActionRow(model, Character::GetInventoryString(
+                              static_cast<InventoryType>(obj)));
     }
   }
 
@@ -100,8 +99,8 @@ ActionsView::createInfoModel(QObject *parent,
     addInfoActionRow(model, ATK_REGEN_MANA, m_CurAtk.regenMana);
   } else if (typePage == ActionsStackedWgType::inventory) {
     model = new QStandardItemModel(0, 1, parent);
-    for (size_t i = 0; i < m_CurPlayer->m_Inventory.size(); i++) {
-      addActionRow(model, m_CurPlayer->m_Inventory.at(i));
+    for (const auto &obj : m_CurPlayer->m_Inventory) {
+      addActionRow(model, obj);
     }
   }
 
@@ -147,16 +146,16 @@ void ActionsView::on_validate_action_clicked() {
 void ActionsView::CreateTargetCheckBoxes(
     const QString &activePlayerName,
     const std::vector<Character *> &playerList) {
-  for (size_t i = 0; i < playerList.size(); i++) {
+  for (const auto& ply :playerList) {
     auto *checkbox = new QCheckBox();
-    checkbox->setText(playerList[i]->m_Name);
+    checkbox->setText(ply->m_Name);
     checkbox->setEnabled(false);
     ui->targets_widget->layout()->addWidget(checkbox);
     // init target
     TargetInfo target;
-    target.m_Name = playerList[i]->m_Name;
+    target.m_Name = ply->m_Name;
     target.m_IsTargeted = false;
-    target.m_IsBoss = playerList[i]->m_type == characType::Boss;
+    target.m_IsBoss = ply->m_type == characType::Boss;
     m_TargetedList.push_back(target);
     const QString &name = target.m_Name;
     connect(checkbox, &QCheckBox::clicked, this,
@@ -188,7 +187,7 @@ void ActionsView::UpdateTargetList(const QString &name) {
   ui->validate_action->setEnabled(enableValidateBtn);
 }
 
-void ActionsView::DisableTargetsBox() {
+void ActionsView::DisableTargetsBox() const {
   for (int i = 0; i < ui->targets_widget->layout()->count(); i++) {
     auto *wg = static_cast<QCheckBox *>(
         ui->targets_widget->layout()->itemAt(i)->widget());
