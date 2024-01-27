@@ -11,6 +11,7 @@ enum class ActionsStackedWgType { attak, inventory, defaultType, enumSize };
 struct TargetInfo{
     QString m_Name;
     bool m_IsTargeted = false;
+    bool m_IsBoss = false;
 };
 
 namespace Ui {
@@ -45,7 +46,7 @@ public:
   void addInfoActionRow(QAbstractItemModel *model, const QVariant &statsType,
                         const QVariant &value) const;
   // Target available of the selected atk
-  void RemoveTargetsWidget();
+  void DisableTargetsBox();
   void CreateTargetCheckBoxes(const QString& activePlayerName, const std::vector<Character*>& playerList);
   void ProcessEnableTargetsBoxes();
   
@@ -59,7 +60,7 @@ private slots:
   // slots validate button
   void on_validate_action_clicked();
   // slots of target widget
-  void UpdateTargetList(const int index);
+  void UpdateTargetList(const QString& name);
 };
 
 #endif // ACTIONSVIEW_H
