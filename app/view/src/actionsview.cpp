@@ -119,11 +119,15 @@ void ActionsView::on_actions_table_view_clicked(const QModelIndex &index) {
   // code to activate second table and display stats if atk type
   m_CurIndex = index;
   ui->atk_stats_table->setModel(createInfoModel(parentWidget(), m_CurPage));
-  // enable/disable targeta
+  // enable/disable target
+  for (auto &tg : m_TargetedList) {
+    tg.m_IsTargeted = false;
+  }
   ProcessEnableTargetsBoxes();
 }
 
 void ActionsView::ResetActionsParam() {
+  DisableTargetsBox();
   ui->validate_action->setEnabled(false);
   m_CurIndex = {};
   m_CurPage = ActionsStackedWgType::defaultType;
@@ -152,9 +156,11 @@ void ActionsView::CreateTargetCheckBoxes(
     TargetInfo target;
     target.m_Name = playerList[i]->m_Name;
     target.m_IsTargeted = false;
+    target.m_IsBoss = playerList[i]->m_type == characType::Boss;
     m_TargetedList.push_back(target);
+    const QString &name = target.m_Name;
     connect(checkbox, &QCheckBox::clicked, this,
-            [this, i]() { UpdateTargetList(static_cast<int>(i)); });
+            [this, name]() { UpdateTargetList(name); });
   }
 }
 
@@ -169,36 +175,53 @@ void ActionsView::InitTargetsWidget() {
   CreateTargetCheckBoxes(m_CurPlayer->m_Name, bossList);
 }
 
-void ActionsView::UpdateTargetList(const int index) {
-  if (static_cast<size_t>(index) >= m_TargetedList.size()) {
-    return;
+void ActionsView::UpdateTargetList(const QString &name) {
+  for (auto &tg : m_TargetedList) {
+    if (name == tg.m_Name) {
+      tg.m_IsTargeted = !tg.m_IsTargeted;
+      break;
+    }
   }
-  m_TargetedList.at(index).m_IsTargeted =
-      !m_TargetedList.at(index).m_IsTargeted;
-
   const bool enableValidateBtn =
       std::any_of(m_TargetedList.begin(), m_TargetedList.end(),
                   [](TargetInfo info) { return info.m_IsTargeted; });
   ui->validate_action->setEnabled(enableValidateBtn);
 }
 
-void ActionsView::RemoveTargetsWidget() {
-  m_TargetedList.clear();
+void ActionsView::DisableTargetsBox() {
   for (int i = 0; i < ui->targets_widget->layout()->count(); i++) {
-    auto *widget = ui->targets_widget->layout()->itemAt(i)->widget();
-    if (widget != nullptr) {
-      delete widget;
-      widget = nullptr;
+    auto *wg = static_cast<QCheckBox *>(
+        ui->targets_widget->layout()->itemAt(i)->widget());
+    if (wg != nullptr) {
+      wg->setCheckState(Qt::CheckState::Unchecked);
+      wg->setEnabled(false);
     }
   }
 }
 
 void ActionsView::ProcessEnableTargetsBoxes() {
+  DisableTargetsBox();
   if (m_CurPage == ActionsStackedWgType::attak) {
     for (int i = 0; i < m_TargetedList.size(); i++) {
-      if (m_TargetedList[i].m_Name == m_CurPlayer->m_Name) {
-        continue;
+
+      if (m_CurPlayer->m_type == characType::Hero) {
+        // Disable current player if atk is not on himself or on all the group
+        // of heroes
+        if (m_TargetedList[i].m_Name == m_CurPlayer->m_Name &&
+            !(m_CurAtk.target == TARGET_HIMSELF ||
+              m_CurAtk.target == TARGET_ALL_HEROES)) {
+          continue;
+        }
+        if (m_TargetedList[i].m_IsBoss && m_CurAtk.target != TARGET_ENNEMY) {
+          continue;
+        }
+        if (!m_TargetedList[i].m_IsBoss &&
+            !(m_CurAtk.target == TARGET_ALLY ||
+              m_CurAtk.target == TARGET_ALL_HEROES)) {
+          continue;
+        }
       }
+
       auto *wg = static_cast<QCheckBox *>(
           ui->targets_widget->layout()->itemAt(i)->widget());
       if (wg != nullptr) {
