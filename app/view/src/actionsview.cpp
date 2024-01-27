@@ -12,7 +12,11 @@ ActionsView::ActionsView(QWidget *parent)
   ui->setupUi(this);
 }
 
-ActionsView::~ActionsView() { delete ui; }
+ActionsView::~ActionsView() {
+  delete ui;
+  m_CurPlayer = nullptr;
+  m_TargetedList.clear();
+}
 
 void ActionsView::addActionRow(QAbstractItemModel *model,
                                const QVariant &action) const {
@@ -33,32 +37,30 @@ void ActionsView::addInfoActionRow(QAbstractItemModel *model,
 QAbstractItemModel *
 ActionsView::createModel(QObject *parent,
                          const ActionsStackedWgType &typePage) {
-  QStandardItemModel *model = nullptr;
-  const auto *activePlayer =
-      Application::GetInstance().m_GameManager->GetCurrentPlayer();
-  if (activePlayer == nullptr) {
-    return model;
+  if (m_CurPlayer == nullptr) {
+    return nullptr;
   }
+  QStandardItemModel *model = nullptr;
 
   // attak view
   if (typePage == ActionsStackedWgType::attak) {
     model = new QStandardItemModel(0, 1, parent);
-    for (const auto &[atkName, atk] : activePlayer->m_AttakList) {
+    for (const auto &[atkName, atk] : m_CurPlayer->m_AttakList) {
       addActionRow(model, atkName);
       // disable atk in case of not enough resources, still displayed!
       for (int column = 0; column < model->columnCount(); ++column) {
         auto *item = model->item(model->rowCount() - 1, column);
-        if (item != nullptr && !activePlayer->CanBeLaunched(atk)) {
+        if (item != nullptr && !m_CurPlayer->CanBeLaunched(atk)) {
           item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
         }
       }
     }
   } else if (typePage == ActionsStackedWgType::inventory) {
     model = new QStandardItemModel(0, 2, parent);
-    for (size_t i = 0; i < activePlayer->m_Inventory.size(); i++) {
+    for (size_t i = 0; i < m_CurPlayer->m_Inventory.size(); i++) {
       addActionRow(model,
                    Character::GetInventoryString(static_cast<InventoryType>(
-                       activePlayer->m_Inventory.at(i))));
+                       m_CurPlayer->m_Inventory.at(i))));
     }
   }
 
@@ -68,17 +70,14 @@ ActionsView::createModel(QObject *parent,
 QAbstractItemModel *
 ActionsView::createInfoModel(QObject *parent,
                              const ActionsStackedWgType &typePage) {
+  if (m_CurPlayer == nullptr) {
+    return nullptr;
+  }
   QStandardItemModel *model = nullptr;
 
-  // Get the current selected atk on current player
-  const auto *activePlayer =
-      Application::GetInstance().m_GameManager->GetCurrentPlayer();
-  if (activePlayer == nullptr) {
-    return model;
-  }
   const auto &curAtkName =
       ui->actions_table_view->model()->data(m_CurIndex).toString();
-  for (const auto &[atkName, atk] : activePlayer->m_AttakList) {
+  for (const auto &[atkName, atk] : m_CurPlayer->m_AttakList) {
     if (atkName == curAtkName) {
       m_CurAtk = atk;
       break;
@@ -101,8 +100,8 @@ ActionsView::createInfoModel(QObject *parent,
     addInfoActionRow(model, ATK_REGEN_MANA, m_CurAtk.regenMana);
   } else if (typePage == ActionsStackedWgType::inventory) {
     model = new QStandardItemModel(0, 1, parent);
-    for (size_t i = 0; i < activePlayer->m_Inventory.size(); i++) {
-      addActionRow(model, activePlayer->m_Inventory.at(i));
+    for (size_t i = 0; i < m_CurPlayer->m_Inventory.size(); i++) {
+      addActionRow(model, m_CurPlayer->m_Inventory.at(i));
     }
   }
 
@@ -114,11 +113,14 @@ void ActionsView::UpdateActions(const ActionsStackedWgType &type) {
   ui->actions_table_view->setModel(createModel(parentWidget(), type));
 }
 
+void ActionsView::SetCurrentPlayer(Character *player) { m_CurPlayer = player; }
+
 void ActionsView::on_actions_table_view_clicked(const QModelIndex &index) {
   // code to activate second table and display stats if atk type
   m_CurIndex = index;
   ui->atk_stats_table->setModel(createInfoModel(parentWidget(), m_CurPage));
-  InitTargetsWidget(); // Activate target widget
+  // enable/disable targeta
+  ProcessEnableTargetsBoxes();
 }
 
 void ActionsView::ResetActionsParam() {
@@ -126,7 +128,6 @@ void ActionsView::ResetActionsParam() {
   m_CurIndex = {};
   m_CurPage = ActionsStackedWgType::defaultType;
   m_CurAtk = {};
-  m_TargetedList.clear();
 }
 
 void ActionsView::on_validate_action_clicked() {
@@ -139,61 +140,45 @@ void ActionsView::on_validate_action_clicked() {
   ResetActionsParam();
 }
 
-void ActionsView::InitTargetsWidget() {
-  // clear table and current widgets in target layout
-  RemoveTargetsWidget();
-
-  const auto &gm = Application::GetInstance().m_GameManager;
-  const auto *activePlayer = gm->GetCurrentPlayer();
-  if (activePlayer == nullptr) {
-    return;
-  }
-  if (m_CurAtk.target == TARGET_ALLY || m_CurAtk.target == TARGET_ALL_HEROES) {
-      const auto &heroList = gm->m_PlayersManager->m_HeroesList;
-    for (size_t i = 0; i < heroList.size(); i++) {
-      // filter active player in case of TARGET_ALLY
-      if (m_CurAtk.target == TARGET_ALLY &&
-          heroList[i]->m_Name == activePlayer->m_Name) {
-        continue;
-      }
-      auto *checkbox = new QCheckBox();
-      checkbox->setText(heroList[i]->m_Name);
-      ui->targets_widget->layout()->addWidget(checkbox);
-      // init target
-      TargetInfo target;
-      target.m_Name = heroList[i]->m_Name;
-      target.m_IsTargeted = false;
-      m_TargetedList.push_back(target);
-      connect(checkbox, &QCheckBox::clicked, this,
-              [this, i]() { UpdateTargetList(static_cast<int>(i)); });
-    }
-  }
-  if (m_CurAtk.target == TARGET_ENNEMY) {
-    // choose boss atk ??
-    const auto &bossList = gm->m_PlayersManager->m_BossesList;
-    for (size_t i = 0; i < bossList.size(); i++) {
-      auto *checkbox = new QCheckBox();
-      checkbox->setText(bossList[i]->m_Name);
-      ui->targets_widget->layout()->addWidget(checkbox);
-      // init target
-      TargetInfo target;
-      target.m_Name = bossList[i]->m_Name;
-      target.m_IsTargeted = false;
-      m_TargetedList.push_back(target);
-      connect(checkbox, &QCheckBox::clicked, this,
-              [this, i]() { UpdateTargetList(static_cast<int>(i)); });
-    }
+void ActionsView::CreateTargetCheckBoxes(
+    const QString &activePlayerName,
+    const std::vector<Character *> &playerList) {
+  for (size_t i = 0; i < playerList.size(); i++) {
+    auto *checkbox = new QCheckBox();
+    checkbox->setText(playerList[i]->m_Name);
+    checkbox->setEnabled(false);
+    ui->targets_widget->layout()->addWidget(checkbox);
+    // init target
+    TargetInfo target;
+    target.m_Name = playerList[i]->m_Name;
+    target.m_IsTargeted = false;
+    m_TargetedList.push_back(target);
+    connect(checkbox, &QCheckBox::clicked, this,
+            [this, i]() { UpdateTargetList(static_cast<int>(i)); });
   }
 }
 
+void ActionsView::InitTargetsWidget() {
+  if (m_CurPlayer == nullptr) {
+    return;
+  }
+  const auto &gm = Application::GetInstance().m_GameManager;
+  const auto &heroList = gm->m_PlayersManager->m_HeroesList;
+  const auto &bossList = gm->m_PlayersManager->m_BossesList;
+  CreateTargetCheckBoxes(m_CurPlayer->m_Name, heroList);
+  CreateTargetCheckBoxes(m_CurPlayer->m_Name, bossList);
+}
+
 void ActionsView::UpdateTargetList(const int index) {
-    if (static_cast<size_t>(index) >= m_TargetedList.size()) {
+  if (static_cast<size_t>(index) >= m_TargetedList.size()) {
     return;
   }
   m_TargetedList.at(index).m_IsTargeted =
       !m_TargetedList.at(index).m_IsTargeted;
 
-  const bool enableValidateBtn = std::any_of(m_TargetedList.begin(), m_TargetedList.end(), [](TargetInfo info) { return info.m_IsTargeted; });
+  const bool enableValidateBtn =
+      std::any_of(m_TargetedList.begin(), m_TargetedList.end(),
+                  [](TargetInfo info) { return info.m_IsTargeted; });
   ui->validate_action->setEnabled(enableValidateBtn);
 }
 
@@ -205,5 +190,22 @@ void ActionsView::RemoveTargetsWidget() {
       delete widget;
       widget = nullptr;
     }
+  }
+}
+
+void ActionsView::ProcessEnableTargetsBoxes() {
+  if (m_CurPage == ActionsStackedWgType::attak) {
+    for (int i = 0; i < m_TargetedList.size(); i++) {
+      if (m_TargetedList[i].m_Name == m_CurPlayer->m_Name) {
+        continue;
+      }
+      auto *wg = static_cast<QCheckBox *>(
+          ui->targets_widget->layout()->itemAt(i)->widget());
+      if (wg != nullptr) {
+        wg->setEnabled(true);
+      }
+    }
+  }
+  if (m_CurPage == ActionsStackedWgType::inventory) {
   }
 }
