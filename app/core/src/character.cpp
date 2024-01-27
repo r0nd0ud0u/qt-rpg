@@ -47,14 +47,18 @@ void Character::Attaque(const QString &atkName, Character *target) {
   auto &tarCurHp = target->m_CurrentStats.m_HP.m_Value;
   if (atk.damage > 0) {
     int arm = 0;
+    int damage = atk.damage;
     if (atk.manaCost > 0) {
-      arm = m_Stats.m_ArmMag.m_Value;
+        damage += static_cast<int>(std::round(m_Stats.m_powMag.m_Value));
+      arm = target->m_Stats.m_ArmMag.m_Value;
     } else if (atk.vigorCost > 0 || atk.berseckCost > 0) {
-      arm = m_Stats.m_ArmPhy.m_Value;
+      damage += m_Stats.m_powPhy.m_Value;
+      arm = target->m_Stats.m_ArmPhy.m_Value;
     }
+    const double protection = 1000.0 / (1000.0 + static_cast<double>(arm));
+    const auto finalDamage = static_cast<int>(std::round(damage * protection));
 
-    const auto damage = atk.damage * (arm / (1000 + arm));
-    tarCurHp = max(0, static_cast<int>(tarCurHp - damage));
+    tarCurHp = max(0, tarCurHp - finalDamage);
   }
   if (atk.heal > 0) {
     tarCurHp = min(target->m_Stats.m_HP.m_Value,

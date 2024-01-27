@@ -86,6 +86,7 @@ const QString REACH_INDIVIDUAL = "Individuel";
 const QString TARGET_ENNEMY = "Ennemie";
 const QString TARGET_ALLY = "Allié";
 const QString TARGET_ALL_HEROES = "Tous les heroes";
+const QString TARGET_HIMSELF = "Soi-même";
 // Stats keys
 const QString STATS_HP = "PV";
 const QString STATS_MANA = "Mana";

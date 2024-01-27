@@ -11,6 +11,7 @@ enum class ActionsStackedWgType { attak, inventory, defaultType, enumSize };
 struct TargetInfo{
     QString m_Name;
     bool m_IsTargeted = false;
+    bool m_IsBoss = false;
 };
 
 namespace Ui {
@@ -24,12 +25,16 @@ public:
   explicit ActionsView(QWidget *parent = nullptr);
   ~ActionsView();
   void UpdateActions(const ActionsStackedWgType &type);
+  void SetCurrentPlayer(Character *player);
   void ResetActionsParam();
+  void InitTargetsWidget();;
 
   private:
   Ui::ActionsView *ui;
   QModelIndex m_CurIndex;
   AttaqueType m_CurAtk;
+  QString m_CurObject;
+  Character * m_CurPlayer = nullptr;
   std::vector<TargetInfo> m_TargetedList;
   ActionsStackedWgType m_CurPage = ActionsStackedWgType::defaultType;
 
@@ -41,9 +46,11 @@ public:
   void addInfoActionRow(QAbstractItemModel *model, const QVariant &statsType,
                         const QVariant &value) const;
   // Target available of the selected atk
-  void InitTargetsWidget();
-  void RemoveTargetsWidget();
-signals:
+  void DisableTargetsBox() const;
+  void CreateTargetCheckBoxes(const QString& activePlayerName, const std::vector<Character*>& playerList);
+  void ProcessEnableTargetsBoxes();
+  
+  signals:
   void SigLaunchAttak(const QString &atkName, const std::vector<TargetInfo>& targetList);
   void SigUseObject(const QString &objName);
 
@@ -53,7 +60,7 @@ private slots:
   // slots validate button
   void on_validate_action_clicked();
   // slots of target widget
-  void UpdateTargetList(const int index);
+  void UpdateTargetList(const QString& name);
 };
 
 #endif // ACTIONSVIEW_H
