@@ -24,12 +24,16 @@ public:
   explicit ActionsView(QWidget *parent = nullptr);
   ~ActionsView();
   void UpdateActions(const ActionsStackedWgType &type);
+  void SetCurrentPlayer(Character *player);
   void ResetActionsParam();
+  void InitTargetsWidget();;
 
   private:
   Ui::ActionsView *ui;
   QModelIndex m_CurIndex;
   AttaqueType m_CurAtk;
+  QString m_CurObject;
+  Character * m_CurPlayer = nullptr;
   std::vector<TargetInfo> m_TargetedList;
   ActionsStackedWgType m_CurPage = ActionsStackedWgType::defaultType;
 
@@ -41,9 +45,11 @@ public:
   void addInfoActionRow(QAbstractItemModel *model, const QVariant &statsType,
                         const QVariant &value) const;
   // Target available of the selected atk
-  void InitTargetsWidget();
   void RemoveTargetsWidget();
-signals:
+  void CreateTargetCheckBoxes(const QString& activePlayerName, const std::vector<Character*>& playerList);
+  void ProcessEnableTargetsBoxes();
+  
+  signals:
   void SigLaunchAttak(const QString &atkName, const std::vector<TargetInfo>& targetList);
   void SigUseObject(const QString &objName);
 
