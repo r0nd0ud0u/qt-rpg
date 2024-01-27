@@ -49,7 +49,7 @@ void Character::Attaque(const QString &atkName, Character *target) {
     int arm = 0;
     int damage = atk.damage;
     if (atk.manaCost > 0) {
-      damage += m_Stats.m_powMag.m_Value;
+        damage += static_cast<int>(std::round(m_Stats.m_powMag.m_Value));
       arm = target->m_Stats.m_ArmMag.m_Value;
     } else if (atk.vigorCost > 0 || atk.berseckCost > 0) {
       damage += m_Stats.m_powPhy.m_Value;

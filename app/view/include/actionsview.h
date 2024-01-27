@@ -46,7 +46,7 @@ public:
   void addInfoActionRow(QAbstractItemModel *model, const QVariant &statsType,
                         const QVariant &value) const;
   // Target available of the selected atk
-  void DisableTargetsBox();
+  void DisableTargetsBox() const;
   void CreateTargetCheckBoxes(const QString& activePlayerName, const std::vector<Character*>& playerList);
   void ProcessEnableTargetsBoxes();
   
