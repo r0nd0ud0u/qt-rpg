@@ -178,7 +178,7 @@ Character *PlayersManager::GetCharacterByName(const QString &name) {
   return nullptr;
 }
 
-void PlayersManager::UpdatePartnersOnAtk(const Character* curPlayer, const QString &atkName) {
+void PlayersManager::UpdatePartnersOnAtk(const Character* curPlayer, const QString &atkName){
     std::vector<Character*> playerList;
 
     if (curPlayer->m_type == characType::Hero){
@@ -193,7 +193,7 @@ void PlayersManager::UpdatePartnersOnAtk(const Character* curPlayer, const QStri
         }
         if (atk.target == TARGET_ALLY && atk.reach == REACH_ZONE) {
             // Regen
-            other->m_Stats.m_Mana.m_CurrentValue +=  other->m_Stats.m_RegenMana.m_CurrentValue;
+            other->m_Stats.m_Mana.m_CurrentValue +=  static_cast<int>(std::round(other->m_Stats.m_RegenMana.m_CurrentValue));
         }
     }
 }
