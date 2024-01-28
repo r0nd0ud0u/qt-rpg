@@ -59,21 +59,25 @@ void Character::Attaque(const QString &atkName, Character *target) {
   }
 }
 
-void Character::StatsChangeAfterAtk(const QString &atkName) {
+void Character::UpdateStatsOnAtk(const QString &atkName) {
   if (atkName.isEmpty()) {
     return;
   }
   const auto &atk = m_AttakList.at(atkName);
 
   // Stats change on target
+  // Cost
   m_Stats.m_Mana.m_CurrentValue =
       max(0, static_cast<int>(m_Stats.m_Mana.m_CurrentValue - atk.manaCost));
   m_Stats.m_Vigor.m_CurrentValue =
       max(0, static_cast<int>(m_Stats.m_Vigor.m_CurrentValue - atk.vigorCost));
   m_Stats.m_Berseck.m_CurrentValue = max(
       0, static_cast<int>(m_Stats.m_Berseck.m_CurrentValue - atk.berseckCost));
+  // Gain
   m_Stats.m_Aggro.m_CurrentValue += m_Stats.m_AggroRate.m_CurrentValue;
   m_Stats.m_Berseck.m_CurrentValue += m_Stats.m_BerseckRate.m_CurrentValue;
+  // Regen
+  m_Stats.m_Mana.m_CurrentValue += m_Stats.m_RegenMana.m_CurrentValue;
 }
 
 void Character::AddAtq(const AttaqueType &atq) { m_AttakList[atq.name] = atq; }

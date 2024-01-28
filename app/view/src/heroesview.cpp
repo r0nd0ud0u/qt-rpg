@@ -12,8 +12,8 @@ HeroesView::HeroesView(QWidget *parent)
   setStyleSheet("#left_widget{ background:     #808080;} "
                 "#right_widget{background:     #808080;} QLabel{color: white;}");
   InitHeroPanel();
-
-  connect((GameDisplay*)parentWidget(), &GameDisplay::SigUpdateHeroPanel, this, &HeroesView::UpdateAllPanels);
+  
+  connect((GameDisplay*)parentWidget(), &GameDisplay::SigUpdatePlayerPanel, this, &HeroesView::UpdateAllPanels);
 }
 
 HeroesView::~HeroesView() {
