@@ -8,6 +8,7 @@ enum class StatsEnum {
     mana,
     vigor,
     berseck,
+    berseckRate,
     armPhy,
     armMag,
     powPhy,
@@ -41,6 +42,7 @@ struct Stats {
     StatsType<int> m_Mana = StatsType<int>(StatsEnum::mana);
     StatsType<int> m_Vigor = StatsType<int>(StatsEnum::vigor);
     StatsType<int> m_Berseck = StatsType<int>(StatsEnum::berseck);
+    StatsType<int> m_BerseckRate = StatsType<int>(StatsEnum::aggroRate);
     StatsType<int> m_ArmPhy = StatsType<int>(StatsEnum::armPhy);
     StatsType<int> m_ArmMag = StatsType<int>(StatsEnum::armMag);
     StatsType<int> m_PowPhy = StatsType<int>(StatsEnum::powPhy);

@@ -96,7 +96,7 @@ void EditAttakView::Save() {
     obj.insert(ATK_MANA_COST, static_cast<int>(atk.type.manaCost));
     obj.insert(ATK_VIGOR_COST, static_cast<int>(atk.type.vigorCost));
     obj.insert(ATK_BERSECK_COST, static_cast<int>(atk.type.berseckCost));
-    obj.insert(ATK_AGGRO, static_cast<int>(atk.type.aggroCum));
+    obj.insert(ATK_AGGRO, static_cast<int>(atk.type.aggro));
     obj.insert(ATK_PHOTO, atk.type.namePhoto);
     obj.insert(ATK_DAMAGE, static_cast<int>(atk.type.damage));
     obj.insert(ATK_HEAL, static_cast<int>(atk.type.heal));
@@ -178,7 +178,7 @@ void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
   ui->reach_comboBox->setCurrentText(selectedAttak.type.reach);
   ui->name_lineEdit->setText(selectedAttak.type.name);
   ui->duration_spinBox->setValue(selectedAttak.type.turnsDuration);
-  ui->aggro_spinBox->setValue(selectedAttak.type.aggroCum);
+  ui->aggro_spinBox->setValue(selectedAttak.type.aggro);
   ui->mana_cost_spinBox->setValue(
       static_cast<int>(selectedAttak.type.manaCost));
   ui->vigor_spinBox->setValue(selectedAttak.type.vigorCost);
@@ -327,7 +327,20 @@ void EditAttakView::on_regen_vigor_spinBox_valueChanged(int arg1) {
 
 void EditAttakView::on_aggro_spinBox_valueChanged(int arg1) {
   OnValueChange(GetIndexSelectedRow());
-  m_AttakList[GetIndexSelectedRow()].type.aggroCum = arg1;
+    m_AttakList[GetIndexSelectedRow()].type.aggro = arg1;
+}
+
+void EditAttakView::on_aggro_rate_spinBox_valueChanged(int arg1)
+{
+    OnValueChange(GetIndexSelectedRow());
+    m_AttakList[GetIndexSelectedRow()].type.aggroRate = arg1;
+}
+
+
+void EditAttakView::on_berseck_rate_spinBox_valueChanged(int arg1)
+{
+    OnValueChange(GetIndexSelectedRow());
+    m_AttakList[GetIndexSelectedRow()].type.berseckRate = arg1;
 }
 
 // end form layout changed
