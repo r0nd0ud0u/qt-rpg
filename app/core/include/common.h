@@ -24,7 +24,7 @@ enum class StatsEnum {
 
 template <class T> class StatsType {
 public:
-    explicit StatsType(StatsEnum type) : m_CurrentValue(), m_Type(type) {}
+    explicit StatsType(StatsEnum type) : m_Type(type) {}
     T m_CurrentValue;
     T m_StartingValue;
     T m_MaxValue;
