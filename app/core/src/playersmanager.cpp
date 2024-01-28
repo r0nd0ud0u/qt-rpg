@@ -178,7 +178,7 @@ Character *PlayersManager::GetCharacterByName(const QString &name) {
   return nullptr;
 }
 
-void PlayersManager::UpdatePartnersOnAtk(const Character* curPlayer, const QString &atkName){
+void PlayersManager::UpdatePartnersOnAtk(const Character* curPlayer, const QString &atkName) const{
     std::vector<Character*> playerList;
 
     if (curPlayer->m_type == characType::Hero){
