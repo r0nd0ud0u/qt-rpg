@@ -169,7 +169,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
   // check who is dead!
   for (auto &boss : gm->m_PlayersManager->m_BossesList) {
-    if (boss->m_CurrentStats.m_HP.m_Value == 0) {
+      if (boss->m_Stats.m_HP.m_CurrentValue == 0) {
       // next phase
       emit SigBossDead(boss->m_Name);
       // delete bosses in player manager
@@ -185,7 +185,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
   uint8_t nbDeadHeroes = 0;
   for (const auto &hero : gm->m_PlayersManager->m_HeroesList) {
-    if (hero->m_CurrentStats.m_HP.m_Value == 0) {
+      if (hero->m_Stats.m_HP.m_CurrentValue == 0) {
       // choose to drink a potion
       nbDeadHeroes++;
     }
