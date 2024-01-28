@@ -28,32 +28,32 @@ public:
   StatsEnum m_Type;
 };
 
-struct CurrentStats{
-    StatsType<int> m_HP = StatsType<int>(StatsEnum::hp);
-    StatsType<int> m_Mana = StatsType<int>(StatsEnum::mana);
-    StatsType<int> m_Vigor = StatsType<int>(StatsEnum::vigor);
-    StatsType<int> m_Bersecker = StatsType<int>(StatsEnum::bersecker);
-    StatsType<int> m_aggro = StatsType<int>(StatsEnum::aggro);
+struct CurrentStats {
+  StatsType<int> m_HP = StatsType<int>(StatsEnum::hp);
+  StatsType<int> m_Mana = StatsType<int>(StatsEnum::mana);
+  StatsType<int> m_Vigor = StatsType<int>(StatsEnum::vigor);
+  StatsType<int> m_Berseck = StatsType<int>(StatsEnum::berseck);
+  StatsType<int> m_Aggro = StatsType<int>(StatsEnum::aggro);
 };
 
 struct Stats {
   StatsType<int> m_HP = StatsType<int>(StatsEnum::hp);
   StatsType<int> m_Mana = StatsType<int>(StatsEnum::mana);
   StatsType<int> m_Vigor = StatsType<int>(StatsEnum::vigor);
-  StatsType<int> m_Bersecker = StatsType<int>(StatsEnum::bersecker);
+  StatsType<int> m_Berseck = StatsType<int>(StatsEnum::berseck);
   StatsType<int> m_ArmPhy = StatsType<int>(StatsEnum::armPhy);
   StatsType<int> m_ArmMag = StatsType<int>(StatsEnum::armMag);
-  StatsType<int> m_powPhy = StatsType<int>(StatsEnum::powPhy);
-  StatsType<double> m_powMag = StatsType<double>(StatsEnum::powMag);
-  StatsType<int> m_aggro = StatsType<int>(StatsEnum::aggro);
-  StatsType<int> m_speed = StatsType<int>(StatsEnum::criticalStrike);
+  StatsType<int> m_PowPhy = StatsType<int>(StatsEnum::powPhy);
+  StatsType<double> m_PowMag = StatsType<double>(StatsEnum::powMag);
+  StatsType<int> m_Aggro = StatsType<int>(StatsEnum::aggro);
+  StatsType<int> m_Speed = StatsType<int>(StatsEnum::criticalStrike);
   // critical strike in %
   StatsType<int> m_CriticalStrike = StatsType<int>(StatsEnum::speed);
   // dodge in %
-  StatsType<double> m_dogde = StatsType<double>(StatsEnum::dodge);
-  StatsType<int> m_regenHP = StatsType<int>(StatsEnum::regenHp);
-  StatsType<double> m_regenMana = StatsType<double>(StatsEnum::regenMana);
-  StatsType<int> m_regenVigueur = StatsType<int>(StatsEnum::regenVigor);
+  StatsType<double> m_Dogde = StatsType<double>(StatsEnum::dodge);
+  StatsType<int> m_RegenHP = StatsType<int>(StatsEnum::regenHp);
+  StatsType<double> m_RegenMana = StatsType<double>(StatsEnum::regenMana);
+  StatsType<int> m_RegenVigor = StatsType<int>(StatsEnum::regenVigor);
 };
 
 const QString OFFLINE_IMG = "./offlines/attak/img/";
