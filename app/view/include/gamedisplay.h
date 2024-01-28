@@ -20,7 +20,7 @@ public:
 
 signals:
     void selectCharacter(QString);
-    void SigUpdateHeroPanel();
+    void SigUpdatePlayerPanel();
     void SigBossDead(QString);
     void SigEndOfGame();
 private:

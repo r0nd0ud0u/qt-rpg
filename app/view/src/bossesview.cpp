@@ -12,7 +12,7 @@ BossesView::BossesView(QWidget *parent)
       "#main_widget{ background:     #000000;} QLabel{color: white;} ");
   InitBossPanels();
 
-  connect((GameDisplay *)parentWidget(), &GameDisplay::SigUpdateHeroPanel, this,
+  connect((GameDisplay *)parentWidget(), &GameDisplay::SigUpdatePlayerPanel, this,
           &BossesView::UpdateAllPanels);
   connect((GameDisplay *)parentWidget(), &GameDisplay::SigBossDead, this,
           &BossesView::RemoveBoss);

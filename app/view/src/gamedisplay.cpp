@@ -148,7 +148,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       static_cast<int>(ActionsStackedWgType::defaultType));
 
   const auto &nameChara = gm->m_GameState->GetCurrentPlayerName();
-  auto *activatedHero = gm->m_PlayersManager->GetCharacterByName(nameChara);
+  auto *activatedPlayer = gm->m_PlayersManager->GetCharacterByName(nameChara);
   // launch atk
   for (const auto &target : targetList) {
     if (!target.m_IsTargeted) {
@@ -156,20 +156,23 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     }
     auto *targetChara = gm->m_PlayersManager->GetCharacterByName(target.m_Name);
 
-    if (activatedHero != nullptr && targetChara != nullptr) {
-      activatedHero->Attaque(atkName, targetChara);
+    if (activatedPlayer != nullptr && targetChara != nullptr) {
+      activatedPlayer->Attaque(atkName, targetChara);
     }
   }
   // Stats change on hero
-  if (activatedHero != nullptr) {
-    activatedHero->StatsChangeAfterAtk(atkName);
+  if (activatedPlayer != nullptr) {
+    activatedPlayer->UpdateStatsOnAtk(atkName);
   }
-  // update views
-  emit SigUpdateHeroPanel();
+  // Stats change on others players
+  gm->m_PlayersManager->UpdatePartnersOnAtk(activatedPlayer, atkName);
+
+  // update views of heroes and bosses
+  emit SigUpdatePlayerPanel();
 
   // check who is dead!
   for (auto &boss : gm->m_PlayersManager->m_BossesList) {
-      if (boss->m_Stats.m_HP.m_CurrentValue == 0) {
+    if (boss->m_Stats.m_HP.m_CurrentValue == 0) {
       // next phase
       emit SigBossDead(boss->m_Name);
       // delete bosses in player manager
@@ -185,7 +188,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
   uint8_t nbDeadHeroes = 0;
   for (const auto &hero : gm->m_PlayersManager->m_HeroesList) {
-      if (hero->m_Stats.m_HP.m_CurrentValue == 0) {
+    if (hero->m_Stats.m_HP.m_CurrentValue == 0) {
       // choose to drink a potion
       nbDeadHeroes++;
     }

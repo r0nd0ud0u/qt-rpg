@@ -15,6 +15,7 @@ public:
     void InitBosses();
     void LoadAllEquipmentsJson();
     Character* GetCharacterByName(const QString& name);
+    void UpdatePartnersOnAtk(const Character* curPlayer, const QString &atkName);
 
     std::vector<Character*> m_HeroesList;
     std::vector<Character*> m_BossesList;
