@@ -31,15 +31,15 @@ HeroPanel::UpdatePanel(Character* hero)
   m_Heroe = hero;
 
   ui->hero_name->setText(hero->m_Name);
-  ui->hp_Bar->setFormat(QString::number(hero->m_CurrentStats.m_HP.m_Value) + "/" +
-                        QString::number(hero->m_Stats.m_HP.m_Value) + " %p%");
-  ui->mana_bar->setFormat(QString::number(hero->m_CurrentStats.m_Mana.m_Value) + "/" +
-                          QString::number(hero->m_Stats.m_Mana.m_Value) + " %p%");
+  ui->hp_Bar->setFormat(QString::number(hero->m_Stats.m_HP.m_CurrentValue) + "/" +
+                        QString::number(hero->m_Stats.m_HP.m_MaxValue) + " %p%");
+  ui->mana_bar->setFormat(QString::number(hero->m_Stats.m_Mana.m_CurrentValue) + "/" +
+                          QString::number(hero->m_Stats.m_Mana.m_MaxValue) + " %p%");
   ui->bersecker_bar->setFormat(
-      QString::number(hero->m_CurrentStats.m_Berseck.m_Value) + "/" +
-    QString::number(hero->m_Stats.m_Berseck.m_Value) + " %p%");
-  ui->vigor_bar->setFormat(QString::number(hero->m_CurrentStats.m_Vigor.m_Value) + "/" +
-                           QString::number(hero->m_Stats.m_Vigor.m_Value) + " %p%");
+      QString::number(hero->m_Stats.m_Berseck.m_CurrentValue) + "/" +
+      QString::number(hero->m_Stats.m_Berseck.m_MaxValue) + " %p%");
+  ui->vigor_bar->setFormat(QString::number(hero->m_Stats.m_Vigor.m_CurrentValue) + "/" +
+                           QString::number(hero->m_Stats.m_Vigor.m_MaxValue) + " %p%");
 
   ui->hp_Bar->setStyleSheet("QProgressBar{color: white;} QProgressBar::chunk { "
                             "background-color: green; border: white;}");

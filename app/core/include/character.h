@@ -62,7 +62,6 @@ public:
     QString m_Name = "default";
     characType m_type = characType::Hero;
     Stats m_Stats;
-    CurrentStats m_CurrentStats;
     std::unordered_map<QString, QString> m_WearingEquipment; // key: body, value: equipmentName
     std::unordered_map<QString, AttaqueType> m_AttakList; // key: attak name, value: AttakType struct
     std::vector<uint8_t> m_Inventory;
