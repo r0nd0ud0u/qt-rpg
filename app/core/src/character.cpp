@@ -21,13 +21,6 @@ Character::Character(const QString name, const characType type,
                      const Stats &stats)
     : m_Name(name), m_type(type), m_Stats(stats) {
   m_Inventory.resize(static_cast<int>(InventoryType::enumSize));
-
-  // init current stats at full power
-  m_CurrentStats.m_HP = stats.m_HP;
-  m_CurrentStats.m_Mana = stats.m_Mana;
-  m_CurrentStats.m_Bersecker = stats.m_Bersecker;
-  m_CurrentStats.m_Vigor = stats.m_Vigor;
-  m_CurrentStats.m_aggro = stats.m_aggro;
 }
 
 //////
@@ -44,16 +37,16 @@ void Character::Attaque(const QString &atkName, Character *target) {
   const auto &atk = m_AttakList.at(atkName);
 
   // Stats change on target
-  auto &tarCurHp = target->m_CurrentStats.m_HP.m_Value;
+  auto &tarCurHp = target->m_Stats.m_HP.m_CurrentValue;
   if (atk.damage > 0) {
     int arm = 0;
     int damage = atk.damage;
     if (atk.manaCost > 0) {
-        damage += static_cast<int>(std::round(m_Stats.m_powMag.m_Value));
-      arm = target->m_Stats.m_ArmMag.m_Value;
+      damage += static_cast<int>(std::round(m_Stats.m_PowMag.m_CurrentValue));
+      arm = target->m_Stats.m_ArmMag.m_CurrentValue;
     } else if (atk.vigorCost > 0 || atk.berseckCost > 0) {
-      damage += m_Stats.m_powPhy.m_Value;
-      arm = target->m_Stats.m_ArmPhy.m_Value;
+      damage += m_Stats.m_PowPhy.m_CurrentValue;
+      arm = target->m_Stats.m_ArmPhy.m_CurrentValue;
     }
     const double protection = 1000.0 / (1000.0 + static_cast<double>(arm));
     const auto finalDamage = static_cast<int>(std::round(damage * protection));
@@ -61,45 +54,50 @@ void Character::Attaque(const QString &atkName, Character *target) {
     tarCurHp = max(0, tarCurHp - finalDamage);
   }
   if (atk.heal > 0) {
-    tarCurHp = min(target->m_Stats.m_HP.m_Value,
+    tarCurHp = min(target->m_Stats.m_HP.m_CurrentValue,
                    static_cast<int>(tarCurHp + atk.heal));
   }
 }
 
-void Character::StatsChangeAfterAtk(const QString &atkName) {
+void Character::UpdateStatsOnAtk(const QString &atkName) {
   if (atkName.isEmpty()) {
     return;
   }
   const auto &atk = m_AttakList.at(atkName);
 
   // Stats change on target
-  m_CurrentStats.m_Mana.m_Value =
-      max(0, static_cast<int>(m_CurrentStats.m_Mana.m_Value - atk.manaCost));
-  m_CurrentStats.m_Vigor.m_Value =
-      max(0, static_cast<int>(m_CurrentStats.m_Vigor.m_Value - atk.vigorCost));
-  m_CurrentStats.m_Bersecker.m_Value =
-      max(0, static_cast<int>(m_CurrentStats.m_Bersecker.m_Value -
-                              atk.berseckCost));
+  // Cost
+  m_Stats.m_Mana.m_CurrentValue =
+      max(0, static_cast<int>(m_Stats.m_Mana.m_CurrentValue - atk.manaCost));
+  m_Stats.m_Vigor.m_CurrentValue =
+      max(0, static_cast<int>(m_Stats.m_Vigor.m_CurrentValue - atk.vigorCost));
+  m_Stats.m_Berseck.m_CurrentValue = max(
+      0, static_cast<int>(m_Stats.m_Berseck.m_CurrentValue - atk.berseckCost));
+  // Gain
+  m_Stats.m_Aggro.m_CurrentValue += m_Stats.m_AggroRate.m_CurrentValue;
+  m_Stats.m_Berseck.m_CurrentValue += m_Stats.m_BerseckRate.m_CurrentValue;
+  // Regen
+  m_Stats.m_Mana.m_CurrentValue += static_cast<int>(std::round(m_Stats.m_RegenMana.m_CurrentValue));
 }
 
 void Character::AddAtq(const AttaqueType &atq) { m_AttakList[atq.name] = atq; }
 
 void Character::AddStuff(const Stuff &stuff) {
-  m_Stats.m_HP.m_Value += stuff.m_Stats.m_HP.m_Value;
+  m_Stats.m_HP.m_CurrentValue += stuff.m_Stats.m_HP.m_CurrentValue;
   m_Stats.m_Mana = stuff.m_Stats.m_Mana;
   m_Stats.m_Vigor = stuff.m_Stats.m_Vigor;
-  m_Stats.m_Bersecker = stuff.m_Stats.m_Bersecker;
+  m_Stats.m_Berseck = stuff.m_Stats.m_Berseck;
   m_Stats.m_ArmPhy = stuff.m_Stats.m_ArmPhy;
   m_Stats.m_ArmMag = stuff.m_Stats.m_ArmMag;
-  m_Stats.m_powPhy = stuff.m_Stats.m_powPhy;
-  m_Stats.m_powMag = stuff.m_Stats.m_powMag;
-  m_Stats.m_aggro = stuff.m_Stats.m_aggro;
-  m_Stats.m_speed = stuff.m_Stats.m_speed;
+  m_Stats.m_PowPhy = stuff.m_Stats.m_PowPhy;
+  m_Stats.m_PowMag = stuff.m_Stats.m_PowMag;
+  m_Stats.m_Aggro = stuff.m_Stats.m_Aggro;
+  m_Stats.m_Speed = stuff.m_Stats.m_Speed;
   m_Stats.m_CriticalStrike = stuff.m_Stats.m_CriticalStrike;
-  m_Stats.m_dogde = stuff.m_Stats.m_dogde;
-  m_Stats.m_regenHP = stuff.m_Stats.m_regenHP;
-  m_Stats.m_regenMana = stuff.m_Stats.m_regenMana;
-  m_Stats.m_regenVigueur = stuff.m_Stats.m_regenVigueur;
+  m_Stats.m_Dogde = stuff.m_Stats.m_Dogde;
+  m_Stats.m_RegenHP = stuff.m_Stats.m_RegenHP;
+  m_Stats.m_RegenMana = stuff.m_Stats.m_RegenMana;
+  m_Stats.m_RegenVigor = stuff.m_Stats.m_RegenVigor;
 }
 
 QString Character::GetInventoryString(const InventoryType &type) {
@@ -142,7 +140,7 @@ void Character::LoadAtkJson() {
       AttaqueType atk;
       atk.name = json[ATK_NAME].toString();
       atk.namePhoto = json[ATK_PHOTO].toString();
-      atk.aggroCum = json[ATK_AGGRO].toInt();
+      atk.aggro = json[ATK_AGGRO].toInt();
       atk.damage = static_cast<uint32_t>(json[ATK_DAMAGE].toInt());
       atk.heal = json[ATK_HEAL].toInt();
       atk.regenMana = json[ATK_REGEN_MANA].toInt();
@@ -205,21 +203,24 @@ void Character::ApplyAllEquipment(
       continue;
     }
     const auto &equip = allEquipMap.at(equipName);
-    m_Stats.m_HP.m_Value += equip.m_Stats.m_HP.m_Value;
-    m_Stats.m_Mana.m_Value += equip.m_Stats.m_Mana.m_Value;
-    m_Stats.m_Vigor.m_Value += equip.m_Stats.m_Vigor.m_Value;
-    m_Stats.m_Bersecker.m_Value += equip.m_Stats.m_Bersecker.m_Value;
-    m_Stats.m_ArmPhy.m_Value += equip.m_Stats.m_ArmPhy.m_Value;
-    m_Stats.m_ArmMag.m_Value += equip.m_Stats.m_ArmMag.m_Value;
-    m_Stats.m_powPhy.m_Value += equip.m_Stats.m_powPhy.m_Value;
-    m_Stats.m_powMag.m_Value += equip.m_Stats.m_powMag.m_Value;
-    m_Stats.m_aggro.m_Value += equip.m_Stats.m_aggro.m_Value;
-    m_Stats.m_speed.m_Value += equip.m_Stats.m_speed.m_Value;
-    m_Stats.m_CriticalStrike.m_Value += equip.m_Stats.m_CriticalStrike.m_Value;
-    m_Stats.m_dogde.m_Value += equip.m_Stats.m_dogde.m_Value;
-    m_Stats.m_regenHP.m_Value += equip.m_Stats.m_regenHP.m_Value;
-    m_Stats.m_regenMana.m_Value += equip.m_Stats.m_regenMana.m_Value;
-    m_Stats.m_regenVigueur.m_Value += equip.m_Stats.m_regenVigueur.m_Value;
+    m_Stats.m_HP.m_CurrentValue += equip.m_Stats.m_HP.m_CurrentValue;
+    m_Stats.m_Mana.m_CurrentValue += equip.m_Stats.m_Mana.m_CurrentValue;
+    m_Stats.m_Vigor.m_CurrentValue += equip.m_Stats.m_Vigor.m_CurrentValue;
+    m_Stats.m_Berseck.m_CurrentValue += equip.m_Stats.m_Berseck.m_CurrentValue;
+    m_Stats.m_ArmPhy.m_CurrentValue += equip.m_Stats.m_ArmPhy.m_CurrentValue;
+    m_Stats.m_ArmMag.m_CurrentValue += equip.m_Stats.m_ArmMag.m_CurrentValue;
+    m_Stats.m_PowPhy.m_CurrentValue += equip.m_Stats.m_PowPhy.m_CurrentValue;
+    m_Stats.m_PowMag.m_CurrentValue += equip.m_Stats.m_PowMag.m_CurrentValue;
+    m_Stats.m_Aggro.m_CurrentValue += equip.m_Stats.m_Aggro.m_CurrentValue;
+    m_Stats.m_Speed.m_CurrentValue += equip.m_Stats.m_Speed.m_CurrentValue;
+    m_Stats.m_CriticalStrike.m_CurrentValue +=
+        equip.m_Stats.m_CriticalStrike.m_CurrentValue;
+    m_Stats.m_Dogde.m_CurrentValue += equip.m_Stats.m_Dogde.m_CurrentValue;
+    m_Stats.m_RegenHP.m_CurrentValue += equip.m_Stats.m_RegenHP.m_CurrentValue;
+    m_Stats.m_RegenMana.m_CurrentValue +=
+        equip.m_Stats.m_RegenMana.m_CurrentValue;
+    m_Stats.m_RegenVigor.m_CurrentValue +=
+        equip.m_Stats.m_RegenVigor.m_CurrentValue;
   }
 }
 
@@ -230,11 +231,11 @@ void Character::ApplyAllEquipment(
 ///
 bool Character::CanBeLaunched(const AttaqueType &atk) const {
   const auto remainingMana =
-      static_cast<uint32_t>(m_CurrentStats.m_Mana.m_Value);
+      static_cast<uint32_t>(m_Stats.m_Mana.m_CurrentValue);
   const auto remainingBerseck =
-      static_cast<uint32_t>(m_CurrentStats.m_Bersecker.m_Value);
+      static_cast<uint32_t>(m_Stats.m_Berseck.m_CurrentValue);
   const auto remainingVigor =
-      static_cast<uint32_t>(m_CurrentStats.m_Vigor.m_Value);
+      static_cast<uint32_t>(m_Stats.m_Vigor.m_CurrentValue);
   if (atk.manaCost > 0 && atk.manaCost <= remainingMana) {
     return true;
   }

@@ -24,7 +24,9 @@ public:
     uint32_t regenMana = 0;
     uint32_t regenVigor = 0;
     uint32_t regenBerseck = 0;
-    uint32_t aggroCum = 0;
+    uint32_t aggro = 0;
+    uint32_t aggroRate = 0;
+    uint32_t berseckRate = 0;
     QString effect;
     uint32_t manaCost = 0;
     uint32_t vigorCost = 0;
@@ -49,7 +51,7 @@ public:
     Character(const QString name, const characType type, const Stats& stats);
 
     void Attaque(const QString& atkName, Character* target);
-    void StatsChangeAfterAtk(const QString& atkName);
+    void UpdateStatsOnAtk(const QString& atkName);
     void AddAtq (const AttaqueType& atq);
     void AddStuff(const Stuff& stuff);
     void LoadAtkJson();
@@ -62,7 +64,6 @@ public:
     QString m_Name = "default";
     characType m_type = characType::Hero;
     Stats m_Stats;
-    CurrentStats m_CurrentStats;
     std::unordered_map<QString, QString> m_WearingEquipment; // key: body, value: equipmentName
     std::unordered_map<QString, AttaqueType> m_AttakList; // key: attak name, value: AttakType struct
     std::vector<uint8_t> m_Inventory;
