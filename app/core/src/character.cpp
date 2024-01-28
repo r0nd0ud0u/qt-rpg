@@ -72,6 +72,7 @@ void Character::StatsChangeAfterAtk(const QString &atkName) {
       max(0, static_cast<int>(m_Stats.m_Vigor.m_CurrentValue - atk.vigorCost));
   m_Stats.m_Berseck.m_CurrentValue = max(
       0, static_cast<int>(m_Stats.m_Berseck.m_CurrentValue - atk.berseckCost));
+  m_Stats.m_Aggro.m_CurrentValue += m_Stats.m_AggroRate.m_CurrentValue;
 }
 
 void Character::AddAtq(const AttaqueType &atq) { m_AttakList[atq.name] = atq; }
