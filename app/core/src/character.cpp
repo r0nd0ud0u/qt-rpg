@@ -77,7 +77,7 @@ void Character::UpdateStatsOnAtk(const QString &atkName) {
   m_Stats.m_Aggro.m_CurrentValue += m_Stats.m_AggroRate.m_CurrentValue;
   m_Stats.m_Berseck.m_CurrentValue += m_Stats.m_BerseckRate.m_CurrentValue;
   // Regen
-  m_Stats.m_Mana.m_CurrentValue += m_Stats.m_RegenMana.m_CurrentValue;
+  m_Stats.m_Mana.m_CurrentValue += static_cast<int>(std::round(m_Stats.m_RegenMana.m_CurrentValue));
 }
 
 void Character::AddAtq(const AttaqueType &atq) { m_AttakList[atq.name] = atq; }
