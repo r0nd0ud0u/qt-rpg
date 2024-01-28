@@ -34,15 +34,15 @@ QAbstractItemModel *StatsView::createStatsModel(QObject *parent,
       Application::GetInstance().m_GameManager->GetSelectedHero();
   addStatRow(model, "ArmPhy", selectedHero->m_Stats.m_ArmPhy.m_Value);
   addStatRow(model, "ArmMag", selectedHero->m_Stats.m_ArmMag.m_Value);
-  addStatRow(model, "PowPhy", selectedHero->m_Stats.m_powPhy.m_Value);
-  addStatRow(model, "PowMag", selectedHero->m_Stats.m_powMag.m_Value);
+  addStatRow(model, "PowPhy", selectedHero->m_Stats.m_PowPhy.m_Value);
+  addStatRow(model, "PowMag", selectedHero->m_Stats.m_PowMag.m_Value);
   addStatRow(model, "Aggro", selectedHero->m_Stats.m_aggro.m_Value);
-  addStatRow(model, "Speed", selectedHero->m_Stats.m_speed.m_Value);
+  addStatRow(model, "Speed", selectedHero->m_Stats.m_Speed.m_Value);
   addStatRow(model, "Crit", selectedHero->m_Stats.m_CriticalStrike.m_Value);
-  addStatRow(model, "Dodge", selectedHero->m_Stats.m_dogde.m_Value);
-  addStatRow(model, "regenHP", selectedHero->m_Stats.m_regenHP.m_Value);
-  addStatRow(model, "regenMana", selectedHero->m_Stats.m_regenMana.m_Value);
-  addStatRow(model, "regenVigor", selectedHero->m_Stats.m_regenVigueur.m_Value);
+  addStatRow(model, "Dodge", selectedHero->m_Stats.m_Dogde.m_Value);
+  addStatRow(model, "regenHP", selectedHero->m_Stats.m_RegenHP.m_Value);
+  addStatRow(model, "regenMana", selectedHero->m_Stats.m_RegenMana.m_Value);
+  addStatRow(model, "regenVigor", selectedHero->m_Stats.m_RegenVigor.m_Value);
 
   return model;
 }

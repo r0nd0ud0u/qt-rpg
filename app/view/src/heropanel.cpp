@@ -36,8 +36,8 @@ HeroPanel::UpdatePanel(Character* hero)
   ui->mana_bar->setFormat(QString::number(hero->m_CurrentStats.m_Mana.m_Value) + "/" +
                           QString::number(hero->m_Stats.m_Mana.m_Value) + " %p%");
   ui->bersecker_bar->setFormat(
-    QString::number(hero->m_CurrentStats.m_Bersecker.m_Value) + "/" +
-    QString::number(hero->m_Stats.m_Bersecker.m_Value) + " %p%");
+      QString::number(hero->m_CurrentStats.m_Berseck.m_Value) + "/" +
+    QString::number(hero->m_Stats.m_Berseck.m_Value) + " %p%");
   ui->vigor_bar->setFormat(QString::number(hero->m_CurrentStats.m_Vigor.m_Value) + "/" +
                            QString::number(hero->m_Stats.m_Vigor.m_Value) + " %p%");
 
