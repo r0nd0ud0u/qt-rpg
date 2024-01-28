@@ -73,6 +73,7 @@ void Character::StatsChangeAfterAtk(const QString &atkName) {
   m_Stats.m_Berseck.m_CurrentValue = max(
       0, static_cast<int>(m_Stats.m_Berseck.m_CurrentValue - atk.berseckCost));
   m_Stats.m_Aggro.m_CurrentValue += m_Stats.m_AggroRate.m_CurrentValue;
+  m_Stats.m_Berseck.m_CurrentValue += m_Stats.m_BerseckRate.m_CurrentValue;
 }
 
 void Character::AddAtq(const AttaqueType &atq) { m_AttakList[atq.name] = atq; }
@@ -135,7 +136,7 @@ void Character::LoadAtkJson() {
       AttaqueType atk;
       atk.name = json[ATK_NAME].toString();
       atk.namePhoto = json[ATK_PHOTO].toString();
-      atk.aggroCum = json[ATK_AGGRO].toInt();
+      atk.aggro = json[ATK_AGGRO].toInt();
       atk.damage = static_cast<uint32_t>(json[ATK_DAMAGE].toInt());
       atk.heal = json[ATK_HEAL].toInt();
       atk.regenMana = json[ATK_REGEN_MANA].toInt();

@@ -14,6 +14,7 @@ void PlayersManager::InitHeroes() {
   stats.m_Mana.SetValues(369, 369, 369);
   stats.m_Vigor.SetValues(126, 126, 126);
   stats.m_Berseck.SetValues(0, 0, 0);
+  stats.m_BerseckRate.SetValues(0, 0, 0);
   stats.m_ArmPhy.SetValues(108, 108, 108);
   stats.m_ArmMag.SetValues(35, 35, 35);
   stats.m_PowPhy.SetValues(10, 10, 10);
@@ -32,6 +33,7 @@ void PlayersManager::InitHeroes() {
   stats.m_Mana.SetValues(141, 141, 141);
   stats.m_Vigor.SetValues(445, 445, 445);
   stats.m_Berseck.SetValues(0, 0, 0);
+  stats.m_BerseckRate.SetValues(0, 0, 0);
   stats.m_ArmPhy.SetValues(60, 60, 60);
   stats.m_ArmMag.SetValues(47, 47, 47);
   stats.m_PowPhy.SetValues(115, 115, 115);
@@ -50,6 +52,7 @@ void PlayersManager::InitHeroes() {
   stats.m_Mana.SetValues(0, 0, 0);
   stats.m_Vigor.SetValues(0, 0, 0);
   stats.m_Berseck.SetValues(20, 20, 100);
+  stats.m_BerseckRate.SetValues(5, 5, 5);
   stats.m_ArmPhy.SetValues(85, 85, 85);
   stats.m_ArmMag.SetValues(45, 45, 45);
   stats.m_PowPhy.SetValues(30, 30, 30);
@@ -81,6 +84,7 @@ void PlayersManager::InitBosses() {
   stats.m_Mana.SetValues(0, 0, 0);
   stats.m_Vigor.SetValues(126, 126, 126);
   stats.m_Berseck.SetValues(0, 0, 0);
+  stats.m_BerseckRate.SetValues(0, 0, 0);
   stats.m_ArmPhy.SetValues(2280, 2280, 2280);
   stats.m_ArmMag.SetValues(35, 35, 35);
   stats.m_PowPhy.SetValues(10, 10, 10);

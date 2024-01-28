@@ -64,7 +64,11 @@ private slots:
 
   void on_aggro_spinBox_valueChanged(int arg1);
 
-private:
+  void on_aggro_rate_spinBox_valueChanged(int arg1);
+
+  void on_berseck_rate_spinBox_valueChanged(int arg1);
+
+  private:
   Ui::EditAttakView *ui;
   std::vector<EditAttak> m_AttakList;
   QString m_SelectedCharaName;

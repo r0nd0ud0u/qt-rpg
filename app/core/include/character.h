@@ -24,7 +24,9 @@ public:
     uint32_t regenMana = 0;
     uint32_t regenVigor = 0;
     uint32_t regenBerseck = 0;
-    uint32_t aggroCum = 0;
+    uint32_t aggro = 0;
+    uint32_t aggroRate = 0;
+    uint32_t berseckRate = 0;
     QString effect;
     uint32_t manaCost = 0;
     uint32_t vigorCost = 0;
