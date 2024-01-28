@@ -96,7 +96,7 @@ void EditAttakView::Save() {
     obj.insert(ATK_MANA_COST, static_cast<int>(atk.type.manaCost));
     obj.insert(ATK_VIGOR_COST, static_cast<int>(atk.type.vigorCost));
     obj.insert(ATK_BERSECK_COST, static_cast<int>(atk.type.berseckCost));
-    obj.insert(ATK_AGGRO, static_cast<int>(atk.type.aggroCum));
+    obj.insert(ATK_AGGRO, static_cast<int>(atk.type.aggro));
     obj.insert(ATK_PHOTO, atk.type.namePhoto);
     obj.insert(ATK_DAMAGE, static_cast<int>(atk.type.damage));
     obj.insert(ATK_HEAL, static_cast<int>(atk.type.heal));
@@ -138,9 +138,12 @@ void EditAttakView::InitComboBoxes() {
   m_FirstShow = true;
 
   // disconnect signals combo boxes
-  disconnect(ui->target_comboBox, &QComboBox::currentTextChanged, nullptr, nullptr);
-  disconnect(ui->reach_comboBox, &QComboBox::currentTextChanged, nullptr, nullptr);
-  disconnect(ui->photo_comboBox, &QComboBox::currentTextChanged, nullptr, nullptr);
+  disconnect(ui->target_comboBox, &QComboBox::currentTextChanged, nullptr,
+             nullptr);
+  disconnect(ui->reach_comboBox, &QComboBox::currentTextChanged, nullptr,
+             nullptr);
+  disconnect(ui->photo_comboBox, &QComboBox::currentTextChanged, nullptr,
+             nullptr);
 
   ui->target_comboBox->setEnabled(true);
   for (const auto &target : AttaqueType::TARGET_TYPES) {
@@ -162,9 +165,12 @@ void EditAttakView::InitComboBoxes() {
   }
 
   // Re-activate them
-  connect(ui->target_comboBox, &QComboBox::currentTextChanged, this, &EditAttakView::on_target_comboBox_currentTextChanged);
-  connect(ui->reach_comboBox, &QComboBox::currentTextChanged, this, &EditAttakView::on_reach_comboBox_currentTextChanged);
-  connect(ui->photo_comboBox, &QComboBox::currentTextChanged, this, &EditAttakView::on_photo_comboBox_currentTextChanged);
+  connect(ui->target_comboBox, &QComboBox::currentTextChanged, this,
+          &EditAttakView::on_target_comboBox_currentTextChanged);
+  connect(ui->reach_comboBox, &QComboBox::currentTextChanged, this,
+          &EditAttakView::on_reach_comboBox_currentTextChanged);
+  connect(ui->photo_comboBox, &QComboBox::currentTextChanged, this,
+          &EditAttakView::on_photo_comboBox_currentTextChanged);
 }
 
 void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
@@ -172,8 +178,9 @@ void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
   ui->reach_comboBox->setCurrentText(selectedAttak.type.reach);
   ui->name_lineEdit->setText(selectedAttak.type.name);
   ui->duration_spinBox->setValue(selectedAttak.type.turnsDuration);
-  ui->aggro_spinBox->setValue(selectedAttak.type.aggroCum);
-  ui->mana_cost_spinBox->setValue(static_cast<int>(selectedAttak.type.manaCost));
+  ui->aggro_spinBox->setValue(selectedAttak.type.aggro);
+  ui->mana_cost_spinBox->setValue(
+      static_cast<int>(selectedAttak.type.manaCost));
   ui->vigor_spinBox->setValue(selectedAttak.type.vigorCost);
   ui->berseck_spinBox->setValue(selectedAttak.type.berseckCost);
   ui->heal_spinBox->setValue(selectedAttak.type.heal);
@@ -261,13 +268,6 @@ void EditAttakView::on_duration_spinBox_valueChanged(
       static_cast<uint16_t>(ui->duration_spinBox->value());
 }
 
-void EditAttakView::on_rage_aggro_spinBox_valueChanged(
-    [[maybe_unused]] int arg1) {
-  OnValueChange(GetIndexSelectedRow());
-  m_AttakList[GetIndexSelectedRow()].type.aggroCum =
-      ui->aggro_spinBox->value();
-}
-
 void EditAttakView::on_mana_cost_spinBox_valueChanged(
     [[maybe_unused]] int arg1) {
   OnValueChange(GetIndexSelectedRow());
@@ -305,33 +305,42 @@ void EditAttakView::on_vigor_spinBox_valueChanged(int arg1) {
   m_AttakList[GetIndexSelectedRow()].type.vigorCost = arg1;
 }
 
-void EditAttakView::on_berseck_spinBox_valueChanged(int arg1)
-{
-    OnValueChange(GetIndexSelectedRow());
-    m_AttakList[GetIndexSelectedRow()].type.berseckCost = arg1;
+void EditAttakView::on_berseck_spinBox_valueChanged(int arg1) {
+  OnValueChange(GetIndexSelectedRow());
+  m_AttakList[GetIndexSelectedRow()].type.berseckCost = arg1;
 }
 
-void EditAttakView::on_level_spinBox_valueChanged(int arg1)
-{
-    OnValueChange(GetIndexSelectedRow());
-    m_AttakList[GetIndexSelectedRow()].type.level = static_cast<uint8_t>(arg1);
+void EditAttakView::on_level_spinBox_valueChanged(int arg1) {
+  OnValueChange(GetIndexSelectedRow());
+  m_AttakList[GetIndexSelectedRow()].type.level = static_cast<uint8_t>(arg1);
 }
 
-void EditAttakView::on_regen_rage_spinBox_valueChanged(int arg1)
+void EditAttakView::on_regen_rage_spinBox_valueChanged(int arg1) {
+  OnValueChange(GetIndexSelectedRow());
+  m_AttakList[GetIndexSelectedRow()].type.regenBerseck = arg1;
+}
+
+void EditAttakView::on_regen_vigor_spinBox_valueChanged(int arg1) {
+  OnValueChange(GetIndexSelectedRow());
+  m_AttakList[GetIndexSelectedRow()].type.regenVigor = arg1;
+}
+
+void EditAttakView::on_aggro_spinBox_valueChanged(int arg1) {
+  OnValueChange(GetIndexSelectedRow());
+    m_AttakList[GetIndexSelectedRow()].type.aggro = arg1;
+}
+
+void EditAttakView::on_aggro_rate_spinBox_valueChanged(int arg1)
 {
     OnValueChange(GetIndexSelectedRow());
-    m_AttakList[GetIndexSelectedRow()].type.regenBerseck = arg1;
+    m_AttakList[GetIndexSelectedRow()].type.aggroRate = arg1;
 }
 
 
-void EditAttakView::on_regen_vigor_spinBox_valueChanged(int arg1)
+void EditAttakView::on_berseck_rate_spinBox_valueChanged(int arg1)
 {
     OnValueChange(GetIndexSelectedRow());
-    m_AttakList[GetIndexSelectedRow()].type.regenVigor = arg1;
+    m_AttakList[GetIndexSelectedRow()].type.berseckRate = arg1;
 }
 
 // end form layout changed
-
-
-
-

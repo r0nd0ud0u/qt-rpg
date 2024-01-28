@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>508</height>
+    <width>937</width>
+    <height>578</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -210,6 +210,26 @@
           <number>1000</number>
          </property>
         </widget>
+       </item>
+       <item row="15" column="0">
+        <widget class="QLabel" name="aggro_rate_label">
+         <property name="text">
+          <string>Taux aggro</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="0">
+        <widget class="QLabel" name="berseck_rate_label">
+         <property name="text">
+          <string>Taux berseck</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="1">
+        <widget class="QSpinBox" name="aggro_rate_spinBox"/>
+       </item>
+       <item row="16" column="1">
+        <widget class="QSpinBox" name="berseck_rate_spinBox"/>
        </item>
       </layout>
      </item>
