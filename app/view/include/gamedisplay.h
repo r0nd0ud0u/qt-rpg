@@ -35,6 +35,7 @@ private slots:
     void on_bag_button_clicked();
     void on_stackedWidget_currentChanged(const int arg1);
     void StartNewTurn();
+    void EndOfTurn() ;
     void EndOfGame();
     void NewRound();
     void LaunchAttak(const QString& atkName, const std::vector<TargetInfo>&);
