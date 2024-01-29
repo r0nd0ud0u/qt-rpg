@@ -28,12 +28,13 @@ Character::Character(const QString name, const characType type,
 /// HOT by n turns : divided pow by n
 /// \param atkName
 /// \param target
+/// Returns a string to append in channel
 ///
-void Character::Attaque(const QString &atkName, Character *target) {
+QString Character::Attaque(const QString &atkName, Character *target) {
   if (target == nullptr || atkName.isEmpty()) {
-    return;
+    return "No target on atk or no atk name";
   }
-
+  QString channelLog;
   const auto &atk = m_AttakList.at(atkName);
 
   // Stats change on target
@@ -52,11 +53,14 @@ void Character::Attaque(const QString &atkName, Character *target) {
     const auto finalDamage = static_cast<int>(std::round(damage * protection));
 
     tarCurHp = max(0, tarCurHp - finalDamage);
+    channelLog = PlayersManager::FormatAtkOnEnnemy(m_Name, target->m_Name,atkName, finalDamage);
   }
   if (atk.heal > 0) {
     tarCurHp = min(target->m_Stats.m_HP.m_CurrentValue,
                    static_cast<int>(tarCurHp + atk.heal));
+      channelLog = PlayersManager::FormatAtkOnAlly(m_Name, target->m_Name,atkName, atk.heal);
   }
+  return channelLog;
 }
 
 void Character::UpdateStatsOnAtk(const QString &atkName) {

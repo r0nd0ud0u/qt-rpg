@@ -50,7 +50,7 @@ class Character
 public:
     Character(const QString name, const characType type, const Stats& stats);
 
-    void Attaque(const QString& atkName, Character* target);
+    QString Attaque(const QString& atkName, Character* target);
     void UpdateStatsOnAtk(const QString& atkName);
     void AddAtq (const AttaqueType& atq);
     void AddStuff(const Stuff& stuff);
