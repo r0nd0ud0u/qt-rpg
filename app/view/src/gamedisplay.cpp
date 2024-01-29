@@ -157,7 +157,9 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     auto *targetChara = gm->m_PlayersManager->GetCharacterByName(target.m_Name);
 
     if (activatedPlayer != nullptr && targetChara != nullptr) {
-      activatedPlayer->Attaque(atkName, targetChara);
+      const QString channelLog = activatedPlayer->Attaque(atkName, targetChara);
+        // Update channel view
+      emit SigUpdateChannelView(channelLog);
     }
   }
   // Stats change on hero

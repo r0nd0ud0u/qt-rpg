@@ -23,6 +23,7 @@ signals:
     void SigUpdatePlayerPanel();
     void SigBossDead(QString);
     void SigEndOfGame();
+    void SigUpdateChannelView(QString);
 private:
     Ui::GameDisplay *ui;
     void UpdateGameStatus();

@@ -9,6 +9,7 @@ Channel::Channel(QWidget *parent) : QWidget(parent), ui(new Ui::Channel) {
 
   ShowTurnPage();
   connect((GameDisplay*)parentWidget(), &GameDisplay::SigBossDead, this, &Channel::EndOfGame);
+  connect((GameDisplay*)parentWidget(), &GameDisplay::SigUpdateChannelView, this, &Channel::UpdateLog);
 }
 
 Channel::~Channel() { delete ui; }
@@ -38,4 +39,8 @@ void Channel::on_end_round_button_clicked() {
 
 void Channel::EndOfGame(){
     ui->end_round_button->setEnabled(false);
+}
+
+void Channel::UpdateLog(QString log){
+    ui->channel_textEdit->append(log);
 }
