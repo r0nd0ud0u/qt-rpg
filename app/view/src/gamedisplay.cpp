@@ -19,7 +19,7 @@ GameDisplay::GameDisplay(QWidget *parent)
   connect(ui->channel_lay, &Channel::SigNewTurn, this,
           &GameDisplay::StartNewTurn);
   connect(ui->channel_lay, &Channel::SigEndOfTurn, this,
-          &GameDisplay::StartNewTurn);
+          &GameDisplay::EndOfTurn);
   connect(ui->attak_page, &ActionsView::SigLaunchAttak, this,
           &GameDisplay::LaunchAttak);
 
@@ -103,6 +103,7 @@ void GameDisplay::NewRound() {
   ui->attak_page->SetCurrentPlayer(activePlayer);
   ui->inventory_page->SetCurrentPlayer(activePlayer);
 
+  emit SigUpdateChannelView("Nouveau round !!");
   // TODO update channel
   // choice of talent
   // if dead -> choice to take a potion
@@ -118,15 +119,18 @@ void GameDisplay::StartNewTurn() {
   // Update game state
   gm->m_GameState->m_CurrentRound = 0;
   gm->m_GameState->m_CurrentTurnNb++;
+  emit SigUpdateChannelView("Nouveau tour !!");
   NewRound();
   // Then, update the display
   UpdateGameStatus();
   // game is just starting at turn 1
   // some first init to do for the viewa
   if (gm->m_GameState->m_CurrentTurnNb == 1) {
-    ui->attak_page->InitTargetsWidget();
+      ui->attak_page->InitTargetsWidget();
   }
 }
+
+void GameDisplay::EndOfTurn() { emit SigUpdateChannelView("Fin du tour !!"); }
 
 void GameDisplay::EndOfGame() {
   // Desactivate actions buttons
@@ -135,6 +139,8 @@ void GameDisplay::EndOfGame() {
   // default page on action view
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(ActionsStackedWgType::defaultType));
+
+  emit SigUpdateChannelView("Fin du jeu !!");
 }
 
 void GameDisplay::LaunchAttak(const QString &atkName,
@@ -157,7 +163,9 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     auto *targetChara = gm->m_PlayersManager->GetCharacterByName(target.m_Name);
 
     if (activatedPlayer != nullptr && targetChara != nullptr) {
-      activatedPlayer->Attaque(atkName, targetChara);
+      const QString channelLog = activatedPlayer->Attaque(atkName, targetChara);
+      // Update channel view
+      emit SigUpdateChannelView(channelLog);
     }
   }
   // Stats change on hero

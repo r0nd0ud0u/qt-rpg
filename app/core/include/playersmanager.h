@@ -17,6 +17,9 @@ public:
     Character* GetCharacterByName(const QString& name);
     void UpdatePartnersOnAtk(const Character* curPlayer, const QString &atkName) const;
 
+    static QString FormatAtkOnEnnemy(const QString player1, const QString player2,  const QString &atkName, const int damage);
+    static QString FormatAtkOnAlly(const QString player1, const QString player2,  const QString &atkName, const int damage);
+
     std::vector<Character*> m_HeroesList;
     std::vector<Character*> m_BossesList;
     Character* m_SelectedHero = nullptr;
