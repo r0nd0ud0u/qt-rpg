@@ -197,3 +197,11 @@ void PlayersManager::UpdatePartnersOnAtk(const Character* curPlayer, const QStri
         }
     }
 }
+
+QString PlayersManager::FormatAtkOnEnnemy(const QString player1, const QString player2,  const QString &atkName, const int damage){
+    return QString("%1 utilise %2 sur %3 et fait %4 de dégâts!").arg(player1).arg(atkName).arg(player2).arg(damage);
+}
+
+QString PlayersManager::FormatAtkOnAlly(const QString player1, const QString player2,  const QString &atkName, const int damage){
+    return QString("%1 utilise %2 sur %3 et soigne de %4 PV!").arg(player1).arg(atkName).arg(player2).arg(damage);
+}
