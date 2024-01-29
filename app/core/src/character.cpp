@@ -139,7 +139,7 @@ void Character::LoadAtkJson() {
       QString msg = out.readAll();
       atkJson.close();
 
-      auto json = QJsonDocument::fromJson(msg.toLatin1());
+      auto json = QJsonDocument::fromJson(msg.toUtf8());
       // decode json
       AttaqueType atk;
       atk.name = json[ATK_NAME].toString();
