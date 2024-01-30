@@ -5,6 +5,7 @@
 #include <QWidget>
 
 #include "character.h"
+#include "effect.h"
 
 #include <vector>
 

@@ -37,6 +37,7 @@ public:
     QString namePhoto = "default.png";
     static std::vector<QString> TARGET_TYPES;
     static std::vector<QString> REACH_TYPES;
+    std::unordered_map<QString, int> m_AllEffects;
 };
 
 enum class InventoryType{
