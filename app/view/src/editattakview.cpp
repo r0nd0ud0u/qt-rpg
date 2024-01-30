@@ -68,6 +68,7 @@ void EditAttakView::on_apply_button_clicked() { Apply(); }
 void EditAttakView::Apply() {
   // disable button
   ui->apply_button->setEnabled(false);
+  ui->effect_widget->GetTable();
 }
 
 void EditAttakView::Save() {
@@ -104,6 +105,9 @@ void EditAttakView::Save() {
     obj.insert(ATK_LEVEL, static_cast<int>(atk.type.level));
     obj.insert(ATK_REGEN_BERSECK, static_cast<int>(atk.type.regenBerseck));
     obj.insert(ATK_REGEN_VIGOR, static_cast<int>(atk.type.regenVigor));
+    for(const auto& effect : ui->effect_widget->GetTable()){
+        obj.insert(effect.effect, effect.value);
+    }
     // output attak json
     QJsonDocument doc(obj);
 
@@ -234,6 +238,7 @@ void EditAttakView::on_new_atk_button_clicked() {
   EnableAllWidgets(true);
   if (ui->atk_list_view->model()->rowCount() == 1) {
     InitComboBoxes();
+      ui->effect_widget->InitComboBoxes();
   }
 }
 // form layout value changed
