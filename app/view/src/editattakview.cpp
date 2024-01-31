@@ -56,8 +56,8 @@ void EditAttakView::InitView() {
   if (!m_AttakList.empty()) {
     ui->atk_list_view->setCurrentIndex(model->index(0));
     InitComboBoxes();
-    UpdateValues(m_AttakList.front());
     ui->effect_widget->InitComboBoxes();
+    UpdateValues(m_AttakList.front());
   } else {
     EnableAllWidgets(false);
   }
@@ -69,7 +69,6 @@ void EditAttakView::on_apply_button_clicked() { Apply(); }
 void EditAttakView::Apply() {
   // disable button
   ui->apply_button->setEnabled(false);
-  ui->effect_widget->GetTable();
 }
 
 void EditAttakView::Save() {
@@ -85,12 +84,17 @@ void EditAttakView::Save() {
       index > m_AttakList.size()) {
     return;
   }
+  const auto& effectList = ui->effect_widget->GetTable();
+  const bool effectUpdate = std::any_of(effectList.begin(), effectList.end(), [](effectParam effect){return effect.updated;});
+
   for (const auto &atk : m_AttakList) {
-    if (!atk.updated) {
+      // init json doc
+      QJsonObject obj;
+
+    if (!atk.updated && !effectUpdate) {
       continue;
     }
-    // init json doc
-    QJsonObject obj;
+
     obj.insert(ATK_NAME, atk.type.name);
     obj.insert(ATK_TARGET, atk.type.target);
     obj.insert(ATK_REACH, atk.type.reach);
@@ -130,7 +134,8 @@ void EditAttakView::Save() {
               .arg(logFilePath));
     }
     QTextStream out(&file);
-    out.setCodec("UTF-8");
+    //out.setCodec("UTF-8");
+    out.setEncoding(QStringConverter::Encoding::Utf8);
     out << doc.toJson() << "\n";
   }
 
@@ -204,6 +209,7 @@ void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
   ui->level_spinBox->setValue(selectedAttak.type.level);
   ui->regen_rage_spinBox->setValue(selectedAttak.type.regenBerseck);
   ui->regen_vigor_spinBox->setValue(selectedAttak.type.regenVigor);
+  ui->effect_widget->SetValues(selectedAttak.type.m_AllEffects);
 }
 
 void EditAttakView::EnableAllWidgets(const bool value) const {

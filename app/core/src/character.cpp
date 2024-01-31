@@ -4,6 +4,7 @@
 #include <QDir>
 #include <QFile>
 #include <QJsonDocument>
+#include <QJsonArray>
 
 #include <QtDebug>
 
@@ -136,7 +137,8 @@ void Character::LoadAtkJson() {
     } else {
       // Convert json file to QString
       QTextStream out(&atkJson);
-      out.setCodec("UTF-8");
+      //out.setCodec("UTF-8");
+      out.setEncoding(QStringConverter::Encoding::Utf8);
       QString msg = out.readAll();
       atkJson.close();
 
@@ -159,8 +161,16 @@ void Character::LoadAtkJson() {
       atk.reach = json[ATK_REACH].toString();
       atk.target = json[ATK_TARGET].toString();
       atk.turnsDuration = static_cast<uint16_t>(json[ATK_DURATION].toInt());
-      for(const auto& effect : EFFECTS) {
-          atk.m_AllEffects[effect] = json[effect].toInt();
+      auto effectArray = json[EFFECT_ARRAY].toArray();
+      for(const auto& effect : effectArray) {
+          const auto& type = effect[EFFECT_TYPE].toString();
+          if(type.isEmpty()){
+              break;
+          }
+          effectParam param;
+          param.effect = type;
+          param.value = effect[EFFECT_VALUE].toInt();
+          atk.m_AllEffects.push_back(param);
       }
       // Add atk to hero atk list
       AddAtq(atk);

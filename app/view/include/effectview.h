@@ -18,6 +18,7 @@ public:
     ~EffectView();
     void InitComboBoxes();
     const std::vector<effectParam>& GetTable();
+    void SetValues(const std::vector<effectParam>& table);
 
 private slots:
     void on_effect_comboBox_currentTextChanged(const QString &arg1);
