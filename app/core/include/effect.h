@@ -29,6 +29,7 @@ enum class EffectType{
 struct effectParam{
     QString effect;
     int value = 0;
+    bool updated = false;
 };
 
 template <class T> class EffectStat {
