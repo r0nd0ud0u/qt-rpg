@@ -136,6 +136,7 @@ void Character::LoadAtkJson() {
     } else {
       // Convert json file to QString
       QTextStream out(&atkJson);
+      out.setCodec("UTF-8");
       QString msg = out.readAll();
       atkJson.close();
 
