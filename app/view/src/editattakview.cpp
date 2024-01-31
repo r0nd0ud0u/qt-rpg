@@ -57,6 +57,7 @@ void EditAttakView::InitView() {
     ui->atk_list_view->setCurrentIndex(model->index(0));
     InitComboBoxes();
     UpdateValues(m_AttakList.front());
+    ui->effect_widget->InitComboBoxes();
   } else {
     EnableAllWidgets(false);
   }
@@ -105,8 +106,16 @@ void EditAttakView::Save() {
     obj.insert(ATK_LEVEL, static_cast<int>(atk.type.level));
     obj.insert(ATK_REGEN_BERSECK, static_cast<int>(atk.type.regenBerseck));
     obj.insert(ATK_REGEN_VIGOR, static_cast<int>(atk.type.regenVigor));
+
+    QJsonArray jsonArray;
     for(const auto& effect : ui->effect_widget->GetTable()){
-        obj.insert(effect.effect, effect.value);
+        QJsonObject item1;
+        item1[EFFECT_TYPE] = effect.effect;
+        item1[EFFECT_VALUE] = effect.value;
+        jsonArray.append(item1);
+    }
+    if(!jsonArray.empty()){
+        obj[EFFECT_ARRAY] = jsonArray;
     }
     // output attak json
     QJsonDocument doc(obj);
@@ -239,7 +248,7 @@ void EditAttakView::on_new_atk_button_clicked() {
   EnableAllWidgets(true);
   if (ui->atk_list_view->model()->rowCount() == 1) {
     InitComboBoxes();
-      ui->effect_widget->InitComboBoxes();
+    ui->effect_widget->InitComboBoxes();
   }
 }
 // form layout value changed

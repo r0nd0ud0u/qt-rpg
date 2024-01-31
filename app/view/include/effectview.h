@@ -32,6 +32,12 @@ private slots:
 
     void on_value_spinBox_3_valueChanged(int arg1);
 
+    void on_checkBox_stateChanged(int arg1);
+
+    void on_checkBox_2_stateChanged(int arg1);
+
+    void on_checkBox_3_stateChanged(int arg1);
+
 private:
     Ui::EffectView *ui;
     bool m_FirstShow = false;
