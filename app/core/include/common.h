@@ -132,7 +132,7 @@ const QString EFFECT_TARGET = "Cible";
 const QString EFFECT_REACH = "Portée";
 const QString EFFECT_VALUE_CHANGE = "Effet on";
 const QString EFFECT_PERCENT_CHANGE = "Effet on";
-const std::unordered_set<QString> EFFECTS{EFFECT_ON,
+const std::unordered_set<QString> EFFECTS{"", EFFECT_ON,
                                           EFFECT_NB_COOL_DOWN,
                                           EFFECT_ACTIVE_TURNS,
                                           EFFECT_NB_DECREASE_ON_TURN,
@@ -141,4 +141,7 @@ const std::unordered_set<QString> EFFECTS{EFFECT_ON,
                                           EFFECT_REACH,
                                           EFFECT_VALUE_CHANGE,
                                           EFFECT_PERCENT_CHANGE};
+const QString EFFECT_ARRAY = "Effet";
+const QString EFFECT_TYPE = "Type";
+const QString EFFECT_VALUE = "Value";
 #endif // COMMON_H
