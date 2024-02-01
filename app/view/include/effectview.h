@@ -17,7 +17,7 @@ public:
     explicit EffectView(QWidget *parent = nullptr);
     ~EffectView();
     void InitComboBoxes();
-    const std::vector<effectParam>& GetTable();
+    const std::vector<effectParam>& GetTable() const;
     void SetValues(const std::vector<effectParam>& table);
 
 private slots:
