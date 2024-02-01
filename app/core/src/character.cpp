@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonArray>
+#include <QJsonObject>
 
 #include <QtDebug>
 
@@ -165,7 +166,8 @@ void Character::LoadAtkJson() {
       atk.reach = json[ATK_REACH].toString();
       atk.target = json[ATK_TARGET].toString();
       atk.turnsDuration = static_cast<uint16_t>(json[ATK_DURATION].toInt());
-      auto effectArray = json[EFFECT_ARRAY].toArray();
+      QJsonArray effectArray = json[EFFECT_ARRAY].toArray();
+#if QT_VERSION_MAJOR == 6
       for(const auto& effect : effectArray) {
           const auto& type = effect[EFFECT_TYPE].toString();
           if(type.isEmpty()){
@@ -176,6 +178,28 @@ void Character::LoadAtkJson() {
           param.value = effect[EFFECT_VALUE].toInt();
           atk.m_AllEffects.push_back(param);
       }
+#else
+      for(const auto& effect : effectArray) {
+          effectParam param;
+          if(effect.isObject()){
+              const QJsonObject item = effect.toObject();
+              for(const auto& key : item.keys()){
+                  const auto& val = item[key];
+                  if (val.isString()){
+                      param.effect = val.toString();
+                  }
+                  else if (val.isDouble())
+                      param.value = static_cast<int>(val.toDouble());
+              }
+          }
+
+          if(param.effect.isEmpty()){
+              break;
+          }
+          atk.m_AllEffects.push_back(param);
+      }
+#endif
+
       // Add atk to hero atk list
       AddAtq(atk);
     }
