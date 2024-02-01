@@ -29,6 +29,11 @@ enum class EffectType{
 struct effectParam{
     QString effect;
     int value = 0;
+    int nbTurns = 0;
+    QString target;
+    QString reach;
+    QString statsName;
+
     bool updated = false;
 };
 
