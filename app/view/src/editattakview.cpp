@@ -134,8 +134,11 @@ void EditAttakView::Save() {
               .arg(logFilePath));
     }
     QTextStream out(&file);
-    //out.setCodec("UTF-8");
+#if QT_VERSION_MAJOR == 6
     out.setEncoding(QStringConverter::Encoding::Utf8);
+#else
+    out.setCodec("UTF-8");
+#endif
     out << doc.toJson() << "\n";
   }
 
