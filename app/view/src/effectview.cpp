@@ -26,9 +26,6 @@ void EffectView::InitComboBoxes() {
   disconnect(ui->effect_comboBox_3, &QComboBox::currentTextChanged, nullptr,
              nullptr);
 
-  //  ui->effect_comboBox->setEnabled(true);
-  //  ui->effect_comboBox_2->setEnabled(false);
-  //  ui->effect_comboBox_3->setEnabled(false);
   for (const auto &target : EFFECTS) {
     ui->effect_comboBox->addItem(target);
     ui->effect_comboBox_2->addItem(target);
@@ -74,7 +71,7 @@ void EffectView::on_value_spinBox_3_valueChanged(int arg1) {
   m_EffectTable[2].updated = true;
 }
 
-const std::vector<effectParam> &EffectView::GetTable() { return m_EffectTable; }
+const std::vector<effectParam> &EffectView::GetTable() const { return m_EffectTable; }
 
 void EffectView::on_checkBox_stateChanged(int arg1) {
   if (arg1 == 2) {
