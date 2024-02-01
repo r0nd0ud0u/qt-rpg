@@ -169,13 +169,17 @@ void Character::LoadAtkJson() {
       QJsonArray effectArray = json[EFFECT_ARRAY].toArray();
 #if QT_VERSION_MAJOR == 6
       for(const auto& effect : effectArray) {
-          const auto& type = effect[EFFECT_TYPE].toString();
-          if(type.isEmpty()){
+          const auto& stat = effect[EFFECT_STAT].toString();
+          if(stat.isEmpty()){
               break;
           }
           effectParam param;
-          param.effect = type;
+          param.effect = effect[EFFECT_TYPE].toString();
           param.value = effect[EFFECT_VALUE].toInt();
+          param.nbTurns = effect[EFFECT_ACTIVE_TURNS].toInt();
+          param.reach = effect[EFFECT_REACH].toString();
+          param.statsName = effect[EFFECT_STAT].toString();
+          param.target = effect[EFFECT_TARGET].toString();
           atk.m_AllEffects.push_back(param);
       }
 #else
@@ -292,4 +296,10 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
     return true;
   }
   return false;
+}
+
+void Character::ApplyAtkEffect(const std::vector<effectParam>& allEffects){
+    for(const auto& effect : allEffects){
+
+    }
 }

@@ -86,11 +86,13 @@ const QString ATK_REGEN_BERSECK = "Regen rage";
 // Reach keys
 const QString REACH_ZONE = "Zone";
 const QString REACH_INDIVIDUAL = "Individuel";
+const std::unordered_set<QString> ALL_REACH = {"", REACH_ZONE, REACH_INDIVIDUAL};
 // Target keys
 const QString TARGET_ENNEMY = "Ennemie";
 const QString TARGET_ALLY = "Allié";
 const QString TARGET_ALL_HEROES = "Tous les heroes";
 const QString TARGET_HIMSELF = "Soi-même";
+const std::unordered_set<QString> ALL_TARGETS = {"", TARGET_ENNEMY, TARGET_ALLY, TARGET_ALL_HEROES, TARGET_HIMSELF};
 // Stats keys
 const QString STATS_HP = "PV";
 const QString STATS_MANA = "Mana";
@@ -107,6 +109,11 @@ const QString STATS_DODGE = "Esquive";
 const QString STATS_REGEN_HP = "Regeneration PV";
 const QString STATS_REGEN_MANA = "Regeneration Mana";
 const QString STATS_REGEN_VIGOR = "Regeneration vigueur";
+const std::unordered_set<QString> ALL_STATS = {"",
+    STATS_HP,       STATS_MANA,       STATS_VIGOR,      STATS_BERSECK,
+    STATS_ARM_PHY,  STATS_ARM_MAG,    STATS_POW_PHY,    STATS_POW_MAG,
+    STATS_AGGRO,    STATS_SPEED,      STATS_CRIT,       STATS_DODGE,
+    STATS_REGEN_HP, STATS_REGEN_MANA, STATS_REGEN_VIGOR};
 // equipment keys
 const QString EQUIP_HEAD = "Tete";
 const QString EQUIP_NECKLACE = "Collier";
@@ -125,23 +132,24 @@ const QString EQUIP_CATEGORY = "Categorie";
 // Effect keys
 const QString EFFECT_ON = "Effet on";
 const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";
-const QString EFFECT_ACTIVE_TURNS = "Tours actifs";
 const QString EFFECT_NB_DECREASE_ON_TURN = "Decroissement pendant le tour";
 const QString EFFECT_NB_DECREASE_BY_TURN = "Decroissement sur le tour";
-const QString EFFECT_TARGET = "Cible";
-const QString EFFECT_REACH = "Portée";
+
 const QString EFFECT_VALUE_CHANGE = "Effet on";
 const QString EFFECT_PERCENT_CHANGE = "Effet on";
-const std::unordered_set<QString> EFFECTS{"", EFFECT_ON,
+const std::unordered_set<QString> EFFECTS{"",
+                                          EFFECT_ON,
                                           EFFECT_NB_COOL_DOWN,
-                                          EFFECT_ACTIVE_TURNS,
                                           EFFECT_NB_DECREASE_ON_TURN,
                                           EFFECT_NB_DECREASE_BY_TURN,
-                                          EFFECT_TARGET,
-                                          EFFECT_REACH,
                                           EFFECT_VALUE_CHANGE,
                                           EFFECT_PERCENT_CHANGE};
 const QString EFFECT_ARRAY = "Effet";
 const QString EFFECT_TYPE = "Type";
 const QString EFFECT_VALUE = "Value";
+const QString EFFECT_TARGET = "Cible";
+const QString EFFECT_REACH = "Portée";
+const QString EFFECT_STAT = "Stat";
+const QString EFFECT_ACTIVE_TURNS = "Tours actifs";
+
 #endif // COMMON_H

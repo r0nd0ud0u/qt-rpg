@@ -5,7 +5,6 @@
 #include <QWidget>
 
 #include "character.h"
-#include "effect.h"
 
 #include <vector>
 
@@ -79,6 +78,8 @@ private slots:
   void OnValueChange(const int index);
   int GetIndexSelectedRow() const;
   void EnableAllWidgets(const bool value) const;
+  void UpdateEffectOn();
+
   bool m_FirstShow = false;
 };
 

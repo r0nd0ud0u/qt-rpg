@@ -11,10 +11,14 @@
 
 #include "character.h"
 #include <Application.h>
+#include "effectview.h"
 
 EditAttakView::EditAttakView(QWidget *parent)
     : QWidget(parent), ui(new Ui::EditAttakView) {
   ui->setupUi(this);
+
+    connect(ui->effect_widget, &EffectView::SigTableUpdated, this,
+            &EditAttakView::UpdateEffectOn);
 }
 
 EditAttakView::~EditAttakView() { delete ui; }
@@ -55,6 +59,9 @@ void EditAttakView::InitView() {
   // Update view
   if (!m_AttakList.empty()) {
     ui->atk_list_view->setCurrentIndex(model->index(0));
+    // send index of atk to update effect table
+    ui->effect_widget->SetVectorSize(m_AttakList.size());
+    ui->effect_widget->SetIndex(0);
     InitComboBoxes();
     ui->effect_widget->InitComboBoxes();
     UpdateValues(m_AttakList.front());
@@ -69,6 +76,7 @@ void EditAttakView::on_apply_button_clicked() { Apply(); }
 void EditAttakView::Apply() {
   // disable button
   ui->apply_button->setEnabled(false);
+  m_AttakList[GetIndexSelectedRow()].type.m_AllEffects = ui->effect_widget->GetTable();
 }
 
 void EditAttakView::Save() {
@@ -84,13 +92,13 @@ void EditAttakView::Save() {
       index > m_AttakList.size()) {
     return;
   }
-  const auto& effectList = ui->effect_widget->GetTable();
-  const bool effectUpdate = std::any_of(effectList.begin(), effectList.end(), [](effectParam effect){return effect.updated;});
-
   for (const auto &atk : m_AttakList) {
-      // init json doc
-      QJsonObject obj;
+    // init json doc
+    QJsonObject obj;
 
+    const bool effectUpdate =
+        std::any_of(atk.type.m_AllEffects.begin(), atk.type.m_AllEffects.end(),
+                    [](effectParam effect) { return effect.updated; });
     if (!atk.updated && !effectUpdate) {
       continue;
     }
@@ -112,14 +120,18 @@ void EditAttakView::Save() {
     obj.insert(ATK_REGEN_VIGOR, static_cast<int>(atk.type.regenVigor));
 
     QJsonArray jsonArray;
-    for(const auto& effect : ui->effect_widget->GetTable()){
-        QJsonObject item1;
-        item1[EFFECT_TYPE] = effect.effect;
-        item1[EFFECT_VALUE] = effect.value;
-        jsonArray.append(item1);
+    for (const auto &effect : atk.type.m_AllEffects) {
+      QJsonObject item1;
+      item1[EFFECT_TYPE] = effect.effect;
+      item1[EFFECT_VALUE] = effect.value;
+      item1[EFFECT_ACTIVE_TURNS] = effect.nbTurns;
+      item1[EFFECT_REACH] = effect.reach;
+      item1[EFFECT_STAT] = effect.statsName;
+      item1[EFFECT_TARGET] = effect.target;
+      jsonArray.append(item1);
     }
-    if(!jsonArray.empty()){
-        obj[EFFECT_ARRAY] = jsonArray;
+    if (!jsonArray.empty()) {
+      obj[EFFECT_ARRAY] = jsonArray;
     }
     // output attak json
     QJsonDocument doc(obj);
@@ -223,6 +235,11 @@ void EditAttakView::EnableAllWidgets(const bool value) const {
     }
   }
 }
+
+void EditAttakView::UpdateEffectOn(){
+    ui->apply_button->setEnabled(true);
+}
+
 void EditAttakView::on_atk_list_view_clicked(const QModelIndex &index) {
   const int idx = index.row();
   if (idx >= m_AttakList.size()) {
@@ -259,6 +276,8 @@ void EditAttakView::on_new_atk_button_clicked() {
     InitComboBoxes();
     ui->effect_widget->InitComboBoxes();
   }
+  // send index of atk to update effect table
+  ui->effect_widget->SetIndex(itemIndex.row());
 }
 // form layout value changed
 
@@ -351,20 +370,17 @@ void EditAttakView::on_regen_vigor_spinBox_valueChanged(int arg1) {
 
 void EditAttakView::on_aggro_spinBox_valueChanged(int arg1) {
   OnValueChange(GetIndexSelectedRow());
-    m_AttakList[GetIndexSelectedRow()].type.aggro = arg1;
+  m_AttakList[GetIndexSelectedRow()].type.aggro = arg1;
 }
 
-void EditAttakView::on_aggro_rate_spinBox_valueChanged(int arg1)
-{
-    OnValueChange(GetIndexSelectedRow());
-    m_AttakList[GetIndexSelectedRow()].type.aggroRate = arg1;
+void EditAttakView::on_aggro_rate_spinBox_valueChanged(int arg1) {
+  OnValueChange(GetIndexSelectedRow());
+  m_AttakList[GetIndexSelectedRow()].type.aggroRate = arg1;
 }
 
-
-void EditAttakView::on_berseck_rate_spinBox_valueChanged(int arg1)
-{
-    OnValueChange(GetIndexSelectedRow());
-    m_AttakList[GetIndexSelectedRow()].type.berseckRate = arg1;
+void EditAttakView::on_berseck_rate_spinBox_valueChanged(int arg1) {
+  OnValueChange(GetIndexSelectedRow());
+  m_AttakList[GetIndexSelectedRow()].type.berseckRate = arg1;
 }
 
 // end form layout changed

@@ -194,6 +194,8 @@ void PlayersManager::UpdatePartnersOnAtk(const Character* curPlayer, const QStri
         if (atk.target == TARGET_ALLY && atk.reach == REACH_ZONE) {
             // Regen
             other->m_Stats.m_Mana.m_CurrentValue +=  static_cast<int>(std::round(other->m_Stats.m_RegenMana.m_CurrentValue));
+            // apply effect
+            other->ApplyAtkEffect(atk.m_AllEffects);
         }
     }
 }
