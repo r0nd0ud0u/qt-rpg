@@ -75,6 +75,8 @@ private:
     int m_Index = 0;
 
 
+    void DisconnectComboSig();
+    void ReconnectComboSig();
 };
 
 #endif // EFFECTVIEW_H

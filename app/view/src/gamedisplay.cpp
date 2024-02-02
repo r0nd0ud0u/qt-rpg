@@ -126,7 +126,7 @@ void GameDisplay::StartNewTurn() {
   // game is just starting at turn 1
   // some first init to do for the viewa
   if (gm->m_GameState->m_CurrentTurnNb == 1) {
-      ui->attak_page->InitTargetsWidget();
+    ui->attak_page->InitTargetsWidget();
   }
   // Apply effects
   gm->m_PlayersManager->ApplyEffects();
@@ -135,14 +135,14 @@ void GameDisplay::StartNewTurn() {
 }
 
 void GameDisplay::EndOfTurn() {
-    const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
-    // update gamestate
-    // update effect
-    const QStringList terminatedEffects = pm->UpdateEffects();
-    for(const auto& te : terminatedEffects){
-        emit SigUpdateChannelView(te);
-    }
-    emit SigUpdateChannelView("Fin du tour !!");
+  const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+  // update gamestate
+  // update effect
+  const QStringList terminatedEffects = pm->UpdateEffects();
+  for (const auto &te : terminatedEffects) {
+    emit SigUpdateChannelView(te);
+  }
+  emit SigUpdateChannelView("Fin du tour !!");
 }
 
 void GameDisplay::EndOfGame() {
@@ -170,24 +170,25 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   auto *activatedPlayer = gm->m_PlayersManager->GetCharacterByName(nameChara);
   // launch atk
   for (const auto &target : targetList) {
-    if (!target.m_IsTargeted) {
-      continue;
-    }
+    QString channelLog;
     auto *targetChara = gm->m_PlayersManager->GetCharacterByName(target.m_Name);
 
     if (activatedPlayer != nullptr && targetChara != nullptr) {
-      const QString channelLog = activatedPlayer->Attaque(atkName, targetChara);
+      if (target.m_IsTargeted) {
+        channelLog = activatedPlayer->Attaque(atkName, targetChara);
+      }
+      activatedPlayer->ApplyAtkEffect(atkName, targetChara);
+
       // Update channel view
-      emit SigUpdateChannelView(channelLog);
+      if(!channelLog.isEmpty()){emit SigUpdateChannelView(channelLog);}
     }
   }
   // Stats change on hero
   if (activatedPlayer != nullptr) {
     activatedPlayer->UpdateStatsOnAtk(atkName);
   }
-  // Stats change on others players
-  gm->m_PlayersManager->UpdatePartnersOnAtk(activatedPlayer, atkName);
-
+    // Update game state
+  gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer, atkName);
   // update views of heroes and bosses
   emit SigUpdatePlayerPanel();
 

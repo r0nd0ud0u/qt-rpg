@@ -173,13 +173,13 @@ void Character::LoadAtkJson() {
           if(stat.isEmpty()){
               break;
           }
-          effectParam* param = new effectParam();
-          param->effect = effect[EFFECT_TYPE].toString();
-          param->value = effect[EFFECT_VALUE].toInt();
-          param->nbTurns = effect[EFFECT_ACTIVE_TURNS].toInt();
-          param->reach = effect[EFFECT_REACH].toString();
-          param->statsName = effect[EFFECT_STAT].toString();
-          param->target = effect[EFFECT_TARGET].toString();
+          effectParam param;
+          param.effect = effect[EFFECT_TYPE].toString();
+          param.value = effect[EFFECT_VALUE].toInt();
+          param.nbTurns = effect[EFFECT_ACTIVE_TURNS].toInt();
+          param.reach = effect[EFFECT_REACH].toString();
+          param.statsName = effect[EFFECT_STAT].toString();
+          param.target = effect[EFFECT_TARGET].toString();
           atk.m_AllEffects.push_back(param);
       }
 #else
@@ -298,13 +298,15 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
   return false;
 }
 
-void Character::ApplyAtkEffect(const std::vector<effectParam*>& allEffects){
+void Character::ApplyAtkEffect(const QString &atkName, Character *target){
+    const auto &allEffects = m_AttakList.at(atkName).m_AllEffects;
     for(const auto& effect : allEffects){
-        if(effect == nullptr){
-            continue;
+        if(effect.statsName == STATS_HP){
+            m_Stats.m_HP.m_CurrentValue = max(m_Stats.m_HP.m_MaxValue, m_Stats.m_HP.m_CurrentValue + effect.value);
         }
-        if(effect->statsName == STATS_HP){
-            m_Stats.m_HP.m_CurrentValue = max(m_Stats.m_HP.m_MaxValue, m_Stats.m_HP.m_CurrentValue + effect->value);
+        if (effect.statsName == STATS_MANA) {
+            // Regen
+            m_Stats.m_Mana.m_CurrentValue = max(m_Stats.m_Mana.m_MaxValue, m_Stats.m_Mana.m_CurrentValue + effect.value);
         }
     }
 }
