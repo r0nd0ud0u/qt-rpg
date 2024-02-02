@@ -138,7 +138,10 @@ void GameDisplay::EndOfTurn() {
     const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
     // update gamestate
     // update effect
-    pm->UpdateEffects();
+    const QStringList terminatedEffects = pm->UpdateEffects();
+    for(const auto& te : terminatedEffects){
+        emit SigUpdateChannelView(te);
+    }
     emit SigUpdateChannelView("Fin du tour !!");
 }
 
