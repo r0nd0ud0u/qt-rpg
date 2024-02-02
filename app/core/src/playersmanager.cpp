@@ -7,6 +7,8 @@
 #include <QFile>
 #include <QJsonDocument>
 
+#include <utility>
+
 void PlayersManager::InitHeroes() {
 
   Stats stats;
@@ -239,6 +241,21 @@ void PlayersManager::ApplyEffects() {
     }
   }
 }
+
+void PlayersManager::ApplyRegenStats(){
+    for(const auto& hero : m_HeroesList){
+        hero->m_Stats.m_HP.m_CurrentValue = std::min(hero->m_Stats.m_HP.m_CurrentValue, hero->m_Stats.m_HP.m_CurrentValue + hero->m_Stats.m_RegenHP.m_CurrentValue);
+        hero->m_Stats.m_Mana.m_CurrentValue = std::min(hero->m_Stats.m_Mana.m_CurrentValue, hero->m_Stats.m_Mana.m_CurrentValue + hero->m_Stats.m_RegenMana.m_CurrentValue);
+        hero->m_Stats.m_Berseck.m_CurrentValue = std::min(hero->m_Stats.m_Berseck.m_CurrentValue, hero->m_Stats.m_Berseck.m_CurrentValue + hero->m_Stats.m_BerseckRate.m_CurrentValue);
+        hero->m_Stats.m_Vigor.m_CurrentValue = std::min(hero->m_Stats.m_Vigor.m_CurrentValue, hero->m_Stats.m_Vigor.m_CurrentValue + hero->m_Stats.m_RegenVigor.m_CurrentValue);
+    }
+    for(const auto& boss : m_BossesList){
+        boss->m_Stats.m_HP.m_CurrentValue = std::min(boss->m_Stats.m_HP.m_CurrentValue, boss->m_Stats.m_HP.m_CurrentValue + boss->m_Stats.m_RegenHP.m_CurrentValue);
+        boss->m_Stats.m_Mana.m_CurrentValue = std::min(boss->m_Stats.m_Mana.m_CurrentValue, boss->m_Stats.m_Mana.m_CurrentValue + boss->m_Stats.m_RegenMana.m_CurrentValue);
+        boss->m_Stats.m_Berseck.m_CurrentValue = std::min(boss->m_Stats.m_Berseck.m_CurrentValue, boss->m_Stats.m_Berseck.m_CurrentValue + boss->m_Stats.m_BerseckRate.m_CurrentValue);
+        boss->m_Stats.m_Vigor.m_CurrentValue = std::min(boss->m_Stats.m_Vigor.m_CurrentValue, boss->m_Stats.m_Vigor.m_CurrentValue + boss->m_Stats.m_RegenVigor.m_CurrentValue);
+    }
+
 }
 
 QString PlayersManager::FormatAtkOnEnnemy(const QString player1,
