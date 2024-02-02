@@ -130,6 +130,8 @@ void GameDisplay::StartNewTurn() {
   }
   // Apply effects
   gm->m_PlayersManager->ApplyEffects();
+  // Apply regen stats
+  gm->m_PlayersManager->ApplyRegenStats();
 }
 
 void GameDisplay::EndOfTurn() {

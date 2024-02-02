@@ -18,6 +18,7 @@ public:
     void UpdatePartnersOnAtk(const Character* curPlayer, const QString &atkName);
     QStringList UpdateEffects();
     void ApplyEffects();
+    void ApplyRegenStats();
 
     static QString FormatAtkOnEnnemy(const QString player1, const QString player2,  const QString &atkName, const int damage);
     static QString FormatAtkOnAlly(const QString player1, const QString player2,  const QString &atkName, const int damage);
