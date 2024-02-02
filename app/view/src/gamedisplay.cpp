@@ -128,9 +128,17 @@ void GameDisplay::StartNewTurn() {
   if (gm->m_GameState->m_CurrentTurnNb == 1) {
       ui->attak_page->InitTargetsWidget();
   }
+  // Apply effects
+  gm->m_PlayersManager->ApplyEffects();
 }
 
-void GameDisplay::EndOfTurn() { emit SigUpdateChannelView("Fin du tour !!"); }
+void GameDisplay::EndOfTurn() {
+    const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+    // update gamestate
+    // update effect
+    pm->UpdateEffects();
+    emit SigUpdateChannelView("Fin du tour !!");
+}
 
 void GameDisplay::EndOfGame() {
   // Desactivate actions buttons

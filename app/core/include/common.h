@@ -43,20 +43,20 @@ struct Stats {
   StatsType<int> m_Mana = StatsType<int>(StatsEnum::mana);
   StatsType<int> m_Vigor = StatsType<int>(StatsEnum::vigor);
   StatsType<int> m_Berseck = StatsType<int>(StatsEnum::berseck);
-  StatsType<int> m_BerseckRate = StatsType<int>(StatsEnum::aggroRate);
+  StatsType<int> m_BerseckRate = StatsType<int>(StatsEnum::berseckRate);
   StatsType<int> m_ArmPhy = StatsType<int>(StatsEnum::armPhy);
   StatsType<int> m_ArmMag = StatsType<int>(StatsEnum::armMag);
   StatsType<int> m_PowPhy = StatsType<int>(StatsEnum::powPhy);
   StatsType<double> m_PowMag = StatsType<double>(StatsEnum::powMag);
   StatsType<int> m_Aggro = StatsType<int>(StatsEnum::aggro);
   StatsType<int> m_AggroRate = StatsType<int>(StatsEnum::aggroRate);
-  StatsType<int> m_Speed = StatsType<int>(StatsEnum::criticalStrike);
+  StatsType<int> m_Speed = StatsType<int>(StatsEnum::speed);
   // critical strike in %
-  StatsType<int> m_CriticalStrike = StatsType<int>(StatsEnum::speed);
+  StatsType<int> m_CriticalStrike = StatsType<int>(StatsEnum::criticalStrike);
   // dodge in %
   StatsType<double> m_Dogde = StatsType<double>(StatsEnum::dodge);
   StatsType<int> m_RegenHP = StatsType<int>(StatsEnum::regenHp);
-  StatsType<double> m_RegenMana = StatsType<double>(StatsEnum::regenMana);
+  StatsType<int> m_RegenMana = StatsType<int>(StatsEnum::regenMana);
   StatsType<int> m_RegenVigor = StatsType<int>(StatsEnum::regenVigor);
 };
 

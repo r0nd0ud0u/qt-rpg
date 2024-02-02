@@ -37,7 +37,7 @@ public:
     QString namePhoto = "default.png";
     static std::vector<QString> TARGET_TYPES;
     static std::vector<QString> REACH_TYPES;
-    std::vector<effectParam> m_AllEffects = {};
+    std::vector<effectParam*> m_AllEffects = {};
 };
 
 enum class InventoryType{
@@ -59,7 +59,7 @@ public:
     void LoadStuffJson();
     void ApplyAllEquipment(const std::unordered_map<QString, Stuff>& allEquipMap);
     bool CanBeLaunched(const AttaqueType &atk)const;
-    void ApplyAtkEffect(const std::vector<effectParam>& allEffects);
+    void ApplyAtkEffect(const std::vector<effectParam*>& allEffects);
 
     static QString GetInventoryString(const InventoryType& type);
 
@@ -69,7 +69,7 @@ public:
     std::unordered_map<QString, QString> m_WearingEquipment; // key: body, value: equipmentName
     std::unordered_map<QString, AttaqueType> m_AttakList; // key: attak name, value: AttakType struct
     std::vector<uint8_t> m_Inventory;
-    std::vector<Effect*> m_EffectsList;
+    std::vector<effectParam*> m_EffectsList;
     int m_Level = 1;
     int m_Exp = 0;
 
