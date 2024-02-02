@@ -58,13 +58,14 @@ void EditAttakView::InitView() {
 
   // Update view
   if (!m_AttakList.empty()) {
-    ui->atk_list_view->setCurrentIndex(model->index(0));
+      const int firstIdx = 0;
+    ui->atk_list_view->setCurrentIndex(model->index(firstIdx));
     // send index of atk to update effect table
     ui->effect_widget->SetVectorSize(m_AttakList.size());
-    ui->effect_widget->SetIndex(0);
+    ui->effect_widget->SetIndex(firstIdx);
     InitComboBoxes();
     ui->effect_widget->InitComboBoxes();
-    UpdateValues(m_AttakList.front());
+    UpdateValues(m_AttakList.front(), firstIdx);
   } else {
     EnableAllWidgets(false);
   }
@@ -76,6 +77,7 @@ void EditAttakView::on_apply_button_clicked() { Apply(); }
 void EditAttakView::Apply() {
   // disable button
   ui->apply_button->setEnabled(false);
+  const auto& a = ui->effect_widget->GetTable();
   m_AttakList[GetIndexSelectedRow()].type.m_AllEffects = ui->effect_widget->GetTable();
 }
 
@@ -207,7 +209,7 @@ void EditAttakView::InitComboBoxes() {
           &EditAttakView::on_photo_comboBox_currentTextChanged);
 }
 
-void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
+void EditAttakView::UpdateValues(const EditAttak &selectedAttak, const int index) {
   ui->target_comboBox->setCurrentText(selectedAttak.type.target);
   ui->reach_comboBox->setCurrentText(selectedAttak.type.reach);
   ui->name_lineEdit->setText(selectedAttak.type.name);
@@ -224,6 +226,9 @@ void EditAttakView::UpdateValues(const EditAttak &selectedAttak) {
   ui->level_spinBox->setValue(selectedAttak.type.level);
   ui->regen_rage_spinBox->setValue(selectedAttak.type.regenBerseck);
   ui->regen_vigor_spinBox->setValue(selectedAttak.type.regenVigor);
+
+  // update effect
+  ui->effect_widget->SetIndex(index);
   ui->effect_widget->SetValues(selectedAttak.type.m_AllEffects);
 }
 
@@ -251,10 +256,11 @@ void EditAttakView::on_atk_list_view_clicked(const QModelIndex &index) {
   EnableAllWidgets(true);
 
   // update values with the ones from the current selected character
-  UpdateValues(selectedAttak);
+  UpdateValues(selectedAttak, idx);
 
   // disable apply button
   ui->apply_button->setEnabled(false);
+
 }
 
 void EditAttakView::on_new_atk_button_clicked() {
@@ -269,7 +275,7 @@ void EditAttakView::on_new_atk_button_clicked() {
   // update m_AttakList
   m_AttakList.push_back(EditAttak());
   m_AttakList.back().updated = true;
-  UpdateValues(m_AttakList.back());
+  UpdateValues(m_AttakList.back(),ui->atk_list_view->model()->rowCount() - 1);
 
   EnableAllWidgets(true);
   if (ui->atk_list_view->model()->rowCount() == 1) {

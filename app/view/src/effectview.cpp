@@ -10,6 +10,67 @@ EffectView::EffectView(QWidget *parent)
 
 EffectView::~EffectView() { delete ui; }
 
+void EffectView::DisconnectComboSig()
+{
+    disconnect(ui->effect_comboBox, &QComboBox::currentTextChanged, nullptr,
+               nullptr);
+    disconnect(ui->effect_comboBox_2, &QComboBox::currentTextChanged, nullptr,
+               nullptr);
+    disconnect(ui->effect_comboBox_3, &QComboBox::currentTextChanged, nullptr,
+               nullptr);
+    disconnect(ui->stats_comboBox, &QComboBox::currentTextChanged, nullptr,
+               nullptr);
+    disconnect(ui->stats_comboBox_2, &QComboBox::currentTextChanged, nullptr,
+               nullptr);
+    disconnect(ui->stats_comboBox_3, &QComboBox::currentTextChanged, nullptr,
+               nullptr);
+    // target
+    disconnect(ui->target_comboBox, &QComboBox::currentTextChanged, nullptr,
+               nullptr);
+    disconnect(ui->target_comboBox_2, &QComboBox::currentTextChanged, nullptr,
+               nullptr);
+    disconnect(ui->target_comboBox_3, &QComboBox::currentTextChanged, nullptr,
+               nullptr);
+    // reach
+    disconnect(ui->reach_comboBox, &QComboBox::currentTextChanged, nullptr,
+               nullptr);
+    disconnect(ui->reach_comboBox_2, &QComboBox::currentTextChanged, nullptr,
+               nullptr);
+    disconnect(ui->reach_comboBox_3, &QComboBox::currentTextChanged, nullptr,
+               nullptr);
+}
+
+void EffectView::ReconnectComboSig()
+{
+    connect(ui->effect_comboBox, &QComboBox::currentTextChanged, this,
+            &EffectView::on_effect_comboBox_currentTextChanged);
+    connect(ui->effect_comboBox_2, &QComboBox::currentTextChanged, this,
+            &EffectView::on_effect_comboBox_2_currentTextChanged);
+    connect(ui->effect_comboBox_3, &QComboBox::currentTextChanged, this,
+            &EffectView::on_effect_comboBox_3_currentTextChanged);
+    // stats
+    connect(ui->stats_comboBox, &QComboBox::currentTextChanged, this,
+            &EffectView::on_stats_comboBox_currentTextChanged);
+    connect(ui->stats_comboBox_2, &QComboBox::currentTextChanged, this,
+            &EffectView::on_stats_comboBox_2_currentTextChanged);
+    connect(ui->stats_comboBox_3, &QComboBox::currentTextChanged, this,
+            &EffectView::on_stats_comboBox_3_currentTextChanged);
+    // target
+    connect(ui->target_comboBox, &QComboBox::currentTextChanged, this,
+            &EffectView::on_target_comboBox_currentTextChanged);
+    connect(ui->target_comboBox_2, &QComboBox::currentTextChanged, this,
+            &EffectView::on_target_comboBox_2_currentTextChanged);
+    connect(ui->target_comboBox_3, &QComboBox::currentTextChanged, this,
+            &EffectView::on_target_comboBox_3_currentTextChanged);
+    // reach
+    connect(ui->reach_comboBox, &QComboBox::currentTextChanged, this,
+            &EffectView::on_reach_comboBox_currentTextChanged);
+    connect(ui->reach_comboBox_2, &QComboBox::currentTextChanged, this,
+            &EffectView::on_reach_comboBox_2_currentTextChanged);
+    connect(ui->reach_comboBox_3, &QComboBox::currentTextChanged, this,
+            &EffectView::on_reach_comboBox_3_currentTextChanged);
+}
+
 void EffectView::InitComboBoxes() {
   // init only one the combo boxes
   if (m_FirstShow) {
@@ -18,32 +79,7 @@ void EffectView::InitComboBoxes() {
   m_FirstShow = true;
 
   // disconnect signals combo boxes
-  disconnect(ui->effect_comboBox, &QComboBox::currentTextChanged, nullptr,
-             nullptr);
-  disconnect(ui->effect_comboBox_2, &QComboBox::currentTextChanged, nullptr,
-             nullptr);
-  disconnect(ui->effect_comboBox_3, &QComboBox::currentTextChanged, nullptr,
-             nullptr);
-  disconnect(ui->stats_comboBox, &QComboBox::currentTextChanged, nullptr,
-             nullptr);
-  disconnect(ui->stats_comboBox_2, &QComboBox::currentTextChanged, nullptr,
-             nullptr);
-  disconnect(ui->stats_comboBox_3, &QComboBox::currentTextChanged, nullptr,
-             nullptr);
-  // target
-  disconnect(ui->target_comboBox, &QComboBox::currentTextChanged, nullptr,
-             nullptr);
-  disconnect(ui->target_comboBox_2, &QComboBox::currentTextChanged, nullptr,
-             nullptr);
-  disconnect(ui->target_comboBox_3, &QComboBox::currentTextChanged, nullptr,
-             nullptr);
-  // reach
-  disconnect(ui->reach_comboBox, &QComboBox::currentTextChanged, nullptr,
-             nullptr);
-  disconnect(ui->reach_comboBox_2, &QComboBox::currentTextChanged, nullptr,
-             nullptr);
-  disconnect(ui->reach_comboBox_3, &QComboBox::currentTextChanged, nullptr,
-             nullptr);
+  DisconnectComboSig();
 
   for (const auto &stat : ALL_STATS) {
       ui->stats_comboBox->addItem(stat);
@@ -68,33 +104,7 @@ void EffectView::InitComboBoxes() {
 
   // Re-activate them
   // effect
-  connect(ui->effect_comboBox, &QComboBox::currentTextChanged, this,
-          &EffectView::on_effect_comboBox_currentTextChanged);
-  connect(ui->effect_comboBox_2, &QComboBox::currentTextChanged, this,
-          &EffectView::on_effect_comboBox_2_currentTextChanged);
-  connect(ui->effect_comboBox_3, &QComboBox::currentTextChanged, this,
-          &EffectView::on_effect_comboBox_3_currentTextChanged);
-  // stats
-  connect(ui->stats_comboBox, &QComboBox::currentTextChanged, this,
-          &EffectView::on_stats_comboBox_currentTextChanged);
-  connect(ui->stats_comboBox_2, &QComboBox::currentTextChanged, this,
-          &EffectView::on_stats_comboBox_2_currentTextChanged);
-  connect(ui->stats_comboBox_3, &QComboBox::currentTextChanged, this,
-          &EffectView::on_stats_comboBox_3_currentTextChanged);
-  // target
-  connect(ui->target_comboBox, &QComboBox::currentTextChanged, this,
-          &EffectView::on_target_comboBox_currentTextChanged);
-  connect(ui->target_comboBox_2, &QComboBox::currentTextChanged, this,
-          &EffectView::on_target_comboBox_2_currentTextChanged);
-  connect(ui->target_comboBox_3, &QComboBox::currentTextChanged, this,
-          &EffectView::on_target_comboBox_3_currentTextChanged);
-  // reach
-  connect(ui->reach_comboBox, &QComboBox::currentTextChanged, this,
-          &EffectView::on_reach_comboBox_currentTextChanged);
-  connect(ui->reach_comboBox_2, &QComboBox::currentTextChanged, this,
-          &EffectView::on_reach_comboBox_2_currentTextChanged);
-  connect(ui->reach_comboBox_3, &QComboBox::currentTextChanged, this,
-          &EffectView::on_reach_comboBox_3_currentTextChanged);
+  ReconnectComboSig();
 }
 
 void EffectView::SetIndex(const int index) {
@@ -102,6 +112,7 @@ void EffectView::SetIndex(const int index) {
 }
 
 void EffectView::SetVectorSize(const size_t size){
+    m_EffectTable.clear();
     m_EffectTable.resize(size);
     for(auto & effect : m_EffectTable){
         effect.resize(3);
@@ -275,6 +286,8 @@ void EffectView::on_checkBox_3_stateChanged(int arg1) {
 }
 
 void EffectView::SetValues(const std::vector<effectParam>& table){
+    DisconnectComboSig();
+
     if(!table.empty() && !table[0].statsName.isEmpty()){
         ui->effect_comboBox->setCurrentText(table[0].effect);
         ui->value_spinBox->setValue(table[0].value);
@@ -291,7 +304,6 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->nb_turns_spinBox->setValue(0);
         ui->value_spinBox->setValue(0);
         ui->checkBox->setCheckState(Qt::CheckState::Unchecked);
-        return;
     }
     if(table.size() > 1 && !table[1].statsName.isEmpty()){
         ui->effect_comboBox_2->setCurrentText(table[1].effect);
@@ -309,7 +321,6 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->stats_comboBox_2->setCurrentText("");
         ui->nb_turns_spinBox_2->setValue(0);
         ui->checkBox_2->setCheckState(Qt::CheckState::Unchecked);
-        return;
     }
     if(table.size() > 2 && !table[2].statsName.isEmpty()){
         ui->effect_comboBox_3->setCurrentText(table[2].effect);
@@ -327,8 +338,8 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->stats_comboBox_3->setCurrentText("");
         ui->nb_turns_spinBox_3->setValue(0);
         ui->checkBox_3->setCheckState(Qt::CheckState::Unchecked);
-        return;
     }
+    ReconnectComboSig();
 
     //update effect list,
     m_EffectTable[m_Index] = table;

@@ -37,7 +37,7 @@ public:
     QString namePhoto = "default.png";
     static std::vector<QString> TARGET_TYPES;
     static std::vector<QString> REACH_TYPES;
-    std::vector<effectParam*> m_AllEffects = {};
+    std::vector<effectParam> m_AllEffects = {};
 };
 
 enum class InventoryType{
@@ -59,7 +59,7 @@ public:
     void LoadStuffJson();
     void ApplyAllEquipment(const std::unordered_map<QString, Stuff>& allEquipMap);
     bool CanBeLaunched(const AttaqueType &atk)const;
-    void ApplyAtkEffect(const std::vector<effectParam*>& allEffects);
+    void ApplyAtkEffect(const QString &atkName, Character *target);
 
     static QString GetInventoryString(const InventoryType& type);
 

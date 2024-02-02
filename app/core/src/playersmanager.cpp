@@ -7,8 +7,6 @@
 #include <QFile>
 #include <QJsonDocument>
 
-#include <utility>
-
 void PlayersManager::InitHeroes() {
 
   Stats stats;
@@ -180,8 +178,8 @@ Character *PlayersManager::GetCharacterByName(const QString &name) {
   return nullptr;
 }
 
-void PlayersManager::UpdatePartnersOnAtk(const Character *curPlayer,
-                                         const QString &atkName) {
+void PlayersManager::AddGameEffectOnAtk(const Character *curPlayer,
+                                        const QString &atkName) {
   std::vector<Character *> playerList;
 
   if (curPlayer->m_type == characType::Hero) {
@@ -189,73 +187,97 @@ void PlayersManager::UpdatePartnersOnAtk(const Character *curPlayer,
   } else if (curPlayer->m_type == characType::Boss) {
     playerList = m_BossesList;
   }
-  const auto &atk = curPlayer->m_AttakList.at(atkName);
-  for (const auto &other : playerList) {
-    if (other->m_Name == curPlayer->m_Name) {
-      continue;
-    }
-    if (atk.target == TARGET_ALLY && atk.reach == REACH_ZONE) {
-      // Regen
-      other->m_Stats.m_Mana.m_CurrentValue += static_cast<int>(
-          std::round(other->m_Stats.m_RegenMana.m_CurrentValue));
-      // apply effect
-
-      for (const auto &e : atk.m_AllEffects) {
-        // check if effect already active ?
-          if(e == nullptr){
-            continue;
-        }
-        effectParam *p = new effectParam();
-        *p = *e;
-        m_AllEffectsOnGame[other->m_Name].push_back(p);
+  auto &atk = curPlayer->m_AttakList.at(atkName);
+  for (const auto &target : playerList) {
+    // update game effect table
+    for (effectParam e : atk.m_AllEffects) {
+      // check if effect already active ?
+        if(e.target != TARGET_HIMSELF && target->m_Name == curPlayer->m_Name){
+          continue;
       }
-
-      other->ApplyAtkEffect(atk.m_AllEffects);
+        //if(e.reach == REACH_INDIVIDUAL &&)
+      GameAtkEffects gae;
+      gae.launcher = curPlayer->m_Name;
+      gae.atkName = atkName;
+      gae.allAtkEffects = e;
+      m_AllEffectsOnGame[target->m_Name].push_back(gae);
     }
   }
 }
 
 QStringList PlayersManager::UpdateEffects() {
   QStringList sl;
-  for (auto &[playerName, effectsTable] : m_AllEffectsOnGame) {
-    for (auto it = effectsTable.begin(); it != effectsTable.end(); it++) {
-      (*it)->nbTurns--;
-      if ((*it)->nbTurns == 0) {
+  for (auto &[playerName, gaeTable] : m_AllEffectsOnGame) {
+    for (auto it = gaeTable.begin(); it != gaeTable.end(); it++) {
+      it->allAtkEffects.nbTurns--;
+
+
+      if (it->allAtkEffects.nbTurns == 0) {
         QString terminated("L'effet %1 sur %2 est terminé.");
-        terminated = terminated.arg((*it)->statsName).arg(playerName);
+        terminated =
+            terminated.arg(it->allAtkEffects.statsName).arg(playerName);
         sl.push_back(terminated);
-        delete *it;
-        *it = nullptr;
-        effectsTable.erase(it--);
       }
     }
+    auto newEnd = std::remove_if(gaeTable.begin(), gaeTable.end(), [](const GameAtkEffects& element) {
+        return element.allAtkEffects.nbTurns == 0; // remove elements where this is true
+    });
+    gaeTable.erase(newEnd, gaeTable.end());
   }
   return sl;
 }
 
 void PlayersManager::ApplyEffects() {
-  for (auto &[playerName, effectsTable] : m_AllEffectsOnGame) {
-    auto *player = GetCharacterByName(playerName);
-    if (player != nullptr) {
-        player->ApplyAtkEffect(effectsTable);
+  for (auto &[targetName, effectsTable] : m_AllEffectsOnGame) {
+    auto *targetPl = GetCharacterByName(targetName);
+    if (targetPl != nullptr) {
+      for (auto &gae : effectsTable) {
+        auto *launcherPl = GetCharacterByName(gae.launcher);
+        if (launcherPl != nullptr) {
+          launcherPl->ApplyAtkEffect(gae.atkName, targetPl);
+        }
+      }
     }
   }
 }
 
-void PlayersManager::ApplyRegenStats(){
-    for(const auto& hero : m_HeroesList){
-        hero->m_Stats.m_HP.m_CurrentValue = std::min(hero->m_Stats.m_HP.m_CurrentValue, hero->m_Stats.m_HP.m_CurrentValue + hero->m_Stats.m_RegenHP.m_CurrentValue);
-        hero->m_Stats.m_Mana.m_CurrentValue = std::min(hero->m_Stats.m_Mana.m_CurrentValue, hero->m_Stats.m_Mana.m_CurrentValue + hero->m_Stats.m_RegenMana.m_CurrentValue);
-        hero->m_Stats.m_Berseck.m_CurrentValue = std::min(hero->m_Stats.m_Berseck.m_CurrentValue, hero->m_Stats.m_Berseck.m_CurrentValue + hero->m_Stats.m_BerseckRate.m_CurrentValue);
-        hero->m_Stats.m_Vigor.m_CurrentValue = std::min(hero->m_Stats.m_Vigor.m_CurrentValue, hero->m_Stats.m_Vigor.m_CurrentValue + hero->m_Stats.m_RegenVigor.m_CurrentValue);
-    }
-    for(const auto& boss : m_BossesList){
-        boss->m_Stats.m_HP.m_CurrentValue = std::min(boss->m_Stats.m_HP.m_CurrentValue, boss->m_Stats.m_HP.m_CurrentValue + boss->m_Stats.m_RegenHP.m_CurrentValue);
-        boss->m_Stats.m_Mana.m_CurrentValue = std::min(boss->m_Stats.m_Mana.m_CurrentValue, boss->m_Stats.m_Mana.m_CurrentValue + boss->m_Stats.m_RegenMana.m_CurrentValue);
-        boss->m_Stats.m_Berseck.m_CurrentValue = std::min(boss->m_Stats.m_Berseck.m_CurrentValue, boss->m_Stats.m_Berseck.m_CurrentValue + boss->m_Stats.m_BerseckRate.m_CurrentValue);
-        boss->m_Stats.m_Vigor.m_CurrentValue = std::min(boss->m_Stats.m_Vigor.m_CurrentValue, boss->m_Stats.m_Vigor.m_CurrentValue + boss->m_Stats.m_RegenVigor.m_CurrentValue);
-    }
-
+void PlayersManager::ApplyRegenStats() {
+  for (const auto &hero : m_HeroesList) {
+    hero->m_Stats.m_HP.m_CurrentValue =
+        std::min(hero->m_Stats.m_HP.m_CurrentValue,
+                 hero->m_Stats.m_HP.m_CurrentValue +
+                     hero->m_Stats.m_RegenHP.m_CurrentValue);
+    hero->m_Stats.m_Mana.m_CurrentValue =
+        std::min(hero->m_Stats.m_Mana.m_CurrentValue,
+                 hero->m_Stats.m_Mana.m_CurrentValue +
+                     hero->m_Stats.m_RegenMana.m_CurrentValue);
+    hero->m_Stats.m_Berseck.m_CurrentValue =
+        std::min(hero->m_Stats.m_Berseck.m_CurrentValue,
+                 hero->m_Stats.m_Berseck.m_CurrentValue +
+                     hero->m_Stats.m_BerseckRate.m_CurrentValue);
+    hero->m_Stats.m_Vigor.m_CurrentValue =
+        std::min(hero->m_Stats.m_Vigor.m_CurrentValue,
+                 hero->m_Stats.m_Vigor.m_CurrentValue +
+                     hero->m_Stats.m_RegenVigor.m_CurrentValue);
+  }
+  for (const auto &boss : m_BossesList) {
+    boss->m_Stats.m_HP.m_CurrentValue =
+        std::min(boss->m_Stats.m_HP.m_CurrentValue,
+                 boss->m_Stats.m_HP.m_CurrentValue +
+                     boss->m_Stats.m_RegenHP.m_CurrentValue);
+    boss->m_Stats.m_Mana.m_CurrentValue =
+        std::min(boss->m_Stats.m_Mana.m_CurrentValue,
+                 boss->m_Stats.m_Mana.m_CurrentValue +
+                     boss->m_Stats.m_RegenMana.m_CurrentValue);
+    boss->m_Stats.m_Berseck.m_CurrentValue =
+        std::min(boss->m_Stats.m_Berseck.m_CurrentValue,
+                 boss->m_Stats.m_Berseck.m_CurrentValue +
+                     boss->m_Stats.m_BerseckRate.m_CurrentValue);
+    boss->m_Stats.m_Vigor.m_CurrentValue =
+        std::min(boss->m_Stats.m_Vigor.m_CurrentValue,
+                 boss->m_Stats.m_Vigor.m_CurrentValue +
+                     boss->m_Stats.m_RegenVigor.m_CurrentValue);
+  }
 }
 
 QString PlayersManager::FormatAtkOnEnnemy(const QString player1,
