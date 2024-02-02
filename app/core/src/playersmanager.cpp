@@ -178,32 +178,87 @@ Character *PlayersManager::GetCharacterByName(const QString &name) {
   return nullptr;
 }
 
-void PlayersManager::UpdatePartnersOnAtk(const Character* curPlayer, const QString &atkName) const{
-    std::vector<Character*> playerList;
+void PlayersManager::UpdatePartnersOnAtk(const Character *curPlayer,
+                                         const QString &atkName) {
+  std::vector<Character *> playerList;
 
-    if (curPlayer->m_type == characType::Hero){
-        playerList = m_HeroesList;
-    } else     if (curPlayer->m_type == characType::Boss){
-        playerList = m_BossesList;
+  if (curPlayer->m_type == characType::Hero) {
+    playerList = m_HeroesList;
+  } else if (curPlayer->m_type == characType::Boss) {
+    playerList = m_BossesList;
+  }
+  const auto &atk = curPlayer->m_AttakList.at(atkName);
+  for (const auto &other : playerList) {
+    if (other->m_Name == curPlayer->m_Name) {
+      continue;
     }
-    const auto& atk = curPlayer->m_AttakList.at(atkName);
-    for (const auto &other : playerList) {
-        if (other->m_Name == curPlayer->m_Name) {
+    if (atk.target == TARGET_ALLY && atk.reach == REACH_ZONE) {
+      // Regen
+      other->m_Stats.m_Mana.m_CurrentValue += static_cast<int>(
+          std::round(other->m_Stats.m_RegenMana.m_CurrentValue));
+      // apply effect
+
+      for (const auto &e : atk.m_AllEffects) {
+        // check if effect already active ?
+          if(e == nullptr){
             continue;
         }
-        if (atk.target == TARGET_ALLY && atk.reach == REACH_ZONE) {
-            // Regen
-            other->m_Stats.m_Mana.m_CurrentValue +=  static_cast<int>(std::round(other->m_Stats.m_RegenMana.m_CurrentValue));
-            // apply effect
-            other->ApplyAtkEffect(atk.m_AllEffects);
-        }
+        effectParam *p = new effectParam();
+        *p = *e;
+        m_AllEffectsOnGame[other->m_Name].push_back(p);
+      }
+
+      other->ApplyAtkEffect(atk.m_AllEffects);
     }
+  }
 }
 
-QString PlayersManager::FormatAtkOnEnnemy(const QString player1, const QString player2,  const QString &atkName, const int damage){
-    return QString("%1 utilise %2 sur %3 et fait %4 de dégâts!").arg(player1).arg(atkName).arg(player2).arg(damage);
+QStringList PlayersManager::UpdateEffects() {
+  QStringList sl;
+  for (auto &[playerName, effectsTable] : m_AllEffectsOnGame) {
+    for (auto it = effectsTable.begin(); it != effectsTable.end(); it++) {
+      (*it)->nbTurns--;
+      if ((*it)->nbTurns == 0) {
+        QString terminated("L'effet %1 sur %2 est terminé.");
+        terminated = terminated.arg((*it)->statsName).arg(playerName);
+        sl.push_back(terminated);
+        delete *it;
+        *it = nullptr;
+        effectsTable.erase(it--);
+      }
+    }
+  }
+  return sl;
 }
 
-QString PlayersManager::FormatAtkOnAlly(const QString player1, const QString player2,  const QString &atkName, const int damage){
-    return QString("%1 utilise %2 sur %3 et soigne de %4 PV!").arg(player1).arg(atkName).arg(player2).arg(damage);
+void PlayersManager::ApplyEffects() {
+  for (auto &[playerName, effectsTable] : m_AllEffectsOnGame) {
+    auto *player = GetCharacterByName(playerName);
+    if (player != nullptr) {
+        player->ApplyAtkEffect(effectsTable);
+    }
+  }
+}
+}
+
+QString PlayersManager::FormatAtkOnEnnemy(const QString player1,
+                                          const QString player2,
+                                          const QString &atkName,
+                                          const int damage) {
+  return QString("%1 utilise %2 sur %3 et fait %4 de dégâts!")
+      .arg(player1)
+      .arg(atkName)
+      .arg(player2)
+      .arg(damage);
+}
+
+QString PlayersManager::FormatAtkOnAlly(const QString player1,
+                                        const QString player2,
+                                        const QString &atkName,
+                                        const int damage) {
+  return QString("%1 utilise %2 sur %3 et soigne de %4 PV!")
+      .arg(player1)
+      .arg(atkName)
+      .arg(player2)
+      .arg(damage);
 }
