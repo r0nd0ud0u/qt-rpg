@@ -290,7 +290,11 @@ void EditAttakView::on_new_atk_button_clicked() {
 void EditAttakView::on_photo_comboBox_currentTextChanged(const QString &arg1) {
   // Update image character
   auto qp = QPixmap(OFFLINE_IMG + arg1);
-  ui->img_char->setPixmap(qp);
+
+  // Resize the photo
+  QPixmap scaledPixmap = qp.scaledToHeight(300); // Set the desired width and height
+
+  ui->img_char->setPixmap(scaledPixmap);
   OnValueChange(GetIndexSelectedRow());
   m_AttakList[GetIndexSelectedRow()].type.namePhoto = arg1;
 }
