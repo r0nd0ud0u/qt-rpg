@@ -208,7 +208,9 @@ void EffectView::on_checkBox_stateChanged(int arg1) {
     ui->effect_comboBox_3->setCurrentIndex(0);
     ui->reach_comboBox_3->setCurrentIndex(0);
     for (auto& it : m_EffectTable) {
-        it[m_Index] = effectParam();
+        if(m_Index < it.size()){
+            it[m_Index] = effectParam();
+        }
     }
   }
   emit SigTableUpdated();
