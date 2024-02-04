@@ -74,7 +74,7 @@ void PlayersManager::InitHeroes() {
   for (const auto &hero : m_HeroesList) {
     hero->LoadAtkJson();
     hero->LoadStuffJson();
-    hero->ApplyAllEquipment(m_Equipments);
+    hero->ApplyEquipOnStats(m_Equipments);
   }
 }
 
@@ -179,7 +179,7 @@ Character *PlayersManager::GetCharacterByName(const QString &name) {
 }
 
 void PlayersManager::AddGameEffectOnAtk(const Character *curPlayer,
-                                        const QString &atkName) {
+                                        const QString &atkName, const std::vector<QString>& targetList) {
   std::vector<Character *> playerList;
 
   if (curPlayer->m_type == characType::Hero) {
@@ -195,7 +195,9 @@ void PlayersManager::AddGameEffectOnAtk(const Character *curPlayer,
         if(e.target != TARGET_HIMSELF && target->m_Name == curPlayer->m_Name){
           continue;
       }
-        //if(e.reach == REACH_INDIVIDUAL &&)
+        if(e.reach == REACH_INDIVIDUAL && targetList.size() == 1 && targetList.front() != target->m_Name){
+          continue;
+      }
       GameAtkEffects gae;
       gae.launcher = curPlayer->m_Name;
       gae.atkName = atkName;
@@ -234,7 +236,7 @@ void PlayersManager::ApplyEffects() {
       for (auto &gae : effectsTable) {
         auto *launcherPl = GetCharacterByName(gae.launcher);
         if (launcherPl != nullptr) {
-          launcherPl->ApplyAtkEffect(gae.atkName, targetPl);
+            launcherPl->ApplyOneEffect(targetPl,gae.allAtkEffects);
         }
       }
     }

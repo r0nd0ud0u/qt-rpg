@@ -21,7 +21,7 @@ public:
     void InitBosses();
     void LoadAllEquipmentsJson();
     Character* GetCharacterByName(const QString& name);
-    void AddGameEffectOnAtk(const Character* curPlayer, const QString &atkName);
+    void AddGameEffectOnAtk(const Character* curPlayer, const QString &atkName, const std::vector<QString>& targetList);
     QStringList UpdateEffects();
     void ApplyEffects();
     void ApplyRegenStats();
