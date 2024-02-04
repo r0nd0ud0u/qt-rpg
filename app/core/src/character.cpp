@@ -246,32 +246,52 @@ void Character::LoadStuffJson() {
   }
 }
 
-void Character::ApplyAllEquipment(
+void Character::ApplyEquipOnStats(
     const std::unordered_map<QString, Stuff> &allEquipMap) {
+
   for (const auto &[body, equipName] : m_WearingEquipment) {
     if (equipName.isEmpty()) {
       continue;
     }
     const auto &equip = allEquipMap.at(equipName);
-    m_Stats.m_HP.m_CurrentValue += equip.m_Stats.m_HP.m_CurrentValue;
-    m_Stats.m_Mana.m_CurrentValue += equip.m_Stats.m_Mana.m_CurrentValue;
-    m_Stats.m_Vigor.m_CurrentValue += equip.m_Stats.m_Vigor.m_CurrentValue;
-    m_Stats.m_Berseck.m_CurrentValue += equip.m_Stats.m_Berseck.m_CurrentValue;
-    m_Stats.m_ArmPhy.m_CurrentValue += equip.m_Stats.m_ArmPhy.m_CurrentValue;
-    m_Stats.m_ArmMag.m_CurrentValue += equip.m_Stats.m_ArmMag.m_CurrentValue;
-    m_Stats.m_PowPhy.m_CurrentValue += equip.m_Stats.m_PowPhy.m_CurrentValue;
-    m_Stats.m_PowMag.m_CurrentValue += equip.m_Stats.m_PowMag.m_CurrentValue;
-    m_Stats.m_Aggro.m_CurrentValue += equip.m_Stats.m_Aggro.m_CurrentValue;
-    m_Stats.m_Speed.m_CurrentValue += equip.m_Stats.m_Speed.m_CurrentValue;
-    m_Stats.m_CriticalStrike.m_CurrentValue +=
-        equip.m_Stats.m_CriticalStrike.m_CurrentValue;
-    m_Stats.m_Dogde.m_CurrentValue += equip.m_Stats.m_Dogde.m_CurrentValue;
-    m_Stats.m_RegenHP.m_CurrentValue += equip.m_Stats.m_RegenHP.m_CurrentValue;
-    m_Stats.m_RegenMana.m_CurrentValue +=
-        equip.m_Stats.m_RegenMana.m_CurrentValue;
-    m_Stats.m_RegenVigor.m_CurrentValue +=
-        equip.m_Stats.m_RegenVigor.m_CurrentValue;
+    ProcessAddEquip(m_Stats.m_HP, equip.m_Stats.m_HP);
+    ProcessAddEquip(m_Stats.m_Mana, equip.m_Stats.m_Mana);
+    ProcessAddEquip(m_Stats.m_Vigor, equip.m_Stats.m_Vigor);
+    ProcessAddEquip(m_Stats.m_Berseck, equip.m_Stats.m_Berseck);
+    ProcessAddEquip(m_Stats.m_ArmPhy, equip.m_Stats.m_ArmPhy);
+    ProcessAddEquip(m_Stats.m_ArmMag, equip.m_Stats.m_ArmMag);
+    ProcessAddEquip(m_Stats.m_PowPhy, equip.m_Stats.m_PowPhy);
+    ProcessAddEquip(m_Stats.m_PowMag, equip.m_Stats.m_PowMag);
+    ProcessAddEquip(m_Stats.m_Aggro, equip.m_Stats.m_Aggro);
+    ProcessAddEquip(m_Stats.m_Speed, equip.m_Stats.m_Speed);
+    ProcessAddEquip(m_Stats.m_CriticalStrike, equip.m_Stats.m_CriticalStrike);
+    ProcessAddEquip(m_Stats.m_Dogde, equip.m_Stats.m_Dogde);
+    ProcessAddEquip(m_Stats.m_RegenHP, equip.m_Stats.m_RegenHP);
+    ProcessAddEquip(m_Stats.m_RegenMana, equip.m_Stats.m_RegenMana);
+    ProcessAddEquip(m_Stats.m_RegenVigor, equip.m_Stats.m_RegenVigor);
   }
+}
+
+template<class T>
+void Character::ProcessAddEquip(StatsType<T>& charStat, const StatsType<T>& equipStat){
+    if(equipStat.m_CurrentValue == 0){
+        return;
+    }
+    double ratio = static_cast<double>(charStat.m_CurrentValue)/static_cast<double>(charStat.m_MaxValue);
+    charStat.m_MaxValue += equipStat.m_CurrentValue; // Currently only current value is filled on equip stat
+
+    charStat.m_CurrentValue = static_cast<T>(std::round(charStat.m_MaxValue*ratio));
+}
+
+template<class T>
+void Character::ProcessRemoveEquip(StatsType<T>& charStat, const StatsType<T>& equipStat){
+    if(equipStat.m_CurrentValue == 0){
+        return;
+    }
+    double ratio = static_cast<double>(charStat.m_CurrentValue)/static_cast<double>(charStat.m_MaxValue);
+    charStat.m_MaxValue -= equipStat.m_CurrentValue; // Currently only current value is filled on equip stat
+
+    charStat.m_CurrentValue = static_cast<T>(std::round(charStat.m_MaxValue*ratio));
 }
 
 /////////////////////////////////////////
@@ -298,15 +318,39 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
   return false;
 }
 
-void Character::ApplyAtkEffect(const QString &atkName, Character *target){
+void Character::ApplyOneEffect(Character *&target, const effectParam &effect) {
+    if (effect.statsName == STATS_HP) {
+        target->m_Stats.m_HP.m_CurrentValue =
+            min(target->m_Stats.m_HP.m_MaxValue,
+                target->m_Stats.m_HP.m_CurrentValue + effect.value);
+    }
+    if (effect.statsName == STATS_MANA) {
+        // Regen
+        target->m_Stats.m_Mana.m_CurrentValue =
+            min(target->m_Stats.m_Mana.m_MaxValue,
+                target->m_Stats.m_Mana.m_CurrentValue + effect.value);
+    }
+}
+void Character::ApplyAtkEffect(const bool targetedOnMainAtk,
+                               const QString &atkName, Character *target) {
+    if (target == nullptr) {
+        return;
+    }
+
     const auto &allEffects = m_AttakList.at(atkName).m_AllEffects;
-    for(const auto& effect : allEffects){
-        if(effect.statsName == STATS_HP){
-            m_Stats.m_HP.m_CurrentValue = max(m_Stats.m_HP.m_MaxValue, m_Stats.m_HP.m_CurrentValue + effect.value);
+
+    for (const auto &effect : allEffects) {
+
+        // is targeted ?
+        if (effect.target == TARGET_ALLY && effect.reach == REACH_INDIVIDUAL &&
+            !targetedOnMainAtk) {
+            continue;
         }
-        if (effect.statsName == STATS_MANA) {
-            // Regen
-            m_Stats.m_Mana.m_CurrentValue = max(m_Stats.m_Mana.m_MaxValue, m_Stats.m_Mana.m_CurrentValue + effect.value);
+        if (effect.target == TARGET_ENNEMY && effect.reach == REACH_INDIVIDUAL &&
+            !targetedOnMainAtk) {
+            continue;
         }
+
+        ApplyOneEffect(target, effect);
     }
 }

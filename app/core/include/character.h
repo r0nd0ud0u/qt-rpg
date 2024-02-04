@@ -57,9 +57,11 @@ public:
     void AddStuff(const Stuff& stuff);
     void LoadAtkJson();
     void LoadStuffJson();
-    void ApplyAllEquipment(const std::unordered_map<QString, Stuff>& allEquipMap);
+    void ApplyEquipOnStats(const std::unordered_map<QString, Stuff>& allEquipMap);
     bool CanBeLaunched(const AttaqueType &atk)const;
-    void ApplyAtkEffect(const QString &atkName, Character *target);
+    void ApplyOneEffect(Character *&target, const effectParam &effect);
+    void ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
+                        Character *target);
 
     static QString GetInventoryString(const InventoryType& type);
 
@@ -72,6 +74,12 @@ public:
     std::vector<effectParam*> m_EffectsList;
     int m_Level = 1;
     int m_Exp = 0;
+
+private:
+    template<class T>
+    void ProcessAddEquip(StatsType<T>& charStat, const StatsType<T>& equipStat);
+    template<class T>
+    void ProcessRemoveEquip(StatsType<T>& charStat, const StatsType<T>& equipStat);
 
 };
 

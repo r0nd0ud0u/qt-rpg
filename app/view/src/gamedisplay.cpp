@@ -132,6 +132,8 @@ void GameDisplay::StartNewTurn() {
   gm->m_PlayersManager->ApplyEffects();
   // Apply regen stats
   gm->m_PlayersManager->ApplyRegenStats();
+  // Updat views after stats changes
+  emit SigUpdatePlayerPanel();
 }
 
 void GameDisplay::EndOfTurn() {
@@ -169,6 +171,13 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   const auto &nameChara = gm->m_GameState->GetCurrentPlayerName();
   auto *activatedPlayer = gm->m_PlayersManager->GetCharacterByName(nameChara);
   // launch atk
+  std::vector<QString> realTargetedList;
+  for (const auto &target : targetList){
+      if(target.m_IsTargeted){
+          realTargetedList.push_back(target.m_Name);
+      }
+
+  }
   for (const auto &target : targetList) {
     QString channelLog;
     auto *targetChara = gm->m_PlayersManager->GetCharacterByName(target.m_Name);
@@ -177,7 +186,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       if (target.m_IsTargeted) {
         channelLog = activatedPlayer->Attaque(atkName, targetChara);
       }
-      activatedPlayer->ApplyAtkEffect(atkName, targetChara);
+      activatedPlayer->ApplyAtkEffect(target.m_IsTargeted, atkName, targetChara);
 
       // Update channel view
       if(!channelLog.isEmpty()){emit SigUpdateChannelView(channelLog);}
@@ -188,7 +197,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     activatedPlayer->UpdateStatsOnAtk(atkName);
   }
     // Update game state
-  gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer, atkName);
+  gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer, atkName,realTargetedList);
   // update views of heroes and bosses
   emit SigUpdatePlayerPanel();
 
