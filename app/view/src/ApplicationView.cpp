@@ -24,6 +24,7 @@ void ApplicationView::StartMainWindow() {
 void ApplicationView::StartCharacterWindow() {
     if (m_Character_Window == nullptr) {
         m_Character_Window = std::make_unique<CharacterWindow>();
+        m_Character_Window->setWindowState(Qt::WindowMaximized);
         m_Character_Window->setWindowModality(Qt::WindowModality::ApplicationModal);
         m_Character_Window->hide();
     }
