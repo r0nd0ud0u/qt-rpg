@@ -167,6 +167,7 @@ void EffectView::on_checkBox_stateChanged(int arg1) {
     ui->target_comboBox->setEnabled(true);
     ui->reach_comboBox->setEnabled(true);
     ui->stats_comboBox->setEnabled(true);
+    ui->effect_value_spinbox->setEnabled(true);
     // 2
     ui->checkBox_2->setEnabled(true);
   } else {
@@ -178,6 +179,7 @@ void EffectView::on_checkBox_stateChanged(int arg1) {
     ui->target_comboBox->setEnabled(false);
     ui->reach_comboBox->setEnabled(false);
     ui->stats_comboBox->setEnabled(false);
+    ui->effect_value_spinbox->setEnabled(false);
     ui->stats_comboBox->setCurrentIndex(0);
     ui->target_comboBox->setCurrentIndex(0);
     ui->reach_comboBox->setCurrentIndex(0);
@@ -190,6 +192,7 @@ void EffectView::on_checkBox_stateChanged(int arg1) {
     ui->target_comboBox_2->setEnabled(false);
     ui->reach_comboBox_2->setEnabled(false);
     ui->stats_comboBox_2->setEnabled(false);
+    ui->effect_value_spinbox_2->setEnabled(false);
     ui->stats_comboBox_2->setCurrentIndex(0);
     ui->target_comboBox_2->setCurrentIndex(0);
     ui->effect_comboBox_2->setCurrentIndex(0);
@@ -203,6 +206,7 @@ void EffectView::on_checkBox_stateChanged(int arg1) {
     ui->target_comboBox_3->setEnabled(false);
     ui->reach_comboBox_3->setEnabled(false);
     ui->stats_comboBox_3->setEnabled(false);
+    ui->effect_value_spinbox_3->setEnabled(false);
     ui->stats_comboBox_3->setCurrentIndex(0);
     ui->target_comboBox_3->setCurrentIndex(0);
     ui->effect_comboBox_3->setCurrentIndex(0);
@@ -225,6 +229,7 @@ void EffectView::on_checkBox_2_stateChanged(int arg1) {
     ui->target_comboBox_2->setEnabled(true);
     ui->reach_comboBox_2->setEnabled(true);
     ui->stats_comboBox_2->setEnabled(true);
+    ui->effect_value_spinbox_2->setEnabled(true);
     // 3
     ui->checkBox_3->setEnabled(true);
   } else {
@@ -237,6 +242,7 @@ void EffectView::on_checkBox_2_stateChanged(int arg1) {
     ui->target_comboBox_2->setEnabled(false);
     ui->reach_comboBox_2->setEnabled(false);
     ui->stats_comboBox_2->setEnabled(false);
+    ui->effect_value_spinbox_2->setEnabled(false);
     ui->stats_comboBox_2->setCurrentIndex(0);
     ui->target_comboBox_2->setCurrentIndex(0);
     ui->effect_comboBox_2->setCurrentIndex(0);
@@ -250,6 +256,7 @@ void EffectView::on_checkBox_2_stateChanged(int arg1) {
     ui->target_comboBox_3->setEnabled(false);
     ui->reach_comboBox_3->setEnabled(false);
     ui->stats_comboBox_3->setEnabled(false);
+    ui->effect_value_spinbox_3->setEnabled(false);
     ui->stats_comboBox_3->setCurrentIndex(0);
     ui->target_comboBox_3->setCurrentIndex(0);
     ui->effect_comboBox_3->setCurrentIndex(0);
@@ -269,6 +276,7 @@ void EffectView::on_checkBox_3_stateChanged(int arg1) {
     ui->target_comboBox_3->setEnabled(true);
     ui->reach_comboBox_3->setEnabled(true);
     ui->stats_comboBox_3->setEnabled(true);
+    ui->effect_value_spinbox_3->setEnabled(true);
   } else {
     ui->effect_comboBox_3->setEnabled(false);
     ui->value_spinBox_3->setEnabled(false);
@@ -278,6 +286,7 @@ void EffectView::on_checkBox_3_stateChanged(int arg1) {
     ui->target_comboBox_3->setEnabled(false);
     ui->reach_comboBox_3->setEnabled(false);
     ui->stats_comboBox_3->setEnabled(false);
+    ui->effect_value_spinbox_3->setEnabled(false);
     ui->stats_comboBox_3->setCurrentIndex(0);
     ui->target_comboBox_3->setCurrentIndex(0);
     ui->effect_comboBox_3->setCurrentIndex(0);
@@ -297,6 +306,7 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->target_comboBox->setCurrentText(table[0].target);
         ui->reach_comboBox->setCurrentText(table[0].reach);
         ui->stats_comboBox->setCurrentText(table[0].statsName);
+        ui->effect_value_spinbox->setValue(table[0].subValueEffect);
         ui->checkBox->setCheckState(Qt::CheckState::Checked);
     } else{
         ui->effect_comboBox->setCurrentText("");
@@ -305,6 +315,7 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->stats_comboBox->setCurrentText("");
         ui->nb_turns_spinBox->setValue(0);
         ui->value_spinBox->setValue(0);
+        ui->effect_value_spinbox->setEnabled(0);
         ui->checkBox->setCheckState(Qt::CheckState::Unchecked);
     }
     if(table.size() > 1 && (!table[1].statsName.isEmpty() || !table[1].effect.isEmpty())){
@@ -314,6 +325,7 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->target_comboBox_2->setCurrentText(table[1].target);
         ui->reach_comboBox_2->setCurrentText(table[1].reach);
         ui->stats_comboBox_2->setCurrentText(table[1].statsName);
+        ui->effect_value_spinbox_2->setValue(table[1].subValueEffect);
         ui->checkBox_2->setCheckState(Qt::CheckState::Checked);
     }else{
         ui->effect_comboBox_2->setCurrentText("");
@@ -322,6 +334,7 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->reach_comboBox_2->setCurrentText("");
         ui->stats_comboBox_2->setCurrentText("");
         ui->nb_turns_spinBox_2->setValue(0);
+        ui->value_spinBox_2->setValue(0);
         ui->checkBox_2->setCheckState(Qt::CheckState::Unchecked);
     }
     if(table.size() > 2 && (!table[2].statsName.isEmpty() || !table[2].effect.isEmpty())){
@@ -331,6 +344,7 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->target_comboBox_3->setCurrentText(table[2].target);
         ui->reach_comboBox_3->setCurrentText(table[2].reach);
         ui->stats_comboBox_3->setCurrentText(table[2].statsName);
+        ui->effect_value_spinbox_3->setValue(table[2].subValueEffect);
         ui->checkBox_3->setCheckState(Qt::CheckState::Checked);
     }else{
         ui->effect_comboBox_3->setCurrentText("");
@@ -339,6 +353,7 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->reach_comboBox_3->setCurrentText("");
         ui->stats_comboBox_3->setCurrentText("");
         ui->nb_turns_spinBox_3->setValue(0);
+        ui->value_spinBox_3->setValue(0);
         ui->checkBox_3->setCheckState(Qt::CheckState::Unchecked);
     }
     ReconnectComboSig();
@@ -441,6 +456,30 @@ void EffectView::on_nb_turns_spinBox_2_valueChanged(int arg1)
 void EffectView::on_nb_turns_spinBox_3_valueChanged(int arg1)
 {
     m_EffectTable[m_Index][2].nbTurns = arg1;
+    m_EffectTable[m_Index][2].updated = true;
+    emit SigTableUpdated();
+}
+
+
+void EffectView::on_effect_value_spinbox_valueChanged(int arg1)
+{
+    m_EffectTable[m_Index][0].subValueEffect = arg1;
+    m_EffectTable[m_Index][0].updated = true;
+    emit SigTableUpdated();
+}
+
+
+void EffectView::on_effect_value_spinbox_2_valueChanged(int arg1)
+{
+    m_EffectTable[m_Index][1].subValueEffect = arg1;
+    m_EffectTable[m_Index][1].updated = true;
+    emit SigTableUpdated();
+}
+
+
+void EffectView::on_effect_value_spinbox_3_valueChanged(int arg1)
+{
+    m_EffectTable[m_Index][2].subValueEffect = arg1;
     m_EffectTable[m_Index][2].updated = true;
     emit SigTableUpdated();
 }

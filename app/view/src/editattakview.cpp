@@ -130,6 +130,7 @@ void EditAttakView::Save() {
       item1[EFFECT_REACH] = effect.reach;
       item1[EFFECT_STAT] = effect.statsName;
       item1[EFFECT_TARGET] = effect.target;
+      item1[EFFECT_SUB_VALUE] = effect.subValueEffect;
       jsonArray.append(item1);
     }
     if (!jsonArray.empty()) {

@@ -10,6 +10,7 @@
 #include <QtDebug>
 
 #include "Application.h"
+#include "utils.h"
 
 using namespace std;
 
@@ -63,6 +64,9 @@ QString Character::Attaque(const QString &atkName, Character *target) {
                    static_cast<int>(tarCurHp + atk.heal));
     channelLog = PlayersManager::FormatAtkOnAlly(m_Name, target->m_Name,
                                                  atkName, atk.heal);
+  }
+  if (channelLog.isEmpty()) {
+    channelLog = PlayersManager::FormatAtk(m_Name, target->m_Name, atkName);
   }
   return channelLog;
 }
@@ -183,6 +187,7 @@ void Character::LoadAtkJson() {
         param.reach = effect[EFFECT_REACH].toString();
         param.statsName = effect[EFFECT_STAT].toString();
         param.target = effect[EFFECT_TARGET].toString();
+        param.subValueEffect = effect[EFFECT_SUB_VALUE].toInt();
         atk.m_AllEffects.push_back(param);
       }
 #else
@@ -211,6 +216,9 @@ void Character::LoadAtkJson() {
               }
               if (key == EFFECT_ACTIVE_TURNS) {
                 param.nbTurns = static_cast<int>(val.toDouble());
+              }
+              if (key == EFFECT_SUB_VALUE) {
+                param.subValueEffect = static_cast<int>(val.toDouble());
               }
             }
           }
@@ -347,27 +355,75 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
   return false;
 }
 
-void Character::ApplyOneEffect(Character *&target, const effectParam &effect) {
-  if (effect.statsName == STATS_HP) {
-    target->m_Stats.m_HP.m_CurrentValue =
-        min(target->m_Stats.m_HP.m_MaxValue,
-            target->m_Stats.m_HP.m_CurrentValue + effect.value);
+QString Character::ApplyOneEffect(Character *&target, const effectParam &effect,
+                                  const bool fromLaunch) {
+  if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
+    const int intMin = 0;
+    const int intMax = 100;
+    const int stepLimit = (intMax / effect.nbTurns); // get percentual
+    const auto maxLimit = stepLimit * (effect.nbTurns - effect.counterTurn);
+    const auto randNb = Utils::GetRandomNb(intMin, intMax);
+    if (!(randNb >= 0 && randNb < maxLimit)) {
+      return QString("%1 n'a pas d'effet").arg(EFFECT_NB_DECREASE_BY_TURN);
+    }
   }
-  if (effect.statsName == STATS_MANA) {
-    // Regen
-    target->m_Stats.m_Mana.m_CurrentValue =
-        min(target->m_Stats.m_Mana.m_MaxValue,
-            target->m_Stats.m_Mana.m_CurrentValue + effect.value);
+  int nbOfApplies = 1; // default value 1 for the nominal case
+
+  if (fromLaunch) {
+    if (effect.effect == EFFECT_NB_DECREASE_ON_TURN) {
+      // Set nbOfApplies to 0 as it is considered as a counter here
+      nbOfApplies = 0;
+      int counter = effect.subValueEffect;
+      while (counter > 0) {
+        const int intMin = 0;
+        const int intMax = 100;
+        const int stepLimit =
+            (intMax / effect.subValueEffect); // get percentual
+        const auto maxLimit = stepLimit * counter;
+        const auto randNb = Utils::GetRandomNb(intMin, intMax);
+        if (randNb >= 0 && randNb < maxLimit) {
+          nbOfApplies++;
+        } else {
+          break;
+        }
+        counter--;
+      }
+    }
   }
+  for (int i = 0; i < nbOfApplies; i++) {
+    if (effect.statsName == STATS_HP) {
+      target->m_Stats.m_HP.m_CurrentValue =
+          min(target->m_Stats.m_HP.m_MaxValue,
+              target->m_Stats.m_HP.m_CurrentValue + effect.value);
+    }
+    if (effect.statsName == STATS_MANA) {
+      // Regen
+      target->m_Stats.m_Mana.m_CurrentValue =
+          min(target->m_Stats.m_Mana.m_MaxValue,
+              target->m_Stats.m_Mana.m_CurrentValue + effect.value);
+    }
+  }
+  const int potentialAttempts = max(1, effect.subValueEffect);
+  return QString("L'effet %1-%2 s'est appliqué %3 fois sur %4 potentielle(s) "
+                 "tentative(s) avec une valeur max de %5.")
+      .arg(effect.statsName)
+      .arg(effect.effect)
+      .arg(nbOfApplies)
+      .arg(QString::number(potentialAttempts))
+      .arg(QString::number(nbOfApplies * effect.value));
 }
-void Character::ApplyAtkEffect(const bool targetedOnMainAtk,
-                               const QString &atkName, Character *target) {
+
+// Apply effect after launch of atk
+QStringList Character::ApplyAtkEffect(const bool targetedOnMainAtk,
+                                      const QString &atkName,
+                                      Character *target) {
   if (target == nullptr) {
-    return;
+    return QStringList("No target");
   }
 
   const auto &allEffects = m_AttakList.at(atkName).m_AllEffects;
 
+  QStringList resultEffects;
   for (const auto &effect : allEffects) {
 
     // is targeted ?
@@ -380,6 +436,8 @@ void Character::ApplyAtkEffect(const bool targetedOnMainAtk,
       continue;
     }
 
-    ApplyOneEffect(target, effect);
+    resultEffects.append(ApplyOneEffect(target, effect, true));
   }
+
+  return resultEffects;
 }
