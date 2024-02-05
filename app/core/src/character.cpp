@@ -190,14 +190,31 @@ void Character::LoadAtkJson() {
               for(const auto& key : item.keys()){
                   const auto& val = item[key];
                   if (val.isString()){
-                      param.effect = val.toString();
+                      if(key == EFFECT_TYPE) {
+                          param.effect = val.toString();
+                      }
+                      if(key == EFFECT_REACH) {
+                          param.reach = val.toString();
+                      }
+                      if(key == EFFECT_STAT) {
+                          param.statsName = val.toString();
+                      }
+                      if(key == EFFECT_TARGET) {
+                          param.target = val.toString();
+                      }
                   }
-                  else if (val.isDouble())
-                      param.value = static_cast<int>(val.toDouble());
+                  else if (val.isDouble()){
+                      if(key == EFFECT_VALUE){
+                          param.value = static_cast<int>(val.toDouble());
+                      }
+                      if(key == EFFECT_ACTIVE_TURNS){
+                          param.nbTurns = static_cast<int>(val.toDouble());
+                      }
+                  }
               }
           }
 
-          if(param.effect.isEmpty()){
+          if(param.statsName.isEmpty()){
               break;
           }
           atk.m_AllEffects.push_back(param);
