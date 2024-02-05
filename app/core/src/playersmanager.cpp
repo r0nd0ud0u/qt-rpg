@@ -29,7 +29,7 @@ void PlayersManager::InitHeroes() {
   stats.m_AggroRate.SetValues(1, 1, 1);
   const auto hero1 = new Character("Thalia", characType::Hero, stats);
 
-  stats.m_HP.SetValues(600, 600, 600);
+  stats.m_HP.SetValues(200, 200, 600);
   stats.m_Mana.SetValues(141, 141, 141);
   stats.m_Vigor.SetValues(445, 445, 445);
   stats.m_Berseck.SetValues(0, 0, 0);
@@ -178,8 +178,9 @@ Character *PlayersManager::GetCharacterByName(const QString &name) {
   return nullptr;
 }
 
-void PlayersManager::AddGameEffectOnAtk(const Character *curPlayer,
-                                        const QString &atkName, const std::vector<QString>& targetList) {
+void PlayersManager::AddGameEffectOnAtk(
+    const Character *curPlayer, const QString &atkName,
+    const std::vector<QString> &targetList) {
   std::vector<Character *> playerList;
 
   if (curPlayer->m_type == characType::Hero) {
@@ -192,11 +193,12 @@ void PlayersManager::AddGameEffectOnAtk(const Character *curPlayer,
     // update game effect table
     for (effectParam e : atk.m_AllEffects) {
       // check if effect already active ?
-        if(e.target != TARGET_HIMSELF && target->m_Name == curPlayer->m_Name){
-          continue;
+      if (e.target != TARGET_HIMSELF && target->m_Name == curPlayer->m_Name) {
+        continue;
       }
-        if(e.reach == REACH_INDIVIDUAL && targetList.size() == 1 && targetList.front() != target->m_Name){
-          continue;
+      if (e.reach == REACH_INDIVIDUAL && targetList.size() == 1 &&
+          targetList.front() != target->m_Name) {
+        continue;
       }
       GameAtkEffects gae;
       gae.launcher = curPlayer->m_Name;
@@ -211,19 +213,21 @@ QStringList PlayersManager::UpdateEffects() {
   QStringList sl;
   for (auto &[playerName, gaeTable] : m_AllEffectsOnGame) {
     for (auto it = gaeTable.begin(); it != gaeTable.end(); it++) {
-      it->allAtkEffects.nbTurns--;
+      it->allAtkEffects.counterTurn++;
 
-
-      if (it->allAtkEffects.nbTurns == 0) {
+      if (it->allAtkEffects.counterTurn == it->allAtkEffects.nbTurns) {
         QString terminated("L'effet %1 sur %2 est terminé.");
         terminated =
             terminated.arg(it->allAtkEffects.statsName).arg(playerName);
         sl.push_back(terminated);
       }
     }
-    auto newEnd = std::remove_if(gaeTable.begin(), gaeTable.end(), [](const GameAtkEffects& element) {
-        return element.allAtkEffects.nbTurns == 0; // remove elements where this is true
-    });
+    auto newEnd = std::remove_if(
+        gaeTable.begin(), gaeTable.end(), [](const GameAtkEffects &element) {
+          return element.allAtkEffects.nbTurns ==
+                 element.allAtkEffects
+                     .counterTurn; // remove elements where this is true
+        });
     gaeTable.erase(newEnd, gaeTable.end());
   }
   return sl;
@@ -236,7 +240,7 @@ void PlayersManager::ApplyEffects() {
       for (auto &gae : effectsTable) {
         auto *launcherPl = GetCharacterByName(gae.launcher);
         if (launcherPl != nullptr) {
-            launcherPl->ApplyOneEffect(targetPl,gae.allAtkEffects);
+          launcherPl->ApplyOneEffect(targetPl, gae.allAtkEffects, false);
         }
       }
     }
@@ -302,4 +306,12 @@ QString PlayersManager::FormatAtkOnAlly(const QString player1,
       .arg(atkName)
       .arg(player2)
       .arg(damage);
+}
+
+QString PlayersManager::FormatAtk(const QString player1, const QString player2,
+                                  const QString &atkName) {
+  return QString("%1 utilise %2 sur %3!")
+      .arg(player1)
+      .arg(atkName)
+      .arg(player2);
 }

@@ -172,32 +172,40 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   auto *activatedPlayer = gm->m_PlayersManager->GetCharacterByName(nameChara);
   // launch atk
   std::vector<QString> realTargetedList;
-  for (const auto &target : targetList){
-      if(target.m_IsTargeted){
-          realTargetedList.push_back(target.m_Name);
-      }
-
+  for (const auto &target : targetList) {
+    if (target.m_IsTargeted) {
+      realTargetedList.push_back(target.m_Name);
+    }
   }
+  // Parse target list and appliy atk and effects
   for (const auto &target : targetList) {
     QString channelLog;
     auto *targetChara = gm->m_PlayersManager->GetCharacterByName(target.m_Name);
 
     if (activatedPlayer != nullptr && targetChara != nullptr) {
       if (target.m_IsTargeted) {
+        // ATK
         channelLog = activatedPlayer->Attaque(atkName, targetChara);
+        // Update channel view
+        if (!channelLog.isEmpty()) {
+          emit SigUpdateChannelView(channelLog);
+        }
       }
-      activatedPlayer->ApplyAtkEffect(target.m_IsTargeted, atkName, targetChara);
-
-      // Update channel view
-      if(!channelLog.isEmpty()){emit SigUpdateChannelView(channelLog);}
+      // EFFECT
+      QStringList resultEffects = activatedPlayer->ApplyAtkEffect(
+          target.m_IsTargeted, atkName, targetChara);
+      for (const auto &re : resultEffects) {
+        emit SigUpdateChannelView(re);
+      }
     }
   }
   // Stats change on hero
   if (activatedPlayer != nullptr) {
     activatedPlayer->UpdateStatsOnAtk(atkName);
   }
-    // Update game state
-  gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer, atkName,realTargetedList);
+  // Update game state
+  gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer, atkName,
+                                           realTargetedList);
   // update views of heroes and bosses
   emit SigUpdatePlayerPanel();
 

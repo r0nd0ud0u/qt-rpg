@@ -151,5 +151,6 @@ const QString EFFECT_TARGET = "Cible";
 const QString EFFECT_REACH = "Portée";
 const QString EFFECT_STAT = "Stat";
 const QString EFFECT_ACTIVE_TURNS = "Tours actifs";
+const QString EFFECT_SUB_VALUE = "Valeur de l'effet";
 
 #endif // COMMON_H
