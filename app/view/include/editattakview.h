@@ -73,11 +73,13 @@ private slots:
   std::vector<EditAttak> m_AttakList;
   QString m_SelectedCharaName;
 
-  void UpdateValues(const EditAttak &selectedAttak);
+  void UpdateValues(const EditAttak &selectedAttak, const int index);
   void Apply();
   void OnValueChange(const int index);
   int GetIndexSelectedRow() const;
   void EnableAllWidgets(const bool value) const;
+  void UpdateEffectOn();
+
   bool m_FirstShow = false;
 };
 

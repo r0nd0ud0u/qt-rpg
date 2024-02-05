@@ -74,7 +74,7 @@ void PlayersManager::InitHeroes() {
   for (const auto &hero : m_HeroesList) {
     hero->LoadAtkJson();
     hero->LoadStuffJson();
-    hero->ApplyAllEquipment(m_Equipments);
+    hero->ApplyEquipOnStats(m_Equipments);
   }
 }
 
@@ -178,30 +178,128 @@ Character *PlayersManager::GetCharacterByName(const QString &name) {
   return nullptr;
 }
 
-void PlayersManager::UpdatePartnersOnAtk(const Character* curPlayer, const QString &atkName) const{
-    std::vector<Character*> playerList;
+void PlayersManager::AddGameEffectOnAtk(const Character *curPlayer,
+                                        const QString &atkName, const std::vector<QString>& targetList) {
+  std::vector<Character *> playerList;
 
-    if (curPlayer->m_type == characType::Hero){
-        playerList = m_HeroesList;
-    } else     if (curPlayer->m_type == characType::Boss){
-        playerList = m_BossesList;
+  if (curPlayer->m_type == characType::Hero) {
+    playerList = m_HeroesList;
+  } else if (curPlayer->m_type == characType::Boss) {
+    playerList = m_BossesList;
+  }
+  auto &atk = curPlayer->m_AttakList.at(atkName);
+  for (const auto &target : playerList) {
+    // update game effect table
+    for (effectParam e : atk.m_AllEffects) {
+      // check if effect already active ?
+        if(e.target != TARGET_HIMSELF && target->m_Name == curPlayer->m_Name){
+          continue;
+      }
+        if(e.reach == REACH_INDIVIDUAL && targetList.size() == 1 && targetList.front() != target->m_Name){
+          continue;
+      }
+      GameAtkEffects gae;
+      gae.launcher = curPlayer->m_Name;
+      gae.atkName = atkName;
+      gae.allAtkEffects = e;
+      m_AllEffectsOnGame[target->m_Name].push_back(gae);
     }
-    const auto& atk = curPlayer->m_AttakList.at(atkName);
-    for (const auto &other : playerList) {
-        if (other->m_Name == curPlayer->m_Name) {
-            continue;
-        }
-        if (atk.target == TARGET_ALLY && atk.reach == REACH_ZONE) {
-            // Regen
-            other->m_Stats.m_Mana.m_CurrentValue +=  static_cast<int>(std::round(other->m_Stats.m_RegenMana.m_CurrentValue));
-        }
-    }
+  }
 }
 
-QString PlayersManager::FormatAtkOnEnnemy(const QString player1, const QString player2,  const QString &atkName, const int damage){
-    return QString("%1 utilise %2 sur %3 et fait %4 de dégâts!").arg(player1).arg(atkName).arg(player2).arg(damage);
+QStringList PlayersManager::UpdateEffects() {
+  QStringList sl;
+  for (auto &[playerName, gaeTable] : m_AllEffectsOnGame) {
+    for (auto it = gaeTable.begin(); it != gaeTable.end(); it++) {
+      it->allAtkEffects.nbTurns--;
+
+
+      if (it->allAtkEffects.nbTurns == 0) {
+        QString terminated("L'effet %1 sur %2 est terminé.");
+        terminated =
+            terminated.arg(it->allAtkEffects.statsName).arg(playerName);
+        sl.push_back(terminated);
+      }
+    }
+    auto newEnd = std::remove_if(gaeTable.begin(), gaeTable.end(), [](const GameAtkEffects& element) {
+        return element.allAtkEffects.nbTurns == 0; // remove elements where this is true
+    });
+    gaeTable.erase(newEnd, gaeTable.end());
+  }
+  return sl;
 }
 
-QString PlayersManager::FormatAtkOnAlly(const QString player1, const QString player2,  const QString &atkName, const int damage){
-    return QString("%1 utilise %2 sur %3 et soigne de %4 PV!").arg(player1).arg(atkName).arg(player2).arg(damage);
+void PlayersManager::ApplyEffects() {
+  for (auto &[targetName, effectsTable] : m_AllEffectsOnGame) {
+    auto *targetPl = GetCharacterByName(targetName);
+    if (targetPl != nullptr) {
+      for (auto &gae : effectsTable) {
+        auto *launcherPl = GetCharacterByName(gae.launcher);
+        if (launcherPl != nullptr) {
+            launcherPl->ApplyOneEffect(targetPl,gae.allAtkEffects);
+        }
+      }
+    }
+  }
+}
+
+void PlayersManager::ApplyRegenStats() {
+  for (const auto &hero : m_HeroesList) {
+    hero->m_Stats.m_HP.m_CurrentValue =
+        std::min(hero->m_Stats.m_HP.m_CurrentValue,
+                 hero->m_Stats.m_HP.m_CurrentValue +
+                     hero->m_Stats.m_RegenHP.m_CurrentValue);
+    hero->m_Stats.m_Mana.m_CurrentValue =
+        std::min(hero->m_Stats.m_Mana.m_CurrentValue,
+                 hero->m_Stats.m_Mana.m_CurrentValue +
+                     hero->m_Stats.m_RegenMana.m_CurrentValue);
+    hero->m_Stats.m_Berseck.m_CurrentValue =
+        std::min(hero->m_Stats.m_Berseck.m_CurrentValue,
+                 hero->m_Stats.m_Berseck.m_CurrentValue +
+                     hero->m_Stats.m_BerseckRate.m_CurrentValue);
+    hero->m_Stats.m_Vigor.m_CurrentValue =
+        std::min(hero->m_Stats.m_Vigor.m_CurrentValue,
+                 hero->m_Stats.m_Vigor.m_CurrentValue +
+                     hero->m_Stats.m_RegenVigor.m_CurrentValue);
+  }
+  for (const auto &boss : m_BossesList) {
+    boss->m_Stats.m_HP.m_CurrentValue =
+        std::min(boss->m_Stats.m_HP.m_CurrentValue,
+                 boss->m_Stats.m_HP.m_CurrentValue +
+                     boss->m_Stats.m_RegenHP.m_CurrentValue);
+    boss->m_Stats.m_Mana.m_CurrentValue =
+        std::min(boss->m_Stats.m_Mana.m_CurrentValue,
+                 boss->m_Stats.m_Mana.m_CurrentValue +
+                     boss->m_Stats.m_RegenMana.m_CurrentValue);
+    boss->m_Stats.m_Berseck.m_CurrentValue =
+        std::min(boss->m_Stats.m_Berseck.m_CurrentValue,
+                 boss->m_Stats.m_Berseck.m_CurrentValue +
+                     boss->m_Stats.m_BerseckRate.m_CurrentValue);
+    boss->m_Stats.m_Vigor.m_CurrentValue =
+        std::min(boss->m_Stats.m_Vigor.m_CurrentValue,
+                 boss->m_Stats.m_Vigor.m_CurrentValue +
+                     boss->m_Stats.m_RegenVigor.m_CurrentValue);
+  }
+}
+
+QString PlayersManager::FormatAtkOnEnnemy(const QString player1,
+                                          const QString player2,
+                                          const QString &atkName,
+                                          const int damage) {
+  return QString("%1 utilise %2 sur %3 et fait %4 de dégâts!")
+      .arg(player1)
+      .arg(atkName)
+      .arg(player2)
+      .arg(damage);
+}
+
+QString PlayersManager::FormatAtkOnAlly(const QString player1,
+                                        const QString player2,
+                                        const QString &atkName,
+                                        const int damage) {
+  return QString("%1 utilise %2 sur %3 et soigne de %4 PV!")
+      .arg(player1)
+      .arg(atkName)
+      .arg(player2)
+      .arg(damage);
 }

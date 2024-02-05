@@ -26,6 +26,17 @@ enum class EffectType{
     enumSize
 };
 
+struct effectParam{
+    QString effect;
+    int value = 0;
+    int nbTurns = 0;
+    QString target;
+    QString reach;
+    QString statsName;
+
+    bool updated = false;
+};
+
 template <class T> class EffectStat {
 public:
     explicit EffectStat(EffectType type, QString name, T value) : m_Type(type),m_Name(name), m_Value(value)  {}
@@ -51,7 +62,7 @@ class Effect : public QObject
     Q_OBJECT
 public:
     explicit Effect(QObject *parent = nullptr);
-    std::unordered_map<StatsEnum, EffectOnStat> m_EffectOnStats;
+    std::unordered_map<QString, EffectOnStat> m_EffectOnStats;
     EffectCategory m_Category = EffectCategory::equipment;
 };
 

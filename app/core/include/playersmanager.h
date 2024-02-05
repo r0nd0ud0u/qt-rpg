@@ -7,6 +7,12 @@
 
 #include <unordered_map>
 
+struct GameAtkEffects{
+    effectParam allAtkEffects;
+    QString atkName;
+    QString launcher;
+};
+
 class PlayersManager
 {
 public:
@@ -15,7 +21,10 @@ public:
     void InitBosses();
     void LoadAllEquipmentsJson();
     Character* GetCharacterByName(const QString& name);
-    void UpdatePartnersOnAtk(const Character* curPlayer, const QString &atkName) const;
+    void AddGameEffectOnAtk(const Character* curPlayer, const QString &atkName, const std::vector<QString>& targetList);
+    QStringList UpdateEffects();
+    void ApplyEffects();
+    void ApplyRegenStats();
 
     static QString FormatAtkOnEnnemy(const QString player1, const QString player2,  const QString &atkName, const int damage);
     static QString FormatAtkOnAlly(const QString player1, const QString player2,  const QString &atkName, const int damage);
@@ -25,6 +34,7 @@ public:
     Character* m_SelectedHero = nullptr;
     Character* m_ActivePlayer = nullptr;
     std::unordered_map<QString, Stuff> m_Equipments;
+    std::unordered_map<QString, std::vector<GameAtkEffects>> m_AllEffectsOnGame;
 
 };
 
