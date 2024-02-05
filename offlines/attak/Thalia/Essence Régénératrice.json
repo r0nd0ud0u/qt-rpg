@@ -5,9 +5,19 @@
     "Coût de vigueur": 0,
     "Durée": 3,
     "Dégâts": 0,
+    "Effet": [
+        {
+            "Cible": "Allié",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 3,
+            "Type": "",
+            "Value": 20
+        }
+    ],
     "Niveau": 1,
     "Nom": "Essence Régénératrice",
-    "Photo": "Thalia.png",
+    "Photo": "Essence regeneratrice.jpg",
     "Portée": "Individuel",
     "Rage aggro": 0,
     "Regen mana": 0,
