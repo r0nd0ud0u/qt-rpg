@@ -133,10 +133,10 @@ const QString EQUIP_CATEGORY = "Categorie";
 const QString EFFECT_ON = "Effet on";
 const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";
 const QString EFFECT_NB_DECREASE_ON_TURN = "Decroissement pendant le tour";
-const QString EFFECT_NB_DECREASE_BY_TURN = "Decroissement sur le tour";
+const QString EFFECT_NB_DECREASE_BY_TURN = "Decroissement par tour";
 
-const QString EFFECT_VALUE_CHANGE = "Effet on";
-const QString EFFECT_PERCENT_CHANGE = "Effet on";
+const QString EFFECT_VALUE_CHANGE = "Changement par valeur";
+const QString EFFECT_PERCENT_CHANGE = "Changement par %";
 const std::unordered_set<QString> EFFECTS{"",
                                           EFFECT_ON,
                                           EFFECT_NB_COOL_DOWN,
