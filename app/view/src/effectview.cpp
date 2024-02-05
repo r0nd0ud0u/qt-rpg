@@ -290,7 +290,7 @@ void EffectView::on_checkBox_3_stateChanged(int arg1) {
 void EffectView::SetValues(const std::vector<effectParam>& table){
     DisconnectComboSig();
 
-    if(!table.empty() && !table[0].statsName.isEmpty()){
+    if(!table.empty() && (!table[0].statsName.isEmpty() || !table[0].effect.isEmpty())){
         ui->effect_comboBox->setCurrentText(table[0].effect);
         ui->value_spinBox->setValue(table[0].value);
         ui->nb_turns_spinBox->setValue(table[0].nbTurns);
@@ -307,7 +307,7 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->value_spinBox->setValue(0);
         ui->checkBox->setCheckState(Qt::CheckState::Unchecked);
     }
-    if(table.size() > 1 && !table[1].statsName.isEmpty()){
+    if(table.size() > 1 && (!table[1].statsName.isEmpty() || !table[1].effect.isEmpty())){
         ui->effect_comboBox_2->setCurrentText(table[1].effect);
         ui->value_spinBox_2->setValue(table[1].value);
         ui->nb_turns_spinBox_2->setValue(table[1].nbTurns);
@@ -324,7 +324,7 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->nb_turns_spinBox_2->setValue(0);
         ui->checkBox_2->setCheckState(Qt::CheckState::Unchecked);
     }
-    if(table.size() > 2 && !table[2].statsName.isEmpty()){
+    if(table.size() > 2 && (!table[2].statsName.isEmpty() || !table[2].effect.isEmpty())){
         ui->effect_comboBox_3->setCurrentText(table[2].effect);
         ui->value_spinBox_3->setValue(table[2].value);
         ui->nb_turns_spinBox_3->setValue(table[2].nbTurns);
@@ -344,7 +344,10 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
     ReconnectComboSig();
 
     //update effect list,
-    m_EffectTable[m_Index] = table;
+    for(int i= 0; i< table.size(); i++){
+        m_EffectTable[m_Index][i] = table[i];
+    }
+
 }
 
 void EffectView::on_reach_comboBox_currentTextChanged(const QString &arg1)
