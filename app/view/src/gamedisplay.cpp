@@ -129,7 +129,10 @@ void GameDisplay::StartNewTurn() {
     ui->attak_page->InitTargetsWidget();
   }
   // Apply effects
-  gm->m_PlayersManager->ApplyEffects();
+  QStringList effectsLogs = gm->m_PlayersManager->ApplyEffects();
+  for(const auto& el : effectsLogs){
+       emit SigUpdateChannelView(el);
+  }
   // Apply regen stats
   gm->m_PlayersManager->ApplyRegenStats();
   // Updat views after stats changes

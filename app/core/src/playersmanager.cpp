@@ -233,18 +233,20 @@ QStringList PlayersManager::UpdateEffects() {
   return sl;
 }
 
-void PlayersManager::ApplyEffects() {
+QStringList PlayersManager::ApplyEffects() {
+    QStringList logs;
   for (auto &[targetName, effectsTable] : m_AllEffectsOnGame) {
     auto *targetPl = GetCharacterByName(targetName);
     if (targetPl != nullptr) {
       for (auto &gae : effectsTable) {
         auto *launcherPl = GetCharacterByName(gae.launcher);
         if (launcherPl != nullptr) {
-          launcherPl->ApplyOneEffect(targetPl, gae.allAtkEffects, false);
+            logs.append(launcherPl->ApplyOneEffect(targetPl, gae.allAtkEffects, false));
         }
       }
     }
   }
+  return logs;
 }
 
 void PlayersManager::ApplyRegenStats() {
