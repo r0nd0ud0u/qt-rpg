@@ -59,7 +59,7 @@ public:
     void LoadStuffJson();
     void ApplyEquipOnStats(const std::unordered_map<QString, Stuff>& allEquipMap);
     bool CanBeLaunched(const AttaqueType &atk)const;
-    QString ApplyOneEffect(Character *&target, const effectParam &effect, const bool fromLaunch);
+    QString ApplyOneEffect(Character *target, const effectParam &effect, const bool fromLaunch);
     QStringList ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
                         Character *target);
 

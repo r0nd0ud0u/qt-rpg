@@ -23,7 +23,7 @@ public:
   void AddGameEffectOnAtk(const Character *curPlayer, const QString &atkName,
                           const std::vector<QString> &targetList);
   QStringList UpdateEffects();
-  void ApplyEffects();
+  QStringList ApplyEffects();
   void ApplyRegenStats();
 
   static QString FormatAtkOnEnnemy(const QString player1, const QString player2,

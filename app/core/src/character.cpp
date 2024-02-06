@@ -355,7 +355,7 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
   return false;
 }
 
-QString Character::ApplyOneEffect(Character *&target, const effectParam &effect,
+QString Character::ApplyOneEffect(Character *target, const effectParam &effect,
                                   const bool fromLaunch) {
   if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
     const int intMin = 0;
@@ -404,8 +404,10 @@ QString Character::ApplyOneEffect(Character *&target, const effectParam &effect,
     }
   }
   const int potentialAttempts = max(1, effect.subValueEffect);
-  return QString("L'effet %1-%2 s'est appliqué %3 fois sur %4 potentielle(s) "
-                 "tentative(s) avec une valeur max de %5.")
+  return QString("Sur %1. L'effet %2-%3 s'est appliqué %4 fois sur %5 "
+                 "potentielle(s) "
+                 "tentative(s) avec une valeur max de %6.")
+      .arg(target->m_Name)
       .arg(effect.statsName)
       .arg(effect.effect)
       .arg(nbOfApplies)
@@ -428,6 +430,10 @@ QStringList Character::ApplyAtkEffect(const bool targetedOnMainAtk,
 
     // is targeted ?
     if (effect.target == TARGET_ALLY && effect.reach == REACH_INDIVIDUAL &&
+        !targetedOnMainAtk) {
+      continue;
+    }
+    if (effect.target == TARGET_ALLY && effect.reach == REACH_ZONE &&
         !targetedOnMainAtk) {
       continue;
     }
