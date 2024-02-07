@@ -60,7 +60,7 @@ QString Character::Attaque(const QString &atkName, Character *target) {
                                                    atkName, finalDamage);
   }
   if (atk.heal > 0) {
-    tarCurHp = min(target->m_Stats.m_HP.m_CurrentValue,
+    tarCurHp = min(target->m_Stats.m_HP.m_MaxValue,
                    static_cast<int>(tarCurHp + atk.heal));
     channelLog = PlayersManager::FormatAtkOnAlly(m_Name, target->m_Name,
                                                  atkName, atk.heal);
@@ -389,6 +389,9 @@ QString Character::ApplyOneEffect(Character *target, const effectParam &effect,
         counter--;
       }
     }
+    if (effect.effect == EFFECT_REINIT) {
+      target->ResetCounterOnOneStatsEffect(effect.statsName);
+    }
   }
   for (int i = 0; i < nbOfApplies; i++) {
     if (effect.statsName == STATS_HP) {
@@ -416,13 +419,13 @@ QString Character::ApplyOneEffect(Character *target, const effectParam &effect,
 }
 
 // Apply effect after launch of atk
-QStringList Character::ApplyAtkEffect(const bool targetedOnMainAtk,
-                                      const QString &atkName,
-                                      Character *target) {
+std::pair<bool, QStringList>
+Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
+                          Character *target) {
   if (target == nullptr) {
-    return QStringList("No target");
+    return std::make_pair(false, QStringList("No target"));
   }
-
+  bool applyAtk = true;
   const auto &allEffects = m_AttakList.at(atkName).m_AllEffects;
 
   QStringList resultEffects;
@@ -441,9 +444,40 @@ QStringList Character::ApplyAtkEffect(const bool targetedOnMainAtk,
         !targetedOnMainAtk) {
       continue;
     }
-
+    if (effect.effect == EFFECT_REINIT &&
+        !(target->GetNbOfStatsInEffectList(effect.statsName) >=
+          effect.subValueEffect)) {
+      applyAtk = false;
+      resultEffects.append(
+          QString(
+              "Sur %1. L'effet %2-%3 n'est pas applicable. %4 effet(s) sur stats %5 requis.")
+              .arg(target->m_Name)
+              .arg(effect.statsName)
+              .arg(effect.effect)
+              .arg(effect.subValueEffect)
+              .arg(effect.statsName));
+      break;
+    }
     resultEffects.append(ApplyOneEffect(target, effect, true));
   }
 
-  return resultEffects;
+  return std::make_pair(applyAtk, resultEffects);
+}
+
+int Character::GetNbOfStatsInEffectList(const QString &statsName) {
+  int counter = 0;
+  for (const auto &e : m_EffectsList) {
+    if (e->statsName == statsName) {
+      counter++;
+    }
+  }
+  return counter;
+}
+
+void Character::ResetCounterOnOneStatsEffect(const QString &statsName) {
+  for (auto &e : m_EffectsList) {
+    if (e->statsName == statsName) {
+      e->counterTurn = 0;
+    }
+  }
 }

@@ -130,8 +130,8 @@ void GameDisplay::StartNewTurn() {
   }
   // Apply effects
   QStringList effectsLogs = gm->m_PlayersManager->ApplyEffects();
-  for(const auto& el : effectsLogs){
-       emit SigUpdateChannelView(el);
+  for (const auto &el : effectsLogs) {
+    emit SigUpdateChannelView(el);
   }
   // Apply regen stats
   gm->m_PlayersManager->ApplyRegenStats();
@@ -174,6 +174,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   const auto &nameChara = gm->m_GameState->GetCurrentPlayerName();
   auto *activatedPlayer = gm->m_PlayersManager->GetCharacterByName(nameChara);
   // launch atk
+  emit SigUpdateChannelView(QString("%1 est lancé par %2.").arg(atkName).arg(nameChara));
   std::vector<QString> realTargetedList;
   for (const auto &target : targetList) {
     if (target.m_IsTargeted) {
@@ -186,19 +187,19 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     auto *targetChara = gm->m_PlayersManager->GetCharacterByName(target.m_Name);
 
     if (activatedPlayer != nullptr && targetChara != nullptr) {
-      if (target.m_IsTargeted) {
+      // EFFECT
+      const auto& [ applyAtk, resultEffects] = activatedPlayer->ApplyAtkEffect(
+          target.m_IsTargeted, atkName, targetChara);
+      for (const auto &re : resultEffects) {
+        emit SigUpdateChannelView(re);
+      }
+      if (target.m_IsTargeted && applyAtk) {
         // ATK
         channelLog = activatedPlayer->Attaque(atkName, targetChara);
         // Update channel view
         if (!channelLog.isEmpty()) {
           emit SigUpdateChannelView(channelLog);
         }
-      }
-      // EFFECT
-      QStringList resultEffects = activatedPlayer->ApplyAtkEffect(
-          target.m_IsTargeted, atkName, targetChara);
-      for (const auto &re : resultEffects) {
-        emit SigUpdateChannelView(re);
       }
     }
   }
