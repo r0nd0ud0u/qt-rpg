@@ -5,14 +5,43 @@
     "Coût de vigueur": 0,
     "Durée": 5,
     "Dégâts": 0,
+    "Effet": [
+        {
+            "Cible": "Allié",
+            "Portée": "Zone",
+            "Stat": "PV",
+            "Tours actifs": 5,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 25
+        },
+        {
+            "Cible": "Allié",
+            "Portée": "Zone",
+            "Stat": "Mana",
+            "Tours actifs": 5,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 5
+        },
+        {
+            "Cible": "Allié",
+            "Portée": "Zone",
+            "Stat": "Vitesse",
+            "Tours actifs": 5,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": -5
+        }
+    ],
     "Niveau": 6,
     "Nom": "Fleur de l'Espoir",
     "Photo": "Thalia.png",
     "Portée": "Zone",
     "Rage aggro": 0,
-    "Regen mana": 5,
+    "Regen mana": 0,
     "Regen rage": 0,
     "Regen vigueur": 0,
-    "Soin": 25
+    "Soin": 0
 }
 
