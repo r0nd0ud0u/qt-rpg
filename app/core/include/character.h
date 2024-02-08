@@ -60,6 +60,7 @@ public:
                                      // after applying effects
   int GetNbOfStatsInEffectList(const QString &effectType);
   void ResetCounterOnOneStatsEffect(const QString &statsName);
+  void DeleteOneBadEffect();
 
   static QString GetInventoryString(const InventoryType &type);
 

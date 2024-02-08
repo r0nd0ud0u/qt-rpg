@@ -143,7 +143,7 @@ void GameDisplay::EndOfTurn() {
   const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
   // update gamestate
   // update effect
-  const QStringList terminatedEffects = pm->UpdateEffects();
+  const QStringList terminatedEffects = pm->RemoveTerminatedEffects(true);
   for (const auto &te : terminatedEffects) {
     emit SigUpdateChannelView(te);
   }
@@ -207,9 +207,15 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   if (activatedPlayer != nullptr) {
     activatedPlayer->UpdateStatsOnAtk(atkName);
   }
-  // Update game state
+  /// Update game state
+  // update effect list of player manager
   gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer, atkName,
                                            realTargetedList);
+  // remove terminated effects
+  const QStringList terminatedEffects =  gm->m_PlayersManager->RemoveTerminatedEffects(false);
+  for (const auto &te : terminatedEffects) {
+      emit SigUpdateChannelView(te);
+  }
   // update views of heroes and bosses
   emit SigUpdatePlayerPanel();
 

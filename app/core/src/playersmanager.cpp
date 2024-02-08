@@ -209,11 +209,14 @@ void PlayersManager::AddGameEffectOnAtk(
   }
 }
 
-QStringList PlayersManager::UpdateEffects() {
+QStringList PlayersManager::RemoveTerminatedEffects(const bool endOfTurn) {
   QStringList sl;
   for (auto &[playerName, gaeTable] : m_AllEffectsOnGame) {
     for (auto it = gaeTable.begin(); it != gaeTable.end(); it++) {
-      it->allAtkEffects.counterTurn++;
+
+      if (endOfTurn) {
+        it->allAtkEffects.counterTurn++;
+      }
 
       if (it->allAtkEffects.counterTurn == it->allAtkEffects.nbTurns) {
         QString terminated("L'effet %1 sur %2 est terminé.");
@@ -234,14 +237,15 @@ QStringList PlayersManager::UpdateEffects() {
 }
 
 QStringList PlayersManager::ApplyEffects() {
-    QStringList logs;
+  QStringList logs;
   for (auto &[targetName, effectsTable] : m_AllEffectsOnGame) {
     auto *targetPl = GetCharacterByName(targetName);
     if (targetPl != nullptr) {
       for (auto &gae : effectsTable) {
         auto *launcherPl = GetCharacterByName(gae.launcher);
         if (launcherPl != nullptr) {
-            logs.append(launcherPl->ApplyOneEffect(targetPl, gae.allAtkEffects, false));
+          logs.append(
+              launcherPl->ApplyOneEffect(targetPl, gae.allAtkEffects, false));
         }
       }
     }
