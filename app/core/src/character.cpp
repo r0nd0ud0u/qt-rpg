@@ -392,6 +392,9 @@ QString Character::ApplyOneEffect(Character *target, const effectParam &effect,
     if (effect.effect == EFFECT_REINIT) {
       target->ResetCounterOnOneStatsEffect(effect.statsName);
     }
+    if(effect.effect == EFFECT_DELETE_BAD){
+        target->DeleteOneBadEffect();
+    }
   }
   for (int i = 0; i < nbOfApplies; i++) {
     if (effect.statsName == STATS_HP) {
@@ -480,4 +483,12 @@ void Character::ResetCounterOnOneStatsEffect(const QString &statsName) {
       e->counterTurn = 0;
     }
   }
+}
+
+void Character::DeleteOneBadEffect(){
+    for (auto &e : m_EffectsList) {
+        if (e->value < 0) {
+            e->counterTurn = e->nbTurns;
+        }
+    }
 }
