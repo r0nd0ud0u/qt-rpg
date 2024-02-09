@@ -61,6 +61,7 @@ public:
   int GetNbOfStatsInEffectList(const QString &effectType);
   void ResetCounterOnOneStatsEffect(const QString &statsName);
   void DeleteOneBadEffect();
+  void RemoveMalusEffect(const QString& statsName);
 
   static QString GetInventoryString(const InventoryType &type);
 
