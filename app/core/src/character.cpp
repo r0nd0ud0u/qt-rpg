@@ -408,6 +408,9 @@ QString Character::ApplyOneEffect(Character *target, const effectParam &effect,
           min(target->m_Stats.m_Mana.m_MaxValue,
               target->m_Stats.m_Mana.m_CurrentValue + effect.value);
     }
+    if (effect.statsName == STATS_SPEED) {
+        target->m_Stats.m_Speed.m_CurrentValue = static_cast<int>(std::round(target->m_Stats.m_Speed.m_CurrentValue + target->m_Stats.m_Speed.m_CurrentValue*effect.value/100));
+    }
   }
   const int potentialAttempts = max(1, effect.subValueEffect);
   return QString("Sur %1. L'effet %2-%3 s'est appliqué %4 fois sur %5 "
@@ -490,5 +493,11 @@ void Character::DeleteOneBadEffect(){
         if (e->value < 0) {
             e->counterTurn = e->nbTurns;
         }
+    }
+}
+
+void Character::RemoveMalusEffect(const QString& statsName){
+    if(statsName == STATS_SPEED){
+        m_Stats.m_Speed.m_CurrentValue = m_Stats.m_Speed.m_MaxValue;
     }
 }

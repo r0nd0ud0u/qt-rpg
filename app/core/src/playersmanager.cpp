@@ -223,6 +223,11 @@ QStringList PlayersManager::RemoveTerminatedEffects(const bool endOfTurn) {
         terminated =
             terminated.arg(it->allAtkEffects.statsName).arg(playerName);
         sl.push_back(terminated);
+        // remove malus effect from player
+        auto* player = GetCharacterByName(playerName);
+        if(player != nullptr){
+            player->RemoveMalusEffect(it->allAtkEffects.statsName);
+        }
       }
     }
     auto newEnd = std::remove_if(
