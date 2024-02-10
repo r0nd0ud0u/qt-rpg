@@ -58,10 +58,9 @@ public:
   ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
                  Character *target); // value1: apply the atk ?, value2 : logs
                                      // after applying effects
-  int GetNbOfStatsInEffectList(const QString &effectType);
-  void ResetCounterOnOneStatsEffect(const QString &statsName);
-  void DeleteOneBadEffect();
   void RemoveMalusEffect(const QString& statsName);
+  int DamageByAtk(Character *target, const AttaqueType &atk);
+  QString RegenIntoDamage(const int atkValue, const QString& statsName);
 
   static QString GetInventoryString(const InventoryType &type);
 
@@ -73,11 +72,10 @@ public:
   std::unordered_map<QString, AttaqueType>
       m_AttakList; // key: attak name, value: AttakType struct
   std::vector<uint8_t> m_Inventory;
-  std::vector<effectParam *> m_EffectsList;
   int m_Level = 1;
   int m_Exp = 0;
 
-private:
+  private:
   template <class T>
   void ProcessAddEquip(StatsType<T> &charStat, const StatsType<T> &equipStat);
   template <class T>

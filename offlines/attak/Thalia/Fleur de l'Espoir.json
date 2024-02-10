@@ -1,4 +1,5 @@
 {
+    "Aggro": 0,
     "Cible": "Allié",
     "Coût de mana": 7,
     "Coût de rage": 0,
@@ -27,7 +28,7 @@
         {
             "Cible": "Allié",
             "Portée": "Zone",
-            "Stat": "Vitesse",
+            "Stat": "Esquive",
             "Tours actifs": 5,
             "Type": "Changement par %",
             "Valeur de l'effet": 0,
@@ -38,7 +39,6 @@
     "Nom": "Fleur de l'Espoir",
     "Photo": "Thalia.png",
     "Portée": "Zone",
-    "Rage aggro": 0,
     "Regen mana": 0,
     "Regen rage": 0,
     "Regen vigueur": 0,

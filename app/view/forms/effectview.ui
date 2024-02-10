@@ -28,7 +28,10 @@
            <bool>false</bool>
           </property>
           <property name="minimum">
-           <number>-100</number>
+           <number>-1000</number>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
           </property>
          </widget>
         </item>
@@ -138,7 +141,10 @@
            <bool>false</bool>
           </property>
           <property name="minimum">
-           <number>-100</number>
+           <number>-1000</number>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
           </property>
          </widget>
         </item>
@@ -186,7 +192,10 @@
            <bool>false</bool>
           </property>
           <property name="minimum">
-           <number>-100</number>
+           <number>-1000</number>
+          </property>
+          <property name="maximum">
+           <number>1000</number>
           </property>
          </widget>
         </item>

@@ -418,3 +418,48 @@ QString PlayersManager::FormatAtk(const QString player1, const QString player2,
       .arg(atkName)
       .arg(player2);
 }
+
+int PlayersManager::GetNbOfStatsInEffectList(const Character* chara, const QString &statsName) {
+    if(chara == nullptr){
+        return 0;
+    }
+    int counter = 0;
+    for (const auto &e : m_AllEffectsOnGame[chara->m_Name]) {
+        if (e.allAtkEffects.statsName == statsName) {
+            counter++;
+        }
+    }
+    return counter;
+}
+
+void PlayersManager::ResetCounterOnOneStatsEffect(const Character* chara,const QString &statsName) {
+    if(chara == nullptr){
+        return;
+    }
+    for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
+        if (e.allAtkEffects.statsName == statsName) {
+            e.allAtkEffects.counterTurn = 0;
+        }
+    }
+}
+
+void PlayersManager::DeleteOneBadEffect(const Character* chara) {
+    if(chara == nullptr){
+        return;
+    }
+    for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
+        if (e.allAtkEffects.value < 0) {
+            e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
+        }
+    }
+}
+
+void PlayersManager::DecreaseCoolDownEffects() {
+    for (auto &[playerName, allGae] : m_AllEffectsOnGame) {
+        for(auto& gae : allGae){
+            if(gae.allAtkEffects.effect == EFFECT_NB_COOL_DOWN && gae.allAtkEffects.subValueEffect > 0){
+                gae.allAtkEffects.subValueEffect--;
+            }
+        }
+    }
+}

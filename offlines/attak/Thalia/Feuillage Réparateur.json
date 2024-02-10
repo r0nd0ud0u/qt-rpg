@@ -1,18 +1,47 @@
 {
+    "Aggro": 0,
     "Cible": "Allié",
     "Coût de mana": 8,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
-    "Durée": 4,
+    "Durée": 1,
     "Dégâts": 0,
+    "Effet": [
+        {
+            "Cible": "Allié",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 4,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 60
+        },
+        {
+            "Cible": "Tous les heroes",
+            "Portée": "Zone",
+            "Stat": "Mana",
+            "Tours actifs": 1,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 10
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
+        }
+    ],
     "Niveau": 11,
     "Nom": "Feuillage Réparateur",
     "Photo": "Thalia.png",
     "Portée": "Individuel",
-    "Rage aggro": 0,
-    "Regen mana": 10,
+    "Regen mana": 0,
     "Regen rage": 0,
     "Regen vigueur": 0,
-    "Soin": 60
+    "Soin": 0
 }
 

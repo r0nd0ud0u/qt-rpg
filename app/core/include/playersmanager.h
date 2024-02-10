@@ -32,6 +32,10 @@ public:
                                  const QString &atkName, const int damage);
   static QString FormatAtk(const QString player1, const QString player2,
                            const QString &atkName);
+  int GetNbOfStatsInEffectList(const Character* chara, const QString &statsName);
+  void ResetCounterOnOneStatsEffect(const Character* chara,const QString &statsName);
+  void DeleteOneBadEffect(const Character* chara);
+  void DecreaseCoolDownEffects();
 
   std::vector<Character *> m_HeroesList;
   std::vector<Character *> m_BossesList;
