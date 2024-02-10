@@ -147,6 +147,7 @@ void GameDisplay::EndOfTurn() {
   for (const auto &te : terminatedEffects) {
     emit SigUpdateChannelView(te);
   }
+  pm->DecreaseCoolDownEffects();
   emit SigUpdateChannelView("Fin du tour !!");
 }
 
@@ -213,6 +214,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer, atkName,
                                            realTargetedList);
   // remove terminated effects
+  // Some effects like "delete one bad effect" need to be updated
   const QStringList terminatedEffects =
       gm->m_PlayersManager->RemoveTerminatedEffects(false);
   for (const auto &te : terminatedEffects) {

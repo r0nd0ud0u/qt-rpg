@@ -1,4 +1,5 @@
 {
+    "Aggro": 0,
     "Cible": "Allié",
     "Coût de mana": 6,
     "Coût de rage": 0,
@@ -27,9 +28,9 @@
         {
             "Cible": "",
             "Portée": "",
-            "Stat": "",
+            "Stat": "PV",
             "Tours actifs": 0,
-            "Type": "",
+            "Type": "Reinit",
             "Valeur de l'effet": 0,
             "Value": 0
         }
@@ -38,7 +39,6 @@
     "Nom": "Éveil de l'Espérance",
     "Photo": "Thalia.png",
     "Portée": "Zone",
-    "Rage aggro": 0,
     "Regen mana": 0,
     "Regen rage": 0,
     "Regen vigueur": 0,
