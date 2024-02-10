@@ -174,7 +174,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   const auto &nameChara = gm->m_GameState->GetCurrentPlayerName();
   auto *activatedPlayer = gm->m_PlayersManager->GetCharacterByName(nameChara);
   // launch atk
-  emit SigUpdateChannelView(QString("%1 est lancé par %2.").arg(atkName).arg(nameChara));
+  emit SigUpdateChannelView(
+      QString("%1 est lancé par %2.").arg(atkName).arg(nameChara));
   std::vector<QString> realTargetedList;
   for (const auto &target : targetList) {
     if (target.m_IsTargeted) {
@@ -188,7 +189,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
     if (activatedPlayer != nullptr && targetChara != nullptr) {
       // EFFECT
-      const auto& [ applyAtk, resultEffects] = activatedPlayer->ApplyAtkEffect(
+      const auto &[applyAtk, resultEffects] = activatedPlayer->ApplyAtkEffect(
           target.m_IsTargeted, atkName, targetChara);
       for (const auto &re : resultEffects) {
         emit SigUpdateChannelView(re);
@@ -212,16 +213,19 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer, atkName,
                                            realTargetedList);
   // remove terminated effects
-  const QStringList terminatedEffects =  gm->m_PlayersManager->RemoveTerminatedEffects(false);
+  const QStringList terminatedEffects =
+      gm->m_PlayersManager->RemoveTerminatedEffects(false);
   for (const auto &te : terminatedEffects) {
-      emit SigUpdateChannelView(te);
+    emit SigUpdateChannelView(te);
   }
   // update views of heroes and bosses
   emit SigUpdatePlayerPanel();
 
   // check who is dead!
   for (auto &boss : gm->m_PlayersManager->m_BossesList) {
-    if (boss->m_Stats.m_HP.m_CurrentValue == 0) {
+    const auto &hp =
+        std::get<StatsType<int>>(boss->m_Stats.m_AllStatsTable[STATS_HP]);
+    if (hp.m_CurrentValue == 0) {
       // next phase
       emit SigBossDead(boss->m_Name);
       // delete bosses in player manager
@@ -237,6 +241,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
   uint8_t nbDeadHeroes = 0;
   for (const auto &hero : gm->m_PlayersManager->m_HeroesList) {
+    const auto &hp =
+        std::get<StatsType<int>>(hero->m_Stats.m_AllStatsTable[STATS_HP]);
     if (hero->m_Stats.m_HP.m_CurrentValue == 0) {
       // choose to drink a potion
       nbDeadHeroes++;

@@ -32,20 +32,21 @@ QAbstractItemModel *StatsView::createStatsModel(QObject *parent,
 
   const auto *selectedHero =
       Application::GetInstance().m_GameManager->GetSelectedHero();
-  addStatRow(model, "ArmPhy", selectedHero->m_Stats.m_ArmPhy.m_CurrentValue);
-  addStatRow(model, "ArmMag", selectedHero->m_Stats.m_ArmMag.m_CurrentValue);
-  addStatRow(model, "PowPhy", selectedHero->m_Stats.m_PowPhy.m_CurrentValue);
-  addStatRow(model, "PowMag", selectedHero->m_Stats.m_PowMag.m_CurrentValue);
-  addStatRow(model, "Aggro", selectedHero->m_Stats.m_Aggro.m_CurrentValue);
-  addStatRow(model, "Speed", selectedHero->m_Stats.m_Speed.m_CurrentValue);
+
+  addStatRow(model, "ArmPhy", std::get<StatsType<int>>(selectedHero->m_Stats.m_AllStatsTable.at(STATS_ARM_PHY)).m_CurrentValue);
+  addStatRow(model, "ArmMag", std::get<StatsType<int>>(selectedHero->m_Stats.m_AllStatsTable.at(STATS_ARM_MAG)).m_CurrentValue);
+  addStatRow(model, "PowPhy", std::get<StatsType<int>>(selectedHero->m_Stats.m_AllStatsTable.at(STATS_POW_PHY)).m_CurrentValue);
+  addStatRow(model, "PowMag", std::get<StatsType<double>>(selectedHero->m_Stats.m_AllStatsTable.at(STATS_POW_MAG)).m_CurrentValue);
+  addStatRow(model, "Aggro", std::get<StatsType<int>>(selectedHero->m_Stats.m_AllStatsTable.at(STATS_AGGRO)).m_CurrentValue);
+  addStatRow(model, "Speed", std::get<StatsType<int>>(selectedHero->m_Stats.m_AllStatsTable.at(STATS_SPEED)).m_CurrentValue);
   addStatRow(model, "Crit",
-             selectedHero->m_Stats.m_CriticalStrike.m_CurrentValue);
-  addStatRow(model, "Dodge", selectedHero->m_Stats.m_Dogde.m_CurrentValue);
-  addStatRow(model, "regenHP", selectedHero->m_Stats.m_RegenHP.m_CurrentValue);
+             std::get<StatsType<int>>(selectedHero->m_Stats.m_AllStatsTable.at(STATS_CRIT)).m_CurrentValue);
+  addStatRow(model, "Dodge", std::get<StatsType<double>>(selectedHero->m_Stats.m_AllStatsTable.at(STATS_DODGE)).m_CurrentValue);
+  addStatRow(model, "regenHP", std::get<StatsType<int>>(selectedHero->m_Stats.m_AllStatsTable.at(STATS_REGEN_HP)).m_CurrentValue);
   addStatRow(model, "regenMana",
-             selectedHero->m_Stats.m_RegenMana.m_CurrentValue);
+             std::get<StatsType<int>>(selectedHero->m_Stats.m_AllStatsTable.at(STATS_REGEN_MANA)).m_CurrentValue);
   addStatRow(model, "regenVigor",
-             selectedHero->m_Stats.m_RegenVigor.m_CurrentValue);
+             std::get<StatsType<int>>(selectedHero->m_Stats.m_AllStatsTable.at(STATS_REGEN_VIGOR)).m_CurrentValue);
 
   return model;
 }
