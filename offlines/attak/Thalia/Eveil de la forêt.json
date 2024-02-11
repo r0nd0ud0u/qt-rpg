@@ -1,18 +1,47 @@
 {
+    "Aggro": 0,
     "Cible": "Allié",
     "Coût de mana": 18,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
-    "Durée": 4,
+    "Durée": 1,
     "Dégâts": 0,
+    "Effet": [
+        {
+            "Cible": "Allié",
+            "Portée": "Zone",
+            "Stat": "PV",
+            "Tours actifs": 4,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 80
+        },
+        {
+            "Cible": "Allié",
+            "Portée": "Zone",
+            "Stat": "",
+            "Tours actifs": 1,
+            "Type": "Reinit",
+            "Valeur de l'effet": 0,
+            "Value": 0
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": 0
+        }
+    ],
     "Niveau": 13,
     "Nom": "Eveil de la forêt",
     "Photo": "Thalia.png",
     "Portée": "Zone",
-    "Rage aggro": 0,
     "Regen mana": 0,
     "Regen rage": 0,
     "Regen vigueur": 0,
-    "Soin": 80
+    "Soin": 0
 }
 

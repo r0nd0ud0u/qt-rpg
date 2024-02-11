@@ -360,6 +360,11 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
 
     //update effect list,
     for(int i= 0; i< table.size(); i++){
+        if(i == 3){
+            // TODO at the time we display only 3 effets
+            // some effects such eveil de la foret has 5 effects, redesign should be done to display them
+            break;
+        }
         m_EffectTable[m_Index][i] = table[i];
     }
 
