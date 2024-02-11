@@ -120,6 +120,8 @@ const QString EFFECT_VALUE_CHANGE = "Changement par valeur";
 const QString EFFECT_PERCENT_CHANGE = "Changement par %";
 const QString EFFECT_DELETE_BAD = "Supprime effet néfaste";
 const QString EFFECT_INTO_DAMAGE = "% (stats) en dégâts";
+const QString EFFECT_IMPROVE_HOTS = "Boost chaque HOT de .. %";
+const QString EFFECT_BOOSTED_BY_HOTS = "Boost l'effet par nb HOTS presents en %";
 const std::unordered_set<QString> EFFECTS{"",
                                           EFFECT_REINIT,
                                           EFFECT_NB_COOL_DOWN,
@@ -128,7 +130,9 @@ const std::unordered_set<QString> EFFECTS{"",
                                           EFFECT_VALUE_CHANGE,
                                           EFFECT_PERCENT_CHANGE,
                                           EFFECT_DELETE_BAD,
-                                          EFFECT_INTO_DAMAGE};
+                                          EFFECT_INTO_DAMAGE,
+                                          EFFECT_IMPROVE_HOTS,
+                                          EFFECT_BOOSTED_BY_HOTS};
 const QString EFFECT_ARRAY = "Effet";
 const QString EFFECT_TYPE = "Type";
 const QString EFFECT_VALUE = "Value";

@@ -310,6 +310,12 @@ void Character::LoadAtkJson() {
       }
 #endif
 
+      if(atk.name == "Eveil de la forêt"){
+          std::vector<effectParam> epTable = CreateEveilDeLaForet();
+          for(const auto& ep : epTable){
+              atk.m_AllEffects.push_back(ep);
+          }
+      }
       // Add atk to hero atk list
       AddAtq(atk);
     }
@@ -479,10 +485,10 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
   return false;
 }
 
-QString Character::ApplyOneEffect(Character *target, const effectParam &effect,
+QString Character::ApplyOneEffect(Character *target, const effectParam &effectConst,
                                   const bool fromLaunch) {
   auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
-
+    effectParam effect = effectConst;
   if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
     const int intMin = 0;
     const int intMax = 100;
@@ -519,7 +525,19 @@ QString Character::ApplyOneEffect(Character *target, const effectParam &effect,
       pm->ResetCounterOnOneStatsEffect(this, effect.statsName);
     }
     if (effect.effect == EFFECT_DELETE_BAD) {
-      pm->DeleteOneBadEffect(this);
+        if(effect.subValueEffect <= 1){
+            pm->DeleteOneBadEffect(this);
+        }
+        else{
+            pm->DeleteAllBadEffect(this);
+        }
+    }
+    if(effect.effect == EFFECT_IMPROVE_HOTS){
+        pm->ImproveHotsOnPlayers(effect.subValueEffect);
+    }
+    if(effect.effect == EFFECT_BOOSTED_BY_HOTS){
+        auto nbHots = pm->GetNbOfStatsInEffectList(target, STATS_HP);
+        effect.value = effect.value*(effect.subValueEffect/100)*nbHots;
     }
   }
   // apply the effect
@@ -629,4 +647,40 @@ void Character::RemoveMalusEffect(const QString &statsName) {
       break;
     }
   }
+}
+
+std::vector<effectParam> Character::CreateEveilDeLaForet(){
+    std::vector<effectParam> epTable;
+
+    effectParam param;
+    param.effect = EFFECT_DELETE_BAD;
+    param.value = 0;
+    param.nbTurns = 1;
+    param.reach = REACH_ZONE;
+    param.statsName = "";
+    param.target = TARGET_ALLY;
+    param.subValueEffect = 1000;
+    epTable.push_back(param);
+
+    effectParam param2;
+    param2.effect = EFFECT_IMPROVE_HOTS;
+    param2.value = 0;
+    param2.nbTurns = 1;
+    param2.reach = REACH_ZONE;
+    param2.statsName = "";
+    param2.target = TARGET_ALLY;
+    param2.subValueEffect = 20;
+    epTable.push_back(param2);
+
+    effectParam param3;
+    param3.effect = EFFECT_BOOSTED_BY_HOTS;
+    param3.value = 80;
+    param3.nbTurns = 1;
+    param3.reach = REACH_ZONE;
+    param3.statsName = STATS_HP;
+    param3.target = TARGET_ALLY;
+    param3.subValueEffect = 25;
+    epTable.push_back(param3);
+
+    return epTable;
 }

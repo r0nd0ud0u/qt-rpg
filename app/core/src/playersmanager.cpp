@@ -448,6 +448,18 @@ void PlayersManager::DeleteOneBadEffect(const Character* chara) {
         return;
     }
     for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
+        if (e.allAtkEffects.value < 0 && !e.allAtkEffects.statsName.isEmpty()) {
+            e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
+            break;
+        }
+    }
+}
+
+void PlayersManager::DeleteAllBadEffect(const Character* chara) {
+    if(chara == nullptr){
+        return;
+    }
+    for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
         if (e.allAtkEffects.value < 0) {
             e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
         }
@@ -459,6 +471,26 @@ void PlayersManager::DecreaseCoolDownEffects() {
         for(auto& gae : allGae){
             if(gae.allAtkEffects.effect == EFFECT_NB_COOL_DOWN && gae.allAtkEffects.subValueEffect > 0){
                 gae.allAtkEffects.subValueEffect--;
+            }
+        }
+    }
+}
+
+void PlayersManager::ImproveHotsOnPlayers(const int valuePercent, const characType launcherType){
+    std::vector<Character *> playerList;
+
+    if (launcherType == characType::Hero) {
+        playerList = m_HeroesList;
+    } else if (launcherType == characType::Boss) {
+        playerList = m_BossesList;
+    }
+    for(const auto& pl : playerList){
+        if(pl == nullptr){
+            continue;
+        }
+        for(auto& e : m_AllEffectsOnGame[pl->m_Name]){
+            if(e.allAtkEffects.statsName == STATS_HP){
+                e.allAtkEffects.value += e.allAtkEffects.value*valuePercent/100;
             }
         }
     }

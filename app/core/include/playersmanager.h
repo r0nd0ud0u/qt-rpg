@@ -36,6 +36,8 @@ public:
   void ResetCounterOnOneStatsEffect(const Character* chara,const QString &statsName);
   void DeleteOneBadEffect(const Character* chara);
   void DecreaseCoolDownEffects();
+  void DeleteAllBadEffect(const Character* chara);
+  void ImproveHotsOnPlayers(const int valuePercent, const characType launcherType);
 
   std::vector<Character *> m_HeroesList;
   std::vector<Character *> m_BossesList;

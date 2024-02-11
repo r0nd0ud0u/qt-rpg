@@ -61,6 +61,7 @@ public:
   void RemoveMalusEffect(const QString& statsName);
   int DamageByAtk(Character *target, const AttaqueType &atk);
   QString RegenIntoDamage(const int atkValue, const QString& statsName);
+  std::vector<effectParam> CreateEveilDeLaForet();
 
   static QString GetInventoryString(const InventoryType &type);
 
