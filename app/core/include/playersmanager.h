@@ -32,7 +32,7 @@ public:
                                  const QString &atkName, const int damage);
   static QString FormatAtk(const QString player1, const QString player2,
                            const QString &atkName);
-  int GetNbOfStatsInEffectList(const Character* chara, const QString &statsName);
+  int GetNbOfStatsInEffectList(const Character* chara, const QString &statsName) const;
   void ResetCounterOnOneStatsEffect(const Character* chara,const QString &statsName);
   void DeleteOneBadEffect(const Character* chara);
   void DecreaseCoolDownEffects();

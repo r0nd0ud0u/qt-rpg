@@ -419,12 +419,12 @@ QString PlayersManager::FormatAtk(const QString player1, const QString player2,
       .arg(player2);
 }
 
-int PlayersManager::GetNbOfStatsInEffectList(const Character* chara, const QString &statsName) {
+int PlayersManager::GetNbOfStatsInEffectList(const Character* chara, const QString &statsName) const {
     if(chara == nullptr){
         return 0;
     }
     int counter = 0;
-    for (const auto &e : m_AllEffectsOnGame[chara->m_Name]) {
+    for (const auto &e : m_AllEffectsOnGame.at(chara->m_Name)) {
         if (e.allAtkEffects.statsName == statsName) {
             counter++;
         }
