@@ -78,7 +78,7 @@ public:
 
   private:
   template <class T>
-  void ProcessAddEquip(StatsType<T> &charStat, const StatsType<T> &equipStat);
+  void ProcessAddEquip(StatsType<T> &charStat, const StatsType<T> &equipStat) const;
   template <class T>
   void ProcessRemoveEquip(StatsType<T> &charStat,
                           const StatsType<T> &equipStat);

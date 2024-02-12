@@ -315,7 +315,7 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->stats_comboBox->setCurrentText("");
         ui->nb_turns_spinBox->setValue(0);
         ui->value_spinBox->setValue(0);
-        ui->effect_value_spinbox->setEnabled(0);
+        ui->effect_value_spinbox->setEnabled(false);
         ui->checkBox->setCheckState(Qt::CheckState::Unchecked);
     }
     if(table.size() > 1 && (!table[1].statsName.isEmpty() || !table[1].effect.isEmpty())){
