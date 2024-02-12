@@ -27,13 +27,13 @@ Character::Character(const QString name, const characType type,
 }
 
 int Character::DamageByAtk(Character *target, const AttaqueType &atk) {
-  auto &launcherPowMag =
+  const auto &launcherPowMag =
       std::get<StatsType<double>>(m_Stats.m_AllStatsTable[STATS_POW_MAG]);
-  auto &launcherPowPhy =
+  const auto &launcherPowPhy =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_POW_PHY]);
-  auto &targetArmPhy =
+  const auto &targetArmPhy =
       std::get<StatsType<int>>(target->m_Stats.m_AllStatsTable[STATS_ARM_PHY]);
-  auto &targetArmMag =
+  const auto &targetArmMag =
       std::get<StatsType<int>>(target->m_Stats.m_AllStatsTable[STATS_ARM_MAG]);
 
   int finalDamage = 0;
