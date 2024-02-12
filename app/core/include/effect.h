@@ -27,14 +27,18 @@ enum class EffectType{
 };
 
 struct effectParam{
+    // received
     QString effect;
     int value = 0;
     int nbTurns = 0;
+    int subValueEffect = 0;
     QString target;
     QString reach;
     QString statsName;
 
+    // processed
     bool updated = false;
+    int counterTurn = 0;
 };
 
 template <class T> class EffectStat {

@@ -12,6 +12,7 @@ set(HEADERS
     include/stuff.h
     include/common.h
     include/effect.h
+    include/utils.h
 
 )
 set(SOURCES
@@ -24,6 +25,7 @@ set(SOURCES
     src/playersmanager.cpp
     src/bosses.cpp
     src/effect.cpp
+    src/utils.cpp
 )
 
 
