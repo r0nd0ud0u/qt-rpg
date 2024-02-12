@@ -190,7 +190,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
     if (activatedPlayer != nullptr && targetChara != nullptr) {
       // EFFECT
-      const auto &[applyAtk, resultEffects] = activatedPlayer->ApplyAtkEffect(
+      const auto &[applyAtk, resultEffects, appliedEffects] = activatedPlayer->ApplyAtkEffect(
           target.m_IsTargeted, atkName, targetChara);
       for (const auto &re : resultEffects) {
         emit SigUpdateChannelView(re);
@@ -203,6 +203,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
           emit SigUpdateChannelView(channelLog);
         }
       }
+      // update all effect panel
+      emit SigNewEffectLaunched(appliedEffects, activatedPlayer->m_Name, target.m_Name);
     }
   }
   // Stats change on hero

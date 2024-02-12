@@ -589,15 +589,20 @@ QString Character::ApplyOneEffect(Character *target,
 }
 
 // Apply effect after launch of atk
-std::pair<bool, QStringList>
+// Test targets
+// Return tuple
+// - 1 : bool: is attak applied ?
+// - 2 : QStringList : log on each applied effect to display on channel
+// - 3 : std::vector<effectParam> : list of all applied effectParam
+std::tuple<bool, QStringList, std::vector<effectParam>>
 Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
                           Character *target) {
   if (target == nullptr) {
-    return std::make_pair(false, QStringList("No target"));
+        return std::make_tuple(false, QStringList("No target"), std::vector<effectParam>());
   }
   bool applyAtk = true;
   const auto &allEffects = m_AttakList.at(atkName).m_AllEffects;
-
+  std::vector<effectParam> appliedEffects;
   QStringList resultEffects;
   for (const auto &effect : allEffects) {
 
@@ -615,6 +620,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
       continue;
     }
 
+    // test if applicable effect
     auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
     if (effect.effect == EFFECT_REINIT &&
         !(pm->GetNbOfStatsInEffectList(this, effect.statsName) >=
@@ -630,10 +636,11 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
               .arg(effect.statsName));
       break;
     }
+    appliedEffects.push_back(effect);
     resultEffects.append(ApplyOneEffect(target, effect, true));
   }
 
-  return std::make_pair(applyAtk, resultEffects);
+  return std::make_tuple(applyAtk, resultEffects, appliedEffects);
 }
 
 void Character::RemoveMalusEffect(const QString &statsName) {

@@ -4,6 +4,7 @@
 #include <QString>
 #include <unordered_map>
 #include <vector>
+#include <tuple>
 
 #include "common.h"
 #include "effect.h"
@@ -54,7 +55,7 @@ public:
   // Effect
   QString ApplyOneEffect(Character *target, const effectParam &effect,
                          const bool fromLaunch);
-  std::pair<bool, QStringList>
+  std::tuple<bool, QStringList, std::vector<effectParam>>
   ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
                  Character *target); // value1: apply the atk ?, value2 : logs
                                      // after applying effects
