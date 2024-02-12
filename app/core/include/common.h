@@ -4,6 +4,7 @@
 #include <qobject.h>
 #include <unordered_set>
 #include <unordered_map>
+#include <variant>
 
 enum class StatsEnum {
   hp = 0,
