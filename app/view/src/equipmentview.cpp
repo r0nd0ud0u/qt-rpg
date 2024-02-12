@@ -33,6 +33,10 @@ QAbstractItemModel *EquipmentView::createEquipmentModel(QObject *parent) {
 
   const auto *selectedHero =
       Application::GetInstance().m_GameManager->GetSelectedHero();
+
+  // TODO test pointers
+  // TODO test m_WearingEquipment
+
   addEquipmentRow(model, EQUIP_HEAD,
                   selectedHero->m_WearingEquipment.at(EQUIP_HEAD));
   addEquipmentRow(model, EQUIP_NECKLACE,

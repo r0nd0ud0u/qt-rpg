@@ -129,7 +129,10 @@ void GameDisplay::StartNewTurn() {
     ui->attak_page->InitTargetsWidget();
   }
   // Apply effects
-  gm->m_PlayersManager->ApplyEffects();
+  QStringList effectsLogs = gm->m_PlayersManager->ApplyEffects();
+  for (const auto &el : effectsLogs) {
+    emit SigUpdateChannelView(el);
+  }
   // Apply regen stats
   gm->m_PlayersManager->ApplyRegenStats();
   // Updat views after stats changes
@@ -140,10 +143,11 @@ void GameDisplay::EndOfTurn() {
   const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
   // update gamestate
   // update effect
-  const QStringList terminatedEffects = pm->UpdateEffects();
+  const QStringList terminatedEffects = pm->RemoveTerminatedEffects(true);
   for (const auto &te : terminatedEffects) {
     emit SigUpdateChannelView(te);
   }
+  pm->DecreaseCoolDownEffects();
   emit SigUpdateChannelView("Fin du tour !!");
 }
 
@@ -171,39 +175,59 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   const auto &nameChara = gm->m_GameState->GetCurrentPlayerName();
   auto *activatedPlayer = gm->m_PlayersManager->GetCharacterByName(nameChara);
   // launch atk
+  emit SigUpdateChannelView(
+      QString("%1 est lancé par %2.").arg(atkName).arg(nameChara));
   std::vector<QString> realTargetedList;
-  for (const auto &target : targetList){
-      if(target.m_IsTargeted){
-          realTargetedList.push_back(target.m_Name);
-      }
-
+  for (const auto &target : targetList) {
+    if (target.m_IsTargeted) {
+      realTargetedList.push_back(target.m_Name);
+    }
   }
+  // Parse target list and appliy atk and effects
   for (const auto &target : targetList) {
     QString channelLog;
     auto *targetChara = gm->m_PlayersManager->GetCharacterByName(target.m_Name);
 
     if (activatedPlayer != nullptr && targetChara != nullptr) {
-      if (target.m_IsTargeted) {
-        channelLog = activatedPlayer->Attaque(atkName, targetChara);
+      // EFFECT
+      const auto &[applyAtk, resultEffects] = activatedPlayer->ApplyAtkEffect(
+          target.m_IsTargeted, atkName, targetChara);
+      for (const auto &re : resultEffects) {
+        emit SigUpdateChannelView(re);
       }
-      activatedPlayer->ApplyAtkEffect(target.m_IsTargeted, atkName, targetChara);
-
-      // Update channel view
-      if(!channelLog.isEmpty()){emit SigUpdateChannelView(channelLog);}
+      if (target.m_IsTargeted && applyAtk) {
+        // ATK
+        channelLog = activatedPlayer->Attaque(atkName, targetChara);
+        // Update channel view
+        if (!channelLog.isEmpty()) {
+          emit SigUpdateChannelView(channelLog);
+        }
+      }
     }
   }
   // Stats change on hero
   if (activatedPlayer != nullptr) {
     activatedPlayer->UpdateStatsOnAtk(atkName);
   }
-    // Update game state
-  gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer, atkName,realTargetedList);
+  /// Update game state
+  // update effect list of player manager
+  gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer, atkName,
+                                           realTargetedList);
+  // remove terminated effects
+  // Some effects like "delete one bad effect" need to be updated
+  const QStringList terminatedEffects =
+      gm->m_PlayersManager->RemoveTerminatedEffects(false);
+  for (const auto &te : terminatedEffects) {
+    emit SigUpdateChannelView(te);
+  }
   // update views of heroes and bosses
   emit SigUpdatePlayerPanel();
 
   // check who is dead!
   for (auto &boss : gm->m_PlayersManager->m_BossesList) {
-    if (boss->m_Stats.m_HP.m_CurrentValue == 0) {
+    const auto &hp =
+        std::get<StatsType<int>>(boss->m_Stats.m_AllStatsTable[STATS_HP]);
+    if (hp.m_CurrentValue == 0) {
       // next phase
       emit SigBossDead(boss->m_Name);
       // delete bosses in player manager
@@ -219,6 +243,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
   uint8_t nbDeadHeroes = 0;
   for (const auto &hero : gm->m_PlayersManager->m_HeroesList) {
+    const auto &hp =
+        std::get<StatsType<int>>(hero->m_Stats.m_AllStatsTable[STATS_HP]);
     if (hero->m_Stats.m_HP.m_CurrentValue == 0) {
       // choose to drink a potion
       nbDeadHeroes++;

@@ -24,9 +24,12 @@ BossPanel::UpdatePanel(Character* boss)
 
   m_Boss = boss;
 
+  auto &hp =
+      std::get<StatsType<int>>(boss->m_Stats.m_AllStatsTable[STATS_HP]);
+
   ui->name_label->setText(boss->m_Name);
-  ui->hp_bar->setFormat(QString::number(boss->m_Stats.m_HP.m_CurrentValue) + "/" +
-                        QString::number(boss->m_Stats.m_HP.m_MaxValue) + " %p%");
+  ui->hp_bar->setFormat(QString::number(hp.m_CurrentValue) + "/" +
+                        QString::number(hp.m_MaxValue) + " %p%");
 
   ui->hp_bar->setStyleSheet("QProgressBar{color: white;} QProgressBar::chunk { "
                             "background-color: green; border: white;}");

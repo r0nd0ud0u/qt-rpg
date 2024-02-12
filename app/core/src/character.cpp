@@ -3,13 +3,14 @@
 // decode json
 #include <QDir>
 #include <QFile>
-#include <QJsonDocument>
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QJsonObject>
 
 #include <QtDebug>
 
 #include "Application.h"
+#include "utils.h"
 
 using namespace std;
 
@@ -23,6 +24,72 @@ Character::Character(const QString name, const characType type,
                      const Stats &stats)
     : m_Name(name), m_type(type), m_Stats(stats) {
   m_Inventory.resize(static_cast<int>(InventoryType::enumSize));
+}
+
+int Character::DamageByAtk(Character *target, const AttaqueType &atk) {
+  const auto &launcherPowMag =
+      std::get<StatsType<double>>(m_Stats.m_AllStatsTable[STATS_POW_MAG]);
+  const auto &launcherPowPhy =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_POW_PHY]);
+  const auto &targetArmPhy =
+      std::get<StatsType<int>>(target->m_Stats.m_AllStatsTable[STATS_ARM_PHY]);
+  const auto &targetArmMag =
+      std::get<StatsType<int>>(target->m_Stats.m_AllStatsTable[STATS_ARM_MAG]);
+
+  int finalDamage = 0;
+  if (atk.damage > 0) {
+    int arm = 0;
+    int damage = atk.damage;
+    if (atk.manaCost > 0) {
+      damage += static_cast<int>(std::round(launcherPowMag.m_CurrentValue));
+      arm = targetArmMag.m_CurrentValue;
+    } else if (atk.vigorCost > 0 || atk.berseckCost > 0) {
+      damage += launcherPowPhy.m_CurrentValue;
+      arm = targetArmPhy.m_CurrentValue;
+    }
+    const double protection = 1000.0 / (1000.0 + static_cast<double>(arm));
+    finalDamage = static_cast<int>(std::round(damage * protection));
+  }
+  return finalDamage;
+}
+
+QString Character::RegenIntoDamage(const int atkValue,
+                                   const QString &statsName) {
+  if (atkValue > 0) {
+    return "atk value is not >0";
+  }
+
+  if (statsName != STATS_HP && statsName != STATS_MANA &&
+      statsName != STATS_VIGOR && statsName != STATS_BERSECK) {
+    return "Bad stats name";
+  }
+
+  QString channelLog;
+  const auto pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+  const auto &effectList = pm->m_AllEffectsOnGame;
+  std::vector<Character *> playerList;
+  if (m_type == characType::Hero) {
+    playerList = pm->m_HeroesList;
+  } else if (m_type == characType::Boss) {
+    playerList = pm->m_BossesList;
+  }
+
+  for (const auto &e : effectList.at(m_Name)) {
+    if (e.allAtkEffects.effect == EFFECT_INTO_DAMAGE) {
+      AttaqueType amountIntoDamageAtk;
+      amountIntoDamageAtk.damage =
+          atkValue * e.allAtkEffects.subValueEffect / 100;
+      for (auto *pl : playerList) {
+        const auto finalDamage = DamageByAtk(pl, amountIntoDamageAtk);
+        auto &hp =
+            std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable[STATS_HP]);
+        hp.m_CurrentValue = max(0, hp.m_CurrentValue - finalDamage);
+        channelLog = PlayersManager::FormatAtkOnEnnemy(
+            m_Name, pl->m_Name, "RegenIntoDamage", finalDamage);
+      }
+    }
+  }
+  return channelLog;
 }
 
 //////
@@ -40,27 +107,24 @@ QString Character::Attaque(const QString &atkName, Character *target) {
   const auto &atk = m_AttakList.at(atkName);
 
   // Stats change on target
-  auto &tarCurHp = target->m_Stats.m_HP.m_CurrentValue;
-  if (atk.damage > 0) {
-    int arm = 0;
-    int damage = atk.damage;
-    if (atk.manaCost > 0) {
-      damage += static_cast<int>(std::round(m_Stats.m_PowMag.m_CurrentValue));
-      arm = target->m_Stats.m_ArmMag.m_CurrentValue;
-    } else if (atk.vigorCost > 0 || atk.berseckCost > 0) {
-      damage += m_Stats.m_PowPhy.m_CurrentValue;
-      arm = target->m_Stats.m_ArmPhy.m_CurrentValue;
-    }
-    const double protection = 1000.0 / (1000.0 + static_cast<double>(arm));
-    const auto finalDamage = static_cast<int>(std::round(damage * protection));
+  auto &targetHp =
+      std::get<StatsType<int>>(target->m_Stats.m_AllStatsTable[STATS_HP]);
 
-    tarCurHp = max(0, tarCurHp - finalDamage);
-    channelLog = PlayersManager::FormatAtkOnEnnemy(m_Name, target->m_Name,atkName, finalDamage);
-  }
+  auto &tarCurHp = targetHp.m_CurrentValue;
+  const auto finalDamage = DamageByAtk(target, atk);
+  tarCurHp = max(0, tarCurHp - finalDamage);
+  channelLog += PlayersManager::FormatAtkOnEnnemy(m_Name, target->m_Name,
+                                                  atkName, finalDamage);
+
   if (atk.heal > 0) {
-    tarCurHp = min(target->m_Stats.m_HP.m_CurrentValue,
-                   static_cast<int>(tarCurHp + atk.heal));
-      channelLog = PlayersManager::FormatAtkOnAlly(m_Name, target->m_Name,atkName, atk.heal);
+    tarCurHp = min(targetHp.m_MaxValue, static_cast<int>(tarCurHp + atk.heal));
+    channelLog += PlayersManager::FormatAtkOnAlly(m_Name, target->m_Name,
+                                                  atkName, atk.heal);
+    // Apply effect transform heal into damage on all bosses
+    channelLog += RegenIntoDamage(atk.heal, STATS_HP);
+  }
+  if (channelLog.isEmpty()) {
+    channelLog = PlayersManager::FormatAtk(m_Name, target->m_Name, atkName);
   }
   return channelLog;
 }
@@ -72,38 +136,61 @@ void Character::UpdateStatsOnAtk(const QString &atkName) {
   const auto &atk = m_AttakList.at(atkName);
 
   // Stats change on target
+  auto &launcherMana =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_MANA]);
+  auto &launcherAggro =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_AGGRO]);
+  auto &launcherBerseck =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_BERSECK]);
+  auto &launcherVigor =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_VIGOR]);
+
+  auto &launcherAggroRate =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_RATE_AGGRO]);
+  auto &launcherRegenMana =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_REGEN_MANA]);
+  auto &launcherRegenVigor =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_REGEN_VIGOR]);
+  auto &launcherBerseckRate =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_RATE_BERSECK]);
+
   // Cost
-  m_Stats.m_Mana.m_CurrentValue =
-      max(0, static_cast<int>(m_Stats.m_Mana.m_CurrentValue - atk.manaCost));
-  m_Stats.m_Vigor.m_CurrentValue =
-      max(0, static_cast<int>(m_Stats.m_Vigor.m_CurrentValue - atk.vigorCost));
-  m_Stats.m_Berseck.m_CurrentValue = max(
-      0, static_cast<int>(m_Stats.m_Berseck.m_CurrentValue - atk.berseckCost));
-  // Gain
-  m_Stats.m_Aggro.m_CurrentValue += m_Stats.m_AggroRate.m_CurrentValue;
-  m_Stats.m_Berseck.m_CurrentValue += m_Stats.m_BerseckRate.m_CurrentValue;
-  // Regen
-  m_Stats.m_Mana.m_CurrentValue += static_cast<int>(std::round(m_Stats.m_RegenMana.m_CurrentValue));
+  launcherMana.m_CurrentValue =
+      max(0, static_cast<int>(launcherMana.m_CurrentValue - atk.manaCost));
+  launcherVigor.m_CurrentValue =
+      max(0, static_cast<int>(launcherVigor.m_CurrentValue - atk.vigorCost));
+  launcherBerseck.m_CurrentValue = max(
+      0, static_cast<int>(launcherBerseck.m_CurrentValue - atk.berseckCost));
+  // Gain or regen
+  launcherAggro.m_CurrentValue += launcherAggroRate.m_CurrentValue;
+  launcherBerseck.m_CurrentValue += launcherBerseckRate.m_CurrentValue;
+  launcherMana.m_CurrentValue +=
+      static_cast<int>(std::round(launcherRegenMana.m_CurrentValue));
+  launcherVigor.m_CurrentValue +=
+      static_cast<int>(std::round(launcherRegenVigor.m_CurrentValue));
 }
 
 void Character::AddAtq(const AttaqueType &atq) { m_AttakList[atq.name] = atq; }
 
 void Character::AddStuff(const Stuff &stuff) {
-  m_Stats.m_HP.m_CurrentValue += stuff.m_Stats.m_HP.m_CurrentValue;
-  m_Stats.m_Mana = stuff.m_Stats.m_Mana;
-  m_Stats.m_Vigor = stuff.m_Stats.m_Vigor;
-  m_Stats.m_Berseck = stuff.m_Stats.m_Berseck;
-  m_Stats.m_ArmPhy = stuff.m_Stats.m_ArmPhy;
-  m_Stats.m_ArmMag = stuff.m_Stats.m_ArmMag;
-  m_Stats.m_PowPhy = stuff.m_Stats.m_PowPhy;
-  m_Stats.m_PowMag = stuff.m_Stats.m_PowMag;
-  m_Stats.m_Aggro = stuff.m_Stats.m_Aggro;
-  m_Stats.m_Speed = stuff.m_Stats.m_Speed;
-  m_Stats.m_CriticalStrike = stuff.m_Stats.m_CriticalStrike;
-  m_Stats.m_Dogde = stuff.m_Stats.m_Dogde;
-  m_Stats.m_RegenHP = stuff.m_Stats.m_RegenHP;
-  m_Stats.m_RegenMana = stuff.m_Stats.m_RegenMana;
-  m_Stats.m_RegenVigor = stuff.m_Stats.m_RegenVigor;
+
+  std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_HP]).m_CurrentValue +=
+      stuff.m_Stats.m_HP.m_CurrentValue;
+
+  // m_Stats.m_Mana = stuff.m_Stats.m_Mana;
+  // m_Stats.m_Vigor = stuff.m_Stats.m_Vigor;
+  // m_Stats.m_Berseck = stuff.m_Stats.m_Berseck;
+  // m_Stats.m_ArmPhy = stuff.m_Stats.m_ArmPhy;
+  // m_Stats.m_ArmMag = stuff.m_Stats.m_ArmMag;
+  // m_Stats.m_PowPhy = stuff.m_Stats.m_PowPhy;
+  // m_Stats.m_PowMag = stuff.m_Stats.m_PowMag;
+  // m_Stats.m_Aggro = stuff.m_Stats.m_Aggro;
+  // m_Stats.m_Speed = stuff.m_Stats.m_Speed;
+  // m_Stats.m_CriticalStrike = stuff.m_Stats.m_CriticalStrike;
+  // m_Stats.m_Dogde = stuff.m_Stats.m_Dogde;
+  // m_Stats.m_RegenHP = stuff.m_Stats.m_RegenHP;
+  // m_Stats.m_RegenMana = stuff.m_Stats.m_RegenMana;
+  // m_Stats.m_RegenVigor = stuff.m_Stats.m_RegenVigor;
 }
 
 QString Character::GetInventoryString(const InventoryType &type) {
@@ -168,42 +255,68 @@ void Character::LoadAtkJson() {
       atk.turnsDuration = static_cast<uint16_t>(json[ATK_DURATION].toInt());
       QJsonArray effectArray = json[EFFECT_ARRAY].toArray();
 #if QT_VERSION_MAJOR == 6
-      for(const auto& effect : effectArray) {
-          const auto& stat = effect[EFFECT_STAT].toString();
-          if(stat.isEmpty()){
-              break;
-          }
-          effectParam param;
-          param.effect = effect[EFFECT_TYPE].toString();
-          param.value = effect[EFFECT_VALUE].toInt();
-          param.nbTurns = effect[EFFECT_ACTIVE_TURNS].toInt();
-          param.reach = effect[EFFECT_REACH].toString();
-          param.statsName = effect[EFFECT_STAT].toString();
-          param.target = effect[EFFECT_TARGET].toString();
-          atk.m_AllEffects.push_back(param);
+      for (const auto &effect : effectArray) {
+        const auto &stat = effect[EFFECT_STAT].toString();
+        if (stat.isEmpty() && effect[EFFECT_TYPE].toString().isEmpty()) {
+          break;
+        }
+        effectParam param;
+        param.effect = effect[EFFECT_TYPE].toString();
+        param.value = effect[EFFECT_VALUE].toInt();
+        param.nbTurns = effect[EFFECT_ACTIVE_TURNS].toInt();
+        param.reach = effect[EFFECT_REACH].toString();
+        param.statsName = effect[EFFECT_STAT].toString();
+        param.target = effect[EFFECT_TARGET].toString();
+        param.subValueEffect = effect[EFFECT_SUB_VALUE].toInt();
+        atk.m_AllEffects.push_back(param);
       }
 #else
-      for(const auto& effect : effectArray) {
-          effectParam param;
-          if(effect.isObject()){
-              const QJsonObject item = effect.toObject();
-              for(const auto& key : item.keys()){
-                  const auto& val = item[key];
-                  if (val.isString()){
-                      param.effect = val.toString();
-                  }
-                  else if (val.isDouble())
-                      param.value = static_cast<int>(val.toDouble());
+      for (const auto &effect : effectArray) {
+        effectParam param;
+        if (effect.isObject()) {
+          const QJsonObject item = effect.toObject();
+          for (const auto &key : item.keys()) {
+            const auto &val = item[key];
+            if (val.isString()) {
+              if (key == EFFECT_TYPE) {
+                param.effect = val.toString();
               }
+              if (key == EFFECT_REACH) {
+                param.reach = val.toString();
+              }
+              if (key == EFFECT_STAT) {
+                param.statsName = val.toString();
+              }
+              if (key == EFFECT_TARGET) {
+                param.target = val.toString();
+              }
+            } else if (val.isDouble()) {
+              if (key == EFFECT_VALUE) {
+                param.value = static_cast<int>(val.toDouble());
+              }
+              if (key == EFFECT_ACTIVE_TURNS) {
+                param.nbTurns = static_cast<int>(val.toDouble());
+              }
+              if (key == EFFECT_SUB_VALUE) {
+                param.subValueEffect = static_cast<int>(val.toDouble());
+              }
+            }
           }
+        }
 
-          if(param.effect.isEmpty()){
-              break;
-          }
-          atk.m_AllEffects.push_back(param);
+        if (param.statsName.isEmpty() && param.effect.isEmpty()) {
+          break;
+        }
+        atk.m_AllEffects.push_back(param);
       }
 #endif
 
+      if (atk.name == "Eveil de la forêt") {
+        std::vector<effectParam> epTable = CreateEveilDeLaForet();
+        for (const auto &ep : epTable) {
+          atk.m_AllEffects.push_back(ep);
+        }
+      }
       // Add atk to hero atk list
       AddAtq(atk);
     }
@@ -254,44 +367,83 @@ void Character::ApplyEquipOnStats(
       continue;
     }
     const auto &equip = allEquipMap.at(equipName);
-    ProcessAddEquip(m_Stats.m_HP, equip.m_Stats.m_HP);
-    ProcessAddEquip(m_Stats.m_Mana, equip.m_Stats.m_Mana);
-    ProcessAddEquip(m_Stats.m_Vigor, equip.m_Stats.m_Vigor);
-    ProcessAddEquip(m_Stats.m_Berseck, equip.m_Stats.m_Berseck);
-    ProcessAddEquip(m_Stats.m_ArmPhy, equip.m_Stats.m_ArmPhy);
-    ProcessAddEquip(m_Stats.m_ArmMag, equip.m_Stats.m_ArmMag);
-    ProcessAddEquip(m_Stats.m_PowPhy, equip.m_Stats.m_PowPhy);
-    ProcessAddEquip(m_Stats.m_PowMag, equip.m_Stats.m_PowMag);
-    ProcessAddEquip(m_Stats.m_Aggro, equip.m_Stats.m_Aggro);
-    ProcessAddEquip(m_Stats.m_Speed, equip.m_Stats.m_Speed);
-    ProcessAddEquip(m_Stats.m_CriticalStrike, equip.m_Stats.m_CriticalStrike);
-    ProcessAddEquip(m_Stats.m_Dogde, equip.m_Stats.m_Dogde);
-    ProcessAddEquip(m_Stats.m_RegenHP, equip.m_Stats.m_RegenHP);
-    ProcessAddEquip(m_Stats.m_RegenMana, equip.m_Stats.m_RegenMana);
-    ProcessAddEquip(m_Stats.m_RegenVigor, equip.m_Stats.m_RegenVigor);
+    ProcessAddEquip(std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_HP]),
+                    equip.m_Stats.m_HP);
+    ProcessAddEquip(
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_MANA]),
+        equip.m_Stats.m_Mana);
+    ProcessAddEquip(
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_VIGOR]),
+        equip.m_Stats.m_Vigor);
+    ProcessAddEquip(
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_BERSECK]),
+        equip.m_Stats.m_Berseck);
+    ProcessAddEquip(
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_ARM_PHY]),
+        equip.m_Stats.m_ArmPhy);
+    ProcessAddEquip(
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_ARM_MAG]),
+        equip.m_Stats.m_ArmMag);
+    ProcessAddEquip(
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_POW_PHY]),
+        equip.m_Stats.m_PowPhy);
+    ProcessAddEquip(
+        std::get<StatsType<double>>(m_Stats.m_AllStatsTable[STATS_POW_MAG]),
+        equip.m_Stats.m_PowMag);
+    ProcessAddEquip(
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_AGGRO]),
+        equip.m_Stats.m_Aggro);
+    ProcessAddEquip(
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_SPEED]),
+        equip.m_Stats.m_Speed);
+    ProcessAddEquip(
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_CRIT]),
+        equip.m_Stats.m_CriticalStrike);
+    ProcessAddEquip(
+        std::get<StatsType<double>>(m_Stats.m_AllStatsTable[STATS_DODGE]),
+        equip.m_Stats.m_Dogde);
+    ProcessAddEquip(
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_REGEN_HP]),
+        equip.m_Stats.m_RegenHP);
+    ProcessAddEquip(
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_REGEN_MANA]),
+        equip.m_Stats.m_RegenMana);
+    ProcessAddEquip(
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_REGEN_VIGOR]),
+        equip.m_Stats.m_RegenVigor);
   }
 }
 
-template<class T>
-void Character::ProcessAddEquip(StatsType<T>& charStat, const StatsType<T>& equipStat){
-    if(equipStat.m_CurrentValue == 0){
-        return;
-    }
-    double ratio = static_cast<double>(charStat.m_CurrentValue)/static_cast<double>(charStat.m_MaxValue);
-    charStat.m_MaxValue += equipStat.m_CurrentValue; // Currently only current value is filled on equip stat
+template <class T>
+void Character::ProcessAddEquip(StatsType<T> &charStat,
+                                const StatsType<T> &equipStat) const {
+  if (equipStat.m_CurrentValue == 0) {
+    return;
+  }
+  double ratio = static_cast<double>(charStat.m_CurrentValue) /
+                 static_cast<double>(charStat.m_MaxValue);
+  charStat.m_MaxValue +=
+      equipStat.m_CurrentValue; // Currently only current value is filled on
+                                // equip stat
 
-    charStat.m_CurrentValue = static_cast<T>(std::round(charStat.m_MaxValue*ratio));
+  charStat.m_CurrentValue =
+      static_cast<T>(std::round(charStat.m_MaxValue * ratio));
 }
 
-template<class T>
-void Character::ProcessRemoveEquip(StatsType<T>& charStat, const StatsType<T>& equipStat){
-    if(equipStat.m_CurrentValue == 0){
-        return;
-    }
-    double ratio = static_cast<double>(charStat.m_CurrentValue)/static_cast<double>(charStat.m_MaxValue);
-    charStat.m_MaxValue -= equipStat.m_CurrentValue; // Currently only current value is filled on equip stat
+template <class T>
+void Character::ProcessRemoveEquip(StatsType<T> &charStat,
+                                   const StatsType<T> &equipStat) {
+  if (equipStat.m_CurrentValue == 0) {
+    return;
+  }
+  double ratio = static_cast<double>(charStat.m_CurrentValue) /
+                 static_cast<double>(charStat.m_MaxValue);
+  charStat.m_MaxValue -=
+      equipStat.m_CurrentValue; // Currently only current value is filled on
+                                // equip stat
 
-    charStat.m_CurrentValue = static_cast<T>(std::round(charStat.m_MaxValue*ratio));
+  charStat.m_CurrentValue =
+      static_cast<T>(std::round(charStat.m_MaxValue * ratio));
 }
 
 /////////////////////////////////////////
@@ -300,12 +452,29 @@ void Character::ProcessRemoveEquip(StatsType<T>& charStat, const StatsType<T>& e
 /// berseck.
 ///
 bool Character::CanBeLaunched(const AttaqueType &atk) const {
-  const auto remainingMana =
-      static_cast<uint32_t>(m_Stats.m_Mana.m_CurrentValue);
-  const auto remainingBerseck =
-      static_cast<uint32_t>(m_Stats.m_Berseck.m_CurrentValue);
-  const auto remainingVigor =
-      static_cast<uint32_t>(m_Stats.m_Vigor.m_CurrentValue);
+  const auto remainingMana = static_cast<uint32_t>(
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_MANA))
+          .m_CurrentValue);
+  const auto remainingBerseck = static_cast<uint32_t>(
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_BERSECK))
+          .m_CurrentValue);
+  const auto remainingVigor = static_cast<uint32_t>(
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_VIGOR))
+          .m_CurrentValue);
+  // Cooldown ?
+  for (const auto &e : atk.m_AllEffects) {
+    // TODO rewrite the cooldown thing for an atk
+    if (e.effect == EFFECT_NB_COOL_DOWN) {
+      const auto &pm =
+          Application::GetInstance().m_GameManager->m_PlayersManager;
+      for (const auto &gae : pm->m_AllEffectsOnGame[m_Name]) {
+        if (gae.allAtkEffects.effect == e.effect &&
+            gae.allAtkEffects.subValueEffect > 0) {
+          return false;
+        }
+      }
+    }
+  }
   if (atk.manaCost > 0 && atk.manaCost <= remainingMana) {
     return true;
   }
@@ -315,42 +484,207 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
   if (atk.vigorCost > 0 && atk.vigorCost <= remainingVigor) {
     return true;
   }
+
   return false;
 }
 
-void Character::ApplyOneEffect(Character *&target, const effectParam &effect) {
-    if (effect.statsName == STATS_HP) {
-        target->m_Stats.m_HP.m_CurrentValue =
-            min(target->m_Stats.m_HP.m_MaxValue,
-                target->m_Stats.m_HP.m_CurrentValue + effect.value);
+QString Character::ApplyOneEffect(Character *target,
+                                  const effectParam &effectConst,
+                                  const bool fromLaunch){
+  auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+  effectParam effect = effectConst;
+  if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
+    const int intMin = 0;
+    const int intMax = 100;
+    const int stepLimit = (intMax / effect.nbTurns); // get percentual
+    const auto maxLimit = stepLimit * (effect.nbTurns - effect.counterTurn);
+    if (const auto randNb = Utils::GetRandomNb(intMin, intMax);
+        !(randNb >= 0 && randNb < maxLimit)) {
+      return QString("%1 n'a pas d'effet").arg(EFFECT_NB_DECREASE_BY_TURN);
     }
-    if (effect.statsName == STATS_MANA) {
-        // Regen
-        target->m_Stats.m_Mana.m_CurrentValue =
-            min(target->m_Stats.m_Mana.m_MaxValue,
-                target->m_Stats.m_Mana.m_CurrentValue + effect.value);
+  }
+  int nbOfApplies = 1; // default value 1 for the nominal case
+
+  if (fromLaunch) {
+    if (effect.effect == EFFECT_NB_DECREASE_ON_TURN) {
+      // Set nbOfApplies to 0 as it is considered as a counter here
+      nbOfApplies = 0;
+      int counter = effect.subValueEffect;
+      while (counter > 0) {
+        const int intMin = 0;
+        const int intMax = 100;
+        const int stepLimit =
+            (intMax / effect.subValueEffect); // get percentual
+        const auto maxLimit = stepLimit * counter;
+        if (const auto randNb = Utils::GetRandomNb(intMin, intMax);
+            randNb >= 0 && randNb < maxLimit) {
+          nbOfApplies++;
+        } else {
+          break;
+        }
+        counter--;
+      }
     }
+    if (effect.effect == EFFECT_REINIT) {
+      pm->ResetCounterOnOneStatsEffect(this, effect.statsName);
+    }
+    if (effect.effect == EFFECT_DELETE_BAD) {
+      if (effect.subValueEffect <= 1) {
+        pm->DeleteOneBadEffect(this);
+      } else {
+        pm->DeleteAllBadEffect(this);
+      }
+    }
+    if (effect.effect == EFFECT_IMPROVE_HOTS) {
+      pm->ImproveHotsOnPlayers(effect.subValueEffect, target->m_type);
+    }
+    if (effect.effect == EFFECT_BOOSTED_BY_HOTS) {
+      auto nbHots = pm->GetNbOfStatsInEffectList(target, STATS_HP);
+      effect.value = effect.value * (effect.subValueEffect / 100) * nbHots;
+    }
+  }
+  // apply the effect
+  for (int i = 0; i < nbOfApplies; i++) {
+    if (effect.statsName == STATS_DODGE) { // value in %
+      auto &localStat = std::get<StatsType<double>>(
+          target->m_Stats.m_AllStatsTable[effect.statsName]);
+      localStat.m_CurrentValue = static_cast<int>(
+          std::round(localStat.m_CurrentValue +
+                     localStat.m_MaxValue * effect.value / 100));
+    } else if (effect.statsName == STATS_POW_MAG) {
+      auto &localStat = std::get<StatsType<double>>(
+          target->m_Stats.m_AllStatsTable[effect.statsName]);
+      localStat.m_CurrentValue =
+          min(localStat.m_MaxValue, localStat.m_CurrentValue + effect.value);
+    } else {
+      auto &localStat = std::get<StatsType<int>>(
+          target->m_Stats.m_AllStatsTable[effect.statsName]);
+      localStat.m_CurrentValue =
+          min(localStat.m_MaxValue, localStat.m_CurrentValue + effect.value);
+    }
+  }
+  // Apply regen effect turning into damage for all bosses
+  if (effect.statsName == STATS_HP || effect.statsName == STATS_MANA ||
+      effect.statsName == STATS_VIGOR || effect.statsName == STATS_BERSECK) {
+    for (const auto &[playerName, allGae] : pm->m_AllEffectsOnGame) {
+      for (const auto &e : allGae) {
+        if (e.allAtkEffects.effect == EFFECT_INTO_DAMAGE) {
+          // TODO handle return QString
+          RegenIntoDamage(effect.value, effect.statsName);
+          break;
+        }
+      }
+    }
+  }
+  const int potentialAttempts = max(1, effect.subValueEffect);
+  return QString("Sur %1. L'effet %2-%3 s'est appliqué %4 fois sur %5 "
+                 "potentielle(s) "
+                 "tentative(s) avec une valeur max de %6.")
+      .arg(target->m_Name)
+      .arg(effect.statsName)
+      .arg(effect.effect)
+      .arg(nbOfApplies)
+      .arg(QString::number(potentialAttempts))
+      .arg(QString::number(nbOfApplies * effect.value));
 }
-void Character::ApplyAtkEffect(const bool targetedOnMainAtk,
-                               const QString &atkName, Character *target) {
-    if (target == nullptr) {
-        return;
+
+// Apply effect after launch of atk
+std::pair<bool, QStringList>
+Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
+                          Character *target) {
+  if (target == nullptr) {
+    return std::make_pair(false, QStringList("No target"));
+  }
+  bool applyAtk = true;
+  const auto &allEffects = m_AttakList.at(atkName).m_AllEffects;
+
+  QStringList resultEffects;
+  for (const auto &effect : allEffects) {
+
+    // is targeted ?
+    if (effect.target == TARGET_ALLY && effect.reach == REACH_INDIVIDUAL &&
+        !targetedOnMainAtk) {
+      continue;
+    }
+    if (effect.target == TARGET_ALLY && effect.reach == REACH_ZONE &&
+        !targetedOnMainAtk) {
+      continue;
+    }
+    if (effect.target == TARGET_ENNEMY && effect.reach == REACH_INDIVIDUAL &&
+        !targetedOnMainAtk) {
+      continue;
     }
 
-    const auto &allEffects = m_AttakList.at(atkName).m_AllEffects;
-
-    for (const auto &effect : allEffects) {
-
-        // is targeted ?
-        if (effect.target == TARGET_ALLY && effect.reach == REACH_INDIVIDUAL &&
-            !targetedOnMainAtk) {
-            continue;
-        }
-        if (effect.target == TARGET_ENNEMY && effect.reach == REACH_INDIVIDUAL &&
-            !targetedOnMainAtk) {
-            continue;
-        }
-
-        ApplyOneEffect(target, effect);
+    auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+    if (effect.effect == EFFECT_REINIT &&
+        !(pm->GetNbOfStatsInEffectList(this, effect.statsName) >=
+          effect.subValueEffect)) {
+      applyAtk = false;
+      resultEffects.append(
+          QString("Sur %1. L'effet %2-%3 n'est pas applicable. %4 effet(s) sur "
+                  "stats %5 requis.")
+              .arg(target->m_Name)
+              .arg(effect.statsName)
+              .arg(effect.effect)
+              .arg(effect.subValueEffect)
+              .arg(effect.statsName));
+      break;
     }
+    resultEffects.append(ApplyOneEffect(target, effect, true));
+  }
+
+  return std::make_pair(applyAtk, resultEffects);
+}
+
+void Character::RemoveMalusEffect(const QString &statsName) {
+
+  for (const auto &stats : ALL_STATS) {
+    if (stats == STATS_POW_MAG || stats == STATS_DODGE) {
+      auto &localStat =
+          std::get<StatsType<double>>(m_Stats.m_AllStatsTable[stats]);
+      localStat.m_CurrentValue = localStat.m_MaxValue;
+      break;
+    } else {
+      auto &localStat =
+          std::get<StatsType<int>>(m_Stats.m_AllStatsTable[stats]);
+      localStat.m_CurrentValue = localStat.m_MaxValue;
+      break;
+    }
+  }
+}
+
+std::vector<effectParam> Character::CreateEveilDeLaForet() {
+  std::vector<effectParam> epTable;
+
+  effectParam param;
+  param.effect = EFFECT_DELETE_BAD;
+  param.value = 0;
+  param.nbTurns = 1;
+  param.reach = REACH_ZONE;
+  param.statsName = "";
+  param.target = TARGET_ALLY;
+  param.subValueEffect = 1000;
+  epTable.push_back(param);
+
+  effectParam param2;
+  param2.effect = EFFECT_IMPROVE_HOTS;
+  param2.value = 0;
+  param2.nbTurns = 1;
+  param2.reach = REACH_ZONE;
+  param2.statsName = "";
+  param2.target = TARGET_ALLY;
+  param2.subValueEffect = 20;
+  epTable.push_back(param2);
+
+  effectParam param3;
+  param3.effect = EFFECT_BOOSTED_BY_HOTS;
+  param3.value = 80;
+  param3.nbTurns = 1;
+  param3.reach = REACH_ZONE;
+  param3.statsName = STATS_HP;
+  param3.target = TARGET_ALLY;
+  param3.subValueEffect = 25;
+  epTable.push_back(param3);
+
+  return epTable;
 }

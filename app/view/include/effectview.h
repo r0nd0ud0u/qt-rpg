@@ -68,6 +68,12 @@ private slots:
 
     void on_nb_turns_spinBox_3_valueChanged(int arg1);
 
+    void on_effect_value_spinbox_valueChanged(int arg1);
+
+    void on_effect_value_spinbox_2_valueChanged(int arg1);
+
+    void on_effect_value_spinbox_3_valueChanged(int arg1);
+
 private:
     Ui::EffectView *ui;
     bool m_FirstShow = false;
