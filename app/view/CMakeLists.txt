@@ -28,6 +28,7 @@ set(SOURCES
         src/characterwindow.cpp
         src/editattakview.cpp
         src/effectview.cpp
+        src/alleffectpanel.cpp
 )
 
 set(HEADERS
@@ -51,6 +52,7 @@ set(HEADERS
         include/characterwindow.h
         include/editattakview.h
         include/effectview.h
+        include/alleffectpanel.h
 )
 
 set(FORMS
@@ -72,15 +74,15 @@ set(FORMS
         forms/characterwindow.ui
         forms/editattakview.ui
         forms/effectview.ui
+        forms/alleffectpanel.ui
+
     )
 
 set(RESOURCES
     ${CMAKE_SOURCE_DIR}/resources/resource.qrc
 )
 
-add_library(view STATIC ${SOURCES} ${HEADERS} ${FORMS} ${RESOURCES}
-
-     )
+add_library(view STATIC ${SOURCES} ${HEADERS} ${FORMS} ${RESOURCES})
 target_include_directories(view PUBLIC include forms)
 
 target_link_libraries(view
