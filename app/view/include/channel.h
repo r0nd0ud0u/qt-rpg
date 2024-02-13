@@ -2,6 +2,7 @@
 #define CHANNEL_H
 
 #include <QWidget>
+#include <QColor>
 
 namespace Ui {
 class Channel;
@@ -25,7 +26,7 @@ private slots:
   void on_next_turn_button_clicked();
   void on_end_round_button_clicked();
   void EndOfGame();
-  void UpdateLog(QString log);
+  void UpdateLog(const QString& log, const QColor = QColor("dark"));
 
   private:
   Ui::Channel *ui;

@@ -2,6 +2,8 @@
 #define CHARACTER_H
 
 #include <QString>
+#include <QColor>
+
 #include <unordered_map>
 #include <vector>
 #include <tuple>
@@ -76,6 +78,7 @@ public:
   std::vector<uint8_t> m_Inventory;
   int m_Level = 1;
   int m_Exp = 0;
+  QColor color = QColor("dark");
 
   private:
   template <class T>
