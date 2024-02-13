@@ -490,7 +490,7 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
 
 QString Character::ApplyOneEffect(Character *target,
                                   const effectParam &effectConst,
-                                  const bool fromLaunch){
+                                  const bool fromLaunch) {
   auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
   effectParam effect = effectConst;
   if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
@@ -527,6 +527,7 @@ QString Character::ApplyOneEffect(Character *target,
     }
     if (effect.effect == EFFECT_REINIT) {
       pm->ResetCounterOnOneStatsEffect(this, effect.statsName);
+      nbOfApplies = 0;
     }
     if (effect.effect == EFFECT_DELETE_BAD) {
       if (effect.subValueEffect <= 1) {
@@ -598,14 +599,25 @@ std::tuple<bool, QStringList, std::vector<effectParam>>
 Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
                           Character *target) {
   if (target == nullptr) {
-        return std::make_tuple(false, QStringList("No target"), std::vector<effectParam>());
+    return std::make_tuple(false, QStringList("No target"),
+                           std::vector<effectParam>());
   }
   bool applyAtk = true;
   const auto &allEffects = m_AttakList.at(atkName).m_AllEffects;
   std::vector<effectParam> appliedEffects;
   QStringList resultEffects;
+  const bool isAlly = target->m_type == m_type;
+  qDebug() << target->m_Name;
   for (const auto &effect : allEffects) {
 
+    if (!isAlly &&
+        (effect.target == TARGET_ALLY || effect.target == TARGET_ALL_HEROES ||
+         effect.target == TARGET_HIMSELF)) {
+      continue;
+    }
+    if (isAlly && effect.target == TARGET_ENNEMY) {
+      continue;
+    }
     // is targeted ?
     if (effect.target == TARGET_ALLY && effect.reach == REACH_INDIVIDUAL &&
         !targetedOnMainAtk) {
