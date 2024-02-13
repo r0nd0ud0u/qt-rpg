@@ -129,9 +129,9 @@ void GameDisplay::StartNewTurn() {
     ui->attak_page->InitTargetsWidget();
   }
   // Apply effects
-  QStringList effectsLogs = gm->m_PlayersManager->ApplyEffects();
+  const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffects();
   for (const auto &el : effectsLogs) {
-    emit SigUpdateChannelView(el);
+      emit SigUpdateChannelView(el);
   }
   // Apply regen stats
   gm->m_PlayersManager->ApplyRegenStats();
@@ -193,7 +193,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       const auto &[applyAtk, resultEffects, appliedEffects] = activatedPlayer->ApplyAtkEffect(
           target.m_IsTargeted, atkName, targetChara);
       for (const auto &re : resultEffects) {
-        emit SigUpdateChannelView(re);
+          emit SigUpdateChannelView(re, activatedPlayer->color);
       }
       if (target.m_IsTargeted && applyAtk) {
         // ATK

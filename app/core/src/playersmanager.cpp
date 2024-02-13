@@ -117,6 +117,11 @@ void PlayersManager::InitHeroes() {
       .SetValues(3, 3, 3);
   const auto hero3 = new Character("Thraïn", characType::Hero, stats);
 
+  // color
+  hero1->color = QColor("green");
+  hero2->color = QColor("orange");
+  hero3->color = QColor("blue");
+
   m_HeroesList.push_back(hero1);
   m_HeroesList.push_back(hero2);
   m_HeroesList.push_back(hero3);
