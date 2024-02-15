@@ -30,7 +30,7 @@ void AllEffectPanel::addRow(QAbstractItemModel *model, const effectParam* ep, co
   model->setData(model->index(index, 4), ep->value);
 }
 
-QAbstractItemModel *AllEffectPanel::createModel(QObject *parent) {
+QAbstractItemModel *AllEffectPanel::createModel(QObject *parent) const  {
   auto *model = new QStandardItemModel(0, 5, parent);
 
   model->setHeaderData(0, Qt::Horizontal, QObject::tr("Effet"));

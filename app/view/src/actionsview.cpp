@@ -193,11 +193,11 @@ void ActionsView::UpdateTargetList(const QString &name) {
       if (m_CurAtk.target == TARGET_ALLY && m_CurAtk.reach == REACH_ZONE) {
         m_TargetedList[i].m_IsTargeted = !m_TargetedList[i].m_IsTargeted;
       }
-      else if (m_CurAtk.reach == REACH_INDIVIDUAL){
-          m_TargetedList[i].m_IsTargeted = (m_TargetedList[i].m_IsTargeted == true) ? false : false;
+      else if (m_CurAtk.reach == REACH_INDIVIDUAL && m_TargetedList[i].m_IsTargeted){
+          m_TargetedList[i].m_IsTargeted = false;
       }
-    } else if (m_CurAtk.reach == REACH_INDIVIDUAL){
-        m_TargetedList[i].m_IsTargeted = (m_TargetedList[i].m_IsTargeted == true) ? false : false;
+    } else if (m_CurAtk.reach == REACH_INDIVIDUAL && m_TargetedList[i].m_IsTargeted){
+        m_TargetedList[i].m_IsTargeted = false;
     }
     if (wg != nullptr) {
       wg->setChecked(m_TargetedList[i].m_IsTargeted);
