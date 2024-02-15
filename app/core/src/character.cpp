@@ -84,8 +84,7 @@ QString Character::RegenIntoDamage(const int atkValue,
         auto &hp =
             std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable[STATS_HP]);
         hp.m_CurrentValue = max(0, hp.m_CurrentValue - finalDamage);
-        channelLog = PlayersManager::FormatAtkOnEnnemy(
-            m_Name, pl->m_Name, "RegenIntoDamage", finalDamage);
+        channelLog = PlayersManager::FormatAtkOnEnnemy(finalDamage);
       }
     }
   }
@@ -111,21 +110,21 @@ QString Character::Attaque(const QString &atkName, Character *target) {
       std::get<StatsType<int>>(target->m_Stats.m_AllStatsTable[STATS_HP]);
 
   auto &tarCurHp = targetHp.m_CurrentValue;
-  const auto finalDamage = DamageByAtk(target, atk);
-  tarCurHp = max(0, tarCurHp - finalDamage);
-  channelLog += PlayersManager::FormatAtkOnEnnemy(m_Name, target->m_Name,
-                                                  atkName, finalDamage);
+  if (atk.damage > 0) {
+    const auto finalDamage = DamageByAtk(target, atk);
+    tarCurHp = max(0, tarCurHp - finalDamage);
+    channelLog +=
+        PlayersManager::FormatAtkOnEnnemy(finalDamage);
+  }
 
   if (atk.heal > 0) {
     tarCurHp = min(targetHp.m_MaxValue, static_cast<int>(tarCurHp + atk.heal));
-    channelLog += PlayersManager::FormatAtkOnAlly(m_Name, target->m_Name,
-                                                  atkName, atk.heal);
+    channelLog +=
+        PlayersManager::FormatAtkOnAlly(atk.heal);
     // Apply effect transform heal into damage on all bosses
     channelLog += RegenIntoDamage(atk.heal, STATS_HP);
   }
-  if (channelLog.isEmpty()) {
-    channelLog = PlayersManager::FormatAtk(m_Name, target->m_Name, atkName);
-  }
+
   return channelLog;
 }
 
@@ -578,9 +577,8 @@ QString Character::ApplyOneEffect(Character *target,
     }
   }
   const int potentialAttempts = max(1, effect.subValueEffect);
-  return QString("Sur %1. L'effet %2-%3 s'est appliqué %4 fois sur %5 "
-                 "potentielle(s) "
-                 "tentative(s) avec une valeur max de %6.")
+  return QString("Sur %1: l'effet %2-%3 s'applique %4/%5 "
+                 "possible(s) avec un max de %6.")
       .arg(target->m_Name)
       .arg(effect.statsName)
       .arg(effect.effect)
