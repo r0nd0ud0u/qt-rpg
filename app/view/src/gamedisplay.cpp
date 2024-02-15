@@ -149,6 +149,7 @@ void GameDisplay::EndOfTurn() {
   }
   pm->DecreaseCoolDownEffects();
   emit SigUpdateChannelView("GameState", "Fin du tour !!");
+  emit SigUpdateAllEffectPanel(pm->m_AllEffectsOnGame);
 }
 
 void GameDisplay::EndOfGame() {

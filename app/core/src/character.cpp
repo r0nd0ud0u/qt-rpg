@@ -658,12 +658,12 @@ void Character::RemoveMalusEffect(const QString &statsName) {
   for (const auto &stats : ALL_STATS) {
     if (stats == STATS_POW_MAG || stats == STATS_DODGE) {
       auto &localStat =
-          std::get<StatsType<double>>(m_Stats.m_AllStatsTable[stats]);
+            std::get<StatsType<double>>(m_Stats.m_AllStatsTable.at(stats));
       localStat.m_CurrentValue = localStat.m_MaxValue;
       break;
     } else {
       auto &localStat =
-          std::get<StatsType<int>>(m_Stats.m_AllStatsTable[stats]);
+            std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(stats));
       localStat.m_CurrentValue = localStat.m_MaxValue;
       break;
     }
