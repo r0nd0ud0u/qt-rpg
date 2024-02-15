@@ -27,7 +27,7 @@ private:
   void addRow(QAbstractItemModel *model, const effectParam *ep,
               const QString &launcher, const QString &targetName) const;
   void InitView();
-  QAbstractItemModel *createModel(QObject *parent);
+  QAbstractItemModel *createModel(QObject *parent) const;
 private slots:
   void UpdateModel(const std::vector<effectParam> &epTable,
                    const QString &launcher, const QString &targetName);
