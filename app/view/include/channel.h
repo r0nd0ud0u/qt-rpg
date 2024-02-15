@@ -26,7 +26,7 @@ private slots:
   void on_next_turn_button_clicked();
   void on_end_round_button_clicked();
   void EndOfGame();
-  void UpdateLog(const QString& log, const QColor = QColor("dark"));
+  void UpdateLog(const QString&, const QString& log, const QColor = QColor("dark"));
 
   private:
   Ui::Channel *ui;

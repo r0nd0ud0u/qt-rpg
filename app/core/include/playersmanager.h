@@ -26,18 +26,18 @@ public:
   QStringList ApplyEffects();
   void ApplyRegenStats();
 
-  static QString FormatAtkOnEnnemy(const QString player1, const QString player2,
-                                   const QString &atkName, const int damage);
-  static QString FormatAtkOnAlly(const QString player1, const QString player2,
-                                 const QString &atkName, const int damage);
-  static QString FormatAtk(const QString player1, const QString player2,
-                           const QString &atkName);
-  int GetNbOfStatsInEffectList(const Character* chara, const QString &statsName) const;
-  void ResetCounterOnOneStatsEffect(const Character* chara,const QString &statsName);
-  void DeleteOneBadEffect(const Character* chara);
+  static QString FormatAtkOnEnnemy(const int damage);
+  static QString FormatAtkOnAlly(const int damage);
+  static QString FormatAtk(const QString player2, const QString &atkName);
+  int GetNbOfStatsInEffectList(const Character *chara,
+                               const QString &statsName) const;
+  void ResetCounterOnOneStatsEffect(const Character *chara,
+                                    const QString &statsName);
+  void DeleteOneBadEffect(const Character *chara);
   void DecreaseCoolDownEffects();
-  void DeleteAllBadEffect(const Character* chara);
-  void ImproveHotsOnPlayers(const int valuePercent, const characType launcherType);
+  void DeleteAllBadEffect(const Character *chara);
+  void ImproveHotsOnPlayers(const int valuePercent,
+                            const characType launcherType);
 
   std::vector<Character *> m_HeroesList;
   std::vector<Character *> m_BossesList;

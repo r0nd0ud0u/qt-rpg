@@ -394,109 +394,96 @@ void PlayersManager::ApplyRegenStats() {
   }
 }
 
-QString PlayersManager::FormatAtkOnEnnemy(const QString player1,
-                                          const QString player2,
-                                          const QString &atkName,
-                                          const int damage) {
-  return QString("%1 utilise %2 sur %3 et fait %4 de dégâts!")
-      .arg(player1)
-      .arg(atkName)
-      .arg(player2)
-      .arg(damage);
+QString PlayersManager::FormatAtkOnEnnemy(const int damage) {
+  return QString("fait %1 de dégâts!").arg(damage);
 }
 
-QString PlayersManager::FormatAtkOnAlly(const QString player1,
-                                        const QString player2,
-                                        const QString &atkName,
-                                        const int damage) {
-  return QString("%1 utilise %2 sur %3 et soigne de %4 PV!")
-      .arg(player1)
-      .arg(atkName)
-      .arg(player2)
-      .arg(damage);
+QString PlayersManager::FormatAtkOnAlly(const int damage) {
+  return QString("soigne de %4 PV!").arg(damage);
 }
 
-QString PlayersManager::FormatAtk(const QString player1, const QString player2,
+QString PlayersManager::FormatAtk(const QString player2,
                                   const QString &atkName) {
-  return QString("%1 utilise %2 sur %3!")
-      .arg(player1)
-      .arg(atkName)
-      .arg(player2);
+  return QString("utilise %2 sur %3!").arg(atkName).arg(player2);
 }
 
-int PlayersManager::GetNbOfStatsInEffectList(const Character* chara, const QString &statsName) const {
-    if(chara == nullptr){
-        return 0;
+int PlayersManager::GetNbOfStatsInEffectList(const Character *chara,
+                                             const QString &statsName) const {
+  if (chara == nullptr) {
+    return 0;
+  }
+  int counter = 0;
+  for (const auto &e : m_AllEffectsOnGame.at(chara->m_Name)) {
+    if (e.allAtkEffects.statsName == statsName) {
+      counter++;
     }
-    int counter = 0;
-    for (const auto &e : m_AllEffectsOnGame.at(chara->m_Name)) {
-        if (e.allAtkEffects.statsName == statsName) {
-            counter++;
-        }
-    }
-    return counter;
+  }
+  return counter;
 }
 
-void PlayersManager::ResetCounterOnOneStatsEffect(const Character* chara,const QString &statsName) {
-    if(chara == nullptr){
-        return;
+void PlayersManager::ResetCounterOnOneStatsEffect(const Character *chara,
+                                                  const QString &statsName) {
+  if (chara == nullptr) {
+    return;
+  }
+  for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
+    if (e.allAtkEffects.statsName == statsName) {
+      e.allAtkEffects.counterTurn = 0;
     }
-    for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
-        if (e.allAtkEffects.statsName == statsName) {
-            e.allAtkEffects.counterTurn = 0;
-        }
-    }
+  }
 }
 
-void PlayersManager::DeleteOneBadEffect(const Character* chara) {
-    if(chara == nullptr){
-        return;
+void PlayersManager::DeleteOneBadEffect(const Character *chara) {
+  if (chara == nullptr) {
+    return;
+  }
+  for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
+    if (e.allAtkEffects.value < 0 && !e.allAtkEffects.statsName.isEmpty()) {
+      e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
+      break;
     }
-    for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
-        if (e.allAtkEffects.value < 0 && !e.allAtkEffects.statsName.isEmpty()) {
-            e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
-            break;
-        }
-    }
+  }
 }
 
-void PlayersManager::DeleteAllBadEffect(const Character* chara) {
-    if(chara == nullptr){
-        return;
+void PlayersManager::DeleteAllBadEffect(const Character *chara) {
+  if (chara == nullptr) {
+    return;
+  }
+  for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
+    if (e.allAtkEffects.value < 0) {
+      e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
     }
-    for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
-        if (e.allAtkEffects.value < 0) {
-            e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
-        }
-    }
+  }
 }
 
 void PlayersManager::DecreaseCoolDownEffects() {
-    for (auto &[playerName, allGae] : m_AllEffectsOnGame) {
-        for(auto& gae : allGae){
-            if(gae.allAtkEffects.effect == EFFECT_NB_COOL_DOWN && gae.allAtkEffects.subValueEffect > 0){
-                gae.allAtkEffects.subValueEffect--;
-            }
-        }
+  for (auto &[playerName, allGae] : m_AllEffectsOnGame) {
+    for (auto &gae : allGae) {
+      if (gae.allAtkEffects.effect == EFFECT_NB_COOL_DOWN &&
+          gae.allAtkEffects.subValueEffect > 0) {
+        gae.allAtkEffects.subValueEffect--;
+      }
     }
+  }
 }
 
-void PlayersManager::ImproveHotsOnPlayers(const int valuePercent, const characType launcherType){
-    std::vector<Character *> playerList;
+void PlayersManager::ImproveHotsOnPlayers(const int valuePercent,
+                                          const characType launcherType) {
+  std::vector<Character *> playerList;
 
-    if (launcherType == characType::Hero) {
-        playerList = m_HeroesList;
-    } else if (launcherType == characType::Boss) {
-        playerList = m_BossesList;
+  if (launcherType == characType::Hero) {
+    playerList = m_HeroesList;
+  } else if (launcherType == characType::Boss) {
+    playerList = m_BossesList;
+  }
+  for (const auto &pl : playerList) {
+    if (pl == nullptr) {
+      continue;
     }
-    for(const auto& pl : playerList){
-        if(pl == nullptr){
-            continue;
-        }
-        for(auto& e : m_AllEffectsOnGame[pl->m_Name]){
-            if(e.allAtkEffects.statsName == STATS_HP){
-                e.allAtkEffects.value += e.allAtkEffects.value*valuePercent/100;
-            }
-        }
+    for (auto &e : m_AllEffectsOnGame[pl->m_Name]) {
+      if (e.allAtkEffects.statsName == STATS_HP) {
+        e.allAtkEffects.value += e.allAtkEffects.value * valuePercent / 100;
+      }
     }
+  }
 }

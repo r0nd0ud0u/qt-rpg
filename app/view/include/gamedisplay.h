@@ -24,7 +24,7 @@ signals:
     void SigUpdatePlayerPanel();
     void SigBossDead(QString);
     void SigEndOfGame();
-    void SigUpdateChannelView(const QString&, const QColor = QColor("dark"));
+    void SigUpdateChannelView(const QString&, const QString&, const QColor = QColor("dark"));
     void SigNewEffectLaunched(const std::vector<effectParam>&, const QString&, const QString&);
 private:
     Ui::GameDisplay *ui;
