@@ -146,7 +146,7 @@ void ActionsView::on_validate_action_clicked() {
 void ActionsView::CreateTargetCheckBoxes(
     const QString &activePlayerName,
     const std::vector<Character *> &playerList) {
-  for (const auto& ply :playerList) {
+  for (const auto &ply : playerList) {
     auto *checkbox = new QCheckBox();
     checkbox->setText(ply->m_Name);
     checkbox->setEnabled(false);
@@ -175,10 +175,32 @@ void ActionsView::InitTargetsWidget() {
 }
 
 void ActionsView::UpdateTargetList(const QString &name) {
-  for (auto &tg : m_TargetedList) {
-    if (name == tg.m_Name) {
-      tg.m_IsTargeted = !tg.m_IsTargeted;
-      break;
+  for (int i = 0; i < m_TargetedList.size(); i++) {
+    auto *wg = static_cast<QCheckBox *>(
+        ui->targets_widget->layout()->itemAt(i)->widget());
+    if (wg == nullptr) {
+      continue;
+    }
+    if (!wg->isEnabled()) {
+      continue;
+    }
+    if (name == m_TargetedList[i].m_Name) {
+      m_TargetedList[i].m_IsTargeted = !m_TargetedList[i].m_IsTargeted;
+    } else if ((m_CurPlayer->m_type == characType::Hero &&
+                !m_TargetedList[i].m_IsBoss) ||
+               (m_CurPlayer->m_type == characType::Boss &&
+                m_TargetedList[i].m_IsBoss)) {
+      if (m_CurAtk.target == TARGET_ALLY && m_CurAtk.reach == REACH_ZONE) {
+        m_TargetedList[i].m_IsTargeted = !m_TargetedList[i].m_IsTargeted;
+      }
+      else if (m_CurAtk.reach == REACH_INDIVIDUAL && m_TargetedList[i].m_IsTargeted){
+          m_TargetedList[i].m_IsTargeted = false;
+      }
+    } else if (m_CurAtk.reach == REACH_INDIVIDUAL && m_TargetedList[i].m_IsTargeted){
+        m_TargetedList[i].m_IsTargeted = false;
+    }
+    if (wg != nullptr) {
+      wg->setChecked(m_TargetedList[i].m_IsTargeted);
     }
   }
   const bool enableValidateBtn =
@@ -211,6 +233,7 @@ void ActionsView::ProcessEnableTargetsBoxes() {
               m_CurAtk.target == TARGET_ALL_HEROES)) {
           continue;
         }
+        // TODO never entering here
         if (m_TargetedList[i].m_IsBoss && m_CurAtk.target != TARGET_ENNEMY) {
           continue;
         }

@@ -41,6 +41,9 @@ void Channel::EndOfGame(){
     ui->end_round_button->setEnabled(false);
 }
 
-void Channel::UpdateLog(QString log){
+void Channel::UpdateLog(const QString& topic, const QString& log, const QColor color){
+    ui->channel_textEdit->setTextColor(color);
+    ui->channel_textEdit->append(QString("[" + topic + "]: "));
+    ui->channel_textEdit->setTextColor("dark");
     ui->channel_textEdit->append(log);
 }

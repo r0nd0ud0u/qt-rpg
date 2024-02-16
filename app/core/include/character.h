@@ -2,8 +2,11 @@
 #define CHARACTER_H
 
 #include <QString>
+#include <QColor>
+
 #include <unordered_map>
 #include <vector>
+#include <tuple>
 
 #include "common.h"
 #include "effect.h"
@@ -54,7 +57,7 @@ public:
   // Effect
   QString ApplyOneEffect(Character *target, const effectParam &effect,
                          const bool fromLaunch);
-  std::pair<bool, QStringList>
+  std::tuple<bool, QStringList, std::vector<effectParam>>
   ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
                  Character *target); // value1: apply the atk ?, value2 : logs
                                      // after applying effects
@@ -75,6 +78,7 @@ public:
   std::vector<uint8_t> m_Inventory;
   int m_Level = 1;
   int m_Exp = 0;
+  QColor color = QColor("dark");
 
   private:
   template <class T>

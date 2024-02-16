@@ -84,8 +84,7 @@ QString Character::RegenIntoDamage(const int atkValue,
         auto &hp =
             std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable[STATS_HP]);
         hp.m_CurrentValue = max(0, hp.m_CurrentValue - finalDamage);
-        channelLog = PlayersManager::FormatAtkOnEnnemy(
-            m_Name, pl->m_Name, "RegenIntoDamage", finalDamage);
+        channelLog = PlayersManager::FormatAtkOnEnnemy(finalDamage);
       }
     }
   }
@@ -111,21 +110,21 @@ QString Character::Attaque(const QString &atkName, Character *target) {
       std::get<StatsType<int>>(target->m_Stats.m_AllStatsTable[STATS_HP]);
 
   auto &tarCurHp = targetHp.m_CurrentValue;
-  const auto finalDamage = DamageByAtk(target, atk);
-  tarCurHp = max(0, tarCurHp - finalDamage);
-  channelLog += PlayersManager::FormatAtkOnEnnemy(m_Name, target->m_Name,
-                                                  atkName, finalDamage);
+  if (atk.damage > 0) {
+    const auto finalDamage = DamageByAtk(target, atk);
+    tarCurHp = max(0, tarCurHp - finalDamage);
+    channelLog +=
+        PlayersManager::FormatAtkOnEnnemy(finalDamage);
+  }
 
   if (atk.heal > 0) {
     tarCurHp = min(targetHp.m_MaxValue, static_cast<int>(tarCurHp + atk.heal));
-    channelLog += PlayersManager::FormatAtkOnAlly(m_Name, target->m_Name,
-                                                  atkName, atk.heal);
+    channelLog +=
+        PlayersManager::FormatAtkOnAlly(atk.heal);
     // Apply effect transform heal into damage on all bosses
     channelLog += RegenIntoDamage(atk.heal, STATS_HP);
   }
-  if (channelLog.isEmpty()) {
-    channelLog = PlayersManager::FormatAtk(m_Name, target->m_Name, atkName);
-  }
+
   return channelLog;
 }
 
@@ -490,7 +489,7 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
 
 QString Character::ApplyOneEffect(Character *target,
                                   const effectParam &effectConst,
-                                  const bool fromLaunch){
+                                  const bool fromLaunch) {
   auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
   effectParam effect = effectConst;
   if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
@@ -527,6 +526,7 @@ QString Character::ApplyOneEffect(Character *target,
     }
     if (effect.effect == EFFECT_REINIT) {
       pm->ResetCounterOnOneStatsEffect(this, effect.statsName);
+      nbOfApplies = 0;
     }
     if (effect.effect == EFFECT_DELETE_BAD) {
       if (effect.subValueEffect <= 1) {
@@ -577,9 +577,8 @@ QString Character::ApplyOneEffect(Character *target,
     }
   }
   const int potentialAttempts = max(1, effect.subValueEffect);
-  return QString("Sur %1. L'effet %2-%3 s'est appliqué %4 fois sur %5 "
-                 "potentielle(s) "
-                 "tentative(s) avec une valeur max de %6.")
+  return QString("Sur %1: l'effet %2-%3 s'applique %4/%5 "
+                 "possible(s) avec un max de %6.")
       .arg(target->m_Name)
       .arg(effect.statsName)
       .arg(effect.effect)
@@ -589,18 +588,34 @@ QString Character::ApplyOneEffect(Character *target,
 }
 
 // Apply effect after launch of atk
-std::pair<bool, QStringList>
+// Test targets
+// Return tuple
+// - 1 : bool: is attak applied ?
+// - 2 : QStringList : log on each applied effect to display on channel
+// - 3 : std::vector<effectParam> : list of all applied effectParam
+std::tuple<bool, QStringList, std::vector<effectParam>>
 Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
                           Character *target) {
   if (target == nullptr) {
-    return std::make_pair(false, QStringList("No target"));
+    return std::make_tuple(false, QStringList("No target"),
+                           std::vector<effectParam>());
   }
   bool applyAtk = true;
   const auto &allEffects = m_AttakList.at(atkName).m_AllEffects;
-
+  std::vector<effectParam> appliedEffects;
   QStringList resultEffects;
+  const bool isAlly = target->m_type == m_type;
+  qDebug() << target->m_Name;
   for (const auto &effect : allEffects) {
 
+    if (!isAlly &&
+        (effect.target == TARGET_ALLY || effect.target == TARGET_ALL_HEROES ||
+         effect.target == TARGET_HIMSELF)) {
+      continue;
+    }
+    if (isAlly && effect.target == TARGET_ENNEMY) {
+      continue;
+    }
     // is targeted ?
     if (effect.target == TARGET_ALLY && effect.reach == REACH_INDIVIDUAL &&
         !targetedOnMainAtk) {
@@ -615,6 +630,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
       continue;
     }
 
+    // test if applicable effect
     auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
     if (effect.effect == EFFECT_REINIT &&
         !(pm->GetNbOfStatsInEffectList(this, effect.statsName) >=
@@ -630,10 +646,11 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
               .arg(effect.statsName));
       break;
     }
+    appliedEffects.push_back(effect);
     resultEffects.append(ApplyOneEffect(target, effect, true));
   }
 
-  return std::make_pair(applyAtk, resultEffects);
+  return std::make_tuple(applyAtk, resultEffects, appliedEffects);
 }
 
 void Character::RemoveMalusEffect(const QString &statsName) {
@@ -641,12 +658,12 @@ void Character::RemoveMalusEffect(const QString &statsName) {
   for (const auto &stats : ALL_STATS) {
     if (stats == STATS_POW_MAG || stats == STATS_DODGE) {
       auto &localStat =
-          std::get<StatsType<double>>(m_Stats.m_AllStatsTable[stats]);
+            std::get<StatsType<double>>(m_Stats.m_AllStatsTable.at(stats));
       localStat.m_CurrentValue = localStat.m_MaxValue;
       break;
     } else {
       auto &localStat =
-          std::get<StatsType<int>>(m_Stats.m_AllStatsTable[stats]);
+            std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(stats));
       localStat.m_CurrentValue = localStat.m_MaxValue;
       break;
     }

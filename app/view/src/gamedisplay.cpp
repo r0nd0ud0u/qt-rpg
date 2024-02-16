@@ -103,7 +103,7 @@ void GameDisplay::NewRound() {
   ui->attak_page->SetCurrentPlayer(activePlayer);
   ui->inventory_page->SetCurrentPlayer(activePlayer);
 
-  emit SigUpdateChannelView("Nouveau round !!");
+  emit SigUpdateChannelView("GameState", QString("Round %1/%2").arg(gs->m_CurrentRound).arg(gs->m_OrderToPlay.size()));
   // TODO update channel
   // choice of talent
   // if dead -> choice to take a potion
@@ -119,7 +119,7 @@ void GameDisplay::StartNewTurn() {
   // Update game state
   gm->m_GameState->m_CurrentRound = 0;
   gm->m_GameState->m_CurrentTurnNb++;
-  emit SigUpdateChannelView("Nouveau tour !!");
+  emit SigUpdateChannelView("GameState", QString("Tour %1").arg(gm->m_GameState->m_CurrentTurnNb));
   NewRound();
   // Then, update the display
   UpdateGameStatus();
@@ -129,9 +129,9 @@ void GameDisplay::StartNewTurn() {
     ui->attak_page->InitTargetsWidget();
   }
   // Apply effects
-  QStringList effectsLogs = gm->m_PlayersManager->ApplyEffects();
+  const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffects();
   for (const auto &el : effectsLogs) {
-    emit SigUpdateChannelView(el);
+      emit SigUpdateChannelView("GameState", el);
   }
   // Apply regen stats
   gm->m_PlayersManager->ApplyRegenStats();
@@ -145,10 +145,11 @@ void GameDisplay::EndOfTurn() {
   // update effect
   const QStringList terminatedEffects = pm->RemoveTerminatedEffects(true);
   for (const auto &te : terminatedEffects) {
-    emit SigUpdateChannelView(te);
+    emit SigUpdateChannelView("GameState", te);
   }
   pm->DecreaseCoolDownEffects();
-  emit SigUpdateChannelView("Fin du tour !!");
+  emit SigUpdateChannelView("GameState", "Fin du tour !!");
+  emit SigUpdateAllEffectPanel(pm->m_AllEffectsOnGame);
 }
 
 void GameDisplay::EndOfGame() {
@@ -159,7 +160,7 @@ void GameDisplay::EndOfGame() {
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(ActionsStackedWgType::defaultType));
 
-  emit SigUpdateChannelView("Fin du jeu !!");
+  emit SigUpdateChannelView("GameState", "Fin du jeu !!");
 }
 
 void GameDisplay::LaunchAttak(const QString &atkName,
@@ -175,8 +176,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   const auto &nameChara = gm->m_GameState->GetCurrentPlayerName();
   auto *activatedPlayer = gm->m_PlayersManager->GetCharacterByName(nameChara);
   // launch atk
-  emit SigUpdateChannelView(
-      QString("%1 est lancé par %2.").arg(atkName).arg(nameChara));
+  emit SigUpdateChannelView(nameChara,
+      QString("lance %1.").arg(atkName), activatedPlayer->color);
   std::vector<QString> realTargetedList;
   for (const auto &target : targetList) {
     if (target.m_IsTargeted) {
@@ -190,19 +191,21 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
     if (activatedPlayer != nullptr && targetChara != nullptr) {
       // EFFECT
-      const auto &[applyAtk, resultEffects] = activatedPlayer->ApplyAtkEffect(
+      const auto &[applyAtk, resultEffects, appliedEffects] = activatedPlayer->ApplyAtkEffect(
           target.m_IsTargeted, atkName, targetChara);
       for (const auto &re : resultEffects) {
-        emit SigUpdateChannelView(re);
+          emit SigUpdateChannelView(nameChara, re, activatedPlayer->color);
       }
       if (target.m_IsTargeted && applyAtk) {
         // ATK
         channelLog = activatedPlayer->Attaque(atkName, targetChara);
         // Update channel view
         if (!channelLog.isEmpty()) {
-          emit SigUpdateChannelView(channelLog);
+          emit SigUpdateChannelView(nameChara, channelLog, activatedPlayer->color);
         }
       }
+      // update all effect panel
+      emit SigNewEffectLaunched(appliedEffects, activatedPlayer->m_Name, target.m_Name);
     }
   }
   // Stats change on hero
@@ -218,7 +221,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   const QStringList terminatedEffects =
       gm->m_PlayersManager->RemoveTerminatedEffects(false);
   for (const auto &te : terminatedEffects) {
-    emit SigUpdateChannelView(te);
+    emit SigUpdateChannelView(nameChara, te);
   }
   // update views of heroes and bosses
   emit SigUpdatePlayerPanel();

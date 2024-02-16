@@ -3,7 +3,6 @@
 
 #include "Application.h"
 #include "gamedisplay.h"
-#include "stuff.h"
 
 EquipmentView::EquipmentView(QWidget *parent)
     : QWidget(parent), ui(new Ui::EquipmentView) {
