@@ -2,29 +2,9 @@
 #define COMMON_H
 
 #include <qobject.h>
-#include <unordered_set>
 #include <unordered_map>
+#include <unordered_set>
 #include <variant>
-
-enum class StatsEnum {
-  hp = 0,
-  mana,
-  vigor,
-  berseck,
-  berseckRate,
-  armPhy,
-  armMag,
-  powPhy,
-  powMag,
-  aggro,
-  aggroRate,
-  speed,
-  criticalStrike,
-  dodge,
-  regenHp,
-  regenMana,
-  regenVigor
-};
 
 const QString OFFLINE_IMG = "./offlines/attak/img/";
 const QString OFFLINE_ATK = "./offlines/attak/";
@@ -123,7 +103,8 @@ const QString EFFECT_PERCENT_CHANGE = "Changement par %";
 const QString EFFECT_DELETE_BAD = "Supprime effet néfaste";
 const QString EFFECT_INTO_DAMAGE = "% (stats) en dégâts";
 const QString EFFECT_IMPROVE_HOTS = "Boost chaque HOT de .. %";
-const QString EFFECT_BOOSTED_BY_HOTS = "Boost l'effet par nb HOTS presents en %";
+const QString EFFECT_BOOSTED_BY_HOTS =
+    "Boost l'effet par nb HOTS presents en %";
 const std::unordered_set<QString> EFFECTS{"",
                                           EFFECT_REINIT,
                                           EFFECT_NB_COOL_DOWN,
@@ -146,7 +127,7 @@ const QString EFFECT_SUB_VALUE = "Valeur de l'effet";
 
 template <class T> class StatsType {
 public:
-  StatsType() = default;  // Default constructor
+  StatsType() = default; // Default constructor
   explicit StatsType(QString type) : m_Type(type) {}
   T m_CurrentValue;
   T m_StartingValue;
@@ -163,8 +144,6 @@ using statsVariant = std::variant<StatsType<double>, StatsType<int>>;
 
 class Stats {
 public:
-
-
   StatsType<int> m_HP = StatsType<int>(STATS_HP);
   StatsType<int> m_Mana = StatsType<int>(STATS_MANA);
   StatsType<int> m_Vigor = StatsType<int>(STATS_VIGOR);

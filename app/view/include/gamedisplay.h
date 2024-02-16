@@ -2,9 +2,12 @@
 #define GAMEDISPLAY_H
 
 #include <QWidget>
+#include <QColor>
 
 // for TargetInfo class
 #include "actionsview.h"
+
+#include "playersmanager.h"
 
 namespace Ui {
 class GameDisplay;
@@ -23,7 +26,9 @@ signals:
     void SigUpdatePlayerPanel();
     void SigBossDead(QString);
     void SigEndOfGame();
-    void SigUpdateChannelView(QString);
+    void SigUpdateChannelView(const QString&, const QString&, const QColor = QColor("dark"));
+    void SigNewEffectLaunched(const std::vector<effectParam>&, const QString&, const QString&);
+    void SigUpdateAllEffectPanel(const std::unordered_map<QString, std::vector<GameAtkEffects>>& );
 private:
     Ui::GameDisplay *ui;
     void UpdateGameStatus();
