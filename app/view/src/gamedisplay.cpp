@@ -124,7 +124,7 @@ void GameDisplay::StartNewTurn() {
   // Then, update the display
   UpdateGameStatus();
   // game is just starting at turn 1
-  // some first init to do for the viewa
+  // some first init to do for the views
   if (gm->m_GameState->m_CurrentTurnNb == 1) {
     ui->attak_page->InitTargetsWidget();
   }
@@ -133,6 +133,13 @@ void GameDisplay::StartNewTurn() {
   for (const auto &el : effectsLogs) {
       emit SigUpdateChannelView("GameState", el);
   }
+  // update effect
+  const QStringList terminatedEffects = gm->m_PlayersManager->RemoveTerminatedEffects();
+  for (const auto &te : terminatedEffects) {
+      emit SigUpdateChannelView("GameState", te);
+  }
+  gm->m_PlayersManager->DecreaseCoolDownEffects();
+  emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
   // Apply regen stats
   gm->m_PlayersManager->ApplyRegenStats();
   // Updat views after stats changes
@@ -140,16 +147,7 @@ void GameDisplay::StartNewTurn() {
 }
 
 void GameDisplay::EndOfTurn() {
-  const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
-  // update gamestate
-  // update effect
-  const QStringList terminatedEffects = pm->RemoveTerminatedEffects(true);
-  for (const auto &te : terminatedEffects) {
-    emit SigUpdateChannelView("GameState", te);
-  }
-  pm->DecreaseCoolDownEffects();
   emit SigUpdateChannelView("GameState", "Fin du tour !!");
-  emit SigUpdateAllEffectPanel(pm->m_AllEffectsOnGame);
 }
 
 void GameDisplay::EndOfGame() {
@@ -219,7 +217,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   // remove terminated effects
   // Some effects like "delete one bad effect" need to be updated
   const QStringList terminatedEffects =
-      gm->m_PlayersManager->RemoveTerminatedEffects(false);
+      gm->m_PlayersManager->RemoveTerminatedEffects();
   for (const auto &te : terminatedEffects) {
     emit SigUpdateChannelView(nameChara, te);
   }

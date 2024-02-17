@@ -281,16 +281,12 @@ void PlayersManager::AddGameEffectOnAtk(
   }
 }
 
-QStringList PlayersManager::RemoveTerminatedEffects(const bool endOfTurn) {
+QStringList PlayersManager::RemoveTerminatedEffects() {
   QStringList sl;
   for (auto &[playerName, gaeTable] : m_AllEffectsOnGame) {
     for (auto it = gaeTable.begin(); it != gaeTable.end(); it++) {
-
-      if (endOfTurn) {
-        it->allAtkEffects.counterTurn++;
-      }
-
       if (it->allAtkEffects.counterTurn == it->allAtkEffects.nbTurns) {
+          // -1 because the launching attak turn is one occurence as well
         QString terminated("L'effet %1 sur %2 est terminé.");
         terminated =
             terminated.arg(it->allAtkEffects.statsName).arg(playerName);
