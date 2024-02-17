@@ -251,34 +251,15 @@ Character *PlayersManager::GetCharacterByName(const QString &name) {
 }
 
 void PlayersManager::AddGameEffectOnAtk(
-    const Character *curPlayer, const QString &atkName,
-    const std::vector<QString> &targetList) {
-  std::vector<Character *> playerList;
-
-  if (curPlayer->m_type == characType::Hero) {
-    playerList = m_HeroesList;
-  } else if (curPlayer->m_type == characType::Boss) {
-    playerList = m_BossesList;
-  }
-  auto &atk = curPlayer->m_AttakList.at(atkName);
-  for (const auto &target : playerList) {
-    // update game effect table
-    for (effectParam e : atk.m_AllEffects) {
-      // check if effect already active ?
-      if (e.target != TARGET_HIMSELF && target->m_Name == curPlayer->m_Name) {
-        continue;
-      }
-      if (e.reach == REACH_INDIVIDUAL && targetList.size() == 1 &&
-          targetList.front() != target->m_Name) {
-        continue;
-      }
-      GameAtkEffects gae;
-      gae.launcher = curPlayer->m_Name;
-      gae.atkName = atkName;
-      gae.allAtkEffects = e;
-      m_AllEffectsOnGame[target->m_Name].push_back(gae);
+    const QString& launcherName, const QString &atkName, const QString& targetName,
+    const std::vector<effectParam> &effects) {
+    for(const auto& e : effects){
+        GameAtkEffects gae;
+        gae.launcher = launcherName;
+        gae.atkName = atkName;
+        gae.allAtkEffects = e;
+        m_AllEffectsOnGame[targetName].push_back(gae);
     }
-  }
 }
 
 QStringList PlayersManager::RemoveTerminatedEffects() {
@@ -286,7 +267,6 @@ QStringList PlayersManager::RemoveTerminatedEffects() {
   for (auto &[playerName, gaeTable] : m_AllEffectsOnGame) {
     for (auto it = gaeTable.begin(); it != gaeTable.end(); it++) {
       if (it->allAtkEffects.counterTurn == it->allAtkEffects.nbTurns) {
-          // -1 because the launching attak turn is one occurence as well
         QString terminated("L'effet %1 sur %2 est terminé.");
         terminated =
             terminated.arg(it->allAtkEffects.statsName).arg(playerName);

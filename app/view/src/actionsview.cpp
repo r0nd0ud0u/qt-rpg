@@ -226,13 +226,6 @@ void ActionsView::ProcessEnableTargetsBoxes() {
     for (int i = 0; i < m_TargetedList.size(); i++) {
 
       if (m_CurPlayer->m_type == characType::Hero) {
-        // Disable current player if atk is not on himself or on all the group
-        // of heroes
-        if (m_TargetedList[i].m_Name == m_CurPlayer->m_Name &&
-            !(m_CurAtk.target == TARGET_HIMSELF ||
-              m_CurAtk.target == TARGET_ALL_HEROES)) {
-          continue;
-        }
         // TODO never entering here
         if (m_TargetedList[i].m_IsBoss && m_CurAtk.target != TARGET_ENNEMY) {
           continue;

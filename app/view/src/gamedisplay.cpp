@@ -103,7 +103,9 @@ void GameDisplay::NewRound() {
   ui->attak_page->SetCurrentPlayer(activePlayer);
   ui->inventory_page->SetCurrentPlayer(activePlayer);
 
-  emit SigUpdateChannelView("GameState", QString("Round %1/%2").arg(gs->m_CurrentRound).arg(gs->m_OrderToPlay.size()));
+  emit SigUpdateChannelView("GameState", QString("Round %1/%2")
+                                             .arg(gs->m_CurrentRound)
+                                             .arg(gs->m_OrderToPlay.size()));
   // TODO update channel
   // choice of talent
   // if dead -> choice to take a potion
@@ -119,7 +121,8 @@ void GameDisplay::StartNewTurn() {
   // Update game state
   gm->m_GameState->m_CurrentRound = 0;
   gm->m_GameState->m_CurrentTurnNb++;
-  emit SigUpdateChannelView("GameState", QString("Tour %1").arg(gm->m_GameState->m_CurrentTurnNb));
+  emit SigUpdateChannelView(
+      "GameState", QString("Tour %1").arg(gm->m_GameState->m_CurrentTurnNb));
   NewRound();
   // Then, update the display
   UpdateGameStatus();
@@ -131,12 +134,13 @@ void GameDisplay::StartNewTurn() {
   // Apply effects
   const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffects();
   for (const auto &el : effectsLogs) {
-      emit SigUpdateChannelView("GameState", el);
+    emit SigUpdateChannelView("GameState", el);
   }
   // update effect
-  const QStringList terminatedEffects = gm->m_PlayersManager->RemoveTerminatedEffects();
+  const QStringList terminatedEffects =
+      gm->m_PlayersManager->RemoveTerminatedEffects();
   for (const auto &te : terminatedEffects) {
-      emit SigUpdateChannelView("GameState", te);
+    emit SigUpdateChannelView("GameState", te);
   }
   gm->m_PlayersManager->DecreaseCoolDownEffects();
   emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
@@ -147,6 +151,8 @@ void GameDisplay::StartNewTurn() {
 }
 
 void GameDisplay::EndOfTurn() {
+  ui->attaque_button->setEnabled(false);
+  ui->bag_button->setEnabled(false);
   emit SigUpdateChannelView("GameState", "Fin du tour !!");
 }
 
@@ -174,8 +180,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   const auto &nameChara = gm->m_GameState->GetCurrentPlayerName();
   auto *activatedPlayer = gm->m_PlayersManager->GetCharacterByName(nameChara);
   // launch atk
-  emit SigUpdateChannelView(nameChara,
-      QString("lance %1.").arg(atkName), activatedPlayer->color);
+  emit SigUpdateChannelView(nameChara, QString("lance %1.").arg(atkName),
+                            activatedPlayer->color);
   std::vector<QString> realTargetedList;
   for (const auto &target : targetList) {
     if (target.m_IsTargeted) {
@@ -189,21 +195,27 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
     if (activatedPlayer != nullptr && targetChara != nullptr) {
       // EFFECT
-      const auto &[applyAtk, resultEffects, appliedEffects] = activatedPlayer->ApplyAtkEffect(
-          target.m_IsTargeted, atkName, targetChara);
+      const auto &[applyAtk, resultEffects, appliedEffects] =
+          activatedPlayer->ApplyAtkEffect(target.m_IsTargeted, atkName,
+                                          targetChara);
       for (const auto &re : resultEffects) {
-          emit SigUpdateChannelView(nameChara, re, activatedPlayer->color);
+        emit SigUpdateChannelView(nameChara, re, activatedPlayer->color);
       }
       if (target.m_IsTargeted && applyAtk) {
         // ATK
         channelLog = activatedPlayer->Attaque(atkName, targetChara);
         // Update channel view
         if (!channelLog.isEmpty()) {
-          emit SigUpdateChannelView(nameChara, channelLog, activatedPlayer->color);
+          emit SigUpdateChannelView(nameChara, channelLog,
+                                    activatedPlayer->color);
         }
       }
+      // update effect on player manager
+      gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer->m_Name, atkName,
+                                               target.m_Name, appliedEffects);
       // update all effect panel
-      emit SigNewEffectLaunched(appliedEffects, activatedPlayer->m_Name, target.m_Name);
+      emit SigNewEffectLaunched(appliedEffects, activatedPlayer->m_Name,
+                                target.m_Name);
     }
   }
   // Stats change on hero
@@ -212,8 +224,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   }
   /// Update game state
   // update effect list of player manager
-  gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer, atkName,
-                                           realTargetedList);
+  // gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer, atkName,
+  //                                          realTargetedList);
   // remove terminated effects
   // Some effects like "delete one bad effect" need to be updated
   const QStringList terminatedEffects =
