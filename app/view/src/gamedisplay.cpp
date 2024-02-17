@@ -188,6 +188,9 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       realTargetedList.push_back(target.m_Name);
     }
   }
+
+  // new effects on that turn
+  std::unordered_map<QString, std::vector<effectParam>> newEffects;
   // Parse target list and appliy atk and effects
   for (const auto &target : targetList) {
     QString channelLog;
@@ -211,18 +214,27 @@ void GameDisplay::LaunchAttak(const QString &atkName,
                                     activatedPlayer->color);
         }
       }
-      // update effect on player manager
-      gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer->m_Name, atkName,
-                                               target.m_Name, appliedEffects);
-      // update all effect panel
-      emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
+      // add applied effect to new effect Table
+      newEffects[target.m_Name] = appliedEffects;
     }
   }
+
   // Stats change on hero
   if (activatedPlayer != nullptr) {
     activatedPlayer->UpdateStatsOnAtk(atkName);
   }
   /// Update game state
+  // update effect on player manager
+  for (const auto &[targetName, epTable] : newEffects) {
+    if (epTable.empty()) {
+      continue;
+    }
+    gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer->m_Name, atkName,
+                                             targetName, epTable);
+  }
+  // update all effect panel
+  emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
+
   // remove terminated effects
   // Some effects like "delete one bad effect" need to be updated
   const QStringList terminatedEffects =
