@@ -491,6 +491,11 @@ QString Character::ApplyOneEffect(Character *target,
                                   const effectParam &effectConst,
                                   const bool fromLaunch) {
   auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+
+  auto &powMag =
+      std::get<StatsType<double>>(m_Stats.m_AllStatsTable[STATS_POW_MAG]);
+  auto &hp = std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_HP]);
+
   effectParam effect = effectConst;
   if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
     const int intMin = 0;
@@ -544,25 +549,48 @@ QString Character::ApplyOneEffect(Character *target,
     }
   }
   // apply the effect
-  for (int i = 0; i < nbOfApplies; i++) {
-    if (effect.statsName == STATS_DODGE) { // value in %
-      auto &localStat = std::get<StatsType<double>>(
-          target->m_Stats.m_AllStatsTable[effect.statsName]);
-      localStat.m_CurrentValue = static_cast<int>(
-          std::round(localStat.m_CurrentValue +
-                     localStat.m_MaxValue * effect.value / 100));
-    } else if (effect.statsName == STATS_POW_MAG) {
-      auto &localStat = std::get<StatsType<double>>(
-          target->m_Stats.m_AllStatsTable[effect.statsName]);
-      localStat.m_CurrentValue =
-          min(localStat.m_MaxValue, localStat.m_CurrentValue + effect.value);
-    } else {
-      auto &localStat = std::get<StatsType<int>>(
-          target->m_Stats.m_AllStatsTable[effect.statsName]);
-      localStat.m_CurrentValue =
-          min(localStat.m_MaxValue, localStat.m_CurrentValue + effect.value);
+  if (effect.statsName != STATS_HP) {
+    for (int i = 0; i < nbOfApplies; i++) {
+      if (effect.statsName == STATS_DODGE) { // value in %
+        auto &localStat = std::get<StatsType<double>>(
+            target->m_Stats.m_AllStatsTable[effect.statsName]);
+        localStat.m_CurrentValue = static_cast<int>(
+            std::round(localStat.m_CurrentValue +
+                       localStat.m_MaxValue * effect.value / 100));
+      } else if (effect.statsName == STATS_POW_MAG) {
+        auto &localStat = std::get<StatsType<double>>(
+            target->m_Stats.m_AllStatsTable[effect.statsName]);
+        localStat.m_CurrentValue =
+            min(localStat.m_MaxValue, localStat.m_CurrentValue + effect.value);
+      } else {
+        auto &localStat = std::get<StatsType<int>>(
+            target->m_Stats.m_AllStatsTable[effect.statsName]);
+        localStat.m_CurrentValue =
+            min(localStat.m_MaxValue, localStat.m_CurrentValue + effect.value);
+      }
     }
   }
+
+  auto finalValue = effect.value;
+  if (effect.statsName == STATS_HP) {
+    for (int i = 0; i < nbOfApplies; i++) {
+      auto &localStat =
+          std::get<StatsType<int>>(target->m_Stats.m_AllStatsTable[STATS_HP]);
+
+      int delta = localStat.m_MaxValue - localStat.m_CurrentValue;
+
+      finalValue =
+          min(delta, effect.value +
+                         static_cast<int>(
+                             static_cast<int>(powMag.m_CurrentValue) /
+                             effect.nbTurns));
+      localStat.m_CurrentValue =
+          min(localStat.m_CurrentValue + effect.value + static_cast<int>(powMag.m_CurrentValue) /
+                                 effect.nbTurns,
+              localStat.m_MaxValue);
+    }
+  }
+
   // Apply regen effect turning into damage for all bosses
   if (effect.statsName == STATS_HP || effect.statsName == STATS_MANA ||
       effect.statsName == STATS_VIGOR || effect.statsName == STATS_BERSECK) {
@@ -584,7 +612,7 @@ QString Character::ApplyOneEffect(Character *target,
       .arg(effect.effect)
       .arg(nbOfApplies)
       .arg(QString::number(potentialAttempts))
-      .arg(QString::number(nbOfApplies * effect.value));
+      .arg(QString::number(nbOfApplies * finalValue));
 }
 
 // Apply effect after launch of atk
