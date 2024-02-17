@@ -485,7 +485,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
     return "No  target character";
   }
   auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
-  auto &powMag =
+  const auto &powMag =
       std::get<StatsType<double>>(m_Stats.m_AllStatsTable[STATS_POW_MAG]);
   QString result;
 
@@ -555,8 +555,8 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
     const auto amount =
         nbOfApplies *
         (effect.value +
-         static_cast<int>(static_cast<int>(powMag.m_CurrentValue) /
-                          effect.nbTurns));
+         static_cast<int>(powMag.m_CurrentValue) /
+                          effect.nbTurns);
     // new value of stat
     localStat.m_CurrentValue += min(delta, amount);
     QString effectName;
@@ -647,7 +647,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
   }
   bool applyAtk = true;
   // effect can be modified -> counter nb when applied
-  auto &allEffects = m_AttakList.at(atkName).m_AllEffects;
+  const auto &allEffects = m_AttakList.at(atkName).m_AllEffects;
   std::vector<effectParam> allAppliedEffects;
   QStringList resultEffects;
   const bool isAlly = target->m_type == m_type;
@@ -677,7 +677,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
     }
 
     // test if applicable effect
-    auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+    const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
     if (effect.effect == EFFECT_REINIT &&
         !(pm->GetNbOfStatsInEffectList(this, effect.statsName) >=
           effect.subValueEffect)) {
@@ -693,7 +693,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
       break;
     }
     effectParam appliedEffect = effect;
-    // ep is modified in ApplyOneEffect
+    // appliedEffect is modified in ApplyOneEffect
     resultEffects.append(ApplyOneEffect(target, appliedEffect, true));
     allAppliedEffects.push_back(appliedEffect);
   }
