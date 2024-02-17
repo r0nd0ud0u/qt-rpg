@@ -22,7 +22,7 @@ public:
   Character *GetCharacterByName(const QString &name);
   void AddGameEffectOnAtk(const Character *curPlayer, const QString &atkName,
                           const std::vector<QString> &targetList);
-  QStringList RemoveTerminatedEffects(const bool endOfTurn);
+  QStringList RemoveTerminatedEffects();
   QStringList ApplyEffects();
   void ApplyRegenStats();
 

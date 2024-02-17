@@ -113,14 +113,12 @@ QString Character::Attaque(const QString &atkName, Character *target) {
   if (atk.damage > 0) {
     const auto finalDamage = DamageByAtk(target, atk);
     tarCurHp = max(0, tarCurHp - finalDamage);
-    channelLog +=
-        PlayersManager::FormatAtkOnEnnemy(finalDamage);
+    channelLog += PlayersManager::FormatAtkOnEnnemy(finalDamage);
   }
 
   if (atk.heal > 0) {
     tarCurHp = min(targetHp.m_MaxValue, static_cast<int>(tarCurHp + atk.heal));
-    channelLog +=
-        PlayersManager::FormatAtkOnAlly(atk.heal);
+    channelLog += PlayersManager::FormatAtkOnAlly(atk.heal);
     // Apply effect transform heal into damage on all bosses
     channelLog += RegenIntoDamage(atk.heal, STATS_HP);
   }
@@ -144,29 +142,21 @@ void Character::UpdateStatsOnAtk(const QString &atkName) {
   auto &launcherVigor =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_VIGOR]);
 
-  auto &launcherAggroRate =
-      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_RATE_AGGRO]);
-  auto &launcherRegenMana =
-      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_REGEN_MANA]);
-  auto &launcherRegenVigor =
-      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_REGEN_VIGOR]);
-  auto &launcherBerseckRate =
-      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_RATE_BERSECK]);
-
   // Cost
+  // mana cost in %
   launcherMana.m_CurrentValue =
-      max(0, static_cast<int>(launcherMana.m_CurrentValue - atk.manaCost));
+      max(0, static_cast<int>(launcherMana.m_CurrentValue -
+                              atk.manaCost * launcherMana.m_MaxValue / 100));
   launcherVigor.m_CurrentValue =
-      max(0, static_cast<int>(launcherVigor.m_CurrentValue - atk.vigorCost));
+      max(0, static_cast<int>(launcherVigor.m_CurrentValue - atk.vigorCost* launcherVigor.m_MaxValue / 100));
   launcherBerseck.m_CurrentValue = max(
-      0, static_cast<int>(launcherBerseck.m_CurrentValue - atk.berseckCost));
+      0, static_cast<int>(launcherBerseck.m_CurrentValue - atk.berseckCost* launcherBerseck.m_MaxValue / 100));
   // Gain or regen
-  launcherAggro.m_CurrentValue += launcherAggroRate.m_CurrentValue;
-  launcherBerseck.m_CurrentValue += launcherBerseckRate.m_CurrentValue;
-  launcherMana.m_CurrentValue +=
-      static_cast<int>(std::round(launcherRegenMana.m_CurrentValue));
-  launcherVigor.m_CurrentValue +=
-      static_cast<int>(std::round(launcherRegenVigor.m_CurrentValue));
+  // TODO in % ?
+  launcherAggro.m_CurrentValue += atk.aggroRate;
+  launcherBerseck.m_CurrentValue += atk.berseckRate;
+  launcherMana.m_CurrentValue += atk.regenMana;
+  launcherVigor.m_CurrentValue += atk.regenVigor;
 }
 
 void Character::AddAtq(const AttaqueType &atq) { m_AttakList[atq.name] = atq; }
@@ -419,8 +409,8 @@ void Character::ProcessAddEquip(StatsType<T> &charStat,
   if (equipStat.m_CurrentValue == 0) {
     return;
   }
-  double ratio = static_cast<double>(charStat.m_CurrentValue) /
-                 static_cast<double>(charStat.m_MaxValue);
+  const double ratio = static_cast<double>(charStat.m_CurrentValue) /
+                       static_cast<double>(charStat.m_MaxValue);
   charStat.m_MaxValue +=
       equipStat.m_CurrentValue; // Currently only current value is filled on
                                 // equip stat
@@ -435,8 +425,8 @@ void Character::ProcessRemoveEquip(StatsType<T> &charStat,
   if (equipStat.m_CurrentValue == 0) {
     return;
   }
-  double ratio = static_cast<double>(charStat.m_CurrentValue) /
-                 static_cast<double>(charStat.m_MaxValue);
+  const double ratio = static_cast<double>(charStat.m_CurrentValue) /
+                       static_cast<double>(charStat.m_MaxValue);
   charStat.m_MaxValue -=
       equipStat.m_CurrentValue; // Currently only current value is filled on
                                 // equip stat
@@ -487,16 +477,14 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
   return false;
 }
 
-QString Character::ApplyOneEffect(Character *target,
-                                  const effectParam &effectConst,
+QString Character::ApplyOneEffect(Character *target, effectParam &effect,
                                   const bool fromLaunch) {
   auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
-
   auto &powMag =
       std::get<StatsType<double>>(m_Stats.m_AllStatsTable[STATS_POW_MAG]);
-  auto &hp = std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_HP]);
 
-  effectParam effect = effectConst;
+  // increment counter turn, effect is used
+  effect.counterTurn++;
   if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
     const int intMin = 0;
     const int intMax = 100;
@@ -549,7 +537,26 @@ QString Character::ApplyOneEffect(Character *target,
     }
   }
   // apply the effect
-  if (effect.statsName != STATS_HP) {
+  auto finalValue = effect.value;
+  // for stats hp, the value depends of the mag power in case of heal
+  // value = effect_value + mag_pow/nb_of_turns
+  if (effect.statsName == STATS_HP) {
+    for (int i = 0; i < nbOfApplies; i++) {
+      auto &localStat =
+          std::get<StatsType<int>>(target->m_Stats.m_AllStatsTable[STATS_HP]);
+
+      const int delta = localStat.m_MaxValue - localStat.m_CurrentValue;
+
+      finalValue = min(
+          delta, effect.value +
+                     static_cast<int>(static_cast<int>(powMag.m_CurrentValue) /
+                                      effect.nbTurns));
+      localStat.m_CurrentValue =
+          min(localStat.m_CurrentValue + effect.value +
+                  static_cast<int>(powMag.m_CurrentValue) / effect.nbTurns,
+              localStat.m_MaxValue);
+    }
+  } else if (effect.statsName != STATS_HP) {
     for (int i = 0; i < nbOfApplies; i++) {
       if (effect.statsName == STATS_DODGE) { // value in %
         auto &localStat = std::get<StatsType<double>>(
@@ -568,26 +575,6 @@ QString Character::ApplyOneEffect(Character *target,
         localStat.m_CurrentValue =
             min(localStat.m_MaxValue, localStat.m_CurrentValue + effect.value);
       }
-    }
-  }
-
-  auto finalValue = effect.value;
-  if (effect.statsName == STATS_HP) {
-    for (int i = 0; i < nbOfApplies; i++) {
-      auto &localStat =
-          std::get<StatsType<int>>(target->m_Stats.m_AllStatsTable[STATS_HP]);
-
-      int delta = localStat.m_MaxValue - localStat.m_CurrentValue;
-
-      finalValue =
-          min(delta, effect.value +
-                         static_cast<int>(
-                             static_cast<int>(powMag.m_CurrentValue) /
-                             effect.nbTurns));
-      localStat.m_CurrentValue =
-          min(localStat.m_CurrentValue + effect.value + static_cast<int>(powMag.m_CurrentValue) /
-                                 effect.nbTurns,
-              localStat.m_MaxValue);
     }
   }
 
@@ -616,6 +603,7 @@ QString Character::ApplyOneEffect(Character *target,
 }
 
 // Apply effect after launch of atk
+// increment counter turn of effect
 // Test targets
 // Return tuple
 // - 1 : bool: is attak applied ?
@@ -629,12 +617,13 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
                            std::vector<effectParam>());
   }
   bool applyAtk = true;
-  const auto &allEffects = m_AttakList.at(atkName).m_AllEffects;
+  // effect can be modified -> counter nb when applied
+  auto &allEffects = m_AttakList.at(atkName).m_AllEffects;
   std::vector<effectParam> appliedEffects;
   QStringList resultEffects;
   const bool isAlly = target->m_type == m_type;
-  qDebug() << target->m_Name;
-  for (const auto &effect : allEffects) {
+
+  for (auto &effect : allEffects) {
 
     if (!isAlly &&
         (effect.target == TARGET_ALLY || effect.target == TARGET_ALL_HEROES ||
@@ -674,8 +663,8 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
               .arg(effect.statsName));
       break;
     }
-    appliedEffects.push_back(effect);
     resultEffects.append(ApplyOneEffect(target, effect, true));
+    appliedEffects.push_back(effect);
   }
 
   return std::make_tuple(applyAtk, resultEffects, appliedEffects);
@@ -686,12 +675,12 @@ void Character::RemoveMalusEffect(const QString &statsName) {
   for (const auto &stats : ALL_STATS) {
     if (stats == STATS_POW_MAG || stats == STATS_DODGE) {
       auto &localStat =
-            std::get<StatsType<double>>(m_Stats.m_AllStatsTable.at(stats));
+          std::get<StatsType<double>>(m_Stats.m_AllStatsTable.at(stats));
       localStat.m_CurrentValue = localStat.m_MaxValue;
       break;
     } else {
       auto &localStat =
-            std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(stats));
+          std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(stats));
       localStat.m_CurrentValue = localStat.m_MaxValue;
       break;
     }

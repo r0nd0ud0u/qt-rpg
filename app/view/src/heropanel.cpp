@@ -32,11 +32,11 @@ HeroPanel::UpdatePanel(Character* hero)
   auto &hp =
       std::get<StatsType<int>>(m_Heroe->m_Stats.m_AllStatsTable[STATS_HP]);
   auto &mana =
-      std::get<StatsType<int>>(m_Heroe->m_Stats.m_AllStatsTable[STATS_HP]);
+      std::get<StatsType<int>>(m_Heroe->m_Stats.m_AllStatsTable[STATS_MANA]);
   auto &vigor =
-      std::get<StatsType<int>>(m_Heroe->m_Stats.m_AllStatsTable[STATS_HP]);
+      std::get<StatsType<int>>(m_Heroe->m_Stats.m_AllStatsTable[STATS_VIGOR]);
   auto &berseck =
-      std::get<StatsType<int>>(m_Heroe->m_Stats.m_AllStatsTable[STATS_HP]);
+      std::get<StatsType<int>>(m_Heroe->m_Stats.m_AllStatsTable[STATS_BERSECK]);
 
   ui->hero_name->setText(hero->m_Name);
   ui->hp_Bar->setFormat(QString::number(hp.m_CurrentValue) + "/" +

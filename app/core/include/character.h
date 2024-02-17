@@ -55,7 +55,7 @@ public:
   bool CanBeLaunched(const AttaqueType &atk) const;
 
   // Effect
-  QString ApplyOneEffect(Character *target, const effectParam &effect,
+  QString ApplyOneEffect(Character *target, effectParam &effect,
                          const bool fromLaunch);
   std::tuple<bool, QStringList, std::vector<effectParam>>
   ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
