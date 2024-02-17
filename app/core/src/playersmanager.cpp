@@ -409,9 +409,10 @@ QString PlayersManager::FormatAtk(const QString player2,
 
 int PlayersManager::GetNbOfStatsInEffectList(const Character *chara,
                                              const QString &statsName) const {
-  if (chara == nullptr) {
+  if (chara == nullptr || m_AllEffectsOnGame.count(chara->m_Name) == 0) {
     return 0;
   }
+
   int counter = 0;
   for (const auto &e : m_AllEffectsOnGame.at(chara->m_Name)) {
     if (e.allAtkEffects.statsName == statsName) {
@@ -423,7 +424,7 @@ int PlayersManager::GetNbOfStatsInEffectList(const Character *chara,
 
 void PlayersManager::ResetCounterOnOneStatsEffect(const Character *chara,
                                                   const QString &statsName) {
-  if (chara == nullptr) {
+  if (chara == nullptr || m_AllEffectsOnGame.count(chara->m_Name) == 0) {
     return;
   }
   for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
@@ -433,22 +434,22 @@ void PlayersManager::ResetCounterOnOneStatsEffect(const Character *chara,
   }
 }
 
+
 void PlayersManager::DeleteOneBadEffect(const Character *chara) {
-  if (chara == nullptr) {
+  if (chara == nullptr || m_AllEffectsOnGame.count(chara->m_Name) == 0) {
     return;
   }
-  for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
+  for (auto &e : m_AllEffectsOnGame[chara->m_Name])
      // TODO rule about debuf
       // a DOT can be a debuf for example
     if (e.allAtkEffects.value < 0 && !e.allAtkEffects.statsName.isEmpty()) {
       e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
       break;
     }
-  }
 }
 
 void PlayersManager::DeleteAllBadEffect(const Character *chara) {
-  if (chara == nullptr) {
+  if (chara == nullptr || m_AllEffectsOnGame.count(chara->m_Name) == 0) {
     return;
   }
   for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
@@ -479,7 +480,7 @@ void PlayersManager::ImproveHotsOnPlayers(const int valuePercent,
     playerList = m_BossesList;
   }
   for (const auto &pl : playerList) {
-    if (pl == nullptr) {
+    if (pl == nullptr || m_AllEffectsOnGame.count(pl->m_Name) == 0) {
       continue;
     }
     for (auto &e : m_AllEffectsOnGame[pl->m_Name]) {
