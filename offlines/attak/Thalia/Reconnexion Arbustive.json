@@ -24,15 +24,6 @@
             "Type": "% (stats) en dégâts",
             "Valeur de l'effet": 50,
             "Value": 0
-        },
-        {
-            "Cible": "",
-            "Portée": "",
-            "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
-            "Valeur de l'effet": 0,
-            "Value": 0
         }
     ],
     "Niveau": 10,
