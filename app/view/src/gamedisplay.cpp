@@ -201,6 +201,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       for (const auto &re : resultEffects) {
         emit SigUpdateChannelView(nameChara, re, activatedPlayer->color);
       }
+      // applyAtk = false if effect reinit with unfulfilled condtions
       if (target.m_IsTargeted && applyAtk) {
         // ATK
         channelLog = activatedPlayer->Attaque(atkName, targetChara);
@@ -214,8 +215,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer->m_Name, atkName,
                                                target.m_Name, appliedEffects);
       // update all effect panel
-      emit SigNewEffectLaunched(appliedEffects, activatedPlayer->m_Name,
-                                target.m_Name);
+      emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
     }
   }
   // Stats change on hero
@@ -223,9 +223,6 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     activatedPlayer->UpdateStatsOnAtk(atkName);
   }
   /// Update game state
-  // update effect list of player manager
-  // gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer, atkName,
-  //                                          realTargetedList);
   // remove terminated effects
   // Some effects like "delete one bad effect" need to be updated
   const QStringList terminatedEffects =
