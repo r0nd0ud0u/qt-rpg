@@ -11,26 +11,26 @@
             "Cible": "Allié",
             "Portée": "Zone",
             "Stat": "PV",
-            "Tours actifs": 4,
-            "Type": "",
-            "Valeur de l'effet": 0,
-            "Value": 80
-        },
-        {
-            "Cible": "Allié",
-            "Portée": "Zone",
-            "Stat": "",
             "Tours actifs": 1,
             "Type": "Reinit",
             "Valeur de l'effet": 0,
             "Value": 0
         },
         {
-            "Cible": "Ennemie",
-            "Portée": "Individuel",
+            "Cible": "Allié",
+            "Portée": "Zone",
+            "Stat": "PV",
+            "Tours actifs": 4,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 80
+        },
+        {
+            "Cible": "",
+            "Portée": "",
             "Stat": "",
             "Tours actifs": 0,
-            "Type": "Changement par %",
+            "Type": "",
             "Valeur de l'effet": 0,
             "Value": 0
         }
