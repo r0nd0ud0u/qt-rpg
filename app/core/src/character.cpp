@@ -28,7 +28,7 @@ Character::Character(const QString name, const characType type,
 
 int Character::DamageByAtk(Character *target, const AttaqueType &atk) {
   const auto &launcherPowMag =
-      std::get<StatsType<double>>(m_Stats.m_AllStatsTable[STATS_POW_MAG]);
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_POW_MAG]);
   const auto &launcherPowPhy =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_POW_PHY]);
   const auto &targetArmPhy =
@@ -379,7 +379,7 @@ void Character::ApplyEquipOnStats(
         std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_POW_PHY]),
         equip.m_Stats.m_PowPhy);
     ProcessAddEquip(
-        std::get<StatsType<double>>(m_Stats.m_AllStatsTable[STATS_POW_MAG]),
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_POW_MAG]),
         equip.m_Stats.m_PowMag);
     ProcessAddEquip(
         std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_AGGRO]),
@@ -391,7 +391,7 @@ void Character::ApplyEquipOnStats(
         std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_CRIT]),
         equip.m_Stats.m_CriticalStrike);
     ProcessAddEquip(
-        std::get<StatsType<double>>(m_Stats.m_AllStatsTable[STATS_DODGE]),
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_DODGE]),
         equip.m_Stats.m_Dogde);
     ProcessAddEquip(
         std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_REGEN_HP]),
@@ -486,7 +486,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   }
   auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
   const auto &powMag =
-      std::get<StatsType<double>>(m_Stats.m_AllStatsTable[STATS_POW_MAG]);
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_POW_MAG]);
   QString result;
 
   // increment counter turn, effect is used
@@ -547,7 +547,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   // the nomical case is 1 for any atk. effect.subValueEffect is on top of the
   // nominal atk
   const int potentialAttempts = max(1, effect.subValueEffect + 1);
-  auto finalValue = effect.value;
+  auto finalValue = nbOfApplies*effect.value;
   // for stats hp, the value depends of the mag power in case of heal
   // value = effect_value + mag_pow/nb_of_turns
   if (effect.statsName == STATS_HP) {
@@ -584,35 +584,31 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
                    .arg(QString::number(amount));
     }
   } else if (effect.statsName != STATS_HP) {
-    if (effect.statsName == STATS_DODGE) { // value in %
-      auto &localStat = std::get<StatsType<double>>(
+      int amount = 0;
+      if (ON_PERCENT_STATS.count(effect.statsName) > 0) { // value in %
+          auto &localStat = std::get<StatsType<int>>(
           target->m_Stats.m_AllStatsTable[effect.statsName]);
-      localStat.m_CurrentValue = static_cast<int>(
-          std::round(localStat.m_CurrentValue +
-                     nbOfApplies * localStat.m_MaxValue * effect.value / 100));
-    } else if (effect.statsName == STATS_POW_MAG) {
-      // for 'double' stats
-      auto &localStat = std::get<StatsType<double>>(
-          target->m_Stats.m_AllStatsTable[effect.statsName]);
-      localStat.m_CurrentValue =
-          min(localStat.m_MaxValue,
-              nbOfApplies * localStat.m_CurrentValue + effect.value);
-    } else {
+          amount = nbOfApplies * localStat.m_MaxValue * effect.value / 100;
+          finalValue = static_cast<int>(
+              std::round(localStat.m_CurrentValue + amount));
+          localStat.m_CurrentValue = min(localStat.m_MaxValue,finalValue);
+    }  else {
       // for 'int' stats
       auto &localStat = std::get<StatsType<int>>(
           target->m_Stats.m_AllStatsTable[effect.statsName]);
+      amount = nbOfApplies * localStat.m_CurrentValue + effect.value;
       localStat.m_CurrentValue =
           min(localStat.m_MaxValue,
-              nbOfApplies * localStat.m_CurrentValue + effect.value);
+              amount);
     }
     result = QString("Sur %1: l'effet %2-%3 s'applique %4/%5 "
-                     "possible(s) avec un max de %6.")
+                     "possible(s) avec une valeur de %6.")
                  .arg(target->m_Name)
                  .arg(effect.statsName)
                  .arg(effect.effect)
                  .arg(nbOfApplies)
                  .arg(QString::number(potentialAttempts))
-                 .arg(QString::number(nbOfApplies * finalValue));
+                 .arg(QString::number(amount));
   }
 
   // Apply regen effect turning into damage for all bosses
@@ -707,7 +703,7 @@ void Character::RemoveMalusEffect(const QString &statsName) {
   for (const auto &stats : ALL_STATS) {
     if (stats == STATS_POW_MAG || stats == STATS_DODGE) {
       auto &localStat =
-          std::get<StatsType<double>>(m_Stats.m_AllStatsTable.at(stats));
+          std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(stats));
       localStat.m_CurrentValue = localStat.m_MaxValue;
       break;
     } else if (m_Stats.m_AllStatsTable.find(statsName) !=

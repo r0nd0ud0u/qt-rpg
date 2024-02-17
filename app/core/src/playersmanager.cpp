@@ -26,15 +26,15 @@ void PlayersManager::InitHeroes() {
       .SetValues(35, 35, 35);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
       .SetValues(10, 10, 10);
-  std::get<StatsType<double>>(stats.m_AllStatsTable[STATS_POW_MAG])
-      .SetValues(137.5, 137.5, 137.5);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
+      .SetValues(137, 137, 137);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
       .SetValues(0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
       .SetValues(25, 25, 25);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
       .SetValues(20, 20, 20);
-  std::get<StatsType<double>>(stats.m_AllStatsTable[STATS_DODGE])
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
       .SetValues(10, 10, 10);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
       .SetValues(14, 14, 14);
@@ -62,7 +62,7 @@ void PlayersManager::InitHeroes() {
       .SetValues(47, 47, 47);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
       .SetValues(115, 115, 115);
-  std::get<StatsType<double>>(stats.m_AllStatsTable[STATS_POW_MAG])
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
       .SetValues(15, 15, 15);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
       .SetValues(0, 0, 0);
@@ -70,8 +70,8 @@ void PlayersManager::InitHeroes() {
       .SetValues(20, 20, 20);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
       .SetValues(20, 20, 20);
-  std::get<StatsType<double>>(stats.m_AllStatsTable[STATS_DODGE])
-      .SetValues(9.5, 9.5, 9.5);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
+      .SetValues(9, 9, 9);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
       .SetValues(10, 10, 10);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
@@ -97,7 +97,7 @@ void PlayersManager::InitHeroes() {
       .SetValues(45, 45, 45);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
       .SetValues(30, 30, 30);
-  std::get<StatsType<double>>(stats.m_AllStatsTable[STATS_POW_MAG])
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
       .SetValues(0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
       .SetValues(0, 0, 0);
@@ -105,7 +105,7 @@ void PlayersManager::InitHeroes() {
       .SetValues(14, 14, 14);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
       .SetValues(15, 15, 15);
-  std::get<StatsType<double>>(stats.m_AllStatsTable[STATS_DODGE])
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
       .SetValues(5, 5, 5);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
       .SetValues(0, 0, 0);
@@ -151,7 +151,7 @@ void PlayersManager::InitBosses() {
       .SetValues(35, 35, 35);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
       .SetValues(10, 10, 10);
-  std::get<StatsType<double>>(stats.m_AllStatsTable[STATS_POW_MAG])
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
       .SetValues(138, 138, 138);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
       .SetValues(0, 0, 0);
@@ -159,7 +159,7 @@ void PlayersManager::InitBosses() {
       .SetValues(25, 25, 25);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
       .SetValues(20, 20, 20);
-  std::get<StatsType<double>>(stats.m_AllStatsTable[STATS_DODGE])
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
       .SetValues(10, 10, 10);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
       .SetValues(4, 4, 4);
