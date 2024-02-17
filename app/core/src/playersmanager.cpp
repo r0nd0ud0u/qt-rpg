@@ -438,6 +438,8 @@ void PlayersManager::DeleteOneBadEffect(const Character *chara) {
     return;
   }
   for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
+     // TODO rule about debuf
+      // a DOT can be a debuf for example
     if (e.allAtkEffects.value < 0 && !e.allAtkEffects.statsName.isEmpty()) {
       e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
       break;
