@@ -14,12 +14,6 @@
 
 using namespace std;
 
-// STATIC ATTAK TYPE
-// init m_TargetTypes
-std::vector<QString> AttaqueType::TARGET_TYPES = {TARGET_ENNEMY, TARGET_ALLY};
-// init m_ReachTypes
-std::vector<QString> AttaqueType::REACH_TYPES = {REACH_ZONE, REACH_INDIVIDUAL};
-
 Character::Character(const QString name, const characType type,
                      const Stats &stats)
     : m_Name(name), m_type(type), m_Stats(stats) {
@@ -142,7 +136,7 @@ QString Character::Attaque(const QString &atkName, Character *target) {
   return channelLog;
 }
 
-void Character::UpdateStatsOnAtk(const QString &atkName) {
+void Character::ProcessCostAndRegen(const QString &atkName) {
   if (atkName.isEmpty()) {
     return;
   }
@@ -709,7 +703,7 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
              (ep.value + static_cast<int>(launcherPowMag) / ep.nbTurns);
   }
   // value in percent
-  else if (percent) {
+  else if (percent && ep.effect == EFFECT_PERCENT_CHANGE) {
     amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
   }
   // nominal behavior
@@ -720,7 +714,8 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
   // new value of stat
   localStat.m_CurrentValue += min(delta, amount);
 
-  return amount;
+  // return the true applied amount
+  return min(delta, amount);
 }
 
 QString Character::ProcessOutputLogOnEffect(const effectParam &ep,
@@ -729,9 +724,12 @@ QString Character::ProcessOutputLogOnEffect(const effectParam &ep,
                                             const int nbOfApplies) {
   QString output;
 
-  // the nomical case is 1 for any atk. effect.subValueEffect is on top of the
   // nominal atk
-  const int potentialAttempts = max(1, ep.subValueEffect + 1);
+  int potentialAttempts = 1;
+  if(ep.effect == EFFECT_NB_DECREASE_ON_TURN){
+      // the nomical case is 1 for any atk. effect.subValueEffect is on top of the
+      potentialAttempts = ep.subValueEffect + 1;
+  }
 
   if (ep.statsName == STATS_HP) {
     QString effectName;

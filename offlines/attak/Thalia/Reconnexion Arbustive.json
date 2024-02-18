@@ -1,6 +1,6 @@
 {
     "Aggro": 0,
-    "Cible": "Allié",
+    "Cible": "Soi-même",
     "Coût de mana": 3,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
@@ -12,7 +12,7 @@
             "Portée": "Individuel",
             "Stat": "Mana",
             "Tours actifs": 1,
-            "Type": "",
+            "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 120
         },
@@ -24,13 +24,22 @@
             "Type": "% (stats) en dégâts",
             "Valeur de l'effet": 50,
             "Value": 0
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
         }
     ],
     "Niveau": 10,
     "Nom": "Reconnexion Arbustive",
     "Photo": "Thalia.png",
     "Portée": "Individuel",
-    "Regen mana": 120,
+    "Regen mana": 0,
     "Regen rage": 0,
     "Regen vigueur": 0,
     "Soin": 0
