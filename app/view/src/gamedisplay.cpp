@@ -179,15 +179,14 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
   const auto &nameChara = gm->m_GameState->GetCurrentPlayerName();
   auto *activatedPlayer = gm->m_PlayersManager->GetCharacterByName(nameChara);
+  if(activatedPlayer == nullptr){
+      return;
+  }
   // launch atk
+  // Stats change on hero
+  activatedPlayer->ProcessCostAndRegen(atkName);
   emit SigUpdateChannelView(nameChara, QString("lance %1.").arg(atkName),
                             activatedPlayer->color);
-  std::vector<QString> realTargetedList;
-  for (const auto &target : targetList) {
-    if (target.m_IsTargeted) {
-      realTargetedList.push_back(target.m_Name);
-    }
-  }
 
   // new effects on that turn
   std::unordered_map<QString, std::vector<effectParam>> newEffects;
@@ -195,8 +194,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   for (const auto &target : targetList) {
     QString channelLog;
     auto *targetChara = gm->m_PlayersManager->GetCharacterByName(target.m_Name);
-
-    if (activatedPlayer != nullptr && targetChara != nullptr) {
+    if (targetChara != nullptr) {
       // EFFECT
       const auto &[applyAtk, resultEffects, appliedEffects] =
           activatedPlayer->ApplyAtkEffect(target.m_IsTargeted, atkName,
@@ -219,10 +217,6 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     }
   }
 
-  // Stats change on hero
-  if (activatedPlayer != nullptr) {
-    activatedPlayer->UpdateStatsOnAtk(atkName);
-  }
   /// Update game state
   // update effect on player manager
   for (const auto &[targetName, epTable] : newEffects) {

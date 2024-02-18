@@ -46,7 +46,7 @@ public:
   Character(const QString name, const characType type, const Stats &stats);
 
   QString Attaque(const QString &atkName, Character *target);
-  void UpdateStatsOnAtk(const QString &atkName);
+  void ProcessCostAndRegen(const QString &atkName);
   void AddAtq(const AttaqueType &atq);
   void AddStuff(const Stuff &stuff);
   void LoadAtkJson();

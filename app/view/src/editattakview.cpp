@@ -183,10 +183,10 @@ void EditAttakView::InitComboBoxes() {
              nullptr);
 
   ui->target_comboBox->setEnabled(true);
-  for (const auto &target : AttaqueType::TARGET_TYPES) {
+  for (const auto &target : ALL_TARGETS) {
     ui->target_comboBox->addItem(target);
   }
-  for (const auto &reach : AttaqueType::REACH_TYPES) {
+  for (const auto &reach : ALL_REACH) {
     ui->reach_comboBox->addItem(reach);
   }
   // List all attak png string and add them to photo_comboBox

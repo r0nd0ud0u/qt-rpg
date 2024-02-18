@@ -192,12 +192,13 @@ void ActionsView::UpdateTargetList(const QString &name) {
                 m_TargetedList[i].m_IsBoss)) {
       if (m_CurAtk.target == TARGET_ALLY && m_CurAtk.reach == REACH_ZONE) {
         m_TargetedList[i].m_IsTargeted = !m_TargetedList[i].m_IsTargeted;
-      }
-      else if (m_CurAtk.reach == REACH_INDIVIDUAL && m_TargetedList[i].m_IsTargeted){
-          m_TargetedList[i].m_IsTargeted = false;
-      }
-    } else if (m_CurAtk.reach == REACH_INDIVIDUAL && m_TargetedList[i].m_IsTargeted){
+      } else if (m_CurAtk.reach == REACH_INDIVIDUAL &&
+                 m_TargetedList[i].m_IsTargeted) {
         m_TargetedList[i].m_IsTargeted = false;
+      }
+    } else if (m_CurAtk.reach == REACH_INDIVIDUAL &&
+               m_TargetedList[i].m_IsTargeted) {
+      m_TargetedList[i].m_IsTargeted = false;
     }
     if (wg != nullptr) {
       wg->setChecked(m_TargetedList[i].m_IsTargeted);
@@ -225,14 +226,18 @@ void ActionsView::ProcessEnableTargetsBoxes() {
   if (m_CurPage == ActionsStackedWgType::attak) {
     for (int i = 0; i < m_TargetedList.size(); i++) {
 
-      if (m_CurPlayer->m_type == characType::Hero) {
+      if (m_CurAtk.target == TARGET_HIMSELF &&
+          m_TargetedList[i].m_Name != m_CurPlayer->m_Name) {
+        continue;
+      }
+      else if (m_CurPlayer->m_type == characType::Hero) {
         // TODO never entering here
         if (m_TargetedList[i].m_IsBoss && m_CurAtk.target != TARGET_ENNEMY) {
           continue;
         }
         if (!m_TargetedList[i].m_IsBoss &&
             !(m_CurAtk.target == TARGET_ALLY ||
-              m_CurAtk.target == TARGET_ALL_HEROES)) {
+              m_CurAtk.target == TARGET_ALL_HEROES || m_CurAtk.target == TARGET_HIMSELF)) {
           continue;
         }
       }
