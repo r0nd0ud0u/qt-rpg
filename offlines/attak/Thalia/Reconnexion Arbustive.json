@@ -26,11 +26,11 @@
             "Value": 0
         },
         {
-            "Cible": "",
-            "Portée": "",
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
             "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
+            "Tours actifs": 5,
+            "Type": "Tours de recharge",
             "Valeur de l'effet": 0,
             "Value": 0
         }
