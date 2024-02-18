@@ -469,8 +469,8 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
       const auto &pm =
           Application::GetInstance().m_GameManager->m_PlayersManager;
       for (const auto &gae : pm->m_AllEffectsOnGame[m_Name]) {
-        if (gae.allAtkEffects.effect == e.effect &&
-            gae.allAtkEffects.subValueEffect > 0) {
+        if (atk.name == gae.atkName && gae.allAtkEffects.effect == e.effect &&
+            gae.allAtkEffects.nbTurns > 0) {
           return false;
         }
       }
@@ -490,7 +490,7 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
 }
 
 QString Character::ApplyOneEffect(Character *target, effectParam &effect,
-                                  const bool fromLaunch) {
+                                  const bool fromLaunch, const QString& atkName) {
   if (target == nullptr) {
     return "No  target character";
   }
@@ -504,6 +504,10 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
     // TODO not ready to be used yet
     result = ProcessDecreaseByTurn(effect);
+  }
+
+  if(effect.effect == EFFECT_NB_COOL_DOWN){
+      return QString("Cooldown actif sur %1.").arg(atkName);
   }
 
   if (fromLaunch) {
@@ -619,7 +623,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
     }
     effectParam appliedEffect = effect;
     // appliedEffect is modified in ApplyOneEffect
-    resultEffects.append(ApplyOneEffect(target, appliedEffect, true));
+    resultEffects.append(ApplyOneEffect(target, appliedEffect, true, atkName));
     // an one-occurence effect available is not displayed or stored
     if (appliedEffect.nbTurns - appliedEffect.counterTurn > 0) {
       allAppliedEffects.push_back(appliedEffect);

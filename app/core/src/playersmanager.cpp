@@ -298,7 +298,7 @@ QStringList PlayersManager::ApplyEffects() {
         auto *launcherPl = GetCharacterByName(gae.launcher);
         if (launcherPl != nullptr) {
           logs.append(
-              launcherPl->ApplyOneEffect(targetPl, gae.allAtkEffects, false));
+              launcherPl->ApplyOneEffect(targetPl, gae.allAtkEffects, false, gae.atkName));
         }
       }
     }
