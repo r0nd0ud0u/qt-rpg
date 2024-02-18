@@ -1,12 +1,12 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include <QString>
 #include <QColor>
+#include <QString>
 
+#include <tuple>
 #include <unordered_map>
 #include <vector>
-#include <tuple>
 
 #include "common.h"
 #include "effect.h"
@@ -56,14 +56,14 @@ public:
 
   // Effect
   QString ApplyOneEffect(Character *target, effectParam &effect,
-                         const bool fromLaunch,const QString& atkName);
+                         const bool fromLaunch, const QString &atkName);
   std::tuple<bool, QStringList, std::vector<effectParam>>
   ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
                  Character *target); // value1: apply the atk ?, value2 : logs
                                      // after applying effects
-  void RemoveMalusEffect(const QString& statsName);
+  void RemoveMalusEffect(const QString &statsName);
   int DamageByAtk(Character *target, const AttaqueType &atk);
-  QString RegenIntoDamage(const int atkValue, const QString& statsName);
+  QString RegenIntoDamage(const int atkValue, const QString &statsName);
   std::vector<effectParam> CreateEveilDeLaForet();
 
   static QString GetInventoryString(const InventoryType &type);
@@ -80,16 +80,21 @@ public:
   int m_Exp = 0;
   QColor color = QColor("dark");
 
-  private:
+private:
   template <class T>
-  void ProcessAddEquip(StatsType<T> &charStat, const StatsType<T> &equipStat) const;
+  void ProcessAddEquip(StatsType<T> &charStat,
+                       const StatsType<T> &equipStat) const;
   template <class T>
   void ProcessRemoveEquip(StatsType<T> &charStat,
                           const StatsType<T> &equipStat);
-  int ProcessCurrentValueOnEffect(const effectParam& ep, const int launcherPowMag, const int nbOfApplies, const bool percent);
-  QString ProcessOutputLogOnEffect(const effectParam& ep, const int amount, const bool fromLaunch, const int nbOfApplies);
-  int ProcessDecreaseOnTurn(const effectParam& ep);
-  QString ProcessDecreaseByTurn(const effectParam& ep);
+  int ProcessCurrentValueOnEffect(const effectParam &ep,
+                                  const int launcherPowMag,
+                                  const int nbOfApplies, const bool percent);
+  QString ProcessOutputLogOnEffect(const effectParam &ep, const int amount,
+                                   const bool fromLaunch, const int nbOfApplies,
+                                   const QString &atkName);
+  int ProcessDecreaseOnTurn(const effectParam &ep);
+  QString ProcessDecreaseByTurn(const effectParam &ep);
 };
 
 #endif // CHARACTER_H

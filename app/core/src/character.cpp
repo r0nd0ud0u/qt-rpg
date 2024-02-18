@@ -484,7 +484,8 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
 }
 
 QString Character::ApplyOneEffect(Character *target, effectParam &effect,
-                                  const bool fromLaunch, const QString& atkName) {
+                                  const bool fromLaunch,
+                                  const QString &atkName) {
   if (target == nullptr) {
     return "No  target character";
   }
@@ -500,8 +501,8 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
     result = ProcessDecreaseByTurn(effect);
   }
 
-  if(effect.effect == EFFECT_NB_COOL_DOWN){
-      return QString("Cooldown actif sur %1.").arg(atkName);
+  if (effect.effect == EFFECT_NB_COOL_DOWN) {
+    return QString("Cooldown actif.").arg(atkName);
   }
 
   if (fromLaunch) {
@@ -542,8 +543,8 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
       effect, powMag.m_CurrentValue, nbOfApplies,
       (ON_PERCENT_STATS.count(effect.statsName) > 0));
   // TODO should be static and not on target ? pass target by argument
-  result =
-      target->ProcessOutputLogOnEffect(effect, amount, fromLaunch, nbOfApplies);
+  result = target->ProcessOutputLogOnEffect(effect, amount, fromLaunch,
+                                            nbOfApplies, atkName);
 
   // Apply regen effect turning into damage for all bosses
   // can be processed only after calcul of amount of atk
@@ -603,7 +604,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
     const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
     if (effect.effect == EFFECT_REINIT &&
         pm->GetNbOfStatsInEffectList(target, effect.statsName) <
-          effect.subValueEffect) {
+            effect.subValueEffect) {
       applyAtk = false;
       resultEffects.append(
           QString("Sur %1. L'effet %2-%3 n'est pas applicable. %4 effet(s) sur "
@@ -678,8 +679,8 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
   if (ep.statsName.isEmpty()) {
     return 0;
   }
-  if(ep.value == 0){
-      return 0;
+  if (ep.value == 0) {
+    return 0;
   }
 
   // common init
@@ -712,14 +713,15 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
 QString Character::ProcessOutputLogOnEffect(const effectParam &ep,
                                             const int amount,
                                             const bool fromLaunch,
-                                            const int nbOfApplies) {
+                                            const int nbOfApplies,
+                                            const QString &atkName) {
   QString output;
 
   // nominal atk
   int potentialAttempts = 1;
-  if(ep.effect == EFFECT_NB_DECREASE_ON_TURN){
-      // the nomical case is 1 for any atk. effect.subValueEffect is on top of the
-      potentialAttempts = ep.subValueEffect + 1;
+  if (ep.effect == EFFECT_NB_DECREASE_ON_TURN) {
+    // the nomical case is 1 for any atk. effect.subValueEffect is on top of the
+    potentialAttempts = ep.subValueEffect + 1;
   }
 
   if (ep.statsName == STATS_HP) {
@@ -731,24 +733,21 @@ QString Character::ProcessOutputLogOnEffect(const effectParam &ep,
       effectName = ep.statsName + "-" + ep.effect;
     }
     if (fromLaunch) {
-      output =
-          QString("Sur %1: Récupère %5 PV grâce à l'effet %2 (appliqué %3/%4 "
-                  "possible(s)).")
-              .arg(m_Name)
-              .arg(effectName)
-              .arg(nbOfApplies)
-              .arg(QString::number(potentialAttempts))
-              .arg(QString::number(amount));
-    } else {
-      output = QString("Sur %1: Récupère %3 PV grâce à l'effet %2.")
-                   .arg(m_Name)
+      output = QString("récupère %4 PV grâce à l'effet %1 (appliqué %2/%3 "
+                       "possible(s)).")
                    .arg(effectName)
+                   .arg(nbOfApplies)
+                   .arg(QString::number(potentialAttempts))
                    .arg(QString::number(amount));
+    } else {
+      output = QString("récupère %2 PV grâce à l'effet %1 (%3).")
+                   .arg(effectName)
+                   .arg(QString::number(amount))
+                   .arg(atkName);
     }
   } else if (ep.statsName != STATS_HP) {
-    output = QString("Sur %1: l'effet %2-%3 s'applique %4/%5 "
-                     "possible(s) avec une valeur de %6.")
-                 .arg(m_Name)
+    output = QString("l'effet %1-%2 s'applique %3/%4 "
+                     "possible(s) avec une valeur de %5.")
                  .arg(ep.statsName)
                  .arg(ep.effect)
                  .arg(nbOfApplies)
