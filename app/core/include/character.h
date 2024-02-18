@@ -86,6 +86,10 @@ public:
   template <class T>
   void ProcessRemoveEquip(StatsType<T> &charStat,
                           const StatsType<T> &equipStat);
+  int ProcessCurrentValueOnEffect(const effectParam& ep, const int launcherPowMag, const int nbOfApplies, const bool percent);
+  QString ProcessOutputLogOnEffect(const effectParam& ep, const int amount, const bool fromLaunch, const int nbOfApplies);
+  int ProcessDecreaseOnTurn(const effectParam& ep);
+  QString ProcessDecreaseByTurn(const effectParam& ep);
 };
 
 #endif // CHARACTER_H
