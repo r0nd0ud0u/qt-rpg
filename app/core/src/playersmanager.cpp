@@ -293,14 +293,19 @@ QStringList PlayersManager::ApplyEffects() {
   QStringList logs;
   for (auto &[targetName, effectsTable] : m_AllEffectsOnGame) {
     auto *targetPl = GetCharacterByName(targetName);
+    QStringList localLog;
+    localLog.append(QString("Sur %1: ").arg(targetName));
     if (targetPl != nullptr) {
       for (auto &gae : effectsTable) {
         auto *launcherPl = GetCharacterByName(gae.launcher);
         if (launcherPl != nullptr) {
-          logs.append(launcherPl->ApplyOneEffect(targetPl, gae.allAtkEffects,
-                                                 false, gae.atkName));
+          localLog.append(launcherPl->ApplyOneEffect(
+              targetPl, gae.allAtkEffects, false, gae.atkName));
         }
       }
+    }
+    if (localLog.size() > 1) {
+      logs.append(localLog.join("\n"));
     }
   }
   return logs;

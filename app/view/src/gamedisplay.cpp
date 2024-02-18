@@ -199,8 +199,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       const auto &[applyAtk, resultEffects, appliedEffects] =
           activatedPlayer->ApplyAtkEffect(target.m_IsTargeted, atkName,
                                           targetChara);
-      for (const auto &re : resultEffects) {
-        emit SigUpdateChannelView(nameChara, re, activatedPlayer->color);
+      if(!resultEffects.isEmpty()){
+          emit SigUpdateChannelView(nameChara, QString("Sur %1: ").arg(target.m_Name) + "\n" + resultEffects.join("\n"), activatedPlayer->color);
       }
       // applyAtk = false if effect reinit with unfulfilled condtions
       if (target.m_IsTargeted && applyAtk) {
