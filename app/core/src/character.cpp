@@ -66,11 +66,11 @@ QString Character::RegenIntoDamage(const int atkValue,
   }
 
   const auto pm = Application::GetInstance().m_GameManager->m_PlayersManager;
-  if(pm->m_AllEffectsOnGame.find(m_Name)== pm->m_AllEffectsOnGame.end()){
-      return "";
+  if (pm->m_AllEffectsOnGame.find(m_Name) == pm->m_AllEffectsOnGame.end()) {
+    return "";
   }
 
-    QString channelLog;
+  QString channelLog;
   std::vector<Character *> playerList;
   if (m_type == characType::Hero) {
     playerList = pm->m_HeroesList;
@@ -525,9 +525,9 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
     }
     if (effect.effect == EFFECT_DELETE_BAD) {
       if (effect.subValueEffect <= 1) {
-        return pm->DeleteOneBadEffect(this);
+        return pm->DeleteOneBadEffect(target);
       } else {
-        return pm->DeleteAllBadEffect(this);
+        return pm->DeleteAllBadEffect(target);
       }
     }
     if (effect.effect == EFFECT_IMPROVE_HOTS) {
@@ -626,7 +626,10 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
     effectParam appliedEffect = effect;
     // appliedEffect is modified in ApplyOneEffect
     resultEffects.append(ApplyOneEffect(target, appliedEffect, true));
-    allAppliedEffects.push_back(appliedEffect);
+    // an one-occurence effect available is not displayed or stored
+    if (appliedEffect.nbTurns - appliedEffect.counterTurn > 0) {
+      allAppliedEffects.push_back(appliedEffect);
+    }
   }
 
   return std::make_tuple(applyAtk, resultEffects, allAppliedEffects);

@@ -412,8 +412,13 @@ void PlayersManager::ResetCounterOnOneStatsEffect(const Character *chara,
 
 
 QString PlayersManager::DeleteOneBadEffect(const Character *chara) {
-  if (chara == nullptr || m_AllEffectsOnGame.count(chara->m_Name) == 0) {
+  if (chara == nullptr) {
+        // debug
     return "No target encountered on DeleteOneBadEffect";
+  }
+  if (m_AllEffectsOnGame.count(chara->m_Name) == 0) {
+      // output channel log
+      return "Aucun effet actif.";
   }
   for (auto &e : m_AllEffectsOnGame[chara->m_Name])
      // TODO rule about debuf
