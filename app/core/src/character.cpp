@@ -312,12 +312,6 @@ void Character::LoadAtkJson() {
       }
 #endif
 
-      if (atk.name == "Eveil de la forêt") {
-        std::vector<effectParam> epTable = CreateEveilDeLaForet();
-        for (const auto &ep : epTable) {
-          atk.m_AllEffects.push_back(ep);
-        }
-      }
       // Add atk to hero atk list
       AddAtq(atk);
     }
@@ -608,8 +602,8 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
     // test if applicable effect
     const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
     if (effect.effect == EFFECT_REINIT &&
-        !(pm->GetNbOfStatsInEffectList(target, effect.statsName) >=
-          effect.subValueEffect)) {
+        pm->GetNbOfStatsInEffectList(target, effect.statsName) <
+          effect.subValueEffect) {
       applyAtk = false;
       resultEffects.append(
           QString("Sur %1. L'effet %2-%3 n'est pas applicable. %4 effet(s) sur "
@@ -654,16 +648,6 @@ void Character::RemoveMalusEffect(const QString &statsName) {
 std::vector<effectParam> Character::CreateEveilDeLaForet() {
   std::vector<effectParam> epTable;
 
-  effectParam param;
-  param.effect = EFFECT_DELETE_BAD;
-  param.value = 0;
-  param.nbTurns = 1;
-  param.reach = REACH_ZONE;
-  param.statsName = "";
-  param.target = TARGET_ALLY;
-  param.subValueEffect = 1000;
-  epTable.push_back(param);
-
   effectParam param2;
   param2.effect = EFFECT_IMPROVE_HOTS;
   param2.value = 0;
@@ -693,6 +677,9 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
                                            const bool percent) {
   if (ep.statsName.isEmpty()) {
     return 0;
+  }
+  if(ep.value == 0){
+      return 0;
   }
 
   // common init

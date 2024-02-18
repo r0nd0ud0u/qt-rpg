@@ -251,15 +251,15 @@ Character *PlayersManager::GetCharacterByName(const QString &name) {
 }
 
 void PlayersManager::AddGameEffectOnAtk(
-    const QString& launcherName, const QString &atkName, const QString& targetName,
-    const std::vector<effectParam> &effects) {
-    for(const auto& e : effects){
-        GameAtkEffects gae;
-        gae.launcher = launcherName;
-        gae.atkName = atkName;
-        gae.allAtkEffects = e;
-        m_AllEffectsOnGame[targetName].push_back(gae);
-    }
+    const QString &launcherName, const QString &atkName,
+    const QString &targetName, const std::vector<effectParam> &effects) {
+  for (const auto &e : effects) {
+    GameAtkEffects gae;
+    gae.launcher = launcherName;
+    gae.atkName = atkName;
+    gae.allAtkEffects = e;
+    m_AllEffectsOnGame[targetName].push_back(gae);
+  }
 }
 
 QStringList PlayersManager::RemoveTerminatedEffects() {
@@ -297,8 +297,8 @@ QStringList PlayersManager::ApplyEffects() {
       for (auto &gae : effectsTable) {
         auto *launcherPl = GetCharacterByName(gae.launcher);
         if (launcherPl != nullptr) {
-          logs.append(
-              launcherPl->ApplyOneEffect(targetPl, gae.allAtkEffects, false, gae.atkName));
+          logs.append(launcherPl->ApplyOneEffect(targetPl, gae.allAtkEffects,
+                                                 false, gae.atkName));
         }
       }
     }
@@ -410,19 +410,18 @@ void PlayersManager::ResetCounterOnOneStatsEffect(const Character *chara,
   }
 }
 
-
 QString PlayersManager::DeleteOneBadEffect(const Character *chara) {
   if (chara == nullptr) {
-        // debug
+    // debug
     return "No target encountered on DeleteOneBadEffect";
   }
   if (m_AllEffectsOnGame.count(chara->m_Name) == 0) {
-      // output channel log
-      return "Aucun effet actif.";
+    // output channel log
+    return "Aucun effet actif.";
   }
   for (auto &e : m_AllEffectsOnGame[chara->m_Name])
-     // TODO rule about debuf
-      // a DOT can be a debuf for example
+    // TODO rule about debuf
+    // a DOT can be a debuf for example
     if (e.allAtkEffects.value < 0 && !e.allAtkEffects.statsName.isEmpty()) {
       e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
       return "supprime un effet néfaste.";
@@ -432,8 +431,13 @@ QString PlayersManager::DeleteOneBadEffect(const Character *chara) {
 }
 
 QString PlayersManager::DeleteAllBadEffect(const Character *chara) {
-  if (chara == nullptr || m_AllEffectsOnGame.count(chara->m_Name) == 0) {
+  if (chara == nullptr) {
+    // debug
     return "No target encountered on DeleteAllBadEffect";
+  }
+  if (m_AllEffectsOnGame.count(chara->m_Name) == 0) {
+    // output channel log
+    return "Aucun effet actif.";
   }
   for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
     if (e.allAtkEffects.value < 0) {
