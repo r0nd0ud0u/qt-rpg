@@ -411,28 +411,31 @@ void PlayersManager::ResetCounterOnOneStatsEffect(const Character *chara,
 }
 
 
-void PlayersManager::DeleteOneBadEffect(const Character *chara) {
+QString PlayersManager::DeleteOneBadEffect(const Character *chara) {
   if (chara == nullptr || m_AllEffectsOnGame.count(chara->m_Name) == 0) {
-    return;
+    return "No target encountered on DeleteOneBadEffect";
   }
   for (auto &e : m_AllEffectsOnGame[chara->m_Name])
      // TODO rule about debuf
       // a DOT can be a debuf for example
     if (e.allAtkEffects.value < 0 && !e.allAtkEffects.statsName.isEmpty()) {
       e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
-      break;
+      return "supprime un effet néfaste.";
     }
+
+  return "Pas de mauvais effet supprimé.";
 }
 
-void PlayersManager::DeleteAllBadEffect(const Character *chara) {
+QString PlayersManager::DeleteAllBadEffect(const Character *chara) {
   if (chara == nullptr || m_AllEffectsOnGame.count(chara->m_Name) == 0) {
-    return;
+    return "No target encountered on DeleteAllBadEffect";
   }
   for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
     if (e.allAtkEffects.value < 0) {
       e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
     }
   }
+  return "supprime tous les effets néfastes.";
 }
 
 void PlayersManager::DecreaseCoolDownEffects() {

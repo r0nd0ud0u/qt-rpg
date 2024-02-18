@@ -35,9 +35,9 @@ public:
                                const QString &statsName) const;
   void ResetCounterOnOneStatsEffect(const Character *chara,
                                     const QString &statsName);
-  void DeleteOneBadEffect(const Character *chara);
+  QString DeleteOneBadEffect(const Character *chara);
   void DecreaseCoolDownEffects();
-  void DeleteAllBadEffect(const Character *chara);
+  QString DeleteAllBadEffect(const Character *chara);
   void ImproveHotsOnPlayers(const int valuePercent,
                             const characType launcherType);
 
