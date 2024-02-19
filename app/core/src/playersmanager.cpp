@@ -136,39 +136,37 @@ void PlayersManager::InitHeroes() {
 void PlayersManager::InitBosses() {
   Stats stats;
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
-      .SetValues(9999, 9999, 9999);
+      .SetValues(2750, 2750, 2750);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
       .SetValues(0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
-      .SetValues(126, 126, 126);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
       .SetValues(0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
       .SetValues(0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .SetValues(2280, 2280, 2280);
+      .SetValues(105, 105, 105);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .SetValues(35, 35, 35);
+      .SetValues(120, 120, 120);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .SetValues(10, 10, 10);
+      .SetValues(80, 80, 80);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
       .SetValues(138, 138, 138);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
       .SetValues(0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .SetValues(25, 25, 25);
+      .SetValues(0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
-      .SetValues(20, 20, 20);
+      .SetValues(15, 15, 15);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
       .SetValues(10, 10, 10);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
-      .SetValues(4, 4, 4);
+      .SetValues(0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
       .SetValues(25, 25, 25);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
-      .SetValues(5, 5, 5);
+      .SetValues(0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
-      .SetValues(1, 1, 1);
+      .SetValues(0, 0, 0);
   const auto boss = new Character("Pignouf hehe", characType::Boss, stats);
 
   m_BossesList.push_back(boss);
@@ -251,12 +249,12 @@ Character *PlayersManager::GetCharacterByName(const QString &name) {
 }
 
 void PlayersManager::AddGameEffectOnAtk(
-    const QString &launcherName, const QString &atkName,
+    const QString &launcherName, const AttaqueType &atk,
     const QString &targetName, const std::vector<effectParam> &effects) {
   for (const auto &e : effects) {
     GameAtkEffects gae;
     gae.launcher = launcherName;
-    gae.atkName = atkName;
+    gae.atk = atk;
     gae.allAtkEffects = e;
     m_AllEffectsOnGame[targetName].push_back(gae);
   }
@@ -300,7 +298,7 @@ QStringList PlayersManager::ApplyEffects() {
         auto *launcherPl = GetCharacterByName(gae.launcher);
         if (launcherPl != nullptr) {
           localLog.append(launcherPl->ApplyOneEffect(
-              targetPl, gae.allAtkEffects, false, gae.atkName));
+              targetPl, gae.allAtkEffects, false, gae.atk));
         }
       }
     }

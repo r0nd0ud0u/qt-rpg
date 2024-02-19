@@ -45,7 +45,6 @@ class Character {
 public:
   Character(const QString name, const characType type, const Stats &stats);
 
-  QString Attaque(const QString &atkName, Character *target);
   void ProcessCostAndRegen(const QString &atkName);
   void AddAtq(const AttaqueType &atq);
   void AddStuff(const Stuff &stuff);
@@ -56,13 +55,13 @@ public:
 
   // Effect
   QString ApplyOneEffect(Character *target, effectParam &effect,
-                         const bool fromLaunch, const QString &atkName);
+                         const bool fromLaunch, const AttaqueType &atk);
   std::tuple<bool, QStringList, std::vector<effectParam>>
-  ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
+  ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
                  Character *target); // value1: apply the atk ?, value2 : logs
                                      // after applying effects
   void RemoveMalusEffect(const QString &statsName);
-  int DamageByAtk(Character *target, const AttaqueType &atk);
+
   QString RegenIntoDamage(const int atkValue, const QString &statsName);
   std::vector<effectParam> CreateEveilDeLaForet();
 
@@ -87,14 +86,15 @@ private:
   template <class T>
   void ProcessRemoveEquip(StatsType<T> &charStat,
                           const StatsType<T> &equipStat);
-  int ProcessCurrentValueOnEffect(const effectParam &ep,
-                                  const int launcherPowMag,
-                                  const int nbOfApplies, const bool percent);
+  static int ProcessCurrentValueOnEffect(const effectParam &ep, const int nbOfApplies,
+                                  const Stats &launcherStats,
+                                  Stats &targetStats);
   QString ProcessOutputLogOnEffect(const effectParam &ep, const int amount,
                                    const bool fromLaunch, const int nbOfApplies,
                                    const QString &atkName) const;
   int ProcessDecreaseOnTurn(const effectParam &ep) const;
   QString ProcessDecreaseByTurn(const effectParam &ep) const;
+  static int DamageByAtk(const Stats& launcherStats, const Stats& targetStats, const bool isMagicAtk, const int atkValue);
 };
 
 #endif // CHARACTER_H

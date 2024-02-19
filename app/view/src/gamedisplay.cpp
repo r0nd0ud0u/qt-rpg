@@ -183,6 +183,10 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       return;
   }
   // launch atk
+  if(activatedPlayer->m_AttakList.count(atkName) == 0){
+      return;
+  }
+  const auto &currentAtk = activatedPlayer->m_AttakList.at(atkName);
   // Stats change on hero
   activatedPlayer->ProcessCostAndRegen(atkName);
   emit SigUpdateChannelView(nameChara, QString("lance %1.").arg(atkName),
@@ -197,15 +201,13 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     if (targetChara != nullptr) {
       // EFFECT
       const auto &[applyAtk, resultEffects, appliedEffects] =
-          activatedPlayer->ApplyAtkEffect(target.m_IsTargeted, atkName,
+          activatedPlayer->ApplyAtkEffect(target.m_IsTargeted, currentAtk,
                                           targetChara);
       if(!resultEffects.isEmpty()){
           emit SigUpdateChannelView(nameChara, QString("Sur %1: ").arg(target.m_Name) + "\n" + resultEffects.join("\n"), activatedPlayer->color);
       }
       // applyAtk = false if effect reinit with unfulfilled condtions
       if (target.m_IsTargeted && applyAtk) {
-        // ATK
-        channelLog = activatedPlayer->Attaque(atkName, targetChara);
         // Update channel view
         if (!channelLog.isEmpty()) {
           emit SigUpdateChannelView(nameChara, channelLog,
@@ -223,7 +225,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     if (epTable.empty()) {
       continue;
     }
-    gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer->m_Name, atkName,
+    gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer->m_Name, currentAtk,
                                              targetName, epTable);
   }
   // update all effect panel

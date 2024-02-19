@@ -10,7 +10,7 @@
 
 struct GameAtkEffects {
   effectParam allAtkEffects;
-  QString atkName;
+  AttaqueType atk;
   QString launcher;
 };
 
@@ -22,7 +22,7 @@ public:
   void LoadAllEquipmentsJson();
   Character *GetCharacterByName(const QString &name);
   void AddGameEffectOnAtk(
-      const QString &launcherName, const QString &atkName,
+      const QString &launcherName, const AttaqueType &atk,
       const QString &targetName, const std::vector<effectParam> &effects);
   QStringList RemoveTerminatedEffects();
   QStringList ApplyEffects();

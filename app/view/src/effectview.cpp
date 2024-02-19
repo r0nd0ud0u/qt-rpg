@@ -308,6 +308,7 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->stats_comboBox->setCurrentText(table[0].statsName);
         ui->effect_value_spinbox->setValue(table[0].subValueEffect);
         ui->checkBox->setCheckState(Qt::CheckState::Checked);
+        ui->checkBox_2->setEnabled(true);
     } else{
         ui->effect_comboBox->setCurrentText("");
         ui->target_comboBox->setCurrentText("");
@@ -316,6 +317,7 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->nb_turns_spinBox->setValue(0);
         ui->value_spinBox->setValue(0);
         ui->effect_value_spinbox->setEnabled(false);
+        ui->checkBox->setEnabled(true);
         ui->checkBox->setCheckState(Qt::CheckState::Unchecked);
     }
     if(table.size() > 1 && (!table[1].statsName.isEmpty() || !table[1].effect.isEmpty())){
@@ -326,6 +328,8 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->reach_comboBox_2->setCurrentText(table[1].reach);
         ui->stats_comboBox_2->setCurrentText(table[1].statsName);
         ui->effect_value_spinbox_2->setValue(table[1].subValueEffect);
+        ui->checkBox->setEnabled(true);
+        ui->checkBox_2->setEnabled(true);
         ui->checkBox_2->setCheckState(Qt::CheckState::Checked);
     }else{
         ui->effect_comboBox_2->setCurrentText("");
@@ -335,6 +339,8 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->stats_comboBox_2->setCurrentText("");
         ui->nb_turns_spinBox_2->setValue(0);
         ui->value_spinBox_2->setValue(0);
+        ui->checkBox->setEnabled(true);
+        ui->checkBox_2->setEnabled(true);
         ui->checkBox_2->setCheckState(Qt::CheckState::Unchecked);
     }
     if(table.size() > 2 && (!table[2].statsName.isEmpty() || !table[2].effect.isEmpty())){
@@ -345,6 +351,9 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->reach_comboBox_3->setCurrentText(table[2].reach);
         ui->stats_comboBox_3->setCurrentText(table[2].statsName);
         ui->effect_value_spinbox_3->setValue(table[2].subValueEffect);
+        ui->checkBox->setEnabled(true);
+        ui->checkBox_2->setEnabled(true);
+        ui->checkBox_3->setEnabled(true);
         ui->checkBox_3->setCheckState(Qt::CheckState::Checked);
     }else{
         ui->effect_comboBox_3->setCurrentText("");
@@ -354,6 +363,9 @@ void EffectView::SetValues(const std::vector<effectParam>& table){
         ui->stats_comboBox_3->setCurrentText("");
         ui->nb_turns_spinBox_3->setValue(0);
         ui->value_spinBox_3->setValue(0);
+        ui->checkBox->setEnabled(true);
+        ui->checkBox_2->setEnabled(true);
+        ui->checkBox_3->setEnabled(true);
         ui->checkBox_3->setCheckState(Qt::CheckState::Unchecked);
     }
     ReconnectComboSig();

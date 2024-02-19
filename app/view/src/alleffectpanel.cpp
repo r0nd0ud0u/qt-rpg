@@ -69,7 +69,7 @@ void AllEffectPanel::ResetModelWithAllEffect(
   for (const auto &[pl, allGae] : table) {
     for (const auto &gae : allGae) {
       addRow(ui->tableView->model(), &gae.allAtkEffects, gae.launcher, pl,
-             gae.atkName);
+             gae.atk.name);
     }
   }
 }
