@@ -6,6 +6,7 @@
 #include "character.h"
 
 #include <unordered_map>
+#include <vector>
 
 struct GameAtkEffects {
   effectParam allAtkEffects;
@@ -20,9 +21,10 @@ public:
   void InitBosses();
   void LoadAllEquipmentsJson();
   Character *GetCharacterByName(const QString &name);
-  void AddGameEffectOnAtk(const Character *curPlayer, const QString &atkName,
-                          const std::vector<QString> &targetList);
-  QStringList RemoveTerminatedEffects(const bool endOfTurn);
+  void AddGameEffectOnAtk(
+      const QString &launcherName, const QString &atkName,
+      const QString &targetName, const std::vector<effectParam> &effects);
+  QStringList RemoveTerminatedEffects();
   QStringList ApplyEffects();
   void ApplyRegenStats();
 
@@ -33,9 +35,9 @@ public:
                                const QString &statsName) const;
   void ResetCounterOnOneStatsEffect(const Character *chara,
                                     const QString &statsName);
-  void DeleteOneBadEffect(const Character *chara);
+  QString DeleteOneBadEffect(const Character *chara);
   void DecreaseCoolDownEffects();
-  void DeleteAllBadEffect(const Character *chara);
+  QString DeleteAllBadEffect(const Character *chara);
   void ImproveHotsOnPlayers(const int valuePercent,
                             const characType launcherType);
 
