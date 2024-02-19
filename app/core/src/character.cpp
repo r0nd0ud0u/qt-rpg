@@ -692,7 +692,7 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
   // HP
   if (ep.statsName == STATS_HP) {
     amount = nbOfApplies *
-             (ep.value + static_cast<int>(launcherPowMag) / ep.nbTurns);
+             (ep.value + launcherPowMag / ep.nbTurns);
   }
   // value in percent
   else if (percent && ep.effect == EFFECT_PERCENT_CHANGE) {
@@ -714,7 +714,7 @@ QString Character::ProcessOutputLogOnEffect(const effectParam &ep,
                                             const int amount,
                                             const bool fromLaunch,
                                             const int nbOfApplies,
-                                            const QString &atkName) {
+                                            const QString &atkName) const {
   QString output;
 
   // nominal atk
@@ -758,7 +758,7 @@ QString Character::ProcessOutputLogOnEffect(const effectParam &ep,
   return output;
 }
 
-int Character::ProcessDecreaseOnTurn(const effectParam &ep) {
+int Character::ProcessDecreaseOnTurn(const effectParam &ep) const {
   int nbOfApplies = 1; // default value 1 for the nominal case
   int counter = ep.subValueEffect;
   while (counter > 0) {
@@ -777,7 +777,7 @@ int Character::ProcessDecreaseOnTurn(const effectParam &ep) {
   return nbOfApplies;
 }
 
-QString Character::ProcessDecreaseByTurn(const effectParam &ep) {
+QString Character::ProcessDecreaseByTurn(const effectParam &ep) const {
   QString output;
 
   const int intMin = 0;

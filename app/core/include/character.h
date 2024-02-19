@@ -92,9 +92,9 @@ private:
                                   const int nbOfApplies, const bool percent);
   QString ProcessOutputLogOnEffect(const effectParam &ep, const int amount,
                                    const bool fromLaunch, const int nbOfApplies,
-                                   const QString &atkName);
-  int ProcessDecreaseOnTurn(const effectParam &ep);
-  QString ProcessDecreaseByTurn(const effectParam &ep);
+                                   const QString &atkName) const;
+  int ProcessDecreaseOnTurn(const effectParam &ep) const;
+  QString ProcessDecreaseByTurn(const effectParam &ep) const;
 };
 
 #endif // CHARACTER_H
