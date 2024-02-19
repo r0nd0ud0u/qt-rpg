@@ -78,6 +78,8 @@ const std::unordered_set<QString> ALL_STATS = {"",
                                                STATS_REGEN_VIGOR,
                                                STATS_RATE_BERSECK,
                                                STATS_RATE_AGGRO};
+const std::unordered_set<QString> ON_PERCENT_STATS = {STATS_MANA,
+                                                      STATS_VIGOR, STATS_DODGE};
 // equipment keys
 const QString EQUIP_HEAD = "Tete";
 const QString EQUIP_NECKLACE = "Collier";
@@ -152,14 +154,14 @@ public:
   StatsType<int> m_ArmPhy = StatsType<int>(STATS_ARM_PHY);
   StatsType<int> m_ArmMag = StatsType<int>(STATS_ARM_MAG);
   StatsType<int> m_PowPhy = StatsType<int>(STATS_POW_PHY);
-  StatsType<double> m_PowMag = StatsType<double>(STATS_POW_MAG);
+  StatsType<int> m_PowMag = StatsType<int>(STATS_POW_MAG);
   StatsType<int> m_Aggro = StatsType<int>(STATS_AGGRO);
   StatsType<int> m_AggroRate = StatsType<int>(STATS_RATE_AGGRO);
   StatsType<int> m_Speed = StatsType<int>(STATS_SPEED);
   // critical strike in %
   StatsType<int> m_CriticalStrike = StatsType<int>(STATS_CRIT);
   // dodge in %
-  StatsType<double> m_Dogde = StatsType<double>(STATS_DODGE);
+  StatsType<int> m_Dogde = StatsType<int>(STATS_DODGE);
   StatsType<int> m_RegenHP = StatsType<int>(STATS_REGEN_HP);
   StatsType<int> m_RegenMana = StatsType<int>(STATS_REGEN_MANA);
   StatsType<int> m_RegenVigor = StatsType<int>(STATS_REGEN_VIGOR);

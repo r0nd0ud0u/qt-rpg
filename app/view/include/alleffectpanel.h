@@ -7,8 +7,18 @@
 #include "effect.h"
 #include "playersmanager.h"
 
-#include <vector>
 #include <unordered_map>
+#include <vector>
+
+enum class columnsPanel {
+  effect = 0,
+  atk,
+  targetName,
+  launcherName,
+  remainingTurns,
+  value,
+  enumSize
+};
 
 namespace Ui {
 class AllEffectPanel;
@@ -25,12 +35,11 @@ private:
   Ui::AllEffectPanel *ui;
 
   void addRow(QAbstractItemModel *model, const effectParam *ep,
-              const QString &launcher, const QString &targetName) const;
+              const QString &launcher, const QString &targetName,
+              const QString &atkName) const;
   void InitView();
   QAbstractItemModel *createModel(QObject *parent) const;
 private slots:
-  void UpdateModel(const std::vector<effectParam> &epTable,
-                   const QString &launcher, const QString &targetName);
   void ResetModelWithAllEffect(
       const std::unordered_map<QString, std::vector<GameAtkEffects>> &table);
 };

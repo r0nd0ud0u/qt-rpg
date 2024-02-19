@@ -1,12 +1,12 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include <QString>
 #include <QColor>
+#include <QString>
 
+#include <tuple>
 #include <unordered_map>
 #include <vector>
-#include <tuple>
 
 #include "common.h"
 #include "effect.h"
@@ -46,7 +46,7 @@ public:
   Character(const QString name, const characType type, const Stats &stats);
 
   QString Attaque(const QString &atkName, Character *target);
-  void UpdateStatsOnAtk(const QString &atkName);
+  void ProcessCostAndRegen(const QString &atkName);
   void AddAtq(const AttaqueType &atq);
   void AddStuff(const Stuff &stuff);
   void LoadAtkJson();
@@ -55,15 +55,15 @@ public:
   bool CanBeLaunched(const AttaqueType &atk) const;
 
   // Effect
-  QString ApplyOneEffect(Character *target, const effectParam &effect,
-                         const bool fromLaunch);
+  QString ApplyOneEffect(Character *target, effectParam &effect,
+                         const bool fromLaunch, const QString &atkName);
   std::tuple<bool, QStringList, std::vector<effectParam>>
   ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
                  Character *target); // value1: apply the atk ?, value2 : logs
                                      // after applying effects
-  void RemoveMalusEffect(const QString& statsName);
+  void RemoveMalusEffect(const QString &statsName);
   int DamageByAtk(Character *target, const AttaqueType &atk);
-  QString RegenIntoDamage(const int atkValue, const QString& statsName);
+  QString RegenIntoDamage(const int atkValue, const QString &statsName);
   std::vector<effectParam> CreateEveilDeLaForet();
 
   static QString GetInventoryString(const InventoryType &type);
@@ -80,12 +80,21 @@ public:
   int m_Exp = 0;
   QColor color = QColor("dark");
 
-  private:
+private:
   template <class T>
-  void ProcessAddEquip(StatsType<T> &charStat, const StatsType<T> &equipStat) const;
+  void ProcessAddEquip(StatsType<T> &charStat,
+                       const StatsType<T> &equipStat) const;
   template <class T>
   void ProcessRemoveEquip(StatsType<T> &charStat,
                           const StatsType<T> &equipStat);
+  int ProcessCurrentValueOnEffect(const effectParam &ep,
+                                  const int launcherPowMag,
+                                  const int nbOfApplies, const bool percent);
+  QString ProcessOutputLogOnEffect(const effectParam &ep, const int amount,
+                                   const bool fromLaunch, const int nbOfApplies,
+                                   const QString &atkName) const;
+  int ProcessDecreaseOnTurn(const effectParam &ep) const;
+  QString ProcessDecreaseByTurn(const effectParam &ep) const;
 };
 
 #endif // CHARACTER_H
