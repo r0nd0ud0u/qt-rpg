@@ -463,7 +463,11 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   }
 
   if (effect.effect == EFFECT_NB_COOL_DOWN) {
-    return QString("Cooldown actif.").arg(atk.name);
+
+    result = (m_Name == target->m_Name)
+                 ? QString("Cooldown actif sur %1.").arg(atk.name)
+                 : "";
+    return result;
   }
 
   if (fromLaunch) {
@@ -527,16 +531,17 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
   // effect can be modified -> counter nb when applied
   const auto &allEffects = atk.m_AllEffects;
   std::vector<effectParam> allAppliedEffects;
-  QStringList resultEffects;
+  QStringList allResultEffects;
   const bool isAlly = target->m_type == m_type;
 
   for (const auto &effect : allEffects) {
     if (effect.target == TARGET_HIMSELF && m_Name != target->m_Name) {
       continue;
     }
-    if (!isAlly &&
-        (effect.target == TARGET_ALLY || effect.target == TARGET_ALL_HEROES ||
-         effect.target == TARGET_HIMSELF)) {
+    if (effect.target == TARGET_ONLY_ALLY && m_Name == target->m_Name) {
+      continue;
+    }
+    if (!isAlly && ALLIES_TARGETS.count(effect.target) > 0) {
       continue;
     }
     if (isAlly && effect.target == TARGET_ENNEMY) {
@@ -562,7 +567,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
         pm->GetNbOfStatsInEffectList(target, effect.statsName) <
             effect.subValueEffect) {
       applyAtk = false;
-      resultEffects.append(
+      allResultEffects.append(
           QString("Sur %1. L'effet %2-%3 n'est pas applicable. %4 effet(s) sur "
                   "stats %5 requis.")
               .arg(target->m_Name)
@@ -574,14 +579,17 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
     }
     effectParam appliedEffect = effect;
     // appliedEffect is modified in ApplyOneEffect
-    resultEffects.append(ApplyOneEffect(target, appliedEffect, true, atk));
+    const QString resultEffect =
+        ApplyOneEffect(target, appliedEffect, true, atk);
     // an one-occurence effect available is not displayed or stored
-    if (appliedEffect.nbTurns - appliedEffect.counterTurn > 0) {
+    if (!resultEffect.isEmpty() &&
+        appliedEffect.nbTurns - appliedEffect.counterTurn > 0) {
+      allResultEffects.append(resultEffect);
       allAppliedEffects.push_back(appliedEffect);
     }
   }
 
-  return std::make_tuple(applyAtk, resultEffects, allAppliedEffects);
+  return std::make_tuple(applyAtk, allResultEffects, allAppliedEffects);
 }
 
 void Character::RemoveMalusEffect(const QString &statsName) {
@@ -652,6 +660,13 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
   const int delta = localStat.m_MaxValue - localStat.m_CurrentValue;
   int amount = 0;
 
+  if (ep.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
+    localStat.m_CurrentValue += localStat.m_CurrentValue * ep.value / 100;
+    localStat.m_MaxValue += localStat.m_CurrentValue * ep.value / 100;
+
+    return sign * localStat.m_CurrentValue * ep.value / 100;
+  }
+
   // HP
   if (ep.statsName == STATS_HP) {
     if (const bool isDamage = ep.target == TARGET_ENNEMY; isDamage) {
@@ -664,7 +679,7 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
     }
   }
   // value in percent
-  else if (isPercentChange && ep.effect == EFFECT_PERCENT_CHANGE) {
+  else if (isPercentChange || ep.effect == EFFECT_PERCENT_CHANGE) {
     amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
   }
   // nominal behavior

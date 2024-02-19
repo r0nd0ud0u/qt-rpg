@@ -37,10 +37,13 @@ const std::unordered_set<QString> ALL_REACH = {"", REACH_ZONE,
 // Target keys
 const QString TARGET_ENNEMY = "Ennemie";
 const QString TARGET_ALLY = "Allié";
+const QString TARGET_ONLY_ALLY = "Seulement les alliés";
 const QString TARGET_ALL_HEROES = "Tous les heroes";
 const QString TARGET_HIMSELF = "Soi-même";
 const std::unordered_set<QString> ALL_TARGETS = {
-    "", TARGET_ENNEMY, TARGET_ALLY, TARGET_ALL_HEROES, TARGET_HIMSELF};
+    "", TARGET_ENNEMY, TARGET_ALLY, TARGET_ALL_HEROES, TARGET_HIMSELF, TARGET_ONLY_ALLY};
+const std::unordered_set<QString> ALLIES_TARGETS = {
+    TARGET_ALLY, TARGET_ALL_HEROES, TARGET_HIMSELF, TARGET_ONLY_ALLY};
 // Stats keys
 const QString STATS_HP = "PV";
 const QString STATS_MANA = "Mana";
@@ -102,6 +105,7 @@ const QString EFFECT_NB_DECREASE_ON_TURN = "Decroissement pendant le tour";
 const QString EFFECT_NB_DECREASE_BY_TURN = "Decroissement par tour";
 const QString EFFECT_VALUE_CHANGE = "Changement par valeur";
 const QString EFFECT_PERCENT_CHANGE = "Changement par %";
+const QString EFFECT_IMPROVE_BY_PERCENT_CHANGE = "Up par %";
 const QString EFFECT_DELETE_BAD = "Supprime effet néfaste";
 const QString EFFECT_INTO_DAMAGE = "% (stats) en dégâts";
 const QString EFFECT_IMPROVE_HOTS = "Boost chaque HOT de .. %";
@@ -117,7 +121,8 @@ const std::unordered_set<QString> EFFECTS{"",
                                           EFFECT_DELETE_BAD,
                                           EFFECT_INTO_DAMAGE,
                                           EFFECT_IMPROVE_HOTS,
-                                          EFFECT_BOOSTED_BY_HOTS};
+                                          EFFECT_BOOSTED_BY_HOTS,
+                                          EFFECT_IMPROVE_BY_PERCENT_CHANGE};
 const QString EFFECT_ARRAY = "Effet";
 const QString EFFECT_TYPE = "Type";
 const QString EFFECT_VALUE = "Value";
