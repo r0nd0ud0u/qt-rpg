@@ -1,4 +1,5 @@
 {
+    "Aggro": 0,
     "Cible": "Ennemie",
     "Coût de mana": 16,
     "Coût de rage": 0,
@@ -9,7 +10,6 @@
     "Nom": "Briseur d'Égide",
     "Photo": "Azrak Ombresang.png",
     "Portée": "Individuel",
-    "Rage aggro": 0,
     "Regen mana": 0,
     "Regen rage": 0,
     "Regen vigueur": 0,

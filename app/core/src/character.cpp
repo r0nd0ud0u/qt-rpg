@@ -676,11 +676,18 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
                                            const int launcherPowMag,
                                            const int nbOfApplies,
                                            const bool percent) {
+
   if (ep.statsName.isEmpty()) {
     return 0;
   }
   if (ep.value == 0) {
     return 0;
+  }
+
+  // heal or damage is suggested by sign
+  int sign = 1;
+  if (ep.target == TARGET_ENNEMY) {
+    sign = -1;
   }
 
   // common init
@@ -691,8 +698,7 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
 
   // HP
   if (ep.statsName == STATS_HP) {
-    amount = nbOfApplies *
-             (ep.value + launcherPowMag / ep.nbTurns);
+    amount = nbOfApplies * (ep.value + launcherPowMag / ep.nbTurns);
   }
   // value in percent
   else if (percent && ep.effect == EFFECT_PERCENT_CHANGE) {
@@ -704,6 +710,7 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
   }
 
   // new value of stat
+  amount = sign * amount; // apply the sign after the calcul of amount
   localStat.m_CurrentValue += min(delta, amount);
 
   // return the true applied amount
@@ -716,7 +723,22 @@ QString Character::ProcessOutputLogOnEffect(const effectParam &ep,
                                             const int nbOfApplies,
                                             const QString &atkName) const {
   QString output;
-
+  QString healOrDamageLog;
+  uint32_t displayedValue = abs(amount);
+  QString effectName;
+  if (ep.effect.isEmpty() || !fromLaunch) {
+    effectName = ep.statsName;
+  } else {
+    // for example EFFECT_NB_DECREASE_ON_TURN is only from launch
+    effectName = ep.statsName + "-" + ep.effect;
+  }
+  if (amount < 0) {
+    healOrDamageLog = "inflige";
+  } else if (amount > 0) {
+    healOrDamageLog = "récupère";
+  } else if (amount == 0) {
+    return QString("%1 n'a pas d'effet.").arg(effectName);
+  }
   // nominal atk
   int potentialAttempts = 1;
   if (ep.effect == EFFECT_NB_DECREASE_ON_TURN) {
@@ -725,34 +747,28 @@ QString Character::ProcessOutputLogOnEffect(const effectParam &ep,
   }
 
   if (ep.statsName == STATS_HP) {
-    QString effectName;
-    if (ep.effect.isEmpty() || !fromLaunch) {
-      effectName = ep.statsName;
-    } else {
-      // for example EFFECT_NB_DECREASE_ON_TURN is only from launch
-      effectName = ep.statsName + "-" + ep.effect;
-    }
     if (fromLaunch) {
-      output = QString("récupère %4 PV grâce à l'effet %1 (appliqué %2/%3 "
+      output = QString("%1 %5 PV grâce à l'effet %2 (appliqué %3/%4 "
                        "possible(s)).")
+                   .arg(healOrDamageLog)
                    .arg(effectName)
                    .arg(nbOfApplies)
                    .arg(QString::number(potentialAttempts))
-                   .arg(QString::number(amount));
+                   .arg(QString::number(displayedValue));
     } else {
-      output = QString("récupère %2 PV grâce à l'effet %1 (%3).")
+      output = QString("%1 %3 PV grâce à l'effet %2 (%4).")
+                   .arg(healOrDamageLog)
                    .arg(effectName)
-                   .arg(QString::number(amount))
+                   .arg(QString::number(displayedValue))
                    .arg(atkName);
     }
   } else if (ep.statsName != STATS_HP) {
-    output = QString("l'effet %1-%2 s'applique %3/%4 "
-                     "possible(s) avec une valeur de %5.")
-                 .arg(ep.statsName)
-                 .arg(ep.effect)
+    output = QString("l'effet %1 s'applique %2/%3 "
+                     "possible(s) avec une valeur de %4.")
+                 .arg(effectName)
                  .arg(nbOfApplies)
                  .arg(QString::number(potentialAttempts))
-                 .arg(QString::number(amount));
+                 .arg(QString::number(displayedValue));
   }
 
   return output;
