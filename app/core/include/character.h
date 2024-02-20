@@ -41,6 +41,15 @@ public:
 
 enum class InventoryType { healthPotion, manaPotion, enumSize };
 
+struct Buf{
+    int m_Value = 0;
+    bool m_IsPercent = false;
+    void SetBuf(const int value, const bool isPercent){
+        m_Value = value;
+        m_IsPercent = isPercent;
+    }
+};
+
 class Character {
 public:
   Character(const QString name, const characType type, const Stats &stats);
@@ -60,11 +69,13 @@ public:
   ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
                  Character *target); // value1: apply the atk ?, value2 : logs
                                      // after applying effects
-  void RemoveMalusEffect(const QString &statsName);
+  void RemoveMalusEffect(const effectParam &ep);
 
   QString RegenIntoDamage(const int atkValue, const QString &statsName);
-  std::vector<effectParam> CreateEveilDeLaForet();
+  std::vector<effectParam> CreateEveilDeLaForet(); // template
+  void SetBuf(const int value, const bool isPercent);
 
+  static void SetStatsByPercent(StatsType<int>& stat, const int value, const bool isUp); // TODO à sortir dans un common pour gerer les stats?
   static QString GetInventoryString(const InventoryType &type);
 
   QString m_Name = "default";
@@ -79,6 +90,7 @@ public:
   int m_Exp = 0;
   QColor color = QColor("dark");
 
+
 private:
   template <class T>
   void ProcessAddEquip(StatsType<T> &charStat,
@@ -86,7 +98,7 @@ private:
   template <class T>
   void ProcessRemoveEquip(StatsType<T> &charStat,
                           const StatsType<T> &equipStat);
-  static int ProcessCurrentValueOnEffect(const effectParam &ep, const int nbOfApplies,
+  int ProcessCurrentValueOnEffect(const effectParam &ep, const int nbOfApplies,
                                   const Stats &launcherStats,
                                   Stats &targetStats);
   QString ProcessOutputLogOnEffect(const effectParam &ep, const int amount,
@@ -95,6 +107,9 @@ private:
   int ProcessDecreaseOnTurn(const effectParam &ep) const;
   QString ProcessDecreaseByTurn(const effectParam &ep) const;
   static int DamageByAtk(const Stats& launcherStats, const Stats& targetStats, const bool isMagicAtk, const int atkValue);
+
+  // Buf
+  Buf m_BufDamage;
 };
 
 #endif // CHARACTER_H

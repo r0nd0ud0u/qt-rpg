@@ -19,9 +19,9 @@
         {
             "Cible": "Tous les heroes",
             "Portée": "Zone",
-            "Stat": "PV",
+            "Stat": "",
             "Tours actifs": 3,
-            "Type": "Up par %",
+            "Type": "Up/down degats en %",
             "Valeur de l'effet": 0,
             "Value": 25
         },

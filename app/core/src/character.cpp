@@ -470,42 +470,40 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
     return result;
   }
 
-  if (fromLaunch) {
-    if (effect.effect == EFFECT_NB_DECREASE_ON_TURN) {
-      nbOfApplies = ProcessDecreaseOnTurn(effect);
+  // Apply some effects only at launch
+  if (fromLaunch && ACTIVE_EFFECTS_ON_LAUNCH.count(effect.effect) > 0) {
+    return "";
+  }
+  if (effect.effect == EFFECT_NB_DECREASE_ON_TURN) {
+    nbOfApplies = ProcessDecreaseOnTurn(effect);
+  }
+  if (effect.effect == EFFECT_REINIT) {
+    pm->ResetCounterOnOneStatsEffect(target, effect.statsName);
+    nbOfApplies = 0;
+    if (effect.value == 0) {
+      return QString("Les HOTs sont reinitialisés.");
     }
-    if (effect.effect == EFFECT_REINIT) {
-      pm->ResetCounterOnOneStatsEffect(target, effect.statsName);
-      nbOfApplies = 0;
-      if (effect.value == 0) {
-        return QString("Les HOTs sont reinitialisés.");
-      }
+  }
+  if (effect.effect == EFFECT_DELETE_BAD) {
+    if (effect.subValueEffect <= 1) {
+      return pm->DeleteOneBadEffect(target);
+    } else {
+      return pm->DeleteAllBadEffect(target);
     }
-    if (effect.effect == EFFECT_DELETE_BAD) {
-      if (effect.subValueEffect <= 1) {
-        return pm->DeleteOneBadEffect(target);
-      } else {
-        return pm->DeleteAllBadEffect(target);
-      }
-    }
-    if (effect.effect == EFFECT_IMPROVE_HOTS) {
-      pm->ImproveHotsOnPlayers(effect.subValueEffect, target->m_type);
-      return QString("Les HOTs sont boostés de %1%.")
-          .arg(effect.subValueEffect);
-    }
-    if (effect.effect == EFFECT_BOOSTED_BY_HOTS) {
-      const auto nbHots = pm->GetNbOfStatsInEffectList(target, STATS_HP);
-      effect.value = effect.value * (effect.subValueEffect / 100) * nbHots;
-    }
-    if (effect.effect == EFFECT_CHANGE_ALL_DAMAGES_PERCENT) {
-      const auto gs = Application::GetInstance().m_GameManager->m_GameState;
-      if (gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb) > 0) {
-        return QString();
-      }
-      return QString(
-                 "Pas d'effect %1 activé. Aucun ennemi mort au tour précédent")
-          .arg(effect.effect);
-    }
+  }
+  if (effect.effect == EFFECT_IMPROVE_HOTS) {
+    pm->ImproveHotsOnPlayers(effect.subValueEffect, target->m_type);
+    return QString("Les HOTs sont boostés de %1%.").arg(effect.subValueEffect);
+  }
+  if (effect.effect == EFFECT_BOOSTED_BY_HOTS) {
+    const auto nbHots = pm->GetNbOfStatsInEffectList(target, STATS_HP);
+    effect.value = effect.value * (effect.subValueEffect / 100) * nbHots;
+  }
+  if (effect.effect == EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT) {
+    target->SetBuf(effect.value, true);
+    return QString("Les dégâts sont boostés de %1% pour %2 tours.")
+        .arg(effect.value)
+        .arg(effect.nbTurns);
   }
 
   // apply the effect
@@ -586,7 +584,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
               .arg(effect.statsName));
       break;
     }
-    if (effect.effect == EFFECT_CHANGE_ALL_DAMAGES_PERCENT) {
+    if (effect.effect == CONDITION_ENNEMIES_DIED) {
       const auto gs = Application::GetInstance().m_GameManager->m_GameState;
       if (gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb) > 0) {
         allResultEffects.append("");
@@ -614,21 +612,23 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
   return std::make_tuple(applyAtk, allResultEffects, allAppliedEffects);
 }
 
-void Character::RemoveMalusEffect(const QString &statsName) {
-
-  for (const auto &stats : ALL_STATS) {
-    if (stats == STATS_POW_MAG || stats == STATS_DODGE) {
-      auto &localStat =
-          std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(stats));
+void Character::RemoveMalusEffect(const effectParam &ep) {
+  // remove malus applied on stats
+  if (!ep.statsName.isEmpty() &&
+      m_Stats.m_AllStatsTable.count(ep.statsName) > 0) {
+    auto &localStat =
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(ep.statsName));
+    if (ep.effect == EFFECT_PERCENT_CHANGE) {
+      SetStatsByPercent(localStat, ep.value, false);
+    } else {
       localStat.m_CurrentValue = localStat.m_MaxValue;
-      break;
-    } else if (m_Stats.m_AllStatsTable.find(statsName) !=
-               m_Stats.m_AllStatsTable.end()) {
-      auto &localStat =
-          std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(stats));
-      localStat.m_CurrentValue = localStat.m_MaxValue;
-      break;
     }
+  }
+
+  // remove debuf/ buf
+  // on damages
+  if (ep.effect == EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT) {
+    SetBuf(0, true);
   }
 }
 
@@ -685,7 +685,7 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
   if (ep.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
     localStat.m_CurrentValue += localStat.m_CurrentValue * ep.value / 100;
     localStat.m_MaxValue += localStat.m_CurrentValue * ep.value / 100;
-
+    SetStatsByPercent(localStat, ep.value, true);
     return sign * localStat.m_CurrentValue * ep.value / 100;
   }
 
@@ -806,4 +806,18 @@ QString Character::ProcessDecreaseByTurn(const effectParam &ep) const {
   }
 
   return output;
+}
+
+void Character::SetBuf(const int value, const bool isPercent) {
+  m_BufDamage.SetBuf(value, isPercent);
+}
+
+void Character::SetStatsByPercent(StatsType<int> &stat, const int value,
+                                  const bool isUp) {
+  int sign = 1;
+  if (!isUp) {
+    sign = -1;
+  }
+  stat.m_CurrentValue += sign * stat.m_CurrentValue * value / 100;
+  stat.m_MaxValue += sign * stat.m_CurrentValue * value / 100;
 }

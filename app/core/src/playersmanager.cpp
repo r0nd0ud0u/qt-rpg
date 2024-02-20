@@ -272,7 +272,7 @@ QStringList PlayersManager::RemoveTerminatedEffects() {
         // remove malus effect from player
         auto *player = GetCharacterByName(playerName);
         if (player != nullptr) {
-          player->RemoveMalusEffect(it->allAtkEffects.statsName);
+          player->RemoveMalusEffect(it->allAtkEffects);
         }
       }
     }
