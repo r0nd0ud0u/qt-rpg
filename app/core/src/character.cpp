@@ -444,6 +444,26 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
   return false;
 }
 
+int Character::GetSignEffectValue(const QString &target) const
+{
+    int sign = 1;
+    if (target == TARGET_ENNEMY) {
+        sign = -1;
+    }
+
+    return sign;
+}
+
+QChar Character::GetCharEffectValue(const QString &target) const
+{
+    QChar sign ='+';
+    if (target == TARGET_ENNEMY) {
+        sign = '-';
+    }
+
+    return sign;
+}
+
 QString Character::ApplyOneEffect(Character *target, effectParam &effect,
                                   const bool fromLaunch,
                                   const AttaqueType &atk) {
@@ -465,13 +485,13 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   if (effect.effect == EFFECT_NB_COOL_DOWN) {
 
     result = (m_Name == target->m_Name)
-                 ? QString("Cooldown actif sur %1.").arg(atk.name)
+                   ? QString("Cooldown actif sur %1 de %2 tours.").arg(atk.name).arg(effect.nbTurns)
                  : "";
     return result;
   }
 
   // Apply some effects only at launch
-  if (fromLaunch && ACTIVE_EFFECTS_ON_LAUNCH.count(effect.effect) > 0) {
+  if (!fromLaunch && ACTIVE_EFFECTS_ON_LAUNCH.count(effect.effect) > 0) {
     return "";
   }
   if (effect.effect == EFFECT_NB_DECREASE_ON_TURN) {
@@ -504,6 +524,14 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
     return QString("Les dégâts sont boostés de %1% pour %2 tours.")
         .arg(effect.value)
         .arg(effect.nbTurns);
+  }
+  if (effect.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
+      const QChar sign = GetCharEffectValue(effect.target);
+      // common init
+      auto &localStat =
+          std::get<StatsType<int>>(target->m_Stats.m_AllStatsTable[effect.statsName]);
+      SetStatsByPercent(localStat, effect.value, true);
+      return QString("La stat %1 est modifié de %2%3%.").arg(effect.statsName).arg(sign).arg(effect.value);
   }
 
   // apply the effect
@@ -601,10 +629,13 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
     // appliedEffect is modified in ApplyOneEffect
     const QString resultEffect =
         ApplyOneEffect(target, appliedEffect, true, atk);
-    // an one-occurence effect available is not displayed or stored
-    if (!resultEffect.isEmpty() &&
-        appliedEffect.nbTurns - appliedEffect.counterTurn > 0) {
+    // an one-occurence or more effect available is displayed
+    if (!resultEffect.isEmpty()) {
       allResultEffects.append(resultEffect);
+    }
+    // from two-occurences an effect is stored, result effect must be not empty
+    // it means the effect has an effect -> TODO can be replaced by a boolean applied effect to process in ApplyOneEffect
+    if (appliedEffect.nbTurns - appliedEffect.counterTurn > 0 && !resultEffect.isEmpty()) {
       allAppliedEffects.push_back(appliedEffect);
     }
   }
@@ -670,10 +701,7 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
   }
 
   // heal or damage is suggested by sign
-  int sign = 1;
-  if (ep.target == TARGET_ENNEMY) {
-    sign = -1;
-  }
+  const int sign = GetSignEffectValue(ep.target);
   const bool isPercentChange = ON_PERCENT_STATS.count(ep.statsName) > 0;
 
   // common init
@@ -681,13 +709,6 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
       std::get<StatsType<int>>(targetStats.m_AllStatsTable[ep.statsName]);
   const int delta = localStat.m_MaxValue - localStat.m_CurrentValue;
   int amount = 0;
-
-  if (ep.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
-    localStat.m_CurrentValue += localStat.m_CurrentValue * ep.value / 100;
-    localStat.m_MaxValue += localStat.m_CurrentValue * ep.value / 100;
-    SetStatsByPercent(localStat, ep.value, true);
-    return sign * localStat.m_CurrentValue * ep.value / 100;
-  }
 
   // HP
   if (ep.statsName == STATS_HP) {
@@ -702,6 +723,7 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
   }
   // value in percent
   else if (isPercentChange || ep.effect == EFFECT_PERCENT_CHANGE) {
+      // TODO duplicate with EFFECT_IMPROVE_BY_PERCENT_CHANGE ?
     amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
   }
   // nominal behavior
@@ -714,6 +736,14 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
   localStat.m_CurrentValue += min(delta, amount);
 
   // return the true applied amount
+  // add buf
+  if (m_BufDamage.m_Value > 0) {
+    if (m_BufDamage.m_IsPercent) {
+      amount += amount * m_BufDamage.m_Value / 100;
+    } else {
+      amount += m_BufDamage.m_Value;
+    }
+  }
   return min(delta, amount);
 }
 

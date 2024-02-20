@@ -475,7 +475,7 @@ void PlayersManager::ImproveHotsOnPlayers(const int valuePercent,
       continue;
     }
     for (auto &e : m_AllEffectsOnGame[pl->m_Name]) {
-      if (e.allAtkEffects.statsName == STATS_HP) {
+        if (e.allAtkEffects.statsName == STATS_HP && ALLIES_TARGETS.count(e.allAtkEffects.target) > 0) {
         e.allAtkEffects.value += e.allAtkEffects.value * valuePercent / 100;
       }
     }

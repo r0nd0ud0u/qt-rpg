@@ -110,6 +110,8 @@ private:
 
   // Buf
   Buf m_BufDamage;
+  int GetSignEffectValue(const QString &target) const;
+  QChar GetCharEffectValue(const QString &target) const;
 };
 
 #endif // CHARACTER_H
