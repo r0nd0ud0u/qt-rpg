@@ -497,6 +497,15 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
       const auto nbHots = pm->GetNbOfStatsInEffectList(target, STATS_HP);
       effect.value = effect.value * (effect.subValueEffect / 100) * nbHots;
     }
+    if (effect.effect == EFFECT_CHANGE_ALL_DAMAGES_PERCENT) {
+      const auto gs = Application::GetInstance().m_GameManager->m_GameState;
+      if (gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb) > 0) {
+        return QString();
+      }
+      return QString(
+                 "Pas d'effect %1 activé. Aucun ennemi mort au tour précédent")
+          .arg(effect.effect);
+    }
   }
 
   // apply the effect
@@ -561,7 +570,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
       continue;
     }
 
-    // test if applicable effect
+    // Condition if applicable effect
     const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
     if (effect.effect == EFFECT_REINIT &&
         pm->GetNbOfStatsInEffectList(target, effect.statsName) <
@@ -577,6 +586,19 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
               .arg(effect.statsName));
       break;
     }
+    if (effect.effect == EFFECT_CHANGE_ALL_DAMAGES_PERCENT) {
+      const auto gs = Application::GetInstance().m_GameManager->m_GameState;
+      if (gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb) > 0) {
+        allResultEffects.append("");
+      } else {
+        allResultEffects.append(
+            QString(
+                "Pas d'effect %1 activé. Aucun ennemi mort au tour précédent")
+                .arg(effect.effect));
+        break;
+      }
+    }
+
     effectParam appliedEffect = effect;
     // appliedEffect is modified in ApplyOneEffect
     const QString resultEffect =

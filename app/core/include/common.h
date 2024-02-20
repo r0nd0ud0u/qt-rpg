@@ -111,6 +111,8 @@ const QString EFFECT_INTO_DAMAGE = "% (stats) en dégâts";
 const QString EFFECT_IMPROVE_HOTS = "Boost chaque HOT de .. %";
 const QString EFFECT_BOOSTED_BY_HOTS =
     "Boost l'effet par nb HOTS presents en %";
+const QString EFFECT_CHANGE_ALL_DAMAGES_PERCENT = "Up/down degats en %";
+const QString CONDITION_ENNEMIES_DIED = "Ennemis morts tours précédents";
 const std::unordered_set<QString> EFFECTS{"",
                                           EFFECT_REINIT,
                                           EFFECT_NB_COOL_DOWN,
@@ -122,7 +124,9 @@ const std::unordered_set<QString> EFFECTS{"",
                                           EFFECT_INTO_DAMAGE,
                                           EFFECT_IMPROVE_HOTS,
                                           EFFECT_BOOSTED_BY_HOTS,
-                                          EFFECT_IMPROVE_BY_PERCENT_CHANGE};
+                                          EFFECT_IMPROVE_BY_PERCENT_CHANGE,
+                                          EFFECT_CHANGE_ALL_DAMAGES_PERCENT,
+                                          CONDITION_ENNEMIES_DIED};
 const QString EFFECT_ARRAY = "Effet";
 const QString EFFECT_TYPE = "Type";
 const QString EFFECT_VALUE = "Value";
