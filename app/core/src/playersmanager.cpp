@@ -260,52 +260,59 @@ void PlayersManager::AddGameEffectOnAtk(
   }
 }
 
-QStringList PlayersManager::RemoveTerminatedEffects() {
+QStringList
+PlayersManager::RemoveTerminatedEffectsOnPlayer(const QString &curPlayerName) {
   QStringList sl;
-  for (auto &[playerName, gaeTable] : m_AllEffectsOnGame) {
-    for (auto it = gaeTable.begin(); it != gaeTable.end(); it++) {
-      if (it->allAtkEffects.counterTurn == it->allAtkEffects.nbTurns) {
-        QString terminated("L'effet %1 sur %2 est terminé.");
-        terminated =
-            terminated.arg(it->allAtkEffects.statsName).arg(playerName);
-        sl.push_back(terminated);
-        // remove malus effect from player
-        auto *player = GetCharacterByName(playerName);
-        if (player != nullptr) {
-          player->RemoveMalusEffect(it->allAtkEffects);
-        }
+  if (m_AllEffectsOnGame.count(curPlayerName) == 0) {
+    return sl;
+  }
+  auto &gaeTable = m_AllEffectsOnGame[curPlayerName];
+  for (auto it = gaeTable.begin(); it != gaeTable.end(); it++) {
+    if (it->allAtkEffects.counterTurn == it->allAtkEffects.nbTurns) {
+      QString terminated("L'effet %1 sur %2 est terminé.");
+      terminated =
+          terminated.arg(it->allAtkEffects.statsName).arg(curPlayerName);
+      sl.push_back(terminated);
+      // remove malus effect from player
+      auto *player = GetCharacterByName(curPlayerName);
+      if (player != nullptr) {
+        player->RemoveMalusEffect(it->allAtkEffects);
       }
     }
-    auto newEnd = std::remove_if(
-        gaeTable.begin(), gaeTable.end(), [](const GameAtkEffects &element) {
-          return element.allAtkEffects.nbTurns ==
-                 element.allAtkEffects
-                     .counterTurn; // remove elements where this is true
-        });
-    gaeTable.erase(newEnd, gaeTable.end());
   }
+  auto newEnd = std::remove_if(
+      gaeTable.begin(), gaeTable.end(), [](const GameAtkEffects &element) {
+        return element.allAtkEffects.nbTurns ==
+               element.allAtkEffects
+                   .counterTurn; // remove elements where this is true
+      });
+  gaeTable.erase(newEnd, gaeTable.end());
   return sl;
 }
-
-QStringList PlayersManager::ApplyEffects() {
+QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName) {
+  // TODO maybe pass the player as argument and not the name
   QStringList logs;
-  for (auto &[targetName, effectsTable] : m_AllEffectsOnGame) {
-    auto *targetPl = GetCharacterByName(targetName);
-    QStringList localLog;
-    localLog.append(QString("Sur %1: ").arg(targetName));
-    if (targetPl != nullptr) {
-      for (auto &gae : effectsTable) {
-        auto *launcherPl = GetCharacterByName(gae.launcher);
-        if (launcherPl != nullptr) {
-          localLog.append(launcherPl->ApplyOneEffect(
-              targetPl, gae.allAtkEffects, false, gae.atk));
-        }
+  if (m_AllEffectsOnGame.count(curPlayerName) == 0) {
+    return logs;
+  }
+  auto &gaeTable = m_AllEffectsOnGame[curPlayerName];
+
+  auto *targetPl = GetCharacterByName(curPlayerName);
+  QStringList localLog;
+  localLog.append(QString("Sur %1: ").arg(curPlayerName));
+  if (targetPl != nullptr) {
+    for (auto &gae : gaeTable) {
+      auto *launcherPl = GetCharacterByName(gae.launcher);
+      if (launcherPl != nullptr) {
+        localLog.append(launcherPl->ApplyOneEffect(targetPl, gae.allAtkEffects,
+                                                   false, gae.atk));
       }
     }
-    if (localLog.size() > 1) {
-      logs.append(localLog.join("\n"));
-    }
   }
+  if (localLog.size() > 1) {
+    logs.append(localLog.join("\n"));
+  }
+
   return logs;
 }
 
@@ -450,13 +457,14 @@ QString PlayersManager::DeleteAllBadEffect(const Character *chara) {
   return "supprime tous les effets néfastes.";
 }
 
-void PlayersManager::DecreaseCoolDownEffects() {
-  for (auto &[playerName, allGae] : m_AllEffectsOnGame) {
-    for (auto &gae : allGae) {
-      if (gae.allAtkEffects.effect == EFFECT_NB_COOL_DOWN &&
-          gae.allAtkEffects.subValueEffect > 0) {
-        gae.allAtkEffects.subValueEffect--;
-      }
+void PlayersManager::DecreaseCoolDownEffects(const QString &curPlayerName) {
+  if (m_AllEffectsOnGame.count(curPlayerName) == 0) {
+    return;
+  }
+  for (auto &gae : m_AllEffectsOnGame[curPlayerName]) {
+    if (gae.allAtkEffects.effect == EFFECT_NB_COOL_DOWN &&
+        gae.allAtkEffects.subValueEffect > 0) {
+      gae.allAtkEffects.subValueEffect--;
     }
   }
 }
@@ -475,9 +483,18 @@ void PlayersManager::ImproveHotsOnPlayers(const int valuePercent,
       continue;
     }
     for (auto &e : m_AllEffectsOnGame[pl->m_Name]) {
-        if (e.allAtkEffects.statsName == STATS_HP && ALLIES_TARGETS.count(e.allAtkEffects.target) > 0) {
+      if (e.allAtkEffects.statsName == STATS_HP &&
+          ALLIES_TARGETS.count(e.allAtkEffects.target) > 0) {
         e.allAtkEffects.value += e.allAtkEffects.value * valuePercent / 100;
       }
     }
   }
+}
+
+void PlayersManager::IncrementCounterEffect(){
+    for (auto &[playerName, gaeTable] : m_AllEffectsOnGame) {
+        for (auto& gae : gaeTable) {
+            gae.allAtkEffects.counterTurn++;
+        }
+    }
 }

@@ -444,24 +444,22 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
   return false;
 }
 
-int Character::GetSignEffectValue(const QString &target) const
-{
-    int sign = 1;
-    if (target == TARGET_ENNEMY) {
-        sign = -1;
-    }
+int Character::GetSignEffectValue(const QString &target) const {
+  int sign = 1;
+  if (target == TARGET_ENNEMY) {
+    sign = -1;
+  }
 
-    return sign;
+  return sign;
 }
 
-QChar Character::GetCharEffectValue(const QString &target) const
-{
-    QChar sign ='+';
-    if (target == TARGET_ENNEMY) {
-        sign = '-';
-    }
+QChar Character::GetCharEffectValue(const QString &target) const {
+  QChar sign = '+';
+  if (target == TARGET_ENNEMY) {
+    sign = '-';
+  }
 
-    return sign;
+  return sign;
 }
 
 QString Character::ApplyOneEffect(Character *target, effectParam &effect,
@@ -475,7 +473,9 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   int nbOfApplies = 1; // default value 1 for the nominal case
 
   // increment counter turn, effect is used
-  effect.counterTurn++;
+  if (fromLaunch) {
+      effect.counterTurn++;
+  };
 
   if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
     // TODO not ready to be used yet
@@ -485,7 +485,9 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   if (effect.effect == EFFECT_NB_COOL_DOWN) {
 
     result = (m_Name == target->m_Name)
-                   ? QString("Cooldown actif sur %1 de %2 tours.").arg(atk.name).arg(effect.nbTurns)
+                 ? QString("Cooldown actif sur %1 de %2 tours.")
+                       .arg(atk.name)
+                       .arg(effect.nbTurns)
                  : "";
     return result;
   }
@@ -526,12 +528,15 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
         .arg(effect.nbTurns);
   }
   if (effect.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
-      const QChar sign = GetCharEffectValue(effect.target);
-      // common init
-      auto &localStat =
-          std::get<StatsType<int>>(target->m_Stats.m_AllStatsTable[effect.statsName]);
-      SetStatsByPercent(localStat, effect.value, true);
-      return QString("La stat %1 est modifié de %2%3%.").arg(effect.statsName).arg(sign).arg(effect.value);
+    const QChar sign = GetCharEffectValue(effect.target);
+    // common init
+    auto &localStat = std::get<StatsType<int>>(
+        target->m_Stats.m_AllStatsTable[effect.statsName]);
+    SetStatsByPercent(localStat, effect.value, true);
+    return QString("La stat %1 est modifié de %2%3%.")
+        .arg(effect.statsName)
+        .arg(sign)
+        .arg(effect.value);
   }
 
   // apply the effect
@@ -634,8 +639,10 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
       allResultEffects.append(resultEffect);
     }
     // from two-occurences an effect is stored, result effect must be not empty
-    // it means the effect has an effect -> TODO can be replaced by a boolean applied effect to process in ApplyOneEffect
-    if (appliedEffect.nbTurns - appliedEffect.counterTurn > 0 && !resultEffect.isEmpty()) {
+    // it means the effect has an effect -> TODO can be replaced by a boolean
+    // applied effect to process in ApplyOneEffect
+    if (appliedEffect.nbTurns - appliedEffect.counterTurn > 0 &&
+        !resultEffect.isEmpty()) {
       allAppliedEffects.push_back(appliedEffect);
     }
   }
@@ -723,7 +730,7 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
   }
   // value in percent
   else if (isPercentChange || ep.effect == EFFECT_PERCENT_CHANGE) {
-      // TODO duplicate with EFFECT_IMPROVE_BY_PERCENT_CHANGE ?
+    // TODO duplicate with EFFECT_IMPROVE_BY_PERCENT_CHANGE ?
     amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
   }
   // nominal behavior
