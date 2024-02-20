@@ -5,7 +5,36 @@
     "Coût de rage": 0,
     "Coût de vigueur": 8,
     "Durée": 1,
-    "Dégâts": 30,
+    "Dégâts": 0,
+    "Effet": [
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 30
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "Armure physique",
+            "Tours actifs": 4,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": 25
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
+        }
+    ],
     "Niveau": 5,
     "Nom": "Fléau Sylvestre",
     "Photo": "Azrak Ombresang.png",

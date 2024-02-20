@@ -6,6 +6,35 @@
     "Coût de vigueur": 0,
     "Durée": 1,
     "Dégâts": 0,
+    "Effet": [
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 0
+        },
+        {
+            "Cible": "Tous les heroes",
+            "Portée": "Zone",
+            "Stat": "",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 10
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
+        }
+    ],
     "Niveau": 10,
     "Nom": "Récupération Mordorienne",
     "Photo": "Azrak Ombresang.png",

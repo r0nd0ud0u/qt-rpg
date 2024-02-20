@@ -5,7 +5,36 @@
     "Coût de rage": 0,
     "Coût de vigueur": 10,
     "Durée": 1,
-    "Dégâts": 30,
+    "Dégâts": 0,
+    "Effet": [
+        {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 30
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "Esquive",
+            "Tours actifs": 2,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 100
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 6,
+            "Type": "Tours de recharge",
+            "Valeur de l'effet": 0,
+            "Value": 0
+        }
+    ],
     "Niveau": 11,
     "Nom": "Lame de Morgul",
     "Photo": "Azrak Ombresang.png",
