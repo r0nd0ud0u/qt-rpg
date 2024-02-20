@@ -5,7 +5,7 @@
 set(HEADERS
     include/Application.h
     include/Stylizer.h
-    include/Stylizertheme.h
+    include/StylizerTheme.h
     include/gamemanager.h
     include/character.h
     include/playersmanager.h
@@ -18,7 +18,7 @@ set(HEADERS
 set(SOURCES
     src/Application.cpp
     src/Stylizer.cpp
-    src/Stylizertheme.cpp
+    src/StylizerTheme.cpp
     src/gamemanager.cpp
     src/character.cpp
     src/stuff.cpp
