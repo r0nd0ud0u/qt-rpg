@@ -17,11 +17,11 @@
             "Value": 30
         },
         {
-            "Cible": "",
-            "Portée": "",
+            "Cible": "Tous les heroes",
+            "Portée": "Zone",
             "Stat": "Esquive",
             "Tours actifs": 2,
-            "Type": "",
+            "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 100
         },
