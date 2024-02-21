@@ -22,7 +22,14 @@ void AllEffectPanel::addRow(QAbstractItemModel *model, const effectParam *ep,
   }
   int index = model->rowCount();
   model->insertRow(index);
-  const QString effect = (ep->effect.isEmpty()) ? ep->statsName : ep->effect;
+  QString effect;
+  if(!ep->effect.isEmpty() && !ep->statsName.isEmpty()){
+      effect = ep->statsName + "-" + ep->effect;
+  } else if(ep->effect.isEmpty()){
+      effect = ep->statsName;
+  } else if(ep->statsName.isEmpty()){
+      effect = ep->effect;
+  }
   model->setData(model->index(index, static_cast<int>(columnsPanel::effect)),
                  effect);
   model->setData(model->index(index, static_cast<int>(columnsPanel::atk)),
@@ -69,7 +76,7 @@ void AllEffectPanel::ResetModelWithAllEffect(
   for (const auto &[pl, allGae] : table) {
     for (const auto &gae : allGae) {
       addRow(ui->tableView->model(), &gae.allAtkEffects, gae.launcher, pl,
-             gae.atkName);
+             gae.atk.name);
     }
   }
 }

@@ -1,15 +1,44 @@
 {
+    "Aggro": 0,
     "Cible": "Ennemie",
     "Coût de mana": 0,
     "Coût de rage": 0,
     "Coût de vigueur": 12,
     "Durée": 1,
-    "Dégâts": 200,
+    "Dégâts": 0,
+    "Effet": [
+        {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 100
+        },
+        {
+            "Cible": "Tous les heroes",
+            "Portée": "Zone",
+            "Stat": "",
+            "Tours actifs": 3,
+            "Type": "Up/down degats en %",
+            "Valeur de l'effet": 0,
+            "Value": 25
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
+        }
+    ],
     "Niveau": 13,
     "Nom": "Éclipse du Mordor",
     "Photo": "Azrak Ombresang.png",
     "Portée": "Zone",
-    "Rage aggro": 0,
     "Regen mana": 0,
     "Regen rage": 0,
     "Regen vigueur": 0,

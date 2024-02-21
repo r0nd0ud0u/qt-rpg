@@ -39,6 +39,7 @@ struct effectParam{
     // processed
     bool updated = false;
     int counterTurn = 0;
+    bool isMagicAtk = false; // magical or physical effect
 };
 
 template <class T> class EffectStat {

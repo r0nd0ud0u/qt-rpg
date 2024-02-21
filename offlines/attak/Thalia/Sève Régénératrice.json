@@ -19,11 +19,11 @@
         {
             "Cible": "",
             "Portée": "",
-            "Stat": "",
-            "Tours actifs": 0,
+            "Stat": "PV",
+            "Tours actifs": 1,
             "Type": "",
             "Valeur de l'effet": 0,
-            "Value": 0
+            "Value": 60
         },
         {
             "Cible": "",
@@ -42,6 +42,6 @@
     "Regen mana": 0,
     "Regen rage": 0,
     "Regen vigueur": 0,
-    "Soin": 60
+    "Soin": 0
 }
 

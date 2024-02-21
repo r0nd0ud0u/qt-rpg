@@ -42,6 +42,9 @@ void Channel::EndOfGame(){
 }
 
 void Channel::UpdateLog(const QString& topic, const QString& log, const QColor color){
+    if(log.isEmpty()){
+        return;
+    }
     ui->channel_textEdit->setTextColor(color);
     ui->channel_textEdit->append(QString("[" + topic + "]: "));
     ui->channel_textEdit->setTextColor("dark");
