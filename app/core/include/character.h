@@ -110,6 +110,7 @@ private:
   static int DamageByAtk(const Stats& launcherStats, const Stats& targetStats, const bool isMagicAtk, const int atkValue);
   int GetSignEffectValue(const QString &target) const;
   QChar GetCharEffectValue(const QString &target) const;
+  int GetMaxNbOfApplies(const AttaqueType& atk) const;
 };
 
 #endif // CHARACTER_H
