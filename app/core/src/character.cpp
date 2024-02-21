@@ -700,7 +700,7 @@ std::vector<effectParam> Character::CreateEveilDeLaForet() {
 int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
                                            const int nbOfApplies,
                                            const Stats &launcherStats,
-                                           Stats &targetStats) {
+                                           Stats &targetStats) const {
   if (ep.statsName.isEmpty()) {
     return 0;
   }
