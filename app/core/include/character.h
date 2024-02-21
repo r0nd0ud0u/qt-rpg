@@ -71,7 +71,7 @@ public:
                                      // after applying effects
   void RemoveMalusEffect(const effectParam &ep);
 
-  QString RegenIntoDamage(const int atkValue, const QString &statsName);
+  QString RegenIntoDamage(const int atkValue, const QString &statsName) const;
   std::vector<effectParam> CreateEveilDeLaForet(); // template
   void SetBuf(const int value, const bool isPercent);
 
@@ -89,7 +89,8 @@ public:
   int m_Level = 1;
   int m_Exp = 0;
   QColor color = QColor("dark");
-
+  // Buf
+  Buf m_BufDamage;
 
 private:
   template <class T>
@@ -100,16 +101,13 @@ private:
                           const StatsType<T> &equipStat);
   int ProcessCurrentValueOnEffect(const effectParam &ep, const int nbOfApplies,
                                   const Stats &launcherStats,
-                                  Stats &targetStats);
+                                  Stats &targetStats) const;
   QString ProcessOutputLogOnEffect(const effectParam &ep, const int amount,
                                    const bool fromLaunch, const int nbOfApplies,
                                    const QString &atkName) const;
   int ProcessDecreaseOnTurn(const effectParam &ep) const;
   QString ProcessDecreaseByTurn(const effectParam &ep) const;
   static int DamageByAtk(const Stats& launcherStats, const Stats& targetStats, const bool isMagicAtk, const int atkValue);
-
-  // Buf
-  Buf m_BufDamage;
   int GetSignEffectValue(const QString &target) const;
   QChar GetCharEffectValue(const QString &target) const;
 };

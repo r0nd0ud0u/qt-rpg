@@ -79,6 +79,9 @@ void GameDisplay::UpdateGameStatus() {
 
 void GameDisplay::NewRound() {
   const auto &gm = Application::GetInstance().m_GameManager;
+  if (gm == nullptr) {
+    return;
+  }
   const auto &gs = gm->m_GameState;
   // TODO game state , check if boss is dead
 
@@ -90,18 +93,20 @@ void GameDisplay::NewRound() {
   auto *activePlayer =
       Application::GetInstance().m_GameManager->GetCurrentPlayer();
 
-  if(activePlayer == nullptr){
-      emit SigUpdateChannelView("Debug", "NewRound nullptr active player");
+  if (activePlayer == nullptr) {
+    emit SigUpdateChannelView("Debug", "NewRound nullptr active player");
   }
 
   // Apply effects
-  const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffectsOnPlayer(activePlayer->m_Name);
+  const QStringList effectsLogs =
+      gm->m_PlayersManager->ApplyEffectsOnPlayer(activePlayer->m_Name);
   for (const auto &el : effectsLogs) {
-      emit SigUpdateChannelView("GameState", el);
+    emit SigUpdateChannelView("GameState", el);
   }
   // update effect
   const QStringList terminatedEffects =
-      gm->m_PlayersManager->RemoveTerminatedEffectsOnPlayer(activePlayer->m_Name);
+      gm->m_PlayersManager->RemoveTerminatedEffectsOnPlayer(
+          activePlayer->m_Name);
   for (const auto &te : terminatedEffects) {
     emit SigUpdateChannelView("GameState", te);
   }
@@ -220,12 +225,10 @@ void GameDisplay::LaunchAttak(const QString &atkName,
                                   activatedPlayer->color);
       }
       // applyAtk = false if effect reinit with unfulfilled condtions
-      if (target.m_IsTargeted && applyAtk) {
+      if (target.m_IsTargeted && applyAtk && !channelLog.isEmpty()) {
         // Update channel view
-        if (!channelLog.isEmpty()) {
-          emit SigUpdateChannelView(nameChara, channelLog,
-                                    activatedPlayer->color);
-        }
+        emit SigUpdateChannelView(nameChara, channelLog,
+                                  activatedPlayer->color);
       }
       // add applied effect to new effect Table
       newEffects[target.m_Name] = appliedEffects;
@@ -245,7 +248,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     const QStringList terminatedEffects =
         gm->m_PlayersManager->RemoveTerminatedEffectsOnPlayer(targetName);
     for (const auto &te : terminatedEffects) {
-        emit SigUpdateChannelView(nameChara, te);
+      emit SigUpdateChannelView(nameChara, te);
     }
   }
   // update all effect panel

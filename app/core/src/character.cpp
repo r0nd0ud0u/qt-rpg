@@ -48,7 +48,7 @@ int Character::DamageByAtk(const Stats &launcherStats, const Stats &targetStats,
 
 // TODO maybe return a log for the channel, and one for the debug
 QString Character::RegenIntoDamage(const int atkValue,
-                                   const QString &statsName) {
+                                   const QString &statsName) const {
   if (atkValue <= 0) {
     return "";
   }
@@ -475,7 +475,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   // increment counter turn, effect is used
   if (fromLaunch) {
       effect.counterTurn++;
-  };
+  }
 
   if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
     // TODO not ready to be used yet
@@ -602,6 +602,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
     }
 
     // Condition if applicable effect
+    // TODO extract a method here with conditions
     const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
     if (effect.effect == EFFECT_REINIT &&
         pm->GetNbOfStatsInEffectList(target, effect.statsName) <
