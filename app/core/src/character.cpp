@@ -464,7 +464,7 @@ QChar Character::GetCharEffectValue(const QString &target) const {
 
 QString Character::ApplyOneEffect(Character *target, effectParam &effect,
                                   const bool fromLaunch,
-                                  const AttaqueType &atk) {
+                                  const AttaqueType &atk) const {
   if (target == nullptr) {
     return "No  target character";
   }
