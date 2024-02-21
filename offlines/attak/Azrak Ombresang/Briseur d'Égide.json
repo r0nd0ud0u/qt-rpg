@@ -1,15 +1,35 @@
 {
+    "Aggro": 0,
     "Cible": "Ennemie",
     "Coût de mana": 16,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Durée": 1,
-    "Dégâts": 20,
+    "Dégâts": 0,
+    "Effet": [
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 20
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "Armure magique",
+            "Tours actifs": 4,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 20
+        }
+    ],
     "Niveau": 3,
     "Nom": "Briseur d'Égide",
     "Photo": "Azrak Ombresang.png",
     "Portée": "Individuel",
-    "Rage aggro": 0,
     "Regen mana": 0,
     "Regen rage": 0,
     "Regen vigueur": 0,

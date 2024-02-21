@@ -136,39 +136,37 @@ void PlayersManager::InitHeroes() {
 void PlayersManager::InitBosses() {
   Stats stats;
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
-      .SetValues(9999, 9999, 9999);
+      .SetValues(2750, 2750, 2750);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
       .SetValues(0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
-      .SetValues(126, 126, 126);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
       .SetValues(0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
       .SetValues(0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .SetValues(2280, 2280, 2280);
+      .SetValues(105, 105, 105);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .SetValues(35, 35, 35);
+      .SetValues(120, 120, 120);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .SetValues(10, 10, 10);
+      .SetValues(80, 80, 80);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
       .SetValues(138, 138, 138);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
       .SetValues(0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .SetValues(25, 25, 25);
+      .SetValues(0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
-      .SetValues(20, 20, 20);
+      .SetValues(15, 15, 15);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
       .SetValues(10, 10, 10);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
-      .SetValues(4, 4, 4);
+      .SetValues(0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
       .SetValues(25, 25, 25);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
-      .SetValues(5, 5, 5);
+      .SetValues(0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
-      .SetValues(1, 1, 1);
+      .SetValues(0, 0, 0);
   const auto boss = new Character("Pignouf hehe", characType::Boss, stats);
 
   m_BossesList.push_back(boss);
@@ -251,63 +249,70 @@ Character *PlayersManager::GetCharacterByName(const QString &name) {
 }
 
 void PlayersManager::AddGameEffectOnAtk(
-    const QString &launcherName, const QString &atkName,
+    const QString &launcherName, const AttaqueType &atk,
     const QString &targetName, const std::vector<effectParam> &effects) {
   for (const auto &e : effects) {
     GameAtkEffects gae;
     gae.launcher = launcherName;
-    gae.atkName = atkName;
+    gae.atk = atk;
     gae.allAtkEffects = e;
     m_AllEffectsOnGame[targetName].push_back(gae);
   }
 }
 
-QStringList PlayersManager::RemoveTerminatedEffects() {
+QStringList
+PlayersManager::RemoveTerminatedEffectsOnPlayer(const QString &curPlayerName) {
   QStringList sl;
-  for (auto &[playerName, gaeTable] : m_AllEffectsOnGame) {
-    for (auto it = gaeTable.begin(); it != gaeTable.end(); it++) {
-      if (it->allAtkEffects.counterTurn == it->allAtkEffects.nbTurns) {
-        QString terminated("L'effet %1 sur %2 est terminé.");
-        terminated =
-            terminated.arg(it->allAtkEffects.statsName).arg(playerName);
-        sl.push_back(terminated);
-        // remove malus effect from player
-        auto *player = GetCharacterByName(playerName);
-        if (player != nullptr) {
-          player->RemoveMalusEffect(it->allAtkEffects.statsName);
-        }
+  if (m_AllEffectsOnGame.count(curPlayerName) == 0) {
+    return sl;
+  }
+  auto &gaeTable = m_AllEffectsOnGame[curPlayerName];
+  for (auto it = gaeTable.begin(); it != gaeTable.end(); it++) {
+    if (it->allAtkEffects.counterTurn == it->allAtkEffects.nbTurns) {
+      QString terminated("L'effet %1 sur %2 est terminé.");
+      terminated =
+          terminated.arg(it->allAtkEffects.statsName).arg(curPlayerName);
+      sl.push_back(terminated);
+      // remove malus effect from player
+      auto *player = GetCharacterByName(curPlayerName);
+      if (player != nullptr) {
+        player->RemoveMalusEffect(it->allAtkEffects);
       }
     }
-    auto newEnd = std::remove_if(
-        gaeTable.begin(), gaeTable.end(), [](const GameAtkEffects &element) {
-          return element.allAtkEffects.nbTurns ==
-                 element.allAtkEffects
-                     .counterTurn; // remove elements where this is true
-        });
-    gaeTable.erase(newEnd, gaeTable.end());
   }
+  auto newEnd = std::remove_if(
+      gaeTable.begin(), gaeTable.end(), [](const GameAtkEffects &element) {
+        return element.allAtkEffects.nbTurns ==
+               element.allAtkEffects
+                   .counterTurn; // remove elements where this is true
+      });
+  gaeTable.erase(newEnd, gaeTable.end());
   return sl;
 }
-
-QStringList PlayersManager::ApplyEffects() {
+QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName) {
+  // TODO maybe pass the player as argument and not the name
   QStringList logs;
-  for (auto &[targetName, effectsTable] : m_AllEffectsOnGame) {
-    auto *targetPl = GetCharacterByName(targetName);
-    QStringList localLog;
-    localLog.append(QString("Sur %1: ").arg(targetName));
-    if (targetPl != nullptr) {
-      for (auto &gae : effectsTable) {
-        auto *launcherPl = GetCharacterByName(gae.launcher);
-        if (launcherPl != nullptr) {
-          localLog.append(launcherPl->ApplyOneEffect(
-              targetPl, gae.allAtkEffects, false, gae.atkName));
-        }
+  if (m_AllEffectsOnGame.count(curPlayerName) == 0) {
+    return logs;
+  }
+  auto &gaeTable = m_AllEffectsOnGame[curPlayerName];
+
+  auto *targetPl = GetCharacterByName(curPlayerName);
+  QStringList localLog;
+  localLog.append(QString("Sur %1: ").arg(curPlayerName));
+  if (targetPl != nullptr) {
+    for (auto &gae : gaeTable) {
+      auto *launcherPl = GetCharacterByName(gae.launcher);
+      if (launcherPl != nullptr) {
+        localLog.append(launcherPl->ApplyOneEffect(targetPl, gae.allAtkEffects,
+                                                   false, gae.atk));
       }
     }
-    if (localLog.size() > 1) {
-      logs.append(localLog.join("\n"));
-    }
   }
+  if (localLog.size() > 1) {
+    logs.append(localLog.join("\n"));
+  }
+
   return logs;
 }
 
@@ -452,13 +457,14 @@ QString PlayersManager::DeleteAllBadEffect(const Character *chara) {
   return "supprime tous les effets néfastes.";
 }
 
-void PlayersManager::DecreaseCoolDownEffects() {
-  for (auto &[playerName, allGae] : m_AllEffectsOnGame) {
-    for (auto &gae : allGae) {
-      if (gae.allAtkEffects.effect == EFFECT_NB_COOL_DOWN &&
-          gae.allAtkEffects.subValueEffect > 0) {
-        gae.allAtkEffects.subValueEffect--;
-      }
+void PlayersManager::DecreaseCoolDownEffects(const QString &curPlayerName) {
+  if (m_AllEffectsOnGame.count(curPlayerName) == 0) {
+    return;
+  }
+  for (auto &gae : m_AllEffectsOnGame[curPlayerName]) {
+    if (gae.allAtkEffects.effect == EFFECT_NB_COOL_DOWN &&
+        gae.allAtkEffects.subValueEffect > 0) {
+      gae.allAtkEffects.subValueEffect--;
     }
   }
 }
@@ -477,9 +483,18 @@ void PlayersManager::ImproveHotsOnPlayers(const int valuePercent,
       continue;
     }
     for (auto &e : m_AllEffectsOnGame[pl->m_Name]) {
-      if (e.allAtkEffects.statsName == STATS_HP) {
+      if (e.allAtkEffects.statsName == STATS_HP &&
+          ALLIES_TARGETS.count(e.allAtkEffects.target) > 0) {
         e.allAtkEffects.value += e.allAtkEffects.value * valuePercent / 100;
       }
     }
   }
+}
+
+void PlayersManager::IncrementCounterEffect(){
+    for (auto &[playerName, gaeTable] : m_AllEffectsOnGame) {
+        for (auto& gae : gaeTable) {
+            gae.allAtkEffects.counterTurn++;
+        }
+    }
 }

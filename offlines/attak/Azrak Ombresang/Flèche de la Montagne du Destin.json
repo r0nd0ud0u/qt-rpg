@@ -1,15 +1,44 @@
 {
+    "Aggro": 0,
     "Cible": "Ennemie",
     "Coût de mana": 0,
     "Coût de rage": 0,
     "Coût de vigueur": 8,
     "Durée": 1,
-    "Dégâts": 80,
+    "Dégâts": 0,
+    "Effet": [
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 4,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 80
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
+        }
+    ],
     "Niveau": 10,
     "Nom": "Flèche de la Montagne du Destin",
     "Photo": "Azrak Ombresang.png",
     "Portée": "Individuel",
-    "Rage aggro": 0,
     "Regen mana": 0,
     "Regen rage": 0,
     "Regen vigueur": 0,

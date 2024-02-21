@@ -20,36 +20,35 @@ Character::Character(const QString name, const characType type,
   m_Inventory.resize(static_cast<int>(InventoryType::enumSize));
 }
 
-int Character::DamageByAtk(Character *target, const AttaqueType &atk) {
+int Character::DamageByAtk(const Stats &launcherStats, const Stats &targetStats,
+                           const bool isMagicAtk, const int atkValue) {
   const auto &launcherPowMag =
-      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_POW_MAG]);
+      std::get<StatsType<int>>(launcherStats.m_AllStatsTable.at(STATS_POW_MAG));
   const auto &launcherPowPhy =
-      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_POW_PHY]);
+      std::get<StatsType<int>>(launcherStats.m_AllStatsTable.at(STATS_POW_PHY));
   const auto &targetArmPhy =
-      std::get<StatsType<int>>(target->m_Stats.m_AllStatsTable[STATS_ARM_PHY]);
+      std::get<StatsType<int>>(targetStats.m_AllStatsTable.at(STATS_ARM_PHY));
   const auto &targetArmMag =
-      std::get<StatsType<int>>(target->m_Stats.m_AllStatsTable[STATS_ARM_MAG]);
+      std::get<StatsType<int>>(targetStats.m_AllStatsTable.at(STATS_ARM_MAG));
 
   int finalDamage = 0;
-  if (atk.damage > 0) {
-    int arm = 0;
-    int damage = atk.damage;
-    if (atk.manaCost > 0) {
-      damage += static_cast<int>(std::round(launcherPowMag.m_CurrentValue));
-      arm = targetArmMag.m_CurrentValue;
-    } else if (atk.vigorCost > 0 || atk.berseckCost > 0) {
-      damage += launcherPowPhy.m_CurrentValue;
-      arm = targetArmPhy.m_CurrentValue;
-    }
-    const double protection = 1000.0 / (1000.0 + static_cast<double>(arm));
-    finalDamage = static_cast<int>(std::round(damage * protection));
+  int arm = 0;
+  int damage = atkValue;
+  if (isMagicAtk) {
+    damage += launcherPowMag.m_CurrentValue;
+    arm = targetArmMag.m_CurrentValue;
+  } else {
+    damage += launcherPowPhy.m_CurrentValue;
+    arm = targetArmPhy.m_CurrentValue;
   }
+  const double protection = 1000.0 / (1000.0 + static_cast<double>(arm));
+  finalDamage = static_cast<int>(std::round(damage * protection));
   return finalDamage;
 }
 
 // TODO maybe return a log for the channel, and one for the debug
 QString Character::RegenIntoDamage(const int atkValue,
-                                   const QString &statsName) {
+                                   const QString &statsName) const {
   if (atkValue <= 0) {
     return "";
   }
@@ -75,11 +74,10 @@ QString Character::RegenIntoDamage(const int atkValue,
   for (const auto &e : pm->m_AllEffectsOnGame.at(m_Name)) {
     if (e.allAtkEffects.effect == EFFECT_INTO_DAMAGE &&
         statsName == e.allAtkEffects.statsName) {
-      AttaqueType amountIntoDamageAtk;
-      amountIntoDamageAtk.damage =
-          atkValue * e.allAtkEffects.subValueEffect / 100;
       for (auto *pl : playerList) {
-        const auto finalDamage = DamageByAtk(pl, amountIntoDamageAtk);
+        const auto finalDamage =
+            DamageByAtk(m_Stats, pl->m_Stats, e.allAtkEffects.isMagicAtk,
+                        atkValue * e.allAtkEffects.subValueEffect / 100);
         auto &localstat =
             std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable[statsName]);
         localstat.m_CurrentValue =
@@ -91,53 +89,11 @@ QString Character::RegenIntoDamage(const int atkValue,
   return channelLog;
 }
 
-//////
-/// \brief Character::Attaque
-/// HOT by n turns : divided pow by n
-/// \param atkName
-/// \param target
-/// Returns a string to append in channel
-///
-QString Character::Attaque(const QString &atkName, Character *target) {
-  if (target == nullptr || atkName.isEmpty()) {
-    return "No target on atk or no atk name";
-  }
-  QString channelLog;
-  const auto &atk = m_AttakList.at(atkName);
-
-  // Stats change on target
-  auto &targetHp =
-      std::get<StatsType<int>>(target->m_Stats.m_AllStatsTable[STATS_HP]);
-
-  auto &tarCurHp = targetHp.m_CurrentValue;
-  if (atk.damage > 0) {
-    const auto finalDamage = DamageByAtk(target, atk);
-    tarCurHp = max(0, tarCurHp - finalDamage);
-    channelLog += PlayersManager::FormatAtkOnEnnemy(finalDamage);
-  }
-
-  if (atk.heal > 0) {
-    // init ep
-    effectParam ep;
-    ep.statsName = STATS_HP;
-    ep.nbTurns = atk.turnsDuration;
-    ep.value = atk.heal;
-
-    // process amount
-    const auto &powMag = std::get<StatsType<int>>(
-        target->m_Stats.m_AllStatsTable[STATS_POW_MAG]);
-    const auto amount =
-        target->ProcessCurrentValueOnEffect(ep, powMag.m_CurrentValue, 1, true);
-    channelLog += PlayersManager::FormatAtkOnAlly(amount);
-    // Apply effect transform heal into damage on all bosses
-    channelLog += RegenIntoDamage(amount, STATS_HP);
-  }
-
-  return channelLog;
-}
-
 void Character::ProcessCostAndRegen(const QString &atkName) {
   if (atkName.isEmpty()) {
+    return;
+  }
+  if (m_AttakList.count(atkName) == 0) {
     return;
   }
   const auto &atk = m_AttakList.at(atkName);
@@ -269,6 +225,9 @@ void Character::LoadAtkJson() {
         param.statsName = effect[EFFECT_STAT].toString();
         param.target = effect[EFFECT_TARGET].toString();
         param.subValueEffect = effect[EFFECT_SUB_VALUE].toInt();
+        // processed
+        param.isMagicAtk = atk.manaCost > 0;
+
         atk.m_AllEffects.push_back(param);
       }
 #else
@@ -308,6 +267,8 @@ void Character::LoadAtkJson() {
         if (param.statsName.isEmpty() && param.effect.isEmpty()) {
           break;
         }
+        // processed
+        param.isMagicAtk = atk.manaCost > 0;
         atk.m_AllEffects.push_back(param);
       }
 #endif
@@ -463,7 +424,7 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
       const auto &pm =
           Application::GetInstance().m_GameManager->m_PlayersManager;
       for (const auto &gae : pm->m_AllEffectsOnGame[m_Name]) {
-        if (atk.name == gae.atkName && gae.allAtkEffects.effect == e.effect &&
+        if (atk.name == gae.atk.name && gae.allAtkEffects.effect == e.effect &&
             gae.allAtkEffects.nbTurns > 0) {
           return false;
         }
@@ -483,9 +444,27 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
   return false;
 }
 
+int Character::GetSignEffectValue(const QString &target) const {
+  int sign = 1;
+  if (target == TARGET_ENNEMY) {
+    sign = -1;
+  }
+
+  return sign;
+}
+
+QChar Character::GetCharEffectValue(const QString &target) const {
+  QChar sign = '+';
+  if (target == TARGET_ENNEMY) {
+    sign = '-';
+  }
+
+  return sign;
+}
+
 QString Character::ApplyOneEffect(Character *target, effectParam &effect,
                                   const bool fromLaunch,
-                                  const QString &atkName) {
+                                  const AttaqueType &atk) const {
   if (target == nullptr) {
     return "No  target character";
   }
@@ -494,7 +473,9 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   int nbOfApplies = 1; // default value 1 for the nominal case
 
   // increment counter turn, effect is used
-  effect.counterTurn++;
+  if (fromLaunch) {
+      effect.counterTurn++;
+  }
 
   if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
     // TODO not ready to be used yet
@@ -502,49 +483,68 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   }
 
   if (effect.effect == EFFECT_NB_COOL_DOWN) {
-    return QString("Cooldown actif.").arg(atkName);
+
+    result = (m_Name == target->m_Name)
+                 ? QString("Cooldown actif sur %1 de %2 tours.")
+                       .arg(atk.name)
+                       .arg(effect.nbTurns)
+                 : "";
+    return result;
   }
 
-  if (fromLaunch) {
-    if (effect.effect == EFFECT_NB_DECREASE_ON_TURN) {
-      nbOfApplies = ProcessDecreaseOnTurn(effect);
+  // Apply some effects only at launch
+  if (!fromLaunch && ACTIVE_EFFECTS_ON_LAUNCH.count(effect.effect) > 0) {
+    return "";
+  }
+  if (effect.effect == EFFECT_NB_DECREASE_ON_TURN) {
+    nbOfApplies = ProcessDecreaseOnTurn(effect);
+  }
+  if (effect.effect == EFFECT_REINIT) {
+    pm->ResetCounterOnOneStatsEffect(target, effect.statsName);
+    nbOfApplies = 0;
+    if (effect.value == 0) {
+      return QString("Les HOTs sont reinitialisés.");
     }
-    if (effect.effect == EFFECT_REINIT) {
-      pm->ResetCounterOnOneStatsEffect(target, effect.statsName);
-      nbOfApplies = 0;
-      if (effect.value == 0) {
-        return QString("Les HOTs sont reinitialisés.");
-      }
+  }
+  if (effect.effect == EFFECT_DELETE_BAD) {
+    if (effect.subValueEffect <= 1) {
+      return pm->DeleteOneBadEffect(target);
+    } else {
+      return pm->DeleteAllBadEffect(target);
     }
-    if (effect.effect == EFFECT_DELETE_BAD) {
-      if (effect.subValueEffect <= 1) {
-        return pm->DeleteOneBadEffect(target);
-      } else {
-        return pm->DeleteAllBadEffect(target);
-      }
-    }
-    if (effect.effect == EFFECT_IMPROVE_HOTS) {
-      pm->ImproveHotsOnPlayers(effect.subValueEffect, target->m_type);
-      return QString("Les HOTs sont boostés de %1%.")
-          .arg(effect.subValueEffect);
-    }
-    if (effect.effect == EFFECT_BOOSTED_BY_HOTS) {
-      const auto nbHots = pm->GetNbOfStatsInEffectList(target, STATS_HP);
-      effect.value = effect.value * (effect.subValueEffect / 100) * nbHots;
-    }
+  }
+  if (effect.effect == EFFECT_IMPROVE_HOTS) {
+    pm->ImproveHotsOnPlayers(effect.subValueEffect, target->m_type);
+    return QString("Les HOTs sont boostés de %1%.").arg(effect.subValueEffect);
+  }
+  if (effect.effect == EFFECT_BOOSTED_BY_HOTS) {
+    const auto nbHots = pm->GetNbOfStatsInEffectList(target, STATS_HP);
+    effect.value = effect.value * (effect.subValueEffect / 100) * nbHots;
+  }
+  if (effect.effect == EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT) {
+    target->SetBuf(effect.value, true);
+    return QString("Les dégâts sont boostés de %1% pour %2 tours.")
+        .arg(effect.value)
+        .arg(effect.nbTurns);
+  }
+  if (effect.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
+    const QChar sign = GetCharEffectValue(effect.target);
+    // common init
+    auto &localStat = std::get<StatsType<int>>(
+        target->m_Stats.m_AllStatsTable[effect.statsName]);
+    SetStatsByPercent(localStat, effect.value, true);
+    return QString("La stat %1 est modifié de %2%3%.")
+        .arg(effect.statsName)
+        .arg(sign)
+        .arg(effect.value);
   }
 
   // apply the effect
-  // for stats hp, the value depends of the mag power in case of heal
-  // value = effect_value + mag_pow/nb_of_turns
-  const auto &powMag =
-      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_POW_MAG]);
-  const auto amount = target->ProcessCurrentValueOnEffect(
-      effect, powMag.m_CurrentValue, nbOfApplies,
-      (ON_PERCENT_STATS.count(effect.statsName) > 0));
+  const auto amount = ProcessCurrentValueOnEffect(effect, nbOfApplies, m_Stats,
+                                                  target->m_Stats);
   // TODO should be static and not on target ? pass target by argument
   result = target->ProcessOutputLogOnEffect(effect, amount, fromLaunch,
-                                            nbOfApplies, atkName);
+                                            nbOfApplies, atk.name);
 
   // Apply regen effect turning into damage for all bosses
   // can be processed only after calcul of amount of atk
@@ -561,7 +561,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
 // - 2 : QStringList : log on each applied effect to display on channel
 // - 3 : std::vector<effectParam> : list of all applied effectParam
 std::tuple<bool, QStringList, std::vector<effectParam>>
-Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
+Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
                           Character *target) {
   if (target == nullptr) {
     return std::make_tuple(false, QStringList("No target"),
@@ -569,18 +569,19 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
   }
   bool applyAtk = true;
   // effect can be modified -> counter nb when applied
-  const auto &allEffects = m_AttakList.at(atkName).m_AllEffects;
+  const auto &allEffects = atk.m_AllEffects;
   std::vector<effectParam> allAppliedEffects;
-  QStringList resultEffects;
+  QStringList allResultEffects;
   const bool isAlly = target->m_type == m_type;
 
   for (const auto &effect : allEffects) {
     if (effect.target == TARGET_HIMSELF && m_Name != target->m_Name) {
       continue;
     }
-    if (!isAlly &&
-        (effect.target == TARGET_ALLY || effect.target == TARGET_ALL_HEROES ||
-         effect.target == TARGET_HIMSELF)) {
+    if (effect.target == TARGET_ONLY_ALLY && m_Name == target->m_Name) {
+      continue;
+    }
+    if (!isAlly && ALLIES_TARGETS.count(effect.target) > 0) {
       continue;
     }
     if (isAlly && effect.target == TARGET_ENNEMY) {
@@ -600,13 +601,14 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
       continue;
     }
 
-    // test if applicable effect
+    // Condition if applicable effect
+    // TODO extract a method here with conditions
     const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
     if (effect.effect == EFFECT_REINIT &&
         pm->GetNbOfStatsInEffectList(target, effect.statsName) <
             effect.subValueEffect) {
       applyAtk = false;
-      resultEffects.append(
+      allResultEffects.append(
           QString("Sur %1. L'effet %2-%3 n'est pas applicable. %4 effet(s) sur "
                   "stats %5 requis.")
               .arg(target->m_Name)
@@ -616,33 +618,56 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
               .arg(effect.statsName));
       break;
     }
+    if (effect.effect == CONDITION_ENNEMIES_DIED) {
+      const auto gs = Application::GetInstance().m_GameManager->m_GameState;
+      if (gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb) > 0) {
+        allResultEffects.append("");
+      } else {
+        allResultEffects.append(
+            QString(
+                "Pas d'effect %1 activé. Aucun ennemi mort au tour précédent")
+                .arg(effect.effect));
+        break;
+      }
+    }
+
     effectParam appliedEffect = effect;
     // appliedEffect is modified in ApplyOneEffect
-    resultEffects.append(ApplyOneEffect(target, appliedEffect, true, atkName));
-    // an one-occurence effect available is not displayed or stored
-    if (appliedEffect.nbTurns - appliedEffect.counterTurn > 0) {
+    const QString resultEffect =
+        ApplyOneEffect(target, appliedEffect, true, atk);
+    // an one-occurence or more effect available is displayed
+    if (!resultEffect.isEmpty()) {
+      allResultEffects.append(resultEffect);
+    }
+    // from two-occurences an effect is stored, result effect must be not empty
+    // it means the effect has an effect -> TODO can be replaced by a boolean
+    // applied effect to process in ApplyOneEffect
+    if (appliedEffect.nbTurns - appliedEffect.counterTurn > 0 &&
+        !resultEffect.isEmpty()) {
       allAppliedEffects.push_back(appliedEffect);
     }
   }
 
-  return std::make_tuple(applyAtk, resultEffects, allAppliedEffects);
+  return std::make_tuple(applyAtk, allResultEffects, allAppliedEffects);
 }
 
-void Character::RemoveMalusEffect(const QString &statsName) {
-
-  for (const auto &stats : ALL_STATS) {
-    if (stats == STATS_POW_MAG || stats == STATS_DODGE) {
-      auto &localStat =
-          std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(stats));
+void Character::RemoveMalusEffect(const effectParam &ep) {
+  // remove malus applied on stats
+  if (!ep.statsName.isEmpty() &&
+      m_Stats.m_AllStatsTable.count(ep.statsName) > 0) {
+    auto &localStat =
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(ep.statsName));
+    if (ep.effect == EFFECT_PERCENT_CHANGE) {
+      SetStatsByPercent(localStat, ep.value, false);
+    } else {
       localStat.m_CurrentValue = localStat.m_MaxValue;
-      break;
-    } else if (m_Stats.m_AllStatsTable.find(statsName) !=
-               m_Stats.m_AllStatsTable.end()) {
-      auto &localStat =
-          std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(stats));
-      localStat.m_CurrentValue = localStat.m_MaxValue;
-      break;
     }
+  }
+
+  // remove debuf/ buf
+  // on damages
+  if (ep.effect == EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT) {
+    SetBuf(0, true);
   }
 }
 
@@ -673,9 +698,9 @@ std::vector<effectParam> Character::CreateEveilDeLaForet() {
 }
 
 int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
-                                           const int launcherPowMag,
                                            const int nbOfApplies,
-                                           const bool percent) {
+                                           const Stats &launcherStats,
+                                           Stats &targetStats) const {
   if (ep.statsName.isEmpty()) {
     return 0;
   }
@@ -683,19 +708,30 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
     return 0;
   }
 
+  // heal or damage is suggested by sign
+  const int sign = GetSignEffectValue(ep.target);
+  const bool isPercentChange = ON_PERCENT_STATS.count(ep.statsName) > 0;
+
   // common init
   auto &localStat =
-      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[ep.statsName]);
+      std::get<StatsType<int>>(targetStats.m_AllStatsTable[ep.statsName]);
   const int delta = localStat.m_MaxValue - localStat.m_CurrentValue;
   int amount = 0;
 
   // HP
   if (ep.statsName == STATS_HP) {
-    amount = nbOfApplies *
-             (ep.value + launcherPowMag / ep.nbTurns);
+    if (const bool isDamage = ep.target == TARGET_ENNEMY; isDamage) {
+      amount = DamageByAtk(launcherStats, targetStats, ep.isMagicAtk, ep.value);
+    } else if (ep.isMagicAtk) {
+      const auto &launcherPowMag = std::get<StatsType<int>>(
+          launcherStats.m_AllStatsTable.at(STATS_POW_MAG));
+      amount =
+          nbOfApplies * (ep.value + launcherPowMag.m_CurrentValue / ep.nbTurns);
+    }
   }
   // value in percent
-  else if (percent && ep.effect == EFFECT_PERCENT_CHANGE) {
+  else if (isPercentChange || ep.effect == EFFECT_PERCENT_CHANGE) {
+    // TODO duplicate with EFFECT_IMPROVE_BY_PERCENT_CHANGE ?
     amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
   }
   // nominal behavior
@@ -704,9 +740,18 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
   }
 
   // new value of stat
+  amount = sign * amount; // apply the sign after the calcul of amount
   localStat.m_CurrentValue += min(delta, amount);
 
   // return the true applied amount
+  // add buf
+  if (m_BufDamage.m_Value > 0) {
+    if (m_BufDamage.m_IsPercent) {
+      amount += amount * m_BufDamage.m_Value / 100;
+    } else {
+      amount += m_BufDamage.m_Value;
+    }
+  }
   return min(delta, amount);
 }
 
@@ -716,7 +761,22 @@ QString Character::ProcessOutputLogOnEffect(const effectParam &ep,
                                             const int nbOfApplies,
                                             const QString &atkName) const {
   QString output;
-
+  QString healOrDamageLog;
+  uint32_t displayedValue = abs(amount);
+  QString effectName;
+  if (ep.effect.isEmpty() || !fromLaunch) {
+    effectName = ep.statsName;
+  } else {
+    // for example EFFECT_NB_DECREASE_ON_TURN is only from launch
+    effectName = ep.statsName + "-" + ep.effect;
+  }
+  if (amount < 0) {
+    healOrDamageLog = "inflige";
+  } else if (amount > 0) {
+    healOrDamageLog = "récupère";
+  } else if (amount == 0) {
+    return QString("%1 n'a pas d'effet.").arg(effectName);
+  }
   // nominal atk
   int potentialAttempts = 1;
   if (ep.effect == EFFECT_NB_DECREASE_ON_TURN) {
@@ -725,34 +785,28 @@ QString Character::ProcessOutputLogOnEffect(const effectParam &ep,
   }
 
   if (ep.statsName == STATS_HP) {
-    QString effectName;
-    if (ep.effect.isEmpty() || !fromLaunch) {
-      effectName = ep.statsName;
-    } else {
-      // for example EFFECT_NB_DECREASE_ON_TURN is only from launch
-      effectName = ep.statsName + "-" + ep.effect;
-    }
     if (fromLaunch) {
-      output = QString("récupère %4 PV grâce à l'effet %1 (appliqué %2/%3 "
+      output = QString("%1 %5 PV grâce à l'effet %2 (appliqué %3/%4 "
                        "possible(s)).")
+                   .arg(healOrDamageLog)
                    .arg(effectName)
                    .arg(nbOfApplies)
                    .arg(QString::number(potentialAttempts))
-                   .arg(QString::number(amount));
+                   .arg(QString::number(displayedValue));
     } else {
-      output = QString("récupère %2 PV grâce à l'effet %1 (%3).")
+      output = QString("%1 %3 PV grâce à l'effet %2 (%4).")
+                   .arg(healOrDamageLog)
                    .arg(effectName)
-                   .arg(QString::number(amount))
+                   .arg(QString::number(displayedValue))
                    .arg(atkName);
     }
   } else if (ep.statsName != STATS_HP) {
-    output = QString("l'effet %1-%2 s'applique %3/%4 "
-                     "possible(s) avec une valeur de %5.")
-                 .arg(ep.statsName)
-                 .arg(ep.effect)
+    output = QString("l'effet %1 s'applique %2/%3 "
+                     "possible(s) avec une valeur de %4.")
+                 .arg(effectName)
                  .arg(nbOfApplies)
                  .arg(QString::number(potentialAttempts))
-                 .arg(QString::number(amount));
+                 .arg(QString::number(displayedValue));
   }
 
   return output;
@@ -790,4 +844,18 @@ QString Character::ProcessDecreaseByTurn(const effectParam &ep) const {
   }
 
   return output;
+}
+
+void Character::SetBuf(const int value, const bool isPercent) {
+  m_BufDamage.SetBuf(value, isPercent);
+}
+
+void Character::SetStatsByPercent(StatsType<int> &stat, const int value,
+                                  const bool isUp) {
+  int sign = 1;
+  if (!isUp) {
+    sign = -1;
+  }
+  stat.m_CurrentValue += sign * stat.m_CurrentValue * value / 100;
+  stat.m_MaxValue += sign * stat.m_CurrentValue * value / 100;
 }

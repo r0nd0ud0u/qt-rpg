@@ -41,11 +41,19 @@ public:
 
 enum class InventoryType { healthPotion, manaPotion, enumSize };
 
+struct Buf{
+    int m_Value = 0;
+    bool m_IsPercent = false;
+    void SetBuf(const int value, const bool isPercent){
+        m_Value = value;
+        m_IsPercent = isPercent;
+    }
+};
+
 class Character {
 public:
   Character(const QString name, const characType type, const Stats &stats);
 
-  QString Attaque(const QString &atkName, Character *target);
   void ProcessCostAndRegen(const QString &atkName);
   void AddAtq(const AttaqueType &atq);
   void AddStuff(const Stuff &stuff);
@@ -56,16 +64,18 @@ public:
 
   // Effect
   QString ApplyOneEffect(Character *target, effectParam &effect,
-                         const bool fromLaunch, const QString &atkName);
+                         const bool fromLaunch, const AttaqueType &atk) const;
   std::tuple<bool, QStringList, std::vector<effectParam>>
-  ApplyAtkEffect(const bool targetedOnMainAtk, const QString &atkName,
+  ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
                  Character *target); // value1: apply the atk ?, value2 : logs
                                      // after applying effects
-  void RemoveMalusEffect(const QString &statsName);
-  int DamageByAtk(Character *target, const AttaqueType &atk);
-  QString RegenIntoDamage(const int atkValue, const QString &statsName);
-  std::vector<effectParam> CreateEveilDeLaForet();
+  void RemoveMalusEffect(const effectParam &ep);
 
+  QString RegenIntoDamage(const int atkValue, const QString &statsName) const;
+  std::vector<effectParam> CreateEveilDeLaForet(); // template
+  void SetBuf(const int value, const bool isPercent);
+
+  static void SetStatsByPercent(StatsType<int>& stat, const int value, const bool isUp); // TODO à sortir dans un common pour gerer les stats?
   static QString GetInventoryString(const InventoryType &type);
 
   QString m_Name = "default";
@@ -79,6 +89,8 @@ public:
   int m_Level = 1;
   int m_Exp = 0;
   QColor color = QColor("dark");
+  // Buf
+  Buf m_BufDamage;
 
 private:
   template <class T>
@@ -87,14 +99,17 @@ private:
   template <class T>
   void ProcessRemoveEquip(StatsType<T> &charStat,
                           const StatsType<T> &equipStat);
-  int ProcessCurrentValueOnEffect(const effectParam &ep,
-                                  const int launcherPowMag,
-                                  const int nbOfApplies, const bool percent);
+  int ProcessCurrentValueOnEffect(const effectParam &ep, const int nbOfApplies,
+                                  const Stats &launcherStats,
+                                  Stats &targetStats) const;
   QString ProcessOutputLogOnEffect(const effectParam &ep, const int amount,
                                    const bool fromLaunch, const int nbOfApplies,
                                    const QString &atkName) const;
   int ProcessDecreaseOnTurn(const effectParam &ep) const;
   QString ProcessDecreaseByTurn(const effectParam &ep) const;
+  static int DamageByAtk(const Stats& launcherStats, const Stats& targetStats, const bool isMagicAtk, const int atkValue);
+  int GetSignEffectValue(const QString &target) const;
+  QChar GetCharEffectValue(const QString &target) const;
 };
 
 #endif // CHARACTER_H

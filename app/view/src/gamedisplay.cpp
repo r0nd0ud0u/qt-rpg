@@ -78,7 +78,11 @@ void GameDisplay::UpdateGameStatus() {
 }
 
 void GameDisplay::NewRound() {
-  const auto &gs = Application::GetInstance().m_GameManager->m_GameState;
+  const auto &gm = Application::GetInstance().m_GameManager;
+  if (gm == nullptr) {
+    return;
+  }
+  const auto &gs = gm->m_GameState;
   // TODO game state , check if boss is dead
 
   // First update the game state
@@ -88,6 +92,28 @@ void GameDisplay::NewRound() {
   // Get current player
   auto *activePlayer =
       Application::GetInstance().m_GameManager->GetCurrentPlayer();
+
+  if (activePlayer == nullptr) {
+    emit SigUpdateChannelView("Debug", "NewRound nullptr active player");
+  }
+
+  // Apply effects
+  const QStringList effectsLogs =
+      gm->m_PlayersManager->ApplyEffectsOnPlayer(activePlayer->m_Name);
+  for (const auto &el : effectsLogs) {
+    emit SigUpdateChannelView("GameState", el);
+  }
+  // update effect
+  const QStringList terminatedEffects =
+      gm->m_PlayersManager->RemoveTerminatedEffectsOnPlayer(
+          activePlayer->m_Name);
+  for (const auto &te : terminatedEffects) {
+    emit SigUpdateChannelView("GameState", te);
+  }
+  gm->m_PlayersManager->DecreaseCoolDownEffects(activePlayer->m_Name);
+  emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
+  // Updat views after stats changes
+  emit SigUpdatePlayerPanel();
 
   // Update views
   // Players panels views
@@ -131,19 +157,8 @@ void GameDisplay::StartNewTurn() {
   if (gm->m_GameState->m_CurrentTurnNb == 1) {
     ui->attak_page->InitTargetsWidget();
   }
-  // Apply effects
-  const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffects();
-  for (const auto &el : effectsLogs) {
-    emit SigUpdateChannelView("GameState", el);
-  }
-  // update effect
-  const QStringList terminatedEffects =
-      gm->m_PlayersManager->RemoveTerminatedEffects();
-  for (const auto &te : terminatedEffects) {
-    emit SigUpdateChannelView("GameState", te);
-  }
-  gm->m_PlayersManager->DecreaseCoolDownEffects();
-  emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
+  // Increment turn effects
+  gm->m_PlayersManager->IncrementCounterEffect();
   // Apply regen stats
   gm->m_PlayersManager->ApplyRegenStats();
   // Updat views after stats changes
@@ -179,10 +194,14 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
   const auto &nameChara = gm->m_GameState->GetCurrentPlayerName();
   auto *activatedPlayer = gm->m_PlayersManager->GetCharacterByName(nameChara);
-  if(activatedPlayer == nullptr){
-      return;
+  if (activatedPlayer == nullptr) {
+    return;
   }
   // launch atk
+  if (activatedPlayer->m_AttakList.count(atkName) == 0) {
+    return;
+  }
+  const auto &currentAtk = activatedPlayer->m_AttakList.at(atkName);
   // Stats change on hero
   activatedPlayer->ProcessCostAndRegen(atkName);
   emit SigUpdateChannelView(nameChara, QString("lance %1.").arg(atkName),
@@ -197,20 +216,19 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     if (targetChara != nullptr) {
       // EFFECT
       const auto &[applyAtk, resultEffects, appliedEffects] =
-          activatedPlayer->ApplyAtkEffect(target.m_IsTargeted, atkName,
+          activatedPlayer->ApplyAtkEffect(target.m_IsTargeted, currentAtk,
                                           targetChara);
-      if(!resultEffects.isEmpty()){
-          emit SigUpdateChannelView(nameChara, QString("Sur %1: ").arg(target.m_Name) + "\n" + resultEffects.join("\n"), activatedPlayer->color);
+      if (!resultEffects.isEmpty()) {
+        emit SigUpdateChannelView(nameChara,
+                                  QString("Sur %1: ").arg(target.m_Name) +
+                                      "\n" + resultEffects.join("\n"),
+                                  activatedPlayer->color);
       }
       // applyAtk = false if effect reinit with unfulfilled condtions
-      if (target.m_IsTargeted && applyAtk) {
-        // ATK
-        channelLog = activatedPlayer->Attaque(atkName, targetChara);
+      if (target.m_IsTargeted && applyAtk && !channelLog.isEmpty()) {
         // Update channel view
-        if (!channelLog.isEmpty()) {
-          emit SigUpdateChannelView(nameChara, channelLog,
-                                    activatedPlayer->color);
-        }
+        emit SigUpdateChannelView(nameChara, channelLog,
+                                  activatedPlayer->color);
       }
       // add applied effect to new effect Table
       newEffects[target.m_Name] = appliedEffects;
@@ -223,19 +241,19 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     if (epTable.empty()) {
       continue;
     }
-    gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer->m_Name, atkName,
-                                             targetName, epTable);
+    gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer->m_Name,
+                                             currentAtk, targetName, epTable);
+    // remove terminated effects
+    // Some effects like "delete one bad effect" need to be updated
+    const QStringList terminatedEffects =
+        gm->m_PlayersManager->RemoveTerminatedEffectsOnPlayer(targetName);
+    for (const auto &te : terminatedEffects) {
+      emit SigUpdateChannelView(nameChara, te);
+    }
   }
   // update all effect panel
   emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
 
-  // remove terminated effects
-  // Some effects like "delete one bad effect" need to be updated
-  const QStringList terminatedEffects =
-      gm->m_PlayersManager->RemoveTerminatedEffects();
-  for (const auto &te : terminatedEffects) {
-    emit SigUpdateChannelView(nameChara, te);
-  }
   // update views of heroes and bosses
   emit SigUpdatePlayerPanel();
 
