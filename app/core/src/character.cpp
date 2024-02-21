@@ -879,7 +879,7 @@ int Character::GetMaxNbOfApplies(const AttaqueType &atk) const{
   int cost = 0;
   QString statName;
   if (atk.manaCost > 0) {
-    maxNb = atk.manaCost;
+    cost = atk.manaCost;
     statName = STATS_MANA;
   }
   if (atk.vigorCost > 0) {
