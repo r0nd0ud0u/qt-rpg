@@ -474,7 +474,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
 
   // increment counter turn, effect is used
   if (fromLaunch) {
-      effect.counterTurn++;
+    effect.counterTurn++;
   }
 
   if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
@@ -537,6 +537,15 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
         .arg(effect.statsName)
         .arg(sign)
         .arg(effect.value);
+  }
+  // only for aggro
+  if (effect.effect == EFFECT_REINIT && effect.statsName == STATS_AGGRO) {
+    auto &localStat = std::get<StatsType<int>>(
+        target->m_Stats.m_AllStatsTable[effect.statsName]);
+    localStat.m_CurrentValue = 0;
+  }
+  if (effect.effect == EFFECT_REPEAT_AS_MANY_AS) {
+    nbOfApplies += GetMaxNbOfApplies(atk);
   }
 
   // apply the effect
@@ -604,7 +613,8 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
     // Condition if applicable effect
     // TODO extract a method here with conditions
     const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
-    if (effect.effect == EFFECT_REINIT &&
+    // Condition nb of HOTS on player
+    if (effect.statsName == STATS_HP && effect.effect == EFFECT_REINIT &&
         pm->GetNbOfStatsInEffectList(target, effect.statsName) <
             effect.subValueEffect) {
       applyAtk = false;
@@ -618,9 +628,11 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
               .arg(effect.statsName));
       break;
     }
+    // Condition number of died ennemies
     if (effect.effect == CONDITION_ENNEMIES_DIED) {
       const auto gs = Application::GetInstance().m_GameManager->m_GameState;
-      if (gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb) > 0) {
+      if (gs->m_CurrentTurnNb > 1 &&
+          gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb - 1) > 0) {
         allResultEffects.append("");
       } else {
         allResultEffects.append(
@@ -720,9 +732,11 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
 
   // HP
   if (ep.statsName == STATS_HP) {
-    if (const bool isDamage = ep.target == TARGET_ENNEMY; isDamage) {
-      amount = DamageByAtk(launcherStats, targetStats, ep.isMagicAtk, ep.value);
+    if (const bool isOnEnnemy = ep.target == TARGET_ENNEMY; isOnEnnemy) {
+      amount = nbOfApplies*DamageByAtk(launcherStats, targetStats, ep.isMagicAtk, ep.value);
+        // TODO DOT ?
     } else if (ep.isMagicAtk) {
+        // HOT
       const auto &launcherPowMag = std::get<StatsType<int>>(
           launcherStats.m_AllStatsTable.at(STATS_POW_MAG));
       amount =
@@ -778,7 +792,7 @@ QString Character::ProcessOutputLogOnEffect(const effectParam &ep,
     return QString("%1 n'a pas d'effet.").arg(effectName);
   }
   // nominal atk
-  int potentialAttempts = 1;
+  int potentialAttempts = nbOfApplies;
   if (ep.effect == EFFECT_NB_DECREASE_ON_TURN) {
     // the nomical case is 1 for any atk. effect.subValueEffect is on top of the
     potentialAttempts = ep.subValueEffect + 1;
@@ -858,4 +872,31 @@ void Character::SetStatsByPercent(StatsType<int> &stat, const int value,
   }
   stat.m_CurrentValue += sign * stat.m_CurrentValue * value / 100;
   stat.m_MaxValue += sign * stat.m_CurrentValue * value / 100;
+}
+
+int Character::GetMaxNbOfApplies(const AttaqueType &atk) const{
+  int maxNb = 0;
+  int cost = 0;
+  QString statName;
+  if (atk.manaCost > 0) {
+    maxNb = atk.manaCost;
+    statName = STATS_MANA;
+  }
+  if (atk.vigorCost > 0) {
+    cost = atk.vigorCost;
+    statName = STATS_VIGOR;
+  }
+  if (atk.berseckCost > 0) {
+    cost = atk.berseckCost;
+    statName = STATS_BERSECK;
+  }
+  if (m_Stats.m_AllStatsTable.count(statName) == 0 || cost == 0) {
+    return 0;
+  }
+
+  const auto &localStat =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(statName));
+
+  return maxNb = localStat.m_CurrentValue/cost;
+
 }
