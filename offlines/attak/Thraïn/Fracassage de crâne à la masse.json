@@ -1,15 +1,44 @@
 {
+    "Aggro": 0,
     "Cible": "Ennemie",
     "Coût de mana": 0,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Durée": 1,
-    "Dégâts": 150,
+    "Dégâts": 0,
+    "Effet": [
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 150
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Esquive",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 65
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "",
+            "Tours actifs": 2,
+            "Type": "Up/down degats en %",
+            "Valeur de l'effet": 0,
+            "Value": 20
+        }
+    ],
     "Niveau": 13,
     "Nom": "Fracassage de crâne à la masse",
     "Photo": "Thraïn.png",
     "Portée": "Individuel",
-    "Rage aggro": 0,
     "Regen mana": 0,
     "Regen rage": 0,
     "Regen vigueur": 0,

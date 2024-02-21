@@ -1,18 +1,47 @@
 {
+    "Aggro": 0,
     "Cible": "Allié",
     "Coût de mana": 0,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Durée": 1,
     "Dégâts": 0,
+    "Effet": [
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Rage",
+            "Tours actifs": 1,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 10
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Armure physique",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 150
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Armure magique",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 150
+        }
+    ],
     "Niveau": 0,
     "Nom": "Protection naine ",
     "Photo": "Thraïn.png",
     "Portée": "Individuel",
-    "Rage aggro": 0,
     "Regen mana": 0,
-    "Regen rage": 10,
-    "Regen vigueur": 10,
+    "Regen rage": 0,
+    "Regen vigueur": 0,
     "Soin": 0
 }
 
