@@ -5,7 +5,7 @@
     "Coût de rage": 0,
     "Coût de vigueur": 7,
     "Durée": 1,
-    "Dégâts": 40,
+    "Dégâts": 0,
     "Effet": [
         {
             "Cible": "Ennemie",
@@ -17,22 +17,13 @@
             "Value": 40
         },
         {
-            "Cible": "",
-            "Portée": "",
-            "Stat": "",
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "Vitesse",
             "Tours actifs": 0,
-            "Type": "",
+            "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 0
-        },
-        {
-            "Cible": "",
-            "Portée": "",
-            "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
-            "Valeur de l'effet": 0,
-            "Value": 0
+            "Value": 10
         }
     ],
     "Niveau": 7,
