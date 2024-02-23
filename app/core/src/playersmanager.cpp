@@ -337,16 +337,16 @@ void PlayersManager::ApplyRegenStats() {
         hero->m_Stats.m_AllStatsTable[STATS_REGEN_VIGOR]);
 
     heroHp.m_CurrentValue =
-        std::min(heroHp.m_CurrentValue,
+        std::min(heroHp.m_MaxValue,
                  heroHp.m_CurrentValue + heroRegenHp.m_CurrentValue);
     heroMana.m_CurrentValue =
-        std::min(heroMana.m_CurrentValue,
+        std::min(heroMana.m_MaxValue,
                  heroMana.m_CurrentValue + heroRegenMana.m_CurrentValue);
     heroBerseck.m_CurrentValue =
-        std::min(heroBerseck.m_CurrentValue,
+        std::min(heroBerseck.m_MaxValue,
                  heroBerseck.m_CurrentValue + heroRegenBerseck.m_CurrentValue);
     heroVigor.m_CurrentValue =
-        std::min(heroVigor.m_CurrentValue,
+        std::min(heroVigor.m_MaxValue,
                  heroVigor.m_CurrentValue + heroRegenVigor.m_CurrentValue);
   }
   for (const auto &boss : m_BossesList) {
@@ -371,12 +371,12 @@ void PlayersManager::ApplyRegenStats() {
     hp.m_CurrentValue =
         std::min(hp.m_CurrentValue, hp.m_CurrentValue + regenHp.m_CurrentValue);
     mana.m_CurrentValue = std::min(
-        mana.m_CurrentValue, mana.m_CurrentValue + regenMana.m_CurrentValue);
+        mana.m_MaxValue, mana.m_CurrentValue + regenMana.m_CurrentValue);
     berseck.m_CurrentValue =
-        std::min(berseck.m_CurrentValue,
+        std::min(berseck.m_MaxValue,
                  berseck.m_CurrentValue + regenBerseck.m_CurrentValue);
     vigor.m_CurrentValue = std::min(
-        vigor.m_CurrentValue, vigor.m_CurrentValue + regenVigor.m_CurrentValue);
+        vigor.m_MaxValue, vigor.m_CurrentValue + regenVigor.m_CurrentValue);
   }
 }
 
@@ -432,7 +432,7 @@ QString PlayersManager::DeleteOneBadEffect(const Character *chara) {
   for (auto &e : m_AllEffectsOnGame[chara->m_Name])
     // TODO rule about debuf
     // a DOT can be a debuf for example
-    if (e.allAtkEffects.value < 0 && !e.allAtkEffects.statsName.isEmpty()) {
+    if (e.allAtkEffects.target == TARGET_ENNEMY &&  !e.allAtkEffects.statsName.isEmpty()) {
       e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
       return "supprime un effet néfaste.";
     }

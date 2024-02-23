@@ -19,11 +19,20 @@
         {
             "Cible": "Tous les heroes",
             "Portée": "Zone",
-            "Stat": "Mana",
-            "Tours actifs": 1,
-            "Type": "Changement par valeur",
+            "Stat": "Regeneration Mana",
+            "Tours actifs": 4,
+            "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": 10
+            "Value": 50
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
         }
     ],
     "Niveau": 11,

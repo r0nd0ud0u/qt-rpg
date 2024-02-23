@@ -107,7 +107,7 @@ private:
                                    const QString &atkName) const;
   int ProcessDecreaseOnTurn(const effectParam &ep) const;
   QString ProcessDecreaseByTurn(const effectParam &ep) const;
-  static int DamageByAtk(const Stats& launcherStats, const Stats& targetStats, const bool isMagicAtk, const int atkValue);
+  static int DamageByAtk(const Stats& launcherStats, const Stats& targetStats, const bool isMagicAtk, const int atkValue, const int nbTurns);
   int GetSignEffectValue(const QString &target) const;
   QChar GetCharEffectValue(const QString &target) const;
   int GetMaxNbOfApplies(const AttaqueType& atk) const;

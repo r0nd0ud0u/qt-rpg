@@ -13,6 +13,7 @@ struct GameAtkEffects {
   AttaqueType atk;
   QString launcher;
   QString target;
+  int launchingTurn = 0;
 };
 
 class PlayersManager {
