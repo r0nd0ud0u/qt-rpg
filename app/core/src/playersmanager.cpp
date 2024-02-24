@@ -169,9 +169,9 @@ void PlayersManager::InitBosses() {
       .SetValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
       .SetValues(0, 0, 0, 0);
-  const auto boss = new Character("Pignouf", characType::Boss, stats);
-  boss->color = QColor("red");
-  m_BossesList.push_back(boss);
+  const auto boss1 = new Character("Pignouf", characType::Boss, stats);
+  boss1->color = QColor("red");
+  m_BossesList.push_back(boss1);
 
   for (const auto &boss : m_BossesList) {
       boss->LoadAtkJson();
