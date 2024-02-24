@@ -91,7 +91,7 @@ QString Character::RegenIntoDamage(const int atkValue,
   return channelLog;
 }
 
-void Character::ProcessCostAndRegen(const QString &atkName) {
+void Character::ProcessCost(const QString &atkName) {
   if (atkName.isEmpty()) {
     return;
   }
@@ -103,8 +103,6 @@ void Character::ProcessCostAndRegen(const QString &atkName) {
   // Stats change on target
   auto &launcherMana =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_MANA]);
-  auto &launcherAggro =
-      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_AGGRO]);
   auto &launcherBerseck =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_BERSECK]);
   auto &launcherVigor =
@@ -119,14 +117,7 @@ void Character::ProcessCostAndRegen(const QString &atkName) {
       max(0, static_cast<int>(launcherVigor.m_CurrentValue -
                               atk.vigorCost * launcherVigor.m_MaxValue / 100));
   launcherBerseck.m_CurrentValue = max(
-      0, static_cast<int>(launcherBerseck.m_CurrentValue -
-                          atk.berseckCost * launcherBerseck.m_MaxValue / 100));
-  // Gain or regen
-  // TODO in % ?
-  launcherAggro.m_CurrentValue += atk.aggroRate;
-  launcherBerseck.m_CurrentValue += atk.berseckRate;
-  launcherMana.m_CurrentValue += atk.regenMana;
-  launcherVigor.m_CurrentValue += atk.regenVigor;
+      0, static_cast<int>(launcherBerseck.m_CurrentValue - atk.berseckCost));
 }
 
 void Character::AddAtq(const AttaqueType &atq) { m_AttakList[atq.name] = atq; }
@@ -410,15 +401,12 @@ void Character::ProcessRemoveEquip(StatsType<T> &charStat,
 /// berseck.
 ///
 bool Character::CanBeLaunched(const AttaqueType &atk) const {
-  const auto remainingMana = static_cast<uint32_t>(
-      std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_MANA))
-          .m_CurrentValue);
-  const auto remainingBerseck = static_cast<uint32_t>(
-      std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_BERSECK))
-          .m_CurrentValue);
-  const auto remainingVigor = static_cast<uint32_t>(
-      std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_VIGOR))
-          .m_CurrentValue);
+  const auto mana =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_MANA));
+  const auto berseck =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_BERSECK));
+  const auto vigor =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_VIGOR));
 
   // check the impact of an effect on an atk here
   // Cooldown
@@ -436,13 +424,12 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
     }
   }
 
-  if (atk.manaCost >= 0 && atk.manaCost <= remainingMana) {
-    return true;
-  }
-  if (atk.berseckCost >= 0 && atk.berseckCost <= remainingBerseck) {
-    return true;
-  }
-  if (atk.vigorCost >= 0 && atk.vigorCost <= remainingVigor) {
+  const int manaCost = atk.manaCost * mana.m_MaxValue / 100;
+  const int vigorCost = atk.vigorCost * mana.m_MaxValue / 100;
+  const int berseckCost = atk.berseckCost;
+
+  if (manaCost <= mana.m_CurrentValue && vigorCost <= vigor.m_CurrentValue &&
+      berseckCost <= berseck.m_CurrentValue) {
     return true;
   }
 
@@ -484,7 +471,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
 
   if (effect.effect == CONDITION_ENNEMIES_DIED) {
     const auto gs = Application::GetInstance().m_GameManager->m_GameState;
-    effect.value *= gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb - 1);
+      effect.value *= static_cast<int>(gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb - 1));
     effect.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
   }
   if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
@@ -564,13 +551,18 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
     return "";
   }
 
+  // apply amount on berseck character if target is ennemy
+  if (const bool isOnEnnemy = effect.target == TARGET_ENNEMY;
+      effect.statsName == STATS_HP && isOnEnnemy) {
+      const auto berseckAmount = target->ProcessBerseckOnRxAtk(nbOfApplies);
+      result += (berseckAmount > 0) ? QString("recupère +%1 de râge.") : "";
+  }
   // apply the effect
   const auto amount = ProcessCurrentValueOnEffect(effect, nbOfApplies, m_Stats,
-                                                  target->m_Stats);
+                                            target->m_Stats);
   // TODO should be static and not on target ? pass target by argument
-  result = target->ProcessOutputLogOnEffect(effect, amount, fromLaunch,
+  result += target->ProcessOutputLogOnEffect(effect, amount, fromLaunch,
                                             nbOfApplies, atk.name);
-
   // Apply regen effect turning into damage for all bosses
   // can be processed only after calcul of amount of atk
   result += RegenIntoDamage(amount, effect.statsName);
@@ -920,4 +912,22 @@ int Character::GetMaxNbOfApplies(const AttaqueType &atk) const {
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(statName));
 
   return maxNb = localStat.m_CurrentValue / cost;
+}
+
+// apply amount on berseck character
+// In case of character working with Berseck, an atk from an ennemy up his
+// berseck gauge.
+int Character::ProcessBerseckOnRxAtk(const int nbOfApplies) {
+  auto &berseckStat =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_BERSECK]);
+  const auto &berseckRate =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_RATE_BERSECK]);
+  const int delta = berseckStat.m_MaxValue - berseckStat.m_CurrentValue;
+  int amount = 0;
+  if (berseckStat.m_MaxValue > 0) {
+      amount = std::min(delta, berseckRate.m_MaxValue * nbOfApplies);
+    berseckStat.m_CurrentValue += amount;
+  }
+
+  return amount;
 }
