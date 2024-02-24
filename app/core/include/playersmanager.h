@@ -30,7 +30,7 @@ public:
   QStringList RemoveTerminatedEffectsOnPlayer(const QString &curPlayerName);
   QStringList ApplyEffectsOnPlayer(const QString &curPlayerName,
                                    const int currentTurn);
-  void ApplyRegenStats();
+  void ApplyRegenStats(const characType& type);
 
   static QString FormatAtkOnEnnemy(const int damage);
   static QString FormatAtkOnAlly(const int damage);
@@ -46,6 +46,7 @@ public:
                             const characType launcherType);
   void IncrementCounterEffect();
   QStringList CheckDiedPlayers(const characType& launcherType);
+  void AddSupAtkTurn(const characType &launcherType, std::vector<QString>& playerOrderTable)const;
 
   std::vector<Character *> m_HeroesList;
   std::vector<Character *> m_BossesList;
