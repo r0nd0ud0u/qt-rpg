@@ -284,7 +284,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   // update views of heroes and bosses
   emit SigUpdatePlayerPanel();
   // update stats view
-  emit SigUpdStatsOnCharacter(nameChara);
+  emit SigUpdStatsOnSelCharacter();
 
   // check who is dead!
   const QStringList diedBossList =
