@@ -25,7 +25,7 @@ private:
   void addStatRow(QAbstractItemModel *model, const QString &statsName,
                   const QVariant &value) const;
 private slots:
-  void UpdateStats(QString name);
+  void UpdateStats();
   void UpdateDisplayedCharStats();
 };
 

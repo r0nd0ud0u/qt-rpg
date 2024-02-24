@@ -88,10 +88,10 @@ QAbstractItemModel *StatsView::createStatsModel(QObject *parent) {
   return model;
 }
 
-void StatsView::UpdateStats(QString name) {
+void StatsView::UpdateStats() {
   ui->stats_table->setModel(createStatsModel(parentWidget()));
 }
 
 void StatsView::UpdateDisplayedCharStats() {
-  UpdateStats(m_CurPlayerName);
+  UpdateStats();
 }
