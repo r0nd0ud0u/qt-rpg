@@ -28,7 +28,7 @@ signals:
     void SigEndOfGame();
     void SigUpdateChannelView(const QString&, const QString&, const QColor = QColor("purple"));
     void SigUpdateAllEffectPanel(const std::unordered_map<QString, std::vector<GameAtkEffects>>& );
-    void SigUpdStatsOnCharacter(const QString&);
+    void SigUpdStatsOnSelCharacter();
 private:
     Ui::GameDisplay *ui;
     void UpdateGameStatus();

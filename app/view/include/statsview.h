@@ -26,7 +26,7 @@ private:
                   const QVariant &value) const;
 private slots:
   void UpdateStats(QString name);
-  void UpdateDisplayedCharStats(const QString &name);
+  void UpdateDisplayedCharStats();
 };
 
 #endif // STATSVIEW_H
