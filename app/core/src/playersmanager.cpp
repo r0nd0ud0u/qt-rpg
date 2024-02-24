@@ -248,9 +248,11 @@ Character *PlayersManager::GetCharacterByName(const QString &name) {
   return nullptr;
 }
 
-void PlayersManager::AddGameEffectOnAtk(
-    const QString &launcherName, const AttaqueType &atk,
-    const QString &targetName, const std::vector<effectParam> &effects) {
+void PlayersManager::AddGameEffectOnAtk(const QString &launcherName,
+                                        const AttaqueType &atk,
+                                        const QString &targetName,
+                                        const std::vector<effectParam> &effects,
+                                        const int currentTurn) {
   for (const auto &e : effects) {
     GameAtkEffects gae;
     gae.launcher = launcherName;
@@ -289,19 +291,24 @@ PlayersManager::RemoveTerminatedEffectsOnPlayer(const QString &curPlayerName) {
   gaeTable.erase(newEnd, gaeTable.end());
   return sl;
 }
-QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName) {
-  // TODO maybe pass the player as argument and not the name
+
+QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName,
+                                                 const int currentTurn) {
   QStringList logs;
   if (m_AllEffectsOnGame.count(curPlayerName) == 0) {
     return logs;
   }
   auto &gaeTable = m_AllEffectsOnGame[curPlayerName];
-
   auto *targetPl = GetCharacterByName(curPlayerName);
+
   QStringList localLog;
   localLog.append(QString("Sur %1: ").arg(curPlayerName));
+
   if (targetPl != nullptr) {
     for (auto &gae : gaeTable) {
+      if (gae.launchingTurn == currentTurn) {
+        continue;
+      }
       auto *launcherPl = GetCharacterByName(gae.launcher);
       if (launcherPl != nullptr) {
         localLog.append(launcherPl->ApplyOneEffect(targetPl, gae.allAtkEffects,
@@ -336,9 +343,8 @@ void PlayersManager::ApplyRegenStats() {
     const auto &heroRegenVigor = std::get<StatsType<int>>(
         hero->m_Stats.m_AllStatsTable[STATS_REGEN_VIGOR]);
 
-    heroHp.m_CurrentValue =
-        std::min(heroHp.m_MaxValue,
-                 heroHp.m_CurrentValue + heroRegenHp.m_CurrentValue);
+    heroHp.m_CurrentValue = std::min(
+        heroHp.m_MaxValue, heroHp.m_CurrentValue + heroRegenHp.m_CurrentValue);
     heroMana.m_CurrentValue =
         std::min(heroMana.m_MaxValue,
                  heroMana.m_CurrentValue + heroRegenMana.m_CurrentValue);
@@ -432,7 +438,8 @@ QString PlayersManager::DeleteOneBadEffect(const Character *chara) {
   for (auto &e : m_AllEffectsOnGame[chara->m_Name])
     // TODO rule about debuf
     // a DOT can be a debuf for example
-    if (e.allAtkEffects.target == TARGET_ENNEMY &&  !e.allAtkEffects.statsName.isEmpty()) {
+    if (e.allAtkEffects.target == TARGET_ENNEMY &&
+        !e.allAtkEffects.statsName.isEmpty()) {
       e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
       return "supprime un effet néfaste.";
     }
@@ -491,10 +498,10 @@ void PlayersManager::ImproveHotsOnPlayers(const int valuePercent,
   }
 }
 
-void PlayersManager::IncrementCounterEffect(){
-    for (auto &[playerName, gaeTable] : m_AllEffectsOnGame) {
-        for (auto& gae : gaeTable) {
-            gae.allAtkEffects.counterTurn++;
-        }
+void PlayersManager::IncrementCounterEffect() {
+  for (auto &[playerName, gaeTable] : m_AllEffectsOnGame) {
+    for (auto &gae : gaeTable) {
+      gae.allAtkEffects.counterTurn++;
     }
+  }
 }
