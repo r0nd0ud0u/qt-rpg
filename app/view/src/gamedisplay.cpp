@@ -79,31 +79,28 @@ void GameDisplay::UpdateGameStatus() {
 
 void GameDisplay::NewRound() {
   const auto &gm = Application::GetInstance().m_GameManager;
-  if (gm == nullptr) {
+  if (gm.get() == nullptr) {
     return;
   }
-  const auto &gs = gm->m_GameState;
-  // TODO game state , check if boss is dead
 
   // First update the game state
+  const auto &gs = gm->m_GameState;
   gs->m_CurrentRound++;
   UpdateGameStatus();
 
   // Get current player
-  auto *activePlayer =
-      Application::GetInstance().m_GameManager->GetCurrentPlayer();
-
+  auto *activePlayer = gm->GetCurrentPlayer();
   if (activePlayer == nullptr) {
     emit SigUpdateChannelView("Debug", "NewRound nullptr active player");
   }
 
   // Apply effects
-  const QStringList effectsLogs =
-      gm->m_PlayersManager->ApplyEffectsOnPlayer(activePlayer->m_Name);
+  const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffectsOnPlayer(
+      activePlayer->m_Name, gm->m_GameState->m_CurrentTurnNb);
   for (const auto &el : effectsLogs) {
     emit SigUpdateChannelView("GameState", el);
   }
-  // update effect
+  // Update effect
   const QStringList terminatedEffects =
       gm->m_PlayersManager->RemoveTerminatedEffectsOnPlayer(
           activePlayer->m_Name);
@@ -112,10 +109,10 @@ void GameDisplay::NewRound() {
   }
   gm->m_PlayersManager->DecreaseCoolDownEffects(activePlayer->m_Name);
   emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
-  // Updat views after stats changes
-  emit SigUpdatePlayerPanel();
 
   // Update views
+  // Update views after stats changes
+  emit SigUpdatePlayerPanel();
   // Players panels views
   ui->heroes_widget->ActivatePanel(activePlayer->m_Name);
   ui->bosses_widget->ActivatePanel(activePlayer->m_Name);
@@ -178,7 +175,7 @@ void GameDisplay::EndOfGame() {
   // default page on action view
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(ActionsStackedWgType::defaultType));
-
+  emit SigBossDead("");
   emit SigUpdateChannelView("GameState", "Fin du jeu !!");
 }
 
@@ -203,32 +200,38 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   }
   const auto &currentAtk = activatedPlayer->m_AttakList.at(atkName);
   // Stats change on hero
-  activatedPlayer->ProcessCostAndRegen(atkName);
+  activatedPlayer->ProcessCost(atkName);
   emit SigUpdateChannelView(nameChara, QString("lance %1.").arg(atkName),
                             activatedPlayer->color);
 
   // new effects on that turn
   std::unordered_map<QString, std::vector<effectParam>> newEffects;
-  // Parse target list and appliy atk and effects
+  // Parse target list and apply atk and effects
   for (const auto &target : targetList) {
     QString channelLog;
     auto *targetChara = gm->m_PlayersManager->GetCharacterByName(target.m_Name);
     if (targetChara != nullptr) {
       // EFFECT
-      const auto &[applyAtk, resultEffects, appliedEffects] =
+      const auto &[conditionsOk, resultEffects, appliedEffects] =
           activatedPlayer->ApplyAtkEffect(target.m_IsTargeted, currentAtk,
                                           targetChara);
+
       if (!resultEffects.isEmpty()) {
         emit SigUpdateChannelView(nameChara,
                                   QString("Sur %1: ").arg(target.m_Name) +
                                       "\n" + resultEffects.join("\n"),
                                   activatedPlayer->color);
       }
-      // applyAtk = false if effect reinit with unfulfilled condtions
-      if (target.m_IsTargeted && applyAtk && !channelLog.isEmpty()) {
+      // conditionsOk = false if effect reinit with unfulfilled condtions
+      if (target.m_IsTargeted && conditionsOk && !channelLog.isEmpty()) {
         // Update channel view
         emit SigUpdateChannelView(nameChara, channelLog,
                                   activatedPlayer->color);
+      }
+      if (!conditionsOk) {
+        ui->bag_button->setEnabled(true);
+        ui->attaque_button->setEnabled(true);
+        return;
       }
       // add applied effect to new effect Table
       newEffects[target.m_Name] = appliedEffects;
@@ -242,7 +245,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       continue;
     }
     gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer->m_Name,
-                                             currentAtk, targetName, epTable);
+                                             currentAtk, targetName, epTable,
+                                             gm->m_GameState->m_CurrentTurnNb);
     // remove terminated effects
     // Some effects like "delete one bad effect" need to be updated
     const QStringList terminatedEffects =
@@ -258,33 +262,24 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   emit SigUpdatePlayerPanel();
 
   // check who is dead!
-  for (auto &boss : gm->m_PlayersManager->m_BossesList) {
-    const auto &hp =
-        std::get<StatsType<int>>(boss->m_Stats.m_AllStatsTable[STATS_HP]);
-    if (hp.m_CurrentValue == 0) {
-      // next phase
-      emit SigBossDead(boss->m_Name);
-      // delete bosses in player manager
-      delete boss;
-      boss = nullptr;
-    }
+  const QStringList diedBossList =
+      gm->m_PlayersManager->CheckDiedPlayers(characType::Boss);
+  for (const auto &dp : diedBossList) {
+    emit SigUpdateChannelView(dp, "est mort.");
   }
+  const QStringList diedHeroesList =
+      gm->m_PlayersManager->CheckDiedPlayers(characType::Hero);
+  for (const auto &dp : diedHeroesList) {
+    emit SigUpdateChannelView(dp, "est mort.");
+  }
+
   // Check end of game
   if (gm->m_PlayersManager->m_BossesList.empty()) {
     // update buttons
-    EndOfGame();
-  }
+    // TODO new boss to add ? or new phase ?
+    // if yes -> start new turn with new boss
+    //      if not end of game!!
 
-  uint8_t nbDeadHeroes = 0;
-  for (const auto &hero : gm->m_PlayersManager->m_HeroesList) {
-    const auto &hp =
-        std::get<StatsType<int>>(hero->m_Stats.m_AllStatsTable[STATS_HP]);
-    if (hero->m_Stats.m_HP.m_CurrentValue == 0) {
-      // choose to drink a potion
-      nbDeadHeroes++;
-    }
-  }
-  if (nbDeadHeroes == gm->m_PlayersManager->m_HeroesList.size()) {
-    // end of game
+    EndOfGame();
   }
 }

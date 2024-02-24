@@ -13,6 +13,7 @@ struct GameAtkEffects {
   AttaqueType atk;
   QString launcher;
   QString target;
+  int launchingTurn = 0;
 };
 
 class PlayersManager {
@@ -22,11 +23,13 @@ public:
   void InitBosses();
   void LoadAllEquipmentsJson();
   Character *GetCharacterByName(const QString &name);
-  void AddGameEffectOnAtk(
-      const QString &launcherName, const AttaqueType &atk,
-      const QString &targetName, const std::vector<effectParam> &effects);
-  QStringList RemoveTerminatedEffectsOnPlayer(const QString& curPlayerName);
-  QStringList ApplyEffectsOnPlayer(const QString& curPlayerName);
+  void AddGameEffectOnAtk(const QString &launcherName, const AttaqueType &atk,
+                          const QString &targetName,
+                          const std::vector<effectParam> &effects,
+                          const int currentTurn);
+  QStringList RemoveTerminatedEffectsOnPlayer(const QString &curPlayerName);
+  QStringList ApplyEffectsOnPlayer(const QString &curPlayerName,
+                                   const int currentTurn);
   void ApplyRegenStats();
 
   static QString FormatAtkOnEnnemy(const int damage);
@@ -37,18 +40,20 @@ public:
   void ResetCounterOnOneStatsEffect(const Character *chara,
                                     const QString &statsName);
   QString DeleteOneBadEffect(const Character *chara);
-  void DecreaseCoolDownEffects(const QString& curPlayerName);
+  void DecreaseCoolDownEffects(const QString &curPlayerName);
   QString DeleteAllBadEffect(const Character *chara);
   void ImproveHotsOnPlayers(const int valuePercent,
                             const characType launcherType);
   void IncrementCounterEffect();
+  QStringList CheckDiedPlayers(const characType& launcherType);
 
   std::vector<Character *> m_HeroesList;
   std::vector<Character *> m_BossesList;
   Character *m_SelectedHero = nullptr;
   Character *m_ActivePlayer = nullptr;
   std::unordered_map<QString, Stuff> m_Equipments;
-  std::unordered_map<QString, std::vector<GameAtkEffects>> m_AllEffectsOnGame; // key target
+  std::unordered_map<QString, std::vector<GameAtkEffects>>
+      m_AllEffectsOnGame; // key target
 };
 
 #endif // PLAYERS__MANAGER_H

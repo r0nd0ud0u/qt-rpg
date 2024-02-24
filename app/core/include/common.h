@@ -85,8 +85,7 @@ const std::unordered_set<QString> ALL_STATS = {"",
                                                STATS_REGEN_VIGOR,
                                                STATS_RATE_BERSECK,
                                                STATS_RATE_AGGRO};
-const std::unordered_set<QString> ON_PERCENT_STATS = {STATS_MANA, STATS_VIGOR,
-                                                      STATS_DODGE};
+const std::unordered_set<QString> ON_PERCENT_STATS = {STATS_MANA, STATS_VIGOR};
 // equipment keys
 const QString EQUIP_HEAD = "Tete";
 const QString EQUIP_NECKLACE = "Collier";
