@@ -17,7 +17,19 @@
    <item>
     <layout class="QVBoxLayout" name="left_lay">
      <property name="spacing">
-      <number>0</number>
+      <number>10</number>
+     </property>
+     <property name="leftMargin">
+      <number>10</number>
+     </property>
+     <property name="topMargin">
+      <number>10</number>
+     </property>
+     <property name="rightMargin">
+      <number>10</number>
+     </property>
+     <property name="bottomMargin">
+      <number>10</number>
      </property>
      <item>
       <layout class="QHBoxLayout" name="game_status_lay">
@@ -59,28 +71,43 @@
       </layout>
      </item>
      <item>
-      <widget class="BossesView" name="bosses_widget" native="true">
+      <widget class="QScrollArea" name="scrollArea_bosses">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
+       <property name="widgetResizable">
+        <bool>true</bool>
        </property>
+       <widget class="BossesView" name="bosses_widget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>416</width>
+          <height>68</height>
+         </rect>
+        </property>
+       </widget>
       </widget>
      </item>
      <item>
-      <widget class="HeroesView" name="heroes_widget" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+      <widget class="QScrollArea" name="scrollArea_heroes">
+       <property name="widgetResizable">
+        <bool>true</bool>
        </property>
+       <widget class="HeroesView" name="heroes_widget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>416</width>
+          <height>464</height>
+         </rect>
+        </property>
+       </widget>
       </widget>
      </item>
     </layout>
