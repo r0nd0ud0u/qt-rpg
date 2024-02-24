@@ -45,6 +45,7 @@ public:
   void ImproveHotsOnPlayers(const int valuePercent,
                             const characType launcherType);
   void IncrementCounterEffect();
+  QStringList CheckDiedPlayers(const characType& launcherType);
 
   std::vector<Character *> m_HeroesList;
   std::vector<Character *> m_BossesList;

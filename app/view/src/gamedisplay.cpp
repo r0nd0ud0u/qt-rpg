@@ -178,7 +178,7 @@ void GameDisplay::EndOfGame() {
   // default page on action view
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(ActionsStackedWgType::defaultType));
-
+  emit SigBossDead("");
   emit SigUpdateChannelView("GameState", "Fin du jeu !!");
 }
 
@@ -209,7 +209,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
   // new effects on that turn
   std::unordered_map<QString, std::vector<effectParam>> newEffects;
-  // Parse target list and appliy atk and effects
+  // Parse target list and apply atk and effects
   for (const auto &target : targetList) {
     QString channelLog;
     auto *targetChara = gm->m_PlayersManager->GetCharacterByName(target.m_Name);
@@ -259,33 +259,24 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   emit SigUpdatePlayerPanel();
 
   // check who is dead!
-  for (auto &boss : gm->m_PlayersManager->m_BossesList) {
-    const auto &hp =
-        std::get<StatsType<int>>(boss->m_Stats.m_AllStatsTable[STATS_HP]);
-    if (hp.m_CurrentValue == 0) {
-      // next phase
-      emit SigBossDead(boss->m_Name);
-      // delete bosses in player manager
-      delete boss;
-      boss = nullptr;
-    }
+  const QStringList diedBossList =
+      gm->m_PlayersManager->CheckDiedPlayers(characType::Boss);
+  for (const auto &dp : diedBossList) {
+    emit SigUpdateChannelView(dp, "est mort.");
   }
+  const QStringList diedHeroesList =
+      gm->m_PlayersManager->CheckDiedPlayers(characType::Hero);
+  for (const auto &dp : diedHeroesList) {
+    emit SigUpdateChannelView(dp, "est mort.");
+  }
+
   // Check end of game
   if (gm->m_PlayersManager->m_BossesList.empty()) {
     // update buttons
-    EndOfGame();
-  }
+    // TODO new boss to add ? or new phase ?
+    // if yes -> start new turn with new boss
+    //      if not end of game!!
 
-  uint8_t nbDeadHeroes = 0;
-  for (const auto &hero : gm->m_PlayersManager->m_HeroesList) {
-    const auto &hp =
-        std::get<StatsType<int>>(hero->m_Stats.m_AllStatsTable[STATS_HP]);
-    if (hp.m_CurrentValue == 0) {
-      // choose to drink a potion
-      nbDeadHeroes++;
-    }
-  }
-  if (nbDeadHeroes == gm->m_PlayersManager->m_HeroesList.size()) {
-    // end of game
+    EndOfGame();
   }
 }

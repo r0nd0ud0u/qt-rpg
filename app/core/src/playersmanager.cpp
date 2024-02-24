@@ -505,3 +505,44 @@ void PlayersManager::IncrementCounterEffect() {
     }
   }
 }
+
+/// Boss is deleted from list
+/// Hero has only his life staying at 0.
+/// That method returns a QStringlist with the different died played.
+/// That list will be displayed on channel logs.
+QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
+  std::vector<Character *> playerList;
+
+  if (launcherType == characType::Hero) {
+    playerList = m_HeroesList;
+  } else if (launcherType == characType::Boss) {
+    playerList = m_BossesList;
+  }
+  QStringList output;
+
+  auto newEnd = std::remove_if(
+      playerList.begin(), playerList.end(), [](const Character *pl) {
+        if (pl == nullptr) {
+          return false;
+        }
+        const auto &hp =
+            std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable.at(STATS_HP));
+        return hp.m_CurrentValue == 0; // remove elements where this is true
+      });
+
+  std::for_each(newEnd, playerList.end(), [&output](const Character *pl) {
+    if (pl != nullptr) {
+      output.append(pl->m_Name);
+    }
+  });
+
+  // Delete only boss player
+  if (launcherType == characType::Boss) {
+      // TODO check if bosses has another phase
+      // if yes init that phase
+      // if not erase the boss of the list
+    playerList.erase(newEnd, playerList.end());
+  }
+
+  return output;
+}
