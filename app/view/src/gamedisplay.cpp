@@ -215,20 +215,26 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     auto *targetChara = gm->m_PlayersManager->GetCharacterByName(target.m_Name);
     if (targetChara != nullptr) {
       // EFFECT
-      const auto &[applyAtk, resultEffects, appliedEffects] =
+      const auto &[conditionsOk, resultEffects, appliedEffects] =
           activatedPlayer->ApplyAtkEffect(target.m_IsTargeted, currentAtk,
                                           targetChara);
+
       if (!resultEffects.isEmpty()) {
         emit SigUpdateChannelView(nameChara,
                                   QString("Sur %1: ").arg(target.m_Name) +
                                       "\n" + resultEffects.join("\n"),
                                   activatedPlayer->color);
       }
-      // applyAtk = false if effect reinit with unfulfilled condtions
-      if (target.m_IsTargeted && applyAtk && !channelLog.isEmpty()) {
+      // conditionsOk = false if effect reinit with unfulfilled condtions
+      if (target.m_IsTargeted && conditionsOk && !channelLog.isEmpty()) {
         // Update channel view
         emit SigUpdateChannelView(nameChara, channelLog,
                                   activatedPlayer->color);
+      }
+      if(!conditionsOk){
+          ui->bag_button->setEnabled(true);
+          ui->attaque_button->setEnabled(true);
+          return;
       }
       // add applied effect to new effect Table
       newEffects[target.m_Name] = appliedEffects;
