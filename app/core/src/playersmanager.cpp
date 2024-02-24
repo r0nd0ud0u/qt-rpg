@@ -143,6 +143,8 @@ void PlayersManager::InitBosses() {
       .SetValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
       .SetValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
+      .SetValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
       .SetValues(105, 105, 105, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
@@ -168,8 +170,14 @@ void PlayersManager::InitBosses() {
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
       .SetValues(0, 0, 0, 0);
   const auto boss = new Character("Pignouf", characType::Boss, stats);
-
+  boss->color = QColor("red");
   m_BossesList.push_back(boss);
+
+  for (const auto &boss : m_BossesList) {
+      boss->LoadAtkJson();
+      boss->LoadStuffJson();
+      boss->ApplyEquipOnStats(m_Equipments);
+  }
 }
 
 void PlayersManager::LoadAllEquipmentsJson() {

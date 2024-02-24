@@ -473,8 +473,6 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
     effect.value *=
         static_cast<int>(gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb - 1));
     effect.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
-  } else{
-      return "";
   }
 
   // Apply some effects only at launch
