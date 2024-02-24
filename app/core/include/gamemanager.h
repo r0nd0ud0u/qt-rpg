@@ -22,8 +22,9 @@ public:
 
     void InitPlayers();
     Character* GetSelectedHero();
-    void ProcessOrderToPlay(std::vector<QString>& orderToPlay);
+    void ProcessOrderToPlay(std::vector<QString>& orderToPlay) const;
     Character* GetCurrentPlayer();
+    QString ProcessLogOrderToPlay() const;
 };
 
 #endif // GAMEMANAGER_H

@@ -24,29 +24,49 @@ Character *GameManager::GetSelectedHero() {
   return m_PlayersManager->m_SelectedHero;
 }
 
-void GameManager::ProcessOrderToPlay(std::vector<QString> &orderToPlay) {
+void GameManager::ProcessOrderToPlay(std::vector<QString> &orderToPlay) const{
   // to be improved with stats
   // one player can play several times as well in different order
-  // random ?
   orderToPlay.clear();
 
-  for (const auto& hero : m_PlayersManager->m_HeroesList) {
+  for (const auto &hero : m_PlayersManager->m_HeroesList) {
     orderToPlay.push_back(hero->m_Name);
   }
-  for (const auto& boss : m_PlayersManager->m_BossesList) {
+  for (const auto &boss : m_PlayersManager->m_BossesList) {
     orderToPlay.push_back(boss->m_Name);
   }
+  // supplementariy atks to push
+  m_PlayersManager->AddSupAtkTurn(characType::Hero, orderToPlay);
+  m_PlayersManager->AddSupAtkTurn(characType::Boss, orderToPlay);
 }
 
-Character* GameManager::GetCurrentPlayer(){
-    const auto& nameChara = m_GameState->GetCurrentPlayerName();
-    return m_PlayersManager->GetCharacterByName(nameChara);
+QString GameManager::ProcessLogOrderToPlay() const{
+  QString logs;
+  if (m_GameState == nullptr) {
+    return "";
+  }
+  if (!m_GameState->m_OrderToPlay.empty()) {
+    logs.append("Ordre des joueurs:\n");
+  }
+  int counter = 1;
+  std::for_each(m_GameState->m_OrderToPlay.begin(),
+                m_GameState->m_OrderToPlay.end(),
+                [&logs, &counter](const QString &plName) {
+                  logs += QString("%1 %2\n").arg(counter).arg(plName);
+                    counter++;
+                });
+
+  return logs;
+}
+
+Character *GameManager::GetCurrentPlayer() {
+  const auto &nameChara = m_GameState->GetCurrentPlayerName();
+  return m_PlayersManager->GetCharacterByName(nameChara);
 }
 
 /////////////////////////////////////////
 /// \brief GameState::GetCurrentPlayerName
 ///
-QString GameState::GetCurrentPlayerName(){
-    return (m_CurrentRound > 0) ? m_OrderToPlay.at(m_CurrentRound-1) : "";
+QString GameState::GetCurrentPlayerName() {
+  return (m_CurrentRound > 0) ? m_OrderToPlay.at(m_CurrentRound - 1) : "";
 }
-

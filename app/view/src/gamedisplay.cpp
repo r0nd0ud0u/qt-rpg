@@ -138,9 +138,18 @@ void GameDisplay::StartNewTurn() {
   // TODO game state , check if boss is dead
   const auto &gm = Application::GetInstance().m_GameManager;
 
+  // Increment turn effects
+  gm->m_PlayersManager->IncrementCounterEffect();
+  // Apply regen stats
+  gm->m_PlayersManager->ApplyRegenStats(characType::Boss);
+  gm->m_PlayersManager->ApplyRegenStats(characType::Hero);
+  // Updat views after stats changes
+  emit SigUpdatePlayerPanel();
+
   // For each turn now
   // Process the order of the players
   gm->ProcessOrderToPlay(gm->m_GameState->m_OrderToPlay);
+  emit SigUpdateChannelView("GameState", gm->ProcessLogOrderToPlay());
   // Update game state
   gm->m_GameState->m_CurrentRound = 0;
   gm->m_GameState->m_CurrentTurnNb++;
@@ -154,12 +163,6 @@ void GameDisplay::StartNewTurn() {
   if (gm->m_GameState->m_CurrentTurnNb == 1) {
     ui->attak_page->InitTargetsWidget();
   }
-  // Increment turn effects
-  gm->m_PlayersManager->IncrementCounterEffect();
-  // Apply regen stats
-  gm->m_PlayersManager->ApplyRegenStats();
-  // Updat views after stats changes
-  emit SigUpdatePlayerPanel();
 }
 
 void GameDisplay::EndOfTurn() {
