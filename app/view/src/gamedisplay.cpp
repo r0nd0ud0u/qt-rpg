@@ -78,21 +78,18 @@ void GameDisplay::UpdateGameStatus() {
 }
 
 void GameDisplay::NewRound() {
-  const auto& gm = Application::GetInstance().m_GameManager;
+  const auto &gm = Application::GetInstance().m_GameManager;
   if (gm.get() == nullptr) {
     return;
   }
-  const auto &gs = gm->m_GameState;
-  // TODO game state , check if boss is dead
 
   // First update the game state
+  const auto &gs = gm->m_GameState;
   gs->m_CurrentRound++;
   UpdateGameStatus();
 
   // Get current player
-  auto *activePlayer =
-      Application::GetInstance().m_GameManager->GetCurrentPlayer();
-
+  auto *activePlayer = gm->GetCurrentPlayer();
   if (activePlayer == nullptr) {
     emit SigUpdateChannelView("Debug", "NewRound nullptr active player");
   }
@@ -103,7 +100,7 @@ void GameDisplay::NewRound() {
   for (const auto &el : effectsLogs) {
     emit SigUpdateChannelView("GameState", el);
   }
-  // update effect
+  // Update effect
   const QStringList terminatedEffects =
       gm->m_PlayersManager->RemoveTerminatedEffectsOnPlayer(
           activePlayer->m_Name);
@@ -112,10 +109,10 @@ void GameDisplay::NewRound() {
   }
   gm->m_PlayersManager->DecreaseCoolDownEffects(activePlayer->m_Name);
   emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
-  // Updat views after stats changes
-  emit SigUpdatePlayerPanel();
 
   // Update views
+  // Update views after stats changes
+  emit SigUpdatePlayerPanel();
   // Players panels views
   ui->heroes_widget->ActivatePanel(activePlayer->m_Name);
   ui->bosses_widget->ActivatePanel(activePlayer->m_Name);
@@ -231,10 +228,10 @@ void GameDisplay::LaunchAttak(const QString &atkName,
         emit SigUpdateChannelView(nameChara, channelLog,
                                   activatedPlayer->color);
       }
-      if(!conditionsOk){
-          ui->bag_button->setEnabled(true);
-          ui->attaque_button->setEnabled(true);
-          return;
+      if (!conditionsOk) {
+        ui->bag_button->setEnabled(true);
+        ui->attaque_button->setEnabled(true);
+        return;
       }
       // add applied effect to new effect Table
       newEffects[target.m_Name] = appliedEffects;
