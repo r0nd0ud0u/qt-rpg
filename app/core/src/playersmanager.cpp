@@ -564,3 +564,19 @@ void PlayersManager::AddSupAtkTurn(const characType &launcherType,
     }
   }
 }
+
+std::pair<bool, QString> PlayersManager::IsDodging(const std::vector<TargetInfo>& targetList){
+    QString plName;
+    const bool isDodging = std::any_of(
+        targetList.begin(), targetList.end(), [this, &plName](const TargetInfo &ti) {
+            if (ti.m_IsTargeted) {
+                const auto *targetChara =
+                    this->GetCharacterByName(ti.m_Name);
+                plName = ti.m_Name;
+                return targetChara->IsDodging();
+            }
+            return false;
+        });
+
+    return std::make_pair(isDodging, plName);
+}

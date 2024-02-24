@@ -456,7 +456,7 @@ QChar Character::GetCharEffectValue(const QString &target) const {
 
 QString Character::ApplyOneEffect(Character *target, effectParam &effect,
                                   const bool fromLaunch,
-                                  const AttaqueType &atk) const {
+                                  const AttaqueType &atk) {
   if (target == nullptr) {
     return "No  target character";
   }
@@ -482,7 +482,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   // up/down % stats must be effective only at launch
   if ((effect.statsName == STATS_DODGE || effect.statsName == STATS_CRIT) &&
       !fromLaunch) {
-      return "";
+    return "";
   }
 
   const auto &[effectLog, nbOfApplies] = ProcessEffectType(effect, target, atk);
@@ -503,6 +503,10 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   // Apply regen effect turning into damage for all bosses
   // can be processed only after calcul of amount of atk
   result += RegenIntoDamage(amount, effect.statsName);
+  // Process aggro
+  if (fromLaunch) {
+      result += ProcessAggro(amount, effect.statsName);
+  }
 
   return result;
 }
@@ -711,6 +715,8 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
       amount += m_BufDamage.m_Value;
     }
   }
+  // is it a critical strike
+  amount = ProcessCriticalStrike(amount);
   if (ep.statsName == STATS_DODGE || ep.statsName == STATS_CRIT) {
     output = amount;
   } else {
@@ -883,7 +889,7 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
 
   if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
     // TODO not ready to be used yet
-        output = ProcessDecreaseByTurn(effect);
+    output = ProcessDecreaseByTurn(effect);
   }
   if (effect.effect == EFFECT_NB_COOL_DOWN) {
     output = (m_Name == target->m_Name)
@@ -947,4 +953,46 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
   }
 
   return std::make_pair(output, nbOfApplies);
+}
+
+QString Character::ProcessAggro(const int atkValue, const QString &statsName) {
+  if (atkValue <= 0) {
+    return "";
+  }
+  if (statsName != STATS_HP) {
+    return "";
+  }
+  const int aggroNorm = 50; // random value at the moment
+  auto &aggroStat =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_AGGRO]);
+  const int genAggro = static_cast<int>(std::round(atkValue / aggroNorm));
+  aggroStat.m_CurrentValue += genAggro;
+
+  return QString("L'aggro monte de +%1").arg(genAggro);
+}
+
+int Character::ProcessCriticalStrike(const int atkValue) const{
+    int critAmount = atkValue;
+    if(atkValue > 0){
+        // this is a heal not an atk
+        return critAmount;
+    }
+    const auto &critStat =
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_CRIT));
+    if (const auto randNb = Utils::GetRandomNb(0, 100);
+        randNb >= 0 && randNb < critStat.m_CurrentValue) {
+        critAmount = atkValue*2;
+    }
+    return critAmount;
+}
+
+bool Character::IsDodging() const{
+    bool isDodging = false;
+    const auto &stat =
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_DODGE));
+    if (const auto randNb = Utils::GetRandomNb(0, 100);
+        randNb >= 0 && randNb < stat.m_CurrentValue) {
+        isDodging = true;
+    }
+    return isDodging;
 }
