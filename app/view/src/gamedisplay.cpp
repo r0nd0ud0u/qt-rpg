@@ -98,8 +98,8 @@ void GameDisplay::NewRound() {
   }
 
   // Apply effects
-  const QStringList effectsLogs =
-      gm->m_PlayersManager->ApplyEffectsOnPlayer(activePlayer->m_Name);
+  const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffectsOnPlayer(
+      activePlayer->m_Name, gm->m_GameState->m_CurrentTurnNb);
   for (const auto &el : effectsLogs) {
     emit SigUpdateChannelView("GameState", el);
   }
@@ -242,7 +242,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       continue;
     }
     gm->m_PlayersManager->AddGameEffectOnAtk(activatedPlayer->m_Name,
-                                             currentAtk, targetName, epTable);
+                                             currentAtk, targetName, epTable,
+                                             gm->m_GameState->m_CurrentTurnNb);
     // remove terminated effects
     // Some effects like "delete one bad effect" need to be updated
     const QStringList terminatedEffects =
@@ -279,7 +280,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   for (const auto &hero : gm->m_PlayersManager->m_HeroesList) {
     const auto &hp =
         std::get<StatsType<int>>(hero->m_Stats.m_AllStatsTable[STATS_HP]);
-    if (hero->m_Stats.m_HP.m_CurrentValue == 0) {
+    if (hp.m_CurrentValue == 0) {
       // choose to drink a potion
       nbDeadHeroes++;
     }
