@@ -203,7 +203,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   }
   const auto &currentAtk = activatedPlayer->m_AttakList.at(atkName);
   // Stats change on hero
-  activatedPlayer->ProcessCostAndRegen(atkName);
+  activatedPlayer->ProcessCost(atkName);
   emit SigUpdateChannelView(nameChara, QString("lance %1.").arg(atkName),
                             activatedPlayer->color);
 

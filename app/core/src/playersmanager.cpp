@@ -258,6 +258,7 @@ void PlayersManager::AddGameEffectOnAtk(const QString &launcherName,
     gae.launcher = launcherName;
     gae.atk = atk;
     gae.allAtkEffects = e;
+    gae.launchingTurn = currentTurn;
     m_AllEffectsOnGame[targetName].push_back(gae);
   }
 }

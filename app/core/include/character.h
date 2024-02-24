@@ -54,7 +54,7 @@ class Character {
 public:
   Character(const QString name, const characType type, const Stats &stats);
 
-  void ProcessCostAndRegen(const QString &atkName);
+    void ProcessCost(const QString &atkName);
   void AddAtq(const AttaqueType &atq);
   void AddStuff(const Stuff &stuff);
   void LoadAtkJson();
@@ -111,6 +111,7 @@ private:
   int GetSignEffectValue(const QString &target) const;
   QChar GetCharEffectValue(const QString &target) const;
   int GetMaxNbOfApplies(const AttaqueType& atk) const;
+  int ProcessBerseckOnRxAtk(const int nbOfApplies);
 };
 
 #endif // CHARACTER_H
