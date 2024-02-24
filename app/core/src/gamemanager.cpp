@@ -52,7 +52,8 @@ QString GameManager::ProcessLogOrderToPlay() const{
   std::for_each(m_GameState->m_OrderToPlay.begin(),
                 m_GameState->m_OrderToPlay.end(),
                 [&logs, &counter](const QString &plName) {
-                  logs += QString("%1 %2\n").arg(counter++).arg(plName);
+                  logs += QString("%1 %2\n").arg(counter).arg(plName);
+                    counter++;
                 });
 
   return logs;
