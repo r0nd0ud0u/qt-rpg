@@ -67,7 +67,7 @@ public:
                          const bool fromLaunch, const AttaqueType &atk) const;
   std::tuple<bool, QStringList, std::vector<effectParam>>
   ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
-                 Character *target); // value1: apply the atk ?, value2 : logs
+                 Character *target); // value1: conditions fulfilled ?, value2 : logs
                                      // after applying effects
   void RemoveMalusEffect(const effectParam &ep);
 
