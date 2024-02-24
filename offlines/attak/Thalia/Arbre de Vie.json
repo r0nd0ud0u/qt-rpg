@@ -19,11 +19,11 @@
         {
             "Cible": "Soi-même",
             "Portée": "Individuel",
-            "Stat": "Mana",
+            "Stat": "Regeneration Mana",
             "Tours actifs": 2,
-            "Type": "Changement par valeur",
+            "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": 15
+            "Value": 100
         }
     ],
     "Niveau": 7,

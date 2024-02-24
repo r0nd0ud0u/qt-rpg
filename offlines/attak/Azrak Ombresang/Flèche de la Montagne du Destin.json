@@ -11,19 +11,19 @@
             "Cible": "Ennemie",
             "Portée": "Individuel",
             "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 60
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "PV",
             "Tours actifs": 4,
             "Type": "",
             "Valeur de l'effet": 0,
-            "Value": 80
-        },
-        {
-            "Cible": "",
-            "Portée": "",
-            "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
-            "Valeur de l'effet": 0,
-            "Value": 0
+            "Value": 20
         },
         {
             "Cible": "",

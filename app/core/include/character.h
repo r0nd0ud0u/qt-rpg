@@ -54,7 +54,7 @@ class Character {
 public:
   Character(const QString name, const characType type, const Stats &stats);
 
-  void ProcessCostAndRegen(const QString &atkName);
+    void ProcessCost(const QString &atkName);
   void AddAtq(const AttaqueType &atq);
   void AddStuff(const Stuff &stuff);
   void LoadAtkJson();
@@ -67,7 +67,7 @@ public:
                          const bool fromLaunch, const AttaqueType &atk) const;
   std::tuple<bool, QStringList, std::vector<effectParam>>
   ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
-                 Character *target); // value1: apply the atk ?, value2 : logs
+                 Character *target); // value1: conditions fulfilled ?, value2 : logs
                                      // after applying effects
   void RemoveMalusEffect(const effectParam &ep);
 
@@ -107,10 +107,12 @@ private:
                                    const QString &atkName) const;
   int ProcessDecreaseOnTurn(const effectParam &ep) const;
   QString ProcessDecreaseByTurn(const effectParam &ep) const;
-  static int DamageByAtk(const Stats& launcherStats, const Stats& targetStats, const bool isMagicAtk, const int atkValue);
+  static int DamageByAtk(const Stats& launcherStats, const Stats& targetStats, const bool isMagicAtk, const int atkValue, const int nbTurns);
   int GetSignEffectValue(const QString &target) const;
   QChar GetCharEffectValue(const QString &target) const;
   int GetMaxNbOfApplies(const AttaqueType& atk) const;
+  int ProcessBerseckOnRxAtk(const int nbOfApplies);
+  std::pair<QString, int> ProcessEffectType(effectParam& effect, Character* target, const AttaqueType &atk) const; // pair1 output log, pair2 nbOfApplies
 };
 
 #endif // CHARACTER_H

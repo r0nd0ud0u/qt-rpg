@@ -30,9 +30,9 @@
             "Portée": "Zone",
             "Stat": "Esquive",
             "Tours actifs": 5,
-            "Type": "Changement par %",
+            "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": -10
+            "Value": -5
         }
     ],
     "Niveau": 6,
