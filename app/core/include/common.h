@@ -159,11 +159,13 @@ public:
   T m_CurrentValue;
   T m_StartingValue;
   T m_MaxValue;
+  T m_RegenOnTurn;
   QString m_Type;
-  void SetValues(T starting, T current, T max) {
+  void SetValues(T starting, T current, T max, T regen) {
     m_CurrentValue = current;
     m_StartingValue = starting;
     m_MaxValue = max;
+    m_RegenOnTurn = regen;
   };
 };
 
