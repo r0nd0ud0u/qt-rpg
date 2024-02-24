@@ -112,6 +112,7 @@ private:
   QChar GetCharEffectValue(const QString &target) const;
   int GetMaxNbOfApplies(const AttaqueType& atk) const;
   int ProcessBerseckOnRxAtk(const int nbOfApplies);
+  std::pair<QString, int> ProcessEffectType(effectParam& effect, Character* target, const AttaqueType &atk) const; // pair1 output log, pair2 nbOfApplies
 };
 
 #endif // CHARACTER_H
