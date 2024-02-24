@@ -401,11 +401,11 @@ void Character::ProcessRemoveEquip(StatsType<T> &charStat,
 /// berseck.
 ///
 bool Character::CanBeLaunched(const AttaqueType &atk) const {
-  const auto mana =
+  const auto& mana =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_MANA));
-  const auto berseck =
+  const auto& berseck =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_BERSECK));
-  const auto vigor =
+  const auto& vigor =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_VIGOR));
 
   // check the impact of an effect on an atk here
