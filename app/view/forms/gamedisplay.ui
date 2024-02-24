@@ -143,7 +143,7 @@
         </widget>
        </item>
        <item>
-        <widget class="StatsView" name="verticalWidget" native="true">
+        <widget class="StatsView" name="stats_character" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
