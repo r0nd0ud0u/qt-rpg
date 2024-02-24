@@ -965,7 +965,7 @@ QString Character::ProcessAggro(const int atkValue, const QString &statsName) {
   const int aggroNorm = 50; // random value at the moment
   auto &aggroStat =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_AGGRO]);
-  const int genAggro = static_cast<int>(std::round(atkValue / aggroNorm));
+  const auto genAggro = static_cast<int>(std::round(atkValue / aggroNorm));
   aggroStat.m_CurrentValue += genAggro;
 
   return QString("L'aggro monte de +%1").arg(genAggro);
