@@ -241,6 +241,15 @@ void ActionsView::ProcessEnableTargetsBoxes() {
           continue;
         }
       }
+      else if (m_CurPlayer->m_type == characType::Boss) {
+          if (m_TargetedList[i].m_IsBoss && m_CurAtk.target == TARGET_ENNEMY) {
+              continue;
+          }
+          if (!m_TargetedList[i].m_IsBoss &&
+              m_CurAtk.target != TARGET_ENNEMY ) {
+              continue;
+          }
+      }
 
       auto *wg = static_cast<QCheckBox *>(
           ui->targets_widget->layout()->itemAt(i)->widget());
