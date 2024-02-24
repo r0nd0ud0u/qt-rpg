@@ -281,9 +281,10 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   }
   // update all effect panel
   emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
-
   // update views of heroes and bosses
   emit SigUpdatePlayerPanel();
+  // update stats view
+  emit SigUpdStatsOnCharacter(nameChara);
 
   // check who is dead!
   const QStringList diedBossList =
