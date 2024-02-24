@@ -545,7 +545,7 @@ void PlayersManager::AddSupAtkTurn(const characType &launcherType,
         std::get<StatsType<int>>(pl1->m_Stats.m_AllStatsTable.at(STATS_SPEED))
             .m_CurrentValue;
     for (const auto &pl2 : playerList2) {
-      auto &speedpl2 =
+      const auto &speedpl2 =
           std::get<StatsType<int>>(pl2->m_Stats.m_AllStatsTable.at(STATS_SPEED))
               .m_CurrentValue;
       if (speedPl1 - speedpl2 >= speedThreshold) {
