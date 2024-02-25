@@ -406,6 +406,9 @@ void Character::ProcessRemoveEquip(StatsType<T> &charStat,
 /// berseck.
 ///
 bool Character::CanBeLaunched(const AttaqueType &atk) const {
+    if(atk.level > m_Level){
+        return false;
+    }
   const auto &mana =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_MANA));
   const auto &berseck =
