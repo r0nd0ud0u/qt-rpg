@@ -1,6 +1,7 @@
 #include "bosspanel.h"
 #include "ui_bosspanel.h"
 
+#include "ApplicationView.h"
 #include "character.h"
 
 BossPanel::BossPanel(QWidget *parent) : QWidget(parent), ui(new Ui::BossPanel) {
@@ -14,6 +15,8 @@ void BossPanel::UpdatePanel(Character *boss) {
     return;
   }
 
+  setStyleSheet(
+      "#frame{color: white;} ");
   m_Boss = boss;
 
   const auto &hp =
@@ -44,4 +47,31 @@ void BossPanel::SetActive(bool activated) {
     setStyleSheet("#verticalWidget { background:     grey;  } "
                   "#verticalWidget QLabel{color: white;}");
   }
+}
+
+void BossPanel::on_edit_button_clicked()
+{
+    auto &appView = ApplicationView::GetInstance();
+    appView.GetCharacterWindow()->InitWindow(actionType::edit);
+    appView.ShowWindow(appView.GetCharacterWindow(), true);
+}
+
+void BossPanel::SetSelected(const bool selected) {
+    QFrame::Shape shape = QFrame::NoFrame;
+    int lineWidth = 0;
+    if (selected) {
+        shape = QFrame::Box;
+        lineWidth = 3;
+        ui->frame->setLineWidth(lineWidth);
+    }
+    ui->frame->setFrameShape(shape);
+
+    // update buttons
+    ui->edit_button->setEnabled(selected);
+}
+
+void BossPanel::mousePressEvent(QMouseEvent *event) {
+    if (event->button() == Qt::LeftButton) {
+        emit SigSelectedCharacterOnPanel(m_Boss->m_Name);
+    }
 }

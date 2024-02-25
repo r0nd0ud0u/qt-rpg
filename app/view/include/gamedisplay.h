@@ -18,7 +18,7 @@ public:
   ~GameDisplay();
   void AddNewCharacter(Character *);
 signals:
-  void selectCharacter(QString);
+  void selectCharacter(const QString&);
   void SigUpdatePlayerPanel();
   void SigBossDead(QString);
   void SigEndOfGame();

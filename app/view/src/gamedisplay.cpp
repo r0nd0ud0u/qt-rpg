@@ -6,6 +6,7 @@
 #include "actionsview.h"
 #include "channel.h"
 #include "heroesview.h"
+#include "bossesview.h"
 
 GameDisplay::GameDisplay(QWidget *parent)
     : QWidget(parent), ui(new Ui::GameDisplay) {
@@ -14,6 +15,8 @@ GameDisplay::GameDisplay(QWidget *parent)
   connect(ui->heroes_widget, &HeroesView::SigAddStuff, this,
           &GameDisplay::UpdateChannel);
   connect(ui->heroes_widget, &HeroesView::SigClickedOnHeroPanel, this,
+          &GameDisplay::UpdateViews);
+  connect(ui->bosses_widget, &BossesView::SigClickedOnPanel, this,
           &GameDisplay::UpdateViews);
   connect(ui->channel_lay, &Channel::SigNextRound, this,
           &GameDisplay::NewRound);
@@ -46,6 +49,12 @@ void GameDisplay::UpdateViews(const QString &name) {
       app.m_GameManager->m_PlayersManager->m_SelectedHero = hero;
       break;
     }
+  }
+  for (auto *boss : app.m_GameManager->m_PlayersManager->m_BossesList) {
+      if (boss->m_Name == name) {
+          app.m_GameManager->m_PlayersManager->m_SelectedHero = boss;
+          break;
+      }
   }
   emit selectCharacter(name);
 }
