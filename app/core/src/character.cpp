@@ -1023,3 +1023,12 @@ void Character::UsePotion(const QString& statsName){
     }
     stat.m_CurrentValue = std::min(stat.m_CurrentValue + boost, stat.m_MaxValue);
 }
+
+void Character::AddExp(const int newXp){
+    m_Exp += newXp;
+
+    while(m_Exp >=m_NextLevel){
+        m_Level +=1;
+        m_NextLevel += m_NextLevel*10/100;
+    }
+}

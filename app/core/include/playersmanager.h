@@ -54,6 +54,7 @@ public:
   QStringList CheckDiedPlayers(const characType& launcherType);
   void AddSupAtkTurn(const characType &launcherType, std::vector<QString>& playerOrderTable)const;
   std::pair<bool, QString> IsDodging(const std::vector<TargetInfo>& targetList); // pair1 isDodging?, pair2 playerName
+  void AddExpForHeroes(const int exp);
 
   std::vector<Character *> m_HeroesList;
   std::vector<Character *> m_BossesList;

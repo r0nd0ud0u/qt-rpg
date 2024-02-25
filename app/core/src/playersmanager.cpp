@@ -580,3 +580,9 @@ std::pair<bool, QString> PlayersManager::IsDodging(const std::vector<TargetInfo>
 
     return std::make_pair(isDodging, plName);
 }
+
+void PlayersManager::AddExpForHeroes(const int exp){
+    for(auto& pl : m_HeroesList){
+        pl->AddExp(exp);
+    }
+}
