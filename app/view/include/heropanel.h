@@ -21,6 +21,7 @@ public:
     void SetActive(const bool activated);
     void SetSelected(const bool selected);
     void mousePressEvent(QMouseEvent *event) override;
+    void SetPixmap(const QString& name);
 
     Character* m_Heroe = nullptr;
 
@@ -31,7 +32,7 @@ private slots:
 
 signals:
     void addStuff();
-    void selectCharacter(QString);
+    void SigPanelSelectCharacter(QString);
 
 private:
     Ui::HeroPanel *ui;
