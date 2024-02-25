@@ -4,9 +4,6 @@
 #include <QColor>
 #include <QWidget>
 
-// for TargetInfo class
-#include "actionsview.h"
-
 #include "playersmanager.h"
 
 namespace Ui {
@@ -31,6 +28,7 @@ signals:
       const std::unordered_map<QString, std::vector<GameAtkEffects>> &);
   void SigUpdStatsOnSelCharacter();
   void SigAddCharacter(Character *);
+  void SigSetFocusOnActivePlayer(const QString&, const characType&);
 
 private:
   Ui::GameDisplay *ui;

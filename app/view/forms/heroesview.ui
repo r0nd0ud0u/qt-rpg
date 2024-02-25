@@ -39,7 +39,7 @@
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents">
+     <widget class="QWidget" name="left_widget">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -48,13 +48,7 @@
         <height>298</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QWidget" name="left_widget" native="true">
-         <layout class="QVBoxLayout" name="verticalLayout"/>
-        </widget>
-       </item>
-      </layout>
+      <layout class="QVBoxLayout" name="verticalLayout_2"/>
      </widget>
     </widget>
    </item>

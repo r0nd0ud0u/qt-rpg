@@ -126,6 +126,8 @@ void GameDisplay::NewRound() {
   // actions views
   ui->attak_page->SetCurrentPlayer(activePlayer);
   ui->inventory_page->SetCurrentPlayer(activePlayer);
+  // set focus on active player
+  emit SigSetFocusOnActivePlayer(activePlayer->m_Name, activePlayer->m_type);
 
   emit SigUpdateChannelView("GameState", QString("Round %1/%2")
                                              .arg(gs->m_CurrentRound)

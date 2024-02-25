@@ -18,6 +18,7 @@ BossesView::BossesView(QWidget *parent)
           &BossesView::RemoveBoss);
   connect((GameDisplay *)parentWidget(), &GameDisplay::SigAddCharacter,
           this, &BossesView::AddBossPanel);
+  connect((GameDisplay*)parentWidget(), &GameDisplay::SigSetFocusOnActivePlayer, this, &BossesView::SetFocusOn);
 }
 
 BossesView::~BossesView() {
@@ -79,4 +80,17 @@ void BossesView::RemoveBoss(QString bossName) {
       lay->removeItem(lay->itemAt(i - 1));
     }
   }
+}
+
+void BossesView::SetFocusOn(const QString& name, const characType& type){
+    if(type != characType::Boss){
+        return;
+    }
+    for(int i = 0; i< ui->main_widget->layout()->count(); i++){
+        auto *wg = static_cast<BossPanel *>(
+            ui->main_widget->layout()->itemAt(i)->widget());
+        if(wg != nullptr && wg->m_Boss->m_Name == name){
+            ui->scrollArea->ensureWidgetVisible(wg);
+        }
+    }
 }
