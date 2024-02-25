@@ -14,6 +14,7 @@ HeroesView::HeroesView(QWidget *parent)
   InitHeroPanel();
   
   connect((GameDisplay*)parentWidget(), &GameDisplay::SigUpdatePlayerPanel, this, &HeroesView::UpdateAllPanels);
+  connect((GameDisplay*)parentWidget(), &GameDisplay::SigSetFocusOnActivePlayer, this, &HeroesView::SetFocusOn);
 }
 
 HeroesView::~HeroesView() {
@@ -79,5 +80,18 @@ void HeroesView::ActivatePanel(const QString& heroName){
 void HeroesView::UpdateAllPanels(){
     for(auto& heroPanel : m_HeroPanels){
         heroPanel->UpdatePanel(heroPanel->m_Heroe);
+    }
+}
+
+void HeroesView::SetFocusOn(const QString& name, const characType& type){
+    if(type != characType::Hero){
+        return;
+    }
+    for(int i = 0; i< ui->left_widget->layout()->count(); i++){
+        auto *wg = static_cast<HeroPanel *>(
+            ui->left_widget->layout()->itemAt(i)->widget());
+        if(wg != nullptr && wg->m_Heroe->m_Name == name){
+            ui->scrollArea->ensureWidgetVisible(wg);
+        }
     }
 }

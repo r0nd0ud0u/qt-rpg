@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <vector>
 
+#include "character.h"
 
 class HeroPanel;
 
@@ -27,6 +28,7 @@ private slots:
     void Dosomething();
     void SlotClickedOnHeroPanel(QString name);
     void UpdateAllPanels();
+    void SetFocusOn(const QString& name, const characType&);
 
 private:
     Ui::HeroesView *ui;
