@@ -81,6 +81,7 @@ public:
       const bool isUp); // TODO à sortir dans un common pour gerer les stats?
   static QString GetInventoryString(const InventoryType &type);
   bool IsDodging() const;
+  void UsePotion(const QString& statsName);
 
   QString m_Name = "default";
   characType m_type = characType::Hero;
