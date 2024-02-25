@@ -1001,3 +1001,25 @@ bool Character::IsDodging() const {
   }
   return isDodging;
 }
+
+void Character::UsePotion(const QString& statsName){
+    if(m_Stats.m_AllStatsTable.count(statsName) == 0){
+        return;
+    }
+    auto &stat =
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(statsName));
+    int boost = 0;
+    if(statsName == STATS_HP){
+        boost = 50;
+    }
+    if(statsName == STATS_BERSECK){
+        boost = 20;
+    }
+    if(statsName == STATS_VIGOR){
+        boost = 50;
+    }
+    if(statsName == STATS_MANA){
+        boost = 50;
+    }
+    stat.m_CurrentValue = std::min(stat.m_CurrentValue + boost, stat.m_MaxValue);
+}
