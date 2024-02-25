@@ -406,6 +406,9 @@ void Character::ProcessRemoveEquip(StatsType<T> &charStat,
 /// berseck.
 ///
 bool Character::CanBeLaunched(const AttaqueType &atk) const {
+    if(atk.level > m_Level){
+        return false;
+    }
   const auto &mana =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_MANA));
   const auto &berseck =
@@ -1022,4 +1025,13 @@ void Character::UsePotion(const QString& statsName){
         boost = 50;
     }
     stat.m_CurrentValue = std::min(stat.m_CurrentValue + boost, stat.m_MaxValue);
+}
+
+void Character::AddExp(const int newXp){
+    m_Exp += newXp;
+
+    while(m_Exp >=m_NextLevel){
+        m_Level +=1;
+        m_NextLevel += m_NextLevel*10/100;
+    }
 }

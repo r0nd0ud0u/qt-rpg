@@ -303,6 +303,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   for (const auto &dp : diedBossList) {
     emit SigUpdateChannelView(dp, "est mort.");
     emit SigBossDead(dp);
+    ui->add_exp_button->setEnabled(true);
   }
   const QStringList diedHeroesList =
       gm->m_PlayersManager->CheckDiedPlayers(characType::Hero);
@@ -368,3 +369,11 @@ void GameDisplay::on_vigor_potion_button_clicked() {
     emit SigUpdatePlayerPanel();
   }
 }
+
+void GameDisplay::on_pushButton_clicked()
+{
+    Application::GetInstance()
+        .m_GameManager->m_PlayersManager->AddExpForHeroes(ui->exp_spinBox->value());
+    ui->add_exp_button->setEnabled(false);
+}
+
