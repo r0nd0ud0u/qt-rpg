@@ -6,7 +6,7 @@
 
 #include "playersmanager.h"
 
-enum class ActionsStackedWgType { attak, inventory, defaultType, enumSize };
+enum class ActionsStackedWgType { attak, defaultType, inventory, enumSize };
 
 namespace Ui {
 class ActionsView;

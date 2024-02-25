@@ -208,9 +208,49 @@
        </item>
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
          <widget class="ActionsView" name="attak_page"/>
          <widget class="QWidget" name="default_page"/>
-         <widget class="ActionsView" name="inventory_page"/>
+         <widget class="QWidget" name="inventory_page">
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <item>
+            <widget class="QPushButton" name="mana_potion_button">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>Potion mana</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="hp_potion_button">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>Potion vie</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="berseck_potion_button">
+             <property name="text">
+              <string>Potion rage</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="vigor_potion_button">
+             <property name="text">
+              <string>Potion vigueur</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
       </layout>

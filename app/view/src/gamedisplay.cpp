@@ -4,9 +4,9 @@
 #include "Application.h"
 #include "ApplicationView.h"
 #include "actionsview.h"
+#include "bossesview.h"
 #include "channel.h"
 #include "heroesview.h"
-#include "bossesview.h"
 
 GameDisplay::GameDisplay(QWidget *parent)
     : QWidget(parent), ui(new Ui::GameDisplay) {
@@ -51,10 +51,10 @@ void GameDisplay::UpdateViews(const QString &name) {
     }
   }
   for (auto *boss : app.m_GameManager->m_PlayersManager->m_BossesList) {
-      if (boss->m_Name == name) {
-          app.m_GameManager->m_PlayersManager->m_SelectedHero = boss;
-          break;
-      }
+    if (boss->m_Name == name) {
+      app.m_GameManager->m_PlayersManager->m_SelectedHero = boss;
+      break;
+    }
   }
   emit selectCharacter(name);
 }
@@ -134,7 +134,6 @@ void GameDisplay::NewRound() {
       static_cast<int>(ActionsStackedWgType::defaultType));
   // actions views
   ui->attak_page->SetCurrentPlayer(activePlayer);
-  ui->inventory_page->SetCurrentPlayer(activePlayer);
   // set focus on active player
   emit SigSetFocusOnActivePlayer(activePlayer->m_Name, activePlayer->m_type);
 
@@ -332,4 +331,40 @@ void GameDisplay::AddNewCharacter(Character *ch) {
   emit SigAddCharacter(ch);
   Application::GetInstance()
       .m_GameManager->m_PlayersManager->m_BossesList.push_back(ch);
+}
+
+void GameDisplay::on_mana_potion_button_clicked() {
+  auto *hero = Application::GetInstance()
+                   .m_GameManager->m_PlayersManager->m_ActivePlayer;
+  if (hero != nullptr) {
+    hero->UsePotion(STATS_MANA);
+    emit SigUpdatePlayerPanel();
+  }
+}
+
+void GameDisplay::on_hp_potion_button_clicked() {
+  auto *hero = Application::GetInstance()
+                   .m_GameManager->m_PlayersManager->m_ActivePlayer;
+  if (hero != nullptr) {
+    hero->UsePotion(STATS_HP);
+    emit SigUpdatePlayerPanel();
+  }
+}
+
+void GameDisplay::on_berseck_potion_button_clicked() {
+  auto *hero = Application::GetInstance()
+                   .m_GameManager->m_PlayersManager->m_ActivePlayer;
+  if (hero != nullptr) {
+    hero->UsePotion(STATS_BERSECK);
+    emit SigUpdatePlayerPanel();
+  }
+}
+
+void GameDisplay::on_vigor_potion_button_clicked() {
+  auto *hero = Application::GetInstance()
+                   .m_GameManager->m_PlayersManager->m_ActivePlayer;
+  if (hero != nullptr) {
+    hero->UsePotion(STATS_VIGOR);
+    emit SigUpdatePlayerPanel();
+  }
 }
