@@ -41,15 +41,6 @@ public:
 
 enum class InventoryType { healthPotion, manaPotion, enumSize };
 
-struct Buf {
-  int m_Value = 0;
-  bool m_IsPercent = false;
-  void SetBuf(const int value, const bool isPercent) {
-    m_Value = value;
-    m_IsPercent = isPercent;
-  }
-};
-
 class Character {
 public:
   Character() = default;

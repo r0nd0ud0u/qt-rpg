@@ -156,6 +156,15 @@ const QString EFFECT_STAT = "Stat";
 const QString EFFECT_ACTIVE_TURNS = "Tours actifs";
 const QString EFFECT_SUB_VALUE = "Valeur de l'effet";
 
+struct Buf {
+    int m_Value = 0;
+    bool m_IsPercent = false;
+    void SetBuf(const int value, const bool isPercent) {
+        m_Value = value;
+        m_IsPercent = isPercent;
+    }
+};
+
 template <class T> class StatsType {
 public:
   StatsType() = default; // Default constructor
@@ -164,12 +173,21 @@ public:
   T m_StartingValue;
   T m_MaxValue;
   T m_RegenOnTurn;
+  T m_BaseEquipValue;
   QString m_Type;
+  T m_BufEffectValue;
+  int m_BufEffectPercent;
+  T m_BufEquipValue;
+  int m_BufEquipPercent;
   void SetValues(T starting, T current, T max, T regen) {
     m_CurrentValue = current;
-    m_StartingValue = starting;
     m_MaxValue = max;
+    m_BufEffectPercent = 0;
+    m_BufEquipPercent = 0;
+
     m_RegenOnTurn = regen;
+    // not processed ?
+    m_StartingValue = starting;
   };
 };
 
