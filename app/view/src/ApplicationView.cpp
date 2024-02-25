@@ -1,6 +1,9 @@
 #include "ApplicationView.h"
 
-ApplicationView::ApplicationView(QObject *parent) : QObject{parent} {}
+#include "gamedisplay.h"
+
+ApplicationView::ApplicationView(QObject *parent) : QObject{parent} {
+}
 
 ApplicationView::~ApplicationView() {
   if (m_main_window.get() != nullptr) {

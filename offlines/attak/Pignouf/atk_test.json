@@ -1,0 +1,38 @@
+{
+    "Aggro": 0,
+    "Cible": "Ennemie",
+    "Coût de mana": 0,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
+    "Durée": 1,
+    "Dégâts": 0,
+    "Effet": [
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 20
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "Armure magique",
+            "Tours actifs": 4,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 20
+        }
+    ],
+    "Niveau": 3,
+    "Nom": "atk_test",
+    "Photo": "Azrak Ombresang.png",
+    "Portée": "Individuel",
+    "Regen mana": 0,
+    "Regen rage": 0,
+    "Regen vigueur": 0,
+    "Soin": 0
+}
+

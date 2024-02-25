@@ -29,6 +29,8 @@ set(SOURCES
         src/editattakview.cpp
         src/effectview.cpp
         src/alleffectpanel.cpp
+        src/editcharacter.cpp
+        src/editstatpanel.cpp
 )
 
 set(HEADERS
@@ -53,6 +55,8 @@ set(HEADERS
         include/editattakview.h
         include/effectview.h
         include/alleffectpanel.h
+        include/editcharacter.h
+        include/editstatpanel.h
 )
 
 set(FORMS
@@ -75,6 +79,8 @@ set(FORMS
         forms/editattakview.ui
         forms/effectview.ui
         forms/alleffectpanel.ui
+        forms/editcharacter.ui
+        forms/editstatpanel.ui
 
     )
 

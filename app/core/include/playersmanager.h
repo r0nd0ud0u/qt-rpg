@@ -16,6 +16,12 @@ struct GameAtkEffects {
   int launchingTurn = 0;
 };
 
+struct TargetInfo{
+    QString m_Name;
+    bool m_IsTargeted = false;
+    bool m_IsBoss = false;
+};
+
 class PlayersManager {
 public:
   PlayersManager() = default;
@@ -47,6 +53,7 @@ public:
   void IncrementCounterEffect();
   QStringList CheckDiedPlayers(const characType& launcherType);
   void AddSupAtkTurn(const characType &launcherType, std::vector<QString>& playerOrderTable)const;
+  std::pair<bool, QString> IsDodging(const std::vector<TargetInfo>& targetList); // pair1 isDodging?, pair2 playerName
 
   std::vector<Character *> m_HeroesList;
   std::vector<Character *> m_BossesList;

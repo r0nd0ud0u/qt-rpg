@@ -72,6 +72,25 @@ void EditAttakView::InitView() {
   ui->apply_button->setEnabled(false);
 }
 
+void EditAttakView::InitDefaultView() {
+
+    // Create model
+    auto *model = new QStringListModel(this);
+    // Make data
+    QStringList List;
+    // Init List and m_AttakList
+    m_AttakList.clear();
+
+    // Populate our model
+    model->setStringList(List);
+
+    // Glue model and view together
+    ui->atk_list_view->setModel(model);
+
+    EnableAllWidgets(false);
+    ui->apply_button->setEnabled(false);
+}
+
 void EditAttakView::on_apply_button_clicked() { Apply(); }
 
 void EditAttakView::Apply() {

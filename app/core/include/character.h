@@ -41,20 +41,21 @@ public:
 
 enum class InventoryType { healthPotion, manaPotion, enumSize };
 
-struct Buf{
-    int m_Value = 0;
-    bool m_IsPercent = false;
-    void SetBuf(const int value, const bool isPercent){
-        m_Value = value;
-        m_IsPercent = isPercent;
-    }
+struct Buf {
+  int m_Value = 0;
+  bool m_IsPercent = false;
+  void SetBuf(const int value, const bool isPercent) {
+    m_Value = value;
+    m_IsPercent = isPercent;
+  }
 };
 
 class Character {
 public:
+  Character() = default;
   Character(const QString name, const characType type, const Stats &stats);
 
-    void ProcessCost(const QString &atkName);
+  void ProcessCost(const QString &atkName);
   void AddAtq(const AttaqueType &atq);
   void AddStuff(const Stuff &stuff);
   void LoadAtkJson();
@@ -64,19 +65,22 @@ public:
 
   // Effect
   QString ApplyOneEffect(Character *target, effectParam &effect,
-                         const bool fromLaunch, const AttaqueType &atk) const;
+                         const bool fromLaunch, const AttaqueType &atk);
   std::tuple<bool, QStringList, std::vector<effectParam>>
   ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
-                 Character *target); // value1: conditions fulfilled ?, value2 : logs
-                                     // after applying effects
+                 Character *target); // value1: conditions fulfilled ?, value2 :
+                                     // logs after applying effects
   void RemoveMalusEffect(const effectParam &ep);
 
   QString RegenIntoDamage(const int atkValue, const QString &statsName) const;
   std::vector<effectParam> CreateEveilDeLaForet(); // template
   void SetBuf(const int value, const bool isPercent);
 
-  static void SetStatsByPercent(StatsType<int>& stat, const int value, const bool isUp); // TODO à sortir dans un common pour gerer les stats?
+  static void SetStatsByPercent(
+      StatsType<int> &stat, const int value,
+      const bool isUp); // TODO à sortir dans un common pour gerer les stats?
   static QString GetInventoryString(const InventoryType &type);
+  bool IsDodging() const;
 
   QString m_Name = "default";
   characType m_type = characType::Hero;
@@ -107,12 +111,18 @@ private:
                                    const QString &atkName) const;
   int ProcessDecreaseOnTurn(const effectParam &ep) const;
   QString ProcessDecreaseByTurn(const effectParam &ep) const;
-  static int DamageByAtk(const Stats& launcherStats, const Stats& targetStats, const bool isMagicAtk, const int atkValue, const int nbTurns);
+  static int DamageByAtk(const Stats &launcherStats, const Stats &targetStats,
+                         const bool isMagicAtk, const int atkValue,
+                         const int nbTurns);
   int GetSignEffectValue(const QString &target) const;
   QChar GetCharEffectValue(const QString &target) const;
-  int GetMaxNbOfApplies(const AttaqueType& atk) const;
+  int GetMaxNbOfApplies(const AttaqueType &atk) const;
   int ProcessBerseckOnRxAtk(const int nbOfApplies);
-  std::pair<QString, int> ProcessEffectType(effectParam& effect, Character* target, const AttaqueType &atk) const; // pair1 output log, pair2 nbOfApplies
+  std::pair<QString, int> ProcessEffectType(
+      effectParam &effect, Character *target,
+      const AttaqueType &atk) const; // pair1 output log, pair2 nbOfApplies
+  QString ProcessAggro(const int atkValue, const QString &statsName);
+  int ProcessCriticalStrike(const int atkValue) const;
 };
 
 #endif // CHARACTER_H

@@ -18,12 +18,15 @@ public:
 private:
   Ui::StatsView *ui;
 
+  QString m_CurPlayerName;
+
   void InitView();
-  QAbstractItemModel *createStatsModel(QObject *parent, QString playerName);
+  QAbstractItemModel *createStatsModel(QObject *parent);
   void addStatRow(QAbstractItemModel *model, const QString &statsName,
                   const QVariant &value) const;
 private slots:
-  void UpdateStats(QString name);
+  void UpdateStats();
+  void UpdateDisplayedCharStats();
 };
 
 #endif // STATSVIEW_H

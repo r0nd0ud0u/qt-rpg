@@ -2,6 +2,7 @@
 #include "ui_gamedisplay.h"
 
 #include "Application.h"
+#include "ApplicationView.h"
 #include "actionsview.h"
 #include "channel.h"
 #include "heroesview.h"
@@ -207,6 +208,17 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   emit SigUpdateChannelView(nameChara, QString("lance %1.").arg(atkName),
                             activatedPlayer->color);
 
+  // is Dodging
+  if (currentAtk.target == TARGET_ENNEMY &&
+      currentAtk.reach == REACH_INDIVIDUAL) {
+    const auto &[isDodging, plName] =
+        gm->m_PlayersManager->IsDodging(targetList);
+    if (isDodging) {
+      emit SigUpdateChannelView(plName, QString("esquive."));
+      return;
+    }
+  }
+
   // new effects on that turn
   std::unordered_map<QString, std::vector<effectParam>> newEffects;
   // Parse target list and apply atk and effects
@@ -214,6 +226,16 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     QString channelLog;
     auto *targetChara = gm->m_PlayersManager->GetCharacterByName(target.m_Name);
     if (targetChara != nullptr) {
+      // is dodging
+      if (currentAtk.target == TARGET_ENNEMY &&
+          currentAtk.reach == REACH_ZONE) {
+        const auto &[isDodging, plName] =
+            gm->m_PlayersManager->IsDodging(targetList);
+        if (isDodging) {
+          emit SigUpdateChannelView(plName, QString("esquive."));
+          continue;
+        }
+      }
       // EFFECT
       const auto &[conditionsOk, resultEffects, appliedEffects] =
           activatedPlayer->ApplyAtkEffect(target.m_IsTargeted, currentAtk,
@@ -260,15 +282,17 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   }
   // update all effect panel
   emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
-
   // update views of heroes and bosses
   emit SigUpdatePlayerPanel();
+  // update stats view
+  emit SigUpdStatsOnSelCharacter();
 
   // check who is dead!
   const QStringList diedBossList =
       gm->m_PlayersManager->CheckDiedPlayers(characType::Boss);
   for (const auto &dp : diedBossList) {
     emit SigUpdateChannelView(dp, "est mort.");
+    emit SigBossDead(dp);
   }
   const QStringList diedHeroesList =
       gm->m_PlayersManager->CheckDiedPlayers(characType::Hero);
@@ -285,4 +309,16 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
     EndOfGame();
   }
+}
+
+void GameDisplay::on_add_boss_button_clicked() {
+  auto &appView = ApplicationView::GetInstance();
+  appView.GetCharacterWindow()->InitWindow(actionType::newCharacter);
+  appView.ShowWindow(appView.GetCharacterWindow(), true);
+}
+
+void GameDisplay::AddNewCharacter(Character *ch) {
+  emit SigAddCharacter(ch);
+  Application::GetInstance()
+      .m_GameManager->m_PlayersManager->m_BossesList.push_back(ch);
 }
