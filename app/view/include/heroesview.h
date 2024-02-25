@@ -28,7 +28,7 @@ private slots:
   void SlotClickedOnHeroPanel(const QString &name);
   void UpdateAllPanels();
   void SetFocusOn(const QString &name, const characType &);
-  void UpdateSelected(const QString &name);
+  void UpdateSelected(const QString &name) const;
 
 private:
   Ui::HeroesView *ui;
