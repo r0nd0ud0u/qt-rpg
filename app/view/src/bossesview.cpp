@@ -105,7 +105,7 @@ void BossesView::SlotClickedOnPanel(const QString& name){
     emit SigClickedOnPanel(name);
 }
 
-void BossesView::UpdateSelected(const QString& name){
+void BossesView::UpdateSelected(const QString& name) const{
     for (auto* panel : m_BossPanels) {
         if(panel == nullptr){
             continue;

@@ -67,7 +67,7 @@ void HeroesView::SlotClickedOnHeroPanel(const QString &name) {
   emit SigClickedOnHeroPanel(name);
 }
 
-void HeroesView::UpdateSelected(const QString &name) {
+void HeroesView::UpdateSelected(const QString &name)  const{
   for (auto *hero : m_HeroPanels) {
     if (hero == nullptr) {
       continue;
