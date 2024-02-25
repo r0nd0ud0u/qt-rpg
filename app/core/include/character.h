@@ -82,6 +82,7 @@ public:
   static QString GetInventoryString(const InventoryType &type);
   bool IsDodging() const;
   void UsePotion(const QString& statsName);
+  void AddExp(const int newXp);
 
   QString m_Name = "default";
   characType m_type = characType::Hero;
@@ -92,7 +93,9 @@ public:
       m_AttakList; // key: attak name, value: AttakType struct
   std::vector<uint8_t> m_Inventory;
   int m_Level = 1;
-  int m_Exp = 0;
+  int m_Exp = 2000;
+  int m_NextLevel = 2200;
+
   QColor color = QColor("dark");
   // Buf
   Buf m_BufDamage;
