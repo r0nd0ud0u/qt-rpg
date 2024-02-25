@@ -183,8 +183,8 @@
      <item>
       <layout class="QHBoxLayout" name="atk_heal_lay">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
+        <layout class="QFormLayout" name="formLayout">
+         <item row="0" column="0">
           <widget class="QPushButton" name="attaque_button">
            <property name="enabled">
             <bool>false</bool>
@@ -194,13 +194,33 @@
            </property>
           </widget>
          </item>
-         <item>
+         <item row="1" column="0">
           <widget class="QPushButton" name="bag_button">
            <property name="enabled">
             <bool>false</bool>
            </property>
            <property name="text">
             <string>Sac</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QSpinBox" name="exp_spinBox"/>
+         </item>
+         <item row="6" column="1">
+          <widget class="QPushButton" name="add_exp_button">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Add Exp</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>EXP</string>
            </property>
           </widget>
          </item>
