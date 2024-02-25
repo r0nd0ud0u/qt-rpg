@@ -18,7 +18,7 @@ public:
     explicit EditCharacter(QWidget *parent = nullptr);
     ~EditCharacter();
     void InitEditCharacter();
-    void AddCharacter(Character* ch);
+    void AddCharacter(Character* ch) const;
 
 private:
     Ui::EditCharacter *ui;

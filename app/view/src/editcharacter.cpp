@@ -35,7 +35,7 @@ void EditCharacter::InitEditCharacter() {
     }
 }
 
-void EditCharacter::AddCharacter(Character* ch){
+void EditCharacter::AddCharacter(Character* ch) const{
     if(ch == nullptr){
         return;
     }
