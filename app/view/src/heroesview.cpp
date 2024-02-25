@@ -35,6 +35,7 @@ void HeroesView::InitHeroPanel() {
         continue;
       }
       auto *heroPanel = new HeroPanel();
+      heroPanel->SetPixmap(it->m_Name);
       heroPanel->UpdatePanel(it);
       ui->left_widget->layout()->addWidget(heroPanel);
       m_HeroPanels.push_back(heroPanel);

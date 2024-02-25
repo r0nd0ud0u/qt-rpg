@@ -21,6 +21,7 @@ public:
     void SetActive(const bool activated);
     void SetSelected(const bool selected);
     void mousePressEvent(QMouseEvent *event) override;
+    void SetPixmap(const QString& name);
 
     Character* m_Heroe = nullptr;
 

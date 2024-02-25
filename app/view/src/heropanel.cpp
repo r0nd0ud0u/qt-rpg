@@ -140,3 +140,9 @@ void HeroPanel::on_edit_button_clicked() const {
   appView.GetCharacterWindow()->InitWindow(actionType::edit);
   appView.ShowWindow(appView.GetCharacterWindow(), true);
 }
+
+void HeroPanel::SetPixmap(const QString& name){
+    // Update image character
+    // Resize the photo
+    ui->img_character->SetPixmap(name, 200);
+}
