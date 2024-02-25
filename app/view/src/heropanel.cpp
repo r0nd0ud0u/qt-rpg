@@ -54,7 +54,7 @@ void HeroPanel::UpdatePanel(Character *hero) {
 
   // vigor
   ui->vigor_bar->setFormat(QString::number(vigor.m_CurrentValue) + "/" +
-                               QString::number(vigor.m_MaxValue) + " %p%");
+                           QString::number(vigor.m_MaxValue) + " %p%");
   int vigorValue = 0;
   if (vigor.m_MaxValue > 0) {
     vigorValue = 100 * vigor.m_CurrentValue / vigor.m_MaxValue;
@@ -137,6 +137,6 @@ void HeroPanel::mousePressEvent(QMouseEvent *event) {
 
 void HeroPanel::on_edit_button_clicked() const {
   auto &appView = ApplicationView::GetInstance();
-  appView.GetCharacterWindow()->InitWindow();
+  appView.GetCharacterWindow()->InitWindow(actionType::edit);
   appView.ShowWindow(appView.GetCharacterWindow(), true);
 }

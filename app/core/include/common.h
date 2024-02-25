@@ -4,6 +4,7 @@
 #include <qobject.h>
 #include <unordered_map>
 #include <unordered_set>
+#include <set>
 #include <variant>
 
 const QString OFFLINE_IMG = "./offlines/attak/img/";
@@ -32,7 +33,7 @@ const QString ATK_REGEN_BERSECK = "Regen rage";
 // Reach keys
 const QString REACH_ZONE = "Zone";
 const QString REACH_INDIVIDUAL = "Individuel";
-const std::unordered_set<QString> ALL_REACH = {"", REACH_ZONE,
+const std::set<QString> ALL_REACH = {"", REACH_ZONE,
                                                REACH_INDIVIDUAL};
 // Target keys
 const QString TARGET_ENNEMY = "Ennemie";
@@ -40,13 +41,13 @@ const QString TARGET_ALLY = "Allié";
 const QString TARGET_ONLY_ALLY = "Seulement les alliés";
 const QString TARGET_ALL_HEROES = "Tous les heroes";
 const QString TARGET_HIMSELF = "Soi-même";
-const std::unordered_set<QString> ALL_TARGETS = {"",
+const std::set<QString> ALL_TARGETS = {"",
                                                  TARGET_ENNEMY,
                                                  TARGET_ALLY,
                                                  TARGET_ALL_HEROES,
                                                  TARGET_HIMSELF,
                                                  TARGET_ONLY_ALLY};
-const std::unordered_set<QString> ALLIES_TARGETS = {
+const std::set<QString> ALLIES_TARGETS = {
     TARGET_ALLY, TARGET_ALL_HEROES, TARGET_HIMSELF, TARGET_ONLY_ALLY};
 // Stats keys
 const QString STATS_HP = "PV";
@@ -67,7 +68,7 @@ const QString STATS_REGEN_VIGOR = "Regeneration vigueur";
 const QString STATS_RATE_BERSECK = "Taux rage";
 const QString STATS_RATE_AGGRO = "Taux aggro";
 
-const std::unordered_set<QString> ALL_STATS = {"",
+const std::set<QString> ALL_STATS = {"",
                                                STATS_HP,
                                                STATS_MANA,
                                                STATS_VIGOR,
@@ -85,7 +86,7 @@ const std::unordered_set<QString> ALL_STATS = {"",
                                                STATS_REGEN_VIGOR,
                                                STATS_RATE_BERSECK,
                                                STATS_RATE_AGGRO};
-const std::unordered_set<QString> ON_PERCENT_STATS = {STATS_MANA, STATS_VIGOR};
+const std::set<QString> ON_PERCENT_STATS = {STATS_MANA, STATS_VIGOR};
 // equipment keys
 const QString EQUIP_HEAD = "Tete";
 const QString EQUIP_NECKLACE = "Collier";
@@ -117,7 +118,7 @@ const QString EFFECT_BOOSTED_BY_HOTS =
 const QString EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT = "Up/down degats en %";
 const QString EFFECT_REPEAT_AS_MANY_AS = "Répète tant que possible";
 const QString CONDITION_ENNEMIES_DIED = "Ennemis morts tours précédents";
-const std::unordered_set<QString> EFFECTS{"",
+const std::set<QString> EFFECTS{"",
                                           EFFECT_REINIT,
                                           EFFECT_NB_COOL_DOWN,
                                           EFFECT_NB_DECREASE_ON_TURN,
@@ -132,7 +133,7 @@ const std::unordered_set<QString> EFFECTS{"",
                                           EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT,
                                           EFFECT_REPEAT_AS_MANY_AS,
                                           CONDITION_ENNEMIES_DIED};
-const std::unordered_set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
+const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_NB_DECREASE_BY_TURN,
     EFFECT_NB_COOL_DOWN,
     EFFECT_NB_DECREASE_ON_TURN,

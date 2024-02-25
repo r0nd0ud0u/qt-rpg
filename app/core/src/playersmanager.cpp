@@ -514,7 +514,7 @@ QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
         }
         const auto &hp =
             std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable.at(STATS_HP));
-        return hp.m_CurrentValue == 0; // remove elements where this is true
+        return hp.m_CurrentValue <= 0; // remove elements where this is true
       });
 
   std::for_each(newEnd, playerList.end(), [&output](const Character *pl) {

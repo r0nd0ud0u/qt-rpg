@@ -2,6 +2,7 @@
 #include "ui_gamedisplay.h"
 
 #include "Application.h"
+#include "ApplicationView.h"
 #include "actionsview.h"
 #include "channel.h"
 #include "heroesview.h"
@@ -22,6 +23,10 @@ GameDisplay::GameDisplay(QWidget *parent)
           &GameDisplay::EndOfTurn);
   connect(ui->attak_page, &ActionsView::SigLaunchAttak, this,
           &GameDisplay::LaunchAttak);
+
+  // connect((MainWindow*)parentWidget(),
+  //         &MainWindow::SigNewCharacter, this,
+  //         &GameDisplay::AddNewCharacter);
 
   // init display default page
   ui->stackedWidget->setCurrentIndex(
@@ -214,7 +219,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
         gm->m_PlayersManager->IsDodging(targetList);
     if (isDodging) {
       emit SigUpdateChannelView(plName, QString("esquive."));
-        return;
+      return;
     }
   }
 
@@ -291,6 +296,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       gm->m_PlayersManager->CheckDiedPlayers(characType::Boss);
   for (const auto &dp : diedBossList) {
     emit SigUpdateChannelView(dp, "est mort.");
+    emit SigBossDead(dp);
   }
   const QStringList diedHeroesList =
       gm->m_PlayersManager->CheckDiedPlayers(characType::Hero);
@@ -307,4 +313,16 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
     EndOfGame();
   }
+}
+
+void GameDisplay::on_add_boss_button_clicked() {
+  auto &appView = ApplicationView::GetInstance();
+  appView.GetCharacterWindow()->InitWindow(actionType::newCharacter);
+  appView.ShowWindow(appView.GetCharacterWindow(), true);
+}
+
+void GameDisplay::AddNewCharacter(Character *ch) {
+  emit SigAddCharacter(ch);
+  Application::GetInstance()
+      .m_GameManager->m_PlayersManager->m_BossesList.push_back(ch);
 }

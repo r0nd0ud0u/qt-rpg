@@ -3,21 +3,13 @@
 
 #include "character.h"
 
-BossPanel::BossPanel(QWidget* parent)
-  : QWidget(parent)
-  , ui(new Ui::BossPanel)
-{
+BossPanel::BossPanel(QWidget *parent) : QWidget(parent), ui(new Ui::BossPanel) {
   ui->setupUi(this);
 }
 
-BossPanel::~BossPanel()
-{
-  delete ui;
-}
+BossPanel::~BossPanel() { delete ui; }
 
-void
-BossPanel::UpdatePanel(Character* boss)
-{
+void BossPanel::UpdatePanel(Character *boss) {
   if (boss == nullptr) {
     return;
   }
@@ -43,9 +35,7 @@ BossPanel::UpdatePanel(Character* boss)
       "border-bottom-left-radius: 10px;}");
 }
 
-void
-BossPanel::SetActive(bool activated)
-{
+void BossPanel::SetActive(bool activated) {
   if (activated) {
     setStyleSheet("#verticalWidget { background:     #40b1fe;  } "
                   "#verticalWidget QLabel{color: white;}");

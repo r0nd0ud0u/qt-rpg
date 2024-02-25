@@ -52,6 +52,7 @@ struct Buf {
 
 class Character {
 public:
+  Character() = default;
   Character(const QString name, const characType type, const Stats &stats);
 
   void ProcessCost(const QString &atkName);
