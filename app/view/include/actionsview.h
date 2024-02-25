@@ -4,15 +4,9 @@
 #include <QAbstractItemModel>
 #include <QWidget>
 
-#include "character.h"
+#include "playersmanager.h"
 
 enum class ActionsStackedWgType { attak, inventory, defaultType, enumSize };
-
-struct TargetInfo{
-    QString m_Name;
-    bool m_IsTargeted = false;
-    bool m_IsBoss = false;
-};
 
 namespace Ui {
 class ActionsView;

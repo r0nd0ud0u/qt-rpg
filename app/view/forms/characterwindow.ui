@@ -18,8 +18,13 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
+      <widget class="EditCharacter" name="character_def">
+       <attribute name="title">
+        <string>Perso</string>
+       </attribute>
+      </widget>
       <widget class="EditAttakView" name="edit_atk_tab">
        <attribute name="title">
         <string>Attaque</string>
@@ -58,6 +63,12 @@
    <class>EditAttakView</class>
    <extends>QWidget</extends>
    <header location="global">editattakview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>EditCharacter</class>
+   <extends>QWidget</extends>
+   <header location="global">editcharacter.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

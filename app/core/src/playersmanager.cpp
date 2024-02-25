@@ -143,6 +143,8 @@ void PlayersManager::InitBosses() {
       .SetValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
       .SetValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
+      .SetValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
       .SetValues(105, 105, 105, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
@@ -167,9 +169,15 @@ void PlayersManager::InitBosses() {
       .SetValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
       .SetValues(0, 0, 0, 0);
-  const auto boss = new Character("Pignouf", characType::Boss, stats);
+  const auto boss1 = new Character("Pignouf", characType::Boss, stats);
+  boss1->color = QColor("red");
+  m_BossesList.push_back(boss1);
 
-  m_BossesList.push_back(boss);
+  for (const auto &boss : m_BossesList) {
+      boss->LoadAtkJson();
+      boss->LoadStuffJson();
+      boss->ApplyEquipOnStats(m_Equipments);
+  }
 }
 
 void PlayersManager::LoadAllEquipmentsJson() {
@@ -506,7 +514,7 @@ QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
         }
         const auto &hp =
             std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable.at(STATS_HP));
-        return hp.m_CurrentValue == 0; // remove elements where this is true
+        return hp.m_CurrentValue <= 0; // remove elements where this is true
       });
 
   std::for_each(newEnd, playerList.end(), [&output](const Character *pl) {
@@ -555,4 +563,20 @@ void PlayersManager::AddSupAtkTurn(const characType &launcherType,
       }
     }
   }
+}
+
+std::pair<bool, QString> PlayersManager::IsDodging(const std::vector<TargetInfo>& targetList){
+    QString plName;
+    const bool isDodging = std::any_of(
+        targetList.begin(), targetList.end(), [this, &plName](const TargetInfo &ti) {
+            if (ti.m_IsTargeted) {
+                const auto *targetChara =
+                    this->GetCharacterByName(ti.m_Name);
+                plName = ti.m_Name;
+                return targetChara->IsDodging();
+            }
+            return false;
+        });
+
+    return std::make_pair(isDodging, plName);
 }
