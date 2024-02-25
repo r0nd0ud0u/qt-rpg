@@ -24,10 +24,6 @@ GameDisplay::GameDisplay(QWidget *parent)
   connect(ui->attak_page, &ActionsView::SigLaunchAttak, this,
           &GameDisplay::LaunchAttak);
 
-  // connect((MainWindow*)parentWidget(),
-  //         &MainWindow::SigNewCharacter, this,
-  //         &GameDisplay::AddNewCharacter);
-
   // init display default page
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(ActionsStackedWgType::defaultType));

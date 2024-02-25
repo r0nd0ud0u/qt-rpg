@@ -48,7 +48,6 @@ private slots:
   void NewRound();
   void LaunchAttak(const QString &atkName, const std::vector<TargetInfo> &);
   void on_add_boss_button_clicked();
-  // void AddNewCharacter(Character*);
 };
 
 #endif // GAMEDISPLAY_H
