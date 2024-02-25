@@ -125,13 +125,13 @@ void HeroPanel::SetSelected(const bool selected) {
 
   // update buttons
   ui->edit_button->setEnabled(selected);
-  ui->talent_tree_button->setEnabled(selected);
+  ui->talent_tree_button->setEnabled(false); // TODO arbre des talents not coded yet
   ui->stuff_button->setEnabled(selected);
 }
 
 void HeroPanel::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
-    emit selectCharacter(m_Heroe->m_Name);
+    emit SigPanelSelectCharacter(m_Heroe->m_Name);
   }
 }
 

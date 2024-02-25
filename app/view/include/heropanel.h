@@ -32,7 +32,7 @@ private slots:
 
 signals:
     void addStuff();
-    void selectCharacter(QString);
+    void SigPanelSelectCharacter(QString);
 
 private:
     Ui::HeroPanel *ui;

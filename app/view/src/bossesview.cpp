@@ -9,7 +9,7 @@ BossesView::BossesView(QWidget *parent)
     : QWidget(parent), ui(new Ui::BossesView) {
   ui->setupUi(this);
   setStyleSheet(
-      "#main_widget{ background:     #000000;} QLabel{color: white;} ");
+      "#main_widget{ background:     #000000;} QLabel{color: white;}");
   InitBossPanels();
 
   connect((GameDisplay *)parentWidget(), &GameDisplay::SigUpdatePlayerPanel,
@@ -19,6 +19,7 @@ BossesView::BossesView(QWidget *parent)
   connect((GameDisplay *)parentWidget(), &GameDisplay::SigAddCharacter,
           this, &BossesView::AddBossPanel);
   connect((GameDisplay*)parentWidget(), &GameDisplay::SigSetFocusOnActivePlayer, this, &BossesView::SetFocusOn);
+  connect((GameDisplay*)parentWidget(), &GameDisplay::selectCharacter, this, &BossesView::UpdateSelected);
 }
 
 BossesView::~BossesView() {
@@ -50,6 +51,9 @@ void BossesView::AddBossPanel(Character *ch) {
   ui->main_widget->layout()->addWidget(bossPanel);
   m_BossPanels.push_back(bossPanel);
   bossPanel->SetActive(false);
+  bossPanel->SetSelected(false);
+  connect(bossPanel, &BossPanel::SigSelectedCharacterOnPanel, this,
+          &BossesView::SlotClickedOnPanel);
 }
 
 void BossesView::ActivatePanel(const QString &bossName) {
@@ -91,6 +95,25 @@ void BossesView::SetFocusOn(const QString& name, const characType& type){
             ui->main_widget->layout()->itemAt(i)->widget());
         if(wg != nullptr && wg->m_Boss->m_Name == name){
             ui->scrollArea->ensureWidgetVisible(wg);
+        }
+    }
+}
+
+void BossesView::SlotClickedOnPanel(const QString& name){
+    UpdateSelected(name);
+
+    emit SigClickedOnPanel(name);
+}
+
+void BossesView::UpdateSelected(const QString& name){
+    for (auto* panel : m_BossPanels) {
+        if(panel == nullptr){
+            continue;
+        }
+        if (panel->m_Boss->m_Name == name) {
+            panel->SetSelected(true);
+        } else {
+            panel->SetSelected(false);
         }
     }
 }
