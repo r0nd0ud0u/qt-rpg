@@ -26,6 +26,7 @@ public:
   void InitView();
   void Save();
   void InitComboBoxes();
+  void InitDefaultView();
 
 private slots:
   void on_apply_button_clicked();

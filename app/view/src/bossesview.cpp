@@ -12,10 +12,12 @@ BossesView::BossesView(QWidget *parent)
       "#main_widget{ background:     #000000;} QLabel{color: white;} ");
   InitBossPanels();
 
-  connect((GameDisplay *)parentWidget(), &GameDisplay::SigUpdatePlayerPanel, this,
-          &BossesView::UpdateAllPanels);
+  connect((GameDisplay *)parentWidget(), &GameDisplay::SigUpdatePlayerPanel,
+          this, &BossesView::UpdateAllPanels);
   connect((GameDisplay *)parentWidget(), &GameDisplay::SigBossDead, this,
           &BossesView::RemoveBoss);
+  connect((GameDisplay *)parentWidget(), &GameDisplay::SigAddCharacter,
+          this, &BossesView::AddBossPanel);
 }
 
 BossesView::~BossesView() {
@@ -33,16 +35,20 @@ void BossesView::InitBossPanels() {
   if (app.m_GameManager != nullptr &&
       app.m_GameManager->m_PlayersManager != nullptr) {
     for (const auto &it : app.m_GameManager->m_PlayersManager->m_BossesList) {
-      if (it == nullptr) {
-        continue;
-      }
-      auto *bossPanel = new BossPanel();
-      bossPanel->UpdatePanel(it);
-      ui->main_widget->layout()->addWidget(bossPanel);
-      m_BossPanels.push_back(bossPanel);
-      bossPanel->SetActive(false);
+      AddBossPanel(it);
     }
   }
+}
+
+void BossesView::AddBossPanel(Character *ch) {
+  if (ch == nullptr) {
+    return;
+  }
+  auto *bossPanel = new BossPanel();
+  bossPanel->UpdatePanel(ch);
+  ui->main_widget->layout()->addWidget(bossPanel);
+  m_BossPanels.push_back(bossPanel);
+  bossPanel->SetActive(false);
 }
 
 void BossesView::ActivatePanel(const QString &bossName) {
