@@ -18,6 +18,10 @@ Character::Character(const QString name, const characType type,
                      const Stats &stats)
     : m_Name(name), m_type(type), m_Stats(stats) {
   m_Inventory.resize(static_cast<int>(InventoryType::enumSize));
+  // init equip
+  for (const auto& e : ALL_EQUIP) {
+    m_WearingEquipment[e] = "";
+  }
 }
 
 int Character::DamageByAtk(const Stats &launcherStats, const Stats &targetStats,
@@ -273,6 +277,7 @@ void Character::LoadAtkJson() {
 }
 
 void Character::LoadStuffJson() {
+
   QString directoryPath =
       OFFLINE_WEARING_EQUIPMENT; // Replace with the actual path
   if (QDir directory(directoryPath); !directory.exists()) {
@@ -505,7 +510,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   result += RegenIntoDamage(amount, effect.statsName);
   // Process aggro
   if (fromLaunch) {
-      result += ProcessAggro(amount, effect.statsName);
+    result += ProcessAggro(amount, effect.statsName);
   }
 
   return result;
@@ -971,28 +976,28 @@ QString Character::ProcessAggro(const int atkValue, const QString &statsName) {
   return QString("L'aggro monte de +%1").arg(genAggro);
 }
 
-int Character::ProcessCriticalStrike(const int atkValue) const{
-    int critAmount = atkValue;
-    if(atkValue > 0){
-        // this is a heal not an atk
-        return critAmount;
-    }
-    const auto &critStat =
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_CRIT));
-    if (const auto randNb = Utils::GetRandomNb(0, 100);
-        randNb >= 0 && randNb < critStat.m_CurrentValue) {
-        critAmount = atkValue*2;
-    }
+int Character::ProcessCriticalStrike(const int atkValue) const {
+  int critAmount = atkValue;
+  if (atkValue > 0) {
+    // this is a heal not an atk
     return critAmount;
+  }
+  const auto &critStat =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_CRIT));
+  if (const auto randNb = Utils::GetRandomNb(0, 100);
+      randNb >= 0 && randNb < critStat.m_CurrentValue) {
+    critAmount = atkValue * 2;
+  }
+  return critAmount;
 }
 
-bool Character::IsDodging() const{
-    bool isDodging = false;
-    const auto &stat =
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_DODGE));
-    if (const auto randNb = Utils::GetRandomNb(0, 100);
-        randNb >= 0 && randNb < stat.m_CurrentValue) {
-        isDodging = true;
-    }
-    return isDodging;
+bool Character::IsDodging() const {
+  bool isDodging = false;
+  const auto &stat =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_DODGE));
+  if (const auto randNb = Utils::GetRandomNb(0, 100);
+      randNb >= 0 && randNb < stat.m_CurrentValue) {
+    isDodging = true;
+  }
+  return isDodging;
 }

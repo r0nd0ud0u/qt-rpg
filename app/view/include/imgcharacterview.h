@@ -15,6 +15,8 @@ public:
     explicit ImgCharacterView(QWidget *parent = nullptr);
     ~ImgCharacterView();
 
+    void SetPixmap(const QString& name, const int scalingHeight);
+
 
 private:
     Ui::ImgCharacterView *ui;

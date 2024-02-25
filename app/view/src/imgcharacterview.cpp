@@ -27,8 +27,14 @@ void ImgCharacterView::UpdateView(QString name) {
     return;
   }
 
-  // Update image character
-  auto qp = QPixmap(OFFLINE_IMG + name + ".png");
-  ui->img_label->setPixmap(qp);
-  ui->img_label->setScaledContents(true);
+  SetPixmap(name, 300);
+
+}
+
+void ImgCharacterView::SetPixmap(const QString& name, const int scalingHeight){
+    // Update image character
+    auto qp = QPixmap(OFFLINE_IMG + name + ".png");
+    QPixmap scaledPixmap = qp.scaledToHeight(scalingHeight); // Set the desired width and height
+    ui->img_label->setPixmap(scaledPixmap);
+    ui->img_label->setScaledContents(true);
 }

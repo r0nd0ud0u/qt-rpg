@@ -2,9 +2,8 @@
 #define COMMON_H
 
 #include <qobject.h>
-#include <unordered_map>
-#include <unordered_set>
 #include <set>
+#include <unordered_map>
 #include <variant>
 
 const QString OFFLINE_IMG = "./offlines/attak/img/";
@@ -33,8 +32,7 @@ const QString ATK_REGEN_BERSECK = "Regen rage";
 // Reach keys
 const QString REACH_ZONE = "Zone";
 const QString REACH_INDIVIDUAL = "Individuel";
-const std::set<QString> ALL_REACH = {"", REACH_ZONE,
-                                               REACH_INDIVIDUAL};
+const std::set<QString> ALL_REACH = {"", REACH_ZONE, REACH_INDIVIDUAL};
 // Target keys
 const QString TARGET_ENNEMY = "Ennemie";
 const QString TARGET_ALLY = "Allié";
@@ -42,13 +40,13 @@ const QString TARGET_ONLY_ALLY = "Seulement les alliés";
 const QString TARGET_ALL_HEROES = "Tous les heroes";
 const QString TARGET_HIMSELF = "Soi-même";
 const std::set<QString> ALL_TARGETS = {"",
-                                                 TARGET_ENNEMY,
-                                                 TARGET_ALLY,
-                                                 TARGET_ALL_HEROES,
-                                                 TARGET_HIMSELF,
-                                                 TARGET_ONLY_ALLY};
-const std::set<QString> ALLIES_TARGETS = {
-    TARGET_ALLY, TARGET_ALL_HEROES, TARGET_HIMSELF, TARGET_ONLY_ALLY};
+                                       TARGET_ENNEMY,
+                                       TARGET_ALLY,
+                                       TARGET_ALL_HEROES,
+                                       TARGET_HIMSELF,
+                                       TARGET_ONLY_ALLY};
+const std::set<QString> ALLIES_TARGETS = {TARGET_ALLY, TARGET_ALL_HEROES,
+                                          TARGET_HIMSELF, TARGET_ONLY_ALLY};
 // Stats keys
 const QString STATS_HP = "PV";
 const QString STATS_MANA = "Mana";
@@ -69,23 +67,23 @@ const QString STATS_RATE_BERSECK = "Taux rage";
 const QString STATS_RATE_AGGRO = "Taux aggro";
 
 const std::set<QString> ALL_STATS = {"",
-                                               STATS_HP,
-                                               STATS_MANA,
-                                               STATS_VIGOR,
-                                               STATS_BERSECK,
-                                               STATS_ARM_PHY,
-                                               STATS_ARM_MAG,
-                                               STATS_POW_PHY,
-                                               STATS_POW_MAG,
-                                               STATS_AGGRO,
-                                               STATS_SPEED,
-                                               STATS_CRIT,
-                                               STATS_DODGE,
-                                               STATS_REGEN_HP,
-                                               STATS_REGEN_MANA,
-                                               STATS_REGEN_VIGOR,
-                                               STATS_RATE_BERSECK,
-                                               STATS_RATE_AGGRO};
+                                     STATS_HP,
+                                     STATS_MANA,
+                                     STATS_VIGOR,
+                                     STATS_BERSECK,
+                                     STATS_ARM_PHY,
+                                     STATS_ARM_MAG,
+                                     STATS_POW_PHY,
+                                     STATS_POW_MAG,
+                                     STATS_AGGRO,
+                                     STATS_SPEED,
+                                     STATS_CRIT,
+                                     STATS_DODGE,
+                                     STATS_REGEN_HP,
+                                     STATS_REGEN_MANA,
+                                     STATS_REGEN_VIGOR,
+                                     STATS_RATE_BERSECK,
+                                     STATS_RATE_AGGRO};
 const std::set<QString> ON_PERCENT_STATS = {STATS_MANA, STATS_VIGOR};
 // equipment keys
 const QString EQUIP_HEAD = "Tete";
@@ -102,6 +100,11 @@ const QString EQUIP_NAME = "Nom";
 const QString EQUIP_RIGHT_WEAPON = "Arme gauche";
 const QString EQUIP_LEFT_WEAPON = "Arme droite";
 const QString EQUIP_CATEGORY = "Categorie";
+const std::set<QString> ALL_EQUIP{
+    EQUIP_HEAD,         EQUIP_NECKLACE,    EQUIP_CHEST,     EQUIP_CHEST,
+    EQUIP_SHOES,        EQUIP_LEFT_ARM,    EQUIP_RIGHT_ARM, EQUIP_LEFT_LEG,
+    EQUIP_RIGHT_LEG,    EQUIP_RING,        EQUIP_PANTS,     EQUIP_NAME,
+    EQUIP_RIGHT_WEAPON, EQUIP_LEFT_WEAPON, EQUIP_CATEGORY};
 // Effect keys
 const QString EFFECT_REINIT = "Reinit";
 const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";
@@ -119,20 +122,20 @@ const QString EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT = "Up/down degats en %";
 const QString EFFECT_REPEAT_AS_MANY_AS = "Répète tant que possible";
 const QString CONDITION_ENNEMIES_DIED = "Ennemis morts tours précédents";
 const std::set<QString> EFFECTS{"",
-                                          EFFECT_REINIT,
-                                          EFFECT_NB_COOL_DOWN,
-                                          EFFECT_NB_DECREASE_ON_TURN,
-                                          EFFECT_NB_DECREASE_BY_TURN,
-                                          EFFECT_VALUE_CHANGE,
-                                          EFFECT_PERCENT_CHANGE,
-                                          EFFECT_DELETE_BAD,
-                                          EFFECT_INTO_DAMAGE,
-                                          EFFECT_IMPROVE_HOTS,
-                                          EFFECT_BOOSTED_BY_HOTS,
-                                          EFFECT_IMPROVE_BY_PERCENT_CHANGE,
-                                          EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT,
-                                          EFFECT_REPEAT_AS_MANY_AS,
-                                          CONDITION_ENNEMIES_DIED};
+                                EFFECT_REINIT,
+                                EFFECT_NB_COOL_DOWN,
+                                EFFECT_NB_DECREASE_ON_TURN,
+                                EFFECT_NB_DECREASE_BY_TURN,
+                                EFFECT_VALUE_CHANGE,
+                                EFFECT_PERCENT_CHANGE,
+                                EFFECT_DELETE_BAD,
+                                EFFECT_INTO_DAMAGE,
+                                EFFECT_IMPROVE_HOTS,
+                                EFFECT_BOOSTED_BY_HOTS,
+                                EFFECT_IMPROVE_BY_PERCENT_CHANGE,
+                                EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT,
+                                EFFECT_REPEAT_AS_MANY_AS,
+                                CONDITION_ENNEMIES_DIED};
 const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_NB_DECREASE_BY_TURN,
     EFFECT_NB_COOL_DOWN,

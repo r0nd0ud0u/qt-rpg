@@ -21,6 +21,10 @@ public:
     explicit BossesView(QWidget *parent = nullptr);
     ~BossesView() final;
     void ActivatePanel(const QString&);
+
+signals:
+    void SigClickedOnPanel(const QString&);
+
 private:
     Ui::BossesView *ui;
     std::vector<BossPanel*> m_BossPanels;
@@ -31,6 +35,9 @@ private slots:
     void UpdateAllPanels();
     void RemoveBoss(QString);
     void AddBossPanel(Character* ch);
+    void SetFocusOn(const QString& name, const characType&);
+    void SlotClickedOnPanel(const QString&);
+    void UpdateSelected(const QString& name) const;
 
 };
 
