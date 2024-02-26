@@ -11,13 +11,15 @@ class CharacterWindow;
 
 enum class actionType { defaultType = 0, newCharacter, edit, enumSize };
 
+enum class tabType {character, attak, stuff, enumSize};
+
 class CharacterWindow : public QMainWindow {
   Q_OBJECT
 
 public:
   explicit CharacterWindow(QWidget *parent = nullptr);
   ~CharacterWindow();
-  void InitWindow(const actionType &action);
+  void InitWindow(const tabType &type);
 
   signals:
   void SigNewCharacter(Character*);
@@ -26,7 +28,6 @@ private slots:
   void on_pushButton_clicked();
 
 private:
-  actionType m_CurrentType = actionType::defaultType;
   Ui::CharacterWindow *ui;
   Character* m_CurCharacter = nullptr;
 };

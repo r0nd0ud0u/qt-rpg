@@ -13,6 +13,7 @@ StuffPanel::~StuffPanel()
     delete ui;
 }
 
-void StuffPanel::AddName(QString name){
-    ui->stuff_name->setText(name);
+void StuffPanel::Init(const QString &name) {
+    m_Name = name;
+    ui->stat_label->setText(name);
 }

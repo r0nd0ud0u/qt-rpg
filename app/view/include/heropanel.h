@@ -26,12 +26,9 @@ public:
     Character* m_Heroe = nullptr;
 
 private slots:
-    void on_pushButton_clicked();
-
     void on_edit_button_clicked() const;
 
 signals:
-    void addStuff();
     void SigPanelSelectCharacter(QString);
 
 private:

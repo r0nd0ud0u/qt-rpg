@@ -38,7 +38,6 @@ GameDisplay::~GameDisplay() { delete ui; }
 
 void GameDisplay::UpdateChannel() {
   ui->channel_lay->ShowPageStuffs();
-  ui->channel_lay->AddStuff();
 }
 
 void GameDisplay::UpdateViews(const QString &name) {
@@ -324,7 +323,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
 void GameDisplay::on_add_boss_button_clicked() {
   auto &appView = ApplicationView::GetInstance();
-  appView.GetCharacterWindow()->InitWindow(actionType::newCharacter);
+    appView.GetCharacterWindow()->InitWindow(tabType::character);
   appView.ShowWindow(appView.GetCharacterWindow(), true);
 }
 

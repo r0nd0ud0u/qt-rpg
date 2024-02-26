@@ -18,8 +18,6 @@ void Channel::ShowPageStuffs() { ui->stackedWidget->setCurrentIndex(0); }
 
 void Channel::ShowTurnPage() { ui->stackedWidget->setCurrentIndex(1); }
 
-void Channel::AddStuff() { ui->list_stuffs->AddStuff("test"); }
-
 void Channel::on_next_turn_button_clicked() {
   ui->next_turn_button->setEnabled(false);
   ui->end_round_button->setEnabled(true);
