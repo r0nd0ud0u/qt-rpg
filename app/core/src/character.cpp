@@ -314,13 +314,13 @@ void Character::LoadStuffJson() {
 }
 
 void Character::ApplyEquipOnStats(
-    const std::unordered_map<QString, Stuff> &allEquipMap) {
+    const std::unordered_map<QString, vector<Stuff>> &allEquipMap) {
 
   for (const auto &[body, equipName] : m_WearingEquipment) {
     if (equipName.isEmpty()) {
       continue;
     }
-    const auto &equip = allEquipMap.at(equipName);
+    const auto &equip = allEquipMap.at(body);
     ProcessAddEquip(std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_HP]),
                     equip.m_Stats.m_HP);
     ProcessAddEquip(
