@@ -129,7 +129,7 @@ void PlayersManager::InitHeroes() {
   for (const auto &hero : m_HeroesList) {
     hero->LoadAtkJson();
     hero->LoadStuffJson();
-    hero->ApplyEquipOnStats(m_Equipments);
+    hero->ApplyEquipOnStats();
   }
 }
 
@@ -174,9 +174,9 @@ void PlayersManager::InitBosses() {
   m_BossesList.push_back(boss1);
 
   for (const auto &boss : m_BossesList) {
-      boss->LoadAtkJson();
-      boss->LoadStuffJson();
-      boss->ApplyEquipOnStats(m_Equipments);
+    boss->LoadAtkJson();
+    boss->LoadStuffJson();
+    boss->ApplyEquipOnStats();
   }
 }
 
@@ -214,28 +214,16 @@ void PlayersManager::LoadAllEquipmentsJson() {
         Stuff stuff;
         stuff.m_Name = jsonDoc[EQUIP_NAME].toString();
         // Fill stuff stats
-        stuff.m_Stats.m_HP.m_CurrentValue = jsonDoc[STATS_HP].toInt();
-        stuff.m_Stats.m_Mana.m_CurrentValue = jsonDoc[STATS_MANA].toInt();
-        stuff.m_Stats.m_Vigor.m_CurrentValue = jsonDoc[STATS_VIGOR].toInt();
-        stuff.m_Stats.m_Berseck.m_CurrentValue = jsonDoc[STATS_BERSECK].toInt();
-        stuff.m_Stats.m_ArmPhy.m_CurrentValue = jsonDoc[STATS_ARM_PHY].toInt();
-        stuff.m_Stats.m_ArmMag.m_CurrentValue = jsonDoc[STATS_ARM_MAG].toInt();
-        stuff.m_Stats.m_PowPhy.m_CurrentValue = jsonDoc[STATS_POW_PHY].toInt();
-        stuff.m_Stats.m_PowMag.m_CurrentValue = jsonDoc[STATS_POW_MAG].toInt();
-        stuff.m_Stats.m_Aggro.m_CurrentValue = jsonDoc[STATS_AGGRO].toInt();
-        stuff.m_Stats.m_Speed.m_CurrentValue = jsonDoc[STATS_SPEED].toInt();
-        stuff.m_Stats.m_CriticalStrike.m_CurrentValue =
-            jsonDoc[STATS_CRIT].toInt();
-        stuff.m_Stats.m_Dogde.m_CurrentValue = jsonDoc[STATS_DODGE].toInt();
-        stuff.m_Stats.m_RegenHP.m_CurrentValue =
-            jsonDoc[STATS_REGEN_HP].toInt();
-        stuff.m_Stats.m_RegenMana.m_CurrentValue =
-            jsonDoc[STATS_REGEN_MANA].toInt();
-        stuff.m_Stats.m_RegenVigor.m_CurrentValue =
-            jsonDoc[STATS_REGEN_VIGOR].toInt();
-        // Add atk to hero atk list
-
-        m_Equipments[stuff.m_Name] = stuff;
+        for(const auto& stats : ALL_STATS){
+            if(stuff.m_Stats.m_AllStatsTable.count(stats) == 0){
+                continue;
+            }
+            auto& stuffStat = std::get<StatsType<int>>(stuff.m_Stats.m_AllStatsTable[stats]);
+            stuffStat.m_BufEquipPercent = jsonDoc["percent"].toInt();
+            stuffStat.m_BufEquipValue = jsonDoc["value"].toInt();
+        }
+        m_Equipments[jsonDoc[EQUIP_CATEGORY].toString()][stuff.m_Name]
+            .push_back(stuff);
       }
     }
   }
@@ -534,8 +522,9 @@ QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
   return output;
 }
 
-void PlayersManager::AddSupAtkTurn(const characType &launcherType,
-                                   std::vector<QString> &playerOrderTable) const{
+void PlayersManager::AddSupAtkTurn(
+    const characType &launcherType,
+    std::vector<QString> &playerOrderTable) const {
   std::vector<Character *> playerList1;
   std::vector<Character *> playerList2;
 
@@ -565,24 +554,26 @@ void PlayersManager::AddSupAtkTurn(const characType &launcherType,
   }
 }
 
-std::pair<bool, QString> PlayersManager::IsDodging(const std::vector<TargetInfo>& targetList){
-    QString plName;
-    const bool isDodging = std::any_of(
-        targetList.begin(), targetList.end(), [this, &plName](const TargetInfo &ti) {
-            if (ti.m_IsTargeted) {
-                const auto *targetChara =
-                    this->GetCharacterByName(ti.m_Name);
-                plName = ti.m_Name;
-                return targetChara->IsDodging();
-            }
-            return false;
-        });
+std::pair<bool, QString>
+PlayersManager::IsDodging(const std::vector<TargetInfo> &targetList) {
+  QString plName;
+  const bool isDodging =
+      std::any_of(targetList.begin(), targetList.end(),
+                  [this, &plName](const TargetInfo &ti) {
+                    if (ti.m_IsTargeted) {
+                      const auto *targetChara =
+                          this->GetCharacterByName(ti.m_Name);
+                      plName = ti.m_Name;
+                      return targetChara->IsDodging();
+                    }
+                    return false;
+                  });
 
-    return std::make_pair(isDodging, plName);
+  return std::make_pair(isDodging, plName);
 }
 
-void PlayersManager::AddExpForHeroes(const int exp){
-    for(auto& pl : m_HeroesList){
-        pl->AddExp(exp);
-    }
+void PlayersManager::AddExpForHeroes(const int exp) {
+  for (auto &pl : m_HeroesList) {
+    pl->AddExp(exp);
+  }
 }

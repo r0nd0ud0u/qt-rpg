@@ -19,8 +19,8 @@ Character::Character(const QString name, const characType type,
     : m_Name(name), m_type(type), m_Stats(stats) {
   m_Inventory.resize(static_cast<int>(InventoryType::enumSize));
   // init equip
-  for (const auto& e : ALL_EQUIP) {
-    m_WearingEquipment[e] = "";
+  for (const auto &e : ALL_EQUIP) {
+    m_WearingEquipment[e].m_Name = "";
   }
 }
 
@@ -296,75 +296,25 @@ void Character::LoadStuffJson() {
 
     const auto jsonDoc = QJsonDocument::fromJson(msg.toUtf8());
     // decode json
-    m_WearingEquipment[EQUIP_HEAD] = jsonDoc[EQUIP_HEAD].toString();
-    m_WearingEquipment[EQUIP_NECKLACE] = jsonDoc[EQUIP_NECKLACE].toString();
-    m_WearingEquipment[EQUIP_CHEST] = jsonDoc[EQUIP_CHEST].toString();
-    m_WearingEquipment[EQUIP_PANTS] = jsonDoc[EQUIP_PANTS].toString();
-    m_WearingEquipment[EQUIP_SHOES] = jsonDoc[EQUIP_SHOES].toString();
-    m_WearingEquipment[EQUIP_LEFT_ARM] = jsonDoc[EQUIP_LEFT_ARM].toString();
-    m_WearingEquipment[EQUIP_RIGHT_ARM] = jsonDoc[EQUIP_RIGHT_ARM].toString();
-    m_WearingEquipment[EQUIP_LEFT_LEG] = jsonDoc[EQUIP_LEFT_LEG].toString();
-    m_WearingEquipment[EQUIP_RIGHT_LEG] = jsonDoc[EQUIP_RIGHT_LEG].toString();
-    m_WearingEquipment[EQUIP_RING] = jsonDoc[EQUIP_RING].toString();
-    m_WearingEquipment[EQUIP_RIGHT_WEAPON] =
-        jsonDoc[EQUIP_RIGHT_WEAPON].toString();
-    m_WearingEquipment[EQUIP_LEFT_WEAPON] =
-        jsonDoc[EQUIP_LEFT_WEAPON].toString();
+    for (const auto &e : ALL_EQUIP) {
+      m_WearingEquipment[e].m_Name = jsonDoc[e].toString();
+    }
   }
 }
 
-void Character::ApplyEquipOnStats(
-    const std::unordered_map<QString, vector<Stuff>> &allEquipMap) {
+void Character::ApplyEquipOnStats() {
 
-  for (const auto &[body, equipName] : m_WearingEquipment) {
-    if (equipName.isEmpty()) {
+  for (const auto &[body, stuff] : m_WearingEquipment) {
+    if (stuff.m_Name.isEmpty()) {
       continue;
     }
-    const auto &equip = allEquipMap.at(body);
-    ProcessAddEquip(std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_HP]),
-                    equip.m_Stats.m_HP);
-    ProcessAddEquip(
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_MANA]),
-        equip.m_Stats.m_Mana);
-    ProcessAddEquip(
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_VIGOR]),
-        equip.m_Stats.m_Vigor);
-    ProcessAddEquip(
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_BERSECK]),
-        equip.m_Stats.m_Berseck);
-    ProcessAddEquip(
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_ARM_PHY]),
-        equip.m_Stats.m_ArmPhy);
-    ProcessAddEquip(
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_ARM_MAG]),
-        equip.m_Stats.m_ArmMag);
-    ProcessAddEquip(
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_POW_PHY]),
-        equip.m_Stats.m_PowPhy);
-    ProcessAddEquip(
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_POW_MAG]),
-        equip.m_Stats.m_PowMag);
-    ProcessAddEquip(
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_AGGRO]),
-        equip.m_Stats.m_Aggro);
-    ProcessAddEquip(
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_SPEED]),
-        equip.m_Stats.m_Speed);
-    ProcessAddEquip(
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_CRIT]),
-        equip.m_Stats.m_CriticalStrike);
-    ProcessAddEquip(
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_DODGE]),
-        equip.m_Stats.m_Dogde);
-    ProcessAddEquip(
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_REGEN_HP]),
-        equip.m_Stats.m_RegenHP);
-    ProcessAddEquip(
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_REGEN_MANA]),
-        equip.m_Stats.m_RegenMana);
-    ProcessAddEquip(
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_REGEN_VIGOR]),
-        equip.m_Stats.m_RegenVigor);
+    for (const auto &stats : ALL_STATS) {
+      if (m_Stats.m_AllStatsTable.count(stats) == 1) {
+        ProcessAddEquip(
+            std::get<StatsType<int>>(m_Stats.m_AllStatsTable[stats]),
+            std::get<StatsType<int>>(stuff.m_Stats.m_AllStatsTable.at(stats)));
+      }
+    }
   }
 }
 
@@ -374,11 +324,13 @@ void Character::ProcessAddEquip(StatsType<T> &charStat,
   if (equipStat.m_CurrentValue == 0) {
     return;
   }
+
+  charStat.m_BufEquipValue += equipStat.m_BufEquipValue;
+  charStat.m_BufEquipPercent += equipStat.m_BufEquipPercent;
+
   const double ratio = static_cast<double>(charStat.m_CurrentValue) /
                        static_cast<double>(charStat.m_MaxValue);
-  charStat.m_MaxValue +=
-      equipStat.m_CurrentValue; // Currently only current value is filled on
-                                // equip stat
+  charStat.m_MaxValue = charStat.m_RawMaxValue + charStat.m_BufEquipValue  + charStat.m_RawMaxValue*charStat.m_BufEquipPercent/100;
 
   charStat.m_CurrentValue =
       static_cast<T>(std::round(charStat.m_MaxValue * ratio));
@@ -390,11 +342,12 @@ void Character::ProcessRemoveEquip(StatsType<T> &charStat,
   if (equipStat.m_CurrentValue == 0) {
     return;
   }
+  charStat.m_BufEquipValue -= equipStat.m_BufEquipValue;
+  charStat.m_BufEquipPercent -= equipStat.m_BufEquipPercent;
+
   const double ratio = static_cast<double>(charStat.m_CurrentValue) /
                        static_cast<double>(charStat.m_MaxValue);
-  charStat.m_MaxValue -=
-      equipStat.m_CurrentValue; // Currently only current value is filled on
-                                // equip stat
+  charStat.m_MaxValue = charStat.m_RawMaxValue + charStat.m_BufEquipValue  + charStat.m_RawMaxValue*charStat.m_BufEquipPercent/100;
 
   charStat.m_CurrentValue =
       static_cast<T>(std::round(charStat.m_MaxValue * ratio));
@@ -406,9 +359,9 @@ void Character::ProcessRemoveEquip(StatsType<T> &charStat,
 /// berseck.
 ///
 bool Character::CanBeLaunched(const AttaqueType &atk) const {
-    if(atk.level > m_Level){
-        return false;
-    }
+  if (atk.level > m_Level) {
+    return false;
+  }
   const auto &mana =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_MANA));
   const auto &berseck =
@@ -1005,33 +958,32 @@ bool Character::IsDodging() const {
   return isDodging;
 }
 
-void Character::UsePotion(const QString& statsName){
-    if(m_Stats.m_AllStatsTable.count(statsName) == 0){
-        return;
-    }
-    auto &stat =
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(statsName));
-    int boost = 0;
-    if(statsName == STATS_HP){
-        boost = 50;
-    }
-    if(statsName == STATS_BERSECK){
-        boost = 20;
-    }
-    if(statsName == STATS_VIGOR){
-        boost = 50;
-    }
-    if(statsName == STATS_MANA){
-        boost = 50;
-    }
-    stat.m_CurrentValue = std::min(stat.m_CurrentValue + boost, stat.m_MaxValue);
+void Character::UsePotion(const QString &statsName) {
+  if (m_Stats.m_AllStatsTable.count(statsName) == 0) {
+    return;
+  }
+  auto &stat = std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(statsName));
+  int boost = 0;
+  if (statsName == STATS_HP) {
+    boost = 50;
+  }
+  if (statsName == STATS_BERSECK) {
+    boost = 20;
+  }
+  if (statsName == STATS_VIGOR) {
+    boost = 50;
+  }
+  if (statsName == STATS_MANA) {
+    boost = 50;
+  }
+  stat.m_CurrentValue = std::min(stat.m_CurrentValue + boost, stat.m_MaxValue);
 }
 
-void Character::AddExp(const int newXp){
-    m_Exp += newXp;
+void Character::AddExp(const int newXp) {
+  m_Exp += newXp;
 
-    while(m_Exp >=m_NextLevel){
-        m_Level +=1;
-        m_NextLevel += m_NextLevel*10/100;
-    }
+  while (m_Exp >= m_NextLevel) {
+    m_Level += 1;
+    m_NextLevel += m_NextLevel * 10 / 100;
+  }
 }
