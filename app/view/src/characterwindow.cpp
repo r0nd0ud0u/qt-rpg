@@ -1,15 +1,19 @@
 #include "characterwindow.h"
 #include "ui_characterwindow.h"
 
+#include "Application.h"
 #include "ApplicationView.h"
 #include "mainwindow.h"
+
+#include "stuffsview.h"
 
 CharacterWindow::CharacterWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::CharacterWindow) {
   ui->setupUi(this);
-    ui->tabWidget->setCurrentIndex(static_cast<int>(tabType::character));
+  ui->tabWidget->setCurrentIndex(static_cast<int>(tabType::character));
 
-  connect(this, &CharacterWindow::SigNewCharacter, ApplicationView::GetInstance().GetMainWindow(),
+  connect(this, &CharacterWindow::SigNewCharacter,
+          ApplicationView::GetInstance().GetMainWindow(),
           &MainWindow::AddNewCharacter);
 }
 
@@ -42,5 +46,12 @@ void CharacterWindow::on_pushButton_clicked() {
   if (type == tabType::character) {
     ui->character_def->AddCharacter(m_CurCharacter);
     emit SigNewCharacter(m_CurCharacter);
+  }
+
+  if (type == tabType::stuff) {
+    EditStuff es = ui->edit_stuff_view->Save();
+    Application::GetInstance()
+        .m_GameManager->m_PlayersManager->m_Equipments[es.m_BodyPart][es.m_Name]
+        .push_back(es.m_Stuff);
   }
 }

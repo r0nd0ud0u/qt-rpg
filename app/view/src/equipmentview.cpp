@@ -33,29 +33,10 @@ QAbstractItemModel *EquipmentView::createEquipmentModel(QObject *parent) {
   const auto *selectedHero =
       Application::GetInstance().m_GameManager->GetSelectedHero();
 
-  // TODO test pointers
-  // TODO test m_WearingEquipment
-
-  addEquipmentRow(model, EQUIP_HEAD,
-                  selectedHero->m_WearingEquipment.at(EQUIP_HEAD));
-  addEquipmentRow(model, EQUIP_NECKLACE,
-                  selectedHero->m_WearingEquipment.at(EQUIP_NECKLACE));
-  addEquipmentRow(model, EQUIP_LEFT_ARM,
-                  selectedHero->m_WearingEquipment.at(EQUIP_LEFT_ARM));
-  addEquipmentRow(model, EQUIP_RIGHT_ARM,
-                  selectedHero->m_WearingEquipment.at(EQUIP_RIGHT_ARM));
-  addEquipmentRow(model, EQUIP_LEFT_WEAPON,
-                  selectedHero->m_WearingEquipment.at(EQUIP_LEFT_WEAPON));
-  addEquipmentRow(model, EQUIP_RIGHT_WEAPON,
-                  selectedHero->m_WearingEquipment.at(EQUIP_RIGHT_WEAPON));
-  addEquipmentRow(model, EQUIP_CHEST,
-                  selectedHero->m_WearingEquipment.at(EQUIP_CHEST));
-  addEquipmentRow(model, EQUIP_RING,
-                  selectedHero->m_WearingEquipment.at(EQUIP_RING));
-  addEquipmentRow(model, EQUIP_PANTS,
-                  selectedHero->m_WearingEquipment.at(EQUIP_PANTS));
-  addEquipmentRow(model, EQUIP_SHOES,
-                  selectedHero->m_WearingEquipment.at(EQUIP_SHOES));
+  for(const auto& e : ALL_EQUIP){
+      addEquipmentRow(model, e,
+                      selectedHero->m_WearingEquipment.at(e).m_Name);
+  }
 
   return model;
 }

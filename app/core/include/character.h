@@ -51,7 +51,7 @@ public:
   void AddStuff(const Stuff &stuff);
   void LoadAtkJson();
   void LoadStuffJson();
-  void ApplyEquipOnStats(const std::unordered_map<QString, vector<Stuff>> &allEquipMap);
+  void ApplyEquipOnStats();
   bool CanBeLaunched(const AttaqueType &atk) const;
 
   // Effect
@@ -78,7 +78,7 @@ public:
   QString m_Name = "default";
   characType m_type = characType::Hero;
   Stats m_Stats;
-  std::unordered_map<QString, QString>
+  std::unordered_map<QString, Stuff>
       m_WearingEquipment; // key: body, value: equipmentName
   std::unordered_map<QString, AttaqueType>
       m_AttakList; // key: attak name, value: AttakType struct

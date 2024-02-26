@@ -101,10 +101,10 @@ const QString EQUIP_RIGHT_WEAPON = "Arme gauche";
 const QString EQUIP_LEFT_WEAPON = "Arme droite";
 const QString EQUIP_CATEGORY = "Categorie";
 const std::set<QString> ALL_EQUIP{
-    EQUIP_HEAD,         EQUIP_NECKLACE,    EQUIP_CHEST,     EQUIP_CHEST,
-    EQUIP_SHOES,        EQUIP_LEFT_ARM,    EQUIP_RIGHT_ARM, EQUIP_LEFT_LEG,
-    EQUIP_RIGHT_LEG,    EQUIP_RING,        EQUIP_PANTS,     EQUIP_NAME,
-    EQUIP_RIGHT_WEAPON, EQUIP_LEFT_WEAPON, EQUIP_CATEGORY};
+    EQUIP_HEAD,        EQUIP_NECKLACE,  EQUIP_CHEST,    EQUIP_SHOES,
+    EQUIP_LEFT_ARM,    EQUIP_RIGHT_ARM, EQUIP_LEFT_LEG, EQUIP_RIGHT_LEG,
+    EQUIP_RING,        EQUIP_PANTS,     EQUIP_NAME,     EQUIP_RIGHT_WEAPON,
+    EQUIP_LEFT_WEAPON, EQUIP_CATEGORY};
 // Effect keys
 const QString EFFECT_REINIT = "Reinit";
 const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";
@@ -157,12 +157,12 @@ const QString EFFECT_ACTIVE_TURNS = "Tours actifs";
 const QString EFFECT_SUB_VALUE = "Valeur de l'effet";
 
 struct Buf {
-    int m_Value = 0;
-    bool m_IsPercent = false;
-    void SetBuf(const int value, const bool isPercent) {
-        m_Value = value;
-        m_IsPercent = isPercent;
-    }
+  int m_Value = 0;
+  bool m_IsPercent = false;
+  void SetBuf(const int value, const bool isPercent) {
+    m_Value = value;
+    m_IsPercent = isPercent;
+  }
 };
 
 template <class T> class StatsType {
