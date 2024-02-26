@@ -174,16 +174,18 @@ public:
   T m_MaxValue;
   T m_RegenOnTurn;
   T m_BaseEquipValue;
+  T m_RawMaxValue;
   QString m_Type;
   T m_BufEffectValue;
   int m_BufEffectPercent;
   T m_BufEquipValue;
   int m_BufEquipPercent;
-  void SetValues(T starting, T current, T max, T regen) {
+  void InitValues(T starting, T current, T max, T regen) {
     m_CurrentValue = current;
     m_MaxValue = max;
     m_BufEffectPercent = 0;
     m_BufEquipPercent = 0;
+    m_RawMaxValue = max;
 
     m_RegenOnTurn = regen;
     // not processed ?

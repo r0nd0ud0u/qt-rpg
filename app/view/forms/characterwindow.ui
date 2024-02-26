@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="EditCharacter" name="character_def">
        <attribute name="title">
@@ -30,7 +30,7 @@
         <string>Attaque</string>
        </attribute>
       </widget>
-      <widget class="QWidget" name="tab_2">
+      <widget class="StuffsView" name="edit_stuff_view">
        <attribute name="title">
         <string>Stuff</string>
        </attribute>
@@ -69,6 +69,12 @@
    <class>EditCharacter</class>
    <extends>QWidget</extends>
    <header location="global">editcharacter.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>StuffsView</class>
+   <extends>QWidget</extends>
+   <header location="global">stuffsview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

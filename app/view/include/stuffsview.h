@@ -17,12 +17,13 @@ public:
     explicit StuffsView(QWidget *parent = nullptr);
     ~StuffsView();
 
-    void AddStuff(QString name);
 
-     std::vector<StuffPanel*> m_StuffList;
 
 private:
     Ui::StuffsView *ui;
+    std::vector<StuffPanel*> m_StuffList;
+
+    void InitEditStuffsView();
 };
 
 #endif // STUFFSVIEW_H

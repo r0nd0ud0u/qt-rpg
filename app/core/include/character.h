@@ -51,7 +51,7 @@ public:
   void AddStuff(const Stuff &stuff);
   void LoadAtkJson();
   void LoadStuffJson();
-  void ApplyEquipOnStats(const std::unordered_map<QString, Stuff> &allEquipMap);
+  void ApplyEquipOnStats(const std::unordered_map<QString, vector<Stuff>> &allEquipMap);
   bool CanBeLaunched(const AttaqueType &atk) const;
 
   // Effect

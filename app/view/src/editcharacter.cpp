@@ -47,7 +47,7 @@ void EditCharacter::AddCharacter(Character* ch) const{
 
     for (const auto& panel : m_PanelList) {
         std::get<StatsType<int>>(ch->m_Stats.m_AllStatsTable[panel->m_Name])
-            .SetValues(panel->m_StartingValue,panel->m_StartingValue, panel->m_MaxValue, panel->m_RegenValue);
+            .InitValues(panel->m_StartingValue,panel->m_StartingValue, panel->m_MaxValue, panel->m_RegenValue);
 
     }
 }

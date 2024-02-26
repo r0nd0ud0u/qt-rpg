@@ -14,7 +14,9 @@ class StuffPanel : public QWidget
 public:
     explicit StuffPanel(QWidget *parent = nullptr);
     ~StuffPanel();
-    void AddName(QString name);
+    void Init(const QString &name);
+
+    QString m_Name;
 
 private:
     Ui::StuffPanel *ui;

@@ -11,110 +11,110 @@ void PlayersManager::InitHeroes() {
 
   Stats stats;
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
-      .SetValues(605, 605, 605, 0);
+      .InitValues(605, 605, 605, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
-      .SetValues(369, 369, 369, 0);
+      .InitValues(369, 369, 369, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
-      .SetValues(126, 126, 126, 0);
+      .InitValues(126, 126, 126, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .SetValues(108, 108, 108, 0);
+      .InitValues(108, 108, 108, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .SetValues(35, 35, 35, 0);
+      .InitValues(35, 35, 35, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .SetValues(10, 10, 10, 0);
+      .InitValues(10, 10, 10, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
-      .SetValues(137, 137, 137, 0);
+      .InitValues(137, 137, 137, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .SetValues(25, 25, 1000, 25);
+      .InitValues(25, 25, 1000, 25);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
-      .SetValues(20, 20, 20, 0);
+      .InitValues(20, 20, 20, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
-      .SetValues(10, 10, 10, 0);
+      .InitValues(10, 10, 10, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
-      .SetValues(14, 14, 14, 0);
+      .InitValues(14, 14, 14, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
-      .SetValues(40, 40, 40, 0);
+      .InitValues(40, 40, 40, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
-      .SetValues(5, 5, 5, 0);
+      .InitValues(5, 5, 5, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
-      .SetValues(1, 1, 1, 0);
+      .InitValues(1, 1, 1, 0);
   const auto hero1 = new Character("Thalia", characType::Hero, stats);
 
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
-      .SetValues(200, 200, 600, 0);
+      .InitValues(200, 200, 600, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
-      .SetValues(141, 141, 141, 0);
+      .InitValues(141, 141, 141, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
-      .SetValues(445, 445, 445, 0);
+      .InitValues(445, 445, 445, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .SetValues(60, 60, 60, 0);
+      .InitValues(60, 60, 60, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .SetValues(47, 47, 47, 0);
+      .InitValues(47, 47, 47, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .SetValues(115, 115, 115, 0);
+      .InitValues(115, 115, 115, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
-      .SetValues(15, 15, 15, 0);
+      .InitValues(15, 15, 15, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .SetValues(20, 20, 1000, 20);
+      .InitValues(20, 20, 1000, 20);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
-      .SetValues(20, 20, 20, 0);
+      .InitValues(20, 20, 20, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
-      .SetValues(9, 9, 9, 0);
+      .InitValues(9, 9, 9, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
-      .SetValues(10, 10, 10, 0);
+      .InitValues(10, 10, 10, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
-      .SetValues(12, 12, 12, 0);
+      .InitValues(12, 12, 12, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
-      .SetValues(10, 10, 10, 0);
+      .InitValues(10, 10, 10, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
-      .SetValues(1, 1, 1, 0);
+      .InitValues(1, 1, 1, 0);
   const auto hero2 = new Character("Azrak Ombresang", characType::Hero, stats);
 
-  stats.m_HP.SetValues(828, 828, 828, 0);
+  stats.m_HP.InitValues(828, 828, 828, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
-      .SetValues(20, 20, 100, 0);
+      .InitValues(20, 20, 100, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
-      .SetValues(5, 5, 5, 0);
+      .InitValues(5, 5, 5, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .SetValues(85, 85, 85, 0);
+      .InitValues(85, 85, 85, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .SetValues(45, 45, 45, 0);
+      .InitValues(45, 45, 45, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .SetValues(30, 30, 30, 0);
+      .InitValues(30, 30, 30, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .SetValues(14, 14, 1000, 14);
+      .InitValues(14, 14, 1000, 14);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
-      .SetValues(15, 15, 15, 0);
+      .InitValues(15, 15, 15, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
-      .SetValues(5, 5, 5, 0);
+      .InitValues(5, 5, 5, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
-      .SetValues(3, 3, 3, 0);
+      .InitValues(3, 3, 3, 0);
   const auto hero3 = new Character("Thraïn", characType::Hero, stats);
 
   // color
@@ -136,39 +136,39 @@ void PlayersManager::InitHeroes() {
 void PlayersManager::InitBosses() {
   Stats stats;
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
-      .SetValues(2750, 2750, 2750, 0);
+      .InitValues(2750, 2750, 2750, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .SetValues(105, 105, 105, 0);
+      .InitValues(105, 105, 105, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .SetValues(120, 120, 120, 0);
+      .InitValues(120, 120, 120, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .SetValues(80, 80, 80, 0);
+      .InitValues(80, 80, 80, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
-      .SetValues(138, 138, 138, 0);
+      .InitValues(138, 138, 138, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .SetValues(0, 0, 1000, 5);
+      .InitValues(0, 0, 1000, 5);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
-      .SetValues(15, 15, 15, 0);
+      .InitValues(15, 15, 15, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
-      .SetValues(10, 10, 10, 0);
+      .InitValues(10, 10, 10, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
-      .SetValues(25, 25, 25, 0);
+      .InitValues(25, 25, 25, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
-      .SetValues(0, 0, 0, 0);
+      .InitValues(0, 0, 0, 0);
   const auto boss1 = new Character("Pignouf", characType::Boss, stats);
   boss1->color = QColor("red");
   m_BossesList.push_back(boss1);
