@@ -52,7 +52,7 @@ EditStuff StuffsView::Save() {
     // prepare result
     EditStuff  editStuff;
     editStuff.m_Name = ui->name_textEdit->toPlainText();
-    editStuff.m_BodyPart = ui->name_textEdit->toPlainText();
+    editStuff.m_BodyPart = ui->body_comboBox->currentText();
 
     for (const auto& panel : m_StuffList) {
         auto& stat = std::get<StatsType<int>>(editStuff.m_Stuff.m_Stats.m_AllStatsTable[panel->m_Name]);

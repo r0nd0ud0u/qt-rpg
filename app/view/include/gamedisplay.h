@@ -17,6 +17,10 @@ public:
   explicit GameDisplay(QWidget *parent = nullptr);
   ~GameDisplay();
   void AddNewCharacter(Character *);
+  void AddNewStuff();
+  public slots:
+  // slots which can be called by other windows
+  void UpdateViews(const QString &name);
 signals:
   void selectCharacter(const QString&);
   void SigUpdatePlayerPanel();
@@ -36,7 +40,6 @@ private:
 
 private slots:
   void UpdateChannel();
-  void UpdateViews(const QString &name);
   void on_attaque_button_clicked();
   void on_bag_button_clicked();
   void on_stackedWidget_currentChanged(const int arg1);
