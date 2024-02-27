@@ -5,7 +5,9 @@
 // decode json
 #include <QDir>
 #include <QFile>
+#include <QJsonArray>
 #include <QJsonDocument>
+#include <QJsonObject>
 
 void PlayersManager::InitHeroes() {
 
@@ -207,26 +209,74 @@ void PlayersManager::LoadAllEquipmentsJson() {
       } else {
         // Convert json file to QString
         QTextStream out(&json);
+#if QT_VERSION_MAJOR == 6
+        out.setEncoding(QStringConverter::Encoding::Utf8);
+#else
+        out.setCodec("UTF-8");
+#endif
         QString msg = out.readAll();
         json.close();
         const auto jsonDoc = QJsonDocument::fromJson(msg.toUtf8());
         // decode json
+
         Stuff stuff;
         stuff.m_Name = jsonDoc[EQUIP_NAME].toString();
-        // Fill stuff stats
-        for(const auto& stats : ALL_STATS){
-            if(stuff.m_Stats.m_AllStatsTable.count(stats) == 0){
-                continue;
-            }
-            auto& stuffStat = std::get<StatsType<int>>(stuff.m_Stats.m_AllStatsTable[stats]);
-            stuffStat.m_BufEquipPercent = jsonDoc["percent"].toInt();
-            stuffStat.m_BufEquipValue = jsonDoc["value"].toInt();
+
+#if QT_VERSION_MAJOR == 6
+        for (const auto &effect : effectArray) {
+          const auto &stat = effect[EFFECT_STAT].toString();
+          if (stat.isEmpty() && effect[EFFECT_TYPE].toString().isEmpty()) {
+            break;
+          }
+          effectParam param;
+          param.effect = effect[EFFECT_TYPE].toString();
+          param.value = effect[EFFECT_VALUE].toInt();
+          param.nbTurns = effect[EFFECT_ACTIVE_TURNS].toInt();
+          param.reach = effect[EFFECT_REACH].toString();
+          param.statsName = effect[EFFECT_STAT].toString();
+          param.target = effect[EFFECT_TARGET].toString();
+          param.subValueEffect = effect[EFFECT_SUB_VALUE].toInt();
+          // processed
+          param.isMagicAtk = atk.manaCost > 0;
+
+          atk.m_AllEffects.push_back(param);
         }
-        m_Equipments[jsonDoc[EQUIP_CATEGORY].toString()][stuff.m_Name]
-            .push_back(stuff);
+#else
+        for (const auto &stats : ALL_STATS) {
+          if (stuff.m_Stats.m_AllStatsTable.count(stats) == 0) {
+            continue;
+          }
+          QJsonArray jsonArray = jsonDoc[stats].toArray();
+          for (const auto &elem : jsonArray) {
+            if (elem.isObject()) {
+              const QJsonObject item = elem.toObject();
+              for (const auto &key : item.keys()) {
+                const auto &val = item[key];
+                if (val.isDouble()) {
+                  auto &stuffStat = std::get<StatsType<int>>(
+                      stuff.m_Stats.m_AllStatsTable[stats]);
+                  if (key == "percent") {
+                      stuffStat.m_BufEquipPercent = static_cast<int>(val.toDouble());
+                  } else if (key == "value") {
+                      stuffStat.m_BufEquipValue = static_cast<int>(val.toDouble());
+                  }
+                }
+              }
+            }
+          }
+        }
+#endif
+        auto &stuffStat = std::get<StatsType<int>>(
+            stuff.m_Stats.m_AllStatsTable[STATS_AGGRO]);
+        m_Equipments[jsonDoc[EQUIP_CATEGORY].toString()][stuff.m_Name] = stuff;
       }
     }
   }
+
+  const auto stat = m_Equipments["Anneau"]["Anneau1"].m_Stats;
+  auto &stuffStat =
+      std::get<StatsType<int>>(stat.m_AllStatsTable.at(STATS_AGGRO));
+  int a = 0;
 }
 
 Character *PlayersManager::GetCharacterByName(const QString &name) {

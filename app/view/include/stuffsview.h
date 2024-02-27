@@ -27,7 +27,6 @@ public:
     ~StuffsView();
     EditStuff Save();
 
-
 private:
     Ui::StuffsView *ui;
     std::vector<StuffPanel*> m_StuffList;

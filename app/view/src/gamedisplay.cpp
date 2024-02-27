@@ -333,6 +333,10 @@ void GameDisplay::AddNewCharacter(Character *ch) {
       .m_GameManager->m_PlayersManager->m_BossesList.push_back(ch);
 }
 
+void GameDisplay::AddNewStuff(){
+    //emit
+}
+
 void GameDisplay::on_mana_potion_button_clicked() {
   auto *hero = Application::GetInstance()
                    .m_GameManager->m_PlayersManager->m_ActivePlayer;

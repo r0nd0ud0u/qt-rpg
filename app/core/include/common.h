@@ -105,6 +105,11 @@ const std::set<QString> ALL_EQUIP{
     EQUIP_LEFT_ARM,    EQUIP_RIGHT_ARM, EQUIP_LEFT_LEG, EQUIP_RIGHT_LEG,
     EQUIP_RING,        EQUIP_PANTS,     EQUIP_NAME,     EQUIP_RIGHT_WEAPON,
     EQUIP_LEFT_WEAPON, EQUIP_CATEGORY};
+const std::set<QString> ALL_EQUIP_ON_BODY{ "",
+                                  EQUIP_HEAD,        EQUIP_NECKLACE,  EQUIP_CHEST,    EQUIP_SHOES,
+                                  EQUIP_LEFT_ARM,    EQUIP_RIGHT_ARM, EQUIP_LEFT_LEG, EQUIP_RIGHT_LEG,
+                                  EQUIP_RING,        EQUIP_PANTS,     EQUIP_RIGHT_WEAPON,
+                                  EQUIP_LEFT_WEAPON};
 // Effect keys
 const QString EFFECT_REINIT = "Reinit";
 const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";

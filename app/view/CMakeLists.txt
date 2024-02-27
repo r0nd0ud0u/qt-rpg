@@ -31,6 +31,8 @@ set(SOURCES
         src/alleffectpanel.cpp
         src/editcharacter.cpp
         src/editstatpanel.cpp
+        src/equiponbodypanel.cpp
+        src/equiponbodyview.cpp
 )
 
 set(HEADERS
@@ -57,6 +59,8 @@ set(HEADERS
         include/alleffectpanel.h
         include/editcharacter.h
         include/editstatpanel.h
+        include/equiponbodypanel.h
+        include/equiponbodyview.h
 )
 
 set(FORMS
@@ -81,6 +85,8 @@ set(FORMS
         forms/alleffectpanel.ui
         forms/editcharacter.ui
         forms/editstatpanel.ui
+        forms/equiponbodypanel.ui
+        forms/equiponbodyview.ui
 
     )
 

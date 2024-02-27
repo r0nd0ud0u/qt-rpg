@@ -291,6 +291,11 @@ void Character::LoadStuffJson() {
   } else {
     // Convert json file to QString
     QTextStream out(&json);
+#if QT_VERSION_MAJOR == 6
+    out.setEncoding(QStringConverter::Encoding::Utf8);
+#else
+    out.setCodec("UTF-8");
+#endif
     QString msg = out.readAll();
     json.close();
 
@@ -330,7 +335,9 @@ void Character::ProcessAddEquip(StatsType<T> &charStat,
 
   const double ratio = static_cast<double>(charStat.m_CurrentValue) /
                        static_cast<double>(charStat.m_MaxValue);
-  charStat.m_MaxValue = charStat.m_RawMaxValue + charStat.m_BufEquipValue  + charStat.m_RawMaxValue*charStat.m_BufEquipPercent/100;
+  charStat.m_MaxValue =
+      charStat.m_RawMaxValue + charStat.m_BufEquipValue +
+      charStat.m_RawMaxValue * charStat.m_BufEquipPercent / 100;
 
   charStat.m_CurrentValue =
       static_cast<T>(std::round(charStat.m_MaxValue * ratio));
@@ -347,7 +354,9 @@ void Character::ProcessRemoveEquip(StatsType<T> &charStat,
 
   const double ratio = static_cast<double>(charStat.m_CurrentValue) /
                        static_cast<double>(charStat.m_MaxValue);
-  charStat.m_MaxValue = charStat.m_RawMaxValue + charStat.m_BufEquipValue  + charStat.m_RawMaxValue*charStat.m_BufEquipPercent/100;
+  charStat.m_MaxValue =
+      charStat.m_RawMaxValue + charStat.m_BufEquipValue +
+      charStat.m_RawMaxValue * charStat.m_BufEquipPercent / 100;
 
   charStat.m_CurrentValue =
       static_cast<T>(std::round(charStat.m_MaxValue * ratio));
@@ -985,5 +994,26 @@ void Character::AddExp(const int newXp) {
   while (m_Exp >= m_NextLevel) {
     m_Level += 1;
     m_NextLevel += m_NextLevel * 10 / 100;
+  }
+}
+
+void Character::SetEquipment(
+    const std::unordered_map<QString, QString> &table) {
+  const auto pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+  for (auto &[bodyPart, stuff] : m_WearingEquipment) {
+    if (table.count(bodyPart) == 1 && pm->m_Equipments.count(bodyPart) == 1) {
+      stuff = pm->m_Equipments[bodyPart][table.at(bodyPart)];
+      auto &stat = std::get<StatsType<int>>(stuff.m_Stats.m_AllStatsTable.at(STATS_AGGRO));
+      int a = 0;
+    } else {
+      // TODO maybe have an equipment by default
+      for (auto &stat : ALL_STATS) {
+        if (stat.isEmpty()) {
+          continue;
+        }
+        auto &local = std::get<StatsType<int>>(stuff.m_Stats.m_AllStatsTable[stat]);
+        local.InitValues(0, 0, 0, 0);
+      }
+    }
   }
 }
