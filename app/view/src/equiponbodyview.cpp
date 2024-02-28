@@ -34,7 +34,7 @@ void EquipOnBodyView::InitEditEquipment() {
 }
 
 // Add new equipment in 'use stuff' tab for the selected character
-void EquipOnBodyView::AddItemInComboBox(const EditStuff &es) {
+void EquipOnBodyView::AddItemInComboBox(const EditStuff &es) const {
   for (const auto &panel : m_PanelList) {
     if (panel->m_BodyName == es.m_BodyPart) {
       panel->AddItemInComboBox(es.m_Name);
