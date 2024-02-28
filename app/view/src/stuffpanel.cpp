@@ -13,6 +13,19 @@ StuffPanel::~StuffPanel()
     delete ui;
 }
 
-void StuffPanel::AddName(QString name){
-    ui->stuff_name->setText(name);
+void StuffPanel::Init(const QString &name) {
+    m_Name = name;
+    ui->stat_label->setText(name);
 }
+
+void StuffPanel::on_percent_radioButton_toggled(bool checked)
+{
+    m_IsPercent = checked;
+}
+
+
+void StuffPanel::on_value_spinBox_valueChanged(int arg1)
+{
+    m_BufValue = arg1;
+}
+

@@ -1,8 +1,8 @@
 {
     "Aggro": [
         {
-            "percent": 0,
-            "value": 44
+            "percent": 22,
+            "value": 33
         }
     ],
     "Armure magique": [
@@ -17,7 +17,7 @@
             "value": 0
         }
     ],
-    "Categorie": "Tete",
+    "Categorie": "Anneau",
     "Cout critique": [
         {
             "percent": 0,
@@ -36,7 +36,7 @@
             "value": 0
         }
     ],
-    "Nom": "tete1",
+    "Nom": "anneau1",
     "PV": [
         {
             "percent": 0,

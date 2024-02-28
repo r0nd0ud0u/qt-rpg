@@ -19,6 +19,12 @@ MainWindow::MainWindow(QWidget *parent)
   connect(this,
           &MainWindow::SigNewCharacter, ui->page_2,
           &GameDisplay::AddNewCharacter);
+  connect(this,
+          &MainWindow::SigNewCharacter, ui->page_2,
+          &GameDisplay::AddNewStuff);
+  connect(this,
+          &MainWindow::SigNewStuffOnUse, ui->page_2,
+          &GameDisplay::UpdateViews);
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -29,4 +35,12 @@ void MainWindow::ShowPageGameDisplay() {
 
 void MainWindow::AddNewCharacter(Character *ch) {
     emit SigNewCharacter(ch);
+}
+
+void MainWindow::AddNewStuff(){
+    emit SigAddNewStuff();
+}
+
+void MainWindow::UpdateStuffOnUse(const QString& playerName){
+    emit SigNewStuffOnUse(playerName);
 }

@@ -19,9 +19,13 @@ public:
   ~MainWindow();
 public slots:
   void AddNewCharacter(Character *);
+  void AddNewStuff();
+  void UpdateStuffOnUse(const QString& playerName);
 
 signals:
   void SigNewCharacter(Character *);
+  void SigAddNewStuff();
+  void SigNewStuffOnUse(const QString&);
 
 private:
   Ui::MainWindow *ui;

@@ -41,15 +41,6 @@ public:
 
 enum class InventoryType { healthPotion, manaPotion, enumSize };
 
-struct Buf {
-  int m_Value = 0;
-  bool m_IsPercent = false;
-  void SetBuf(const int value, const bool isPercent) {
-    m_Value = value;
-    m_IsPercent = isPercent;
-  }
-};
-
 class Character {
 public:
   Character() = default;
@@ -60,12 +51,12 @@ public:
   void AddStuff(const Stuff &stuff);
   void LoadAtkJson();
   void LoadStuffJson();
-  void ApplyEquipOnStats(const std::unordered_map<QString, Stuff> &allEquipMap);
+  void ApplyEquipOnStats();
   bool CanBeLaunched(const AttaqueType &atk) const;
 
   // Effect
   QString ApplyOneEffect(Character *target, effectParam &effect,
-                         const bool fromLaunch, const AttaqueType &atk);
+                         const bool fromLaunch, const AttaqueType &atk, const bool reload = false);
   std::tuple<bool, QStringList, std::vector<effectParam>>
   ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
                  Character *target); // value1: conditions fulfilled ?, value2 :
@@ -76,25 +67,28 @@ public:
   std::vector<effectParam> CreateEveilDeLaForet(); // template
   void SetBuf(const int value, const bool isPercent);
 
-  static void SetStatsByPercent(
+  static void SetStatsOnEffect(
       StatsType<int> &stat, const int value,
-      const bool isUp); // TODO à sortir dans un common pour gerer les stats?
+      const bool isUp, const bool isPercent); // TODO à sortir dans un common pour gerer les stats?
   static QString GetInventoryString(const InventoryType &type);
   bool IsDodging() const;
   void UsePotion(const QString& statsName);
   void AddExp(const int newXp);
+  void SetEquipment(const std::unordered_map<QString, QString>&);
+  void UpdateEquipmentOnJson() const;
+  void ApplyEffeftOnStats();
 
   QString m_Name = "default";
   characType m_type = characType::Hero;
   Stats m_Stats;
-  std::unordered_map<QString, QString>
+  std::unordered_map<QString, Stuff>
       m_WearingEquipment; // key: body, value: equipmentName
   std::unordered_map<QString, AttaqueType>
       m_AttakList; // key: attak name, value: AttakType struct
   std::vector<uint8_t> m_Inventory;
   int m_Level = 1;
-  int m_Exp = 2000;
-  int m_NextLevel = 2200;
+  int m_Exp = 100;
+  int m_NextLevel = 120;
 
   QColor color = QColor("dark");
   // Buf
@@ -127,6 +121,7 @@ private:
       const AttaqueType &atk) const; // pair1 output log, pair2 nbOfApplies
   QString ProcessAggro(const int atkValue, const QString &statsName);
   int ProcessCriticalStrike(const int atkValue) const;
+  void UpdateStatsToNextLevel();
 };
 
 #endif // CHARACTER_H

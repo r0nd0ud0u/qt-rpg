@@ -18,7 +18,7 @@ public:
     ~EffectView();
     void InitComboBoxes();
     const std::vector<effectParam>& GetTable() const;
-    void SetValues(const std::vector<effectParam>& table);
+    void InitValues(const std::vector<effectParam>& table);
     void SetIndex(const int index);
     void SetVectorSize(const size_t size);
 

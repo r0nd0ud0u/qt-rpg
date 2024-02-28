@@ -1,13 +1,17 @@
 {
-    "Tete": "tete1",
-    "Collier": "",
-    "Torse": "",
-    "Pantalon": "",
-    "Chaussures": "",
-    "Bras gauche": "",
+    "Anneau": "anneau1",
+    "Arme droite": "",
+    "Arme gauche": "",
     "Bras droit": "",
-    "Jambe gauche": "",
+    "Bras gauche": "",
+    "Categorie": "",
+    "Chaussures": "",
+    "Collier": "",
     "Jambe droite": "",
-    "Anneau": ""
+    "Jambe gauche": "",
+    "Nom": "",
+    "Pantalon": "",
+    "Tete": "tete1",
+    "Torse": ""
 }
 

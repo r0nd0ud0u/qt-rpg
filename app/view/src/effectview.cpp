@@ -296,7 +296,7 @@ void EffectView::on_checkBox_3_stateChanged(int arg1) {
   emit SigTableUpdated();
 }
 
-void EffectView::SetValues(const std::vector<effectParam>& table){
+void EffectView::InitValues(const std::vector<effectParam>& table){
     DisconnectComboSig();
 
     if(!table.empty() && (!table[0].statsName.isEmpty() || !table[0].effect.isEmpty())){

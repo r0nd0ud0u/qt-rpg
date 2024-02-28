@@ -85,6 +85,9 @@ const std::set<QString> ALL_STATS = {"",
                                      STATS_RATE_BERSECK,
                                      STATS_RATE_AGGRO};
 const std::set<QString> ON_PERCENT_STATS = {STATS_MANA, STATS_VIGOR};
+const std::set<QString> STATS_TO_LEVEL_UP = {STATS_HP,      STATS_MANA,
+                                             STATS_VIGOR,   STATS_BERSECK,
+                                             STATS_POW_PHY, STATS_POW_MAG};
 // equipment keys
 const QString EQUIP_HEAD = "Tete";
 const QString EQUIP_NECKLACE = "Collier";
@@ -101,10 +104,23 @@ const QString EQUIP_RIGHT_WEAPON = "Arme gauche";
 const QString EQUIP_LEFT_WEAPON = "Arme droite";
 const QString EQUIP_CATEGORY = "Categorie";
 const std::set<QString> ALL_EQUIP{
-    EQUIP_HEAD,         EQUIP_NECKLACE,    EQUIP_CHEST,     EQUIP_CHEST,
-    EQUIP_SHOES,        EQUIP_LEFT_ARM,    EQUIP_RIGHT_ARM, EQUIP_LEFT_LEG,
-    EQUIP_RIGHT_LEG,    EQUIP_RING,        EQUIP_PANTS,     EQUIP_NAME,
-    EQUIP_RIGHT_WEAPON, EQUIP_LEFT_WEAPON, EQUIP_CATEGORY};
+    EQUIP_HEAD,        EQUIP_NECKLACE,  EQUIP_CHEST,    EQUIP_SHOES,
+    EQUIP_LEFT_ARM,    EQUIP_RIGHT_ARM, EQUIP_LEFT_LEG, EQUIP_RIGHT_LEG,
+    EQUIP_RING,        EQUIP_PANTS,     EQUIP_NAME,     EQUIP_RIGHT_WEAPON,
+    EQUIP_LEFT_WEAPON, EQUIP_CATEGORY};
+const std::set<QString> ALL_EQUIP_ON_BODY{"",
+                                          EQUIP_HEAD,
+                                          EQUIP_NECKLACE,
+                                          EQUIP_CHEST,
+                                          EQUIP_SHOES,
+                                          EQUIP_LEFT_ARM,
+                                          EQUIP_RIGHT_ARM,
+                                          EQUIP_LEFT_LEG,
+                                          EQUIP_RIGHT_LEG,
+                                          EQUIP_RING,
+                                          EQUIP_PANTS,
+                                          EQUIP_RIGHT_WEAPON,
+                                          EQUIP_LEFT_WEAPON};
 // Effect keys
 const QString EFFECT_REINIT = "Reinit";
 const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";
@@ -156,6 +172,15 @@ const QString EFFECT_STAT = "Stat";
 const QString EFFECT_ACTIVE_TURNS = "Tours actifs";
 const QString EFFECT_SUB_VALUE = "Valeur de l'effet";
 
+struct Buf {
+  int m_Value = 0;
+  bool m_IsPercent = false;
+  void SetBuf(const int value, const bool isPercent) {
+    m_Value = value;
+    m_IsPercent = isPercent;
+  }
+};
+
 template <class T> class StatsType {
 public:
   StatsType() = default; // Default constructor
@@ -164,12 +189,26 @@ public:
   T m_StartingValue;
   T m_MaxValue;
   T m_RegenOnTurn;
+  T m_BaseEquipValue;
+  T m_RawMaxValue;
   QString m_Type;
-  void SetValues(T starting, T current, T max, T regen) {
+  T m_BufEffectValue;
+  int m_BufEffectPercent;
+  T m_BufEquipValue;
+  int m_BufEquipPercent;
+  void InitValues(T starting, T current, T max, T regen) {
     m_CurrentValue = current;
-    m_StartingValue = starting;
     m_MaxValue = max;
+    m_BufEffectPercent = 0;
+    m_BufEquipPercent = 0;
+    m_BaseEquipValue = 0;
+    m_BufEquipValue = 0;
+    m_BufEffectValue = 0;
+    m_RawMaxValue = max;
+
     m_RegenOnTurn = regen;
+    // not processed ?
+    m_StartingValue = starting;
   };
 };
 

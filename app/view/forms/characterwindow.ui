@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="EditCharacter" name="character_def">
        <attribute name="title">
@@ -30,19 +30,35 @@
         <string>Attaque</string>
        </attribute>
       </widget>
-      <widget class="QWidget" name="tab_2">
+      <widget class="StuffsView" name="edit_stuff_view">
        <attribute name="title">
-        <string>Stuff</string>
+        <string>Edit stuff</string>
+       </attribute>
+      </widget>
+      <widget class="EquipOnBodyView" name="use_stuff_view">
+       <attribute name="title">
+        <string>Use stuff</string>
        </attribute>
       </widget>
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>Ok</string>
-      </property>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>Ok</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="apply_pushButton">
+        <property name="text">
+         <string>Apply</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -69,6 +85,18 @@
    <class>EditCharacter</class>
    <extends>QWidget</extends>
    <header location="global">editcharacter.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>StuffsView</class>
+   <extends>QWidget</extends>
+   <header location="global">stuffsview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>EquipOnBodyView</class>
+   <extends>QWidget</extends>
+   <header location="global">equiponbodyview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
