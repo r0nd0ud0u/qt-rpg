@@ -68,6 +68,15 @@ void CharacterWindow::on_pushButton_clicked() {
   }
 
   if (type == tabType::useStuff) {
+      const auto &table = ui->use_stuff_view->GetCurrentEquipmentTable();
+      auto *ch = Application::GetInstance()
+                     .m_GameManager->m_PlayersManager->m_SelectedHero;
+      if (ch != nullptr) {
+          ch->SetEquipment(table);
+          ch->ApplyEquipOnStats();
+          ch->UpdateEquipmentOnJson();
+          emit SigUseNewStuff(ch->m_Name);
+      }
     Application::GetInstance()
         .m_GameManager->m_PlayersManager->LoadAllEquipmentsJson();
   }
@@ -93,6 +102,8 @@ void CharacterWindow::on_apply_pushButton_clicked() {
       ch->UpdateEquipmentOnJson();
       emit SigUseNewStuff(ch->m_Name);
     }
+    Application::GetInstance()
+        .m_GameManager->m_PlayersManager->LoadAllEquipmentsJson();
   }
 }
 

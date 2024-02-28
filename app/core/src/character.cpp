@@ -321,6 +321,17 @@ void Character::ApplyEquipOnStats() {
       }
     }
   }
+  ApplyEffeftOnStats();
+}
+
+void Character::ApplyEffeftOnStats() {
+  auto &allGae =
+      Application::GetInstance()
+          .m_GameManager->m_PlayersManager->m_AllEffectsOnGame[m_Name];
+
+  for (auto &gae : allGae) {
+    ApplyOneEffect(this, gae.allAtkEffects, false, gae.atk);
+  }
 }
 
 template <class T>
@@ -429,8 +440,8 @@ QChar Character::GetCharEffectValue(const QString &target) const {
 }
 
 QString Character::ApplyOneEffect(Character *target, effectParam &effect,
-                                  const bool fromLaunch,
-                                  const AttaqueType &atk) {
+                                  const bool fromLaunch, const AttaqueType &atk,
+                                  const bool reload) {
   if (target == nullptr) {
     return "No  target character";
   }
@@ -455,7 +466,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   }
   // up/down % stats must be effective only at launch
   if ((effect.statsName == STATS_DODGE || effect.statsName == STATS_CRIT) &&
-      !fromLaunch) {
+      (!fromLaunch && !reload)) {
     return "";
   }
 
@@ -476,7 +487,9 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
                                              nbOfApplies, atk.name);
   // Apply regen effect turning into damage for all bosses
   // can be processed only after calcul of amount of atk
-  result += RegenIntoDamage(amount, effect.statsName);
+  if (!reload) {
+    result += RegenIntoDamage(amount, effect.statsName);
+  }
   // Process aggro
   if (fromLaunch) {
     result += ProcessAggro(amount, effect.statsName);
@@ -592,9 +605,9 @@ void Character::RemoveMalusEffect(const effectParam &ep) {
     auto &localStat =
         std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(ep.statsName));
     if (ep.effect == EFFECT_PERCENT_CHANGE) {
-      SetStatsByPercent(localStat, ep.value, false);
+      SetStatsOnEffect(localStat, ep.value, false, true);
     } else {
-      localStat.m_CurrentValue = localStat.m_MaxValue;
+      SetStatsOnEffect(localStat, ep.value, false, false);
     }
   }
 
@@ -653,7 +666,7 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
   int amount = 0;
 
   // HP
-  if (ep.statsName == STATS_HP) {
+  if (ep.statsName == STATS_HP && ep.effect == EFFECT_VALUE_CHANGE) {
     if (const bool isOnEnnemy = ep.target == TARGET_ENNEMY; isOnEnnemy) {
       amount = nbOfApplies * DamageByAtk(launcherStats, targetStats,
                                          ep.isMagicAtk, ep.value, ep.nbTurns);
@@ -795,14 +808,24 @@ void Character::SetBuf(const int value, const bool isPercent) {
   m_BufDamage.SetBuf(value, isPercent);
 }
 
-void Character::SetStatsByPercent(StatsType<int> &stat, const int value,
-                                  const bool isUp) {
+void Character::SetStatsOnEffect(StatsType<int> &stat, const int value,
+                                  const bool isUp, const bool isPercent) {
+  int div = 1;
+  if (isPercent) {
+    div = 100;
+  }
   int sign = 1;
   if (!isUp) {
     sign = -1;
   }
-  stat.m_CurrentValue += sign * stat.m_CurrentValue * value / 100;
-  stat.m_MaxValue += sign * stat.m_CurrentValue * value / 100;
+  const double ratio = (stat.m_MaxValue > 0)
+                           ? static_cast<double>(stat.m_CurrentValue) /
+                                 static_cast<double>(stat.m_MaxValue)
+                           : 1;
+  const auto baseValue = stat.m_RawMaxValue + stat.m_BufEquipValue +
+                         stat.m_BufEquipPercent * stat.m_RawMaxValue / 100;
+  stat.m_MaxValue += sign * baseValue * value / div;
+  stat.m_CurrentValue += sign * std::round(stat.m_MaxValue * ratio);
 }
 
 int Character::GetMaxNbOfApplies(const AttaqueType &atk) const {
@@ -907,10 +930,23 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
   }
   if (effect.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
     const QChar sign = GetCharEffectValue(effect.target);
+    const auto signBool = static_cast<bool>(GetSignEffectValue(effect.target));
     // common init
     auto &localStat = std::get<StatsType<int>>(
         target->m_Stats.m_AllStatsTable[effect.statsName]);
-    SetStatsByPercent(localStat, effect.value, true);
+    SetStatsOnEffect(localStat, effect.value, signBool, true);
+    output = QString("La stat %1 est modifié de %2%3%.")
+                 .arg(effect.statsName)
+                 .arg(sign)
+                 .arg(effect.value);
+  }
+  if (effect.effect == EFFECT_VALUE_CHANGE) {
+    const QChar sign = GetCharEffectValue(effect.target);
+    const auto signBool = static_cast<bool>(GetSignEffectValue(effect.target));
+    // common init
+    auto &localStat = std::get<StatsType<int>>(
+        target->m_Stats.m_AllStatsTable[effect.statsName]);
+    SetStatsOnEffect(localStat, effect.value, signBool, false);
     output = QString("La stat %1 est modifié de %2%3%.")
                  .arg(effect.statsName)
                  .arg(sign)
@@ -997,7 +1033,8 @@ void Character::AddExp(const int newXp) {
 
   while (m_Exp >= m_NextLevel) {
     m_Level += 1;
-    m_NextLevel += m_NextLevel * 10 / 100;
+    m_NextLevel += m_NextLevel * 20 / 100;
+    UpdateStatsToNextLevel();
   }
 }
 
@@ -1033,8 +1070,8 @@ void Character::SetEquipment(
 }
 
 void Character::UpdateEquipmentOnJson() {
-    // init json doc
-    QJsonObject obj;
+  // init json doc
+  QJsonObject obj;
   for (const auto &[bodyPart, equip] : m_WearingEquipment) {
     if (bodyPart.isEmpty()) {
       continue;
@@ -1046,12 +1083,12 @@ void Character::UpdateEquipmentOnJson() {
   QString directoryPath =
       OFFLINE_WEARING_EQUIPMENT; // Replace with the actual path
   if (QDir directory(directoryPath); !directory.exists()) {
-      qDebug() << "Directory does not exist: " << directoryPath;
+    qDebug() << "Directory does not exist: " << directoryPath;
   }
   QFile json(directoryPath + m_Name + ".json");
   if (!json.open(QFile::WriteOnly | QFile::Text)) {
-      Application::GetInstance().log(" Could not open the file for reading " +
-                                     directoryPath + m_Name + ".json");
+    Application::GetInstance().log(" Could not open the file for reading " +
+                                   directoryPath + m_Name + ".json");
   }
   QTextStream out(&json);
 #if QT_VERSION_MAJOR == 6
@@ -1060,4 +1097,18 @@ void Character::UpdateEquipmentOnJson() {
   out.setCodec("UTF-8");
 #endif
   out << doc.toJson() << "\n";
+}
+
+void Character::UpdateStatsToNextLevel() {
+  for (const auto &stat : STATS_TO_LEVEL_UP) {
+    if (m_Stats.m_AllStatsTable.count(stat) == 0) {
+      continue;
+    }
+    auto &localStat = std::get<StatsType<int>>(m_Stats.m_AllStatsTable[stat]);
+    localStat.m_RawMaxValue += localStat.m_RawMaxValue * 10 / 100;
+
+    // update current value and max value
+    ApplyEquipOnStats();
+    // re apply effects
+  }
 }
