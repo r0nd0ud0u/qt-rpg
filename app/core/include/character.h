@@ -56,7 +56,7 @@ public:
 
   // Effect
   QString ApplyOneEffect(Character *target, effectParam &effect,
-                         const bool fromLaunch, const AttaqueType &atk);
+                         const bool fromLaunch, const AttaqueType &atk, const bool reload = false);
   std::tuple<bool, QStringList, std::vector<effectParam>>
   ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
                  Character *target); // value1: conditions fulfilled ?, value2 :
@@ -67,15 +67,16 @@ public:
   std::vector<effectParam> CreateEveilDeLaForet(); // template
   void SetBuf(const int value, const bool isPercent);
 
-  static void SetStatsByPercent(
+  static void SetStatsOnEffect(
       StatsType<int> &stat, const int value,
-      const bool isUp); // TODO à sortir dans un common pour gerer les stats?
+      const bool isUp, const bool isPercent); // TODO à sortir dans un common pour gerer les stats?
   static QString GetInventoryString(const InventoryType &type);
   bool IsDodging() const;
   void UsePotion(const QString& statsName);
   void AddExp(const int newXp);
   void SetEquipment(const std::unordered_map<QString, QString>&);
   void UpdateEquipmentOnJson();
+  void ApplyEffeftOnStats();
 
   QString m_Name = "default";
   characType m_type = characType::Hero;
@@ -87,7 +88,7 @@ public:
   std::vector<uint8_t> m_Inventory;
   int m_Level = 1;
   int m_Exp = 100;
-  int m_NextLevel = 110;
+  int m_NextLevel = 120;
 
   QColor color = QColor("dark");
   // Buf
@@ -120,6 +121,7 @@ private:
       const AttaqueType &atk) const; // pair1 output log, pair2 nbOfApplies
   QString ProcessAggro(const int atkValue, const QString &statsName);
   int ProcessCriticalStrike(const int atkValue) const;
+  void UpdateStatsToNextLevel();
 };
 
 #endif // CHARACTER_H
