@@ -331,7 +331,8 @@ void GameDisplay::AddNewCharacter(Character *ch) {
       .m_GameManager->m_PlayersManager->m_BossesList.push_back(ch);
 }
 
-void GameDisplay::AddNewStuff() {
+void GameDisplay::AddNewStuff() const {
+  // TODO useful ?
   // emit
 }
 

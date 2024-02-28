@@ -26,7 +26,7 @@ CharacterWindow::~CharacterWindow() { delete ui; }
 
 void CharacterWindow::InitWindow(const tabType &type, const bool setIndex) {
   if (setIndex) {
-        ui->tabWidget->setCurrentIndex(static_cast<int>(type));
+    ui->tabWidget->setCurrentIndex(static_cast<int>(type));
   }
   if (type == tabType::attak) {
     ui->edit_atk_tab->InitView();
@@ -49,7 +49,7 @@ void CharacterWindow::InitWindow(const tabType &type, const bool setIndex) {
 
 void CharacterWindow::on_pushButton_clicked() {
   hide();
-  const tabType type = static_cast<tabType>(ui->tabWidget->currentIndex());
+  const auto type = static_cast<tabType>(ui->tabWidget->currentIndex());
   if (type == tabType::attak) {
     ui->edit_atk_tab->Save();
   }
@@ -58,53 +58,32 @@ void CharacterWindow::on_pushButton_clicked() {
     emit SigNewCharacter(m_CurCharacter);
   }
 
-  if (type == tabType::stuff) {
-    EditStuff es = ui->edit_stuff_view->Save();
-    Application::GetInstance()
-        .m_GameManager->m_PlayersManager
-        ->m_Equipments[es.m_BodyPart][es.m_Name] = es.m_Stuff;
-    ui->use_stuff_view->AddItemInComboBox(es);
-    emit SigAddNewStuff();
-  }
-
-  if (type == tabType::useStuff) {
-      const auto &table = ui->use_stuff_view->GetCurrentEquipmentTable();
-      auto *ch = Application::GetInstance()
-                     .m_GameManager->m_PlayersManager->m_SelectedHero;
-      if (ch != nullptr) {
-          ch->SetEquipment(table);
-          ch->ApplyEquipOnStats();
-          ch->UpdateEquipmentOnJson();
-          emit SigUseNewStuff(ch->m_Name);
-      }
-    Application::GetInstance()
-        .m_GameManager->m_PlayersManager->LoadAllEquipmentsJson();
-  }
+  Apply();
 }
 
 void CharacterWindow::on_apply_pushButton_clicked() {
-  const tabType type = static_cast<tabType>(ui->tabWidget->currentIndex());
-  if (type == tabType::stuff) {
-    EditStuff es = ui->edit_stuff_view->Save();
-    Application::GetInstance()
-        .m_GameManager->m_PlayersManager
-        ->m_Equipments[es.m_BodyPart][es.m_Name] = es.m_Stuff;
-    ui->use_stuff_view->AddItemInComboBox(es);
-    emit SigAddNewStuff();
-  }
-  if (type == tabType::useStuff) {
-    const auto &table = ui->use_stuff_view->GetCurrentEquipmentTable();
-    auto *ch = Application::GetInstance()
-                   .m_GameManager->m_PlayersManager->m_SelectedHero;
-    if (ch != nullptr) {
-      ch->SetEquipment(table);
-      ch->ApplyEquipOnStats();
-      ch->UpdateEquipmentOnJson();
-      emit SigUseNewStuff(ch->m_Name);
+    Apply();
+}
+
+void CharacterWindow::Apply(){
+    const auto type = static_cast<tabType>(ui->tabWidget->currentIndex());
+    auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+    if (type == tabType::stuff) {
+        EditStuff es = ui->edit_stuff_view->Save();
+        pm->m_Equipments[es.m_BodyPart][es.m_Name] = es.m_Stuff;
+        ui->use_stuff_view->AddItemInComboBox(es);
+        emit SigAddNewStuff();
     }
-    Application::GetInstance()
-        .m_GameManager->m_PlayersManager->LoadAllEquipmentsJson();
-  }
+    if (type == tabType::useStuff) {
+        if (auto *ch = pm->m_SelectedHero; ch != nullptr) {
+            const auto &table = ui->use_stuff_view->GetCurrentEquipmentTable();
+            ch->SetEquipment(table);
+            ch->ApplyEquipOnStats();
+            ch->UpdateEquipmentOnJson();
+            emit SigUseNewStuff(ch->m_Name);
+        }
+        pm->LoadAllEquipmentsJson();
+    }
 }
 
 void CharacterWindow::on_tabWidget_currentChanged(int index) {

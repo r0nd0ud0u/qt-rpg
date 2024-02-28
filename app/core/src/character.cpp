@@ -825,7 +825,7 @@ void Character::SetStatsOnEffect(StatsType<int> &stat, const int value,
   const auto baseValue = stat.m_RawMaxValue + stat.m_BufEquipValue +
                          stat.m_BufEquipPercent * stat.m_RawMaxValue / 100;
   stat.m_MaxValue += sign * baseValue * value / div;
-  stat.m_CurrentValue += sign * std::round(stat.m_MaxValue * ratio);
+  stat.m_CurrentValue += static_cast<int>(sign * std::round(stat.m_MaxValue * ratio));
 }
 
 int Character::GetMaxNbOfApplies(const AttaqueType &atk) const {
@@ -1069,7 +1069,7 @@ void Character::SetEquipment(
   }
 }
 
-void Character::UpdateEquipmentOnJson() {
+void Character::UpdateEquipmentOnJson() const {
   // init json doc
   QJsonObject obj;
   for (const auto &[bodyPart, equip] : m_WearingEquipment) {

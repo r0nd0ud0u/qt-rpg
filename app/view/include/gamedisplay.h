@@ -17,7 +17,7 @@ public:
   explicit GameDisplay(QWidget *parent = nullptr);
   ~GameDisplay();
   void AddNewCharacter(Character *);
-  void AddNewStuff();
+  void AddNewStuff() const;
   public slots:
   // slots which can be called by other windows
   void UpdateViews(const QString &name);
