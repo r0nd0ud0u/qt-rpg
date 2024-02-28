@@ -75,6 +75,7 @@ public:
   void UsePotion(const QString& statsName);
   void AddExp(const int newXp);
   void SetEquipment(const std::unordered_map<QString, QString>&);
+  void UpdateEquipmentOnJson();
 
   QString m_Name = "default";
   characType m_type = characType::Hero;

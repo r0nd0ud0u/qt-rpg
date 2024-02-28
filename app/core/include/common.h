@@ -190,6 +190,9 @@ public:
     m_MaxValue = max;
     m_BufEffectPercent = 0;
     m_BufEquipPercent = 0;
+    m_BaseEquipValue = 0;
+    m_BufEquipValue = 0;
+    m_BufEffectValue = 0;
     m_RawMaxValue = max;
 
     m_RegenOnTurn = regen;
