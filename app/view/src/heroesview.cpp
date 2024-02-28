@@ -48,7 +48,6 @@ void HeroesView::InitHeroPanel() {
       m_HeroPanels.push_back(heroPanel);
       heroPanel->SetActive(false);
       heroPanel->SetSelected(false);
-      connect(heroPanel, &HeroPanel::addStuff, this, &HeroesView::Dosomething);
       connect(heroPanel, &HeroPanel::SigPanelSelectCharacter, this,
               &HeroesView::SlotClickedOnHeroPanel);
     }

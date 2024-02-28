@@ -17,7 +17,7 @@ public:
 
   void ShowPageStuffs();
   void ShowTurnPage();
-  void AddStuff();
+
 signals:
   void SigNextRound();
     void SigNewTurn();

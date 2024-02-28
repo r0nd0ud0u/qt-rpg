@@ -36,10 +36,7 @@ GameDisplay::GameDisplay(QWidget *parent)
 
 GameDisplay::~GameDisplay() { delete ui; }
 
-void GameDisplay::UpdateChannel() {
-  ui->channel_lay->ShowPageStuffs();
-  ui->channel_lay->AddStuff();
-}
+void GameDisplay::UpdateChannel() { ui->channel_lay->ShowPageStuffs(); }
 
 void GameDisplay::UpdateViews(const QString &name) {
   const auto &app = Application::GetInstance();
@@ -324,7 +321,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
 void GameDisplay::on_add_boss_button_clicked() {
   auto &appView = ApplicationView::GetInstance();
-  appView.GetCharacterWindow()->InitWindow(actionType::newCharacter);
+  appView.GetCharacterWindow()->InitWindow(tabType::character);
   appView.ShowWindow(appView.GetCharacterWindow(), true);
 }
 
@@ -332,6 +329,11 @@ void GameDisplay::AddNewCharacter(Character *ch) {
   emit SigAddCharacter(ch);
   Application::GetInstance()
       .m_GameManager->m_PlayersManager->m_BossesList.push_back(ch);
+}
+
+void GameDisplay::AddNewStuff() const {
+  // TODO useful ?
+  // emit
 }
 
 void GameDisplay::on_mana_potion_button_clicked() {
@@ -370,10 +372,8 @@ void GameDisplay::on_vigor_potion_button_clicked() {
   }
 }
 
-void GameDisplay::on_pushButton_clicked()
-{
-    Application::GetInstance()
-        .m_GameManager->m_PlayersManager->AddExpForHeroes(ui->exp_spinBox->value());
-    ui->add_exp_button->setEnabled(false);
+void GameDisplay::on_pushButton_clicked() {
+  Application::GetInstance().m_GameManager->m_PlayersManager->AddExpForHeroes(
+      ui->exp_spinBox->value());
+  ui->add_exp_button->setEnabled(false);
 }
-

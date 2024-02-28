@@ -52,7 +52,7 @@ void BossPanel::SetActive(bool activated) {
 void BossPanel::on_edit_button_clicked()
 {
     auto &appView = ApplicationView::GetInstance();
-    appView.GetCharacterWindow()->InitWindow(actionType::edit);
+    appView.GetCharacterWindow()->InitWindow(tabType::attak);
     appView.ShowWindow(appView.GetCharacterWindow(), true);
 }
 

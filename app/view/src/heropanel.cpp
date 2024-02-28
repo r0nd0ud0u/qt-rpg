@@ -9,8 +9,6 @@ HeroPanel::HeroPanel(QWidget *parent) : QWidget(parent), ui(new Ui::HeroPanel) {
 
 HeroPanel::~HeroPanel() { delete ui; }
 
-void HeroPanel::on_pushButton_clicked() { emit addStuff(); }
-
 void HeroPanel::UpdatePanel(Character *hero) {
   if (hero == nullptr) {
     return;
@@ -137,7 +135,7 @@ void HeroPanel::mousePressEvent(QMouseEvent *event) {
 
 void HeroPanel::on_edit_button_clicked() const {
   auto &appView = ApplicationView::GetInstance();
-  appView.GetCharacterWindow()->InitWindow(actionType::edit);
+    appView.GetCharacterWindow()->InitWindow(tabType::attak, true);
   appView.ShowWindow(appView.GetCharacterWindow(), true);
 }
 

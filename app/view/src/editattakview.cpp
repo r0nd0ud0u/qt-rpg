@@ -249,7 +249,7 @@ void EditAttakView::UpdateValues(const EditAttak &selectedAttak, const int index
 
   // update effect
   ui->effect_widget->SetIndex(index);
-  ui->effect_widget->SetValues(selectedAttak.type.m_AllEffects);
+  ui->effect_widget->InitValues(selectedAttak.type.m_AllEffects);
 }
 
 void EditAttakView::EnableAllWidgets(const bool value) const {

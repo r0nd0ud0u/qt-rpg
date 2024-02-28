@@ -14,7 +14,17 @@ class StuffPanel : public QWidget
 public:
     explicit StuffPanel(QWidget *parent = nullptr);
     ~StuffPanel();
-    void AddName(QString name);
+    void Init(const QString &name);
+
+    QString m_Name;
+    bool m_IsPercent = false;
+    int m_BufValue = 0;
+
+
+private slots:
+    void on_percent_radioButton_toggled(bool checked);
+
+    void on_value_spinBox_valueChanged(int arg1);
 
 private:
     Ui::StuffPanel *ui;
