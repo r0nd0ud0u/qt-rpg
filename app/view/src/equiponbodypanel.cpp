@@ -29,7 +29,7 @@ void EquipOnBodyPanel::InitComboBox(const QString& name){
     }
 }
 
-void EquipOnBodyPanel::AddItemInComboBox(const QString& name){
+void EquipOnBodyPanel::AddItemInComboBox(const QString& name) const{
     ui->equip_comboBox->addItem(name);
 }
 

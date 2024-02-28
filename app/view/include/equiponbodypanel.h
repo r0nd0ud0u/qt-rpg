@@ -15,7 +15,7 @@ public:
     explicit EquipOnBodyPanel(QWidget *parent = nullptr);
     ~EquipOnBodyPanel();
     void InitComboBox(const QString& name);
-    void AddItemInComboBox(const QString& name);
+    void AddItemInComboBox(const QString& name) const;
     void SetValue(const QString& value);
 
     QString m_BodyName;

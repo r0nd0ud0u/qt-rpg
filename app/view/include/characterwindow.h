@@ -36,6 +36,8 @@ private slots:
   private:
   Ui::CharacterWindow *ui;
   Character* m_CurCharacter = nullptr;
+
+  void Apply();
 };
 
 #endif // CHARACTERWINDOW_H

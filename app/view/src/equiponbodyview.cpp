@@ -44,7 +44,7 @@ void EquipOnBodyView::AddItemInComboBox(const EditStuff &es) {
 }
 
 // Init the view with the selected hero or boss
-void EquipOnBodyView::InitView(Character *player) {
+void EquipOnBodyView::InitView(Character *player) const{
   if (player == nullptr) {
     return;
   }
@@ -56,7 +56,7 @@ void EquipOnBodyView::InitView(Character *player) {
 }
 
 std::unordered_map<QString, QString>
-EquipOnBodyView::GetCurrentEquipmentTable() {
+EquipOnBodyView::GetCurrentEquipmentTable() const{
   std::unordered_map<QString, QString> output;
   for (const auto &panel : m_PanelList) {
     if (!panel->m_Equipment.isEmpty()) {
