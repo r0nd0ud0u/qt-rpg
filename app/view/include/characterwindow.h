@@ -19,7 +19,7 @@ class CharacterWindow : public QMainWindow {
 public:
   explicit CharacterWindow(QWidget *parent = nullptr);
   ~CharacterWindow();
-  void InitWindow(const tabType &type);
+  void InitWindow(const tabType &type, const bool index = false);
 
   signals:
   void SigNewCharacter(Character*);
@@ -31,7 +31,9 @@ private slots:
 
     void on_apply_pushButton_clicked();
 
-private:
+  void on_tabWidget_currentChanged(int index);
+
+  private:
   Ui::CharacterWindow *ui;
   Character* m_CurCharacter = nullptr;
 };

@@ -246,6 +246,10 @@ void PlayersManager::LoadAllEquipmentsJson() {
           if (stuff.m_Stats.m_AllStatsTable.count(stats) == 0) {
             continue;
           }
+          // init
+          auto &stuffStat = std::get<StatsType<int>>(
+              stuff.m_Stats.m_AllStatsTable[stats]);
+          stuffStat.InitValues(0,0,0,0);
           QJsonArray jsonArray = jsonDoc[stats].toArray();
           for (const auto &elem : jsonArray) {
             if (elem.isObject()) {
@@ -253,8 +257,6 @@ void PlayersManager::LoadAllEquipmentsJson() {
               for (const auto &key : item.keys()) {
                 const auto &val = item[key];
                 if (val.isDouble()) {
-                  auto &stuffStat = std::get<StatsType<int>>(
-                      stuff.m_Stats.m_AllStatsTable[stats]);
                   if (key == "percent") {
                       stuffStat.m_BufEquipPercent = static_cast<int>(val.toDouble());
                   } else if (key == "value") {
@@ -266,17 +268,10 @@ void PlayersManager::LoadAllEquipmentsJson() {
           }
         }
 #endif
-        auto &stuffStat = std::get<StatsType<int>>(
-            stuff.m_Stats.m_AllStatsTable[STATS_AGGRO]);
         m_Equipments[jsonDoc[EQUIP_CATEGORY].toString()][stuff.m_Name] = stuff;
       }
     }
   }
-
-  const auto stat = m_Equipments["Anneau"]["Anneau1"].m_Stats;
-  auto &stuffStat =
-      std::get<StatsType<int>>(stat.m_AllStatsTable.at(STATS_AGGRO));
-  int a = 0;
 }
 
 Character *PlayersManager::GetCharacterByName(const QString &name) {

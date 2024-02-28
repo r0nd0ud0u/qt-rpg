@@ -10,7 +10,6 @@
 CharacterWindow::CharacterWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::CharacterWindow) {
   ui->setupUi(this);
-  ui->tabWidget->setCurrentIndex(static_cast<int>(tabType::character));
 
   connect(this, &CharacterWindow::SigNewCharacter,
           ApplicationView::GetInstance().GetMainWindow(),
@@ -25,8 +24,10 @@ CharacterWindow::CharacterWindow(QWidget *parent)
 
 CharacterWindow::~CharacterWindow() { delete ui; }
 
-void CharacterWindow::InitWindow(const tabType &type) {
-  ui->tabWidget->setCurrentIndex(static_cast<int>(type));
+void CharacterWindow::InitWindow(const tabType &type, const bool setIndex) {
+  if (setIndex) {
+        ui->tabWidget->setCurrentIndex(static_cast<int>(type));
+  }
   if (type == tabType::attak) {
     ui->edit_atk_tab->InitView();
     ui->tabWidget->setTabEnabled(1, true);
@@ -89,8 +90,13 @@ void CharacterWindow::on_apply_pushButton_clicked() {
     if (ch != nullptr) {
       ch->SetEquipment(table);
       ch->ApplyEquipOnStats();
-      // vh->UpdateEquipmentJson();
+      ch->UpdateEquipmentOnJson();
       emit SigUseNewStuff(ch->m_Name);
     }
   }
+}
+
+void CharacterWindow::on_tabWidget_currentChanged(int index) {
+  ApplicationView::GetInstance().GetCharacterWindow()->InitWindow(
+      static_cast<tabType>(index), false);
 }

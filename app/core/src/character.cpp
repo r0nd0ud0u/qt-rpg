@@ -326,15 +326,17 @@ void Character::ApplyEquipOnStats() {
 template <class T>
 void Character::ProcessAddEquip(StatsType<T> &charStat,
                                 const StatsType<T> &equipStat) const {
-  if (equipStat.m_CurrentValue == 0) {
+  if (equipStat.m_BufEquipPercent == 0 && equipStat.m_BufEquipValue == 0) {
     return;
   }
 
   charStat.m_BufEquipValue += equipStat.m_BufEquipValue;
   charStat.m_BufEquipPercent += equipStat.m_BufEquipPercent;
 
-  const double ratio = static_cast<double>(charStat.m_CurrentValue) /
-                       static_cast<double>(charStat.m_MaxValue);
+  const double ratio = (charStat.m_MaxValue > 0)
+                           ? static_cast<double>(charStat.m_CurrentValue) /
+                                 static_cast<double>(charStat.m_MaxValue)
+                           : 1;
   charStat.m_MaxValue =
       charStat.m_RawMaxValue + charStat.m_BufEquipValue +
       charStat.m_RawMaxValue * charStat.m_BufEquipPercent / 100;
@@ -346,14 +348,16 @@ void Character::ProcessAddEquip(StatsType<T> &charStat,
 template <class T>
 void Character::ProcessRemoveEquip(StatsType<T> &charStat,
                                    const StatsType<T> &equipStat) {
-  if (equipStat.m_CurrentValue == 0) {
+  if (equipStat.m_BufEquipPercent == 0 && equipStat.m_BufEquipValue == 0) {
     return;
   }
   charStat.m_BufEquipValue -= equipStat.m_BufEquipValue;
   charStat.m_BufEquipPercent -= equipStat.m_BufEquipPercent;
 
-  const double ratio = static_cast<double>(charStat.m_CurrentValue) /
-                       static_cast<double>(charStat.m_MaxValue);
+  const double ratio = (charStat.m_MaxValue > 0)
+                           ? static_cast<double>(charStat.m_CurrentValue) /
+                                 static_cast<double>(charStat.m_MaxValue)
+                           : 1;
   charStat.m_MaxValue =
       charStat.m_RawMaxValue + charStat.m_BufEquipValue +
       charStat.m_RawMaxValue * charStat.m_BufEquipPercent / 100;
@@ -1001,19 +1005,59 @@ void Character::SetEquipment(
     const std::unordered_map<QString, QString> &table) {
   const auto pm = Application::GetInstance().m_GameManager->m_PlayersManager;
   for (auto &[bodyPart, stuff] : m_WearingEquipment) {
+
+    for (auto &stat : ALL_STATS) {
+      if (m_Stats.m_AllStatsTable.count(stat) == 0) {
+        continue;
+      }
+      ProcessRemoveEquip(
+          std::get<StatsType<int>>(m_Stats.m_AllStatsTable[stat]),
+          std::get<StatsType<int>>(stuff.m_Stats.m_AllStatsTable[stat]));
+    }
+
     if (table.count(bodyPart) == 1 && pm->m_Equipments.count(bodyPart) == 1) {
       stuff = pm->m_Equipments[bodyPart][table.at(bodyPart)];
-      auto &stat = std::get<StatsType<int>>(stuff.m_Stats.m_AllStatsTable.at(STATS_AGGRO));
-      int a = 0;
     } else {
       // TODO maybe have an equipment by default
       for (auto &stat : ALL_STATS) {
-        if (stat.isEmpty()) {
+        if (stuff.m_Stats.m_AllStatsTable.count(stat) == 0) {
           continue;
         }
-        auto &local = std::get<StatsType<int>>(stuff.m_Stats.m_AllStatsTable[stat]);
+        stuff.m_Name = "";
+        auto &local =
+            std::get<StatsType<int>>(stuff.m_Stats.m_AllStatsTable[stat]);
         local.InitValues(0, 0, 0, 0);
       }
     }
   }
+}
+
+void Character::UpdateEquipmentOnJson() {
+    // init json doc
+    QJsonObject obj;
+  for (const auto &[bodyPart, equip] : m_WearingEquipment) {
+    if (bodyPart.isEmpty()) {
+      continue;
+    }
+    obj.insert(bodyPart, equip.m_Name);
+  }
+  // output attak json
+  QJsonDocument doc(obj);
+  QString directoryPath =
+      OFFLINE_WEARING_EQUIPMENT; // Replace with the actual path
+  if (QDir directory(directoryPath); !directory.exists()) {
+      qDebug() << "Directory does not exist: " << directoryPath;
+  }
+  QFile json(directoryPath + m_Name + ".json");
+  if (!json.open(QFile::WriteOnly | QFile::Text)) {
+      Application::GetInstance().log(" Could not open the file for reading " +
+                                     directoryPath + m_Name + ".json");
+  }
+  QTextStream out(&json);
+#if QT_VERSION_MAJOR == 6
+  out.setEncoding(QStringConverter::Encoding::Utf8);
+#else
+  out.setCodec("UTF-8");
+#endif
+  out << doc.toJson() << "\n";
 }
