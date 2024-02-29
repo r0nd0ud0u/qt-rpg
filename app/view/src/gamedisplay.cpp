@@ -103,7 +103,7 @@ void GameDisplay::NewRound() {
 
   // Apply effects
   const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffectsOnPlayer(
-      activePlayer->m_Name, gm->m_GameState->m_CurrentTurnNb);
+      activePlayer->m_Name, gm->m_GameState->m_CurrentTurnNb, false);
   for (const auto &el : effectsLogs) {
     emit SigUpdateChannelView("GameState", el);
   }
