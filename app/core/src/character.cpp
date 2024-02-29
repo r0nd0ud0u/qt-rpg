@@ -684,11 +684,6 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
     // TODO duplicate with EFFECT_IMPROVE_BY_PERCENT_CHANGE ?
     amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
   }
-  // nominal behavior
-  else {
-    amount = nbOfApplies * ep.value;
-  }
-
   // new value of stat
   amount = sign * amount; // apply the sign after the calcul of amount
   localStat.m_CurrentValue += min(delta, amount);
@@ -698,7 +693,7 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
   if (m_BufDamage.m_Value > 0) {
     if (m_BufDamage.m_IsPercent) {
       amount += amount * m_BufDamage.m_Value / 100;
-    } else {
+    } else if (amount > 0) {
       amount += m_BufDamage.m_Value;
     }
   }
@@ -809,11 +804,7 @@ void Character::SetBuf(const int value, const bool isPercent) {
 }
 
 void Character::SetStatsOnEffect(StatsType<int> &stat, const int value,
-                                  const bool isUp, const bool isPercent) {
-  int div = 1;
-  if (isPercent) {
-    div = 100;
-  }
+                                 const bool isUp, const bool isPercent) {
   int sign = 1;
   if (!isUp) {
     sign = -1;
@@ -824,8 +815,17 @@ void Character::SetStatsOnEffect(StatsType<int> &stat, const int value,
                            : 1;
   const auto baseValue = stat.m_RawMaxValue + stat.m_BufEquipValue +
                          stat.m_BufEquipPercent * stat.m_RawMaxValue / 100;
-  stat.m_MaxValue += sign * baseValue * value / div;
-  stat.m_CurrentValue += static_cast<int>(sign * std::round(stat.m_MaxValue * ratio));
+
+  if (isPercent) {
+    stat.m_MaxValue += sign * baseValue * value / 100;
+    stat.m_BufEffectPercent += sign * value;
+  } else {
+    stat.m_MaxValue += sign * value;
+    stat.m_BufEffectValue += sign * value;
+  }
+
+  stat.m_CurrentValue +=
+      static_cast<int>(sign * std::round(stat.m_MaxValue * ratio));
 }
 
 int Character::GetMaxNbOfApplies(const AttaqueType &atk) const {
@@ -940,7 +940,7 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
                  .arg(sign)
                  .arg(effect.value);
   }
-  if (effect.effect == EFFECT_VALUE_CHANGE) {
+  if (effect.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
     const QChar sign = GetCharEffectValue(effect.target);
     const auto signBool = static_cast<bool>(GetSignEffectValue(effect.target));
     // common init
@@ -1114,99 +1114,99 @@ void Character::UpdateStatsToNextLevel() {
 }
 
 std::vector<effectParam> Character::LoadThaliaTalent() {
-    std::vector<effectParam> epTable;
+  std::vector<effectParam> epTable;
 
-    effectParam param1;
-    param1.effect = "";
-    param1.value = 50;
-    param1.nbTurns = 1000;
-    param1.reach = REACH_INDIVIDUAL;
-    param1.statsName = STATS_REGEN_MANA;
-    param1.target = TARGET_HIMSELF;
-    param1.subValueEffect = 0;
-    epTable.push_back(param1);
+  effectParam param1;
+  param1.effect = EFFECT_IMPROVEMENT_STAT_BY_VALUE;
+  param1.value = 50;
+  param1.nbTurns = 1000;
+  param1.reach = REACH_INDIVIDUAL;
+  param1.statsName = STATS_REGEN_MANA;
+  param1.target = TARGET_HIMSELF;
+  param1.subValueEffect = 0;
+  epTable.push_back(param1);
 
-    effectParam param2;
-    param2.effect = "";
-    param2.value = 50;
-    param2.nbTurns = 1;
-    param2.reach = REACH_INDIVIDUAL;
-    param2.statsName = STATS_HP;
-    param2.target = TARGET_HIMSELF;
-    param2.subValueEffect = 0;
-    epTable.push_back(param2);
+  effectParam param2;
+  param2.effect = EFFECT_IMPROVEMENT_STAT_BY_VALUE;
+  param2.value = 50;
+  param2.nbTurns = 1;
+  param2.reach = REACH_INDIVIDUAL;
+  param2.statsName = STATS_HP;
+  param2.target = TARGET_HIMSELF;
+  param2.subValueEffect = 0;
+  epTable.push_back(param2);
 
-    effectParam param3;
-    param3.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
-    param3.value = 35;
-    param3.nbTurns = 1;
-    param3.reach = REACH_INDIVIDUAL;
-    param3.statsName = STATS_ARM_PHY;
-    param3.target = TARGET_HIMSELF;
-    param3.subValueEffect = 0;
-    epTable.push_back(param3);
+  effectParam param3;
+  param3.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
+  param3.value = 35;
+  param3.nbTurns = 1;
+  param3.reach = REACH_INDIVIDUAL;
+  param3.statsName = STATS_ARM_PHY;
+  param3.target = TARGET_HIMSELF;
+  param3.subValueEffect = 0;
+  epTable.push_back(param3);
 
-    return epTable;
+  return epTable;
 }
 
 std::vector<effectParam> Character::LoadAzrakTalent() {
-    std::vector<effectParam> epTable;
+  std::vector<effectParam> epTable;
 
-    effectParam param1;
-    param1.effect = "";
-    param1.value = 5;
-    param1.nbTurns = 1000;
-    param1.reach = REACH_INDIVIDUAL;
-    param1.statsName = STATS_REGEN_MANA;
-    param1.target = TARGET_HIMSELF;
-    param1.subValueEffect = 0;
-    epTable.push_back(param1);
+  effectParam param1;
+  param1.effect = "";
+  param1.value = 5;
+  param1.nbTurns = 1000;
+  param1.reach = REACH_INDIVIDUAL;
+  param1.statsName = STATS_REGEN_MANA;
+  param1.target = TARGET_HIMSELF;
+  param1.subValueEffect = 0;
+  epTable.push_back(param1);
 
-    return epTable;
+  return epTable;
 }
 
 std::vector<effectParam> Character::LoadThrainTalent() {
-    std::vector<effectParam> epTable;
+  std::vector<effectParam> epTable;
 
-    effectParam param1;
-    param1.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
-    param1.value = 10;
-    param1.nbTurns = 1000;
-    param1.reach = REACH_INDIVIDUAL;
-    param1.statsName = STATS_DODGE;
-    param1.target = TARGET_HIMSELF;
-    param1.subValueEffect = 0;
-    epTable.push_back(param1);
+  effectParam param1;
+  param1.effect = EFFECT_IMPROVEMENT_STAT_BY_VALUE;
+  param1.value = 10;
+  param1.nbTurns = 1000;
+  param1.reach = REACH_INDIVIDUAL;
+  param1.statsName = STATS_DODGE;
+  param1.target = TARGET_HIMSELF;
+  param1.subValueEffect = 0;
+  epTable.push_back(param1);
 
-    effectParam param2;
-    param2.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
-    param2.value = 15;
-    param2.nbTurns = 1000;
-    param2.reach = REACH_INDIVIDUAL;
-    param2.statsName = STATS_HP;
-    param2.target = TARGET_HIMSELF;
-    param2.subValueEffect = 0;
-    epTable.push_back(param2);
+  effectParam param2;
+  param2.effect = EFFECT_IMPROVEMENT_STAT_BY_VALUE;
+  param2.value = 15;
+  param2.nbTurns = 1000;
+  param2.reach = REACH_INDIVIDUAL;
+  param2.statsName = STATS_HP;
+  param2.target = TARGET_HIMSELF;
+  param2.subValueEffect = 0;
+  epTable.push_back(param2);
 
-    effectParam param3;
-    param3.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
-    param3.value = 35;
-    param3.nbTurns = 1000;
-    param3.reach = REACH_INDIVIDUAL;
-    param3.statsName = STATS_ARM_PHY;
-    param3.target = TARGET_HIMSELF;
-    param3.subValueEffect = 0;
-    epTable.push_back(param3);
+  effectParam param3;
+  param3.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
+  param3.value = 35;
+  param3.nbTurns = 1000;
+  param3.reach = REACH_INDIVIDUAL;
+  param3.statsName = STATS_ARM_PHY;
+  param3.target = TARGET_HIMSELF;
+  param3.subValueEffect = 0;
+  epTable.push_back(param3);
 
-    effectParam param4;
-    param4.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
-    param4.value = 35;
-    param4.nbTurns = 1000;
-    param4.reach = REACH_INDIVIDUAL;
-    param4.statsName = STATS_ARM_MAG;
-    param4.target = TARGET_HIMSELF;
-    param4.subValueEffect = 0;
-    epTable.push_back(param4);
+  effectParam param4;
+  param4.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
+  param4.value = 35;
+  param4.nbTurns = 1000;
+  param4.reach = REACH_INDIVIDUAL;
+  param4.statsName = STATS_ARM_MAG;
+  param4.target = TARGET_HIMSELF;
+  param4.subValueEffect = 0;
+  epTable.push_back(param4);
 
-    return epTable;
+  return epTable;
 }
