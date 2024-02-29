@@ -136,13 +136,18 @@ void PlayersManager::InitHeroes() {
   const auto epParamTalent1 = hero1->LoadThaliaTalent();
   const auto epParamTalent2 = hero2->LoadAzrakTalent();
   const auto epParamTalent3 = hero3->LoadThrainTalent();
-  AddGameEffectOnAtk(hero1->m_Name, AttaqueType(), hero1->m_Name, epParamTalent1, 0);
-  AddGameEffectOnAtk(hero2->m_Name, AttaqueType(), hero2->m_Name, epParamTalent2, 0);
-  AddGameEffectOnAtk(hero3->m_Name, AttaqueType(), hero3->m_Name, epParamTalent3, 0);
+  AddGameEffectOnAtk(hero1->m_Name, AttaqueType(), hero1->m_Name,
+                     epParamTalent1, 0);
+  AddGameEffectOnAtk(hero2->m_Name, AttaqueType(), hero2->m_Name,
+                     epParamTalent2, 0);
+  AddGameEffectOnAtk(hero3->m_Name, AttaqueType(), hero3->m_Name,
+                     epParamTalent3, 0);
 
-  ApplyEffectsOnPlayer(hero1->m_Name, 0);
-  ApplyEffectsOnPlayer(hero2->m_Name, 0);
-  ApplyEffectsOnPlayer(hero3->m_Name, 0);
+  ApplyEffectsOnPlayer(
+      hero1->m_Name,
+      1); // 1 because launching turn must be different than current turn
+  ApplyEffectsOnPlayer(hero2->m_Name, 1);
+  ApplyEffectsOnPlayer(hero3->m_Name, 1);
 }
 
 void PlayersManager::InitBosses() {
@@ -233,33 +238,16 @@ void PlayersManager::LoadAllEquipmentsJson() {
         stuff.m_Name = jsonDoc[EQUIP_NAME].toString();
 
 #if QT_VERSION_MAJOR == 6
-        for (const auto &effect : effectArray) {
-          const auto &stat = effect[EFFECT_STAT].toString();
-          if (stat.isEmpty() && effect[EFFECT_TYPE].toString().isEmpty()) {
-            break;
-          }
-          effectParam param;
-          param.effect = effect[EFFECT_TYPE].toString();
-          param.value = effect[EFFECT_VALUE].toInt();
-          param.nbTurns = effect[EFFECT_ACTIVE_TURNS].toInt();
-          param.reach = effect[EFFECT_REACH].toString();
-          param.statsName = effect[EFFECT_STAT].toString();
-          param.target = effect[EFFECT_TARGET].toString();
-          param.subValueEffect = effect[EFFECT_SUB_VALUE].toInt();
-          // processed
-          param.isMagicAtk = atk.manaCost > 0;
-
-          atk.m_AllEffects.push_back(param);
-        }
+// do some code here
 #else
         for (const auto &stats : ALL_STATS) {
           if (stuff.m_Stats.m_AllStatsTable.count(stats) == 0) {
             continue;
           }
           // init
-          auto &stuffStat = std::get<StatsType<int>>(
-              stuff.m_Stats.m_AllStatsTable[stats]);
-          stuffStat.InitValues(0,0,0,0);
+          auto &stuffStat =
+              std::get<StatsType<int>>(stuff.m_Stats.m_AllStatsTable[stats]);
+          stuffStat.InitValues(0, 0, 0, 0);
           QJsonArray jsonArray = jsonDoc[stats].toArray();
           for (const auto &elem : jsonArray) {
             if (elem.isObject()) {
@@ -268,9 +256,11 @@ void PlayersManager::LoadAllEquipmentsJson() {
                 const auto &val = item[key];
                 if (val.isDouble()) {
                   if (key == "percent") {
-                      stuffStat.m_BufEquipPercent = static_cast<int>(val.toDouble());
+                    stuffStat.m_BufEquipPercent =
+                        static_cast<int>(val.toDouble());
                   } else if (key == "value") {
-                      stuffStat.m_BufEquipValue = static_cast<int>(val.toDouble());
+                    stuffStat.m_BufEquipValue =
+                        static_cast<int>(val.toDouble());
                   }
                 }
               }
@@ -359,6 +349,7 @@ QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName,
   if (targetPl != nullptr) {
     for (auto &gae : gaeTable) {
       if (gae.launchingTurn == currentTurn) {
+        // effet is applicable at launch of one character and then at the next turn of the target
         continue;
       }
       auto *launcherPl = GetCharacterByName(gae.launcher);

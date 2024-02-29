@@ -137,6 +137,7 @@ const QString EFFECT_BOOSTED_BY_HOTS =
 const QString EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT = "Up/down degats en %";
 const QString EFFECT_REPEAT_AS_MANY_AS = "Répète tant que possible";
 const QString CONDITION_ENNEMIES_DIED = "Ennemis morts tours précédents";
+const QString EFFECT_IMPROVEMENT_STAT_BY_VALUE = "Up par valeur";
 const std::set<QString> EFFECTS{"",
                                 EFFECT_REINIT,
                                 EFFECT_NB_COOL_DOWN,
@@ -151,7 +152,8 @@ const std::set<QString> EFFECTS{"",
                                 EFFECT_IMPROVE_BY_PERCENT_CHANGE,
                                 EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT,
                                 EFFECT_REPEAT_AS_MANY_AS,
-                                CONDITION_ENNEMIES_DIED};
+                                CONDITION_ENNEMIES_DIED,
+                                EFFECT_IMPROVEMENT_STAT_BY_VALUE};
 const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_NB_DECREASE_BY_TURN,
     EFFECT_NB_COOL_DOWN,
