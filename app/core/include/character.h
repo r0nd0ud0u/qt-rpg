@@ -77,6 +77,10 @@ public:
   void SetEquipment(const std::unordered_map<QString, QString>&);
   void UpdateEquipmentOnJson() const;
   void ApplyEffeftOnStats();
+  std::vector<effectParam> LoadThaliaTalent();
+  std::vector<effectParam> LoadAzrakTalent();
+  std::vector<effectParam> LoadThrainTalent();
+
 
   QString m_Name = "default";
   characType m_type = characType::Hero;
