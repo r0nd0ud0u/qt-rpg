@@ -1117,7 +1117,7 @@ std::vector<effectParam> Character::LoadThaliaTalent() {
   std::vector<effectParam> epTable;
 
   effectParam param1;
-  param1.effect = EFFECT_IMPROVEMENT_STAT_BY_VALUE;
+  param1.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
   param1.value = 50;
   param1.nbTurns = 1000;
   param1.reach = REACH_INDIVIDUAL;
@@ -1127,9 +1127,9 @@ std::vector<effectParam> Character::LoadThaliaTalent() {
   epTable.push_back(param1);
 
   effectParam param2;
-  param2.effect = EFFECT_IMPROVEMENT_STAT_BY_VALUE;
-  param2.value = 50;
-  param2.nbTurns = 1;
+  param2.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
+  param2.value = 10;
+  param2.nbTurns = 1000;
   param2.reach = REACH_INDIVIDUAL;
   param2.statsName = STATS_HP;
   param2.target = TARGET_HIMSELF;
@@ -1139,7 +1139,7 @@ std::vector<effectParam> Character::LoadThaliaTalent() {
   effectParam param3;
   param3.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
   param3.value = 35;
-  param3.nbTurns = 1;
+  param3.nbTurns = 1000;
   param3.reach = REACH_INDIVIDUAL;
   param3.statsName = STATS_ARM_PHY;
   param3.target = TARGET_HIMSELF;

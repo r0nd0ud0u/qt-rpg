@@ -145,9 +145,9 @@ void PlayersManager::InitHeroes() {
 
   ApplyEffectsOnPlayer(
       hero1->m_Name,
-      1); // 1 because launching turn must be different than current turn
-  ApplyEffectsOnPlayer(hero2->m_Name, 1);
-  ApplyEffectsOnPlayer(hero3->m_Name, 1);
+      1, true); // 1 because launching turn must be different than current turn
+  ApplyEffectsOnPlayer(hero2->m_Name, 1, true);
+  ApplyEffectsOnPlayer(hero3->m_Name, 1, true);
 }
 
 void PlayersManager::InitBosses() {
@@ -335,7 +335,7 @@ PlayersManager::RemoveTerminatedEffectsOnPlayer(const QString &curPlayerName) {
 }
 
 QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName,
-                                                 const int currentTurn) {
+                                                 const int currentTurn, const bool fromLaunch) {
   QStringList logs;
   if (m_AllEffectsOnGame.count(curPlayerName) == 0) {
     return logs;
@@ -355,7 +355,7 @@ QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName,
       auto *launcherPl = GetCharacterByName(gae.launcher);
       if (launcherPl != nullptr) {
         localLog.append(launcherPl->ApplyOneEffect(targetPl, gae.allAtkEffects,
-                                                   false, gae.atk));
+                                                   fromLaunch, gae.atk));
       }
     }
   }

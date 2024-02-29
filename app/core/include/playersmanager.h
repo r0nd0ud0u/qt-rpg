@@ -35,7 +35,7 @@ public:
                           const int currentTurn);
   QStringList RemoveTerminatedEffectsOnPlayer(const QString &curPlayerName);
   QStringList ApplyEffectsOnPlayer(const QString &curPlayerName,
-                                   const int currentTurn);
+                                   const int currentTurn, const bool fromLaunch);
   void ApplyRegenStats(const characType& type);
 
   static QString FormatAtkOnEnnemy(const int damage);
