@@ -1112,3 +1112,101 @@ void Character::UpdateStatsToNextLevel() {
     // re apply effects
   }
 }
+
+std::vector<effectParam> Character::LoadThaliaTalent() {
+    std::vector<effectParam> epTable;
+
+    effectParam param1;
+    param1.effect = "";
+    param1.value = 50;
+    param1.nbTurns = 1000;
+    param1.reach = REACH_INDIVIDUAL;
+    param1.statsName = STATS_REGEN_MANA;
+    param1.target = TARGET_HIMSELF;
+    param1.subValueEffect = 0;
+    epTable.push_back(param1);
+
+    effectParam param2;
+    param2.effect = "";
+    param2.value = 50;
+    param2.nbTurns = 1;
+    param2.reach = REACH_INDIVIDUAL;
+    param2.statsName = STATS_HP;
+    param2.target = TARGET_HIMSELF;
+    param2.subValueEffect = 0;
+    epTable.push_back(param2);
+
+    effectParam param3;
+    param3.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
+    param3.value = 35;
+    param3.nbTurns = 1;
+    param3.reach = REACH_INDIVIDUAL;
+    param3.statsName = STATS_ARM_PHY;
+    param3.target = TARGET_HIMSELF;
+    param3.subValueEffect = 0;
+    epTable.push_back(param3);
+
+    return epTable;
+}
+
+std::vector<effectParam> Character::LoadAzrakTalent() {
+    std::vector<effectParam> epTable;
+
+    effectParam param1;
+    param1.effect = "";
+    param1.value = 5;
+    param1.nbTurns = 1000;
+    param1.reach = REACH_INDIVIDUAL;
+    param1.statsName = STATS_REGEN_MANA;
+    param1.target = TARGET_HIMSELF;
+    param1.subValueEffect = 0;
+    epTable.push_back(param1);
+
+    return epTable;
+}
+
+std::vector<effectParam> Character::LoadThrainTalent() {
+    std::vector<effectParam> epTable;
+
+    effectParam param1;
+    param1.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
+    param1.value = 10;
+    param1.nbTurns = 1000;
+    param1.reach = REACH_INDIVIDUAL;
+    param1.statsName = STATS_DODGE;
+    param1.target = TARGET_HIMSELF;
+    param1.subValueEffect = 0;
+    epTable.push_back(param1);
+
+    effectParam param2;
+    param2.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
+    param2.value = 15;
+    param2.nbTurns = 1000;
+    param2.reach = REACH_INDIVIDUAL;
+    param2.statsName = STATS_HP;
+    param2.target = TARGET_HIMSELF;
+    param2.subValueEffect = 0;
+    epTable.push_back(param2);
+
+    effectParam param3;
+    param3.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
+    param3.value = 35;
+    param3.nbTurns = 1000;
+    param3.reach = REACH_INDIVIDUAL;
+    param3.statsName = STATS_ARM_PHY;
+    param3.target = TARGET_HIMSELF;
+    param3.subValueEffect = 0;
+    epTable.push_back(param3);
+
+    effectParam param4;
+    param4.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
+    param4.value = 35;
+    param4.nbTurns = 1000;
+    param4.reach = REACH_INDIVIDUAL;
+    param4.statsName = STATS_ARM_MAG;
+    param4.target = TARGET_HIMSELF;
+    param4.subValueEffect = 0;
+    epTable.push_back(param4);
+
+    return epTable;
+}

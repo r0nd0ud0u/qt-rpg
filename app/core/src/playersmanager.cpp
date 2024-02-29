@@ -133,6 +133,16 @@ void PlayersManager::InitHeroes() {
     hero->LoadStuffJson();
     hero->ApplyEquipOnStats();
   }
+  const auto epParamTalent1 = hero1->LoadThaliaTalent();
+  const auto epParamTalent2 = hero2->LoadAzrakTalent();
+  const auto epParamTalent3 = hero3->LoadThrainTalent();
+  AddGameEffectOnAtk(hero1->m_Name, AttaqueType(), hero1->m_Name, epParamTalent1, 0);
+  AddGameEffectOnAtk(hero2->m_Name, AttaqueType(), hero2->m_Name, epParamTalent2, 0);
+  AddGameEffectOnAtk(hero3->m_Name, AttaqueType(), hero3->m_Name, epParamTalent3, 0);
+
+  ApplyEffectsOnPlayer(hero1->m_Name, 0);
+  ApplyEffectsOnPlayer(hero2->m_Name, 0);
+  ApplyEffectsOnPlayer(hero3->m_Name, 0);
 }
 
 void PlayersManager::InitBosses() {
