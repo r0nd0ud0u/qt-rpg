@@ -30,8 +30,9 @@ void PlayersManager::InitHeroes() {
       .InitValues(10, 10, 10, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
       .InitValues(137, 137, 137, 0);
+  // TODO set max aggro 9999 is a good idea??
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
-      .InitValues(0, 0, 0, 0);
+      .InitValues(0, 0, 9999, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
       .InitValues(25, 25, 1000, 25);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
@@ -67,7 +68,7 @@ void PlayersManager::InitHeroes() {
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
       .InitValues(15, 15, 15, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
-      .InitValues(0, 0, 0, 0);
+      .InitValues(0, 0, 9999, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
       .InitValues(20, 20, 1000, 20);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
@@ -102,7 +103,7 @@ void PlayersManager::InitHeroes() {
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
-      .InitValues(0, 0, 0, 0);
+      .InitValues(0, 0, 9999, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
       .InitValues(14, 14, 1000, 14);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])

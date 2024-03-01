@@ -12,7 +12,7 @@
             "Portée": "Zone",
             "Stat": "PV",
             "Tours actifs": 2,
-            "Type": "",
+            "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 15
         },
@@ -24,6 +24,15 @@
             "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 100
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
         }
     ],
     "Niveau": 7,

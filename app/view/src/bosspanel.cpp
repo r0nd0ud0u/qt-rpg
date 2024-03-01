@@ -40,11 +40,11 @@ void BossPanel::UpdatePanel(Character *boss) {
 
 void BossPanel::SetActive(bool activated) {
   if (activated) {
-    setStyleSheet("#verticalWidget { background:     #40b1fe;  } "
+    setStyleSheet("#active_widget { background:     #40b1fe;  } "
                   "#verticalWidget QLabel{color: white;}");
   } else {
 
-    setStyleSheet("#verticalWidget { background:     grey;  } "
+    setStyleSheet("#active_widget { background:     grey;  } "
                   "#verticalWidget QLabel{color: white;}");
   }
 }

@@ -604,10 +604,8 @@ void Character::RemoveMalusEffect(const effectParam &ep) {
       m_Stats.m_AllStatsTable.count(ep.statsName) > 0) {
     auto &localStat =
         std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(ep.statsName));
-    if (ep.effect == EFFECT_PERCENT_CHANGE) {
+    if (ep.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
       SetStatsOnEffect(localStat, ep.value, false, true);
-    } else {
-      SetStatsOnEffect(localStat, ep.value, false, false);
     }
   }
 
@@ -654,10 +652,12 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
   if (ep.value == 0) {
     return 0;
   }
+  if (ep.statsName == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
+    return 0;
+  }
   int output = 0;
   // heal or damage is suggested by sign
   const int sign = GetSignEffectValue(ep.target);
-  const bool isPercentChange = ON_PERCENT_STATS.count(ep.statsName) > 0;
 
   // common init
   auto &localStat =
@@ -680,10 +680,17 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
     }
   }
   // value in percent
-  else if (isPercentChange || ep.effect == EFFECT_PERCENT_CHANGE) {
+  else if (ep.effect == EFFECT_PERCENT_CHANGE) {
     // TODO duplicate with EFFECT_IMPROVE_BY_PERCENT_CHANGE ?
     amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
+  } else {
+    amount = nbOfApplies * ep.value;
   }
+
+  if (amount == 0) {
+    return 0;
+  }
+
   // new value of stat
   amount = sign * amount; // apply the sign after the calcul of amount
   localStat.m_CurrentValue += min(delta, amount);
@@ -713,6 +720,10 @@ QString Character::ProcessOutputLogOnEffect(const effectParam &ep,
                                             const bool fromLaunch,
                                             const int nbOfApplies,
                                             const QString &atkName) const {
+  // show logs in case of heal of damage atk
+  if (ep.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
+    return "";
+  }
   QString output;
   QString healOrDamageLog;
   uint32_t displayedValue = abs(amount);
@@ -728,12 +739,14 @@ QString Character::ProcessOutputLogOnEffect(const effectParam &ep,
   } else if (amount > 0) {
     healOrDamageLog = "récupère";
   } else if (amount == 0) {
+    // EFFECT_IMPROVE_BY_PERCENT_CHANGE is not a heal or a damage atk
     return QString("%1 n'a pas d'effet.").arg(effectName);
   }
   // nominal atk
   int potentialAttempts = nbOfApplies;
   if (ep.effect == EFFECT_NB_DECREASE_ON_TURN) {
-    // the nomical case is 0 for any atk. effect.subValueEffect is on top of the
+    // the nomical case is 0 for any atk. effect.subValueEffect is on top of
+    // the
     potentialAttempts = ep.subValueEffect;
   }
 
@@ -815,16 +828,16 @@ void Character::SetStatsOnEffect(StatsType<int> &stat, const int value,
                            : 1;
   const auto baseValue = stat.m_RawMaxValue + stat.m_BufEquipValue +
                          stat.m_BufEquipPercent * stat.m_RawMaxValue / 100;
-
+  stat.m_MaxValue = baseValue;
   if (isPercent) {
-    stat.m_MaxValue += sign * baseValue * value / 100;
     stat.m_BufEffectPercent += sign * value;
   } else {
-    stat.m_MaxValue += sign * value;
     stat.m_BufEffectValue += sign * value;
   }
+  // update maxvalue with all effects
+  stat.m_MaxValue += stat.m_BufEffectValue + stat.m_BufEffectPercent * baseValue / 100;
 
-  stat.m_CurrentValue +=
+  stat.m_CurrentValue =
       static_cast<int>(sign * std::round(stat.m_MaxValue * ratio));
 }
 
@@ -978,7 +991,7 @@ QString Character::ProcessAggro(const int atkValue, const QString &statsName) {
   const auto genAggro = static_cast<int>(std::round(atkValue / aggroNorm));
   aggroStat.m_CurrentValue += genAggro;
 
-  return QString("L'aggro monte de +%1").arg(genAggro);
+  return QString("L'aggro monte de +%1 pour %2").arg(genAggro).arg(m_Name);
 }
 
 int Character::ProcessCriticalStrike(const int atkValue) const {
