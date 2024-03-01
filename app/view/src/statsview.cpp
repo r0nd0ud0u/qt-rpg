@@ -40,50 +40,15 @@ QAbstractItemModel *StatsView::createStatsModel(QObject *parent) {
   // define curplayername
   m_CurPlayerName = selectedHero->m_Name;
 
-  addStatRow(model, "ArmPhy",
-             std::get<StatsType<int>>(
-                 selectedHero->m_Stats.m_AllStatsTable.at(STATS_ARM_PHY))
-                 .m_CurrentValue);
-  addStatRow(model, "ArmMag",
-             std::get<StatsType<int>>(
-                 selectedHero->m_Stats.m_AllStatsTable.at(STATS_ARM_MAG))
-                 .m_CurrentValue);
-  addStatRow(model, "PowPhy",
-             std::get<StatsType<int>>(
-                 selectedHero->m_Stats.m_AllStatsTable.at(STATS_POW_PHY))
-                 .m_CurrentValue);
-  addStatRow(model, "PowMag",
-             std::get<StatsType<int>>(
-                 selectedHero->m_Stats.m_AllStatsTable.at(STATS_POW_MAG))
-                 .m_CurrentValue);
-  addStatRow(model, "Aggro",
-             std::get<StatsType<int>>(
-                 selectedHero->m_Stats.m_AllStatsTable.at(STATS_AGGRO))
-                 .m_CurrentValue);
-  addStatRow(model, "Speed",
-             std::get<StatsType<int>>(
-                 selectedHero->m_Stats.m_AllStatsTable.at(STATS_SPEED))
-                 .m_CurrentValue);
-  addStatRow(model, "Crit",
-             std::get<StatsType<int>>(
-                 selectedHero->m_Stats.m_AllStatsTable.at(STATS_CRIT))
-                 .m_CurrentValue);
-  addStatRow(model, "Dodge",
-             std::get<StatsType<int>>(
-                 selectedHero->m_Stats.m_AllStatsTable.at(STATS_DODGE))
-                 .m_CurrentValue);
-  addStatRow(model, "regenHP",
-             std::get<StatsType<int>>(
-                 selectedHero->m_Stats.m_AllStatsTable.at(STATS_REGEN_HP))
-                 .m_CurrentValue);
-  addStatRow(model, "regenMana",
-             std::get<StatsType<int>>(
-                 selectedHero->m_Stats.m_AllStatsTable.at(STATS_REGEN_MANA))
-                 .m_CurrentValue);
-  addStatRow(model, "regenVigor",
-             std::get<StatsType<int>>(
-                 selectedHero->m_Stats.m_AllStatsTable.at(STATS_REGEN_VIGOR))
-                 .m_CurrentValue);
+  for(const auto& stat : ALL_STATS){
+      if(stat.isEmpty()){
+          continue;
+      }
+      addStatRow(model, stat,
+                 std::get<StatsType<int>>(
+                     selectedHero->m_Stats.m_AllStatsTable.at(stat))
+                     .m_CurrentValue);
+  }
 
   return model;
 }
