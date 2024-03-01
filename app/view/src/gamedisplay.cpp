@@ -150,7 +150,7 @@ void GameDisplay::StartNewTurn() {
   gm->m_PlayersManager->IncrementCounterEffect();
   // Apply regen stats
   gm->m_PlayersManager->ApplyRegenStats(characType::Boss);
-  gm->m_PlayersManager->ApplyRegenStats(characType::Hero);
+  //gm->m_PlayersManager->ApplyRegenStats(characType::Hero);
   // Updat views after stats changes
   emit SigUpdatePlayerPanel();
 
