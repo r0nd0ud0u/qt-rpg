@@ -43,9 +43,10 @@ enum class InventoryType { healthPotion, manaPotion, enumSize };
 
 class Character {
 public:
-  Character() = default;
+  Character();
   Character(const QString name, const characType type, const Stats &stats);
 
+  void InitTables();
   void ProcessCost(const QString &atkName);
   void AddAtq(const AttaqueType &atq);
   void AddStuff(const Stuff &stuff);
