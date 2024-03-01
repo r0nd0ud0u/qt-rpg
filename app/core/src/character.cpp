@@ -14,14 +14,21 @@
 
 using namespace std;
 
+Character::Character(){
+    InitTables();
+}
+
 Character::Character(const QString name, const characType type,
                      const Stats &stats)
     : m_Name(name), m_type(type), m_Stats(stats) {
   m_Inventory.resize(static_cast<int>(InventoryType::enumSize));
-  // init equip
-  for (const auto &e : ALL_EQUIP) {
-    m_WearingEquipment[e].m_Name = "";
-  }
+    InitTables();
+}
+
+void Character::InitTables(){
+    for (const auto &e : ALL_EQUIP) {
+        m_WearingEquipment[e].m_Name = "";
+    }
 }
 
 int Character::DamageByAtk(const Stats &launcherStats, const Stats &targetStats,
