@@ -1173,7 +1173,7 @@ std::vector<effectParam> Character::LoadAzrakTalent() {
   std::vector<effectParam> epTable;
 
   effectParam param1;
-  param1.effect = "";
+  param1.effect = EFFECT_IMPROVEMENT_STAT_BY_VALUE;
   param1.value = 5;
   param1.nbTurns = 1000;
   param1.reach = REACH_INDIVIDUAL;
