@@ -1034,18 +1034,18 @@ void Character::UsePotion(const QString &statsName) {
   auto &stat = std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(statsName));
   int boost = 0;
   if (statsName == STATS_HP) {
-    boost = 50;
+    boost = 20;
   }
   if (statsName == STATS_BERSECK) {
     boost = 20;
   }
   if (statsName == STATS_VIGOR) {
-    boost = 50;
+    boost = 20;
   }
   if (statsName == STATS_MANA) {
-    boost = 50;
+    boost = 20;
   }
-  stat.m_CurrentValue = std::min(stat.m_CurrentValue + boost, stat.m_MaxValue);
+  stat.m_CurrentValue = std::min(stat.m_CurrentValue + boost*stat.m_CurrentValue/100, stat.m_MaxValue);
 }
 
 void Character::AddExp(const int newXp) {

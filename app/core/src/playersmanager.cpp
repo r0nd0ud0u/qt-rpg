@@ -92,6 +92,8 @@ void PlayersManager::InitHeroes() {
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
       .InitValues(20, 20, 100, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
+      .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
       .InitValues(5, 5, 5, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
@@ -145,8 +147,8 @@ void PlayersManager::InitHeroes() {
                      epParamTalent3, 0);
 
   ApplyEffectsOnPlayer(
-      hero1->m_Name,
-      1, true); // 1 because launching turn must be different than current turn
+      hero1->m_Name, 1,
+      true); // 1 because launching turn must be different than current turn
   ApplyEffectsOnPlayer(hero2->m_Name, 1, true);
   ApplyEffectsOnPlayer(hero3->m_Name, 1, true);
 }
@@ -336,7 +338,8 @@ PlayersManager::RemoveTerminatedEffectsOnPlayer(const QString &curPlayerName) {
 }
 
 QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName,
-                                                 const int currentTurn, const bool fromLaunch) {
+                                                 const int currentTurn,
+                                                 const bool fromLaunch) {
   QStringList logs;
   if (m_AllEffectsOnGame.count(curPlayerName) == 0) {
     return logs;
@@ -350,13 +353,17 @@ QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName,
   if (targetPl != nullptr) {
     for (auto &gae : gaeTable) {
       if (gae.launchingTurn == currentTurn) {
-        // effet is applicable at launch of one character and then at the next turn of the target
+        // effet is applicable at launch of one character and then at the next
+        // turn of the target
         continue;
       }
       auto *launcherPl = GetCharacterByName(gae.launcher);
       if (launcherPl != nullptr) {
-        localLog.append(launcherPl->ApplyOneEffect(targetPl, gae.allAtkEffects,
-                                                   fromLaunch, gae.atk));
+        const auto output = launcherPl->ApplyOneEffect(
+            targetPl, gae.allAtkEffects, fromLaunch, gae.atk);
+        if (!output.isEmpty()) {
+          localLog.append(output);
+        }
       }
     }
   }
