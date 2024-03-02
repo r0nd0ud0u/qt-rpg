@@ -3,6 +3,7 @@
 
 #include "Application.h"
 #include "character.h"
+#include "utils.h"
 
 #include <QCheckBox>
 #include <QStandardItemModel>
@@ -88,15 +89,14 @@ ActionsView::createInfoModel(QObject *parent,
     model = new QStandardItemModel(0, 2, parent);
     addInfoActionRow(model, ATK_TARGET, m_CurAtk.target);
     addInfoActionRow(model, ATK_REACH, m_CurAtk.reach);
-    addInfoActionRow(model, ATK_DURATION, m_CurAtk.turnsDuration);
     addInfoActionRow(model, ATK_MANA_COST, m_CurAtk.manaCost);
     addInfoActionRow(model, ATK_VIGOR_COST, m_CurAtk.vigorCost);
     addInfoActionRow(model, ATK_BERSECK_COST, m_CurAtk.berseckCost);
-    addInfoActionRow(model, ATK_AGGRO, m_CurAtk.aggro);
-    addInfoActionRow(model, ATK_DAMAGE, m_CurAtk.damage);
     addInfoActionRow(model, ATK_LEVEL, m_CurAtk.level);
-    addInfoActionRow(model, ATK_HEAL, m_CurAtk.heal);
-    addInfoActionRow(model, ATK_REGEN_MANA, m_CurAtk.regenMana);
+    for(const auto& e : m_CurAtk.m_AllEffects){
+        const auto effectName = Utils::BuildEffectName(e.effect, e.statsName);
+        addInfoActionRow(model, effectName, e.value);
+    }
   } else if (typePage == ActionsStackedWgType::inventory) {
     model = new QStandardItemModel(0, 1, parent);
     for (const auto &obj : m_CurPlayer->m_Inventory) {
