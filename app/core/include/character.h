@@ -78,6 +78,8 @@ public:
   void SetEquipment(const std::unordered_map<QString, QString>&);
   void UpdateEquipmentOnJson() const;
   void ApplyEffeftOnStats();
+
+  // Temporary
   std::vector<effectParam> LoadThaliaTalent();
   std::vector<effectParam> LoadAzrakTalent();
   std::vector<effectParam> LoadThrainTalent();
@@ -88,7 +90,7 @@ public:
   Stats m_Stats;
   std::unordered_map<QString, Stuff>
       m_WearingEquipment; // key: body, value: equipmentName
-  std::unordered_map<QString, AttaqueType>
+  std::map<QString, AttaqueType>
       m_AttakList; // key: attak name, value: AttakType struct
   std::vector<uint8_t> m_Inventory;
   int m_Level = 30;
