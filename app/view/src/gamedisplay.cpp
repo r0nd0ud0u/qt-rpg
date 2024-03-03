@@ -101,6 +101,7 @@ void GameDisplay::NewRound() {
     emit SigUpdateChannelView("Debug", "NewRound nullptr active player");
   }
 
+
   // Apply effects
   const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffectsOnPlayer(
       activePlayer->m_Name, gm->m_GameState->m_CurrentTurnNb, false);
@@ -150,7 +151,7 @@ void GameDisplay::StartNewTurn() {
   gm->m_PlayersManager->IncrementCounterEffect();
   // Apply regen stats
   gm->m_PlayersManager->ApplyRegenStats(characType::Boss);
-  //gm->m_PlayersManager->ApplyRegenStats(characType::Hero);
+  gm->m_PlayersManager->ApplyRegenStats(characType::Hero);
   // Updat views after stats changes
   emit SigUpdatePlayerPanel();
 
@@ -338,7 +339,7 @@ void GameDisplay::AddNewStuff() const {
 
 void GameDisplay::on_mana_potion_button_clicked() {
   auto *hero = Application::GetInstance()
-                   .m_GameManager->m_PlayersManager->m_ActivePlayer;
+                     .m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_MANA);
     emit SigUpdatePlayerPanel();
@@ -347,7 +348,7 @@ void GameDisplay::on_mana_potion_button_clicked() {
 
 void GameDisplay::on_hp_potion_button_clicked() {
   auto *hero = Application::GetInstance()
-                   .m_GameManager->m_PlayersManager->m_ActivePlayer;
+                     .m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_HP);
     emit SigUpdatePlayerPanel();
@@ -356,7 +357,7 @@ void GameDisplay::on_hp_potion_button_clicked() {
 
 void GameDisplay::on_berseck_potion_button_clicked() {
   auto *hero = Application::GetInstance()
-                   .m_GameManager->m_PlayersManager->m_ActivePlayer;
+                     .m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_BERSECK);
     emit SigUpdatePlayerPanel();
@@ -365,7 +366,7 @@ void GameDisplay::on_berseck_potion_button_clicked() {
 
 void GameDisplay::on_vigor_potion_button_clicked() {
   auto *hero = Application::GetInstance()
-                   .m_GameManager->m_PlayersManager->m_ActivePlayer;
+                   .m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_VIGOR);
     emit SigUpdatePlayerPanel();

@@ -12,7 +12,7 @@
             "Portée": "Individuel",
             "Stat": "PV",
             "Tours actifs": 1,
-            "Type": "",
+            "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 30
         },
@@ -24,6 +24,15 @@
             "Type": "Changement par %",
             "Valeur de l'effet": 0,
             "Value": 25
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
         }
     ],
     "Niveau": 5,
