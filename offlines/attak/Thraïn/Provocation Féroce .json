@@ -12,7 +12,7 @@
             "Portée": "Individuel",
             "Stat": "Rage",
             "Tours actifs": 1,
-            "Type": "",
+            "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 12
         },
@@ -21,7 +21,7 @@
             "Portée": "Individuel",
             "Stat": "Aggro",
             "Tours actifs": 1,
-            "Type": "",
+            "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 10
         },
@@ -33,15 +33,6 @@
             "Type": "Reinit",
             "Valeur de l'effet": 0,
             "Value": 0
-        },
-		{
-            "Cible": "Soi-même",
-            "Portée": "Individuel",
-            "Stat": "Cout critique",
-            "Tours actifs": 2,
-            "Type": "",
-            "Valeur de l'effet": 0,
-            "Value": 40
         }
     ],
     "Niveau": 7,

@@ -14,21 +14,19 @@
 
 using namespace std;
 
-Character::Character(){
-    InitTables();
-}
+Character::Character() { InitTables(); }
 
 Character::Character(const QString name, const characType type,
                      const Stats &stats)
     : m_Name(name), m_type(type), m_Stats(stats) {
   m_Inventory.resize(static_cast<int>(InventoryType::enumSize));
-    InitTables();
+  InitTables();
 }
 
-void Character::InitTables(){
-    for (const auto &e : ALL_EQUIP) {
-        m_WearingEquipment[e].m_Name = "";
-    }
+void Character::InitTables() {
+  for (const auto &e : ALL_EQUIP) {
+    m_WearingEquipment[e].m_Name = "";
+  }
 }
 
 int Character::DamageByAtk(const Stats &launcherStats, const Stats &targetStats,
@@ -77,9 +75,9 @@ QString Character::RegenIntoDamage(const int atkValue,
 
   QString channelLog;
   std::vector<Character *> playerList;
-  if (m_type == characType::Hero) {
+  if (m_type == characType::Boss) {
     playerList = pm->m_HeroesList;
-  } else if (m_type == characType::Boss) {
+  } else if (m_type == characType::Hero) {
     playerList = pm->m_BossesList;
   }
 
@@ -123,10 +121,10 @@ void Character::ProcessCost(const QString &atkName) {
   // mana cost in %
   launcherMana.m_CurrentValue =
       max(0, static_cast<int>(launcherMana.m_CurrentValue -
-                              atk.manaCost * launcherMana.m_MaxValue / 100));
-  launcherVigor.m_CurrentValue =
-      max(0, static_cast<int>(launcherVigor.m_CurrentValue -
-                              atk.vigorCost * launcherVigor.m_MaxValue / 100));
+                              atk.manaCost * launcherMana.m_RawMaxValue / 100));
+  launcherVigor.m_CurrentValue = max(
+      0, static_cast<int>(launcherVigor.m_CurrentValue -
+                          atk.vigorCost * launcherVigor.m_RawMaxValue / 100));
   launcherBerseck.m_CurrentValue = max(
       0, static_cast<int>(launcherBerseck.m_CurrentValue - atk.berseckCost));
 }
@@ -487,11 +485,14 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
     result += (berseckAmount > 0) ? QString("recupère +%1 de râge.") : "";
   }
   // apply the effect
-  const auto amount = ProcessCurrentValueOnEffect(effect, nbOfApplies, m_Stats,
-                                                  target->m_Stats);
+  const auto [isCrit, amount, maxAmount] = ProcessCurrentValueOnEffect(effect, nbOfApplies, m_Stats,
+                                                  target->m_Stats, fromLaunch);
+  if(isCrit){
+      result += "Coup critique !\n";
+  }
   // TODO should be static and not on target ? pass target by argument
   result += target->ProcessOutputLogOnEffect(effect, amount, fromLaunch,
-                                             nbOfApplies, atk.name);
+                                             nbOfApplies, atk.name, maxAmount);
   // Apply regen effect turning into damage for all bosses
   // can be processed only after calcul of amount of atk
   if (!reload) {
@@ -614,6 +615,9 @@ void Character::RemoveMalusEffect(const effectParam &ep) {
     if (ep.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
       SetStatsOnEffect(localStat, ep.value, false, true);
     }
+    if(ep.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE){
+        SetStatsOnEffect(localStat, ep.value,false, false);
+    }
   }
 
   // remove debuf/ buf
@@ -649,18 +653,19 @@ std::vector<effectParam> Character::CreateEveilDeLaForet() {
   return epTable;
 }
 
-int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
+std::tuple<bool,int, int> Character::ProcessCurrentValueOnEffect(effectParam &ep,
                                            const int nbOfApplies,
                                            const Stats &launcherStats,
-                                           Stats &targetStats) const {
+                                           Stats &targetStats,
+                                           const bool launch) const {
   if (ep.statsName.isEmpty()) {
-    return 0;
+        return std::make_tuple(false,0,0);
   }
   if (ep.value == 0) {
-    return 0;
+      return std::make_tuple(false,0,0);
   }
   if (ep.statsName == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
-    return 0;
+      return std::make_tuple(false,0,0);
   }
   int output = 0;
   // heal or damage is suggested by sign
@@ -673,7 +678,20 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
   int amount = 0;
 
   // HP
-  if (ep.statsName == STATS_HP && ep.effect == EFFECT_VALUE_CHANGE) {
+  if(ep.statsName == STATS_HP && ep.effect == EFFECT_NB_DECREASE_ON_TURN){
+      if (launch) {
+          // HOT
+          const auto &launcherPowMag = std::get<StatsType<int>>(
+              launcherStats.m_AllStatsTable.at(STATS_POW_MAG));
+          amount =
+              nbOfApplies * (ep.value + launcherPowMag.m_CurrentValue / ep.nbTurns);
+          ep.value = amount;
+      }
+      else {
+          amount = ep.value;
+      }
+  }
+  else if (ep.statsName == STATS_HP && (ep.effect == EFFECT_VALUE_CHANGE)) {
     if (const bool isOnEnnemy = ep.target == TARGET_ENNEMY; isOnEnnemy) {
       amount = nbOfApplies * DamageByAtk(launcherStats, targetStats,
                                          ep.isMagicAtk, ep.value, ep.nbTurns);
@@ -695,16 +713,12 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
   }
 
   if (amount == 0) {
-    return 0;
+      return std::make_tuple(false,0,0);
   }
-
-  // new value of stat
-  amount = sign * amount; // apply the sign after the calcul of amount
-  localStat.m_CurrentValue += min(delta, amount);
 
   // return the true applied amount
   // add buf
-  if (m_BufDamage.m_Value > 0) {
+  if (m_BufDamage.m_Value > 0 && sign == -1) {
     if (m_BufDamage.m_IsPercent) {
       amount += amount * m_BufDamage.m_Value / 100;
     } else if (amount > 0) {
@@ -712,24 +726,42 @@ int Character::ProcessCurrentValueOnEffect(const effectParam &ep,
     }
   }
   // is it a critical strike
-  amount = ProcessCriticalStrike(amount);
-  if (ep.statsName == STATS_DODGE || ep.statsName == STATS_CRIT) {
-    output = amount;
-  } else {
-    output = min(delta, amount);
+  const auto [isCrit, ccAmount] = ProcessCriticalStrike(amount);
+  if (ep.statsName == STATS_CRIT) {
+    output = sign *ccAmount;
+  }else{
+      // new value of stat
+      output = sign * amount; // apply the sign after the calcul of amount
   }
 
-  return output;
+  int maxAmount = 0;
+  if(output > 0){
+       localStat.m_CurrentValue = min(output + localStat.m_CurrentValue, localStat.m_MaxValue);
+      maxAmount = min(delta, output);
+  }
+  else{
+      int tmp = localStat.m_CurrentValue;
+      localStat.m_CurrentValue = max(0, localStat.m_CurrentValue + output);
+      // TODO change it
+      maxAmount = min(tmp, output);
+  }
+
+
+  return std::make_tuple(isCrit,output, maxAmount);
 }
 
 QString Character::ProcessOutputLogOnEffect(const effectParam &ep,
                                             const int amount,
                                             const bool fromLaunch,
                                             const int nbOfApplies,
-                                            const QString &atkName) const {
+                                            const QString &atkName, const int maxAmount) const {
   // show logs in case of heal of damage atk
   if (ep.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
     return "";
+  }
+  if(ep.effect == EFFECT_NB_DECREASE_ON_TURN){
+      // TODO à revoir
+      return QString("donne %1 PV pour %2 tours et %3 PV maintenant").arg(ep.value).arg(ep.nbTurns).arg(amount);
   }
   QString output;
   QString healOrDamageLog;
@@ -747,7 +779,11 @@ QString Character::ProcessOutputLogOnEffect(const effectParam &ep,
     healOrDamageLog = "récupère";
   } else if (amount == 0) {
     // EFFECT_IMPROVE_BY_PERCENT_CHANGE is not a heal or a damage atk
-    return QString("%1 n'a pas d'effet.").arg(effectName);
+      if(ep.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE ){
+        return "";
+      } else{
+          return QString("%1/%2").arg(amount).arg(maxAmount);
+      }
   }
   // nominal atk
   int potentialAttempts = nbOfApplies;
@@ -759,27 +795,27 @@ QString Character::ProcessOutputLogOnEffect(const effectParam &ep,
 
   if (ep.statsName == STATS_HP) {
     if (fromLaunch) {
-      output = QString("%1 %5 PV grâce à l'effet %2 (appliqué %3/%4 "
+      output = QString("%1 %5/%6 PV grâce à l'effet %2 (appliqué %3/%4 "
                        "possible(s)).")
                    .arg(healOrDamageLog)
                    .arg(effectName)
                    .arg(nbOfApplies)
                    .arg(QString::number(potentialAttempts))
-                   .arg(QString::number(displayedValue));
+                     .arg(maxAmount).arg(QString::number(displayedValue));
     } else {
-      output = QString("%1 %3 PV grâce à l'effet %2 (%4).")
+      output = QString("%1 %3/%5 PV grâce à l'effet %2 (%4).")
                    .arg(healOrDamageLog)
                    .arg(effectName)
-                   .arg(QString::number(displayedValue))
+                   .arg(maxAmount).arg(QString::number(displayedValue))
                    .arg(atkName);
     }
   } else if (ep.statsName != STATS_HP) {
     output = QString("l'effet %1 s'applique %2/%3 "
-                     "possible(s) avec une valeur de %4.")
+                     "possible(s) avec une valeur de %4/%5.")
                  .arg(effectName)
                  .arg(nbOfApplies)
                  .arg(QString::number(potentialAttempts))
-                 .arg(QString::number(displayedValue));
+                 .arg(maxAmount).arg(QString::number(displayedValue));
   }
 
   return output;
@@ -842,10 +878,11 @@ void Character::SetStatsOnEffect(StatsType<int> &stat, const int value,
     stat.m_BufEffectValue += sign * value;
   }
   // update maxvalue with all effects
-  stat.m_MaxValue += stat.m_BufEffectValue + stat.m_BufEffectPercent * baseValue / 100;
+  stat.m_MaxValue +=
+      stat.m_BufEffectValue + stat.m_BufEffectPercent * baseValue / 100;
 
   stat.m_CurrentValue =
-      static_cast<int>(sign * std::round(stat.m_MaxValue * ratio));
+      static_cast<int>(std::round(stat.m_MaxValue * ratio));
 }
 
 int Character::GetMaxNbOfApplies(const AttaqueType &atk) const {
@@ -917,7 +954,7 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
   }
   if (effect.effect == EFFECT_NB_DECREASE_ON_TURN) {
     nbOfApplies = ProcessDecreaseOnTurn(effect);
-    effect.value *= nbOfApplies;
+    //effect.value *= nbOfApplies;
   }
   if (effect.effect == EFFECT_REINIT) {
     pm->ResetCounterOnOneStatsEffect(target, effect.statsName);
@@ -989,10 +1026,8 @@ QString Character::ProcessAggro(const int atkValue, const QString &statsName) {
   if (atkValue <= 0) {
     return "";
   }
-  if (statsName != STATS_HP) {
-    return "";
-  }
-  const int aggroNorm = 50; // random value at the moment
+
+  const int aggroNorm = 20; // random value at the moment
   auto &aggroStat =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_AGGRO]);
   const auto genAggro = static_cast<int>(std::round(atkValue / aggroNorm));
@@ -1001,19 +1036,21 @@ QString Character::ProcessAggro(const int atkValue, const QString &statsName) {
   return QString("L'aggro monte de +%1 pour %2").arg(genAggro).arg(m_Name);
 }
 
-int Character::ProcessCriticalStrike(const int atkValue) const {
+std::pair<bool,int> Character::ProcessCriticalStrike(const int atkValue) const {
   int critAmount = atkValue;
   if (atkValue > 0) {
     // this is a heal not an atk
-    return critAmount;
+      return std::make_pair(false, atkValue);
   }
   const auto &critStat =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_CRIT));
+
   if (const auto randNb = Utils::GetRandomNb(0, 100);
       randNb >= 0 && randNb < critStat.m_CurrentValue) {
     critAmount = atkValue * 2;
+      return std::make_pair(true, critAmount);
   }
-  return critAmount;
+  return std::make_pair(false, atkValue);
 }
 
 bool Character::IsDodging() const {
@@ -1045,7 +1082,8 @@ void Character::UsePotion(const QString &statsName) {
   if (statsName == STATS_MANA) {
     boost = 20;
   }
-  stat.m_CurrentValue = std::min(stat.m_CurrentValue + boost*stat.m_CurrentValue/100, stat.m_MaxValue);
+  stat.m_CurrentValue = std::min(
+      stat.m_CurrentValue + boost * stat.m_MaxValue / 100, stat.m_MaxValue);
 }
 
 void Character::AddExp(const int newXp) {
@@ -1136,35 +1174,37 @@ void Character::UpdateStatsToNextLevel() {
 std::vector<effectParam> Character::LoadThaliaTalent() {
   std::vector<effectParam> epTable;
 
-  effectParam param1;
-  param1.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
-  param1.value = 50;
-  param1.nbTurns = 1000;
-  param1.reach = REACH_INDIVIDUAL;
-  param1.statsName = STATS_REGEN_MANA;
-  param1.target = TARGET_HIMSELF;
-  param1.subValueEffect = 0;
-  epTable.push_back(param1);
+  // TODO stats improbed already in the stats
+  // to change when creating new thalia forms
+  //  effectParam param1;
+  //  param1.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
+  //  param1.value = 50;
+  //  param1.nbTurns = 1000;
+  //  param1.reach = REACH_INDIVIDUAL;
+  //  param1.statsName = STATS_REGEN_MANA;
+  //  param1.target = TARGET_HIMSELF;
+  //  param1.subValueEffect = 0;
+  //  epTable.push_back(param1);
 
-  effectParam param2;
-  param2.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
-  param2.value = 10;
-  param2.nbTurns = 1000;
-  param2.reach = REACH_INDIVIDUAL;
-  param2.statsName = STATS_HP;
-  param2.target = TARGET_HIMSELF;
-  param2.subValueEffect = 0;
-  epTable.push_back(param2);
+  //  effectParam param2;
+  //  param2.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
+  //  param2.value = 10;
+  //  param2.nbTurns = 1000;
+  //  param2.reach = REACH_INDIVIDUAL;
+  //  param2.statsName = STATS_HP;
+  //  param2.target = TARGET_HIMSELF;
+  //  param2.subValueEffect = 0;
+  //  epTable.push_back(param2);
 
-  effectParam param3;
-  param3.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
-  param3.value = 35;
-  param3.nbTurns = 1000;
-  param3.reach = REACH_INDIVIDUAL;
-  param3.statsName = STATS_ARM_PHY;
-  param3.target = TARGET_HIMSELF;
-  param3.subValueEffect = 0;
-  epTable.push_back(param3);
+  //  effectParam param3;
+  //  param3.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
+  //  param3.value = 35;
+  //  param3.nbTurns = 1000;
+  //  param3.reach = REACH_INDIVIDUAL;
+  //  param3.statsName = STATS_ARM_PHY;
+  //  param3.target = TARGET_HIMSELF;
+  //  param3.subValueEffect = 0;
+  //  epTable.push_back(param3);
 
   return epTable;
 }

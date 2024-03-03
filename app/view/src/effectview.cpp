@@ -109,6 +109,9 @@ void EffectView::InitComboBoxes() {
 
 void EffectView::SetIndex(const int index) {
     m_Index = index;
+    std::vector<effectParam> newEffect;
+    newEffect.resize(3);
+    m_EffectTable.push_back(newEffect);
 }
 
 void EffectView::SetVectorSize(const size_t size){

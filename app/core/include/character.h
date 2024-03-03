@@ -94,8 +94,8 @@ public:
       m_AttakList; // key: attak name, value: AttakType struct
   std::vector<uint8_t> m_Inventory;
   int m_Level = 30;
-  int m_Exp = 100;
-  int m_NextLevel = 120;
+  int m_Exp = 0;
+  int m_NextLevel = 100;
 
   QColor color = QColor("dark");
   // Buf
@@ -108,12 +108,14 @@ private:
   template <class T>
   void ProcessRemoveEquip(StatsType<T> &charStat,
                           const StatsType<T> &equipStat);
-  int ProcessCurrentValueOnEffect(const effectParam &ep, const int nbOfApplies,
+  std::tuple<bool,int, int> ProcessCurrentValueOnEffect(effectParam &ep,
+                                  const int nbOfApplies,
                                   const Stats &launcherStats,
-                                  Stats &targetStats) const;
+                                  Stats &targetStats,
+                                  const bool launch) const; // value 1 isCrit, value 2 total amount value 3 maxamount
   QString ProcessOutputLogOnEffect(const effectParam &ep, const int amount,
                                    const bool fromLaunch, const int nbOfApplies,
-                                   const QString &atkName) const;
+                                   const QString &atkName, const int maxAmount) const;
   int ProcessDecreaseOnTurn(const effectParam &ep) const;
   QString ProcessDecreaseByTurn(const effectParam &ep) const;
   static int DamageByAtk(const Stats &launcherStats, const Stats &targetStats,
@@ -127,7 +129,7 @@ private:
       effectParam &effect, Character *target,
       const AttaqueType &atk) const; // pair1 output log, pair2 nbOfApplies
   QString ProcessAggro(const int atkValue, const QString &statsName);
-  int ProcessCriticalStrike(const int atkValue) const;
+  std::pair<bool,int> ProcessCriticalStrike(const int atkValue) const;
   void UpdateStatsToNextLevel();
 };
 

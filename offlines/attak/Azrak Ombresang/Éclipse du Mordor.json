@@ -29,8 +29,8 @@
             "Cible": "",
             "Portée": "",
             "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
+            "Tours actifs": 10,
+            "Type": "Tours de recharge",
             "Valeur de l'effet": 0,
             "Value": 0
         }
