@@ -91,7 +91,10 @@ void GameDisplay::NewRound() {
   }
 
   // First update the game state
-  const auto &gs = gm->m_GameState;
+  auto *gs = gm->m_GameState;
+  if(gs == nullptr){
+      return;
+  }
   gs->m_CurrentRound++;
   UpdateGameStatus();
 
@@ -100,7 +103,6 @@ void GameDisplay::NewRound() {
   if (activePlayer == nullptr) {
     emit SigUpdateChannelView("Debug", "NewRound nullptr active player");
   }
-
 
   // Apply effects
   const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffectsOnPlayer(
