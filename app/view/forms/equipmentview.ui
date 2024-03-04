@@ -33,8 +33,8 @@
     <widget class="QTableView" name="equipment_table">
      <property name="font">
       <font>
-       <pointsize>11</pointsize>
-       <bold>true</bold>
+       <pointsize>9</pointsize>
+       <bold>false</bold>
       </font>
      </property>
      <property name="frameShape">
@@ -47,7 +47,7 @@
       <enum>Qt::ScrollBarAlwaysOff</enum>
      </property>
      <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOff</enum>
+      <enum>Qt::ScrollBarAsNeeded</enum>
      </property>
      <property name="sizeAdjustPolicy">
       <enum>QAbstractScrollArea::AdjustToContents</enum>

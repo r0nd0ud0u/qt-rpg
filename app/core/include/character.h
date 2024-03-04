@@ -40,12 +40,14 @@ public:
 };
 
 enum class InventoryType { healthPotion, manaPotion, enumSize };
+enum class BufTypes { defaultBuf, damageRx, damageTx, enumSize };
 
 class Character {
 public:
-  Character() = default;
+  Character();
   Character(const QString name, const characType type, const Stats &stats);
 
+  void InitTables();
   void ProcessCost(const QString &atkName);
   void AddAtq(const AttaqueType &atq);
   void AddStuff(const Stuff &stuff);
@@ -56,7 +58,8 @@ public:
 
   // Effect
   QString ApplyOneEffect(Character *target, effectParam &effect,
-                         const bool fromLaunch, const AttaqueType &atk, const bool reload = false);
+                         const bool fromLaunch, const AttaqueType &atk,
+                         const bool reload = false);
   std::tuple<bool, QStringList, std::vector<effectParam>>
   ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
                  Character *target); // value1: conditions fulfilled ?, value2 :
@@ -65,34 +68,39 @@ public:
 
   QString RegenIntoDamage(const int atkValue, const QString &statsName) const;
   std::vector<effectParam> CreateEveilDeLaForet(); // template
-  void SetBuf(const int value, const bool isPercent);
 
-  static void SetStatsOnEffect(
-      StatsType<int> &stat, const int value,
-      const bool isUp, const bool isPercent); // TODO à sortir dans un common pour gerer les stats?
+  static void
+  SetStatsOnEffect(StatsType<int> &stat, const int value, const bool isUp,
+                   const bool isPercent); // TODO à sortir dans un common pour
+                                          // gerer les stats?
   static QString GetInventoryString(const InventoryType &type);
   bool IsDodging() const;
-  void UsePotion(const QString& statsName);
+  void UsePotion(const QString &statsName);
   void AddExp(const int newXp);
-  void SetEquipment(const std::unordered_map<QString, QString>&);
+  void SetEquipment(const std::unordered_map<QString, QString> &);
   void UpdateEquipmentOnJson() const;
   void ApplyEffeftOnStats();
+
+  // Temporary
+  std::vector<effectParam> LoadThaliaTalent() const;
+  std::vector<effectParam> LoadAzrakTalent() const;
+  std::vector<effectParam> LoadThrainTalent() const;
 
   QString m_Name = "default";
   characType m_type = characType::Hero;
   Stats m_Stats;
   std::unordered_map<QString, Stuff>
       m_WearingEquipment; // key: body, value: equipmentName
-  std::unordered_map<QString, AttaqueType>
+  std::map<QString, AttaqueType>
       m_AttakList; // key: attak name, value: AttakType struct
   std::vector<uint8_t> m_Inventory;
-  int m_Level = 1;
-  int m_Exp = 100;
-  int m_NextLevel = 120;
+  int m_Level = 30;
+  int m_Exp = 0;
+  int m_NextLevel = 100;
 
   QColor color = QColor("dark");
   // Buf
-  Buf m_BufDamage;
+  std::vector<Buf> m_AllBufs;
 
 private:
   template <class T>
@@ -101,12 +109,15 @@ private:
   template <class T>
   void ProcessRemoveEquip(StatsType<T> &charStat,
                           const StatsType<T> &equipStat);
-  int ProcessCurrentValueOnEffect(const effectParam &ep, const int nbOfApplies,
-                                  const Stats &launcherStats,
-                                  Stats &targetStats) const;
+  std::tuple<bool, int, int>
+  ProcessCurrentValueOnEffect(effectParam &ep, const int nbOfApplies,
+                              const Stats &launcherStats, const bool launch,
+                              Character *target)
+      const; // value 1 isCrit, value 2 total amount value 3 maxamount
   QString ProcessOutputLogOnEffect(const effectParam &ep, const int amount,
                                    const bool fromLaunch, const int nbOfApplies,
-                                   const QString &atkName) const;
+                                   const QString &atkName,
+                                   const int maxAmount) const;
   int ProcessDecreaseOnTurn(const effectParam &ep) const;
   QString ProcessDecreaseByTurn(const effectParam &ep) const;
   static int DamageByAtk(const Stats &launcherStats, const Stats &targetStats,
@@ -119,9 +130,12 @@ private:
   std::pair<QString, int> ProcessEffectType(
       effectParam &effect, Character *target,
       const AttaqueType &atk) const; // pair1 output log, pair2 nbOfApplies
-  QString ProcessAggro(const int atkValue, const QString &statsName);
-  int ProcessCriticalStrike(const int atkValue) const;
+  QString ProcessAggro(const int atkValue);
+  std::pair<bool, int> ProcessCriticalStrike(const int atkValue) const; // return isCrit, newvalue
   void UpdateStatsToNextLevel();
+  void UpdateBuf(const BufTypes &bufType, const int value,
+                 const bool isPercent);
+  static int UpdateDamageByBuf(const Buf &bufDmg, const int value);
 };
 
 #endif // CHARACTER_H

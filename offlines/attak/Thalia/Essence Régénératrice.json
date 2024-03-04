@@ -1,7 +1,7 @@
 {
     "Aggro": 0,
     "Cible": "Allié",
-    "Coût de mana": 5,
+    "Coût de mana": 10,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Durée": 1,
@@ -12,7 +12,7 @@
             "Portée": "Individuel",
             "Stat": "PV",
             "Tours actifs": 3,
-            "Type": "",
+            "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 20
         }

@@ -75,6 +75,9 @@ void AllEffectPanel::ResetModelWithAllEffect(
   ui->tableView->setModel(createModel(ui->tableView->parent()));
   for (const auto &[pl, allGae] : table) {
     for (const auto &gae : allGae) {
+          if(gae.allAtkEffects.nbTurns > 100){
+            continue; // TODO hide the passive bonus set at 1000 at start of game, improve that
+        }
       addRow(ui->tableView->model(), &gae.allAtkEffects, gae.launcher, pl,
              gae.atk.name);
     }

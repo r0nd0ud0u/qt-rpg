@@ -8,6 +8,7 @@ class Utils
 public:
     Utils() = default;
     static int64_t GetRandomNb(const int64_t min, const int64_t max);
+    static QString BuildEffectName(const QString& rawEffect, const QString& statsName);
 
 };
 
