@@ -71,15 +71,15 @@ public:
 
   static void
   SetStatsOnEffect(StatsType<int> &stat, const int value, const bool isUp,
-                   const bool isPercent); // TODO à sortir dans un common pour
+                   const bool isPercent, const bool updateEffect); // TODO à sortir dans un common pour
                                           // gerer les stats?
   static QString GetInventoryString(const InventoryType &type);
-  bool IsDodging() const;
+  std::pair<bool,QString> IsDodging() const;
   void UsePotion(const QString &statsName);
   void AddExp(const int newXp);
   void SetEquipment(const std::unordered_map<QString, QString> &);
   void UpdateEquipmentOnJson() const;
-  void ApplyEffeftOnStats();
+  void ApplyEffeftOnStats(const bool updateEffect);
 
   // Temporary
   std::vector<effectParam> LoadThaliaTalent() const;
@@ -109,11 +109,11 @@ private:
   template <class T>
   void ProcessRemoveEquip(StatsType<T> &charStat,
                           const StatsType<T> &equipStat);
-  std::tuple<bool, int, int>
+  std::tuple<bool, int, int, int>
   ProcessCurrentValueOnEffect(effectParam &ep, const int nbOfApplies,
                               const Stats &launcherStats, const bool launch,
                               Character *target)
-      const; // value 1 isCrit, value 2 total amount value 3 maxamount
+      const; // value 1 isCrit, value 2 total amount value 3 maxamount, value 4: crit randNb
   QString ProcessOutputLogOnEffect(const effectParam &ep, const int amount,
                                    const bool fromLaunch, const int nbOfApplies,
                                    const QString &atkName,
@@ -131,7 +131,7 @@ private:
       effectParam &effect, Character *target,
       const AttaqueType &atk) const; // pair1 output log, pair2 nbOfApplies
   QString ProcessAggro(const int atkValue);
-  std::pair<bool, int> ProcessCriticalStrike(const int atkValue) const; // return isCrit, newvalue
+  std::tuple<bool, int, int> ProcessCriticalStrike(const int atkValue) const; // return isCrit, newvalue, random number
   void UpdateStatsToNextLevel();
   void UpdateBuf(const BufTypes &bufType, const int value,
                  const bool isPercent);
