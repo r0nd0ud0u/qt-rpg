@@ -330,16 +330,30 @@ void Character::ApplyEquipOnStats() {
       }
     }
   }
-  ApplyEffeftOnStats();
+  ApplyEffeftOnStats(false);
 }
 
-void Character::ApplyEffeftOnStats() {
-  auto &allGae =
+void Character::ApplyEffeftOnStats(const bool updateEffect) {
+  const auto &allGae =
       Application::GetInstance()
           .m_GameManager->m_PlayersManager->m_AllEffectsOnGame[m_Name];
 
-  for (auto &gae : allGae) {
-    ApplyOneEffect(this, gae.allAtkEffects, false, gae.atk);
+  for (const auto &gae : allGae) {
+    if (gae.allAtkEffects.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
+      const auto signBool =
+          static_cast<bool>(GetSignEffectValue(gae.allAtkEffects.target));
+      // common init
+      auto &localStat = std::get<StatsType<int>>(
+          m_Stats.m_AllStatsTable[gae.allAtkEffects.statsName]);
+      SetStatsOnEffect(localStat, gae.allAtkEffects.value, signBool, true, updateEffect);
+    } else if (gae.allAtkEffects.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
+      const auto signBool =
+          static_cast<bool>(GetSignEffectValue(gae.allAtkEffects.target));
+      // common init
+      auto &localStat = std::get<StatsType<int>>(
+          m_Stats.m_AllStatsTable[gae.allAtkEffects.statsName]);
+      SetStatsOnEffect(localStat, gae.allAtkEffects.value, signBool, false, updateEffect);
+    }
   }
 }
 
@@ -489,8 +503,10 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
     result += (berseckAmount > 0) ? QString("recupère +%1 de râge.\n") : "";
   }
   // apply the effect
-  const auto [isCrit, amount, maxAmount] = ProcessCurrentValueOnEffect(
-      effect, nbOfApplies, m_Stats, fromLaunch, target);
+  const auto [isCrit, amount, maxAmount, critRandNb] =
+      ProcessCurrentValueOnEffect(effect, nbOfApplies, m_Stats, fromLaunch,
+                                  target);
+  result += QString("Test coup critique:%1.\n").arg(critRandNb);
   if (isCrit) {
     result += "Coup critique !\n";
   }
@@ -617,10 +633,10 @@ void Character::RemoveMalusEffect(const effectParam &ep) {
     auto &localStat =
         std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(ep.statsName));
     if (ep.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
-      SetStatsOnEffect(localStat, ep.value, false, true);
+      SetStatsOnEffect(localStat, ep.value, false, true, true);
     }
     if (ep.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
-      SetStatsOnEffect(localStat, ep.value, false, false);
+      SetStatsOnEffect(localStat, ep.value, false, false, true);
     }
   }
 
@@ -657,17 +673,19 @@ std::vector<effectParam> Character::CreateEveilDeLaForet() {
   return epTable;
 }
 
-std::tuple<bool, int, int> Character::ProcessCurrentValueOnEffect(
+std::tuple<bool, int, int, int> Character::ProcessCurrentValueOnEffect(
     effectParam &ep, const int nbOfApplies, const Stats &launcherStats,
     const bool launch, Character *target) const {
+  const int DEFAULT_CRIT = -1;
+
   if (ep.statsName.isEmpty() || target == nullptr) {
-    return std::make_tuple(false, 0, 0);
+    return std::make_tuple(false, 0, 0, DEFAULT_CRIT);
   }
   if (ep.value == 0) {
-    return std::make_tuple(false, 0, 0);
+    return std::make_tuple(false, 0, 0, DEFAULT_CRIT);
   }
   if (ep.statsName == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
-    return std::make_tuple(false, 0, 0);
+    return std::make_tuple(false, 0, 0, DEFAULT_CRIT);
   }
   int output = 0;
   // heal or damage is suggested by sign
@@ -713,7 +731,7 @@ std::tuple<bool, int, int> Character::ProcessCurrentValueOnEffect(
   }
 
   if (amount == 0) {
-    return std::make_tuple(false, 0, 0);
+    return std::make_tuple(false, 0, 0, DEFAULT_CRIT);
   }
 
   // return the true applied amount
@@ -725,7 +743,7 @@ std::tuple<bool, int, int> Character::ProcessCurrentValueOnEffect(
                                amount);
   }
   // is it a critical strike
-  const auto [isCrit, ccAmount] = ProcessCriticalStrike(amount);
+  const auto [isCrit, ccAmount, critRandNb] = ProcessCriticalStrike(amount);
   if (ep.statsName == STATS_CRIT) {
     output = sign * ccAmount;
   } else {
@@ -745,7 +763,7 @@ std::tuple<bool, int, int> Character::ProcessCurrentValueOnEffect(
     maxAmount = min(tmp, output);
   }
 
-  return std::make_tuple(isCrit, output, maxAmount);
+  return std::make_tuple(isCrit, output, maxAmount, critRandNb);
 }
 
 QString Character::ProcessOutputLogOnEffect(
@@ -868,7 +886,7 @@ void Character::UpdateBuf(const BufTypes &bufType, const int value,
 }
 
 void Character::SetStatsOnEffect(StatsType<int> &stat, const int value,
-                                 const bool isUp, const bool isPercent) {
+                                 const bool isUp, const bool isPercent, const bool updateEffect) {
   int sign = 1;
   if (!isUp) {
     sign = -1;
@@ -880,11 +898,12 @@ void Character::SetStatsOnEffect(StatsType<int> &stat, const int value,
   const auto baseValue = stat.m_RawMaxValue + stat.m_BufEquipValue +
                          stat.m_BufEquipPercent * stat.m_RawMaxValue / 100;
   stat.m_MaxValue = baseValue;
+  if(updateEffect){
   if (isPercent) {
     stat.m_BufEffectPercent += sign * value;
   } else {
     stat.m_BufEffectValue += sign * value;
-  }
+  }}
   // update maxvalue with all effects
   stat.m_MaxValue +=
       stat.m_BufEffectValue + stat.m_BufEffectPercent * baseValue / 100;
@@ -1002,7 +1021,7 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
     // common init
     auto &localStat = std::get<StatsType<int>>(
         target->m_Stats.m_AllStatsTable[effect.statsName]);
-    SetStatsOnEffect(localStat, effect.value, signBool, true);
+    SetStatsOnEffect(localStat, effect.value, signBool, true, true);
     output = QString("La stat %1 est modifiée de %2%3%.\n")
                  .arg(effect.statsName)
                  .arg(sign)
@@ -1014,7 +1033,7 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
     // common init
     auto &localStat = std::get<StatsType<int>>(
         target->m_Stats.m_AllStatsTable[effect.statsName]);
-    SetStatsOnEffect(localStat, effect.value, signBool, false);
+    SetStatsOnEffect(localStat, effect.value, signBool, false, true);
     output = QString("La stat %1 est modifiée de %2%3%.\n")
                  .arg(effect.statsName)
                  .arg(sign)
@@ -1049,33 +1068,29 @@ QString Character::ProcessAggro(const int atkValue) {
              : "";
 }
 
-std::pair<bool, int>
+std::tuple<bool, int, int>
 Character::ProcessCriticalStrike(const int atkValue) const {
-  int critAmount = atkValue;
-  if (atkValue > 0) {
-    // this is a heal not an atk
-    return std::make_pair(false, atkValue);
-  }
   const auto &critStat =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_CRIT));
-
-  if (const auto randNb = Utils::GetRandomNb(0, 100);
+  int randNb = -1;
+  if (randNb = Utils::GetRandomNb(0, 100);
       randNb >= 0 && randNb < critStat.m_CurrentValue) {
-    critAmount = atkValue * 2;
-    return std::make_pair(true, critAmount);
+    return std::make_tuple(true, atkValue * 2, randNb);
   }
-  return std::make_pair(false, atkValue);
+  return std::make_tuple(false, atkValue, randNb);
 }
 
-bool Character::IsDodging() const {
+std::pair<bool, QString> Character::IsDodging() const {
   bool isDodging = false;
   const auto &stat =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_DODGE));
-  if (const auto randNb = Utils::GetRandomNb(0, 100);
+  const int DEFAULT_RAND = -1;
+  int randNb = DEFAULT_RAND;
+  if (randNb = Utils::GetRandomNb(0, 100);
       randNb >= 0 && randNb < stat.m_CurrentValue) {
     isDodging = true;
   }
-  return isDodging;
+  return std::make_pair(isDodging, QString::number(randNb));
 }
 
 void Character::UsePotion(const QString &statsName) {
@@ -1228,7 +1243,7 @@ std::vector<effectParam> Character::LoadAzrakTalent() const {
 
   effectParam param1;
   param1.effect = EFFECT_IMPROVEMENT_STAT_BY_VALUE;
-  param1.value = 5;
+  param1.value = 3;
   param1.nbTurns = 1000;
   param1.reach = REACH_INDIVIDUAL;
   param1.statsName = STATS_REGEN_MANA;

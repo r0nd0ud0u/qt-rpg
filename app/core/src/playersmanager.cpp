@@ -130,9 +130,16 @@ void PlayersManager::InitHeroes() {
   m_HeroesList.push_back(hero2);
   m_HeroesList.push_back(hero3);
 
-  for (const auto &hero : m_HeroesList) {
+  for (auto *hero : m_HeroesList) {
     hero->LoadAtkJson();
     hero->LoadStuffJson();
+    std::unordered_map<QString, QString> table;
+    for(const auto& [name, stuff] : hero->m_WearingEquipment){
+        if(!stuff.m_Name.isEmpty()){
+            table[name] = stuff.m_Name;
+        }
+    }
+    hero->SetEquipment(table);
     hero->ApplyEquipOnStats();
   }
   const auto epParamTalent1 = hero1->LoadThaliaTalent();
@@ -145,11 +152,10 @@ void PlayersManager::InitHeroes() {
   AddGameEffectOnAtk(hero3->m_Name, AttaqueType(), hero3->m_Name,
                      epParamTalent3, 0);
 
-  ApplyEffectsOnPlayer(
-      hero1->m_Name, 1,
-      true); // 1 because launching turn must be different than current turn
-  ApplyEffectsOnPlayer(hero2->m_Name, 1, true);
-  ApplyEffectsOnPlayer(hero3->m_Name, 1, true);
+  hero1->ApplyEffeftOnStats(true);
+  hero2->ApplyEffeftOnStats(true);
+  hero3->ApplyEffeftOnStats(true);
+
 }
 
 void PlayersManager::InitBosses() {
@@ -610,22 +616,25 @@ void PlayersManager::AddSupAtkTurn(
   }
 }
 
-std::pair<bool, QString>
+std::tuple<bool, QString, QStringList>
 PlayersManager::IsDodging(const std::vector<TargetInfo> &targetList) {
   QString plName;
+    QStringList output;
   const bool isDodging =
       std::any_of(targetList.begin(), targetList.end(),
-                  [this, &plName](const TargetInfo &ti) {
+                  [this, &plName, &output](const TargetInfo &ti) {
                     if (ti.m_IsTargeted) {
                       const auto *targetChara =
                           this->GetCharacterByName(ti.m_Name);
                       plName = ti.m_Name;
-                      return targetChara->IsDodging();
+                      const auto [isDodging, randNbStr] = targetChara->IsDodging();
+                      output.append(randNbStr);
+                      return isDodging;
                     }
                     return false;
                   });
 
-  return std::make_pair(isDodging, plName);
+  return std::make_tuple(isDodging, plName, output);
 }
 
 void PlayersManager::AddExpForHeroes(const int exp) {

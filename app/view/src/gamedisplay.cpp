@@ -92,8 +92,8 @@ void GameDisplay::NewRound() {
 
   // First update the game state
   auto *gs = gm->m_GameState;
-  if(gs == nullptr){
-      return;
+  if (gs == nullptr) {
+    return;
   }
   gs->m_CurrentRound++;
   UpdateGameStatus();
@@ -122,7 +122,6 @@ void GameDisplay::NewRound() {
 
   // Update views
   // Update views after stats changes
-  emit SigUpdatePlayerPanel();
   // Players panels views
   ui->heroes_widget->ActivatePanel(activePlayer->m_Name);
   ui->bosses_widget->ActivatePanel(activePlayer->m_Name);
@@ -136,10 +135,11 @@ void GameDisplay::NewRound() {
   ui->attak_page->SetCurrentPlayer(activePlayer);
   // set focus on active player
   emit SigSetFocusOnActivePlayer(activePlayer->m_Name, activePlayer->m_type);
-
+  emit SigUpdatePlayerPanel();
   emit SigUpdateChannelView("GameState", QString("Round %1/%2")
                                              .arg(gs->m_CurrentRound)
                                              .arg(gs->m_OrderToPlay.size()));
+  emit SigUpdStatsOnSelCharacter();
   // TODO update channel
   // choice of talent
   // if dead -> choice to take a potion
@@ -221,11 +221,15 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   // is Dodging
   if (currentAtk.target == TARGET_ENNEMY &&
       currentAtk.reach == REACH_INDIVIDUAL) {
-    const auto &[isDodging, plName] =
+    const auto &[isDodging, plName, outputsRandNb] =
         gm->m_PlayersManager->IsDodging(targetList);
     if (isDodging) {
-      emit SigUpdateChannelView(plName, QString("esquive."));
+      emit SigUpdateChannelView(
+          plName, QString("esquive.(%1)").arg(outputsRandNb.first()));
       return;
+    } else {
+      emit SigUpdateChannelView(
+          plName, QString("pas d'esquive.(%1)").arg(outputsRandNb.first()));
     }
   }
 
@@ -238,12 +242,16 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     if (targetChara != nullptr) {
       // is dodging
       if (currentAtk.target == TARGET_ENNEMY &&
-          currentAtk.reach == REACH_ZONE) {
-        const auto &[isDodging, plName] =
-            gm->m_PlayersManager->IsDodging(targetList);
+          currentAtk.reach == REACH_ZONE && target.m_IsTargeted) {
+        const auto &[isDodging, outputsRandnb] = targetChara->IsDodging();
         if (isDodging) {
-          emit SigUpdateChannelView(plName, QString("esquive."));
+          emit SigUpdateChannelView(targetChara->m_Name,
+                                    QString("esquive.(%1)").arg(outputsRandnb));
           continue;
+        } else {
+          emit SigUpdateChannelView(
+              targetChara->m_Name,
+              QString("pas d'esquive.(%1)").arg(outputsRandnb));
         }
       }
       // EFFECT
@@ -340,8 +348,7 @@ void GameDisplay::AddNewStuff() const {
 }
 
 void GameDisplay::on_mana_potion_button_clicked() {
-  auto *hero = Application::GetInstance()
-                     .m_GameManager->GetCurrentPlayer();
+  auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_MANA);
     emit SigUpdatePlayerPanel();
@@ -349,8 +356,7 @@ void GameDisplay::on_mana_potion_button_clicked() {
 }
 
 void GameDisplay::on_hp_potion_button_clicked() {
-  auto *hero = Application::GetInstance()
-                     .m_GameManager->GetCurrentPlayer();
+  auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_HP);
     emit SigUpdatePlayerPanel();
@@ -358,8 +364,7 @@ void GameDisplay::on_hp_potion_button_clicked() {
 }
 
 void GameDisplay::on_berseck_potion_button_clicked() {
-  auto *hero = Application::GetInstance()
-                     .m_GameManager->GetCurrentPlayer();
+  auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_BERSECK);
     emit SigUpdatePlayerPanel();
@@ -367,8 +372,7 @@ void GameDisplay::on_berseck_potion_button_clicked() {
 }
 
 void GameDisplay::on_vigor_potion_button_clicked() {
-  auto *hero = Application::GetInstance()
-                   .m_GameManager->GetCurrentPlayer();
+  auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_VIGOR);
     emit SigUpdatePlayerPanel();
