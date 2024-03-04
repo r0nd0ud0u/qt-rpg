@@ -12,7 +12,7 @@
             "Portée": "Individuel",
             "Stat": "PV",
             "Tours actifs": 1,
-            "Type": "",
+            "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 40
         },
@@ -20,10 +20,19 @@
             "Cible": "Ennemie",
             "Portée": "Individuel",
             "Stat": "Vitesse",
-            "Tours actifs": 0,
+            "Tours actifs": 6,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 10
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
         }
     ],
     "Niveau": 7,

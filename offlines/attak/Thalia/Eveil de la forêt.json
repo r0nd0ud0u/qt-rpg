@@ -1,7 +1,7 @@
 {
     "Aggro": 0,
     "Cible": "Allié",
-    "Coût de mana": 18,
+    "Coût de mana": 23,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Durée": 1,
@@ -21,7 +21,7 @@
             "Portée": "Zone",
             "Stat": "PV",
             "Tours actifs": 4,
-            "Type": "",
+            "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 80
         },
@@ -33,6 +33,15 @@
             "Type": "Supprime effet néfaste",
             "Valeur de l'effet": 1000,
             "Value": 0
+        },
+        {
+            "Cible": "Allié",
+            "Portée": "Zone",
+            "Stat": "",
+            "Tours actifs": 1,
+            "Type": "Tours de recharge",
+            "Valeur de l'effet": 1000,
+            "Value": 10
         }
     ],
     "Niveau": 13,

@@ -25,6 +25,8 @@ void BossPanel::UpdatePanel(Character *boss) {
   ui->name_label->setText(boss->m_Name);
   ui->hp_bar->setFormat(QString::number(hp.m_CurrentValue) + "/" +
                         QString::number(hp.m_MaxValue) + " %p%");
+  int hpValue = 100 * hp.m_CurrentValue / hp.m_MaxValue;
+  ui->hp_bar->setValue(hpValue);
 
   ui->hp_bar->setStyleSheet(
       "QProgressBar{text-align: center; border-style: solid; padding: 1px; "
@@ -40,11 +42,11 @@ void BossPanel::UpdatePanel(Character *boss) {
 
 void BossPanel::SetActive(bool activated) {
   if (activated) {
-    setStyleSheet("#verticalWidget { background:     #40b1fe;  } "
+    setStyleSheet("#active_widget { background:     #40b1fe;  } "
                   "#verticalWidget QLabel{color: white;}");
   } else {
 
-    setStyleSheet("#verticalWidget { background:     grey;  } "
+    setStyleSheet("#active_widget { background:     grey;  } "
                   "#verticalWidget QLabel{color: white;}");
   }
 }

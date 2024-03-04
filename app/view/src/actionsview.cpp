@@ -3,6 +3,7 @@
 
 #include "Application.h"
 #include "character.h"
+#include "utils.h"
 
 #include <QCheckBox>
 #include <QStandardItemModel>
@@ -88,15 +89,14 @@ ActionsView::createInfoModel(QObject *parent,
     model = new QStandardItemModel(0, 2, parent);
     addInfoActionRow(model, ATK_TARGET, m_CurAtk.target);
     addInfoActionRow(model, ATK_REACH, m_CurAtk.reach);
-    addInfoActionRow(model, ATK_DURATION, m_CurAtk.turnsDuration);
     addInfoActionRow(model, ATK_MANA_COST, m_CurAtk.manaCost);
     addInfoActionRow(model, ATK_VIGOR_COST, m_CurAtk.vigorCost);
     addInfoActionRow(model, ATK_BERSECK_COST, m_CurAtk.berseckCost);
-    addInfoActionRow(model, ATK_AGGRO, m_CurAtk.aggro);
-    addInfoActionRow(model, ATK_DAMAGE, m_CurAtk.damage);
     addInfoActionRow(model, ATK_LEVEL, m_CurAtk.level);
-    addInfoActionRow(model, ATK_HEAL, m_CurAtk.heal);
-    addInfoActionRow(model, ATK_REGEN_MANA, m_CurAtk.regenMana);
+    for (const auto &e : m_CurAtk.m_AllEffects) {
+      const auto effectName = Utils::BuildEffectName(e.effect, e.statsName);
+      addInfoActionRow(model, effectName, e.value);
+    }
   } else if (typePage == ActionsStackedWgType::inventory) {
     model = new QStandardItemModel(0, 1, parent);
     for (const auto &obj : m_CurPlayer->m_Inventory) {
@@ -176,6 +176,7 @@ void ActionsView::InitTargetsWidget() {
 
 void ActionsView::UpdateTargetList(const QString &name) {
   for (int i = 0; i < m_TargetedList.size(); i++) {
+    const auto test = m_TargetedList[i];
     auto *wg = static_cast<QCheckBox *>(
         ui->targets_widget->layout()->itemAt(i)->widget());
     if (wg == nullptr) {
@@ -184,13 +185,18 @@ void ActionsView::UpdateTargetList(const QString &name) {
     if (!wg->isEnabled()) {
       continue;
     }
+
     if (name == m_TargetedList[i].m_Name) {
       m_TargetedList[i].m_IsTargeted = !m_TargetedList[i].m_IsTargeted;
     } else if ((m_CurPlayer->m_type == characType::Hero &&
                 !m_TargetedList[i].m_IsBoss) ||
                (m_CurPlayer->m_type == characType::Boss &&
-                m_TargetedList[i].m_IsBoss)) {
-      if (m_CurAtk.target == TARGET_ALLY && m_CurAtk.reach == REACH_ZONE) {
+                m_TargetedList[i].m_IsBoss) ||
+               (m_CurPlayer->m_type == characType::Hero &&
+                m_TargetedList[i].m_IsBoss) ||
+               (m_CurPlayer->m_type == characType::Boss &&
+                !m_TargetedList[i].m_IsBoss)) {
+      if (m_CurAtk.reach == REACH_ZONE) {
         m_TargetedList[i].m_IsTargeted = !m_TargetedList[i].m_IsTargeted;
       } else if (m_CurAtk.reach == REACH_INDIVIDUAL &&
                  m_TargetedList[i].m_IsTargeted) {
@@ -229,26 +235,24 @@ void ActionsView::ProcessEnableTargetsBoxes() {
       if (m_CurAtk.target == TARGET_HIMSELF &&
           m_TargetedList[i].m_Name != m_CurPlayer->m_Name) {
         continue;
-      }
-      else if (m_CurPlayer->m_type == characType::Hero) {
+      } else if (m_CurPlayer->m_type == characType::Hero) {
         // TODO never entering here
         if (m_TargetedList[i].m_IsBoss && m_CurAtk.target != TARGET_ENNEMY) {
           continue;
         }
         if (!m_TargetedList[i].m_IsBoss &&
             !(m_CurAtk.target == TARGET_ALLY ||
-              m_CurAtk.target == TARGET_ALL_HEROES || m_CurAtk.target == TARGET_HIMSELF)) {
+              m_CurAtk.target == TARGET_ALL_HEROES ||
+              m_CurAtk.target == TARGET_HIMSELF)) {
           continue;
         }
-      }
-      else if (m_CurPlayer->m_type == characType::Boss) {
-          if (m_TargetedList[i].m_IsBoss && m_CurAtk.target == TARGET_ENNEMY) {
-              continue;
-          }
-          if (!m_TargetedList[i].m_IsBoss &&
-              m_CurAtk.target != TARGET_ENNEMY ) {
-              continue;
-          }
+      } else if (m_CurPlayer->m_type == characType::Boss) {
+        if (m_TargetedList[i].m_IsBoss && m_CurAtk.target == TARGET_ENNEMY) {
+          continue;
+        }
+        if (!m_TargetedList[i].m_IsBoss && m_CurAtk.target != TARGET_ENNEMY) {
+          continue;
+        }
       }
 
       auto *wg = static_cast<QCheckBox *>(
