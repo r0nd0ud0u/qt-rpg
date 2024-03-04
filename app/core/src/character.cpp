@@ -486,7 +486,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   if (const bool isOnEnnemy = effect.target == TARGET_ENNEMY;
       effect.statsName == STATS_HP && isOnEnnemy) {
     const auto berseckAmount = target->ProcessBerseckOnRxAtk(nbOfApplies);
-    result += (berseckAmount > 0) ? QString("recupère +%1 de râge.") : "";
+    result += (berseckAmount > 0) ? QString("recupère +%1 de râge.\n") : "";
   }
   // apply the effect
   const auto [isCrit, amount, maxAmount] = ProcessCurrentValueOnEffect(
@@ -568,7 +568,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
       conditionsAreOk = false;
       allResultEffects.append(
           QString("L'effet %1-%2 n'est pas applicable. %3 effet(s) sur "
-                  "stats %4 requis.")
+                  "stats %4 requis.\n")
               .arg(effect.statsName)
               .arg(effect.effect)
               .arg(effect.subValueEffect)
@@ -584,7 +584,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
         conditionsAreOk = false;
         allResultEffects.append(
             QString(
-                "Pas d'effect %1 activé. Aucun ennemi mort au tour précédent")
+                "Pas d'effect %1 activé. Aucun ennemi mort au tour précédent\n")
                 .arg(effect.effect));
         break;
       }
@@ -757,14 +757,14 @@ QString Character::ProcessOutputLogOnEffect(
   }
   if (ep.effect == EFFECT_NB_DECREASE_ON_TURN) {
     // TODO à revoir
-    return QString("donne %1 PV pour %2 tours et %3 PV maintenant")
+    return QString("donne %1 PV pour %2 tours et %3 PV maintenant.\n")
         .arg(ep.value)
         .arg(ep.nbTurns)
         .arg(amount);
   }
   QString output;
   QString healOrDamageLog;
-  uint32_t displayedValue = abs(amount);
+  int displayedValue = amount;
   QString effectName;
   if (ep.effect.isEmpty() || !fromLaunch) {
     effectName = ep.statsName;
@@ -781,7 +781,13 @@ QString Character::ProcessOutputLogOnEffect(
     if (ep.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
       return "";
     } else {
-      return QString("%1/%2").arg(amount).arg(maxAmount);
+      if (maxAmount > 0) {
+        return QString("Effet %3: %1/%2\n")
+            .arg(amount)
+            .arg(maxAmount)
+            .arg(effectName);
+      }
+      return "";
     }
   }
   // nominal atk
@@ -794,8 +800,7 @@ QString Character::ProcessOutputLogOnEffect(
 
   if (ep.statsName == STATS_HP) {
     if (fromLaunch) {
-      output = QString("%1 %5/%6 PV grâce à l'effet %2 (appliqué %3/%4 "
-                       "possible(s)).")
+      output = QString("%1 %5/%6 PV avec l'effet %2 (appliqué %3/%4).\n")
                    .arg(healOrDamageLog)
                    .arg(effectName)
                    .arg(nbOfApplies)
@@ -803,7 +808,7 @@ QString Character::ProcessOutputLogOnEffect(
                    .arg(maxAmount)
                    .arg(QString::number(displayedValue));
     } else {
-      output = QString("%1 %3/%5 PV grâce à l'effet %2 (%4).")
+      output = QString("%1 %3/%5 PV avec l'effet %2 (%4).\n")
                    .arg(healOrDamageLog)
                    .arg(effectName)
                    .arg(maxAmount)
@@ -811,8 +816,7 @@ QString Character::ProcessOutputLogOnEffect(
                    .arg(atkName);
     }
   } else if (ep.statsName != STATS_HP) {
-    output = QString("l'effet %1 s'applique %2/%3 "
-                     "possible(s) avec une valeur de %4/%5.")
+    output = QString("l'effet %1: %4/%5 (appliqué %2/%3).\n")
                  .arg(effectName)
                  .arg(nbOfApplies)
                  .arg(QString::number(potentialAttempts))
@@ -950,7 +954,7 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
   }
   if (effect.effect == EFFECT_NB_COOL_DOWN) {
     output = (m_Name == target->m_Name)
-                 ? QString("Cooldown actif sur %1 de %2 tours.")
+                 ? QString("Cooldown actif sur %1 de %2 tours.\n")
                        .arg(atk.name)
                        .arg(effect.nbTurns)
                  : "";
@@ -962,7 +966,7 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
     pm->ResetCounterOnOneStatsEffect(target, effect.statsName);
     nbOfApplies = 0;
     if (effect.value == 0) {
-      output = QString("Les HOTs sont reinitialisés.");
+      output = QString("Les HOTs sont reinitialisés.\n");
     }
   }
   if (effect.effect == EFFECT_DELETE_BAD) {
@@ -975,7 +979,7 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
   if (effect.effect == EFFECT_IMPROVE_HOTS) {
     pm->ImproveHotsOnPlayers(effect.subValueEffect, target->m_type);
     output =
-        QString("Les HOTs sont boostés de %1%.").arg(effect.subValueEffect);
+        QString("Les HOTs sont boostés de %1%.\n").arg(effect.subValueEffect);
   }
   if (effect.effect == EFFECT_BOOSTED_BY_HOTS) {
     const auto nbHots = pm->GetNbOfStatsInEffectList(target, STATS_HP);
@@ -988,7 +992,7 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
       target->UpdateBuf(BufTypes::damageTx, effect.value, true);
     }
 
-    output = QString("Les dégâts sont boostés de %1% pour %2 tours.")
+    output = QString("Les dégâts sont boostés de %1% pour %2 tours.\n")
                  .arg(effect.value)
                  .arg(effect.nbTurns);
   }
@@ -999,7 +1003,7 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
     auto &localStat = std::get<StatsType<int>>(
         target->m_Stats.m_AllStatsTable[effect.statsName]);
     SetStatsOnEffect(localStat, effect.value, signBool, true);
-    output = QString("La stat %1 est modifié de %2%3%.")
+    output = QString("La stat %1 est modifiée de %2%3%.\n")
                  .arg(effect.statsName)
                  .arg(sign)
                  .arg(effect.value);
@@ -1011,7 +1015,7 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
     auto &localStat = std::get<StatsType<int>>(
         target->m_Stats.m_AllStatsTable[effect.statsName]);
     SetStatsOnEffect(localStat, effect.value, signBool, false);
-    output = QString("La stat %1 est modifié de %2%3%.")
+    output = QString("La stat %1 est modifiée de %2%3%.\n")
                  .arg(effect.statsName)
                  .arg(sign)
                  .arg(effect.value);
@@ -1040,7 +1044,9 @@ QString Character::ProcessAggro(const int atkValue) {
   const auto genAggro = static_cast<int>(std::round(atkValue / aggroNorm));
   aggroStat.m_CurrentValue += genAggro;
 
-  return QString("L'aggro monte de +%1 pour %2").arg(genAggro).arg(m_Name);
+  return (genAggro > 0)
+             ? QString("+%1 aggro pour %2.\n").arg(genAggro).arg(m_Name)
+             : "";
 }
 
 std::pair<bool, int>
@@ -1179,7 +1185,7 @@ void Character::UpdateStatsToNextLevel() {
   }
 }
 
-std::vector<effectParam> Character::LoadThaliaTalent() const{
+std::vector<effectParam> Character::LoadThaliaTalent() const {
   std::vector<effectParam> epTable;
 
   // TODO stats improbed already in the stats
@@ -1217,7 +1223,7 @@ std::vector<effectParam> Character::LoadThaliaTalent() const{
   return epTable;
 }
 
-std::vector<effectParam> Character::LoadAzrakTalent() const{
+std::vector<effectParam> Character::LoadAzrakTalent() const {
   std::vector<effectParam> epTable;
 
   effectParam param1;
