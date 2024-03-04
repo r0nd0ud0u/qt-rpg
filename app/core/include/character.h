@@ -82,9 +82,9 @@ public:
   void ApplyEffeftOnStats();
 
   // Temporary
-  std::vector<effectParam> LoadThaliaTalent();
-  std::vector<effectParam> LoadAzrakTalent();
-  std::vector<effectParam> LoadThrainTalent();
+  std::vector<effectParam> LoadThaliaTalent() const;
+  std::vector<effectParam> LoadAzrakTalent() const;
+  std::vector<effectParam> LoadThrainTalent() const;
 
   QString m_Name = "default";
   characType m_type = characType::Hero;
@@ -130,7 +130,7 @@ private:
   std::pair<QString, int> ProcessEffectType(
       effectParam &effect, Character *target,
       const AttaqueType &atk) const; // pair1 output log, pair2 nbOfApplies
-  QString ProcessAggro(const int atkValue, const QString &statsName);
+  QString ProcessAggro(const int atkValue);
   std::pair<bool, int> ProcessCriticalStrike(const int atkValue) const; // return isCrit, newvalue
   void UpdateStatsToNextLevel();
   void UpdateBuf(const BufTypes &bufType, const int value,

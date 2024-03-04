@@ -391,8 +391,6 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
         std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable[STATS_REGEN_MANA]);
     auto &berseck =
         std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable[STATS_BERSECK]);
-    const auto &regenBerseck = std::get<StatsType<int>>(
-        pl->m_Stats.m_AllStatsTable[STATS_RATE_BERSECK]);
     auto &vigor =
         std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable[STATS_VIGOR]);
     const auto &regenVigor = std::get<StatsType<int>>(

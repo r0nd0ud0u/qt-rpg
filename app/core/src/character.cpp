@@ -504,7 +504,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   }
   // Process aggro
   if (fromLaunch) {
-    result += ProcessAggro(amount, effect.statsName);
+    result += ProcessAggro(amount);
   }
 
   return result;
@@ -1029,7 +1029,7 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
   return std::make_pair(output, nbOfApplies);
 }
 
-QString Character::ProcessAggro(const int atkValue, const QString &statsName) {
+QString Character::ProcessAggro(const int atkValue) {
   if (atkValue <= 0) {
     return "";
   }
@@ -1179,7 +1179,7 @@ void Character::UpdateStatsToNextLevel() {
   }
 }
 
-std::vector<effectParam> Character::LoadThaliaTalent() {
+std::vector<effectParam> Character::LoadThaliaTalent() const{
   std::vector<effectParam> epTable;
 
   // TODO stats improbed already in the stats
@@ -1217,7 +1217,7 @@ std::vector<effectParam> Character::LoadThaliaTalent() {
   return epTable;
 }
 
-std::vector<effectParam> Character::LoadAzrakTalent() {
+std::vector<effectParam> Character::LoadAzrakTalent() const{
   std::vector<effectParam> epTable;
 
   effectParam param1;
@@ -1233,7 +1233,7 @@ std::vector<effectParam> Character::LoadAzrakTalent() {
   return epTable;
 }
 
-std::vector<effectParam> Character::LoadThrainTalent() {
+std::vector<effectParam> Character::LoadThrainTalent() const {
   std::vector<effectParam> epTable;
 
   effectParam param1;
