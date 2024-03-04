@@ -254,7 +254,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       if (!resultEffects.isEmpty()) {
         emit SigUpdateChannelView(nameChara,
                                   QString("Sur %1: ").arg(target.m_Name) +
-                                      "\n" + resultEffects.join("\n"),
+                                      "\n" + resultEffects.join(""),
                                   activatedPlayer->color);
       }
       // conditionsOk = false if effect reinit with unfulfilled condtions

@@ -459,7 +459,7 @@ QString PlayersManager::DeleteOneBadEffect(const Character *chara) {
   }
   if (m_AllEffectsOnGame.count(chara->m_Name) == 0) {
     // output channel log
-    return "Aucun effet actif.";
+    return "Aucun effet actif.\n";
   }
   for (auto &e : m_AllEffectsOnGame[chara->m_Name])
     // TODO rule about debuf
@@ -467,10 +467,10 @@ QString PlayersManager::DeleteOneBadEffect(const Character *chara) {
     if (e.allAtkEffects.target == TARGET_ENNEMY &&
         !e.allAtkEffects.statsName.isEmpty()) {
       e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
-      return "supprime un effet néfaste.";
+      return "supprime un effet néfaste.\n";
     }
 
-  return "Pas de mauvais effet supprimé.";
+  return "Pas de mauvais effet supprimé.\n";
 }
 
 QString PlayersManager::DeleteAllBadEffect(const Character *chara) {
@@ -480,14 +480,14 @@ QString PlayersManager::DeleteAllBadEffect(const Character *chara) {
   }
   if (m_AllEffectsOnGame.count(chara->m_Name) == 0) {
     // output channel log
-    return "Aucun effet actif.";
+    return "Aucun effet actif.\n";
   }
   for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
     if (e.allAtkEffects.value < 0) {
       e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
     }
   }
-  return "supprime tous les effets néfastes.";
+  return "supprime tous les effets néfastes.\n";
 }
 
 void PlayersManager::DecreaseCoolDownEffects(const QString &curPlayerName) {
