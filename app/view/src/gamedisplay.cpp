@@ -234,7 +234,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   }
 
   // is critical Strike ??
-  const auto [isCrit, critRandNb] = activatedPlayer->IsCriticalStrike();
+  const auto [isCrit, critRandNb] = activatedPlayer->ProcessCriticalStrike();
   QString critStr;
   if (isCrit) {
       critStr = "Coup Critique";
@@ -291,6 +291,9 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       newEffects[target.m_Name] = appliedEffects;
     }
   }
+
+  // end of critical strike buf (if any)
+  activatedPlayer->ResetBuf(BufTypes::damageCritCapped);
 
   /// Update game state
   // update effect on player manager

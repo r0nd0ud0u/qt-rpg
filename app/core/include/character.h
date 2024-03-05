@@ -40,7 +40,7 @@ public:
 };
 
 enum class InventoryType { healthPotion, manaPotion, enumSize };
-enum class BufTypes { defaultBuf, damageRx, damageTx, enumSize };
+enum class BufTypes { defaultBuf, damageRx, damageTx, damageCritCapped, enumSize };
 
 class Character {
 public:
@@ -82,7 +82,8 @@ public:
   void SetEquipment(const std::unordered_map<QString, QString> &);
   void UpdateEquipmentOnJson() const;
   void ApplyEffeftOnStats(const bool updateEffect);
-  std::pair<bool, int> IsCriticalStrike() const; // return isCrit, random number
+  std::pair<bool, int> ProcessCriticalStrike(); // return isCrit, random number
+  void ResetBuf(const BufTypes &bufType);
 
   // Temporary
   std::vector<effectParam> LoadThaliaTalent() const;

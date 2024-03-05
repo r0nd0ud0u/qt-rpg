@@ -521,6 +521,11 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
     result += ProcessAggro(amount);
   }
 
+  // update effect value
+  if(effect.effect == EFFECT_VALUE_CHANGE){
+      effect.value = maxAmount;
+  }
+
   return result;
 }
 
@@ -739,6 +744,8 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
         target->m_AllBufs[static_cast<int>(BufTypes::damageRx)], amount);
     amount = UpdateDamageByBuf(m_AllBufs[static_cast<int>(BufTypes::damageTx)],
                                amount);
+    amount = UpdateDamageByBuf(m_AllBufs[static_cast<int>(BufTypes::damageCritCapped)],
+                               amount);
   }
   // is it a critical strike
   if (isCrit && ep.statsName == STATS_HP && ep.effect == EFFECT_VALUE_CHANGE) {
@@ -882,6 +889,12 @@ void Character::UpdateBuf(const BufTypes &bufType, const int value,
   buf.SetBuf(buf.m_Value + value, isPercent);
 }
 
+void Character::ResetBuf(const BufTypes &bufType) {
+    auto &buf = m_AllBufs[static_cast<int>(bufType)];
+    buf.SetBuf(0, false);
+    buf.SetBuf(0, true);
+}
+
 void Character::SetStatsOnEffect(StatsType<int> &stat, const int value,
                                  const bool isUp, const bool isPercent,
                                  const bool updateEffect) {
@@ -985,7 +998,7 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
     nbOfApplies = 0;
     if (effect.value == 0) {
       if (effect.statsName != STATS_HP) {
-            output = QString("Stats %1 est reinit.\n").arg(effect.statsName);
+        output = QString("Stats %1 est reinit.\n").arg(effect.statsName);
       } else {
         output = "Chaque HOT est reinit.\n";
       }
@@ -1071,12 +1084,18 @@ QString Character::ProcessAggro(const int atkValue) {
              : "";
 }
 
-std::pair<bool, int> Character::IsCriticalStrike() const {
+std::pair<bool, int> Character::ProcessCriticalStrike() {
   const auto &critStat =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_CRIT));
   int randNb = -1;
+  const int critCapped = 60;
+  const int maxCritUsed = std::max(critCapped, critStat.m_CurrentValue);
+
   if (randNb = Utils::GetRandomNb(0, 100);
-      randNb >= 0 && randNb < critStat.m_CurrentValue) {
+      randNb >= 0 && randNb < maxCritUsed) {
+    // update buf dmg by crit capped
+    UpdateBuf(BufTypes::damageCritCapped,
+              min(0, critStat.m_CurrentValue - critCapped), false);
     return std::make_pair(true, randNb);
   }
   return std::make_pair(false, randNb);
