@@ -59,10 +59,11 @@ public:
   // Effect
   QString ApplyOneEffect(Character *target, effectParam &effect,
                          const bool fromLaunch, const AttaqueType &atk,
-                         const bool reload = false);
+                         const bool reload = false, const bool isCrit = false);
   std::tuple<bool, QStringList, std::vector<effectParam>>
   ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
-                 Character *target); // value1: conditions fulfilled ?, value2 :
+                 Character *target,
+                 const bool isCrit); // value1: conditions fulfilled ?, value2 :
                                      // logs after applying effects
   void RemoveMalusEffect(const effectParam &ep);
 
@@ -71,15 +72,17 @@ public:
 
   static void
   SetStatsOnEffect(StatsType<int> &stat, const int value, const bool isUp,
-                   const bool isPercent, const bool updateEffect); // TODO à sortir dans un common pour
-                                          // gerer les stats?
+                   const bool isPercent,
+                   const bool updateEffect); // TODO à sortir dans un common
+                                             // pour gerer les stats?
   static QString GetInventoryString(const InventoryType &type);
-  std::pair<bool,QString> IsDodging() const;
+  std::pair<bool, QString> IsDodging() const;
   void UsePotion(const QString &statsName);
   void AddExp(const int newXp);
   void SetEquipment(const std::unordered_map<QString, QString> &);
   void UpdateEquipmentOnJson() const;
   void ApplyEffeftOnStats(const bool updateEffect);
+  std::pair<bool, int> IsCriticalStrike() const; // return isCrit, random number
 
   // Temporary
   std::vector<effectParam> LoadThaliaTalent() const;
@@ -109,11 +112,11 @@ private:
   template <class T>
   void ProcessRemoveEquip(StatsType<T> &charStat,
                           const StatsType<T> &equipStat);
-  std::tuple<bool, int, int, int>
-  ProcessCurrentValueOnEffect(effectParam &ep, const int nbOfApplies,
-                              const Stats &launcherStats, const bool launch,
-                              Character *target)
-      const; // value 1 isCrit, value 2 total amount value 3 maxamount, value 4: crit randNb
+  std::pair<int, int> ProcessCurrentValueOnEffect(
+      effectParam &ep, const int nbOfApplies, const Stats &launcherStats,
+      const bool launch, Character *target,
+      const bool isCrit) const; // value 1 isCrit, value 2 total amount value 3
+                                // maxamount, value 4: crit randNb
   QString ProcessOutputLogOnEffect(const effectParam &ep, const int amount,
                                    const bool fromLaunch, const int nbOfApplies,
                                    const QString &atkName,
@@ -131,7 +134,6 @@ private:
       effectParam &effect, Character *target,
       const AttaqueType &atk) const; // pair1 output log, pair2 nbOfApplies
   QString ProcessAggro(const int atkValue);
-  std::tuple<bool, int, int> ProcessCriticalStrike(const int atkValue) const; // return isCrit, newvalue, random number
   void UpdateStatsToNextLevel();
   void UpdateBuf(const BufTypes &bufType, const int value,
                  const bool isPercent);
