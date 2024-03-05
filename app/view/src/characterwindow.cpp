@@ -70,6 +70,13 @@ void CharacterWindow::Apply(){
     auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
     if (type == tabType::stuff) {
         EditStuff es = ui->edit_stuff_view->Save();
+        if(es.m_Name.isEmpty()){
+            // name is empty at launch of the window
+            // and is reset to empty after one apply
+            // this way , no duplicate if "button apply" + "button save" pressed
+            // TODO handle behavior enable/disable apply button
+            return;
+        }
         pm->m_Equipments[es.m_BodyPart][es.m_Name] = es.m_Stuff;
         ui->use_stuff_view->AddItemInComboBox(es);
         emit SigAddNewStuff();

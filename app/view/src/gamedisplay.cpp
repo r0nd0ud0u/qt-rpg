@@ -233,6 +233,17 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     }
   }
 
+  // is critical Strike ??
+  const auto [isCrit, critRandNb] = activatedPlayer->IsCriticalStrike();
+  QString critStr;
+  if (isCrit) {
+      critStr = "Coup Critique";
+  } else{
+      critStr = "pas de coup critique";
+  }
+  emit SigUpdateChannelView(
+      nameChara, QString("Test coup critique:%1 -> %2.\n").arg(critRandNb).arg(critStr));
+
   // new effects on that turn
   std::unordered_map<QString, std::vector<effectParam>> newEffects;
   // Parse target list and apply atk and effects
@@ -257,7 +268,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       // EFFECT
       const auto &[conditionsOk, resultEffects, appliedEffects] =
           activatedPlayer->ApplyAtkEffect(target.m_IsTargeted, currentAtk,
-                                          targetChara);
+                                          targetChara, isCrit);
 
       if (!resultEffects.isEmpty()) {
         emit SigUpdateChannelView(nameChara,

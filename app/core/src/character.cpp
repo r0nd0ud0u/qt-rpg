@@ -345,14 +345,16 @@ void Character::ApplyEffeftOnStats(const bool updateEffect) {
       // common init
       auto &localStat = std::get<StatsType<int>>(
           m_Stats.m_AllStatsTable[gae.allAtkEffects.statsName]);
-      SetStatsOnEffect(localStat, gae.allAtkEffects.value, signBool, true, updateEffect);
+      SetStatsOnEffect(localStat, gae.allAtkEffects.value, signBool, true,
+                       updateEffect);
     } else if (gae.allAtkEffects.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
       const auto signBool =
           static_cast<bool>(GetSignEffectValue(gae.allAtkEffects.target));
       // common init
       auto &localStat = std::get<StatsType<int>>(
           m_Stats.m_AllStatsTable[gae.allAtkEffects.statsName]);
-      SetStatsOnEffect(localStat, gae.allAtkEffects.value, signBool, false, updateEffect);
+      SetStatsOnEffect(localStat, gae.allAtkEffects.value, signBool, false,
+                       updateEffect);
     }
   }
 }
@@ -464,7 +466,7 @@ QChar Character::GetCharEffectValue(const QString &target) const {
 
 QString Character::ApplyOneEffect(Character *target, effectParam &effect,
                                   const bool fromLaunch, const AttaqueType &atk,
-                                  const bool reload) {
+                                  const bool reload, const bool isCrit) {
   if (target == nullptr) {
     return "No  target character";
   }
@@ -503,13 +505,9 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
     result += (berseckAmount > 0) ? QString("recupère +%1 de râge.\n") : "";
   }
   // apply the effect
-  const auto [isCrit, amount, maxAmount, critRandNb] =
-      ProcessCurrentValueOnEffect(effect, nbOfApplies, m_Stats, fromLaunch,
-                                  target);
-  result += QString("Test coup critique:%1.\n").arg(critRandNb);
-  if (isCrit) {
-    result += "Coup critique !\n";
-  }
+  const auto [amount, maxAmount] = ProcessCurrentValueOnEffect(
+      effect, nbOfApplies, m_Stats, fromLaunch, target, isCrit);
+
   // TODO should be static and not on target ? pass target by argument
   result += target->ProcessOutputLogOnEffect(effect, amount, fromLaunch,
                                              nbOfApplies, atk.name, maxAmount);
@@ -535,7 +533,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
 // - 3 : std::vector<effectParam> : list of all applied effectParam
 std::tuple<bool, QStringList, std::vector<effectParam>>
 Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
-                          Character *target) {
+                          Character *target, const bool isCrit) {
   if (target == nullptr) {
     return std::make_tuple(false, QStringList("No target"),
                            std::vector<effectParam>());
@@ -609,7 +607,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
     effectParam appliedEffect = effect;
     // appliedEffect is modified in ApplyOneEffect
     const QString resultEffect =
-        ApplyOneEffect(target, appliedEffect, true, atk);
+        ApplyOneEffect(target, appliedEffect, true, atk, isCrit);
     // an one-occurence or more effect available is displayed
     if (!resultEffect.isEmpty()) {
       allResultEffects.append(resultEffect);
@@ -673,19 +671,18 @@ std::vector<effectParam> Character::CreateEveilDeLaForet() {
   return epTable;
 }
 
-std::tuple<bool, int, int, int> Character::ProcessCurrentValueOnEffect(
+std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     effectParam &ep, const int nbOfApplies, const Stats &launcherStats,
-    const bool launch, Character *target) const {
-  const int DEFAULT_CRIT = -1;
+    const bool launch, Character *target, const bool isCrit) const {
 
   if (ep.statsName.isEmpty() || target == nullptr) {
-    return std::make_tuple(false, 0, 0, DEFAULT_CRIT);
+    return std::make_pair(0, 0);
   }
   if (ep.value == 0) {
-    return std::make_tuple(false, 0, 0, DEFAULT_CRIT);
+    return std::make_pair(0, 0);
   }
   if (ep.statsName == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
-    return std::make_tuple(false, 0, 0, DEFAULT_CRIT);
+    return std::make_pair(0, 0);
   }
   int output = 0;
   // heal or damage is suggested by sign
@@ -731,7 +728,7 @@ std::tuple<bool, int, int, int> Character::ProcessCurrentValueOnEffect(
   }
 
   if (amount == 0) {
-    return std::make_tuple(false, 0, 0, DEFAULT_CRIT);
+    return std::make_pair(0, 0);
   }
 
   // return the true applied amount
@@ -743,9 +740,8 @@ std::tuple<bool, int, int, int> Character::ProcessCurrentValueOnEffect(
                                amount);
   }
   // is it a critical strike
-  const auto [isCrit, ccAmount, critRandNb] = ProcessCriticalStrike(amount);
-  if (ep.statsName == STATS_CRIT) {
-    output = sign * ccAmount;
+  if (isCrit && ep.statsName == STATS_HP && ep.effect == EFFECT_VALUE_CHANGE) {
+    output = 2 * sign * amount;
   } else {
     // new value of stat
     output = sign * amount; // apply the sign after the calcul of amount
@@ -763,7 +759,7 @@ std::tuple<bool, int, int, int> Character::ProcessCurrentValueOnEffect(
     maxAmount = min(tmp, output);
   }
 
-  return std::make_tuple(isCrit, output, maxAmount, critRandNb);
+  return std::make_pair(output, maxAmount);
 }
 
 QString Character::ProcessOutputLogOnEffect(
@@ -886,7 +882,8 @@ void Character::UpdateBuf(const BufTypes &bufType, const int value,
 }
 
 void Character::SetStatsOnEffect(StatsType<int> &stat, const int value,
-                                 const bool isUp, const bool isPercent, const bool updateEffect) {
+                                 const bool isUp, const bool isPercent,
+                                 const bool updateEffect) {
   int sign = 1;
   if (!isUp) {
     sign = -1;
@@ -898,12 +895,13 @@ void Character::SetStatsOnEffect(StatsType<int> &stat, const int value,
   const auto baseValue = stat.m_RawMaxValue + stat.m_BufEquipValue +
                          stat.m_BufEquipPercent * stat.m_RawMaxValue / 100;
   stat.m_MaxValue = baseValue;
-  if(updateEffect){
-  if (isPercent) {
-    stat.m_BufEffectPercent += sign * value;
-  } else {
-    stat.m_BufEffectValue += sign * value;
-  }}
+  if (updateEffect) {
+    if (isPercent) {
+      stat.m_BufEffectPercent += sign * value;
+    } else {
+      stat.m_BufEffectValue += sign * value;
+    }
+  }
   // update maxvalue with all effects
   stat.m_MaxValue +=
       stat.m_BufEffectValue + stat.m_BufEffectPercent * baseValue / 100;
@@ -1068,16 +1066,15 @@ QString Character::ProcessAggro(const int atkValue) {
              : "";
 }
 
-std::tuple<bool, int, int>
-Character::ProcessCriticalStrike(const int atkValue) const {
+std::pair<bool, int> Character::IsCriticalStrike() const {
   const auto &critStat =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_CRIT));
   int randNb = -1;
   if (randNb = Utils::GetRandomNb(0, 100);
       randNb >= 0 && randNb < critStat.m_CurrentValue) {
-    return std::make_tuple(true, atkValue * 2, randNb);
+    return std::make_pair(true, randNb);
   }
-  return std::make_tuple(false, atkValue, randNb);
+  return std::make_pair(false, randNb);
 }
 
 std::pair<bool, QString> Character::IsDodging() const {
