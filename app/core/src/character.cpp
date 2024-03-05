@@ -681,7 +681,8 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
   if (ep.value == 0) {
     return std::make_pair(0, 0);
   }
-  if (ep.statsName == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
+  if (ep.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE ||
+      ep.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
     return std::make_pair(0, 0);
   }
   int output = 0;
@@ -983,7 +984,11 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
     pm->ResetCounterOnOneStatsEffect(target, effect.statsName);
     nbOfApplies = 0;
     if (effect.value == 0) {
-      output = QString("Les HOTs sont reinitialisés.\n");
+      if (effect.statsName != STATS_HP) {
+            output = QString("Stats %1 est reinit.\n").arg(effect.statsName);
+      } else {
+        output = "Chaque HOT est reinit.\n";
+      }
     }
   }
   if (effect.effect == EFFECT_DELETE_BAD) {
@@ -1032,7 +1037,7 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
     auto &localStat = std::get<StatsType<int>>(
         target->m_Stats.m_AllStatsTable[effect.statsName]);
     SetStatsOnEffect(localStat, effect.value, signBool, false, true);
-    output = QString("La stat %1 est modifiée de %2%3%.\n")
+    output = QString("La stat %1 est modifiée de %2%3.\n")
                  .arg(effect.statsName)
                  .arg(sign)
                  .arg(effect.value);
