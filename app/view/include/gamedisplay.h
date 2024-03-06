@@ -54,6 +54,7 @@ private slots:
   void on_berseck_potion_button_clicked();
   void on_vigor_potion_button_clicked();
   void on_pushButton_clicked();
+  void on_add_exp_button_clicked();
 };
 
 #endif // GAMEDISPLAY_H

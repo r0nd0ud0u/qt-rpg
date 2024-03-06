@@ -134,7 +134,7 @@ private:
   std::pair<QString, int> ProcessEffectType(
       effectParam &effect, Character *target,
       const AttaqueType &atk) const; // pair1 output log, pair2 nbOfApplies
-  QString ProcessAggro(const int atkValue);
+  QString ProcessAggro(const int atkValue, const QString& target);
   void UpdateStatsToNextLevel();
   void UpdateBuf(const BufTypes &bufType, const int value,
                  const bool isPercent);

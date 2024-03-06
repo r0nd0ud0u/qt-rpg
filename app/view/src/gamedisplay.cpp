@@ -396,5 +396,14 @@ void GameDisplay::on_vigor_potion_button_clicked() {
 void GameDisplay::on_pushButton_clicked() {
   Application::GetInstance().m_GameManager->m_PlayersManager->AddExpForHeroes(
       ui->exp_spinBox->value());
-  ui->add_exp_button->setEnabled(false);
+
 }
+
+void GameDisplay::on_add_exp_button_clicked()
+{
+    Application::GetInstance().m_GameManager->m_PlayersManager->AddExpForHeroes(
+        ui->exp_spinBox->value());
+    //TODO check it
+    //ui->add_exp_button->setEnabled(false);
+}
+
