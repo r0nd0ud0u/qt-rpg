@@ -20,9 +20,9 @@ public:
     void Init(const QString& name, const Stats& stats);
 
     QString m_Name;
-    int m_MaxValue = 0;
-    int m_StartingValue = 0;
-    int m_RegenValue = 0;
+    int m_MaxValue = -1;
+    int m_StartingValue = -1;
+    int m_RegenValue = -1;
 
 private slots:
     void on_start_spinBox_valueChanged(int arg1);
