@@ -25,7 +25,7 @@ void BossPanel::UpdatePanel(Character *boss) {
   ui->name_label->setText(boss->m_Name);
   ui->hp_bar->setFormat(QString::number(hp.m_CurrentValue) + "/" +
                         QString::number(hp.m_MaxValue) + " %p%");
-  int hpValue = 100 * hp.m_CurrentValue / hp.m_MaxValue;
+  int hpValue = (hp.m_MaxValue != 0) ?100 * hp.m_CurrentValue / hp.m_MaxValue : 10;
   ui->hp_bar->setValue(hpValue);
 
   ui->hp_bar->setStyleSheet(

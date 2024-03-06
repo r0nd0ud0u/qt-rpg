@@ -518,7 +518,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   }
   // Process aggro
   if (fromLaunch) {
-    result += ProcessAggro(amount);
+    result += ProcessAggro(amount, effect.target);
   }
 
   // update effect value
@@ -1068,15 +1068,15 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
   return std::make_pair(output, nbOfApplies);
 }
 
-QString Character::ProcessAggro(const int atkValue) {
-  if (atkValue <= 0) {
+QString Character::ProcessAggro(const int atkValue, const QString& target) {
+  if (target != TARGET_ENNEMY) {
     return "";
   }
 
   const int aggroNorm = 20; // random value at the moment
   auto &aggroStat =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_AGGRO]);
-  const auto genAggro = static_cast<int>(std::round(atkValue / aggroNorm));
+  const auto genAggro = static_cast<int>(std::round(abs(atkValue) / aggroNorm));
   aggroStat.m_CurrentValue += genAggro;
 
   return (genAggro > 0)
@@ -1089,7 +1089,7 @@ std::pair<bool, int> Character::ProcessCriticalStrike() {
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_CRIT));
   int randNb = -1;
   const int critCapped = 60;
-  const int maxCritUsed = std::max(critCapped, critStat.m_CurrentValue);
+  const int maxCritUsed = std::min(critCapped, critStat.m_CurrentValue);
 
   if (randNb = Utils::GetRandomNb(0, 100);
       randNb >= 0 && randNb < maxCritUsed) {
