@@ -139,6 +139,8 @@ void GameDisplay::NewRound() {
   emit SigUpdateChannelView("GameState", QString("Round %1/%2")
                                              .arg(gs->m_CurrentRound)
                                              .arg(gs->m_OrderToPlay.size()));
+  // auto select hero
+  gm->m_PlayersManager->m_SelectedHero = activePlayer;
   emit selectCharacter(activePlayer->m_Name);
   // TODO update channel
   // choice of talent
@@ -154,8 +156,9 @@ void GameDisplay::StartNewTurn() {
   // Apply regen stats
   gm->m_PlayersManager->ApplyRegenStats(characType::Boss);
   gm->m_PlayersManager->ApplyRegenStats(characType::Hero);
-  // Updat views after stats changes
+  // Update views after stats changes
   emit SigUpdatePlayerPanel();
+
 
   // For each turn now
   // Process the order of the players
