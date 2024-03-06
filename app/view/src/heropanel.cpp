@@ -15,6 +15,10 @@ void HeroPanel::UpdatePanel(Character *hero) {
   }
 
   m_Heroe = hero;
+
+  // update level exp
+  ui->hero_level->setText(QString("Lv: %1 Exp: %2").arg(hero->m_Level).arg(hero->m_Exp));
+
   const auto &hp =
       std::get<StatsType<int>>(m_Heroe->m_Stats.m_AllStatsTable[STATS_HP]);
   const auto &mana =
