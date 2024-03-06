@@ -139,7 +139,7 @@ void GameDisplay::NewRound() {
   emit SigUpdateChannelView("GameState", QString("Round %1/%2")
                                              .arg(gs->m_CurrentRound)
                                              .arg(gs->m_OrderToPlay.size()));
-  emit SigUpdStatsOnSelCharacter();
+  emit selectCharacter(activePlayer->m_Name);
   // TODO update channel
   // choice of talent
   // if dead -> choice to take a potion
