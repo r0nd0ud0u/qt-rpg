@@ -54,10 +54,10 @@ void CharacterWindow::on_pushButton_clicked() {
     ui->edit_atk_tab->Save();
   }
   if (type == tabType::character) {
-    ui->character_def->AddCharacter(m_CurCharacter);
-    emit SigNewCharacter(m_CurCharacter);
+      ui->character_def->AddCharacter(m_CurCharacter);
+      emit SigNewCharacter(m_CurCharacter);
+      m_CurCharacter = nullptr;
   }
-
   Apply();
 }
 
