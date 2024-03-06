@@ -15,8 +15,6 @@ void BossPanel::UpdatePanel(Character *boss) {
     return;
   }
 
-  setStyleSheet(
-      "#frame{color: white;} ");
   m_Boss = boss;
 
   const auto &hp =
