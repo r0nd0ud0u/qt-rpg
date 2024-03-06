@@ -161,7 +161,7 @@ void PlayersManager::InitHeroes() {
 void PlayersManager::InitBosses() {
   Stats stats;
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
-      .InitValues(2750, 2750, 2750, 0);
+      .InitValues(1000, 1000, 1000, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
       .InitValues(9999, 9999, 9999, 9999);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
@@ -171,21 +171,21 @@ void PlayersManager::InitBosses() {
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
       .InitValues(9999, 9999, 9999, 9999);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .InitValues(105, 105, 105, 0);
+      .InitValues(200, 200, 200, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .InitValues(120, 120, 120, 0);
+      .InitValues(200, 200, 200, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .InitValues(40, 40, 40, 0);
+      .InitValues(50, 50, 50, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
-      .InitValues(30, 40, 40, 0);
+      .InitValues(40, 40, 40, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .InitValues(0, 0, 1000, 5);
+      .InitValues(0, 0, 1000, 9);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
       .InitValues(15, 15, 15, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
-      .InitValues(10, 10, 10, 0);
+      .InitValues(6, 6, 6, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
@@ -194,7 +194,7 @@ void PlayersManager::InitBosses() {
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
       .InitValues(0, 0, 0, 0);
-  const auto boss1 = new Character("Pignouf", characType::Boss, stats);
+  const auto boss1 = new Character("Balrog", characType::Boss, stats);
   boss1->color = QColor("red");
   m_BossesList.push_back(boss1);
 
