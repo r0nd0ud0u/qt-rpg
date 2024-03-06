@@ -613,7 +613,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
     effectParam appliedEffect = effect;
     // appliedEffect is modified in ApplyOneEffect
     const QString resultEffect =
-        ApplyOneEffect(target, appliedEffect, true, atk, isCrit);
+        ApplyOneEffect(target, appliedEffect, true, atk, false,isCrit);
     // an one-occurence or more effect available is displayed
     if (!resultEffect.isEmpty()) {
       allResultEffects.append(resultEffect);
