@@ -89,10 +89,7 @@ QString Character::RegenIntoDamage(const int atkValue,
     if (e.allAtkEffects.effect == EFFECT_INTO_DAMAGE &&
         statsName == e.allAtkEffects.statsName) {
       for (auto *pl : playerList) {
-        const auto finalDamage =
-            DamageByAtk(m_Stats, pl->m_Stats, e.allAtkEffects.isMagicAtk,
-                        atkValue * e.allAtkEffects.subValueEffect / 100,
-                        e.allAtkEffects.nbTurns);
+        const auto finalDamage = atkValue * e.allAtkEffects.subValueEffect / 100;
         auto &localstat =
             std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable[statsName]);
         localstat.m_CurrentValue =
@@ -514,7 +511,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   // Apply regen effect turning into damage for all bosses
   // can be processed only after calcul of amount of atk
   if (!reload) {
-    result += RegenIntoDamage(amount, effect.statsName);
+    result += RegenIntoDamage(maxAmount, effect.statsName);
   }
   // Process aggro
   if (fromLaunch && effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE &&
@@ -613,7 +610,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
     effectParam appliedEffect = effect;
     // appliedEffect is modified in ApplyOneEffect
     const QString resultEffect =
-        ApplyOneEffect(target, appliedEffect, true, atk, false,isCrit);
+        ApplyOneEffect(target, appliedEffect, true, atk, false, isCrit);
     // an one-occurence or more effect available is displayed
     if (!resultEffect.isEmpty()) {
       allResultEffects.append(resultEffect);
@@ -1057,6 +1054,12 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
   if (effect.effect == EFFECT_REPEAT_AS_MANY_AS) {
     nbOfApplies += GetMaxNbOfApplies(atk);
   }
+  if (effect.effect == EFFECT_INTO_DAMAGE) {
+    output = QString("%1% des sorts %2 -> en dégâts pendant %3 tours.\n")
+                 .arg(effect.subValueEffect)
+                 .arg(effect.statsName)
+                 .arg(effect.nbTurns);
+  }
 
   return std::make_pair(output, nbOfApplies);
 }
@@ -1207,12 +1210,18 @@ void Character::UpdateStatsToNextLevel() {
     }
     auto &localStat = std::get<StatsType<int>>(m_Stats.m_AllStatsTable[stat]);
     localStat.m_RawMaxValue += localStat.m_RawMaxValue * 10 / 100;
-
-    // update current value and max value
-    ApplyEquipOnStats();
-    // re apply effects
-    ApplyEffeftOnStats(false);
   }
+  for(const auto& stat : ALL_STATS){
+      if(stat.isEmpty()){
+          continue;
+      }
+      auto &localStat = std::get<StatsType<int>>(m_Stats.m_AllStatsTable[stat]);
+      localStat.m_BufEquipValue = 0;
+      localStat.m_BufEquipPercent = 0;
+      // update current value and max value
+      // no need to set buf effect to 0 but set to false for effet in ApplyEquipOnStats
+  }
+  ApplyEquipOnStats();
 }
 
 std::vector<effectParam> Character::LoadThaliaTalent() const {
