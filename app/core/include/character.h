@@ -12,6 +12,7 @@
 #include "effect.h"
 #include "stuff.h"
 
+
 enum class characType { Hero, Boss };
 
 class AttaqueType {
@@ -95,7 +96,7 @@ public:
   Stats m_Stats;
   std::unordered_map<QString, Stuff>
       m_WearingEquipment; // key: body, value: equipmentName
-  std::map<QString, AttaqueType>
+  std::unordered_map<QString, AttaqueType>
       m_AttakList; // key: attak name, value: AttakType struct
   std::vector<uint8_t> m_Inventory;
   int m_Level = 1;
