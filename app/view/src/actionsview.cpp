@@ -46,8 +46,14 @@ ActionsView::createModel(QObject *parent,
   // attak view
   if (typePage == ActionsStackedWgType::attak) {
     model = new QStandardItemModel(0, 1, parent);
-    for (const auto &[atkName, atk] : m_CurPlayer->m_AttakList) {
-      addActionRow(model, atkName);
+      // TODO maybe use another container got atk list
+    std::vector<AttaqueType> tmpAtkList;
+    for(const auto& [atkName, atk]: m_CurPlayer->m_AttakList){
+        tmpAtkList.push_back(atk);
+    }
+    std::sort(tmpAtkList.begin(), tmpAtkList.end(), Utils::CompareByLevel);
+    for (const auto &atk : tmpAtkList) {
+      addActionRow(model, atk.name);
       // disable atk in case of not enough resources, still displayed!
       for (int column = 0; column < model->columnCount(); ++column) {
         auto *item = model->item(model->rowCount() - 1, column);
