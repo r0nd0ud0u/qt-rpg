@@ -407,7 +407,7 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
     hp.m_CurrentValue =
         std::min(hp.m_MaxValue, hp.m_CurrentValue + hp.m_CurrentValue*regenHp.m_CurrentValue/100);
     mana.m_CurrentValue = std::min(
-        mana.m_MaxValue, mana.m_CurrentValue + mana.m_CurrentValue*regenMana.m_CurrentValue/100);
+        mana.m_MaxValue, mana.m_CurrentValue + mana.m_MaxValue*regenMana.m_CurrentValue/100);
     berseck.m_CurrentValue =
         std::min(berseck.m_MaxValue,
                  berseck.m_CurrentValue + berseck.m_RegenOnTurn);
