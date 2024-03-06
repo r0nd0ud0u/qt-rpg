@@ -517,13 +517,14 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
     result += RegenIntoDamage(amount, effect.statsName);
   }
   // Process aggro
-  if (fromLaunch) {
+  if (fromLaunch && effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE &&
+      effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
     result += ProcessAggro(amount, effect.target);
   }
 
   // update effect value
-  if(effect.effect == EFFECT_VALUE_CHANGE){
-      effect.value = maxAmount;
+  if (effect.effect == EFFECT_VALUE_CHANGE) {
+    effect.value = maxAmount;
   }
 
   return result;
@@ -739,16 +740,16 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
 
   // return the true applied amount
   // add buf
-  if (target != nullptr && sign == -1) {
+  if (target != nullptr && sign == -1 && launch) {
     amount = UpdateDamageByBuf(
         target->m_AllBufs[static_cast<int>(BufTypes::damageRx)], amount);
     amount = UpdateDamageByBuf(m_AllBufs[static_cast<int>(BufTypes::damageTx)],
                                amount);
-    amount = UpdateDamageByBuf(m_AllBufs[static_cast<int>(BufTypes::damageCritCapped)],
-                               amount);
+    amount = UpdateDamageByBuf(
+        m_AllBufs[static_cast<int>(BufTypes::damageCritCapped)], amount);
   }
   // is it a critical strike
-  if (isCrit && ep.statsName == STATS_HP && ep.effect == EFFECT_VALUE_CHANGE) {
+  if (isCrit && ep.statsName == STATS_HP && launch) {
     output = 2 * sign * amount;
   } else {
     // new value of stat
@@ -777,13 +778,7 @@ QString Character::ProcessOutputLogOnEffect(
   if (ep.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
     return "";
   }
-  if (ep.effect == EFFECT_NB_DECREASE_ON_TURN) {
-    // TODO à revoir
-    return QString("donne %1 PV pour %2 tours et %3 PV maintenant.\n")
-        .arg(ep.value)
-        .arg(ep.nbTurns)
-        .arg(amount);
-  }
+
   QString output;
   QString healOrDamageLog;
   int displayedValue = amount;
@@ -815,8 +810,6 @@ QString Character::ProcessOutputLogOnEffect(
   // nominal atk
   int potentialAttempts = nbOfApplies;
   if (ep.effect == EFFECT_NB_DECREASE_ON_TURN) {
-    // the nomical case is 0 for any atk. effect.subValueEffect is on top of
-    // the
     potentialAttempts = ep.subValueEffect;
   }
 
@@ -830,7 +823,7 @@ QString Character::ProcessOutputLogOnEffect(
                    .arg(maxAmount)
                    .arg(QString::number(displayedValue));
     } else {
-      output = QString("%1 %3/%5 PV avec l'effet %2 (%4).\n")
+      output = QString("%1 %3/%4 PV avec l'effet %2-(%5).\n")
                    .arg(healOrDamageLog)
                    .arg(effectName)
                    .arg(maxAmount)
@@ -890,9 +883,9 @@ void Character::UpdateBuf(const BufTypes &bufType, const int value,
 }
 
 void Character::ResetBuf(const BufTypes &bufType) {
-    auto &buf = m_AllBufs[static_cast<int>(bufType)];
-    buf.SetBuf(0, false);
-    buf.SetBuf(0, true);
+  auto &buf = m_AllBufs[static_cast<int>(bufType)];
+  buf.SetBuf(0, false);
+  buf.SetBuf(0, true);
 }
 
 void Character::SetStatsOnEffect(StatsType<int> &stat, const int value,
@@ -1068,7 +1061,7 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
   return std::make_pair(output, nbOfApplies);
 }
 
-QString Character::ProcessAggro(const int atkValue, const QString& target) {
+QString Character::ProcessAggro(const int atkValue, const QString &target) {
   if (target != TARGET_ENNEMY) {
     return "";
   }
@@ -1218,6 +1211,7 @@ void Character::UpdateStatsToNextLevel() {
     // update current value and max value
     ApplyEquipOnStats();
     // re apply effects
+    ApplyEffeftOnStats(false);
   }
 }
 
