@@ -1137,7 +1137,7 @@ void Character::AddExp(const int newXp) {
 
   while (m_Exp >= m_NextLevel) {
     m_Level += 1;
-    m_NextLevel += m_NextLevel * 20 / 100;
+    m_NextLevel += m_NextLevel + m_NextLevel * 20 / 100;
     UpdateStatsToNextLevel();
   }
 }
@@ -1203,25 +1203,36 @@ void Character::UpdateEquipmentOnJson() const {
   out << doc.toJson() << "\n";
 }
 
+/**
+ * @brief Character::UpdateStatsToNextLevel
+ * Update the selected stats (not all) by 10% for their current raw max value
+ * apply on those their equipment buf and their effect
+ */
 void Character::UpdateStatsToNextLevel() {
   for (const auto &stat : STATS_TO_LEVEL_UP) {
     if (m_Stats.m_AllStatsTable.count(stat) == 0) {
       continue;
     }
     auto &localStat = std::get<StatsType<int>>(m_Stats.m_AllStatsTable[stat]);
+
+    // store the ratio between max value and current value
+    const double ratio = (localStat.m_MaxValue > 0)
+                             ? static_cast<double>(localStat.m_CurrentValue) /
+                                   static_cast<double>(localStat.m_MaxValue)
+                             : 1;
+    // update the raw value by 10%
     localStat.m_RawMaxValue += localStat.m_RawMaxValue * 10 / 100;
+
+    // recalcultate with equipment and effect
+    localStat.m_MaxValue =
+        localStat.m_RawMaxValue + localStat.m_BufEquipValue +
+        localStat.m_RawMaxValue * localStat.m_BufEquipPercent / 100 + localStat.m_BufEffectValue +
+        localStat.m_RawMaxValue * localStat.m_BufEffectPercent / 100;
+
+    // recompute current value by ratio
+    localStat.m_CurrentValue =
+        static_cast<int>(std::round(localStat.m_MaxValue * ratio));
   }
-  for(const auto& stat : ALL_STATS){
-      if(stat.isEmpty()){
-          continue;
-      }
-      auto &localStat = std::get<StatsType<int>>(m_Stats.m_AllStatsTable[stat]);
-      localStat.m_BufEquipValue = 0;
-      localStat.m_BufEquipPercent = 0;
-      // update current value and max value
-      // no need to set buf effect to 0 but set to false for effet in ApplyEquipOnStats
-  }
-  ApplyEquipOnStats();
 }
 
 std::vector<effectParam> Character::LoadThaliaTalent() const {
