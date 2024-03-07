@@ -131,9 +131,6 @@ void GameDisplay::NewRound() {
   // Activate actions buttons
   ui->bag_button->setEnabled(true);
   ui->attaque_button->setEnabled(true);
-  // default page on action view
-  ui->stackedWidget->setCurrentIndex(
-      static_cast<int>(ActionsStackedWgType::defaultType));
   // actions views
   ui->attak_page->SetCurrentPlayer(activePlayer);
   // set focus on active player
@@ -145,6 +142,15 @@ void GameDisplay::NewRound() {
   // auto select hero
   gm->m_PlayersManager->m_SelectedHero = activePlayer;
   emit selectCharacter(activePlayer->m_Name);
+
+  // set atk view on
+  // do it after hero has been activated and selected
+  ui->attak_page->ResetActionsParam();
+  ui->stackedWidget->setCurrentIndex(
+      static_cast<int>(ActionsStackedWgType::attak));
+  ui->attaque_button->setEnabled(false);
+  ui->bag_button->setEnabled(true);
+  ui->attak_page->UpdateActions(ActionsStackedWgType::attak);
   // TODO update channel
   // choice of talent
   // if dead -> choice to take a potion
