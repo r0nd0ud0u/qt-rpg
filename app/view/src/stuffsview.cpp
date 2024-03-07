@@ -37,7 +37,7 @@ void StuffsView::InitEditStuffsView() {
         m_StuffList.push_back(stuff);
     }
 
-    for (const auto &bodyPart : ALL_EQUIP) {
+    for (const auto &bodyPart : ALL_EQUIP_ON_BODY) {
         ui->body_comboBox->addItem(bodyPart);
     }
 
@@ -53,6 +53,11 @@ EditStuff StuffsView::Save() {
     EditStuff  editStuff;
     editStuff.m_Name = ui->name_textEdit->toPlainText();
     editStuff.m_BodyPart = ui->body_comboBox->currentText();
+
+    // no name entered => nothing to save
+    if(editStuff.m_Name.isEmpty()){
+        return EditStuff();
+    }
 
     for (const auto& panel : m_StuffList) {
         auto& stat = std::get<StatsType<int>>(editStuff.m_Stuff.m_Stats.m_AllStatsTable[panel->m_Name]);
@@ -108,6 +113,10 @@ EditStuff StuffsView::Save() {
 #endif
         out << doc.toJson() << "\n";
     }
+
+    // clean edit stuff view after one save
+    ui->name_textEdit->setText("");
+    ui->body_comboBox->setCurrentText("");
 
     return editStuff;
 }

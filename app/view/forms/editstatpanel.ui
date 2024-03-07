@@ -96,8 +96,14 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimum">
+         <number>-1</number>
+        </property>
         <property name="maximum">
          <number>9999</number>
+        </property>
+        <property name="value">
+         <number>-1</number>
         </property>
        </widget>
       </item>
@@ -109,8 +115,14 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimum">
+         <number>-1</number>
+        </property>
         <property name="maximum">
          <number>9999</number>
+        </property>
+        <property name="value">
+         <number>-1</number>
         </property>
        </widget>
       </item>

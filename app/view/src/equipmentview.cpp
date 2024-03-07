@@ -33,7 +33,10 @@ QAbstractItemModel *EquipmentView::createEquipmentModel(QObject *parent) {
   const auto *selectedHero =
       Application::GetInstance().m_GameManager->GetSelectedHero();
 
-  for(const auto& e : ALL_EQUIP){
+  for(const auto& e : ALL_EQUIP_ON_BODY){
+      if(e.isEmpty()){
+          continue;
+      }
       addEquipmentRow(model, e,
                       selectedHero->m_WearingEquipment.at(e).m_Name);
   }

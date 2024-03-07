@@ -12,6 +12,7 @@
 #include "effect.h"
 #include "stuff.h"
 
+
 enum class characType { Hero, Boss };
 
 class AttaqueType {
@@ -40,7 +41,7 @@ public:
 };
 
 enum class InventoryType { healthPotion, manaPotion, enumSize };
-enum class BufTypes { defaultBuf, damageRx, damageTx, enumSize };
+enum class BufTypes { defaultBuf, damageRx, damageTx, damageCritCapped, enumSize };
 
 class Character {
 public:
@@ -59,10 +60,11 @@ public:
   // Effect
   QString ApplyOneEffect(Character *target, effectParam &effect,
                          const bool fromLaunch, const AttaqueType &atk,
-                         const bool reload = false);
+                         const bool reload = false, const bool isCrit = false);
   std::tuple<bool, QStringList, std::vector<effectParam>>
   ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
-                 Character *target); // value1: conditions fulfilled ?, value2 :
+                 Character *target,
+                 const bool isCrit); // value1: conditions fulfilled ?, value2 :
                                      // logs after applying effects
   void RemoveMalusEffect(const effectParam &ep);
 
@@ -71,15 +73,18 @@ public:
 
   static void
   SetStatsOnEffect(StatsType<int> &stat, const int value, const bool isUp,
-                   const bool isPercent); // TODO à sortir dans un common pour
-                                          // gerer les stats?
+                   const bool isPercent,
+                   const bool updateEffect); // TODO à sortir dans un common
+                                             // pour gerer les stats?
   static QString GetInventoryString(const InventoryType &type);
-  bool IsDodging() const;
+  std::pair<bool, QString> IsDodging() const;
   void UsePotion(const QString &statsName);
   void AddExp(const int newXp);
   void SetEquipment(const std::unordered_map<QString, QString> &);
   void UpdateEquipmentOnJson() const;
-  void ApplyEffeftOnStats();
+  void ApplyEffeftOnStats(const bool updateEffect);
+  std::pair<bool, int> ProcessCriticalStrike(); // return isCrit, random number
+  void ResetBuf(const BufTypes &bufType);
 
   // Temporary
   std::vector<effectParam> LoadThaliaTalent() const;
@@ -91,12 +96,13 @@ public:
   Stats m_Stats;
   std::unordered_map<QString, Stuff>
       m_WearingEquipment; // key: body, value: equipmentName
-  std::map<QString, AttaqueType>
+  std::unordered_map<QString, AttaqueType>
       m_AttakList; // key: attak name, value: AttakType struct
   std::vector<uint8_t> m_Inventory;
-  int m_Level = 30;
+  int m_Level = 1;
   int m_Exp = 0;
   int m_NextLevel = 100;
+  std::vector<int> m_LastAggros; // keep the last five aggros and sum them
 
   QColor color = QColor("dark");
   // Buf
@@ -109,11 +115,11 @@ private:
   template <class T>
   void ProcessRemoveEquip(StatsType<T> &charStat,
                           const StatsType<T> &equipStat);
-  std::tuple<bool, int, int>
-  ProcessCurrentValueOnEffect(effectParam &ep, const int nbOfApplies,
-                              const Stats &launcherStats, const bool launch,
-                              Character *target)
-      const; // value 1 isCrit, value 2 total amount value 3 maxamount
+  std::pair<int, int> ProcessCurrentValueOnEffect(
+      effectParam &ep, const int nbOfApplies, const Stats &launcherStats,
+      const bool launch, Character *target,
+      const bool isCrit) const; // value 1 isCrit, value 2 total amount value 3
+                                // maxamount, value 4: crit randNb
   QString ProcessOutputLogOnEffect(const effectParam &ep, const int amount,
                                    const bool fromLaunch, const int nbOfApplies,
                                    const QString &atkName,
@@ -130,8 +136,7 @@ private:
   std::pair<QString, int> ProcessEffectType(
       effectParam &effect, Character *target,
       const AttaqueType &atk) const; // pair1 output log, pair2 nbOfApplies
-  QString ProcessAggro(const int atkValue);
-  std::pair<bool, int> ProcessCriticalStrike(const int atkValue) const; // return isCrit, newvalue
+  QString ProcessAggro(const int atkValue, const QString& target);
   void UpdateStatsToNextLevel();
   void UpdateBuf(const BufTypes &bufType, const int value,
                  const bool isPercent);

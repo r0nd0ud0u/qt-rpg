@@ -130,9 +130,16 @@ void PlayersManager::InitHeroes() {
   m_HeroesList.push_back(hero2);
   m_HeroesList.push_back(hero3);
 
-  for (const auto &hero : m_HeroesList) {
+  for (auto *hero : m_HeroesList) {
     hero->LoadAtkJson();
     hero->LoadStuffJson();
+    std::unordered_map<QString, QString> table;
+    for(const auto& [name, stuff] : hero->m_WearingEquipment){
+        if(!stuff.m_Name.isEmpty()){
+            table[name] = stuff.m_Name;
+        }
+    }
+    hero->SetEquipment(table);
     hero->ApplyEquipOnStats();
   }
   const auto epParamTalent1 = hero1->LoadThaliaTalent();
@@ -145,17 +152,16 @@ void PlayersManager::InitHeroes() {
   AddGameEffectOnAtk(hero3->m_Name, AttaqueType(), hero3->m_Name,
                      epParamTalent3, 0);
 
-  ApplyEffectsOnPlayer(
-      hero1->m_Name, 1,
-      true); // 1 because launching turn must be different than current turn
-  ApplyEffectsOnPlayer(hero2->m_Name, 1, true);
-  ApplyEffectsOnPlayer(hero3->m_Name, 1, true);
+  hero1->ApplyEffeftOnStats(true);
+  hero2->ApplyEffeftOnStats(true);
+  hero3->ApplyEffeftOnStats(true);
+
 }
 
 void PlayersManager::InitBosses() {
   Stats stats;
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
-      .InitValues(2750, 2750, 2750, 0);
+      .InitValues(1200, 1200, 1200, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
       .InitValues(9999, 9999, 9999, 9999);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
@@ -165,21 +171,21 @@ void PlayersManager::InitBosses() {
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
       .InitValues(9999, 9999, 9999, 9999);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .InitValues(105, 105, 105, 0);
+      .InitValues(250, 250, 250, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .InitValues(120, 120, 120, 0);
+      .InitValues(50, 50, 50, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .InitValues(40, 40, 40, 0);
+      .InitValues(80, 80, 80, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
-      .InitValues(30, 40, 40, 0);
+      .InitValues(112, 112, 112, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .InitValues(0, 0, 1000, 5);
+      .InitValues(0, 0, 1000, 20);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
       .InitValues(15, 15, 15, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
-      .InitValues(10, 10, 10, 0);
+      .InitValues(25, 25, 25, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
@@ -188,9 +194,48 @@ void PlayersManager::InitBosses() {
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
       .InitValues(0, 0, 0, 0);
-  const auto boss1 = new Character("Pignouf", characType::Boss, stats);
+  const auto boss1 = new Character("Smogogo", characType::Boss, stats);
   boss1->color = QColor("red");
   m_BossesList.push_back(boss1);
+
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
+      .InitValues(1500, 1500, 1500, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
+      .InitValues(9999, 9999, 9999, 9999);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
+      .InitValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
+      .InitValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
+      .InitValues(9999, 9999, 9999, 9999);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
+      .InitValues(190, 190, 190, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
+      .InitValues(117, 117, 117, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
+      .InitValues(80, 80, 80, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
+      .InitValues(130, 130, 130, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
+      .InitValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
+      .InitValues(0, 0, 1000, 5);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
+      .InitValues(20, 20, 20, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
+      .InitValues(6, 6, 6, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
+      .InitValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
+      .InitValues(25, 25, 25, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
+      .InitValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
+      .InitValues(0, 0, 0, 0);
+  const auto boss2 = new Character("Smogogo le retour", characType::Boss, stats);
+  boss2->color = QColor("red");
+  m_BossesList.push_back(boss2);
+
 
   for (const auto &boss : m_BossesList) {
     boss->LoadAtkJson();
@@ -401,7 +446,7 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
     hp.m_CurrentValue =
         std::min(hp.m_MaxValue, hp.m_CurrentValue + hp.m_CurrentValue*regenHp.m_CurrentValue/100);
     mana.m_CurrentValue = std::min(
-        mana.m_MaxValue, mana.m_CurrentValue + mana.m_CurrentValue*regenMana.m_CurrentValue/100);
+        mana.m_MaxValue, mana.m_CurrentValue + mana.m_MaxValue*regenMana.m_CurrentValue/100);
     berseck.m_CurrentValue =
         std::min(berseck.m_MaxValue,
                  berseck.m_CurrentValue + berseck.m_RegenOnTurn);
@@ -459,7 +504,7 @@ QString PlayersManager::DeleteOneBadEffect(const Character *chara) {
   }
   if (m_AllEffectsOnGame.count(chara->m_Name) == 0) {
     // output channel log
-    return "Aucun effet actif.";
+    return "Aucun effet actif.\n";
   }
   for (auto &e : m_AllEffectsOnGame[chara->m_Name])
     // TODO rule about debuf
@@ -467,10 +512,10 @@ QString PlayersManager::DeleteOneBadEffect(const Character *chara) {
     if (e.allAtkEffects.target == TARGET_ENNEMY &&
         !e.allAtkEffects.statsName.isEmpty()) {
       e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
-      return "supprime un effet néfaste.";
+      return "supprime un effet néfaste.\n";
     }
 
-  return "Pas de mauvais effet supprimé.";
+  return "Pas de mauvais effet supprimé.\n";
 }
 
 QString PlayersManager::DeleteAllBadEffect(const Character *chara) {
@@ -480,14 +525,14 @@ QString PlayersManager::DeleteAllBadEffect(const Character *chara) {
   }
   if (m_AllEffectsOnGame.count(chara->m_Name) == 0) {
     // output channel log
-    return "Aucun effet actif.";
+    return "Aucun effet actif.\n";
   }
   for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
     if (e.allAtkEffects.value < 0) {
       e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
     }
   }
-  return "supprime tous les effets néfastes.";
+  return "supprime tous les effets néfastes.\n";
 }
 
 void PlayersManager::DecreaseCoolDownEffects(const QString &curPlayerName) {
@@ -610,22 +655,25 @@ void PlayersManager::AddSupAtkTurn(
   }
 }
 
-std::pair<bool, QString>
+std::tuple<bool, QString, QStringList>
 PlayersManager::IsDodging(const std::vector<TargetInfo> &targetList) {
   QString plName;
+    QStringList output;
   const bool isDodging =
       std::any_of(targetList.begin(), targetList.end(),
-                  [this, &plName](const TargetInfo &ti) {
+                  [this, &plName, &output](const TargetInfo &ti) {
                     if (ti.m_IsTargeted) {
                       const auto *targetChara =
                           this->GetCharacterByName(ti.m_Name);
                       plName = ti.m_Name;
-                      return targetChara->IsDodging();
+                      const auto [isDodging, randNbStr] = targetChara->IsDodging();
+                      output.append(randNbStr);
+                      return isDodging;
                     }
                     return false;
                   });
 
-  return std::make_pair(isDodging, plName);
+  return std::make_tuple(isDodging, plName, output);
 }
 
 void PlayersManager::AddExpForHeroes(const int exp) {

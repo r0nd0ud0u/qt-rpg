@@ -93,8 +93,7 @@ const QString EQUIP_NECKLACE = "Collier";
 const QString EQUIP_CHEST = "Torse";
 const QString EQUIP_PANTS = "Pantalon";
 const QString EQUIP_SHOES = "Chaussures";
-const QString EQUIP_LEFT_ARM = "Bras gauche";
-const QString EQUIP_RIGHT_ARM = "Bras droit";
+const QString EQUIP_ARM = "Bras";
 const QString EQUIP_LEFT_LEG = "Jambe gauche";
 const QString EQUIP_RIGHT_LEG = "Jambe droite";
 const QString EQUIP_RING = "Anneau";
@@ -103,23 +102,13 @@ const QString EQUIP_RIGHT_WEAPON = "Arme gauche";
 const QString EQUIP_LEFT_WEAPON = "Arme droite";
 const QString EQUIP_CATEGORY = "Categorie";
 const std::set<QString> ALL_EQUIP{
-    EQUIP_HEAD,        EQUIP_NECKLACE,  EQUIP_CHEST,    EQUIP_SHOES,
-    EQUIP_LEFT_ARM,    EQUIP_RIGHT_ARM, EQUIP_LEFT_LEG, EQUIP_RIGHT_LEG,
-    EQUIP_RING,        EQUIP_PANTS,     EQUIP_NAME,     EQUIP_RIGHT_WEAPON,
-    EQUIP_LEFT_WEAPON, EQUIP_CATEGORY};
-const std::set<QString> ALL_EQUIP_ON_BODY{"",
-                                          EQUIP_HEAD,
-                                          EQUIP_NECKLACE,
-                                          EQUIP_CHEST,
-                                          EQUIP_SHOES,
-                                          EQUIP_LEFT_ARM,
-                                          EQUIP_RIGHT_ARM,
-                                          EQUIP_LEFT_LEG,
-                                          EQUIP_RIGHT_LEG,
-                                          EQUIP_RING,
-                                          EQUIP_PANTS,
-                                          EQUIP_RIGHT_WEAPON,
-                                          EQUIP_LEFT_WEAPON};
+    EQUIP_HEAD,     EQUIP_NECKLACE,     EQUIP_CHEST,       EQUIP_SHOES,EQUIP_ARM,
+    EQUIP_LEFT_LEG, EQUIP_RIGHT_LEG,    EQUIP_RING,        EQUIP_PANTS,
+    EQUIP_NAME,     EQUIP_RIGHT_WEAPON, EQUIP_LEFT_WEAPON, EQUIP_CATEGORY};
+const std::set<QString> ALL_EQUIP_ON_BODY{
+    "",          EQUIP_HEAD,  EQUIP_NECKLACE,     EQUIP_CHEST,
+    EQUIP_SHOES, EQUIP_ARM,   EQUIP_LEFT_LEG,     EQUIP_RIGHT_LEG,
+    EQUIP_RING,  EQUIP_PANTS, EQUIP_RIGHT_WEAPON, EQUIP_LEFT_WEAPON};
 // Effect keys
 const QString EFFECT_REINIT = "Reinit";
 const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";
@@ -162,7 +151,8 @@ const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_BOOSTED_BY_HOTS,
     EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT,
     EFFECT_IMPROVEMENT_STAT_BY_VALUE,
-    EFFECT_IMPROVE_BY_PERCENT_CHANGE
+    EFFECT_IMPROVE_BY_PERCENT_CHANGE,
+    EFFECT_INTO_DAMAGE
 
 };
 const QString EFFECT_ARRAY = "Effet";
