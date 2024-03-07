@@ -7,6 +7,9 @@
 #include "bossesview.h"
 #include "channel.h"
 #include "heroesview.h"
+#include "utils.h"
+
+#include <unordered_set>
 
 GameDisplay::GameDisplay(QWidget *parent)
     : QWidget(parent), ui(new Ui::GameDisplay) {
@@ -244,6 +247,9 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   } else{
       critStr = "pas de coup critique";
   }
+
+  critStr += Utils::ComputeNbOfShots(activatedPlayer->m_Name, critRandNb);
+
   emit SigUpdateChannelView(
       nameChara, QString("Test coup critique:%1 -> %2.\n").arg(critRandNb).arg(critStr));
 
@@ -257,15 +263,15 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       // is dodging
       if (currentAtk.target == TARGET_ENNEMY &&
           currentAtk.reach == REACH_ZONE && target.m_IsTargeted) {
-        const auto &[isDodging, outputsRandnb] = targetChara->IsDodging();
-        if (isDodging) {
+        const auto &[isDodgingZone, outputsRandnbZone] = targetChara->IsDodging();
+        if (isDodgingZone) {
           emit SigUpdateChannelView(targetChara->m_Name,
-                                    QString("esquive.(%1)").arg(outputsRandnb));
+                                    QString("esquive.(%1)").arg(outputsRandnbZone));
           continue;
         } else {
           emit SigUpdateChannelView(
               targetChara->m_Name,
-              QString("pas d'esquive.(%1)").arg(outputsRandnb));
+              QString("pas d'esquive.(%1)").arg(outputsRandnbZone));
         }
       }
       // EFFECT
@@ -396,12 +402,6 @@ void GameDisplay::on_vigor_potion_button_clicked() {
   }
 }
 
-void GameDisplay::on_pushButton_clicked() {
-  Application::GetInstance().m_GameManager->m_PlayersManager->AddExpForHeroes(
-      ui->exp_spinBox->value());
-
-}
-
 void GameDisplay::on_add_exp_button_clicked()
 {
     Application::GetInstance().m_GameManager->m_PlayersManager->AddExpForHeroes(
@@ -409,7 +409,5 @@ void GameDisplay::on_add_exp_button_clicked()
     // update level + exp label of each hero panel
     emit SigUpdatePlayerPanel();
     emit selectCharacter(Application::GetInstance().m_GameManager->m_PlayersManager->m_SelectedHero->m_Name);
-    //TODO check it
-    //ui->add_exp_button->setEnabled(false);
 }
 

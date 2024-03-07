@@ -53,7 +53,6 @@ private slots:
   void on_hp_potion_button_clicked();
   void on_berseck_potion_button_clicked();
   void on_vigor_potion_button_clicked();
-  void on_pushButton_clicked();
   void on_add_exp_button_clicked();
 };
 
