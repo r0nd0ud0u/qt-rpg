@@ -102,6 +102,7 @@ public:
   int m_Level = 1;
   int m_Exp = 0;
   int m_NextLevel = 100;
+  std::vector<int> m_LastAggros; // keep the last five aggros and sum them
 
   QColor color = QColor("dark");
   // Buf

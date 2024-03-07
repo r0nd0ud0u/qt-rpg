@@ -1064,19 +1064,34 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
   return std::make_pair(output, nbOfApplies);
 }
 
+/**
+ * @brief Character::ProcessAggro
+ * Keep only the last 5 aggro generated after a heal or a damage
+ * Sum them to process the current value of stats aggro
+ * @param atkValue
+ * @param target
+ * @return a QString to output in channel log the result
+ */
 QString Character::ProcessAggro(const int atkValue, const QString &target) {
   if (target != TARGET_ENNEMY) {
     return "";
   }
 
   const int aggroNorm = 20; // random value at the moment
+  const auto genAggro = static_cast<int>(std::round(abs(atkValue) / aggroNorm));
+  // keep the last 5
+  m_LastAggros.push_back(genAggro);
+  if(m_LastAggros.size() == 6){
+      m_LastAggros.pop_back();
+  }
+  // update current aggro stat with the sum of the last 5
   auto &aggroStat =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_AGGRO]);
-  const auto genAggro = static_cast<int>(std::round(abs(atkValue) / aggroNorm));
-  aggroStat.m_CurrentValue += genAggro;
+  const int oldAggro = aggroStat.m_CurrentValue;
+  aggroStat.m_CurrentValue = accumulate(m_LastAggros.begin(), m_LastAggros.end(),0);
 
   return (genAggro > 0)
-             ? QString("+%1 aggro pour %2.\n").arg(genAggro).arg(m_Name)
+             ? QString("+%1 aggro pour %2, old: %3, new: %4\n").arg(genAggro).arg(m_Name).arg(oldAggro).arg(aggroStat.m_CurrentValue)
              : "";
 }
 
