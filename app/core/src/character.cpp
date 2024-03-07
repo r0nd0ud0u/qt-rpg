@@ -962,7 +962,7 @@ int Character::ProcessBerseckOnRxAtk(const int nbOfApplies) {
 
 std::pair<QString, int>
 Character::ProcessEffectType(effectParam &effect, Character *target,
-                             const AttaqueType &atk) const {
+                             const AttaqueType &atk) {
   if (target == nullptr) {
     return std::make_pair("", 0);
   }
@@ -1056,6 +1056,10 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
   }
   if (effect.effect == EFFECT_REPEAT_AS_MANY_AS) {
     nbOfApplies += GetMaxNbOfApplies(atk);
+      // one cost has already been processed at the start of launchingattak-> nbOfApplies-1
+      for(int i=0; i<nbOfApplies-1;i++){
+        ProcessCost(atk.name);
+    }
   }
   if (effect.effect == EFFECT_INTO_DAMAGE) {
     output = QString("%1% des sorts %2 -> en dégâts pendant %3 tours.\n")
