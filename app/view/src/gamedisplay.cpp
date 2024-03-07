@@ -7,6 +7,9 @@
 #include "bossesview.h"
 #include "channel.h"
 #include "heroesview.h"
+#include "utils.h"
+
+#include <unordered_set>
 
 GameDisplay::GameDisplay(QWidget *parent)
     : QWidget(parent), ui(new Ui::GameDisplay) {
@@ -92,8 +95,8 @@ void GameDisplay::NewRound() {
 
   // First update the game state
   auto *gs = gm->m_GameState;
-  if(gs == nullptr){
-      return;
+  if (gs == nullptr) {
+    return;
   }
   gs->m_CurrentRound++;
   UpdateGameStatus();
@@ -122,7 +125,6 @@ void GameDisplay::NewRound() {
 
   // Update views
   // Update views after stats changes
-  emit SigUpdatePlayerPanel();
   // Players panels views
   ui->heroes_widget->ActivatePanel(activePlayer->m_Name);
   ui->bosses_widget->ActivatePanel(activePlayer->m_Name);
@@ -136,10 +138,13 @@ void GameDisplay::NewRound() {
   ui->attak_page->SetCurrentPlayer(activePlayer);
   // set focus on active player
   emit SigSetFocusOnActivePlayer(activePlayer->m_Name, activePlayer->m_type);
-
+  emit SigUpdatePlayerPanel();
   emit SigUpdateChannelView("GameState", QString("Round %1/%2")
                                              .arg(gs->m_CurrentRound)
                                              .arg(gs->m_OrderToPlay.size()));
+  // auto select hero
+  gm->m_PlayersManager->m_SelectedHero = activePlayer;
+  emit selectCharacter(activePlayer->m_Name);
   // TODO update channel
   // choice of talent
   // if dead -> choice to take a potion
@@ -154,8 +159,9 @@ void GameDisplay::StartNewTurn() {
   // Apply regen stats
   gm->m_PlayersManager->ApplyRegenStats(characType::Boss);
   gm->m_PlayersManager->ApplyRegenStats(characType::Hero);
-  // Updat views after stats changes
+  // Update views after stats changes
   emit SigUpdatePlayerPanel();
+
 
   // For each turn now
   // Process the order of the players
@@ -221,13 +227,31 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   // is Dodging
   if (currentAtk.target == TARGET_ENNEMY &&
       currentAtk.reach == REACH_INDIVIDUAL) {
-    const auto &[isDodging, plName] =
+    const auto &[isDodging, plName, outputsRandNb] =
         gm->m_PlayersManager->IsDodging(targetList);
     if (isDodging) {
-      emit SigUpdateChannelView(plName, QString("esquive."));
+      emit SigUpdateChannelView(
+          plName, QString("esquive.(%1)").arg(outputsRandNb.first()));
       return;
+    } else {
+      emit SigUpdateChannelView(
+          plName, QString("pas d'esquive.(%1)").arg(outputsRandNb.first()));
     }
   }
+
+  // is critical Strike ??
+  const auto [isCrit, critRandNb] = activatedPlayer->ProcessCriticalStrike();
+  QString critStr;
+  if (isCrit) {
+      critStr = "Coup Critique";
+  } else{
+      critStr = "pas de coup critique";
+  }
+
+  critStr += Utils::ComputeNbOfShots(activatedPlayer->m_Name, critRandNb);
+
+  emit SigUpdateChannelView(
+      nameChara, QString("Test coup critique:%1 -> %2.\n").arg(critRandNb).arg(critStr));
 
   // new effects on that turn
   std::unordered_map<QString, std::vector<effectParam>> newEffects;
@@ -238,23 +262,27 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     if (targetChara != nullptr) {
       // is dodging
       if (currentAtk.target == TARGET_ENNEMY &&
-          currentAtk.reach == REACH_ZONE) {
-        const auto &[isDodging, plName] =
-            gm->m_PlayersManager->IsDodging(targetList);
-        if (isDodging) {
-          emit SigUpdateChannelView(plName, QString("esquive."));
+          currentAtk.reach == REACH_ZONE && target.m_IsTargeted) {
+        const auto &[isDodgingZone, outputsRandnbZone] = targetChara->IsDodging();
+        if (isDodgingZone) {
+          emit SigUpdateChannelView(targetChara->m_Name,
+                                    QString("esquive.(%1)").arg(outputsRandnbZone));
           continue;
+        } else {
+          emit SigUpdateChannelView(
+              targetChara->m_Name,
+              QString("pas d'esquive.(%1)").arg(outputsRandnbZone));
         }
       }
       // EFFECT
       const auto &[conditionsOk, resultEffects, appliedEffects] =
           activatedPlayer->ApplyAtkEffect(target.m_IsTargeted, currentAtk,
-                                          targetChara);
+                                          targetChara, isCrit);
 
       if (!resultEffects.isEmpty()) {
         emit SigUpdateChannelView(nameChara,
                                   QString("Sur %1: ").arg(target.m_Name) +
-                                      "\n" + resultEffects.join("\n"),
+                                      "\n" + resultEffects.join(""),
                                   activatedPlayer->color);
       }
       // conditionsOk = false if effect reinit with unfulfilled condtions
@@ -272,6 +300,9 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       newEffects[target.m_Name] = appliedEffects;
     }
   }
+
+  // end of critical strike buf (if any)
+  activatedPlayer->ResetBuf(BufTypes::damageCritCapped);
 
   /// Update game state
   // update effect on player manager
@@ -340,8 +371,7 @@ void GameDisplay::AddNewStuff() const {
 }
 
 void GameDisplay::on_mana_potion_button_clicked() {
-  auto *hero = Application::GetInstance()
-                     .m_GameManager->GetCurrentPlayer();
+  auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_MANA);
     emit SigUpdatePlayerPanel();
@@ -349,8 +379,7 @@ void GameDisplay::on_mana_potion_button_clicked() {
 }
 
 void GameDisplay::on_hp_potion_button_clicked() {
-  auto *hero = Application::GetInstance()
-                     .m_GameManager->GetCurrentPlayer();
+  auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_HP);
     emit SigUpdatePlayerPanel();
@@ -358,8 +387,7 @@ void GameDisplay::on_hp_potion_button_clicked() {
 }
 
 void GameDisplay::on_berseck_potion_button_clicked() {
-  auto *hero = Application::GetInstance()
-                     .m_GameManager->GetCurrentPlayer();
+  auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_BERSECK);
     emit SigUpdatePlayerPanel();
@@ -367,16 +395,19 @@ void GameDisplay::on_berseck_potion_button_clicked() {
 }
 
 void GameDisplay::on_vigor_potion_button_clicked() {
-  auto *hero = Application::GetInstance()
-                   .m_GameManager->GetCurrentPlayer();
+  auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_VIGOR);
     emit SigUpdatePlayerPanel();
   }
 }
 
-void GameDisplay::on_pushButton_clicked() {
-  Application::GetInstance().m_GameManager->m_PlayersManager->AddExpForHeroes(
-      ui->exp_spinBox->value());
-  ui->add_exp_button->setEnabled(false);
+void GameDisplay::on_add_exp_button_clicked()
+{
+    Application::GetInstance().m_GameManager->m_PlayersManager->AddExpForHeroes(
+        ui->exp_spinBox->value());
+    // update level + exp label of each hero panel
+    emit SigUpdatePlayerPanel();
+    emit selectCharacter(Application::GetInstance().m_GameManager->m_PlayersManager->m_SelectedHero->m_Name);
 }
+
