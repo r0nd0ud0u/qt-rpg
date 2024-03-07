@@ -470,7 +470,9 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   QString result;
 
   // increment counter turn, effect is used
-  if (fromLaunch) {
+  // it means update only the dot and hot, not the changes on max values of stats
+  // can be improved
+  if (fromLaunch && effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE && effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
     effect.counterTurn++;
   }
 
@@ -520,8 +522,9 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   }
 
   // update effect value
+  // keep the calcultated value for the HOT or DOT
   if (effect.effect == EFFECT_VALUE_CHANGE) {
-    effect.value = maxAmount;
+      effect.value = abs(maxAmount);
   }
 
   return result;
@@ -710,7 +713,7 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     } else {
       amount = ep.value;
     }
-  } else if (ep.statsName == STATS_HP && (ep.effect == EFFECT_VALUE_CHANGE)) {
+  } else if (launch && ep.statsName == STATS_HP && (ep.effect == EFFECT_VALUE_CHANGE)) {
     if (const bool isOnEnnemy = ep.target == TARGET_ENNEMY; isOnEnnemy) {
       amount = nbOfApplies * DamageByAtk(launcherStats, target->m_Stats,
                                          ep.isMagicAtk, ep.value, ep.nbTurns);
