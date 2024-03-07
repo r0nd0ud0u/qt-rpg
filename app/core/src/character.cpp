@@ -524,7 +524,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   // update effect value
   // keep the calcultated value for the HOT or DOT
   if (effect.effect == EFFECT_VALUE_CHANGE) {
-      effect.value = abs(maxAmount);
+      effect.value = abs(amount);
   }
 
   return result;
