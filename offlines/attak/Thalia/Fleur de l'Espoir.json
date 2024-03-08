@@ -19,7 +19,7 @@
         {
             "Cible": "Allié",
             "Portée": "Zone",
-            "Stat": "Mana",
+            "Stat": "Regeneration Mana",
             "Tours actifs": 5,
             "Type": "Changement par %",
             "Valeur de l'effet": 0,

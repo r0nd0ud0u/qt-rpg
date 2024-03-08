@@ -35,13 +35,31 @@
             "Value": 0
         },
         {
-            "Cible": "Allié",
-            "Portée": "Zone",
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
             "Stat": "",
-            "Tours actifs": 1,
+            "Tours actifs": 10,
             "Type": "Tours de recharge",
             "Valeur de l'effet": 1000,
             "Value": 10
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "",
+            "Tours actifs": 1,
+            "Type": "Boost chaque HOT de .. %",
+            "Valeur de l'effet": 0,
+            "Value": 25
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "Boost l'effet par nb HOTS presents en %",
+            "Valeur de l'effet": 0,
+            "Value": 20
         }
     ],
     "Niveau": 13,

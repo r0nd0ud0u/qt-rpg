@@ -1,13 +1,16 @@
 {
-    "Tete": "tete1",
+    "Anneau": "Anneau des explorateurs des terres sauvages",
+    "Arme droite": "Bâton du roi sorcier d'Angmar",
+    "Arme gauche": "Baliste des forteresses naines",
+    "Bras": "",
+    "Categorie": "",
+    "Chaussures": "Bottes des seigneurs d'Angmar",
     "Collier": "",
-    "Torse": "",
-    "Pantalon": "",
-    "Chaussures": "",
-    "Bras gauche": "",
-    "Bras droit": "",
-    "Jambe gauche": "",
     "Jambe droite": "",
-    "Anneau": ""
+    "Jambe gauche": "",
+    "Nom": "",
+    "Pantalon": "",
+    "Tete": "",
+    "Torse": "Armure de la brûme d'Emyn Muil"
 }
 

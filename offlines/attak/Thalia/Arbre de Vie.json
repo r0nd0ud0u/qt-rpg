@@ -11,7 +11,7 @@
             "Cible": "Allié",
             "Portée": "Zone",
             "Stat": "PV",
-            "Tours actifs": 2,
+            "Tours actifs": 3,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 15
@@ -20,10 +20,19 @@
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "Regeneration Mana",
-            "Tours actifs": 2,
+            "Tours actifs": 3,
             "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 100
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
         }
     ],
     "Niveau": 7,

@@ -3,7 +3,7 @@
     "Cible": "Ennemie",
     "Coût de mana": 0,
     "Coût de rage": 0,
-    "Coût de vigueur": 8,
+    "Coût de vigueur": 13,
     "Durée": 1,
     "Dégâts": 0,
     "Effet": [
@@ -21,7 +21,7 @@
             "Portée": "Individuel",
             "Stat": "Armure physique",
             "Tours actifs": 4,
-            "Type": "Changement par %",
+            "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 25
         },

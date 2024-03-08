@@ -3,7 +3,7 @@
     "Cible": "Ennemie",
     "Coût de mana": 0,
     "Coût de rage": 0,
-    "Coût de vigueur": 7,
+    "Coût de vigueur": 12,
     "Durée": 1,
     "Dégâts": 0,
     "Effet": [
@@ -24,15 +24,6 @@
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 10
-        },
-        {
-            "Cible": "",
-            "Portée": "",
-            "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
-            "Valeur de l'effet": 0,
-            "Value": 0
         }
     ],
     "Niveau": 7,
