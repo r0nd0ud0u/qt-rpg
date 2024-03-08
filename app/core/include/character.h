@@ -42,7 +42,7 @@ public:
 };
 
 enum class InventoryType { healthPotion, manaPotion, enumSize };
-enum class BufTypes { defaultBuf, damageRx, damageTx, damageCritCapped, enumSize };
+enum class BufTypes { defaultBuf, damageRx, damageTx, damageCritCapped, powPhyBuf, enumSize };
 
 class Character {
 public:
@@ -111,6 +111,7 @@ public:
   QColor color = QColor("dark");
   // Buf
   std::vector<Buf> m_AllBufs;
+  int m_HealRxOnTurn = 0;
 
 private:
   template <class T>

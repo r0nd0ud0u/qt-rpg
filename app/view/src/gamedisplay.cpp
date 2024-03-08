@@ -125,6 +125,17 @@ void GameDisplay::NewRound() {
   gm->m_PlayersManager->DecreaseCoolDownEffects(activePlayer->m_Name);
   emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
 
+  // update buf pow
+  if(activePlayer->m_Name == "Azrak Ombresang"){
+      auto &localStat =
+          std::get<StatsType<int>>(activePlayer->m_Stats.m_AllStatsTable[STATS_POW_PHY]);
+      auto& phyBuf = activePlayer->m_AllBufs[static_cast<int>(BufTypes::powPhyBuf)];
+      activePlayer->SetStatsOnEffect(localStat,- phyBuf.m_Value + activePlayer->m_HealRxOnTurn, true, false,
+                       true);
+     phyBuf.m_Value = activePlayer->m_HealRxOnTurn;
+  }
+  activePlayer->m_HealRxOnTurn = 0;
+
   // Update views
   // Update views after stats changes
   // Players panels views

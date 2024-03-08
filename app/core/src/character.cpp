@@ -516,6 +516,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   if (!reload) {
     result += RegenIntoDamage(maxAmount, effect.statsName);
   }
+
   // Process aggro
   if (effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE &&
       effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
@@ -526,6 +527,9 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   // keep the calcultated value for the HOT or DOT
   if (effect.effect == EFFECT_VALUE_CHANGE) {
       effect.value = abs(amount);
+      if(amount > 0){
+          target->m_HealRxOnTurn += amount;
+      }
   }
 
   return result;
