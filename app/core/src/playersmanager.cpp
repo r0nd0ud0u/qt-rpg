@@ -48,6 +48,8 @@ void PlayersManager::InitHeroes() {
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
       .InitValues(1, 1, 1, 0);
   const auto hero1 = new Character("Thalia", characType::Hero, stats);
+  hero1->m_Forms.push_back(ENT_FORM);
+  hero1->m_Forms.push_back(BEAR_FORM);
 
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
       .InitValues(145, 145, 145, 0);
@@ -76,7 +78,7 @@ void PlayersManager::InitHeroes() {
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
       .InitValues(6, 6, 6, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
-      .InitValues(7,7, 7, 0);
+      .InitValues(7, 7, 7, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
       .InitValues(7, 7, 7, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
@@ -84,6 +86,7 @@ void PlayersManager::InitHeroes() {
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
       .InitValues(1, 1, 1, 0);
   const auto hero2 = new Character("Azrak Ombresang", characType::Hero, stats);
+  hero2->m_Forms.push_back(STANDARD_FORM);
 
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
       .InitValues(155, 155, 155, 0);
@@ -120,7 +123,7 @@ void PlayersManager::InitHeroes() {
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
       .InitValues(3, 3, 3, 0);
   const auto hero3 = new Character("Thraïn", characType::Hero, stats);
-
+  hero3->m_Forms.push_back(STANDARD_FORM);
   // color
   hero1->color = QColor("green");
   hero2->color = QColor("orange");
@@ -134,10 +137,10 @@ void PlayersManager::InitHeroes() {
     hero->LoadAtkJson();
     hero->LoadStuffJson();
     std::unordered_map<QString, QString> table;
-    for(const auto& [name, stuff] : hero->m_WearingEquipment){
-        if(!stuff.m_Name.isEmpty()){
-            table[name] = stuff.m_Name;
-        }
+    for (const auto &[name, stuff] : hero->m_WearingEquipment) {
+      if (!stuff.m_Name.isEmpty()) {
+        table[name] = stuff.m_Name;
+      }
     }
     hero->SetEquipment(table);
     hero->ApplyEquipOnStats();
@@ -155,7 +158,6 @@ void PlayersManager::InitHeroes() {
   hero1->ApplyEffeftOnStats(true);
   hero2->ApplyEffeftOnStats(true);
   hero3->ApplyEffeftOnStats(true);
-
 }
 
 void PlayersManager::InitBosses() {
@@ -196,7 +198,7 @@ void PlayersManager::InitBosses() {
       .InitValues(0, 0, 0, 0);
   const auto boss1 = new Character("Smogogo", characType::Boss, stats);
   boss1->color = QColor("red");
- // m_BossesList.push_back(boss1);
+  // m_BossesList.push_back(boss1);
 
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
       .InitValues(1500, 1500, 1500, 0);
@@ -232,10 +234,10 @@ void PlayersManager::InitBosses() {
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
       .InitValues(0, 0, 0, 0);
-  const auto boss2 = new Character("Smogogo le retour", characType::Boss, stats);
+  const auto boss2 =
+      new Character("Smogogo le retour", characType::Boss, stats);
   boss2->color = QColor("red");
   m_BossesList.push_back(boss2);
-
 
   for (const auto &boss : m_BossesList) {
     boss->LoadAtkJson();
@@ -443,15 +445,18 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
     auto &speed =
         std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable[STATS_SPEED]);
 
-    hp.m_CurrentValue =
-        std::min(hp.m_MaxValue, hp.m_CurrentValue + hp.m_CurrentValue*regenHp.m_CurrentValue/100);
+    hp.m_CurrentValue = std::min(
+        hp.m_MaxValue,
+        hp.m_CurrentValue + hp.m_CurrentValue * regenHp.m_CurrentValue / 100);
     mana.m_CurrentValue = std::min(
-        mana.m_MaxValue, mana.m_CurrentValue + mana.m_MaxValue*regenMana.m_CurrentValue/100);
-    berseck.m_CurrentValue =
-        std::min(berseck.m_MaxValue,
-                 berseck.m_CurrentValue + berseck.m_RegenOnTurn);
-    vigor.m_CurrentValue = std::min(
-        vigor.m_MaxValue, vigor.m_CurrentValue + vigor.m_CurrentValue*regenVigor.m_CurrentValue/100);
+        mana.m_MaxValue,
+        mana.m_CurrentValue + mana.m_MaxValue * regenMana.m_CurrentValue / 100);
+    berseck.m_CurrentValue = std::min(
+        berseck.m_MaxValue, berseck.m_CurrentValue + berseck.m_RegenOnTurn);
+    vigor.m_CurrentValue =
+        std::min(vigor.m_MaxValue,
+                 vigor.m_CurrentValue +
+                     vigor.m_CurrentValue * regenVigor.m_CurrentValue / 100);
     speed.m_CurrentValue =
         std::min(speed.m_MaxValue, speed.m_CurrentValue + speed.m_RegenOnTurn);
   }
@@ -590,8 +595,8 @@ QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
     playerList = m_BossesList;
   }
 
-  if (launcherType == characType::Hero){
-      return QStringList();
+  if (launcherType == characType::Hero) {
+    return QStringList();
   }
 
   QStringList output;
@@ -658,20 +663,19 @@ void PlayersManager::AddSupAtkTurn(
 std::tuple<bool, QString, QStringList>
 PlayersManager::IsDodging(const std::vector<TargetInfo> &targetList) {
   QString plName;
-    QStringList output;
-  const bool isDodging =
-      std::any_of(targetList.begin(), targetList.end(),
-                  [this, &plName, &output](const TargetInfo &ti) {
-                    if (ti.m_IsTargeted) {
-                      const auto *targetChara =
-                          this->GetCharacterByName(ti.m_Name);
-                      plName = ti.m_Name;
-                      const auto [isDodging, randNbStr] = targetChara->IsDodging();
-                      output.append(randNbStr);
-                      return isDodging;
-                    }
-                    return false;
-                  });
+  QStringList output;
+  const bool isDodging = std::any_of(
+      targetList.begin(), targetList.end(),
+      [this, &plName, &output](const TargetInfo &ti) {
+        if (ti.m_IsTargeted) {
+          const auto *targetChara = this->GetCharacterByName(ti.m_Name);
+          plName = ti.m_Name;
+          const auto [isDodging, randNbStr] = targetChara->IsDodging();
+          output.append(randNbStr);
+          return isDodging;
+        }
+        return false;
+      });
 
   return std::make_tuple(isDodging, plName, output);
 }
