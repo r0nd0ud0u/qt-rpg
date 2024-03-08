@@ -163,4 +163,5 @@ void HeroPanel::InitComboBox() {
 
 void HeroPanel::on_form_comboBox_currentTextChanged(const QString &arg1) {
     emit SigUpdateCharaForm(m_Heroe->m_Name, arg1);
+    m_Heroe->m_SelectedForm = arg1;
 }

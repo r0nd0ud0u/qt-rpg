@@ -55,6 +55,8 @@ ActionsView::createModel(QObject *parent,
     // for init
     if(!m_CurPlayer->m_Forms.empty() && m_Form == STANDARD_FORM){
         m_Form = m_CurPlayer->m_Forms.front();
+    } else{
+        m_Form = m_CurPlayer->m_SelectedForm;
     }
     for (const auto &atk : tmpAtkList) {
       if (m_Form != atk.form) {
