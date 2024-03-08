@@ -106,6 +106,7 @@ public:
   int m_NextLevel = 100;
   std::vector<int> m_LastAggros; // keep the last five aggros and sum them
   std::vector<QString> m_Forms;
+  QString m_SelectedForm = STANDARD_FORM;
 
   QColor color = QColor("dark");
   // Buf

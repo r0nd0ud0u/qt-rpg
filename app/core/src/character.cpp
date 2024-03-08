@@ -1375,7 +1375,7 @@ void Character::SetValuesForThalia(const bool isBear){
     auto &localstat =
         std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_BERSECK]);
     if(isBear){
-        localstat.InitValues(20,20,100,100);
+        localstat.InitValues(20,20,100,0);
     } else{
         localstat.InitValues(0,0,0,0);
     }

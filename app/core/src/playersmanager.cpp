@@ -199,6 +199,7 @@ void PlayersManager::InitBosses() {
   const auto boss1 = new Character("Smogogo", characType::Boss, stats);
   boss1->color = QColor("red");
   // m_BossesList.push_back(boss1);
+  boss1->m_Forms.push_back(STANDARD_FORM);
 
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
       .InitValues(1500, 1500, 1500, 0);
@@ -237,6 +238,7 @@ void PlayersManager::InitBosses() {
   const auto boss2 =
       new Character("Smogogo le retour", characType::Boss, stats);
   boss2->color = QColor("red");
+  boss2->m_Forms.push_back(STANDARD_FORM);
   m_BossesList.push_back(boss2);
 
   for (const auto &boss : m_BossesList) {
