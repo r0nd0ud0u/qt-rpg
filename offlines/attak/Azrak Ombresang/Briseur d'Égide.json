@@ -24,8 +24,18 @@
             "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 20
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
         }
     ],
+    "Forme": "Standard",
     "Niveau": 3,
     "Nom": "Briseur d'Égide",
     "Photo": "Azrak Ombresang.png",

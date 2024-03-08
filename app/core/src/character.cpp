@@ -199,6 +199,7 @@ void Character::LoadAtkJson() {
       AttaqueType atk;
       atk.name = json[ATK_NAME].toString();
       atk.namePhoto = json[ATK_PHOTO].toString();
+      atk.form = json[ATK_FORM].toString();
       atk.aggro = json[ATK_AGGRO].toInt();
       atk.damage = static_cast<uint32_t>(json[ATK_DAMAGE].toInt());
       atk.heal = json[ATK_HEAL].toInt();

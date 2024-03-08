@@ -29,6 +29,7 @@ const QString ATK_EFFECT = "Effet";
 const QString ATK_LEVEL = "Niveau";
 const QString ATK_REGEN_VIGOR = "Regen vigueur";
 const QString ATK_REGEN_BERSECK = "Regen rage";
+const QString ATK_FORM = "Forme";
 // Reach keys
 const QString REACH_ZONE = "Zone";
 const QString REACH_INDIVIDUAL = "Individuel";
@@ -102,9 +103,10 @@ const QString EQUIP_RIGHT_WEAPON = "Arme gauche";
 const QString EQUIP_LEFT_WEAPON = "Arme droite";
 const QString EQUIP_CATEGORY = "Categorie";
 const std::set<QString> ALL_EQUIP{
-    EQUIP_HEAD,     EQUIP_NECKLACE,     EQUIP_CHEST,       EQUIP_SHOES,EQUIP_ARM,
-    EQUIP_LEFT_LEG, EQUIP_RIGHT_LEG,    EQUIP_RING,        EQUIP_PANTS,
-    EQUIP_NAME,     EQUIP_RIGHT_WEAPON, EQUIP_LEFT_WEAPON, EQUIP_CATEGORY};
+    EQUIP_HEAD,    EQUIP_NECKLACE, EQUIP_CHEST,        EQUIP_SHOES,
+    EQUIP_ARM,     EQUIP_LEFT_LEG, EQUIP_RIGHT_LEG,    EQUIP_RING,
+    EQUIP_PANTS,   EQUIP_NAME,     EQUIP_RIGHT_WEAPON, EQUIP_LEFT_WEAPON,
+    EQUIP_CATEGORY};
 const std::set<QString> ALL_EQUIP_ON_BODY{
     "",          EQUIP_HEAD,  EQUIP_NECKLACE,     EQUIP_CHEST,
     EQUIP_SHOES, EQUIP_ARM,   EQUIP_LEFT_LEG,     EQUIP_RIGHT_LEG,
@@ -163,6 +165,12 @@ const QString EFFECT_REACH = "Portée";
 const QString EFFECT_STAT = "Stat";
 const QString EFFECT_ACTIVE_TURNS = "Tours actifs";
 const QString EFFECT_SUB_VALUE = "Valeur de l'effet";
+
+// Form keys
+const QString ENT_FORM = "Ent";
+const QString BEAR_FORM = "Ours";
+const QString STANDARD_FORM = "Standard";
+const std::set<QString> ALL_FORMS = {STANDARD_FORM, ENT_FORM, BEAR_FORM};
 
 struct Buf {
   int m_Value = 0;

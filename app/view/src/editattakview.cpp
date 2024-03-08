@@ -96,7 +96,6 @@ void EditAttakView::on_apply_button_clicked() { Apply(); }
 void EditAttakView::Apply() {
   // disable button
   ui->apply_button->setEnabled(false);
-  const auto& a = ui->effect_widget->GetTable();
   m_AttakList[GetIndexSelectedRow()].type.m_AllEffects = ui->effect_widget->GetTable();
 }
 
@@ -139,6 +138,7 @@ void EditAttakView::Save() {
     obj.insert(ATK_LEVEL, static_cast<int>(atk.type.level));
     obj.insert(ATK_REGEN_BERSECK, static_cast<int>(atk.type.regenBerseck));
     obj.insert(ATK_REGEN_VIGOR, static_cast<int>(atk.type.regenVigor));
+    obj.insert(ATK_FORM, atk.type.form);
 
     QJsonArray jsonArray;
     for (const auto &effect : atk.type.m_AllEffects) {
@@ -200,6 +200,8 @@ void EditAttakView::InitComboBoxes() {
              nullptr);
   disconnect(ui->photo_comboBox, &QComboBox::currentTextChanged, nullptr,
              nullptr);
+  disconnect(ui->form_comboBox, &QComboBox::currentTextChanged, nullptr,
+             nullptr);
 
   ui->target_comboBox->setEnabled(true);
   for (const auto &target : ALL_TARGETS) {
@@ -207,6 +209,9 @@ void EditAttakView::InitComboBoxes() {
   }
   for (const auto &reach : ALL_REACH) {
     ui->reach_comboBox->addItem(reach);
+  }
+  for (const auto &form : ALL_FORMS) {
+      ui->form_comboBox->addItem(form);
   }
   // List all attak png string and add them to photo_comboBox
   QString directoryPath = OFFLINE_IMG; // Replace with the actual path
@@ -227,25 +232,21 @@ void EditAttakView::InitComboBoxes() {
           &EditAttakView::on_reach_comboBox_currentTextChanged);
   connect(ui->photo_comboBox, &QComboBox::currentTextChanged, this,
           &EditAttakView::on_photo_comboBox_currentTextChanged);
+  connect(ui->form_comboBox, &QComboBox::currentTextChanged, this,
+          &EditAttakView::on_form_comboBox_currentTextChanged);
 }
 
 void EditAttakView::UpdateValues(const EditAttak &selectedAttak, const int index) {
   ui->target_comboBox->setCurrentText(selectedAttak.type.target);
   ui->reach_comboBox->setCurrentText(selectedAttak.type.reach);
+  ui->form_comboBox->setCurrentText(selectedAttak.type.form);
   ui->name_lineEdit->setText(selectedAttak.type.name);
-  ui->duration_spinBox->setValue(selectedAttak.type.turnsDuration);
-  ui->aggro_spinBox->setValue(selectedAttak.type.aggro);
   ui->mana_cost_spinBox->setValue(
       static_cast<int>(selectedAttak.type.manaCost));
   ui->vigor_spinBox->setValue(selectedAttak.type.vigorCost);
   ui->berseck_spinBox->setValue(selectedAttak.type.berseckCost);
-  ui->heal_spinBox->setValue(selectedAttak.type.heal);
-  ui->damage_spinBox->setValue(selectedAttak.type.damage);
   ui->photo_comboBox->setCurrentText(selectedAttak.type.namePhoto);
-  ui->regen_mana_spinBox->setValue(selectedAttak.type.regenMana);
   ui->level_spinBox->setValue(selectedAttak.type.level);
-  ui->regen_rage_spinBox->setValue(selectedAttak.type.regenBerseck);
-  ui->regen_vigor_spinBox->setValue(selectedAttak.type.regenVigor);
 
   // update effect
   ui->effect_widget->SetIndex(index);
@@ -334,28 +335,11 @@ void EditAttakView::on_name_lineEdit_textChanged(const QString &arg1) {
   m_AttakList[GetIndexSelectedRow()].type.name = ui->name_lineEdit->text();
 }
 
-void EditAttakView::on_duration_spinBox_valueChanged(
-    [[maybe_unused]] int arg1) {
-  OnValueChange(GetIndexSelectedRow());
-  m_AttakList[GetIndexSelectedRow()].type.turnsDuration =
-      static_cast<uint16_t>(ui->duration_spinBox->value());
-}
-
 void EditAttakView::on_mana_cost_spinBox_valueChanged(
     [[maybe_unused]] int arg1) {
   OnValueChange(GetIndexSelectedRow());
   m_AttakList[GetIndexSelectedRow()].type.manaCost =
       ui->mana_cost_spinBox->value();
-}
-
-void EditAttakView::on_heal_spinBox_valueChanged([[maybe_unused]] int arg1) {
-  OnValueChange(GetIndexSelectedRow());
-  m_AttakList[GetIndexSelectedRow()].type.heal = ui->heal_spinBox->value();
-}
-
-void EditAttakView::on_damage_spinBox_valueChanged(int arg1) {
-  OnValueChange(GetIndexSelectedRow());
-  m_AttakList[GetIndexSelectedRow()].type.damage = arg1;
 }
 
 void EditAttakView::on_target_comboBox_currentTextChanged(const QString &arg1) {
@@ -368,49 +352,14 @@ void EditAttakView::on_reach_comboBox_currentTextChanged(const QString &arg1) {
   m_AttakList[GetIndexSelectedRow()].type.reach = arg1;
 }
 
-void EditAttakView::on_regen_mana_spinBox_valueChanged(int arg1) {
-  OnValueChange(GetIndexSelectedRow());
-  m_AttakList[GetIndexSelectedRow()].type.regenMana = arg1;
-}
-
-void EditAttakView::on_vigor_spinBox_valueChanged(int arg1) {
-  OnValueChange(GetIndexSelectedRow());
-  m_AttakList[GetIndexSelectedRow()].type.vigorCost = arg1;
-}
-
-void EditAttakView::on_berseck_spinBox_valueChanged(int arg1) {
-  OnValueChange(GetIndexSelectedRow());
-  m_AttakList[GetIndexSelectedRow()].type.berseckCost = arg1;
-}
-
 void EditAttakView::on_level_spinBox_valueChanged(int arg1) {
   OnValueChange(GetIndexSelectedRow());
   m_AttakList[GetIndexSelectedRow()].type.level = static_cast<uint8_t>(arg1);
 }
 
-void EditAttakView::on_regen_rage_spinBox_valueChanged(int arg1) {
-  OnValueChange(GetIndexSelectedRow());
-  m_AttakList[GetIndexSelectedRow()].type.regenBerseck = arg1;
+void EditAttakView::on_form_comboBox_currentTextChanged(const QString &arg1)
+{
+    OnValueChange(GetIndexSelectedRow());
+    m_AttakList[GetIndexSelectedRow()].type.form = arg1;
 }
-
-void EditAttakView::on_regen_vigor_spinBox_valueChanged(int arg1) {
-  OnValueChange(GetIndexSelectedRow());
-  m_AttakList[GetIndexSelectedRow()].type.regenVigor = arg1;
-}
-
-void EditAttakView::on_aggro_spinBox_valueChanged(int arg1) {
-  OnValueChange(GetIndexSelectedRow());
-  m_AttakList[GetIndexSelectedRow()].type.aggro = arg1;
-}
-
-void EditAttakView::on_aggro_rate_spinBox_valueChanged(int arg1) {
-  OnValueChange(GetIndexSelectedRow());
-  m_AttakList[GetIndexSelectedRow()].type.aggroRate = arg1;
-}
-
-void EditAttakView::on_berseck_rate_spinBox_valueChanged(int arg1) {
-  OnValueChange(GetIndexSelectedRow());
-  m_AttakList[GetIndexSelectedRow()].type.berseckRate = arg1;
-}
-
 // end form layout changed
