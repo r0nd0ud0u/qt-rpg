@@ -46,10 +46,13 @@ void HeroesView::InitHeroPanel() {
       heroPanel->UpdatePanel(it);
       ui->left_widget->layout()->addWidget(heroPanel);
       m_HeroPanels.push_back(heroPanel);
+      heroPanel->InitComboBox();
       heroPanel->SetActive(false);
       heroPanel->SetSelected(false);
       connect(heroPanel, &HeroPanel::SigPanelSelectCharacter, this,
               &HeroesView::SlotClickedOnHeroPanel);
+      connect(heroPanel, &HeroPanel::SigUpdateCharaForm, this,
+              &HeroesView::SlotSelectedForm);
     }
     if (!m_HeroPanels.empty()) {
       m_HeroPanels.front()->SetActive(true);
@@ -64,6 +67,10 @@ void HeroesView::SlotClickedOnHeroPanel(const QString &name) {
 
   UpdateSelected(name);
   emit SigClickedOnHeroPanel(name);
+}
+
+void HeroesView::SlotSelectedForm(const QString &playerName, const QString &form) {
+    emit SigSelectedFormOnHeroPanel(playerName ,form);
 }
 
 void HeroesView::UpdateSelected(const QString &name)  const{

@@ -517,7 +517,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
     result += RegenIntoDamage(maxAmount, effect.statsName);
   }
   // Process aggro
-  if (fromLaunch && effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE &&
+  if (effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE &&
       effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
     result += ProcessAggro(amount, effect.target);
   }
@@ -1369,4 +1369,14 @@ int Character::UpdateDamageByBuf(const Buf &bufDmg, const int value) {
   }
 
   return output;
+}
+
+void Character::SetValuesForThalia(const bool isBear){
+    auto &localstat =
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_BERSECK]);
+    if(isBear){
+        localstat.InitValues(20,20,100,100);
+    } else{
+        localstat.InitValues(0,0,0,0);
+    }
 }

@@ -19,6 +19,8 @@ GameDisplay::GameDisplay(QWidget *parent)
           &GameDisplay::UpdateChannel);
   connect(ui->heroes_widget, &HeroesView::SigClickedOnHeroPanel, this,
           &GameDisplay::UpdateViews);
+  connect(ui->heroes_widget, &HeroesView::SigSelectedFormOnHeroPanel, this,
+          &GameDisplay::SlotUpdateActionViews);
   connect(ui->bosses_widget, &BossesView::SigClickedOnPanel, this,
           &GameDisplay::UpdateViews);
   connect(ui->channel_lay, &Channel::SigNextRound, this,
@@ -417,3 +419,28 @@ void GameDisplay::on_add_exp_button_clicked()
     emit selectCharacter(Application::GetInstance().m_GameManager->m_PlayersManager->m_SelectedHero->m_Name);
 }
 
+void GameDisplay::SlotUpdateActionViews(const QString& name, const QString& form){
+    const auto &gm = Application::GetInstance().m_GameManager;
+    const auto &nameChara = gm->m_GameState->GetCurrentPlayerName();
+    if(nameChara != name){
+        return;
+    }
+    auto *activatedPlayer = gm->m_PlayersManager->GetCharacterByName(nameChara);
+    if (activatedPlayer == nullptr) {
+        return;
+    }
+    if(name == "Thalia"){
+       activatedPlayer->SetValuesForThalia(form == BEAR_FORM);
+        emit SigUpdatePlayerPanel();
+    }
+
+    // update form
+    ui->attak_page->SetForm(form);
+    // reset the attak view
+    ui->attak_page->ResetActionsParam();
+    ui->stackedWidget->setCurrentIndex(
+        static_cast<int>(ActionsStackedWgType::attak));
+    ui->attaque_button->setEnabled(false);
+    ui->bag_button->setEnabled(true);
+    ui->attak_page->UpdateActions(ActionsStackedWgType::attak);
+}

@@ -86,6 +86,7 @@ public:
   void ApplyEffeftOnStats(const bool updateEffect);
   std::pair<bool, int> ProcessCriticalStrike(); // return isCrit, random number
   void ResetBuf(const BufTypes &bufType);
+  void SetValuesForThalia(const bool isBear);
 
   // Temporary
   std::vector<effectParam> LoadThaliaTalent() const;
@@ -104,6 +105,7 @@ public:
   int m_Exp = 0;
   int m_NextLevel = 100;
   std::vector<int> m_LastAggros; // keep the last five aggros and sum them
+  std::vector<QString> m_Forms;
 
   QColor color = QColor("dark");
   // Buf

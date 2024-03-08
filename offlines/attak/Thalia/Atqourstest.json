@@ -1,7 +1,7 @@
 {
     "Aggro": 0,
     "Cible": "Ennemie",
-    "Coût de mana": 1,
+    "Coût de mana": 0,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Durée": 1,
@@ -9,21 +9,21 @@
     "Effet": [
         {
             "Cible": "Ennemie",
-            "Portée": "Zone",
+            "Portée": "Individuel",
             "Stat": "PV",
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 40
+            "Value": 30
         },
         {
-            "Cible": "Ennemie",
-            "Portée": "Individuel",
-            "Stat": "PV",
-            "Tours actifs": 3,
-            "Type": "Changement par valeur",
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
             "Valeur de l'effet": 0,
-            "Value": 10
+            "Value": 0
         },
         {
             "Cible": "",
@@ -35,11 +35,11 @@
             "Value": 0
         }
     ],
-    "Forme": "Standard",
+    "Forme": "Ours",
     "Niveau": 1,
-    "Nom": "Deflagration",
+    "Nom": "Atqourstest",
     "Photo": "default.png",
-    "Portée": "Zone",
+    "Portée": "Individuel",
     "Regen mana": 0,
     "Regen rage": 0,
     "Regen vigueur": 0,
