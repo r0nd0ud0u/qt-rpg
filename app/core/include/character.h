@@ -38,6 +38,7 @@ public:
   static std::vector<QString> TARGET_TYPES;
   static std::vector<QString> REACH_TYPES;
   std::vector<effectParam> m_AllEffects = {};
+  QString form = STANDARD_FORM;
 };
 
 enum class InventoryType { healthPotion, manaPotion, enumSize };

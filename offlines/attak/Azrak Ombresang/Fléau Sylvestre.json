@@ -24,17 +24,9 @@
             "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 25
-        },
-        {
-            "Cible": "",
-            "Portée": "",
-            "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
-            "Valeur de l'effet": 0,
-            "Value": 0
         }
     ],
+    "Forme": "Standard",
     "Niveau": 5,
     "Nom": "Fléau Sylvestre",
     "Photo": "Azrak Ombresang.png",

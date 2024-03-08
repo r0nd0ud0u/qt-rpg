@@ -24,17 +24,9 @@
             "Type": "Tours de recharge",
             "Valeur de l'effet": 0,
             "Value": 0
-        },
-        {
-            "Cible": "",
-            "Portée": "",
-            "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
-            "Valeur de l'effet": 0,
-            "Value": 0
         }
     ],
+    "Forme": "Standard",
     "Niveau": 6,
     "Nom": "Coup Puissant ",
     "Photo": "Thraïn.png",

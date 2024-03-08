@@ -207,7 +207,7 @@
          <item row="6" column="0">
           <widget class="QSpinBox" name="exp_spinBox">
            <property name="maximum">
-            <number>9999</number>
+            <number>999999999</number>
            </property>
           </widget>
          </item>
