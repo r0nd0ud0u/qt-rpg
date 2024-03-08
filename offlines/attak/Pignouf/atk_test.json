@@ -1,7 +1,7 @@
 {
     "Aggro": 0,
     "Cible": "Ennemie",
-    "Coût de mana": 0,
+    "Coût de mana": 5,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Durée": 1,
@@ -14,7 +14,7 @@
             "Tours actifs": 1,
             "Type": "",
             "Valeur de l'effet": 0,
-            "Value": 20
+            "Value": 50
         },
         {
             "Cible": "Ennemie",
@@ -24,6 +24,15 @@
             "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 20
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
         }
     ],
     "Niveau": 3,

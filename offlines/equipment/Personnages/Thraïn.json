@@ -1,13 +1,16 @@
 {
-    "Tete": "tete2",
+    "Anneau": "Anneau des Guerriers de la Lumière",
+    "Arme droite": "Sarbacane des eleveurs de bêtes de gorgoth",
+    "Arme gauche": "Masse des des defenseurs de la porte ouest",
+    "Bras": "",
+    "Categorie": "",
+    "Chaussures": "Chaussures des fermiers de la Comté",
     "Collier": "",
-    "Torse": "",
-    "Pantalon": "",
-    "Chaussures": "",
-    "Bras gauche": "",
-    "Bras droit": "",
-    "Jambe gauche": "",
     "Jambe droite": "",
-    "Anneau": ""
+    "Jambe gauche": "Jambieère des Haradrim",
+    "Nom": "",
+    "Pantalon": "",
+    "Tete": "Casque de Boromir",
+    "Torse": "Armure des Hommes de l'Est"
 }
 

@@ -3,7 +3,7 @@
     "Cible": "Allié",
     "Coût de mana": 0,
     "Coût de rage": 0,
-    "Coût de vigueur": 8,
+    "Coût de vigueur": 13,
     "Durée": 1,
     "Dégâts": 0,
     "Effet": [
@@ -26,8 +26,8 @@
             "Value": 10
         },
         {
-            "Cible": "Allié",
-            "Portée": "Zone",
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
             "Stat": "",
             "Tours actifs": 6,
             "Type": "Tours de recharge",
