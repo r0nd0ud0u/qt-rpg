@@ -199,6 +199,7 @@ void Character::LoadAtkJson() {
       AttaqueType atk;
       atk.name = json[ATK_NAME].toString();
       atk.namePhoto = json[ATK_PHOTO].toString();
+      atk.form = json[ATK_FORM].toString();
       atk.aggro = json[ATK_AGGRO].toInt();
       atk.damage = static_cast<uint32_t>(json[ATK_DAMAGE].toInt());
       atk.heal = json[ATK_HEAL].toInt();
@@ -515,8 +516,9 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   if (!reload) {
     result += RegenIntoDamage(maxAmount, effect.statsName);
   }
+
   // Process aggro
-  if (fromLaunch && effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE &&
+  if (effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE &&
       effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
     result += ProcessAggro(amount, effect.target);
   }
@@ -525,6 +527,9 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   // keep the calcultated value for the HOT or DOT
   if (effect.effect == EFFECT_VALUE_CHANGE) {
       effect.value = abs(amount);
+      if(amount > 0){
+          target->m_HealRxOnTurn += amount;
+      }
   }
 
   return result;
@@ -962,7 +967,7 @@ int Character::ProcessBerseckOnRxAtk(const int nbOfApplies) {
 
 std::pair<QString, int>
 Character::ProcessEffectType(effectParam &effect, Character *target,
-                             const AttaqueType &atk) const {
+                             const AttaqueType &atk) {
   if (target == nullptr) {
     return std::make_pair("", 0);
   }
@@ -1056,6 +1061,10 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
   }
   if (effect.effect == EFFECT_REPEAT_AS_MANY_AS) {
     nbOfApplies += GetMaxNbOfApplies(atk);
+      // one cost has already been processed at the start of launchingattak-> nbOfApplies-1
+      for(int i=0; i<nbOfApplies-1;i++){
+        ProcessCost(atk.name);
+    }
   }
   if (effect.effect == EFFECT_INTO_DAMAGE) {
     output = QString("%1% des sorts %2 -> en dégâts pendant %3 tours.\n")
@@ -1364,4 +1373,14 @@ int Character::UpdateDamageByBuf(const Buf &bufDmg, const int value) {
   }
 
   return output;
+}
+
+void Character::SetValuesForThalia(const bool isBear){
+    auto &localstat =
+        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_BERSECK]);
+    if(isBear){
+        localstat.InitValues(20,20,100,0);
+    } else{
+        localstat.InitValues(0,0,0,0);
+    }
 }

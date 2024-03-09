@@ -38,10 +38,11 @@ public:
   static std::vector<QString> TARGET_TYPES;
   static std::vector<QString> REACH_TYPES;
   std::vector<effectParam> m_AllEffects = {};
+  QString form = STANDARD_FORM;
 };
 
 enum class InventoryType { healthPotion, manaPotion, enumSize };
-enum class BufTypes { defaultBuf, damageRx, damageTx, damageCritCapped, enumSize };
+enum class BufTypes { defaultBuf, damageRx, damageTx, damageCritCapped, powPhyBuf, enumSize };
 
 class Character {
 public:
@@ -85,6 +86,7 @@ public:
   void ApplyEffeftOnStats(const bool updateEffect);
   std::pair<bool, int> ProcessCriticalStrike(); // return isCrit, random number
   void ResetBuf(const BufTypes &bufType);
+  void SetValuesForThalia(const bool isBear);
 
   // Temporary
   std::vector<effectParam> LoadThaliaTalent() const;
@@ -103,10 +105,13 @@ public:
   int m_Exp = 0;
   int m_NextLevel = 100;
   std::vector<int> m_LastAggros; // keep the last five aggros and sum them
+  std::vector<QString> m_Forms;
+  QString m_SelectedForm = STANDARD_FORM;
 
   QColor color = QColor("dark");
   // Buf
   std::vector<Buf> m_AllBufs;
+  int m_HealRxOnTurn = 0;
 
 private:
   template <class T>
@@ -135,7 +140,7 @@ private:
   int ProcessBerseckOnRxAtk(const int nbOfApplies);
   std::pair<QString, int> ProcessEffectType(
       effectParam &effect, Character *target,
-      const AttaqueType &atk) const; // pair1 output log, pair2 nbOfApplies
+      const AttaqueType &atk); // pair1 output log, pair2 nbOfApplies
   QString ProcessAggro(const int atkValue, const QString& target);
   void UpdateStatsToNextLevel();
   void UpdateBuf(const BufTypes &bufType, const int value,

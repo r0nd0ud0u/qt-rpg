@@ -351,6 +351,9 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QComboBox" name="form_comboBox"/>
+         </item>
         </layout>
        </widget>
       </item>

@@ -17,7 +17,8 @@ void HeroPanel::UpdatePanel(Character *hero) {
   m_Heroe = hero;
 
   // update level exp
-  ui->hero_level->setText(QString("Lv: %1 Exp: %2").arg(hero->m_Level).arg(hero->m_Exp));
+  ui->hero_level->setText(
+      QString("Lv: %1 Exp: %2").arg(hero->m_Level).arg(hero->m_Exp));
 
   const auto &hp =
       std::get<StatsType<int>>(m_Heroe->m_Stats.m_AllStatsTable[STATS_HP]);
@@ -107,6 +108,7 @@ void HeroPanel::UpdatePanel(Character *hero) {
 }
 
 void HeroPanel::SetActive(const bool activated) {
+  ui->form_comboBox->setEnabled(activated);
   if (activated) {
     setStyleSheet("#active_widget{ background:     #40b1fe;  } ");
   } else {
@@ -127,7 +129,8 @@ void HeroPanel::SetSelected(const bool selected) {
 
   // update buttons
   ui->edit_button->setEnabled(selected);
-  ui->talent_tree_button->setEnabled(false); // TODO arbre des talents not coded yet
+  ui->talent_tree_button->setEnabled(
+      false); // TODO arbre des talents not coded yet
   ui->stuff_button->setEnabled(selected);
 }
 
@@ -139,12 +142,26 @@ void HeroPanel::mousePressEvent(QMouseEvent *event) {
 
 void HeroPanel::on_edit_button_clicked() const {
   auto &appView = ApplicationView::GetInstance();
-    appView.GetCharacterWindow()->InitWindow(tabType::attak, true);
+  appView.GetCharacterWindow()->InitWindow(tabType::attak, true);
   appView.ShowWindow(appView.GetCharacterWindow(), true);
 }
 
-void HeroPanel::SetPixmap(const QString& name){
-    // Update image character
-    // Resize the photo
-    ui->img_character->SetPixmap(name, 200);
+void HeroPanel::SetPixmap(const QString &name) {
+  // Update image character
+  // Resize the photo
+  ui->img_character->SetPixmap(name, 200);
+}
+
+void HeroPanel::InitComboBox() {
+  if (m_Heroe == nullptr) {
+    return;
+  }
+  for (const auto &form : m_Heroe->m_Forms) {
+    ui->form_comboBox->addItem(form);
+  }
+}
+
+void HeroPanel::on_form_comboBox_currentTextChanged(const QString &arg1) {
+    emit SigUpdateCharaForm(m_Heroe->m_Name, arg1);
+    m_Heroe->m_SelectedForm = arg1;
 }

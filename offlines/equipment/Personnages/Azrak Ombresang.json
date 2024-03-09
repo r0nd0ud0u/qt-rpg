@@ -1,13 +1,16 @@
 {
-    "Tete": "tete1",
+    "Anneau": "Bague des sages de Valinor",
+    "Arme droite": "Bâton du roi sorcier d'Angmar",
+    "Arme gauche": "Shuriken des veilleurs du Gondor",
+    "Bras": "",
+    "Categorie": "",
+    "Chaussures": "Chaussures de Smaug",
     "Collier": "",
-    "Torse": "",
-    "Pantalon": "",
-    "Chaussures": "",
-    "Bras gauche": "",
-    "Bras droit": "",
-    "Jambe gauche": "",
     "Jambe droite": "",
-    "Anneau": ""
+    "Jambe gauche": "",
+    "Nom": "",
+    "Pantalon": "Cuissarde des archers elfes",
+    "Tete": "",
+    "Torse": "Armure de la brûme d'Emyn Muil"
 }
 

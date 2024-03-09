@@ -1,17 +1,16 @@
 {
-    "Anneau": "anneau1",
-    "Arme droite": "",
-    "Arme gauche": "",
-    "Bras droit": "",
-    "Bras gauche": "",
+    "Anneau": "Bague de l'isengard",
+    "Arme droite": "Glaive des cavaliers du mark",
+    "Arme gauche": "Dague des explorateurs",
+    "Bras": "",
     "Categorie": "",
-    "Chaussures": "",
+    "Chaussures": "Bottes des nains de la montagne solitaire",
     "Collier": "",
     "Jambe droite": "",
     "Jambe gauche": "",
     "Nom": "",
-    "Pantalon": "",
-    "Tete": "tete1",
+    "Pantalon": "Pantalon des forêts vertes",
+    "Tete": "",
     "Torse": ""
 }
 

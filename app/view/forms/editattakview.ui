@@ -35,6 +35,9 @@
          </property>
         </widget>
        </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="target_comboBox"/>
+       </item>
        <item row="2" column="0">
         <widget class="QLabel" name="type_label">
          <property name="text">
@@ -49,187 +52,77 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QComboBox" name="target_comboBox"/>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="damage_label">
-         <property name="text">
-          <string>Dégâts</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QSpinBox" name="damage_spinBox">
-         <property name="maximum">
-          <number>10000</number>
-         </property>
-        </widget>
-       </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="duration_label">
-         <property name="text">
-          <string>Durée</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QSpinBox" name="duration_spinBox"/>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="heal_label">
-         <property name="text">
-          <string>Soin</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QSpinBox" name="heal_spinBox">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="maximum">
-          <number>10000</number>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="aggro_label">
-         <property name="text">
-          <string>Aggro</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1">
-        <widget class="QSpinBox" name="aggro_spinBox">
-         <property name="maximum">
-          <number>1000</number>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="1">
-        <widget class="QSpinBox" name="mana_cost_spinBox">
-         <property name="maximum">
-          <number>1000</number>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
         <widget class="QLabel" name="mana_cost_label">
          <property name="text">
           <string>Coût mana %</string>
          </property>
         </widget>
        </item>
-       <item row="11" column="1">
-        <widget class="QComboBox" name="photo_comboBox"/>
-       </item>
-       <item row="11" column="0">
-        <widget class="QLabel" name="photo_label">
-         <property name="text">
-          <string>Photo</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="regen_mana_label">
-         <property name="text">
-          <string>Regen mana</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QSpinBox" name="regen_mana_spinBox">
+       <item row="3" column="1">
+        <widget class="QSpinBox" name="mana_cost_spinBox">
          <property name="maximum">
           <number>1000</number>
          </property>
         </widget>
        </item>
-       <item row="10" column="0">
+       <item row="4" column="0">
         <widget class="QLabel" name="vigor_label">
          <property name="text">
           <string>Coût vigueur %</string>
          </property>
         </widget>
        </item>
-       <item row="10" column="1">
+       <item row="4" column="1">
         <widget class="QSpinBox" name="vigor_spinBox">
          <property name="maximum">
           <number>1000</number>
          </property>
         </widget>
        </item>
-       <item row="12" column="0">
+       <item row="5" column="0">
+        <widget class="QLabel" name="photo_label">
+         <property name="text">
+          <string>Photo</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QComboBox" name="photo_comboBox"/>
+       </item>
+       <item row="6" column="0">
         <widget class="QLabel" name="berseck_label">
          <property name="text">
           <string>Coût rage</string>
          </property>
         </widget>
        </item>
-       <item row="12" column="1">
+       <item row="6" column="1">
         <widget class="QSpinBox" name="berseck_spinBox">
          <property name="maximum">
           <number>1000</number>
          </property>
         </widget>
        </item>
-       <item row="13" column="0">
+       <item row="7" column="0">
         <widget class="QLabel" name="level_label">
          <property name="text">
           <string>Niveau</string>
          </property>
         </widget>
        </item>
-       <item row="13" column="1">
+       <item row="7" column="1">
         <widget class="QSpinBox" name="level_spinBox"/>
        </item>
        <item row="8" column="0">
-        <widget class="QLabel" name="regen_rage_label">
+        <widget class="QLabel" name="label">
          <property name="text">
-          <string>Regen rage</string>
+          <string>Form</string>
          </property>
         </widget>
        </item>
        <item row="8" column="1">
-        <widget class="QSpinBox" name="regen_rage_spinBox">
-         <property name="maximum">
-          <number>1000</number>
-         </property>
-        </widget>
-       </item>
-       <item row="14" column="0">
-        <widget class="QLabel" name="regen_vigor_label">
-         <property name="text">
-          <string>Regen vigueur</string>
-         </property>
-        </widget>
-       </item>
-       <item row="14" column="1">
-        <widget class="QSpinBox" name="regen_vigor_spinBox">
-         <property name="maximum">
-          <number>1000</number>
-         </property>
-        </widget>
-       </item>
-       <item row="15" column="0">
-        <widget class="QLabel" name="aggro_rate_label">
-         <property name="text">
-          <string>Taux aggro</string>
-         </property>
-        </widget>
-       </item>
-       <item row="16" column="0">
-        <widget class="QLabel" name="berseck_rate_label">
-         <property name="text">
-          <string>Taux berseck</string>
-         </property>
-        </widget>
-       </item>
-       <item row="15" column="1">
-        <widget class="QSpinBox" name="aggro_rate_spinBox"/>
-       </item>
-       <item row="16" column="1">
-        <widget class="QSpinBox" name="berseck_rate_spinBox"/>
+        <widget class="QComboBox" name="form_comboBox"/>
        </item>
       </layout>
      </item>
