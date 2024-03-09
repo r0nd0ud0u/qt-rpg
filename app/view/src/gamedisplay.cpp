@@ -131,7 +131,7 @@ void GameDisplay::NewRound() {
         activePlayer->m_Stats.m_AllStatsTable[STATS_POW_PHY]);
     auto &phyBuf =
         activePlayer->m_AllBufs[static_cast<int>(BufTypes::powPhyBuf)];
-    activePlayer->SetStatsOnEffect(
+    Character::SetStatsOnEffect(
         localStat, -phyBuf.m_Value + activePlayer->m_HealRxOnTurn, true, false,
         true);
     phyBuf.m_Value = activePlayer->m_HealRxOnTurn;
