@@ -8,20 +8,20 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 85
+            "value": 25
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 25
         }
     ],
-    "Categorie": "Anneau",
+    "Categorie": "Pantalon",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 12
+            "value": 0
         }
     ],
     "Esquive": [
@@ -36,22 +36,22 @@
             "value": 0
         }
     ],
-    "Nom": "Bague de l'isengard",
+    "Nom": "Pantalon des hommes des colines",
     "PV": [
         {
-            "percent": 11,
+            "percent": 0,
             "value": 0
         }
     ],
     "Pouvoir magique": [
         {
-            "percent": 35,
+            "percent": 5,
             "value": 0
         }
     ],
     "Pouvoir physique": [
         {
-            "percent": 40,
+            "percent": 0,
             "value": 0
         }
     ],
@@ -63,7 +63,7 @@
     ],
     "Regeneration Mana": [
         {
-            "percent": 4,
+            "percent": 0,
             "value": 0
         }
     ],
