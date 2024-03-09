@@ -1,6 +1,6 @@
 {
     "Aggro": 0,
-    "Cible": "Ennemie",
+    "Cible": "Soi-même",
     "Coût de mana": 0,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
@@ -13,8 +13,8 @@
             "Stat": "PV",
             "Tours actifs": 1,
             "Type": "Ennemis morts tours précédents",
-            "Valeur de l'effet": 0,
-            "Value": 10
+            "Valeur de l'effet": 10,
+            "Value": 0
         },
         {
             "Cible": "Soi-même",
@@ -22,8 +22,8 @@
             "Stat": "Mana",
             "Tours actifs": 1,
             "Type": "Ennemis morts tours précédents",
-            "Valeur de l'effet": 0,
-            "Value": 10
+            "Valeur de l'effet": 10,
+            "Value": 0
         },
         {
             "Cible": "Soi-même",
@@ -31,8 +31,8 @@
             "Stat": "Vigor",
             "Tours actifs": 1,
             "Type": "Ennemis morts tours précédents",
-            "Valeur de l'effet": 0,
-            "Value": 10
+            "Valeur de l'effet": 10,
+            "Value": 0
         }
     ],
     "Forme": "Standard",

@@ -4,6 +4,7 @@
 #include "Application.h"
 #include "character.h"
 #include "utils.h"
+#include "gamedisplay.h"
 
 #include <QCheckBox>
 #include <QStandardItemModel>
@@ -11,6 +12,8 @@
 ActionsView::ActionsView(QWidget *parent)
     : QWidget(parent), ui(new Ui::ActionsView) {
   ui->setupUi(this);
+  connect((GameDisplay *)parentWidget(), &GameDisplay::SigBossDead, this,
+          &ActionsView::RemoveTarget);
 }
 
 ActionsView::~ActionsView() {
@@ -53,10 +56,10 @@ ActionsView::createModel(QObject *parent,
     }
     std::sort(tmpAtkList.begin(), tmpAtkList.end(), Utils::CompareByLevel);
     // for init
-    if(!m_CurPlayer->m_Forms.empty() && m_Form == STANDARD_FORM){
-        m_Form = m_CurPlayer->m_Forms.front();
-    } else{
-        m_Form = m_CurPlayer->m_SelectedForm;
+    if (!m_CurPlayer->m_Forms.empty() && m_Form == STANDARD_FORM) {
+      m_Form = m_CurPlayer->m_Forms.front();
+    } else {
+      m_Form = m_CurPlayer->m_SelectedForm;
     }
     for (const auto &atk : tmpAtkList) {
       if (m_Form != atk.form) {
@@ -282,3 +285,31 @@ void ActionsView::ProcessEnableTargetsBoxes() {
 }
 
 void ActionsView::SetForm(const QString &form) { m_Form = form; }
+
+void ActionsView::RemoveTarget(QString targetName) {
+  if (targetName.isEmpty()) {
+    return;
+  }
+  auto *lay = ui->targets_widget->layout();
+
+  int i = 0;
+  for (auto &it : m_TargetedList) {
+    if (it.m_Name == targetName) {
+      break;
+    }
+    i++;
+  }
+
+  const auto newEnd = std::remove_if(
+      m_TargetedList.begin(), m_TargetedList.end(),
+      [&targetName](const TargetInfo &ti) {
+        return targetName ==
+               ti.m_Name; // remove elements where this is true
+      });
+  m_TargetedList.erase(newEnd, m_TargetedList.end());
+  auto *widget = lay->itemAt(i)->widget();
+  widget->hide();
+  lay->removeItem(lay->itemAt(i));
+  lay->removeWidget(widget);
+  delete widget;
+}

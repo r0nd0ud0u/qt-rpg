@@ -70,3 +70,13 @@ Character *GameManager::GetCurrentPlayer() {
 QString GameState::GetCurrentPlayerName() {
   return (m_CurrentRound > 0) ? m_OrderToPlay.at(m_CurrentRound - 1) : "";
 }
+
+void GameState::RemoveDeadPlayerInTurn(const QString& name){
+    const auto newEnd = std::remove_if(
+        m_OrderToPlay.begin(), m_OrderToPlay.end(),
+        [&name](const QString& localName) {
+            return localName ==
+                   name; // remove elements where this is true
+        });
+    m_OrderToPlay.erase(newEnd, m_OrderToPlay.end());
+}
