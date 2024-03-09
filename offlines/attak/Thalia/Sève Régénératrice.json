@@ -24,15 +24,6 @@
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 60
-        },
-        {
-            "Cible": "",
-            "Portée": "",
-            "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
-            "Valeur de l'effet": 0,
-            "Value": 0
         }
     ],
     "Forme": "Ent",
