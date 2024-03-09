@@ -522,7 +522,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   // Process aggro
   if (effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE &&
       effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE &&
-      (effect.statsName == STATS_HP ||effect.statsName == STATS_AGGRO)) {
+      (effect.statsName == STATS_HP || effect.statsName == STATS_AGGRO)) {
     result += ProcessAggro(maxAmount, effect.target);
   }
 
@@ -723,16 +723,19 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     }
   } else if (launch && ep.statsName == STATS_HP &&
              (ep.effect == EFFECT_VALUE_CHANGE)) {
-    if (const bool isOnEnnemy = ep.target == TARGET_ENNEMY; isOnEnnemy) {
+    if (ep.target == TARGET_ENNEMY) {
       amount = nbOfApplies * DamageByAtk(launcherStats, target->m_Stats,
                                          ep.isMagicAtk, ep.value, ep.nbTurns);
       // TODO DOT ?
     } else if (ep.isMagicAtk) {
-      // HOT
+      // HOT ou DOT
       const auto &launcherPowMag = std::get<StatsType<int>>(
           launcherStats.m_AllStatsTable.at(STATS_POW_MAG));
       amount =
           nbOfApplies * (ep.value + launcherPowMag.m_CurrentValue / ep.nbTurns);
+    } else {
+      // DOT -> create an effect to explicited say that is a damage on allies
+      amount = nbOfApplies * ep.value;
     }
   }
   // value in percent
@@ -1005,8 +1008,8 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
         output = "Chaque HOT est reinit.\n";
       }
     }
-    if(effect.statsName == STATS_AGGRO){
-        target->m_LastAggros.clear();
+    if (effect.statsName == STATS_AGGRO) {
+      target->m_LastAggros.clear();
     }
   }
   if (effect.effect == EFFECT_DELETE_BAD) {
@@ -1094,9 +1097,10 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
  */
 QString Character::ProcessAggro(const int atkValue, const QString &target) {
   const double aggroNorm = 20.0; // random value at the moment
-    const auto genAggro = std::lround(static_cast<double>(abs(atkValue)) / aggroNorm);
-  if(genAggro == 0){
-      return "Pas d'aggro.\n";
+  const auto genAggro =
+      std::lround(static_cast<double>(abs(atkValue)) / aggroNorm);
+  if (genAggro == 0) {
+    return "Pas d'aggro.\n";
   }
   // keep the last 5
   m_LastAggros.push_back(genAggro);
