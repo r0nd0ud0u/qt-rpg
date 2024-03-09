@@ -95,22 +95,35 @@ const QString EQUIP_CHEST = "Torse";
 const QString EQUIP_PANTS = "Pantalon";
 const QString EQUIP_SHOES = "Chaussures";
 const QString EQUIP_ARM = "Bras";
-const QString EQUIP_LEFT_LEG = "Jambe gauche";
-const QString EQUIP_RIGHT_LEG = "Jambe droite";
 const QString EQUIP_RING = "Anneau";
 const QString EQUIP_NAME = "Nom";
 const QString EQUIP_RIGHT_WEAPON = "Arme gauche";
 const QString EQUIP_LEFT_WEAPON = "Arme droite";
 const QString EQUIP_CATEGORY = "Categorie";
-const std::set<QString> ALL_EQUIP{
-    EQUIP_HEAD,    EQUIP_NECKLACE, EQUIP_CHEST,        EQUIP_SHOES,
-    EQUIP_ARM,     EQUIP_LEFT_LEG, EQUIP_RIGHT_LEG,    EQUIP_RING,
-    EQUIP_PANTS,   EQUIP_NAME,     EQUIP_RIGHT_WEAPON, EQUIP_LEFT_WEAPON,
-    EQUIP_CATEGORY};
+const QString EQUIP_RUNIQUE_TATOO_1 = "Tatouage 1";
+const QString EQUIP_RUNIQUE_TATOO_2 = "Tatouage 2";
+const QString EQUIP_RUNIQUE_TATOO_3 = "Tatouage 3";
+const std::set<QString> ALL_EQUIP{EQUIP_HEAD,
+                                  EQUIP_NECKLACE,
+                                  EQUIP_CHEST,
+                                  EQUIP_SHOES,
+                                  EQUIP_ARM,
+                                  EQUIP_RING,
+                                  EQUIP_PANTS,
+                                  EQUIP_NAME,
+                                  EQUIP_RIGHT_WEAPON,
+                                  EQUIP_LEFT_WEAPON,
+                                  EQUIP_CATEGORY,
+                                  EQUIP_RUNIQUE_TATOO_1,
+                                  EQUIP_RUNIQUE_TATOO_2,
+                                  EQUIP_RUNIQUE_TATOO_3};
 const std::set<QString> ALL_EQUIP_ON_BODY{
     "",          EQUIP_HEAD,  EQUIP_NECKLACE,     EQUIP_CHEST,
-    EQUIP_SHOES, EQUIP_ARM,   EQUIP_LEFT_LEG,     EQUIP_RIGHT_LEG,
-    EQUIP_RING,  EQUIP_PANTS, EQUIP_RIGHT_WEAPON, EQUIP_LEFT_WEAPON};
+    EQUIP_SHOES, EQUIP_ARM,
+    EQUIP_RING,  EQUIP_PANTS, EQUIP_RIGHT_WEAPON, EQUIP_LEFT_WEAPON,
+    EQUIP_RUNIQUE_TATOO_1,
+    EQUIP_RUNIQUE_TATOO_2,
+    EQUIP_RUNIQUE_TATOO_3};
 // Effect keys
 const QString EFFECT_REINIT = "Reinit";
 const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";
