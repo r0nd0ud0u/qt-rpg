@@ -482,8 +482,8 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   // conditions
   if (effect.effect == CONDITION_ENNEMIES_DIED) {
     const auto gs = Application::GetInstance().m_GameManager->m_GameState;
-    effect.value *=
-        static_cast<int>(gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb - 1));
+    effect.value +=
+        static_cast<int>(gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb - 1))*effect.subValueEffect;
     effect.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
   }
 

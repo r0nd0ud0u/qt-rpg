@@ -76,6 +76,9 @@ void BossesView::UpdateAllPanels() {
 }
 
 void BossesView::RemoveBoss(QString bossName) {
+  if (bossName.isEmpty()) {
+    return;
+  }
   auto *lay = ui->main_widget->layout();
 
   int i = 0;
@@ -89,11 +92,11 @@ void BossesView::RemoveBoss(QString bossName) {
   const auto newEnd = std::remove_if(
       m_BossPanels.begin(), m_BossPanels.end(),
       [&bossName](const BossPanel *bp) {
-          if (bp == nullptr || bp->m_Boss == nullptr) {
-              return false;
-          }
-          return bossName ==
-                 bp->m_Boss->m_Name; // remove elements where this is true
+        if (bp == nullptr || bp->m_Boss == nullptr) {
+          return false;
+        }
+        return bossName ==
+               bp->m_Boss->m_Name; // remove elements where this is true
       });
   m_BossPanels.erase(newEnd, m_BossPanels.end());
   auto *widget = lay->itemAt(i)->widget();
