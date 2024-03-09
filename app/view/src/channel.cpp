@@ -36,7 +36,9 @@ void Channel::on_end_round_button_clicked() {
 }
 
 void Channel::EndOfGame(){
-    ui->end_round_button->setEnabled(false);
+    // TODO end of game
+    // if no more ennemies set false end round
+    //ui->end_round_button->setEnabled(false);
 }
 
 void Channel::UpdateLog(const QString& topic, const QString& log, const QColor color){

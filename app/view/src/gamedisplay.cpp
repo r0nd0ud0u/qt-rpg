@@ -354,7 +354,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   for (const auto &dp : diedBossList) {
     emit SigUpdateChannelView(dp, "est mort.");
     // TODO what to do when a boss is dead
-    // emit SigBossDead(dp);
+     emit SigBossDead(dp);
     ui->add_exp_button->setEnabled(true);
   }
   const QStringList diedHeroesList =

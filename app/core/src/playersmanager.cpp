@@ -241,7 +241,7 @@ void PlayersManager::InitBosses() {
       const auto boss2 = new Character(QString("Gobenain-%1").arg(i), characType::Boss, stats);
     boss2->m_Forms.push_back(STANDARD_FORM);
     boss2->color = QColor("red");
-    //m_BossesList.push_back(boss2);
+    m_BossesList.push_back(boss2);
   }
 
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
@@ -281,7 +281,7 @@ void PlayersManager::InitBosses() {
   const auto boss3 = new Character(
       "Thorin furieux", characType::Boss, stats);
   boss3->color = QColor("red");
-  m_BossesList.push_back(boss3);
+  //m_BossesList.push_back(boss3);
   boss3->m_Forms.push_back(STANDARD_FORM);
 
   for (const auto &boss : m_BossesList) {
@@ -632,12 +632,15 @@ void PlayersManager::IncrementCounterEffect() {
 /// That method returns a QStringlist with the different died played.
 /// That list will be displayed on channel logs.
 QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
-  std::vector<Character *> playerList;
+  std::vector<Character *>* playerList = nullptr;
 
   if (launcherType == characType::Hero) {
-    playerList = m_HeroesList;
+    playerList = &m_HeroesList;
   } else if (launcherType == characType::Boss) {
-    playerList = m_BossesList;
+    playerList = &m_BossesList;
+  }
+  if(playerList == nullptr){
+      return QStringList();
   }
 
   if (launcherType == characType::Hero) {
@@ -646,28 +649,27 @@ QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
 
   QStringList output;
 
-  auto newEnd = std::remove_if(
-      playerList.begin(), playerList.end(), [](const Character *pl) {
+  const auto newEnd = std::remove_if(
+      playerList->begin(), playerList->end(), [&output](const Character *pl) {
         if (pl == nullptr) {
           return false;
         }
         const auto &hp =
             std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable.at(STATS_HP));
-        return hp.m_CurrentValue <= 0; // remove elements where this is true
+        QString name = pl->m_Name;
+        const bool isDead = hp.m_CurrentValue <= 0;
+        if(isDead){
+            output.append(pl->m_Name);
+        }
+        return isDead; // remove elements where this is true
       });
-
-  std::for_each(newEnd, playerList.end(), [&output](const Character *pl) {
-    if (pl != nullptr) {
-      output.append(pl->m_Name);
-    }
-  });
 
   // Delete only boss player
   if (launcherType == characType::Boss) {
     // TODO check if bosses has another phase
     // if yes init that phase
     // if not erase the boss of the list
-    playerList.erase(newEnd, playerList.end());
+      playerList->erase(newEnd, playerList->end());
   }
 
   return output;
