@@ -12,6 +12,8 @@
 #include "Application.h"
 #include "utils.h"
 
+#include <cmath>
+
 using namespace std;
 
 Character::Character() { InitTables(); }
