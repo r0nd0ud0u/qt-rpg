@@ -7,8 +7,8 @@
     ],
     "Armure magique": [
         {
-            "percent": 10,
-            "value": 0
+            "percent": 0,
+            "value": 85
         }
     ],
     "Armure physique": [
@@ -21,7 +21,7 @@
     "Cout critique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 12
         }
     ],
     "Esquive": [
@@ -39,13 +39,13 @@
     "Nom": "Bague de l'isengard",
     "PV": [
         {
-            "percent": 0,
+            "percent": 11,
             "value": 0
         }
     ],
     "Pouvoir magique": [
         {
-            "percent": 20,
+            "percent": 35,
             "value": 0
         }
     ],
