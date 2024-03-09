@@ -14,7 +14,34 @@
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 35
+            "Value": 55
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 55
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Esquive",
+            "Tours actifs": 2,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -10
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Soi-même",
+            "Stat": "",
+            "Tours actifs": 5,
+            "Type": "Tours de recharge",
+            "Valeur de l'effet": 0,
+            "Value": 0
         },
         {
             "Cible": "Soi-même",
@@ -23,22 +50,13 @@
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 5
-        },
-        {
-            "Cible": "Ennemie",
-            "Portée": "Individuel",
-            "Stat": "PV",
-            "Tours actifs": 3,
-            "Type": "Changement par valeur",
-            "Valeur de l'effet": 0,
-            "Value": 10
+            "Value": 45
         }
     ],
     "Forme": "Standard",
-    "Niveau": 1,
-    "Nom": "Frappe Cinglante ",
-    "Photo": "Thraïn.png",
+    "Niveau": 8,
+    "Nom": "Folie des profondeurs de la Moria",
+    "Photo": "default.png",
     "Portée": "Individuel",
     "Regen mana": 0,
     "Regen rage": 0,

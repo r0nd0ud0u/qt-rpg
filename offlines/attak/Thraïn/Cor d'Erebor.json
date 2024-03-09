@@ -14,38 +14,38 @@
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 12
+            "Value": 5
         },
         {
-            "Cible": "Soi-même",
-            "Portée": "Individuel",
-            "Stat": "Aggro",
-            "Tours actifs": 1,
-            "Type": "Changement par valeur",
-            "Valeur de l'effet": 0,
-            "Value": 10
-        },
-        {
-            "Cible": "Seulement les alliés",
+            "Cible": "Tous les heroes",
             "Portée": "Zone",
-            "Stat": "Aggro",
-            "Tours actifs": 1,
-            "Type": "Reinit",
+            "Stat": "PV",
+            "Tours actifs": 2,
+            "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": 0
+            "Value": 15
+        },
+        {
+            "Cible": "Tous les heroes",
+            "Portée": "Zone",
+            "Stat": "Armure magique",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 15
+        },
+		{
+            "Cible": "Tous les heroes",
+            "Portée": "Zone",
+            "Stat": "Armure physique",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 15
         },
         {
             "Cible": "Soi-même",
-            "Portée": "Individuel",
-            "Stat": "Cout critique",
-            "Tours actifs": 3,
-            "Type": "Up par valeur",
-            "Valeur de l'effet": 0,
-            "Value": 40
-        },
-        {
-            "Cible": "Soi-même",
-            "Portée": "Individuel",
+            "Portée": "Soi-même",
             "Stat": "",
             "Tours actifs": 5,
             "Type": "Tours de recharge",
@@ -54,9 +54,9 @@
         }
     ],
     "Forme": "Standard",
-    "Niveau": 7,
-    "Nom": "Provocation Féroce ",
-    "Photo": "Thraïn.png",
+    "Niveau": 5,
+    "Nom": "Cor d'Erebor",
+    "Photo": "default.png",
     "Portée": "Individuel",
     "Regen mana": 0,
     "Regen rage": 0,

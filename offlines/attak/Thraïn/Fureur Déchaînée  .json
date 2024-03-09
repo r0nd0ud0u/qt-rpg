@@ -24,6 +24,15 @@
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 5
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Cout critique",
+            "Tours actifs": 3,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 15
         }
     ],
     "Forme": "Standard",
