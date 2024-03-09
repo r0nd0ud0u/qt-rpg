@@ -14,7 +14,7 @@
             "Tours actifs": 3,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 15
+            "Value": 28
         },
         {
             "Cible": "Soi-même",
@@ -24,6 +24,15 @@
             "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 100
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
         }
     ],
     "Forme": "Ent",
