@@ -35,7 +35,7 @@ QString Utils::ComputeNbOfShots(const QString &name, const int value) {
   for (int i = 70; i < 101; i++) {
     shotKiki.insert(i);
   }
-  for (int i = 15; i < 16; i++) {
+  for (int i = 0; i < 16; i++) {
     shotMarc.insert(i);
   }
   const bool isSebShot = name == "Azrak Ombresang" && shotSeb.count(value) > 0;
