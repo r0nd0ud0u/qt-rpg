@@ -24,6 +24,15 @@
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 5
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 3,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 10
         }
     ],
     "Forme": "Standard",
