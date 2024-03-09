@@ -89,7 +89,8 @@ QString Character::RegenIntoDamage(const int atkValue,
     if (e.allAtkEffects.effect == EFFECT_INTO_DAMAGE &&
         statsName == e.allAtkEffects.statsName) {
       for (auto *pl : playerList) {
-        const auto finalDamage = atkValue * e.allAtkEffects.subValueEffect / 100;
+        const auto finalDamage =
+            atkValue * e.allAtkEffects.subValueEffect / 100;
         auto &localstat =
             std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable[statsName]);
         localstat.m_CurrentValue =
@@ -471,9 +472,10 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   QString result;
 
   // increment counter turn, effect is used
-  // it means update only the dot and hot, not the changes on max values of stats
-  // can be improved
-  if (fromLaunch && effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE && effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
+  // it means update only the dot and hot, not the changes on max values of
+  // stats can be improved
+  if (fromLaunch && effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE &&
+      effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
     effect.counterTurn++;
   }
 
@@ -519,17 +521,18 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
 
   // Process aggro
   if (effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE &&
-      effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
-    result += ProcessAggro(amount, effect.target);
+      effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE &&
+      (effect.statsName == STATS_HP ||effect.statsName == STATS_AGGRO)) {
+    result += ProcessAggro(maxAmount, effect.target);
   }
 
   // update effect value
   // keep the calcultated value for the HOT or DOT
   if (effect.effect == EFFECT_VALUE_CHANGE) {
-      effect.value = abs(amount);
-      if(amount > 0){
-          target->m_HealRxOnTurn += amount;
-      }
+    effect.value = abs(amount);
+    if (amount > 0) {
+      target->m_HealRxOnTurn += amount;
+    }
   }
 
   return result;
@@ -718,7 +721,8 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     } else {
       amount = ep.value;
     }
-  } else if (launch && ep.statsName == STATS_HP && (ep.effect == EFFECT_VALUE_CHANGE)) {
+  } else if (launch && ep.statsName == STATS_HP &&
+             (ep.effect == EFFECT_VALUE_CHANGE)) {
     if (const bool isOnEnnemy = ep.target == TARGET_ENNEMY; isOnEnnemy) {
       amount = nbOfApplies * DamageByAtk(launcherStats, target->m_Stats,
                                          ep.isMagicAtk, ep.value, ep.nbTurns);
@@ -965,9 +969,9 @@ int Character::ProcessBerseckOnRxAtk(const int nbOfApplies) {
   return amount;
 }
 
-std::pair<QString, int>
-Character::ProcessEffectType(effectParam &effect, Character *target,
-                             const AttaqueType &atk) {
+std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
+                                                     Character *target,
+                                                     const AttaqueType &atk) {
   if (target == nullptr) {
     return std::make_pair("", 0);
   }
@@ -1000,6 +1004,9 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
       } else {
         output = "Chaque HOT est reinit.\n";
       }
+    }
+    if(effect.statsName == STATS_AGGRO){
+        target->m_LastAggros.clear();
     }
   }
   if (effect.effect == EFFECT_DELETE_BAD) {
@@ -1061,9 +1068,10 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
   }
   if (effect.effect == EFFECT_REPEAT_AS_MANY_AS) {
     nbOfApplies += GetMaxNbOfApplies(atk);
-      // one cost has already been processed at the start of launchingattak-> nbOfApplies-1
-      for(int i=0; i<nbOfApplies-1;i++){
-        ProcessCost(atk.name);
+    // one cost has already been processed at the start of launchingattak->
+    // nbOfApplies-1
+    for (int i = 0; i < nbOfApplies - 1; i++) {
+      ProcessCost(atk.name);
     }
   }
   if (effect.effect == EFFECT_INTO_DAMAGE) {
@@ -1085,25 +1093,35 @@ Character::ProcessEffectType(effectParam &effect, Character *target,
  * @return a QString to output in channel log the result
  */
 QString Character::ProcessAggro(const int atkValue, const QString &target) {
-  if (target != TARGET_ENNEMY) {
-    return "";
+  const double aggroNorm = 20.0; // random value at the moment
+    const auto genAggro = std::lround(static_cast<double>(abs(atkValue)) / aggroNorm);
+  if(genAggro == 0){
+      return "Pas d'aggro.\n";
   }
-
-  const int aggroNorm = 20; // random value at the moment
-  const auto genAggro = static_cast<int>(std::round(abs(atkValue) / aggroNorm));
   // keep the last 5
   m_LastAggros.push_back(genAggro);
-  if(m_LastAggros.size() == 6){
-      m_LastAggros.pop_back();
+  if (m_LastAggros.size() == 6) {
+    m_LastAggros.pop_front();
   }
   // update current aggro stat with the sum of the last 5
   auto &aggroStat =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_AGGRO]);
   const int oldAggro = aggroStat.m_CurrentValue;
-  aggroStat.m_CurrentValue = accumulate(m_LastAggros.begin(), m_LastAggros.end(),0);
+  aggroStat.m_CurrentValue =
+      accumulate(m_LastAggros.begin(), m_LastAggros.end(), 0);
+
+  QStringList aggroItems;
+  std::for_each(
+      m_LastAggros.begin(), m_LastAggros.end(),
+      [&aggroItems](int &n) { aggroItems.append(QString::number(n)); });
 
   return (genAggro > 0)
-             ? QString("+%1 aggro pour %2, old: %3, new: %4\n").arg(genAggro).arg(m_Name).arg(oldAggro).arg(aggroStat.m_CurrentValue)
+             ? QString("+%1 aggro pour %2, old: %3, new: %4, items=(%5)\n")
+                   .arg(genAggro)
+                   .arg(m_Name)
+                   .arg(oldAggro)
+                   .arg(aggroStat.m_CurrentValue)
+                   .arg(aggroItems.join(","))
              : "";
 }
 
@@ -1253,7 +1271,8 @@ void Character::UpdateStatsToNextLevel() {
     // recalcultate with equipment and effect
     localStat.m_MaxValue =
         localStat.m_RawMaxValue + localStat.m_BufEquipValue +
-        localStat.m_RawMaxValue * localStat.m_BufEquipPercent / 100 + localStat.m_BufEffectValue +
+        localStat.m_RawMaxValue * localStat.m_BufEquipPercent / 100 +
+        localStat.m_BufEffectValue +
         localStat.m_RawMaxValue * localStat.m_BufEffectPercent / 100;
 
     // recompute current value by ratio
@@ -1375,12 +1394,12 @@ int Character::UpdateDamageByBuf(const Buf &bufDmg, const int value) {
   return output;
 }
 
-void Character::SetValuesForThalia(const bool isBear){
-    auto &localstat =
-        std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_BERSECK]);
-    if(isBear){
-        localstat.InitValues(20,20,100,0);
-    } else{
-        localstat.InitValues(0,0,0,0);
-    }
+void Character::SetValuesForThalia(const bool isBear) {
+  auto &localstat =
+      std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_BERSECK]);
+  if (isBear) {
+    localstat.InitValues(20, 20, 100, 0);
+  } else {
+    localstat.InitValues(0, 0, 0, 0);
+  }
 }
