@@ -7,6 +7,7 @@
 #include <tuple>
 #include <unordered_map>
 #include <vector>
+#include <deque>
 
 #include "common.h"
 #include "effect.h"
@@ -104,7 +105,7 @@ public:
   int m_Level = 1;
   int m_Exp = 0;
   int m_NextLevel = 100;
-  std::vector<int> m_LastAggros; // keep the last five aggros and sum them
+  std::deque<int> m_LastAggros; // keep the last five aggros and sum them
   std::vector<QString> m_Forms;
   QString m_SelectedForm = STANDARD_FORM;
 
