@@ -3,7 +3,7 @@
     "Cible": "Ennemie",
     "Coût de mana": 0,
     "Coût de rage": 0,
-    "Coût de vigueur": 10,
+    "Coût de vigueur": 15,
     "Durée": 1,
     "Dégâts": 0,
     "Effet": [
@@ -29,12 +29,13 @@
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "",
-            "Tours actifs": 6,
-            "Type": "Tours de recharge",
+            "Tours actifs": 4,
+            "Type": "Up/down degats en %",
             "Valeur de l'effet": 0,
-            "Value": 0
+            "Value": 30
         }
     ],
+    "Forme": "Standard",
     "Niveau": 11,
     "Nom": "Lame de Morgul",
     "Photo": "Azrak Ombresang.png",

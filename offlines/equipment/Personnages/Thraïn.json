@@ -1,13 +1,16 @@
 {
-    "Tete": "tete2",
-    "Collier": "",
-    "Torse": "",
-    "Pantalon": "",
-    "Chaussures": "",
-    "Bras gauche": "",
-    "Bras droit": "",
-    "Jambe gauche": "",
+    "Anneau": "Anneau des Guerriers de la Lumière",
+    "Arme droite": "Sarbacane des eleveurs de bêtes de gorgoth",
+    "Arme gauche": "Masse des des defenseurs de la porte ouest",
+    "Bras": "",
+    "Categorie": "",
+    "Chaussures": "Chaussures de la Guilde des voleurs",
+    "Collier": "Pendentif de l'odre des mages",
     "Jambe droite": "",
-    "Anneau": ""
+    "Jambe gauche": "Jambieère des Haradrim",
+    "Nom": "",
+    "Pantalon": "",
+    "Tete": "Casque de Boromir",
+    "Torse": "Armure des Hommes de l'Est"
 }
 

@@ -46,13 +46,22 @@ ActionsView::createModel(QObject *parent,
   // attak view
   if (typePage == ActionsStackedWgType::attak) {
     model = new QStandardItemModel(0, 1, parent);
-      // TODO maybe use another container got atk list
+    // TODO maybe use another container got atk list
     std::vector<AttaqueType> tmpAtkList;
-    for(const auto& [atkName, atk]: m_CurPlayer->m_AttakList){
-        tmpAtkList.push_back(atk);
+    for (const auto &[atkName, atk] : m_CurPlayer->m_AttakList) {
+      tmpAtkList.push_back(atk);
     }
     std::sort(tmpAtkList.begin(), tmpAtkList.end(), Utils::CompareByLevel);
+    // for init
+    if(!m_CurPlayer->m_Forms.empty() && m_Form == STANDARD_FORM){
+        m_Form = m_CurPlayer->m_Forms.front();
+    } else{
+        m_Form = m_CurPlayer->m_SelectedForm;
+    }
     for (const auto &atk : tmpAtkList) {
+      if (m_Form != atk.form) {
+        continue;
+      }
       addActionRow(model, atk.name);
       // disable atk in case of not enough resources, still displayed!
       for (int column = 0; column < model->columnCount(); ++column) {
@@ -271,3 +280,5 @@ void ActionsView::ProcessEnableTargetsBoxes() {
   if (m_CurPage == ActionsStackedWgType::inventory) {
   }
 }
+
+void ActionsView::SetForm(const QString &form) { m_Form = form; }

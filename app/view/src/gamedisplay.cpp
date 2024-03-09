@@ -19,6 +19,8 @@ GameDisplay::GameDisplay(QWidget *parent)
           &GameDisplay::UpdateChannel);
   connect(ui->heroes_widget, &HeroesView::SigClickedOnHeroPanel, this,
           &GameDisplay::UpdateViews);
+  connect(ui->heroes_widget, &HeroesView::SigSelectedFormOnHeroPanel, this,
+          &GameDisplay::SlotUpdateActionViews);
   connect(ui->bosses_widget, &BossesView::SigClickedOnPanel, this,
           &GameDisplay::UpdateViews);
   connect(ui->channel_lay, &Channel::SigNextRound, this,
@@ -123,6 +125,19 @@ void GameDisplay::NewRound() {
   gm->m_PlayersManager->DecreaseCoolDownEffects(activePlayer->m_Name);
   emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
 
+  // update buf pow
+  if (activePlayer->m_Name == "Azrak Ombresang") {
+    auto &localStat = std::get<StatsType<int>>(
+        activePlayer->m_Stats.m_AllStatsTable[STATS_POW_PHY]);
+    auto &phyBuf =
+        activePlayer->m_AllBufs[static_cast<int>(BufTypes::powPhyBuf)];
+    Character::SetStatsOnEffect(
+        localStat, -phyBuf.m_Value + activePlayer->m_HealRxOnTurn, true, false,
+        true);
+    phyBuf.m_Value = activePlayer->m_HealRxOnTurn;
+  }
+  activePlayer->m_HealRxOnTurn = 0;
+
   // Update views
   // Update views after stats changes
   // Players panels views
@@ -131,9 +146,6 @@ void GameDisplay::NewRound() {
   // Activate actions buttons
   ui->bag_button->setEnabled(true);
   ui->attaque_button->setEnabled(true);
-  // default page on action view
-  ui->stackedWidget->setCurrentIndex(
-      static_cast<int>(ActionsStackedWgType::defaultType));
   // actions views
   ui->attak_page->SetCurrentPlayer(activePlayer);
   // set focus on active player
@@ -145,6 +157,15 @@ void GameDisplay::NewRound() {
   // auto select hero
   gm->m_PlayersManager->m_SelectedHero = activePlayer;
   emit selectCharacter(activePlayer->m_Name);
+
+  // set atk view on
+  // do it after hero has been activated and selected
+  ui->attak_page->ResetActionsParam();
+  ui->stackedWidget->setCurrentIndex(
+      static_cast<int>(ActionsStackedWgType::attak));
+  ui->attaque_button->setEnabled(false);
+  ui->bag_button->setEnabled(true);
+  ui->attak_page->UpdateActions(ActionsStackedWgType::attak);
   // TODO update channel
   // choice of talent
   // if dead -> choice to take a potion
@@ -161,7 +182,6 @@ void GameDisplay::StartNewTurn() {
   gm->m_PlayersManager->ApplyRegenStats(characType::Hero);
   // Update views after stats changes
   emit SigUpdatePlayerPanel();
-
 
   // For each turn now
   // Process the order of the players
@@ -243,15 +263,13 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   const auto [isCrit, critRandNb] = activatedPlayer->ProcessCriticalStrike();
   QString critStr;
   if (isCrit) {
-      critStr = "Coup Critique";
-  } else{
-      critStr = "pas de coup critique";
+    critStr = "Coup Critique";
+  } else {
+    critStr = "pas de coup critique";
   }
-
-  critStr += Utils::ComputeNbOfShots(activatedPlayer->m_Name, critRandNb);
-
   emit SigUpdateChannelView(
-      nameChara, QString("Test coup critique:%1 -> %2.\n").arg(critRandNb).arg(critStr));
+      nameChara,
+      QString("Test coup critique:%1 -> %2.\n").arg(critRandNb).arg(critStr));
 
   // new effects on that turn
   std::unordered_map<QString, std::vector<effectParam>> newEffects;
@@ -263,10 +281,12 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       // is dodging
       if (currentAtk.target == TARGET_ENNEMY &&
           currentAtk.reach == REACH_ZONE && target.m_IsTargeted) {
-        const auto &[isDodgingZone, outputsRandnbZone] = targetChara->IsDodging();
+        const auto &[isDodgingZone, outputsRandnbZone] =
+            targetChara->IsDodging();
         if (isDodgingZone) {
-          emit SigUpdateChannelView(targetChara->m_Name,
-                                    QString("esquive.(%1)").arg(outputsRandnbZone));
+          emit SigUpdateChannelView(
+              targetChara->m_Name,
+              QString("esquive.(%1)").arg(outputsRandnbZone));
           continue;
         } else {
           emit SigUpdateChannelView(
@@ -333,7 +353,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       gm->m_PlayersManager->CheckDiedPlayers(characType::Boss);
   for (const auto &dp : diedBossList) {
     emit SigUpdateChannelView(dp, "est mort.");
-    emit SigBossDead(dp);
+    // TODO what to do when a boss is dead
+    // emit SigBossDead(dp);
     ui->add_exp_button->setEnabled(true);
   }
   const QStringList diedHeroesList =
@@ -402,12 +423,39 @@ void GameDisplay::on_vigor_potion_button_clicked() {
   }
 }
 
-void GameDisplay::on_add_exp_button_clicked()
-{
-    Application::GetInstance().m_GameManager->m_PlayersManager->AddExpForHeroes(
-        ui->exp_spinBox->value());
-    // update level + exp label of each hero panel
-    emit SigUpdatePlayerPanel();
-    emit selectCharacter(Application::GetInstance().m_GameManager->m_PlayersManager->m_SelectedHero->m_Name);
+void GameDisplay::on_add_exp_button_clicked() {
+  Application::GetInstance().m_GameManager->m_PlayersManager->AddExpForHeroes(
+      ui->exp_spinBox->value());
+  // update level + exp label of each hero panel
+  emit SigUpdatePlayerPanel();
+  emit selectCharacter(
+      Application::GetInstance()
+          .m_GameManager->m_PlayersManager->m_SelectedHero->m_Name);
 }
 
+void GameDisplay::SlotUpdateActionViews(const QString &name,
+                                        const QString &form) {
+  const auto &gm = Application::GetInstance().m_GameManager;
+  const auto &nameChara = gm->m_GameState->GetCurrentPlayerName();
+  if (nameChara != name) {
+    return;
+  }
+  auto *activatedPlayer = gm->m_PlayersManager->GetCharacterByName(nameChara);
+  if (activatedPlayer == nullptr) {
+    return;
+  }
+  if (name == "Thalia") {
+    activatedPlayer->SetValuesForThalia(form == BEAR_FORM);
+    emit SigUpdatePlayerPanel();
+  }
+
+  // update form
+  ui->attak_page->SetForm(form);
+  // reset the attak view
+  ui->attak_page->ResetActionsParam();
+  ui->stackedWidget->setCurrentIndex(
+      static_cast<int>(ActionsStackedWgType::attak));
+  ui->attaque_button->setEnabled(false);
+  ui->bag_button->setEnabled(true);
+  ui->attak_page->UpdateActions(ActionsStackedWgType::attak);
+}

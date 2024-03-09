@@ -11,7 +11,7 @@
             "Cible": "Allié",
             "Portée": "Zone",
             "Stat": "PV",
-            "Tours actifs": 2,
+            "Tours actifs": 3,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 15
@@ -20,12 +20,13 @@
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "Regeneration Mana",
-            "Tours actifs": 2,
+            "Tours actifs": 3,
             "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 100
         }
     ],
+    "Forme": "Ent",
     "Niveau": 7,
     "Nom": "Arbre de Vie",
     "Photo": "Thalia.png",

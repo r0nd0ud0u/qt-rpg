@@ -24,17 +24,9 @@
             "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 10
-        },
-        {
-            "Cible": "",
-            "Portée": "",
-            "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
-            "Valeur de l'effet": 0,
-            "Value": 0
         }
     ],
+    "Forme": "Standard",
     "Niveau": 13,
     "Nom": "Malédiction de Morgul",
     "Photo": "Azrak Ombresang.png",

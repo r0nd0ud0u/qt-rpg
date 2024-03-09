@@ -37,37 +37,17 @@ private slots:
 
   void on_name_lineEdit_textChanged(const QString &arg1);
 
-  void on_duration_spinBox_valueChanged(int arg1);
-
   void on_mana_cost_spinBox_valueChanged(int arg1);
 
   void on_new_atk_button_clicked();
-
-  void on_heal_spinBox_valueChanged(int arg1);
-
-  void on_damage_spinBox_valueChanged(int arg1);
 
   void on_target_comboBox_currentTextChanged(const QString &arg1);
 
   void on_reach_comboBox_currentTextChanged(const QString &arg1);
 
-  void on_regen_mana_spinBox_valueChanged(int arg1);
-
-  void on_vigor_spinBox_valueChanged(int arg1);
-
-  void on_berseck_spinBox_valueChanged(int arg1);
-
   void on_level_spinBox_valueChanged(int arg1);
 
-  void on_regen_rage_spinBox_valueChanged(int arg1);
-
-  void on_regen_vigor_spinBox_valueChanged(int arg1);
-
-  void on_aggro_spinBox_valueChanged(int arg1);
-
-  void on_aggro_rate_spinBox_valueChanged(int arg1);
-
-  void on_berseck_rate_spinBox_valueChanged(int arg1);
+  void on_form_comboBox_currentTextChanged(const QString &arg1);
 
   private:
   Ui::EditAttakView *ui;

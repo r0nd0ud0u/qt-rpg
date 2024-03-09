@@ -19,7 +19,7 @@
         {
             "Cible": "Allié",
             "Portée": "Zone",
-            "Stat": "Mana",
+            "Stat": "Regeneration Mana",
             "Tours actifs": 5,
             "Type": "Changement par %",
             "Valeur de l'effet": 0,
@@ -35,6 +35,7 @@
             "Value": -5
         }
     ],
+    "Forme": "Ent",
     "Niveau": 6,
     "Nom": "Fleur de l'Espoir",
     "Photo": "Thalia.png",

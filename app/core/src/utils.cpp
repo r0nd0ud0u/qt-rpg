@@ -29,13 +29,13 @@ QString Utils::ComputeNbOfShots(const QString &name, const int value) {
   std::set<int> shotMarc;
   std::set<int> shotKiki;
 
-  for (int i = 51; i < 62; i++) {
+  for (int i = 41; i < 72; i++) {
     shotSeb.insert(i);
   }
-  for (int i = 90; i < 101; i++) {
+  for (int i = 70; i < 101; i++) {
     shotKiki.insert(i);
   }
-  for (int i = 10; i < 20; i++) {
+  for (int i = 0; i < 16; i++) {
     shotMarc.insert(i);
   }
   const bool isSebShot = name == "Azrak Ombresang" && shotSeb.count(value) > 0;

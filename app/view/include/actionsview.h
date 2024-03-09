@@ -22,7 +22,7 @@ public:
   void SetCurrentPlayer(Character *player);
   void ResetActionsParam();
   void InitTargetsWidget();
-  ;
+  void SetForm(const QString & form);
 
 private:
   Ui::ActionsView *ui;
@@ -32,6 +32,7 @@ private:
   Character *m_CurPlayer = nullptr;
   std::vector<TargetInfo> m_TargetedList;
   ActionsStackedWgType m_CurPage = ActionsStackedWgType::defaultType;
+  QString m_Form = STANDARD_FORM;
 
   // Table of attaks
   QAbstractItemModel *createModel(QObject *parent,
