@@ -11,6 +11,7 @@ public:
     uint16_t m_CurrentRound = 0; // max value = size of m_OrderToPlay
 
     QString GetCurrentPlayerName();
+    void RemoveDeadPlayerInTurn(const QString& name);
 };
 
 class GameManager

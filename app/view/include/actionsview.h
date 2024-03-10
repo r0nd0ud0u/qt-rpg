@@ -23,6 +23,7 @@ public:
   void ResetActionsParam();
   void InitTargetsWidget();
   void SetForm(const QString & form);
+  void RemoveTarget(QString);
 
 private:
   Ui::ActionsView *ui;

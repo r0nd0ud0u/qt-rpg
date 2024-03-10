@@ -49,8 +49,8 @@
             "Stat": "",
             "Tours actifs": 5,
             "Type": "Tours de recharge",
-            "Valeur de l'effet": 1000,
-            "Value": 10
+            "Valeur de l'effet": 0,
+            "Value": 0
         }
     ],
     "Forme": "Standard",

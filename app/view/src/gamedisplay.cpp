@@ -354,8 +354,11 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   for (const auto &dp : diedBossList) {
     emit SigUpdateChannelView(dp, "est mort.");
     // TODO what to do when a boss is dead
-    // emit SigBossDead(dp);
+     emit SigBossDead(dp);
+    ui->attak_page->RemoveTarget(dp);
     ui->add_exp_button->setEnabled(true);
+    gm->m_GameState->RemoveDeadPlayerInTurn(dp);
+    gm->m_GameState->m_DiedEnnemies[gm->m_GameState->m_CurrentTurnNb].push_back(dp);
   }
   const QStringList diedHeroesList =
       gm->m_PlayersManager->CheckDiedPlayers(characType::Hero);

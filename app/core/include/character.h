@@ -7,6 +7,7 @@
 #include <tuple>
 #include <unordered_map>
 #include <vector>
+#include <deque>
 
 #include "common.h"
 #include "effect.h"
@@ -52,7 +53,6 @@ public:
   void InitTables();
   void ProcessCost(const QString &atkName);
   void AddAtq(const AttaqueType &atq);
-  void AddStuff(const Stuff &stuff);
   void LoadAtkJson();
   void LoadStuffJson();
   void ApplyEquipOnStats();
@@ -104,7 +104,7 @@ public:
   int m_Level = 1;
   int m_Exp = 0;
   int m_NextLevel = 100;
-  std::vector<int> m_LastAggros; // keep the last five aggros and sum them
+  std::deque<int> m_LastAggros; // keep the last five aggros and sum them
   std::vector<QString> m_Forms;
   QString m_SelectedForm = STANDARD_FORM;
 
@@ -141,7 +141,7 @@ private:
   std::pair<QString, int> ProcessEffectType(
       effectParam &effect, Character *target,
       const AttaqueType &atk); // pair1 output log, pair2 nbOfApplies
-  QString ProcessAggro(const int atkValue, const QString& target);
+  QString ProcessAggro(const int atkValue);
   void UpdateStatsToNextLevel();
   void UpdateBuf(const BufTypes &bufType, const int value,
                  const bool isPercent);

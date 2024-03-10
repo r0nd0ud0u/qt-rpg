@@ -163,7 +163,7 @@ void PlayersManager::InitHeroes() {
 void PlayersManager::InitBosses() {
   Stats stats;
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
-      .InitValues(3000, 3000, 3000, 0);
+      .InitValues(7000, 7000, 7000, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
       .InitValues(9999, 9999, 9999, 9999);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
@@ -173,21 +173,21 @@ void PlayersManager::InitBosses() {
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
       .InitValues(9999, 9999, 9999, 9999);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .InitValues(450, 450, 450, 0);
+      .InitValues(580, 580, 580, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .InitValues(170, 170, 170, 0);
+      .InitValues(603, 603, 603, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .InitValues(117, 117, 117, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
       .InitValues(100, 100, 100, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
+      .InitValues(200, 200, 200, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .InitValues(0, 0, 1000, 10);
+      .InitValues(0, 0, 1000, 25);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
       .InitValues(21, 21, 21, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
-      .InitValues(9, 9, 9, 0);
+      .InitValues(18, 18, 18, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
@@ -197,13 +197,13 @@ void PlayersManager::InitBosses() {
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
       .InitValues(0, 0, 0, 0);
   const auto boss1 = new Character(
-      "Thorin écu de chêne corrompu par l'Arkenstone", characType::Boss, stats);
+      "La bouche du Mordor", characType::Boss, stats);
   boss1->color = QColor("red");
   //m_BossesList.push_back(boss1);
   boss1->m_Forms.push_back(STANDARD_FORM);
 
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
-      .InitValues(1000, 1000, 1000, 0);
+      .InitValues(4000, 4000, 4000, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
       .InitValues(9999, 9999, 9999, 9999);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
@@ -213,21 +213,21 @@ void PlayersManager::InitBosses() {
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
       .InitValues(9999, 9999, 9999, 9999);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .InitValues(50, 50, 50, 0);
+      .InitValues(500, 500, 500, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .InitValues(200, 200, 200, 0);
+      .InitValues(500, 500, 500, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .InitValues(22, 22, 22, 0);
+      .InitValues(50, 50, 50, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
-      .InitValues(22, 22, 22, 0);
+      .InitValues(50, 50, 50, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .InitValues(0, 0, 1000, 6);
+      .InitValues(0, 0, 1000, 10);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
-      .InitValues(7, 7, 7, 0);
+      .InitValues(10, 10, 10, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
-      .InitValues(8, 8, 8, 0);
+      .InitValues(10, 10, 10, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
@@ -237,8 +237,8 @@ void PlayersManager::InitBosses() {
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
       .InitValues(0, 0, 0, 0);
 
-  for (int i = 0; i < 10; i++) {
-      const auto boss2 = new Character(QString("Gobenain-%1").arg(i), characType::Boss, stats);
+  for (int i = 0; i < 5; i++) {
+      const auto boss2 = new Character(QString("Nazgul-%1").arg(i), characType::Boss, stats);
     boss2->m_Forms.push_back(STANDARD_FORM);
     boss2->color = QColor("red");
     //m_BossesList.push_back(boss2);
@@ -257,19 +257,19 @@ void PlayersManager::InitBosses() {
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
       .InitValues(500, 500, 500, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .InitValues(200, 200, 200, 0);
+      .InitValues(700, 700, 700, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .InitValues(250, 250, 250, 0);
+      .InitValues(140, 140, 140, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
-      .InitValues(300, 300, 300, 0);
+      .InitValues(200, 200, 200, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .InitValues(0, 0, 1000, 10);
+      .InitValues(0, 0, 1000, 20);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
-      .InitValues(25, 25, 25, 0);
+      .InitValues(15, 15, 15, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
-      .InitValues(10, 10, 10, 0);
+      .InitValues(15, 15, 15, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
@@ -279,15 +279,55 @@ void PlayersManager::InitBosses() {
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
       .InitValues(0, 0, 0, 0);
   const auto boss3 = new Character(
-      "Thorin furieux", characType::Boss, stats);
+      "Angmar", characType::Boss, stats);
   boss3->color = QColor("red");
-  m_BossesList.push_back(boss3);
+  //m_BossesList.push_back(boss3);
   boss3->m_Forms.push_back(STANDARD_FORM);
 
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
+      .InitValues(20000, 20000, 20000, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
+      .InitValues(9999, 9999, 9999, 9999);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
+      .InitValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
+      .InitValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
+      .InitValues(9999, 9999, 9999, 9999);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
+      .InitValues(800, 800, 800, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
+      .InitValues(600, 600, 600, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
+      .InitValues(250, 250, 250, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
+      .InitValues(120, 120, 120, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
+      .InitValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
+      .InitValues(0, 0, 1000, 20);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
+      .InitValues(20, 20, 20, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
+      .InitValues(20, 20, 20, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
+      .InitValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
+      .InitValues(25, 25, 25, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
+      .InitValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
+      .InitValues(0, 0, 0, 0);
+  const auto boss4 = new Character(
+      "Angmar le retour", characType::Boss, stats);
+  boss4->color = QColor("red");
+  m_BossesList.push_back(boss4);
+  boss4->m_Forms.push_back(STANDARD_FORM);
+
   for (const auto &boss : m_BossesList) {
-    boss->LoadAtkJson();
-    boss->LoadStuffJson();
-    boss->ApplyEquipOnStats();
+      boss->LoadAtkJson();
+      boss->LoadStuffJson();
+      boss->ApplyEquipOnStats();
   }
 }
 
@@ -331,37 +371,33 @@ void PlayersManager::LoadAllEquipmentsJson() {
         Stuff stuff;
         stuff.m_Name = jsonDoc[EQUIP_NAME].toString();
 
-#if QT_VERSION_MAJOR == 6
-// do some code here
-#else
         for (const auto &stats : ALL_STATS) {
-          if (stuff.m_Stats.m_AllStatsTable.count(stats) == 0) {
-            continue;
-          }
-          // init
-          auto &stuffStat =
-              std::get<StatsType<int>>(stuff.m_Stats.m_AllStatsTable[stats]);
-          stuffStat.InitValues(0, 0, 0, 0);
-          QJsonArray jsonArray = jsonDoc[stats].toArray();
-          for (const auto &elem : jsonArray) {
-            if (elem.isObject()) {
-              const QJsonObject item = elem.toObject();
-              for (const auto &key : item.keys()) {
-                const auto &val = item[key];
-                if (val.isDouble()) {
-                  if (key == "percent") {
-                    stuffStat.m_BufEquipPercent =
-                        static_cast<int>(val.toDouble());
-                  } else if (key == "value") {
-                    stuffStat.m_BufEquipValue =
-                        static_cast<int>(val.toDouble());
-                  }
-                }
-              }
+            if (stuff.m_Stats.m_AllStatsTable.count(stats) == 0) {
+                continue;
             }
-          }
+            // init
+            auto &stuffStat =
+                std::get<StatsType<int>>(stuff.m_Stats.m_AllStatsTable[stats]);
+            stuffStat.InitValues(0, 0, 0, 0);
+            QJsonArray jsonArray = jsonDoc[stats].toArray();
+            for (const auto &elem : jsonArray) {
+                if (elem.isObject()) {
+                    const QJsonObject item = elem.toObject();
+                    for (const auto &key : item.keys()) {
+                        const auto &val = item[key];
+                        if (val.isDouble()) {
+                            if (key == "percent") {
+                                stuffStat.m_BufEquipPercent =
+                                    static_cast<int>(val.toDouble());
+                            } else if (key == "value") {
+                                stuffStat.m_BufEquipValue =
+                                    static_cast<int>(val.toDouble());
+                            }
+                        }
+                    }
+                }
+            }
         }
-#endif
         m_Equipments[jsonDoc[EQUIP_CATEGORY].toString()][stuff.m_Name] = stuff;
       }
     }
@@ -492,7 +528,7 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
 
     hp.m_CurrentValue = std::min(
         hp.m_MaxValue,
-        hp.m_CurrentValue + hp.m_CurrentValue * regenHp.m_CurrentValue / 100);
+        hp.m_CurrentValue + hp.m_MaxValue * regenHp.m_CurrentValue / 100);
     mana.m_CurrentValue = std::min(
         mana.m_MaxValue,
         mana.m_CurrentValue + mana.m_MaxValue * regenMana.m_CurrentValue / 100);
@@ -501,7 +537,7 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
     vigor.m_CurrentValue =
         std::min(vigor.m_MaxValue,
                  vigor.m_CurrentValue +
-                     vigor.m_CurrentValue * regenVigor.m_CurrentValue / 100);
+                     vigor.m_MaxValue * regenVigor.m_CurrentValue / 100);
     speed.m_CurrentValue =
         std::min(speed.m_MaxValue, speed.m_CurrentValue + speed.m_RegenOnTurn);
   }
@@ -632,12 +668,15 @@ void PlayersManager::IncrementCounterEffect() {
 /// That method returns a QStringlist with the different died played.
 /// That list will be displayed on channel logs.
 QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
-  std::vector<Character *> playerList;
+  std::vector<Character *>* playerList = nullptr;
 
   if (launcherType == characType::Hero) {
-    playerList = m_HeroesList;
+    playerList = &m_HeroesList;
   } else if (launcherType == characType::Boss) {
-    playerList = m_BossesList;
+    playerList = &m_BossesList;
+  }
+  if(playerList == nullptr){
+      return QStringList();
   }
 
   if (launcherType == characType::Hero) {
@@ -646,28 +685,27 @@ QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
 
   QStringList output;
 
-  auto newEnd = std::remove_if(
-      playerList.begin(), playerList.end(), [](const Character *pl) {
+  const auto newEnd = std::remove_if(
+      playerList->begin(), playerList->end(), [&output](const Character *pl) {
         if (pl == nullptr) {
           return false;
         }
         const auto &hp =
             std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable.at(STATS_HP));
-        return hp.m_CurrentValue <= 0; // remove elements where this is true
+        QString name = pl->m_Name;
+        const bool isDead = hp.m_CurrentValue <= 0;
+        if(isDead){
+            output.append(pl->m_Name);
+        }
+        return isDead; // remove elements where this is true
       });
-
-  std::for_each(newEnd, playerList.end(), [&output](const Character *pl) {
-    if (pl != nullptr) {
-      output.append(pl->m_Name);
-    }
-  });
 
   // Delete only boss player
   if (launcherType == characType::Boss) {
     // TODO check if bosses has another phase
     // if yes init that phase
     // if not erase the boss of the list
-    playerList.erase(newEnd, playerList.end());
+      playerList->erase(newEnd, playerList->end());
   }
 
   return output;

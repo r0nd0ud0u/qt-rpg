@@ -31,15 +31,11 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      #- name: Set up Python
-       # uses: actions/setup-python@v4
-      #  with:
-     #     python-version: 3.10
                 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3.3.0
         with:
-            version: '5.15.2'
+            version: '6.6.1'
       - name: Configure CMake
         shell: bash
         run: |
@@ -57,9 +53,3 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
               sonar-scanner --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}"
-#      - name: run tests
- #       run: |
-  #        ${{runner.workspace}}/build/bin/tests.exe    
-   #   - name: Parse xml output
-     #   run: |
-      #    python 'scripts\parse_xml_unittest.py' -xml_file 'results\output.xml'
