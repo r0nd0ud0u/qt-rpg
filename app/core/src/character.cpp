@@ -135,27 +135,6 @@ void Character::ProcessCost(const QString &atkName) {
 
 void Character::AddAtq(const AttaqueType &atq) { m_AttakList[atq.name] = atq; }
 
-void Character::AddStuff(const Stuff &stuff) {
-
-  std::get<StatsType<int>>(m_Stats.m_AllStatsTable[STATS_HP]).m_CurrentValue +=
-      stuff.m_Stats.m_HP.m_CurrentValue;
-
-  // m_Stats.m_Mana = stuff.m_Stats.m_Mana;
-  // m_Stats.m_Vigor = stuff.m_Stats.m_Vigor;
-  // m_Stats.m_Berseck = stuff.m_Stats.m_Berseck;
-  // m_Stats.m_ArmPhy = stuff.m_Stats.m_ArmPhy;
-  // m_Stats.m_ArmMag = stuff.m_Stats.m_ArmMag;
-  // m_Stats.m_PowPhy = stuff.m_Stats.m_PowPhy;
-  // m_Stats.m_PowMag = stuff.m_Stats.m_PowMag;
-  // m_Stats.m_Aggro = stuff.m_Stats.m_Aggro;
-  // m_Stats.m_Speed = stuff.m_Stats.m_Speed;
-  // m_Stats.m_CriticalStrike = stuff.m_Stats.m_CriticalStrike;
-  // m_Stats.m_Dogde = stuff.m_Stats.m_Dogde;
-  // m_Stats.m_RegenHP = stuff.m_Stats.m_RegenHP;
-  // m_Stats.m_RegenMana = stuff.m_Stats.m_RegenMana;
-  // m_Stats.m_RegenVigor = stuff.m_Stats.m_RegenVigor;
-}
-
 QString Character::GetInventoryString(const InventoryType &type) {
   switch (type) {
   case InventoryType::healthPotion:

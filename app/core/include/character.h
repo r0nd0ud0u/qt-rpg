@@ -53,7 +53,6 @@ public:
   void InitTables();
   void ProcessCost(const QString &atkName);
   void AddAtq(const AttaqueType &atq);
-  void AddStuff(const Stuff &stuff);
   void LoadAtkJson();
   void LoadStuffJson();
   void ApplyEquipOnStats();
