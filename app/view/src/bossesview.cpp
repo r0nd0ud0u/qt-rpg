@@ -82,7 +82,7 @@ void BossesView::RemoveBoss(QString bossName) {
   auto *lay = ui->main_widget->layout();
 
   int i = 0;
-  for (auto *it : m_BossPanels) {
+  for (const auto *it : m_BossPanels) {
     if (it->m_Boss->m_Name == bossName) {
       break;
     }

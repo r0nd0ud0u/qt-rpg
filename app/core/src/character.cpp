@@ -199,8 +199,7 @@ void Character::LoadAtkJson() {
       QJsonArray effectArray = json[EFFECT_ARRAY].toArray();
 #if QT_VERSION_MAJOR == 6
       for (const auto &effect : effectArray) {
-        const auto &stat = effect[EFFECT_STAT].toString();
-        if (stat.isEmpty() && effect[EFFECT_TYPE].toString().isEmpty()) {
+        if (effect[EFFECT_STAT].toString().isEmpty() && effect[EFFECT_TYPE].toString().isEmpty()) {
           break;
         }
         effectParam param;
