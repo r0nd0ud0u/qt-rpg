@@ -371,37 +371,33 @@ void PlayersManager::LoadAllEquipmentsJson() {
         Stuff stuff;
         stuff.m_Name = jsonDoc[EQUIP_NAME].toString();
 
-#if QT_VERSION_MAJOR == 6
-// do some code here
-#else
         for (const auto &stats : ALL_STATS) {
-          if (stuff.m_Stats.m_AllStatsTable.count(stats) == 0) {
-            continue;
-          }
-          // init
-          auto &stuffStat =
-              std::get<StatsType<int>>(stuff.m_Stats.m_AllStatsTable[stats]);
-          stuffStat.InitValues(0, 0, 0, 0);
-          QJsonArray jsonArray = jsonDoc[stats].toArray();
-          for (const auto &elem : jsonArray) {
-            if (elem.isObject()) {
-              const QJsonObject item = elem.toObject();
-              for (const auto &key : item.keys()) {
-                const auto &val = item[key];
-                if (val.isDouble()) {
-                  if (key == "percent") {
-                    stuffStat.m_BufEquipPercent =
-                        static_cast<int>(val.toDouble());
-                  } else if (key == "value") {
-                    stuffStat.m_BufEquipValue =
-                        static_cast<int>(val.toDouble());
-                  }
-                }
-              }
+            if (stuff.m_Stats.m_AllStatsTable.count(stats) == 0) {
+                continue;
             }
-          }
+            // init
+            auto &stuffStat =
+                std::get<StatsType<int>>(stuff.m_Stats.m_AllStatsTable[stats]);
+            stuffStat.InitValues(0, 0, 0, 0);
+            QJsonArray jsonArray = jsonDoc[stats].toArray();
+            for (const auto &elem : jsonArray) {
+                if (elem.isObject()) {
+                    const QJsonObject item = elem.toObject();
+                    for (const auto &key : item.keys()) {
+                        const auto &val = item[key];
+                        if (val.isDouble()) {
+                            if (key == "percent") {
+                                stuffStat.m_BufEquipPercent =
+                                    static_cast<int>(val.toDouble());
+                            } else if (key == "value") {
+                                stuffStat.m_BufEquipValue =
+                                    static_cast<int>(val.toDouble());
+                            }
+                        }
+                    }
+                }
+            }
         }
-#endif
         m_Equipments[jsonDoc[EQUIP_CATEGORY].toString()][stuff.m_Name] = stuff;
       }
     }

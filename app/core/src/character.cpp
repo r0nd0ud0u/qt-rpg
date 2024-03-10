@@ -504,7 +504,7 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   if (effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE &&
       effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE &&
       (effect.statsName == STATS_HP || effect.statsName == STATS_AGGRO)) {
-    result += ProcessAggro(maxAmount, effect.target);
+    result += ProcessAggro(maxAmount);
   }
 
   // update effect value
@@ -1073,10 +1073,9 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
  * Keep only the last 5 aggro generated after a heal or a damage
  * Sum them to process the current value of stats aggro
  * @param atkValue
- * @param target
  * @return a QString to output in channel log the result
  */
-QString Character::ProcessAggro(const int atkValue, const QString &target) {
+QString Character::ProcessAggro(const int atkValue) {
   const double aggroNorm = 20.0; // random value at the moment
   const auto genAggro =
       std::lround(static_cast<double>(abs(atkValue)) / aggroNorm);
@@ -1098,7 +1097,7 @@ QString Character::ProcessAggro(const int atkValue, const QString &target) {
   QStringList aggroItems;
   std::for_each(
       m_LastAggros.begin(), m_LastAggros.end(),
-      [&aggroItems](int &n) { aggroItems.append(QString::number(n)); });
+      [&aggroItems](const int &n) { aggroItems.append(QString::number(n)); });
 
   return (genAggro > 0)
              ? QString("+%1 aggro pour %2, old: %3, new: %4, items=(%5)\n")
