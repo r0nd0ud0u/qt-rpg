@@ -14,7 +14,25 @@
             "Tours actifs": 4,
             "Type": "Decroissement pendant le tour",
             "Valeur de l'effet": 3,
-            "Value": 30
+            "Value": 32
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
         }
     ],
     "Forme": "Ent",

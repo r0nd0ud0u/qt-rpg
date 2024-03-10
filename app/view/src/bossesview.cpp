@@ -16,10 +16,13 @@ BossesView::BossesView(QWidget *parent)
           this, &BossesView::UpdateAllPanels);
   connect((GameDisplay *)parentWidget(), &GameDisplay::SigBossDead, this,
           &BossesView::RemoveBoss);
-  connect((GameDisplay *)parentWidget(), &GameDisplay::SigAddCharacter,
-          this, &BossesView::AddBossPanel);
-  connect((GameDisplay*)parentWidget(), &GameDisplay::SigSetFocusOnActivePlayer, this, &BossesView::SetFocusOn);
-  connect((GameDisplay*)parentWidget(), &GameDisplay::selectCharacter, this, &BossesView::UpdateSelected);
+  connect((GameDisplay *)parentWidget(), &GameDisplay::SigAddCharacter, this,
+          &BossesView::AddBossPanel);
+  connect((GameDisplay *)parentWidget(),
+          &GameDisplay::SigSetFocusOnActivePlayer, this,
+          &BossesView::SetFocusOn);
+  connect((GameDisplay *)parentWidget(), &GameDisplay::selectCharacter, this,
+          &BossesView::UpdateSelected);
 }
 
 BossesView::~BossesView() {
@@ -73,47 +76,64 @@ void BossesView::UpdateAllPanels() {
 }
 
 void BossesView::RemoveBoss(QString bossName) {
+  if (bossName.isEmpty()) {
+    return;
+  }
   auto *lay = ui->main_widget->layout();
+
   int i = 0;
-  for (auto &it : m_BossPanels) {
+  for (const auto *it : m_BossPanels) {
     if (it->m_Boss->m_Name == bossName) {
-      lay->removeWidget(it);
-      delete it;
-      it = nullptr;
-      i++;
-      lay->removeItem(lay->itemAt(i - 1));
+      break;
+    }
+    i++;
+  }
+
+  const auto newEnd = std::remove_if(
+      m_BossPanels.begin(), m_BossPanels.end(),
+      [&bossName](const BossPanel *bp) {
+        if (bp == nullptr || bp->m_Boss == nullptr) {
+          return false;
+        }
+        return bossName ==
+               bp->m_Boss->m_Name; // remove elements where this is true
+      });
+  m_BossPanels.erase(newEnd, m_BossPanels.end());
+  auto *widget = lay->itemAt(i)->widget();
+  widget->hide();
+  lay->removeItem(lay->itemAt(i));
+  lay->removeWidget(widget);
+  delete widget;
+}
+
+void BossesView::SetFocusOn(const QString &name, const characType &type) {
+  if (type != characType::Boss) {
+    return;
+  }
+  for (int i = 0; i < ui->main_widget->layout()->count(); i++) {
+    auto *wg = static_cast<BossPanel *>(
+        ui->main_widget->layout()->itemAt(i)->widget());
+    if (wg != nullptr && wg->m_Boss->m_Name == name) {
+      ui->scrollArea->ensureWidgetVisible(wg);
     }
   }
 }
 
-void BossesView::SetFocusOn(const QString& name, const characType& type){
-    if(type != characType::Boss){
-        return;
-    }
-    for(int i = 0; i< ui->main_widget->layout()->count(); i++){
-        auto *wg = static_cast<BossPanel *>(
-            ui->main_widget->layout()->itemAt(i)->widget());
-        if(wg != nullptr && wg->m_Boss->m_Name == name){
-            ui->scrollArea->ensureWidgetVisible(wg);
-        }
-    }
+void BossesView::SlotClickedOnPanel(const QString &name) {
+  UpdateSelected(name);
+
+  emit SigClickedOnPanel(name);
 }
 
-void BossesView::SlotClickedOnPanel(const QString& name){
-    UpdateSelected(name);
-
-    emit SigClickedOnPanel(name);
-}
-
-void BossesView::UpdateSelected(const QString& name) const{
-    for (auto* panel : m_BossPanels) {
-        if(panel == nullptr){
-            continue;
-        }
-        if (panel->m_Boss->m_Name == name) {
-            panel->SetSelected(true);
-        } else {
-            panel->SetSelected(false);
-        }
+void BossesView::UpdateSelected(const QString &name) const {
+  for (auto *panel : m_BossPanels) {
+    if (panel == nullptr) {
+      continue;
     }
+    if (panel->m_Boss->m_Name == name) {
+      panel->SetSelected(true);
+    } else {
+      panel->SetSelected(false);
+    }
+  }
 }

@@ -1,0 +1,86 @@
+#include <QtTest>
+#include "utils.h"
+
+// add necessary includes here
+
+class utils_tests : public QObject
+{
+    Q_OBJECT
+
+public:
+    utils_tests();
+    ~utils_tests();
+
+private slots:
+    void initTestCase();
+    void cleanupTestCase();
+    void GetRandomNb_works();
+    void BuildEffectName_works();
+    void CompareByLevel_works();
+
+};
+
+utils_tests::utils_tests()
+{
+
+}
+
+utils_tests::~utils_tests()
+{
+
+}
+
+void utils_tests::initTestCase()
+{
+
+}
+
+void utils_tests::cleanupTestCase()
+{
+
+}
+
+void utils_tests::GetRandomNb_works()
+{
+    // test if output is between the min and max
+    const auto a = Utils::GetRandomNb(0,100);
+    Q_ASSERT(a >=0);
+    Q_ASSERT(a <=100);
+}
+
+void utils_tests::BuildEffectName_works(){
+    // case args not empty
+    QString str = Utils::BuildEffectName("effect", "stats");
+    Q_ASSERT("stats-effect" == str);
+    // case effect str empty
+    str = Utils::BuildEffectName("", "stats");
+    // case stats empty
+    str = Utils::BuildEffectName("effect", "");
+    Q_ASSERT("effect" == str);
+    // case both args empty
+    str = Utils::BuildEffectName("", "");
+    Q_ASSERT("" == str);
+}
+
+void utils_tests::CompareByLevel_works(){
+    //init
+    AttaqueType atk1;
+    atk1.level =1;
+    AttaqueType atk2;
+    atk2.level =1;
+    // case same level
+    bool result = Utils::CompareByLevel(atk1, atk2);
+    Q_ASSERT(!result);
+    // case level1 < level2
+    atk2.level =2;
+    result = Utils::CompareByLevel(atk1, atk2);
+    Q_ASSERT(result);
+    // case level1 > level2
+    atk1.level =3;
+    result = Utils::CompareByLevel(atk1, atk2);
+    Q_ASSERT(!result);
+}
+
+QTEST_APPLESS_MAIN(utils_tests)
+
+#include "tst_utils.moc"
