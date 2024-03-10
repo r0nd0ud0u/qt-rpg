@@ -3,13 +3,13 @@
 
 // add necessary includes here
 
-class core_tests : public QObject
+class utils_tests : public QObject
 {
     Q_OBJECT
 
 public:
-    core_tests();
-    ~core_tests();
+    utils_tests();
+    ~utils_tests();
 
 private slots:
     void initTestCase();
@@ -20,27 +20,27 @@ private slots:
 
 };
 
-core_tests::core_tests()
+utils_tests::utils_tests()
 {
 
 }
 
-core_tests::~core_tests()
+utils_tests::~utils_tests()
 {
 
 }
 
-void core_tests::initTestCase()
+void utils_tests::initTestCase()
 {
 
 }
 
-void core_tests::cleanupTestCase()
+void utils_tests::cleanupTestCase()
 {
 
 }
 
-void core_tests::GetRandomNb_works()
+void utils_tests::GetRandomNb_works()
 {
     // test if output is between the min and max
     const auto a = Utils::GetRandomNb(0,100);
@@ -48,7 +48,7 @@ void core_tests::GetRandomNb_works()
     Q_ASSERT(a <=100);
 }
 
-void core_tests::BuildEffectName_works(){
+void utils_tests::BuildEffectName_works(){
     // case args not empty
     QString str = Utils::BuildEffectName("effect", "stats");
     Q_ASSERT("stats-effect" == str);
@@ -62,7 +62,7 @@ void core_tests::BuildEffectName_works(){
     Q_ASSERT("" == str);
 }
 
-void core_tests::CompareByLevel_works(){
+void utils_tests::CompareByLevel_works(){
     //init
     AttaqueType atk1;
     atk1.level =1;
@@ -81,6 +81,6 @@ void core_tests::CompareByLevel_works(){
     Q_ASSERT(!result);
 }
 
-QTEST_APPLESS_MAIN(core_tests)
+QTEST_APPLESS_MAIN(utils_tests)
 
-#include "tst_core_tests.moc"
+#include "tst_utils.moc"
