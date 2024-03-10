@@ -230,7 +230,7 @@ void ActionsView::UpdateTargetList(const QString &name) {
   }
   const bool enableValidateBtn =
       std::any_of(m_TargetedList.begin(), m_TargetedList.end(),
-                  [](TargetInfo info) { return info.m_IsTargeted; });
+                  [](const TargetInfo& info) { return info.m_IsTargeted; });
   ui->validate_action->setEnabled(enableValidateBtn);
 }
 
@@ -293,7 +293,7 @@ void ActionsView::RemoveTarget(QString targetName) {
   auto *lay = ui->targets_widget->layout();
 
   int i = 0;
-  for (auto &it : m_TargetedList) {
+  for (const auto &it : m_TargetedList) {
     if (it.m_Name == targetName) {
       break;
     }
