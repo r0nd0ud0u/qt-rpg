@@ -3,8 +3,8 @@
 
 #include "Application.h"
 #include "character.h"
-#include "utils.h"
 #include "gamedisplay.h"
+#include "utils.h"
 
 #include <QCheckBox>
 #include <QStandardItemModel>
@@ -74,12 +74,6 @@ ActionsView::createModel(QObject *parent,
         }
       }
     }
-  } else if (typePage == ActionsStackedWgType::inventory) {
-    model = new QStandardItemModel(0, 2, parent);
-    for (const auto &obj : m_CurPlayer->m_Inventory) {
-      addActionRow(model, Character::GetInventoryString(
-                              static_cast<InventoryType>(obj)));
-    }
   }
 
   return model;
@@ -115,11 +109,6 @@ ActionsView::createInfoModel(QObject *parent,
       const auto effectName = Utils::BuildEffectName(e.effect, e.statsName);
       addInfoActionRow(model, effectName, e.value);
     }
-  } else if (typePage == ActionsStackedWgType::inventory) {
-    model = new QStandardItemModel(0, 1, parent);
-    for (const auto &obj : m_CurPlayer->m_Inventory) {
-      addActionRow(model, obj);
-    }
   }
 
   return model;
@@ -154,8 +143,6 @@ void ActionsView::ResetActionsParam() {
 void ActionsView::on_validate_action_clicked() {
   if (m_CurPage == ActionsStackedWgType::attak) {
     emit SigLaunchAttak(m_CurAtk.name, m_TargetedList);
-  } else if (m_CurPage == ActionsStackedWgType::inventory) {
-    emit SigUseObject(m_CurAtk.name);
   }
   // reset to init values the members and view
   ResetActionsParam();
@@ -230,7 +217,7 @@ void ActionsView::UpdateTargetList(const QString &name) {
   }
   const bool enableValidateBtn =
       std::any_of(m_TargetedList.begin(), m_TargetedList.end(),
-                  [](const TargetInfo& info) { return info.m_IsTargeted; });
+                  [](const TargetInfo &info) { return info.m_IsTargeted; });
   ui->validate_action->setEnabled(enableValidateBtn);
 }
 
@@ -280,8 +267,6 @@ void ActionsView::ProcessEnableTargetsBoxes() {
       }
     }
   }
-  if (m_CurPage == ActionsStackedWgType::inventory) {
-  }
 }
 
 void ActionsView::SetForm(const QString &form) { m_Form = form; }
@@ -303,8 +288,7 @@ void ActionsView::RemoveTarget(QString targetName) {
   const auto newEnd = std::remove_if(
       m_TargetedList.begin(), m_TargetedList.end(),
       [&targetName](const TargetInfo &ti) {
-        return targetName ==
-               ti.m_Name; // remove elements where this is true
+        return targetName == ti.m_Name; // remove elements where this is true
       });
   m_TargetedList.erase(newEnd, m_TargetedList.end());
   auto *widget = lay->itemAt(i)->widget();
