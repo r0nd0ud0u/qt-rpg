@@ -100,7 +100,6 @@ public:
       m_WearingEquipment; // key: body, value: equipmentName
   std::unordered_map<QString, AttaqueType>
       m_AttakList; // key: attak name, value: AttakType struct
-  std::vector<uint8_t> m_Inventory;
   int m_Level = 1;
   int m_Exp = 0;
   int m_NextLevel = 100;

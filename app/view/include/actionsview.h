@@ -6,7 +6,7 @@
 
 #include "playersmanager.h"
 
-enum class ActionsStackedWgType { attak, defaultType, inventory, enumSize };
+#include "gamedisplay.h"
 
 namespace Ui {
 class ActionsView;
@@ -53,7 +53,6 @@ private:
 signals:
   void SigLaunchAttak(const QString &atkName,
                       const std::vector<TargetInfo> &targetList);
-  void SigUseObject(const QString &objName);
 
 private slots:
   // Slots Table atk
