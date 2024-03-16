@@ -1,6 +1,5 @@
 #include <QtTest>
 #include "utils.h"
-
 // add necessary includes here
 
 class utils_tests : public QObject
@@ -80,7 +79,5 @@ void utils_tests::CompareByLevel_works(){
     result = Utils::CompareByLevel(atk1, atk2);
     Q_ASSERT(!result);
 }
-
-QTEST_APPLESS_MAIN(utils_tests)
 
 #include "tst_utils.moc"
