@@ -1,5 +1,6 @@
 #include <QtTest>
 #include "utils.h"
+#include "character.h"
 
 // add necessary includes here
 
@@ -7,38 +8,13 @@ class utils_tests : public QObject
 {
     Q_OBJECT
 
-public:
-    utils_tests();
-    ~utils_tests();
 
 private slots:
-    void initTestCase();
-    void cleanupTestCase();
     void GetRandomNb_works();
     void BuildEffectName_works();
     void CompareByLevel_works();
 
 };
-
-utils_tests::utils_tests()
-{
-
-}
-
-utils_tests::~utils_tests()
-{
-
-}
-
-void utils_tests::initTestCase()
-{
-
-}
-
-void utils_tests::cleanupTestCase()
-{
-
-}
 
 void utils_tests::GetRandomNb_works()
 {
@@ -81,6 +57,30 @@ void utils_tests::CompareByLevel_works(){
     Q_ASSERT(!result);
 }
 
-QTEST_APPLESS_MAIN(utils_tests)
+class character_tests : public QObject
+{
+    Q_OBJECT
+
+public:
+
+private slots:
+    void test_works();
+};
+
+void character_tests::test_works(){
+
+}
+
+int main(int argc, char *argv[])
+{
+    utils_tests test;
+    QTest::qExec(&test);
+
+    character_tests test2;
+    QTest::qExec(&test2);
+
+    return 0;
+}
+
 
 #include "tst_utils.moc"
