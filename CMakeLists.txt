@@ -21,31 +21,31 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Network 
 #include(${CMAKE_SOURCE_DIR}/build_conan/${CMAKE_BUILD_TYPE}/conanbuildinfo.cmake)
 #conan_basic_setup()
 
-#include(FetchContent)
+include(FetchContent)
 
-#set(CMAKE_EXPORT_COMPILE_COMMANDS true)
-#set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_EXPORT_COMPILE_COMMANDS true)
+set(CMAKE_CXX_STANDARD 17)
 
-#FetchContent_Declare(
-#    Corrosion
-#    GIT_REPOSITORY https://github.com/corrosion-rs/corrosion.git
-#    GIT_TAG master
-#)
-#FetchContent_MakeAvailable(Corrosion)
+FetchContent_Declare(
+    Corrosion
+    GIT_REPOSITORY https://github.com/corrosion-rs/corrosion.git
+    GIT_TAG master
+)
+FetchContent_MakeAvailable(Corrosion)
 
-#find_program(CXXBRIDGE cxxbridge PATHS "$ENV{HOME}/.cargo/bin/")
-#if (CXXBRIDGE STREQUAL "CXXBRIDGE-NOTFOUND")
-#    message("Could not find cxxbridge, trying to install with `cargo install cxxbridge-cmd'")
-#    find_program(CARGO cargo PATHS "$ENV{HOME}/.cargo/bin/")
-#    if (CARGO STREQUAL "CARGO-NOTFOUND")
-#        message(FATAL_ERROR "Requires cargo available in path, install via rustup https://rustup.rs/")
-#    endif()
-#    execute_process(COMMAND ${CARGO} install cxxbridge-cmd)
-#    find_program(CXXBRIDGE cxxbridge PATHS "$ENV{HOME}/.cargo/bin/")
-#endif()
+find_program(CXXBRIDGE cxxbridge PATHS "$ENV{HOME}/.cargo/bin/")
+if (CXXBRIDGE STREQUAL "CXXBRIDGE-NOTFOUND")
+    message("Could not find cxxbridge, trying to install with `cargo install cxxbridge-cmd'")
+    find_program(CARGO cargo PATHS "$ENV{HOME}/.cargo/bin/")
+    if (CARGO STREQUAL "CARGO-NOTFOUND")
+        message(FATAL_ERROR "Requires cargo available in path, install via rustup https://rustup.rs/")
+    endif()
+    execute_process(COMMAND ${CARGO} install cxxbridge-cmd)
+    find_program(CXXBRIDGE cxxbridge PATHS "$ENV{HOME}/.cargo/bin/")
+endif()
 
-#corrosion_import_crate(MANIFEST_PATH rusty_code/Cargo.toml)
-#corrosion_add_cxxbridge(rusty_bridge CRATE rusty_code MANIFEST_PATH rusty_code FILES lib.rs)
+corrosion_import_crate(MANIFEST_PATH rusty_code/Cargo.toml)
+corrosion_add_cxxbridge(rusty_bridge CRATE rusty_code MANIFEST_PATH rusty_code FILES lib.rs)
 
 add_subdirectory(app)
 
