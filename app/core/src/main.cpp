@@ -4,7 +4,7 @@
 #include "Stylizer.h"
 
 #include "rusty_bridge/lib.h"
-#include "rust/cxx.h"
+//#include "rust/cxx.h"
 #include <iostream>
 #include <QtDebug>
 
