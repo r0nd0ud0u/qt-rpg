@@ -5,8 +5,8 @@
 
 //#include "rusty_bridge/lib.h"
 //#include "rust/cxx.h"
-#include <iostream>
-#include <QtDebug>
+//#include <iostream>
+//#include <QtDebug>
 
 //extern "C" {
 //int32_t rusty_extern_c_integer();
