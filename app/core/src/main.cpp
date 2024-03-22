@@ -3,23 +3,23 @@
 
 #include "Stylizer.h"
 
-#include "rusty_bridge/lib.h"
+//#include "rusty_bridge/lib.h"
 //#include "rust/cxx.h"
 #include <iostream>
 #include <QtDebug>
 
-extern "C" {
-int32_t rusty_extern_c_integer();
-}
+//extern "C" {
+//int32_t rusty_extern_c_integer();
+//}
 
 int main(int argc, char *argv[])
 {
 //    qDebug() << "A value given via generated cxxbridge "
 //              << rusty_cxxbridge_integer() << "\n";
-    qDebug() << "A value given directly by extern c function "
-              << rusty_extern_c_integer() << "\n";
+  //  qDebug() << "A value given directly by extern c function "
+    //          << rusty_extern_c_integer() << "\n";
 
-    rust::Vec<Shared> toto = rusty_cxxbridge_vector();
+  //  rust::Vec<Shared> toto = rusty_cxxbridge_vector();
    // rust::Vec<uint16_t> vec;
         //rust::Vec<Shared> toto = rusty_cxxbridge_vector();
 
