@@ -21,7 +21,6 @@ Character::Character() { InitTables(); }
 Character::Character(const QString name, const characType type,
                      const Stats &stats)
     : m_Name(name), m_type(type), m_Stats(stats) {
-  m_Inventory.resize(static_cast<int>(InventoryType::enumSize));
   InitTables();
 }
 
@@ -199,7 +198,8 @@ void Character::LoadAtkJson() {
       QJsonArray effectArray = json[EFFECT_ARRAY].toArray();
 #if QT_VERSION_MAJOR == 6
       for (const auto &effect : effectArray) {
-        if (effect[EFFECT_STAT].toString().isEmpty() && effect[EFFECT_TYPE].toString().isEmpty()) {
+        if (effect[EFFECT_STAT].toString().isEmpty() &&
+            effect[EFFECT_TYPE].toString().isEmpty()) {
           break;
         }
         effectParam param;
@@ -463,7 +463,8 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   if (effect.effect == CONDITION_ENNEMIES_DIED) {
     const auto gs = Application::GetInstance().m_GameManager->m_GameState;
     effect.value +=
-        static_cast<int>(gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb - 1))*effect.subValueEffect;
+        static_cast<int>(gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb - 1)) *
+        effect.subValueEffect;
     effect.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
   }
 

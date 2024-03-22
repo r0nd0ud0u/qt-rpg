@@ -6,6 +6,9 @@
 
 #include "playersmanager.h"
 
+// The different types of the actions to perform by a player
+enum class ActionsStackedWgType { attak, defaultType, inventory, enumSize };
+
 namespace Ui {
 class GameDisplay;
 }

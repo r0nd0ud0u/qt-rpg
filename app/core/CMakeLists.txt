@@ -23,7 +23,6 @@ set(SOURCES
     src/character.cpp
     src/stuff.cpp
     src/playersmanager.cpp
-    src/bosses.cpp
     src/effect.cpp
     src/utils.cpp
 )
