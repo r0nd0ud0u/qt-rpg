@@ -83,7 +83,7 @@ target_link_libraries(qt-rpg PRIVATE
     Qt${QT_VERSION_MAJOR}::Network
     Qt${QT_VERSION_MAJOR}::Sql
     view
-    PRIVATE rusty_bridge
+   # PRIVATE rusty_bridge
 )
 
 
