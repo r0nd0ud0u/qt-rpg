@@ -21,9 +21,9 @@ int main(int argc, char *argv[])
 
     rust::Vec<Shared> toto = rusty_cxxbridge_vector();
    // rust::Vec<uint16_t> vec;
-    //rust::Vec<Shared> toto = rusty_cxxbridge_vector();
+        //rust::Vec<Shared> toto = rusty_cxxbridge_vector();
 
-    return 0;
+    //return 0;
     auto app = std::make_unique<Application>(argc, argv);
     app->Init();
 
