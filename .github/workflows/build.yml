@@ -37,7 +37,6 @@ jobs:
         with:
             version: '5.15.2'
             host: 'windows'
-            target: 'desktop'
             arch: 'win64_mingw81'
       - name: Configure CMake
         shell: bash
