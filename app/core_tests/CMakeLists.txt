@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(core_tests LANGUAGES CXX)
+project(core_tests)
 
 enable_testing()
 
