@@ -35,12 +35,17 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3.3.0
         with:
+            aqtversion: '==3.1.*'
             version: '6.6.1'
+            host: 'windows'
+            target: 'desktop'
+            arch: 'win64_mingw'
+            tools: 'tools_mingw90'
       - name: Configure CMake
         shell: bash
         run: |
           export WORKSPACE_PATH=$(echo "${{runner.workspace}}" | sed 's/\\/\//g')
-          cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+          cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -G "MinGW Makefiles"
 
       - name: Install sonar-scanner and build-wrapper
         uses: SonarSource/sonarcloud-github-c-cpp@v2.0.2
@@ -53,3 +58,4 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
               sonar-scanner --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}"
+    
