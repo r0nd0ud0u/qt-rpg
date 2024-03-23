@@ -35,7 +35,12 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3.3.0
         with:
+            aqtversion: '==3.1.*'
             version: '5.15.2'
+            host: 'windows'
+            target: 'desktop'
+            arch: 'win64_mingw81'
+            tools: 'tools_mingw,qt.tools.win64_mingw810'
       - name: Configure CMake
         shell: bash
         run: |
