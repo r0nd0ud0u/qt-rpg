@@ -2,7 +2,7 @@
 #include "ApplicationView.h"
 #include "Stylizer.h"
 
-#include "rusty_bridge/lib.h"
+#include "lib.h"
 
 int main(int argc, char *argv[])
 {

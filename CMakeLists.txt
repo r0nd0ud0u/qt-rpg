@@ -76,6 +76,24 @@ else()
     endif()
 endif()
 
+set(HEADERS
+    app/lib-rpg/rusty_bridge/include/rust
+    app/lib-rpg/rusty_bridge/include/rusty_bridge
+ )
+
+set(SOURCE
+    app/lib-rpg/rusty_bridge/src
+ )
+
+set(LIBS_CMAKE app/lib-rpg/lib)
+
+include_directories(${HEADERS} ${SOURCE})
+
+find_library(LIB_RPG
+    NAMES rusty_bridge.a rusty_code.a
+    HINTS LIBS_CMAKE
+)
+
 target_link_libraries(qt-rpg PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Core
@@ -83,7 +101,7 @@ target_link_libraries(qt-rpg PRIVATE
     Qt${QT_VERSION_MAJOR}::Network
     Qt${QT_VERSION_MAJOR}::Sql
     view
-    rusty_bridge
+    LIB_RPG
 )
 
 set_target_properties(qt-rpg PROPERTIES
