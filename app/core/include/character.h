@@ -92,6 +92,7 @@ public:
   std::vector<effectParam> LoadThaliaTalent() const;
   std::vector<effectParam> LoadAzrakTalent() const;
   std::vector<effectParam> LoadThrainTalent() const;
+  std::vector<effectParam> LoadElaraTalent() const;
 
   QString m_Name = "default";
   characType m_type = characType::Hero;

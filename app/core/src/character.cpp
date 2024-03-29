@@ -1365,6 +1365,26 @@ std::vector<effectParam> Character::LoadThrainTalent() const {
   return epTable;
 }
 
+std::vector<effectParam> Character::LoadElaraTalent() const {
+    std::vector<effectParam> epTable;
+
+    effectParam param1;
+    param1.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
+    param1.value = 10;
+    param1.nbTurns = 1000;
+    param1.reach = REACH_INDIVIDUAL;
+    param1.statsName = STATS_ARM_MAG;
+    param1.target = TARGET_HIMSELF;
+    param1.subValueEffect = 0;
+    epTable.push_back(param1);
+
+    // if a critical atk has been made => next heal is critical
+
+    // 25 % of damages => heal on worst hp heroe
+
+    return epTable;
+}
+
 int Character::UpdateDamageByBuf(const Buf &bufDmg, const int value) {
   int output = value;
   if (bufDmg.m_Value > 0) {
