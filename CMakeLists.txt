@@ -90,7 +90,7 @@ set(LIBS_CMAKE app/lib-rpg/lib)
 include_directories(${HEADERS} ${SOURCE})
 
 find_library(LIB_RPG
-    NAMES rusty_bridge.a rusty_code.a
+    NAMES rpg.lib
     HINTS LIBS_CMAKE
 )
 
