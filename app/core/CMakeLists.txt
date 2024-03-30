@@ -37,4 +37,5 @@ target_link_libraries(core
     Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Network
+    rust-rpg-bridge
 )

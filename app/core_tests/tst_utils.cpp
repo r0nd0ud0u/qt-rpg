@@ -11,7 +11,6 @@ class utils_tests : public QObject
 
 private slots:
     void GetRandomNb_works();
-    void BuildEffectName_works();
     void CompareByLevel_works();
 
 };
@@ -22,20 +21,6 @@ void utils_tests::GetRandomNb_works()
     const auto a = Utils::GetRandomNb(0,100);
     Q_ASSERT(a >=0);
     Q_ASSERT(a <=100);
-}
-
-void utils_tests::BuildEffectName_works(){
-    // case args not empty
-    QString str = Utils::BuildEffectName("effect", "stats");
-    Q_ASSERT("stats-effect" == str);
-    // case effect str empty
-    str = Utils::BuildEffectName("", "stats");
-    // case stats empty
-    str = Utils::BuildEffectName("effect", "");
-    Q_ASSERT("effect" == str);
-    // case both args empty
-    str = Utils::BuildEffectName("", "");
-    Q_ASSERT("" == str);
 }
 
 void utils_tests::CompareByLevel_works(){

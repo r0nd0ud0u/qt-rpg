@@ -5,6 +5,7 @@
 #include "character.h"
 #include "gamedisplay.h"
 #include "utils.h"
+#include "rust-rpg-bridge/utils.h"
 
 #include <QCheckBox>
 #include <QStandardItemModel>
@@ -106,8 +107,8 @@ ActionsView::createInfoModel(QObject *parent,
     addInfoActionRow(model, ATK_BERSECK_COST, m_CurAtk.berseckCost);
     addInfoActionRow(model, ATK_LEVEL, m_CurAtk.level);
     for (const auto &e : m_CurAtk.m_AllEffects) {
-      const auto effectName = Utils::BuildEffectName(e.effect, e.statsName);
-      addInfoActionRow(model, effectName, e.value);
+        const auto effectName = build_effect_name("e.effect", "e.effect");
+        addInfoActionRow(model, effectName.data(), e.value);
     }
   }
 
