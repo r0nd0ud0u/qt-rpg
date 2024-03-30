@@ -13,6 +13,7 @@
 #include "effect.h"
 #include "stuff.h"
 
+#include "rust-rpg-bridge/character.h"
 
 enum class characType { Hero, Boss };
 
@@ -20,24 +21,12 @@ class AttaqueType {
 public:
   QString name = "Atq";
   uint8_t level = 1;
-  uint32_t damage = 0;
-  uint32_t heal = 0;
-  uint32_t regenMana = 0;
-  uint32_t regenVigor = 0;
-  uint32_t regenBerseck = 0;
-  uint32_t aggro = 0;
-  uint32_t aggroRate = 0;
-  uint32_t berseckRate = 0;
-  QString effect;
   uint32_t manaCost = 0;
   uint32_t vigorCost = 0;
   uint32_t berseckCost = 0;
   QString target = TARGET_ENNEMY;
   QString reach = REACH_INDIVIDUAL;
-  uint16_t turnsDuration = 1;
   QString namePhoto = "default.png";
-  static std::vector<QString> TARGET_TYPES;
-  static std::vector<QString> REACH_TYPES;
   std::vector<effectParam> m_AllEffects = {};
   QString form = STANDARD_FORM;
 };

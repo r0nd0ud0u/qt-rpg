@@ -10,7 +10,7 @@
 #include <QtDebug>
 
 #include "Application.h"
-#include "utils.h"
+#include "rust-rpg-bridge/utils.h"
 
 #include <cmath>
 
@@ -22,6 +22,8 @@ Character::Character(const QString name, const characType type,
                      const Stats &stats)
     : m_Name(name), m_type(type), m_Stats(stats) {
   InitTables();
+    auto atk2 = default_atk("").into_raw();
+  //atk2->get_name();
 }
 
 void Character::InitTables() {
@@ -181,20 +183,12 @@ void Character::LoadAtkJson() {
       atk.name = json[ATK_NAME].toString();
       atk.namePhoto = json[ATK_PHOTO].toString();
       atk.form = json[ATK_FORM].toString();
-      atk.aggro = json[ATK_AGGRO].toInt();
-      atk.damage = static_cast<uint32_t>(json[ATK_DAMAGE].toInt());
-      atk.heal = json[ATK_HEAL].toInt();
-      atk.regenMana = json[ATK_REGEN_MANA].toInt();
-      atk.effect = json[ATK_EFFECT].toString();
       atk.level = static_cast<uint8_t>(json[ATK_LEVEL].toInt());
       atk.manaCost = static_cast<uint32_t>(json[ATK_MANA_COST].toInt());
       atk.vigorCost = static_cast<uint32_t>(json[ATK_VIGOR_COST].toInt());
-      atk.regenBerseck = static_cast<uint32_t>(json[ATK_REGEN_BERSECK].toInt());
-      atk.regenVigor = static_cast<uint32_t>(json[ATK_REGEN_VIGOR].toInt());
       atk.berseckCost = static_cast<uint32_t>(json[ATK_BERSECK_COST].toInt());
       atk.reach = json[ATK_REACH].toString();
       atk.target = json[ATK_TARGET].toString();
-      atk.turnsDuration = static_cast<uint16_t>(json[ATK_DURATION].toInt());
       QJsonArray effectArray = json[EFFECT_ARRAY].toArray();
 #if QT_VERSION_MAJOR == 6
       for (const auto &effect : effectArray) {
@@ -843,7 +837,7 @@ int Character::ProcessDecreaseOnTurn(const effectParam &ep) const {
     const int intMax = 100;
     const int stepLimit = (intMax / ep.subValueEffect); // get percentual
     const auto maxLimit = stepLimit * counter;
-    if (const auto randNb = Utils::GetRandomNb(intMin, intMax);
+    if (const auto randNb = get_random_nb(intMin, intMax);
         randNb >= 0 && randNb < maxLimit) {
       nbOfApplies++;
     } else {
@@ -861,7 +855,7 @@ QString Character::ProcessDecreaseByTurn(const effectParam &ep) const {
   const int intMax = 100;
   const int stepLimit = (intMax / ep.nbTurns); // get percentual
   const auto maxLimit = stepLimit * (ep.nbTurns - ep.counterTurn);
-  if (const auto randNb = Utils::GetRandomNb(intMin, intMax);
+  if (const auto randNb = get_random_nb(intMin, intMax);
       !(randNb >= 0 && randNb < maxLimit)) {
     output = QString("%1 n'a pas d'effet").arg(EFFECT_NB_DECREASE_BY_TURN);
   }
@@ -1116,7 +1110,7 @@ std::pair<bool, int> Character::ProcessCriticalStrike() {
   const int critCapped = 60;
   const int maxCritUsed = std::min(critCapped, critStat.m_CurrentValue);
 
-  if (randNb = Utils::GetRandomNb(0, 100);
+  if (randNb = get_random_nb(0, 100);
       randNb >= 0 && randNb < maxCritUsed) {
     // update buf dmg by crit capped
     UpdateBuf(BufTypes::damageCritCapped,
@@ -1132,7 +1126,7 @@ std::pair<bool, QString> Character::IsDodging() const {
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_DODGE));
   const int DEFAULT_RAND = -1;
   int randNb = DEFAULT_RAND;
-  if (randNb = Utils::GetRandomNb(0, 100);
+  if (randNb = get_random_nb(0, 100);
       randNb >= 0 && randNb < stat.m_CurrentValue) {
     isDodging = true;
   }
