@@ -59,14 +59,12 @@ public:
   void RemoveMalusEffect(const effectParam &ep);
 
   QString RegenIntoDamage(const int atkValue, const QString &statsName) const;
-  std::vector<effectParam> CreateEveilDeLaForet(); // template
 
   static void
   SetStatsOnEffect(StatsType<int> &stat, const int value, const bool isUp,
                    const bool isPercent,
                    const bool updateEffect); // TODO à sortir dans un common
                                              // pour gerer les stats?
-  static QString GetInventoryString(const InventoryType &type);
   std::pair<bool, QString> IsDodging() const;
   void UsePotion(const QString &statsName);
   void AddExp(const int newXp);

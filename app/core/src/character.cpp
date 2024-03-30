@@ -136,18 +136,6 @@ void Character::ProcessCost(const QString &atkName) {
 
 void Character::AddAtq(const AttaqueType &atq) { m_AttakList[atq.name] = atq; }
 
-QString Character::GetInventoryString(const InventoryType &type) {
-  switch (type) {
-  case InventoryType::healthPotion:
-    return "Potion de vie";
-  case InventoryType::manaPotion:
-    return "Potion de mana";
-  default:
-    break;
-  }
-  return "";
-}
-
 void Character::LoadAtkJson() {
   // List all attak for a character
   QString directoryPath = OFFLINE_ATK + m_Name; // Replace with the actual path
@@ -632,32 +620,6 @@ void Character::RemoveMalusEffect(const effectParam &ep) {
   if (ep.effect == EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT) {
     UpdateBuf(BufTypes::damageTx, -ep.value, true);
   }
-}
-
-std::vector<effectParam> Character::CreateEveilDeLaForet() {
-  std::vector<effectParam> epTable;
-
-  effectParam param2;
-  param2.effect = EFFECT_IMPROVE_HOTS;
-  param2.value = 0;
-  param2.nbTurns = 1;
-  param2.reach = REACH_ZONE;
-  param2.statsName = "";
-  param2.target = TARGET_ALLY;
-  param2.subValueEffect = 20;
-  epTable.push_back(param2);
-
-  effectParam param3;
-  param3.effect = EFFECT_BOOSTED_BY_HOTS;
-  param3.value = 80;
-  param3.nbTurns = 1;
-  param3.reach = REACH_ZONE;
-  param3.statsName = STATS_HP;
-  param3.target = TARGET_ALLY;
-  param3.subValueEffect = 25;
-  epTable.push_back(param3);
-
-  return epTable;
 }
 
 std::pair<int, int> Character::ProcessCurrentValueOnEffect(
