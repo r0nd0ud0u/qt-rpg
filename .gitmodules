@@ -1,0 +1,4 @@
+[submodule "app/submodules/lib-rpg"]
+	path = app/submodules/lib-rpg
+	url = git@github.com:r0nd0ud0u/lib-rpg.git
+	branch = main

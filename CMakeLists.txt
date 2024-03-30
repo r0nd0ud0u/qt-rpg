@@ -44,8 +44,8 @@ if (CXXBRIDGE STREQUAL "CXXBRIDGE-NOTFOUND")
     find_program(CXXBRIDGE cxxbridge PATHS "$ENV{HOME}/.cargo/bin/")
 endif()
 
-corrosion_import_crate(MANIFEST_PATH rusty_code/Cargo.toml)
-corrosion_add_cxxbridge(rusty_bridge CRATE rusty_code MANIFEST_PATH rusty_code FILES lib.rs)
+corrosion_import_crate(MANIFEST_PATH app/submodules/lib-rpg/Cargo.toml)
+corrosion_add_cxxbridge(rust-rpg-bridge CRATE rust-rpg MANIFEST_PATH rust-rpg FILES lib.rs)
 
 add_subdirectory(app)
 
@@ -76,23 +76,6 @@ else()
     endif()
 endif()
 
-set(HEADERS
-    app/lib-rpg/rusty_bridge/include/rust
-    app/lib-rpg/rusty_bridge/include/rusty_bridge
- )
-
-set(SOURCE
-    app/lib-rpg/rusty_bridge/src
- )
-
-set(LIBS_CMAKE app/lib-rpg/lib)
-
-include_directories(${HEADERS} ${SOURCE})
-
-find_library(LIB_RPG
-    NAMES rpg.lib
-    HINTS LIBS_CMAKE
-)
 
 target_link_libraries(qt-rpg PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
@@ -101,7 +84,7 @@ target_link_libraries(qt-rpg PRIVATE
     Qt${QT_VERSION_MAJOR}::Network
     Qt${QT_VERSION_MAJOR}::Sql
     view
-    LIB_RPG
+    rust-rpg-bridge
 )
 
 set_target_properties(qt-rpg PROPERTIES
