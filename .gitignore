@@ -31,3 +31,4 @@ Makefile*
 *.qm
 *.prl
 /rusty_code/target/*
+/CMakeFiles/*
