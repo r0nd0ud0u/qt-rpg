@@ -1,11 +1,8 @@
 {
-    "Aggro": 0,
     "Cible": "Allié",
     "Coût de mana": 12,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
-    "Durée": 1,
-    "Dégâts": 0,
     "Effet": [
         {
             "Cible": "Soi-même",
@@ -39,10 +36,6 @@
     "Niveau": 2,
     "Nom": "Offrande vitale",
     "Photo": "default.png",
-    "Portée": "Individuel",
-    "Regen mana": 0,
-    "Regen rage": 0,
-    "Regen vigueur": 0,
-    "Soin": 0
+    "Portée": "Individuel"
 }
 
