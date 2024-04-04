@@ -13,8 +13,6 @@
 #include "effect.h"
 #include "stuff.h"
 
-#include "rust-rpg-bridge/character.h"
-
 enum class characType { Hero, Boss };
 
 class AttaqueType {

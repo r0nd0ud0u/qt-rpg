@@ -9,7 +9,7 @@
             "Portée": "Individuel",
             "Stat": "PV",
             "Tours actifs": 1,
-            "Type": "Up par %",
+            "Type": "Changement par %",
             "Valeur de l'effet": 0,
             "Value": -15
         },
@@ -25,11 +25,29 @@
         {
             "Cible": "Allié",
             "Portée": "Individuel",
+            "Stat": "Armure magique",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 50
+        },
+        {
+            "Cible": "Allié",
+            "Portée": "Individuel",
             "Stat": "Armure physique",
             "Tours actifs": 2,
             "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 50
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "",
+            "Tours actifs": 4,
+            "Type": "Tours de recharge",
+            "Valeur de l'effet": 0,
+            "Value": 0
         }
     ],
     "Forme": "Standard",

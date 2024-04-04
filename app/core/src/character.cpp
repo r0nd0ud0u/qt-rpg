@@ -22,8 +22,6 @@ Character::Character(const QString name, const characType type,
                      const Stats &stats)
     : m_Name(name), m_type(type), m_Stats(stats) {
   InitTables();
-    auto atk2 = default_atk("").into_raw();
-  //atk2->get_name();
 }
 
 void Character::InitTables() {
