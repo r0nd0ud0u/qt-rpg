@@ -45,7 +45,7 @@ if (CXXBRIDGE STREQUAL "CXXBRIDGE-NOTFOUND")
 endif()
 
 corrosion_import_crate(MANIFEST_PATH app/submodules/lib-rpg/Cargo.toml)
-corrosion_add_cxxbridge(rust-rpg-bridge CRATE rust-rpg MANIFEST_PATH rust-rpg FILES utils.rs)
+corrosion_add_cxxbridge(rust-rpg-bridge CRATE rust-rpg MANIFEST_PATH rust-rpg FILES utils.rs character.rs effect.rs)
 
 add_subdirectory(app)
 

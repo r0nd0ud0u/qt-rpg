@@ -10,7 +10,7 @@
 #include <QtDebug>
 
 #include "Application.h"
-#include "utils.h"
+#include "rust-rpg-bridge/utils.h"
 
 #include <cmath>
 
@@ -134,18 +134,6 @@ void Character::ProcessCost(const QString &atkName) {
 
 void Character::AddAtq(const AttaqueType &atq) { m_AttakList[atq.name] = atq; }
 
-QString Character::GetInventoryString(const InventoryType &type) {
-  switch (type) {
-  case InventoryType::healthPotion:
-    return "Potion de vie";
-  case InventoryType::manaPotion:
-    return "Potion de mana";
-  default:
-    break;
-  }
-  return "";
-}
-
 void Character::LoadAtkJson() {
   // List all attak for a character
   QString directoryPath = OFFLINE_ATK + m_Name; // Replace with the actual path
@@ -181,20 +169,12 @@ void Character::LoadAtkJson() {
       atk.name = json[ATK_NAME].toString();
       atk.namePhoto = json[ATK_PHOTO].toString();
       atk.form = json[ATK_FORM].toString();
-      atk.aggro = json[ATK_AGGRO].toInt();
-      atk.damage = static_cast<uint32_t>(json[ATK_DAMAGE].toInt());
-      atk.heal = json[ATK_HEAL].toInt();
-      atk.regenMana = json[ATK_REGEN_MANA].toInt();
-      atk.effect = json[ATK_EFFECT].toString();
       atk.level = static_cast<uint8_t>(json[ATK_LEVEL].toInt());
       atk.manaCost = static_cast<uint32_t>(json[ATK_MANA_COST].toInt());
       atk.vigorCost = static_cast<uint32_t>(json[ATK_VIGOR_COST].toInt());
-      atk.regenBerseck = static_cast<uint32_t>(json[ATK_REGEN_BERSECK].toInt());
-      atk.regenVigor = static_cast<uint32_t>(json[ATK_REGEN_VIGOR].toInt());
       atk.berseckCost = static_cast<uint32_t>(json[ATK_BERSECK_COST].toInt());
       atk.reach = json[ATK_REACH].toString();
       atk.target = json[ATK_TARGET].toString();
-      atk.turnsDuration = static_cast<uint16_t>(json[ATK_DURATION].toInt());
       QJsonArray effectArray = json[EFFECT_ARRAY].toArray();
 #if QT_VERSION_MAJOR == 6
       for (const auto &effect : effectArray) {
@@ -640,32 +620,6 @@ void Character::RemoveMalusEffect(const effectParam &ep) {
   }
 }
 
-std::vector<effectParam> Character::CreateEveilDeLaForet() {
-  std::vector<effectParam> epTable;
-
-  effectParam param2;
-  param2.effect = EFFECT_IMPROVE_HOTS;
-  param2.value = 0;
-  param2.nbTurns = 1;
-  param2.reach = REACH_ZONE;
-  param2.statsName = "";
-  param2.target = TARGET_ALLY;
-  param2.subValueEffect = 20;
-  epTable.push_back(param2);
-
-  effectParam param3;
-  param3.effect = EFFECT_BOOSTED_BY_HOTS;
-  param3.value = 80;
-  param3.nbTurns = 1;
-  param3.reach = REACH_ZONE;
-  param3.statsName = STATS_HP;
-  param3.target = TARGET_ALLY;
-  param3.subValueEffect = 25;
-  epTable.push_back(param3);
-
-  return epTable;
-}
-
 std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     effectParam &ep, const int nbOfApplies, const Stats &launcherStats,
     const bool launch, Character *target, const bool isCrit) const {
@@ -843,7 +797,7 @@ int Character::ProcessDecreaseOnTurn(const effectParam &ep) const {
     const int intMax = 100;
     const int stepLimit = (intMax / ep.subValueEffect); // get percentual
     const auto maxLimit = stepLimit * counter;
-    if (const auto randNb = Utils::GetRandomNb(intMin, intMax);
+    if (const auto randNb = get_random_nb(intMin, intMax);
         randNb >= 0 && randNb < maxLimit) {
       nbOfApplies++;
     } else {
@@ -861,7 +815,7 @@ QString Character::ProcessDecreaseByTurn(const effectParam &ep) const {
   const int intMax = 100;
   const int stepLimit = (intMax / ep.nbTurns); // get percentual
   const auto maxLimit = stepLimit * (ep.nbTurns - ep.counterTurn);
-  if (const auto randNb = Utils::GetRandomNb(intMin, intMax);
+  if (const auto randNb = get_random_nb(intMin, intMax);
       !(randNb >= 0 && randNb < maxLimit)) {
     output = QString("%1 n'a pas d'effet").arg(EFFECT_NB_DECREASE_BY_TURN);
   }
@@ -1112,11 +1066,11 @@ QString Character::ProcessAggro(const int atkValue) {
 std::pair<bool, int> Character::ProcessCriticalStrike() {
   const auto &critStat =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_CRIT));
-  int randNb = -1;
+  int64_t randNb = -1;
   const int critCapped = 60;
   const int maxCritUsed = std::min(critCapped, critStat.m_CurrentValue);
 
-  if (randNb = Utils::GetRandomNb(0, 100);
+  if (randNb = get_random_nb(0, 100);
       randNb >= 0 && randNb < maxCritUsed) {
     // update buf dmg by crit capped
     UpdateBuf(BufTypes::damageCritCapped,
@@ -1131,8 +1085,8 @@ std::pair<bool, QString> Character::IsDodging() const {
   const auto &stat =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_DODGE));
   const int DEFAULT_RAND = -1;
-  int randNb = DEFAULT_RAND;
-  if (randNb = Utils::GetRandomNb(0, 100);
+  int64_t randNb = DEFAULT_RAND;
+  if (randNb = get_random_nb(0, 100);
       randNb >= 0 && randNb < stat.m_CurrentValue) {
     isDodging = true;
   }
@@ -1363,6 +1317,26 @@ std::vector<effectParam> Character::LoadThrainTalent() const {
   epTable.push_back(param4);
 
   return epTable;
+}
+
+std::vector<effectParam> Character::LoadElaraTalent() const {
+    std::vector<effectParam> epTable;
+
+    effectParam param1;
+    param1.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
+    param1.value = 10;
+    param1.nbTurns = 1000;
+    param1.reach = REACH_INDIVIDUAL;
+    param1.statsName = STATS_ARM_MAG;
+    param1.target = TARGET_HIMSELF;
+    param1.subValueEffect = 0;
+    epTable.push_back(param1);
+
+    // if a critical atk has been made => next heal is critical
+
+    // 25 % of damages => heal on worst hp heroe
+
+    return epTable;
 }
 
 int Character::UpdateDamageByBuf(const Buf &bufDmg, const int value) {

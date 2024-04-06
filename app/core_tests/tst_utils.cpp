@@ -10,18 +10,10 @@ class utils_tests : public QObject
 
 
 private slots:
-    void GetRandomNb_works();
     void CompareByLevel_works();
 
 };
 
-void utils_tests::GetRandomNb_works()
-{
-    // test if output is between the min and max
-    const auto a = Utils::GetRandomNb(0,100);
-    Q_ASSERT(a >=0);
-    Q_ASSERT(a <=100);
-}
 
 void utils_tests::CompareByLevel_works(){
     //init

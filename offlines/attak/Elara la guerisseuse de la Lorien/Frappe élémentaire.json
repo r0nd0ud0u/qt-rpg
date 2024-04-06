@@ -1,0 +1,23 @@
+{
+    "Cible": "Ennemie",
+    "Coût de mana": 15,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
+    "Effet": [
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 0,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 70
+        }
+    ],
+    "Forme": "Standard",
+    "Niveau": 11,
+    "Nom": "Frappe élémentaire",
+    "Photo": "default.png",
+    "Portée": "Individuel"
+}
+
