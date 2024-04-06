@@ -9,6 +9,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include "rust-rpg-bridge/attaque.h"
+
 void PlayersManager::InitHeroes() {
 
   Stats stats;
@@ -201,6 +203,9 @@ void PlayersManager::InitHeroes() {
   hero1->ApplyEffeftOnStats(true);
   hero2->ApplyEffeftOnStats(true);
   hero3->ApplyEffeftOnStats(true);
+
+  // add passive powers
+  hero4->m_Power.is_crit_heal_after_crit = true;
 }
 
 void PlayersManager::InitBosses() {

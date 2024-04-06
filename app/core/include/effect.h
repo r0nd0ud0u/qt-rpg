@@ -12,7 +12,6 @@ struct effectParam{
     QString target;
     QString reach;
     QString statsName;
-
     // processed
     bool updated = false;
     int counterTurn = 0;

@@ -136,7 +136,18 @@ void GameDisplay::NewRound() {
         true);
     phyBuf.m_Value = activePlayer->m_HealRxOnTurn;
   }
+
+  // reset heal received on turn
   activePlayer->m_HealRxOnTurn = 0;
+
+  // process actions on last turn damage received
+  if(activePlayer->m_Power.is_crit_heal_after_crit &&
+      activePlayer->m_LastDamageTX.find(gs->m_CurrentTurnNb - 1) != activePlayer->m_LastDamageTX.end() &&
+      activePlayer->m_isLastAtkCritical){
+      // in case of critical damage sent on last turn , next heal critical is enable
+      activePlayer->m_AllBufs[static_cast<int>(BufTypes::nextHealAtkIsCrit)].m_isPassiveEnabled = true;
+  };
+
 
   // Update views
   // Update views after stats changes
@@ -260,7 +271,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   }
 
   // is critical Strike ??
-  const auto [isCrit, critRandNb] = activatedPlayer->ProcessCriticalStrike();
+  const auto [isCrit, critRandNb] = activatedPlayer->ProcessCriticalStrike(currentAtk);
   QString critStr;
   if (isCrit) {
     critStr = "Coup Critique";

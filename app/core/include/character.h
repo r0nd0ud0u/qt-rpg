@@ -4,14 +4,17 @@
 #include <QColor>
 #include <QString>
 
+#include <deque>
 #include <tuple>
 #include <unordered_map>
 #include <vector>
-#include <deque>
 
 #include "common.h"
 #include "effect.h"
 #include "stuff.h"
+
+#include "rust-rpg-bridge/attaque.h"
+#include "rust-rpg-bridge/powers.h"
 
 enum class characType { Hero, Boss };
 
@@ -27,10 +30,19 @@ public:
   QString namePhoto = "default.png";
   std::vector<effectParam> m_AllEffects = {};
   QString form = STANDARD_FORM;
+  AttaqueNature nature;
 };
 
 enum class InventoryType { healthPotion, manaPotion, enumSize };
-enum class BufTypes { defaultBuf, damageRx, damageTx, damageCritCapped, powPhyBuf, enumSize };
+enum class BufTypes {
+  defaultBuf = 0,
+  damageRx,
+  damageTx,
+  damageCritCapped,
+  powPhyBuf,
+  nextHealAtkIsCrit,
+  enumSize
+};
 
 class Character {
 public:
@@ -69,7 +81,8 @@ public:
   void SetEquipment(const std::unordered_map<QString, QString> &);
   void UpdateEquipmentOnJson() const;
   void ApplyEffeftOnStats(const bool updateEffect);
-  std::pair<bool, int> ProcessCriticalStrike(); // return isCrit, random number
+  std::pair<bool, int>
+  ProcessCriticalStrike(const AttaqueType &atk); // return isCrit, random number
   void ResetBuf(const BufTypes &bufType);
   void SetValuesForThalia(const bool isBear);
 
@@ -97,6 +110,10 @@ public:
   // Buf
   std::vector<Buf> m_AllBufs;
   int m_HealRxOnTurn = 0;
+  /// Explain if the last attak has been critical or not
+  bool m_isLastAtkCritical = false;
+  std::unordered_map<uint64_t, uint64_t> m_LastDamageTX; // key : turn number, value: damage transmitted
+  Powers m_Power;
 
 private:
   template <class T>

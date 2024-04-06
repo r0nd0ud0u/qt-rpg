@@ -192,6 +192,9 @@ void Character::LoadAtkJson() {
         param.subValueEffect = effect[EFFECT_SUB_VALUE].toInt();
         // processed
         param.isMagicAtk = atk.manaCost > 0;
+        if(atk.nature.is_heal){
+            atk.nature.is_heal = is_heal_effect(param.statsName.toStdString(), param.target.toStdString());
+        }
 
         atk.m_AllEffects.push_back(param);
       }
@@ -493,6 +496,9 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
     effect.value = abs(amount);
     if (amount > 0) {
       target->m_HealRxOnTurn += amount;
+    } else{
+        const auto gs = Application::GetInstance().m_GameManager->m_GameState;
+        m_LastDamageTX[gs->m_CurrentTurnNb] += std::abs(amount);
     }
   }
 
@@ -1018,6 +1024,9 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
                  .arg(effect.statsName)
                  .arg(effect.nbTurns);
   }
+  if(effect.effect == EFFECT_NEXT_HEAL_IS_CRIT){
+      m_AllBufs[static_cast<int>(BufTypes::nextHealAtkIsCrit)].m_isPassiveEnabled = true;
+  }
 
   return std::make_pair(output, nbOfApplies);
 }
@@ -1063,21 +1072,41 @@ QString Character::ProcessAggro(const int atkValue) {
              : "";
 }
 
-std::pair<bool, int> Character::ProcessCriticalStrike() {
+/**
+ * @brief Character::ProcessCriticalStrike
+ * a critical strike can be enabled if the buf nextHealAtkIsCrit has been enabled or
+ * if a random number has been drawn between [0,100]
+ *
+ * Update m_isLastAtkCritical attribute
+ * @param atk
+ * @return
+ */
+std::pair<bool, int> Character::ProcessCriticalStrike(const AttaqueType& atk) {
   const auto &critStat =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_CRIT));
   int64_t randNb = -1;
   const int critCapped = 60;
   const int maxCritUsed = std::min(critCapped, critStat.m_CurrentValue);
 
+  auto& isCritByBuf = m_AllBufs[static_cast<int>(BufTypes::nextHealAtkIsCrit)].m_isPassiveEnabled;
+
+  bool isCrit = false;
   if (randNb = get_random_nb(0, 100);
-      randNb >= 0 && randNb < maxCritUsed) {
+      isCritByBuf && atk.nature.is_heal || randNb >= 0 && randNb < maxCritUsed) {
     // update buf dmg by crit capped
     UpdateBuf(BufTypes::damageCritCapped,
               min(0, critStat.m_CurrentValue - critCapped), false);
-    return std::make_pair(true, randNb);
+    // Reset isCritByBuf if it has been used
+    if(isCritByBuf){
+        isCritByBuf = true;
+    } else{
+        isCritByBuf = false;
+    }
+    isCrit = true;
   }
-  return std::make_pair(false, randNb);
+  // update critical attribute
+  m_isLastAtkCritical = isCrit;
+  return std::make_pair(isCrit, randNb);
 }
 
 std::pair<bool, QString> Character::IsDodging() const {

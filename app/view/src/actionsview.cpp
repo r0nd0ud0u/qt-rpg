@@ -107,7 +107,7 @@ ActionsView::createInfoModel(QObject *parent,
     addInfoActionRow(model, ATK_BERSECK_COST, m_CurAtk.berseckCost);
     addInfoActionRow(model, ATK_LEVEL, m_CurAtk.level);
     for (const auto &e : m_CurAtk.m_AllEffects) {
-        const auto effectName = build_effect_name("e.effect", "e.effect");
+        const auto effectName = build_effect_name(e.effect.toStdString(), e.statsName.toStdString());
         addInfoActionRow(model, effectName.data(), e.value);
     }
   }

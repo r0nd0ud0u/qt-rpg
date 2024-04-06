@@ -117,13 +117,19 @@ const std::set<QString> ALL_EQUIP{EQUIP_HEAD,
                                   EQUIP_RUNIQUE_TATOO_1,
                                   EQUIP_RUNIQUE_TATOO_2,
                                   EQUIP_RUNIQUE_TATOO_3};
-const std::set<QString> ALL_EQUIP_ON_BODY{
-    "",          EQUIP_HEAD,  EQUIP_NECKLACE,     EQUIP_CHEST,
-    EQUIP_SHOES, EQUIP_ARM,
-    EQUIP_RING,  EQUIP_PANTS, EQUIP_RIGHT_WEAPON, EQUIP_LEFT_WEAPON,
-    EQUIP_RUNIQUE_TATOO_1,
-    EQUIP_RUNIQUE_TATOO_2,
-    EQUIP_RUNIQUE_TATOO_3};
+const std::set<QString> ALL_EQUIP_ON_BODY{"",
+                                          EQUIP_HEAD,
+                                          EQUIP_NECKLACE,
+                                          EQUIP_CHEST,
+                                          EQUIP_SHOES,
+                                          EQUIP_ARM,
+                                          EQUIP_RING,
+                                          EQUIP_PANTS,
+                                          EQUIP_RIGHT_WEAPON,
+                                          EQUIP_LEFT_WEAPON,
+                                          EQUIP_RUNIQUE_TATOO_1,
+                                          EQUIP_RUNIQUE_TATOO_2,
+                                          EQUIP_RUNIQUE_TATOO_3};
 // Effect keys
 const QString EFFECT_REINIT = "Reinit";
 const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";
@@ -141,6 +147,7 @@ const QString EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT = "Up/down degats en %";
 const QString EFFECT_REPEAT_AS_MANY_AS = "Répète tant que possible";
 const QString CONDITION_ENNEMIES_DIED = "Ennemis morts tours précédents";
 const QString EFFECT_IMPROVEMENT_STAT_BY_VALUE = "Up par valeur";
+const QString EFFECT_NEXT_HEAL_IS_CRIT = "Prochaine attaque heal est crit";
 const std::set<QString> EFFECTS{"",
                                 EFFECT_REINIT,
                                 EFFECT_NB_COOL_DOWN,
@@ -167,8 +174,8 @@ const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT,
     EFFECT_IMPROVEMENT_STAT_BY_VALUE,
     EFFECT_IMPROVE_BY_PERCENT_CHANGE,
-    EFFECT_INTO_DAMAGE
-
+    EFFECT_INTO_DAMAGE,
+    EFFECT_NEXT_HEAL_IS_CRIT,
 };
 const QString EFFECT_ARRAY = "Effet";
 const QString EFFECT_TYPE = "Type";
@@ -186,6 +193,9 @@ const QString STANDARD_FORM = "Standard";
 const std::set<QString> ALL_FORMS = {STANDARD_FORM, ENT_FORM, BEAR_FORM};
 
 struct Buf {
+  /// A buf can be passive, that is without being a change of value
+  bool m_isPassiveEnabled = false;
+  /// If it is active, it changes the value
   int m_Value = 0;
   bool m_IsPercent = false;
   void SetBuf(const int value, const bool isPercent) {
