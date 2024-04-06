@@ -1066,7 +1066,7 @@ QString Character::ProcessAggro(const int atkValue) {
 std::pair<bool, int> Character::ProcessCriticalStrike() {
   const auto &critStat =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_CRIT));
-  int randNb = -1;
+  int64_t randNb = -1;
   const int critCapped = 60;
   const int maxCritUsed = std::min(critCapped, critStat.m_CurrentValue);
 
@@ -1085,7 +1085,7 @@ std::pair<bool, QString> Character::IsDodging() const {
   const auto &stat =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_DODGE));
   const int DEFAULT_RAND = -1;
-  int randNb = DEFAULT_RAND;
+  int64_t randNb = DEFAULT_RAND;
   if (randNb = get_random_nb(0, 100);
       randNb >= 0 && randNb < stat.m_CurrentValue) {
     isDodging = true;
