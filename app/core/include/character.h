@@ -13,31 +13,18 @@
 #include "effect.h"
 #include "stuff.h"
 
-
 enum class characType { Hero, Boss };
 
 class AttaqueType {
 public:
   QString name = "Atq";
   uint8_t level = 1;
-  uint32_t damage = 0;
-  uint32_t heal = 0;
-  uint32_t regenMana = 0;
-  uint32_t regenVigor = 0;
-  uint32_t regenBerseck = 0;
-  uint32_t aggro = 0;
-  uint32_t aggroRate = 0;
-  uint32_t berseckRate = 0;
-  QString effect;
   uint32_t manaCost = 0;
   uint32_t vigorCost = 0;
   uint32_t berseckCost = 0;
   QString target = TARGET_ENNEMY;
   QString reach = REACH_INDIVIDUAL;
-  uint16_t turnsDuration = 1;
   QString namePhoto = "default.png";
-  static std::vector<QString> TARGET_TYPES;
-  static std::vector<QString> REACH_TYPES;
   std::vector<effectParam> m_AllEffects = {};
   QString form = STANDARD_FORM;
 };
@@ -70,14 +57,12 @@ public:
   void RemoveMalusEffect(const effectParam &ep);
 
   QString RegenIntoDamage(const int atkValue, const QString &statsName) const;
-  std::vector<effectParam> CreateEveilDeLaForet(); // template
 
   static void
   SetStatsOnEffect(StatsType<int> &stat, const int value, const bool isUp,
                    const bool isPercent,
                    const bool updateEffect); // TODO à sortir dans un common
                                              // pour gerer les stats?
-  static QString GetInventoryString(const InventoryType &type);
   std::pair<bool, QString> IsDodging() const;
   void UsePotion(const QString &statsName);
   void AddExp(const int newXp);
@@ -92,6 +77,7 @@ public:
   std::vector<effectParam> LoadThaliaTalent() const;
   std::vector<effectParam> LoadAzrakTalent() const;
   std::vector<effectParam> LoadThrainTalent() const;
+  std::vector<effectParam> LoadElaraTalent() const;
 
   QString m_Name = "default";
   characType m_type = characType::Hero;

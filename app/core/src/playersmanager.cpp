@@ -124,14 +124,56 @@ void PlayersManager::InitHeroes() {
       .InitValues(3, 3, 3, 0);
   const auto hero3 = new Character("Thraïn", characType::Hero, stats);
   hero3->m_Forms.push_back(STANDARD_FORM);
+
+  // character flo
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
+      .InitValues(130, 130, 130, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
+      .InitValues(180, 180, 180, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
+      .InitValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
+      .InitValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
+      .InitValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
+      .InitValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
+      .InitValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
+      .InitValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
+      .InitValues(25, 25, 25, 0);
+  // TODO set max aggro 9999 is a good idea??
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
+      .InitValues(0, 0, 9999, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
+      .InitValues(8, 8, 1000, 8);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
+      .InitValues(10, 10, 10, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
+      .InitValues(7, 7, 7, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
+      .InitValues(5, 5, 5, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
+      .InitValues(5, 5, 5, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
+      .InitValues(0, 0, 0, 0);
+  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
+      .InitValues(1, 1, 1, 0);
+  const auto hero4 = new Character("Elara la guerisseuse de la Lorien", characType::Hero, stats);
+  hero4->m_Forms.push_back(STANDARD_FORM);
+
   // color
   hero1->color = QColor("green");
   hero2->color = QColor("orange");
   hero3->color = QColor("blue");
+  hero4->color = QColor("pink");
 
   m_HeroesList.push_back(hero1);
   m_HeroesList.push_back(hero2);
   m_HeroesList.push_back(hero3);
+  m_HeroesList.push_back(hero4);
 
   for (auto *hero : m_HeroesList) {
     hero->LoadAtkJson();
@@ -148,6 +190,7 @@ void PlayersManager::InitHeroes() {
   const auto epParamTalent1 = hero1->LoadThaliaTalent();
   const auto epParamTalent2 = hero2->LoadAzrakTalent();
   const auto epParamTalent3 = hero3->LoadThrainTalent();
+  const auto epParamTalent4 = hero4->LoadElaraTalent();
   AddGameEffectOnAtk(hero1->m_Name, AttaqueType(), hero1->m_Name,
                      epParamTalent1, 0);
   AddGameEffectOnAtk(hero2->m_Name, AttaqueType(), hero2->m_Name,

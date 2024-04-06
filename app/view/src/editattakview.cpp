@@ -126,18 +126,11 @@ void EditAttakView::Save() {
     obj.insert(ATK_NAME, atk.type.name);
     obj.insert(ATK_TARGET, atk.type.target);
     obj.insert(ATK_REACH, atk.type.reach);
-    obj.insert(ATK_DURATION, atk.type.turnsDuration);
     obj.insert(ATK_MANA_COST, static_cast<int>(atk.type.manaCost));
     obj.insert(ATK_VIGOR_COST, static_cast<int>(atk.type.vigorCost));
     obj.insert(ATK_BERSECK_COST, static_cast<int>(atk.type.berseckCost));
-    obj.insert(ATK_AGGRO, static_cast<int>(atk.type.aggro));
     obj.insert(ATK_PHOTO, atk.type.namePhoto);
-    obj.insert(ATK_DAMAGE, static_cast<int>(atk.type.damage));
-    obj.insert(ATK_HEAL, static_cast<int>(atk.type.heal));
-    obj.insert(ATK_REGEN_MANA, static_cast<int>(atk.type.regenMana));
     obj.insert(ATK_LEVEL, static_cast<int>(atk.type.level));
-    obj.insert(ATK_REGEN_BERSECK, static_cast<int>(atk.type.regenBerseck));
-    obj.insert(ATK_REGEN_VIGOR, static_cast<int>(atk.type.regenVigor));
     obj.insert(ATK_FORM, atk.type.form);
 
     QJsonArray jsonArray;
