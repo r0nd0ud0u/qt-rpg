@@ -55,6 +55,9 @@ public:
   void AddSupAtkTurn(const characType &launcherType, std::vector<QString>& playerOrderTable)const;
   std::tuple<bool, QString, QStringList> IsDodging(const std::vector<TargetInfo>& targetList); // pair1 isDodging?, pair2 playerName
   void AddExpForHeroes(const int exp);
+  QString ProcessDamageTXHealNeedyAlly(const characType &launcherType, const int damageTX);
+  std::optional<std::vector<Character *> *> GetPlayerListByType(const characType &launcherType);
+  std::optional<std::vector<QString>> GetAllDeadliestAllies(const characType &launcherType) const;
 
   std::vector<Character *> m_HeroesList;
   std::vector<Character *> m_BossesList;
@@ -63,5 +66,6 @@ public:
   std::unordered_map<QString, std::unordered_map<QString,Stuff>> m_Equipments; // key 1 body name, key2 {equipName, equip value-stats}
   std::unordered_map<QString, std::vector<GameAtkEffects>>
       m_AllEffectsOnGame; // key target
+
 };
 #endif // PLAYERS__MANAGER_H

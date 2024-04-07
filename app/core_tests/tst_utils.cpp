@@ -1,8 +1,7 @@
 #include <QtTest>
-#include "utils.h"
-#include "character.h"
 
-// add necessary includes here
+#include "utils.h"
+#include "playersmanager.h"
 
 class utils_tests : public QObject
 {
@@ -34,18 +33,70 @@ void utils_tests::CompareByLevel_works(){
     Q_ASSERT(!result);
 }
 
-class character_tests : public QObject
+class player_manager_tests : public QObject
 {
     Q_OBJECT
 
 public:
 
 private slots:
-    void test_works();
+    void GetDeadliestAlly_works();
+    void ProcessDamageTXHealNeedyAlly_works();
 };
 
-void character_tests::test_works(){
+void player_manager_tests::GetDeadliestAlly_works(){
 
+    PlayersManager pl;
+    Character* c1 = new Character;
+    Character* c2 = new Character;
+
+    // case pv c1 < pv c2
+    std::get<StatsType<int>>(
+        c1->m_Stats.m_AllStatsTable.at(STATS_HP)).m_CurrentValue = 0;
+    std::get<StatsType<int>>(
+        c1->m_Stats.m_AllStatsTable.at(STATS_HP)).m_MaxValue = 1000;
+    std::get<StatsType<int>>(
+        c2->m_Stats.m_AllStatsTable.at(STATS_HP)).m_CurrentValue = 1000;
+    std::get<StatsType<int>>(
+        c2->m_Stats.m_AllStatsTable.at(STATS_HP)).m_MaxValue = 1000;
+    c1->m_Name = "c1";
+    c2->m_Name = "c2";
+    pl.m_HeroesList.push_back(c1);
+    pl.m_HeroesList.push_back(c2);
+
+    const auto output = pl.GetAllDeadliestAllies(characType::Hero);
+    QCOMPARE("c1", output.value().front());
+
+    // case pv c1 == pv c2
+    std::get<StatsType<int>>(
+        c2->m_Stats.m_AllStatsTable.at(STATS_HP)).m_CurrentValue = 0;
+    const auto output2 = pl.GetAllDeadliestAllies(characType::Hero).value();
+    QCOMPARE("c1", output2.front());
+    QCOMPARE("c2", output2.at(1));
+}
+
+void player_manager_tests::ProcessDamageTXHealNeedyAlly_works(){
+    PlayersManager pl;
+    Character* c1 = new Character;
+    Character* c2 = new Character;
+
+    // case pv c1 < pv c2
+    std::get<StatsType<int>>(
+        c1->m_Stats.m_AllStatsTable.at(STATS_HP)).m_CurrentValue = 0;
+    std::get<StatsType<int>>(
+        c1->m_Stats.m_AllStatsTable.at(STATS_HP)).m_MaxValue = 1000;
+    std::get<StatsType<int>>(
+        c2->m_Stats.m_AllStatsTable.at(STATS_HP)).m_CurrentValue = 1000;
+    std::get<StatsType<int>>(
+        c2->m_Stats.m_AllStatsTable.at(STATS_HP)).m_MaxValue = 1000;
+    c1->m_Name = "c1";
+    c2->m_Name = "c2";
+    pl.m_HeroesList.push_back(c1);
+    pl.m_HeroesList.push_back(c2);
+
+    pl.ProcessDamageTXHealNeedyAlly(characType::Hero, 100);
+    QCOMPARE(25,    std::get<StatsType<int>>(
+                 c1->m_Stats.m_AllStatsTable.at(STATS_HP)).m_CurrentValue);
 }
 
 int main(int argc, char *argv[])
@@ -53,7 +104,7 @@ int main(int argc, char *argv[])
     utils_tests test;
     QTest::qExec(&test);
 
-    character_tests test2;
+    player_manager_tests test2;
     QTest::qExec(&test2);
 
     return 0;

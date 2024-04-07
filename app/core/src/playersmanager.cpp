@@ -10,6 +10,7 @@
 #include <QJsonObject>
 
 #include "rust-rpg-bridge/attaque.h"
+#include "rust-rpg-bridge/utils.h"
 
 void PlayersManager::InitHeroes() {
 
@@ -163,7 +164,8 @@ void PlayersManager::InitHeroes() {
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
       .InitValues(1, 1, 1, 0);
-  const auto hero4 = new Character("Elara la guerisseuse de la Lorien", characType::Hero, stats);
+  const auto hero4 = new Character("Elara la guerisseuse de la Lorien",
+                                   characType::Hero, stats);
   hero4->m_Forms.push_back(STANDARD_FORM);
 
   // color
@@ -206,6 +208,7 @@ void PlayersManager::InitHeroes() {
 
   // add passive powers
   hero4->m_Power.is_crit_heal_after_crit = true;
+  hero4->m_Power.is_damage_tx_heal_needy_ally = true;
 }
 
 void PlayersManager::InitBosses() {
@@ -244,10 +247,10 @@ void PlayersManager::InitBosses() {
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
       .InitValues(0, 0, 0, 0);
-  const auto boss1 = new Character(
-      "La bouche du Mordor", characType::Boss, stats);
+  const auto boss1 =
+      new Character("La bouche du Mordor", characType::Boss, stats);
   boss1->color = QColor("red");
-  //m_BossesList.push_back(boss1);
+  // m_BossesList.push_back(boss1);
   boss1->m_Forms.push_back(STANDARD_FORM);
 
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
@@ -286,10 +289,11 @@ void PlayersManager::InitBosses() {
       .InitValues(0, 0, 0, 0);
 
   for (int i = 0; i < 5; i++) {
-      const auto boss2 = new Character(QString("Nazgul-%1").arg(i), characType::Boss, stats);
+    const auto boss2 =
+        new Character(QString("Nazgul-%1").arg(i), characType::Boss, stats);
     boss2->m_Forms.push_back(STANDARD_FORM);
     boss2->color = QColor("red");
-    //m_BossesList.push_back(boss2);
+    // m_BossesList.push_back(boss2);
   }
 
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
@@ -326,10 +330,9 @@ void PlayersManager::InitBosses() {
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
       .InitValues(0, 0, 0, 0);
-  const auto boss3 = new Character(
-      "Angmar", characType::Boss, stats);
+  const auto boss3 = new Character("Angmar", characType::Boss, stats);
   boss3->color = QColor("red");
-  //m_BossesList.push_back(boss3);
+  // m_BossesList.push_back(boss3);
   boss3->m_Forms.push_back(STANDARD_FORM);
 
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
@@ -366,16 +369,15 @@ void PlayersManager::InitBosses() {
       .InitValues(0, 0, 0, 0);
   std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
       .InitValues(0, 0, 0, 0);
-  const auto boss4 = new Character(
-      "Angmar le retour", characType::Boss, stats);
+  const auto boss4 = new Character("Angmar le retour", characType::Boss, stats);
   boss4->color = QColor("red");
   m_BossesList.push_back(boss4);
   boss4->m_Forms.push_back(STANDARD_FORM);
 
   for (const auto &boss : m_BossesList) {
-      boss->LoadAtkJson();
-      boss->LoadStuffJson();
-      boss->ApplyEquipOnStats();
+    boss->LoadAtkJson();
+    boss->LoadStuffJson();
+    boss->ApplyEquipOnStats();
   }
 }
 
@@ -420,31 +422,31 @@ void PlayersManager::LoadAllEquipmentsJson() {
         stuff.m_Name = jsonDoc[EQUIP_NAME].toString();
 
         for (const auto &stats : ALL_STATS) {
-            if (stuff.m_Stats.m_AllStatsTable.count(stats) == 0) {
-                continue;
-            }
-            // init
-            auto &stuffStat =
-                std::get<StatsType<int>>(stuff.m_Stats.m_AllStatsTable[stats]);
-            stuffStat.InitValues(0, 0, 0, 0);
-            QJsonArray jsonArray = jsonDoc[stats].toArray();
-            for (const auto &elem : jsonArray) {
-                if (elem.isObject()) {
-                    const QJsonObject item = elem.toObject();
-                    for (const auto &key : item.keys()) {
-                        const auto &val = item[key];
-                        if (val.isDouble()) {
-                            if (key == "percent") {
-                                stuffStat.m_BufEquipPercent =
-                                    static_cast<int>(val.toDouble());
-                            } else if (key == "value") {
-                                stuffStat.m_BufEquipValue =
-                                    static_cast<int>(val.toDouble());
-                            }
-                        }
-                    }
+          if (stuff.m_Stats.m_AllStatsTable.count(stats) == 0) {
+            continue;
+          }
+          // init
+          auto &stuffStat =
+              std::get<StatsType<int>>(stuff.m_Stats.m_AllStatsTable[stats]);
+          stuffStat.InitValues(0, 0, 0, 0);
+          QJsonArray jsonArray = jsonDoc[stats].toArray();
+          for (const auto &elem : jsonArray) {
+            if (elem.isObject()) {
+              const QJsonObject item = elem.toObject();
+              for (const auto &key : item.keys()) {
+                const auto &val = item[key];
+                if (val.isDouble()) {
+                  if (key == "percent") {
+                    stuffStat.m_BufEquipPercent =
+                        static_cast<int>(val.toDouble());
+                  } else if (key == "value") {
+                    stuffStat.m_BufEquipValue =
+                        static_cast<int>(val.toDouble());
+                  }
                 }
+              }
             }
+          }
         }
         m_Equipments[jsonDoc[EQUIP_CATEGORY].toString()][stuff.m_Name] = stuff;
       }
@@ -716,15 +718,15 @@ void PlayersManager::IncrementCounterEffect() {
 /// That method returns a QStringlist with the different died played.
 /// That list will be displayed on channel logs.
 QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
-  std::vector<Character *>* playerList = nullptr;
+  std::vector<Character *> *playerList = nullptr;
 
   if (launcherType == characType::Hero) {
     playerList = &m_HeroesList;
   } else if (launcherType == characType::Boss) {
     playerList = &m_BossesList;
   }
-  if(playerList == nullptr){
-      return QStringList();
+  if (playerList == nullptr) {
+    return QStringList();
   }
 
   if (launcherType == characType::Hero) {
@@ -742,8 +744,8 @@ QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
             std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable.at(STATS_HP));
         QString name = pl->m_Name;
         const bool isDead = hp.m_CurrentValue <= 0;
-        if(isDead){
-            output.append(pl->m_Name);
+        if (isDead) {
+          output.append(pl->m_Name);
         }
         return isDead; // remove elements where this is true
       });
@@ -753,7 +755,7 @@ QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
     // TODO check if bosses has another phase
     // if yes init that phase
     // if not erase the boss of the list
-      playerList->erase(newEnd, playerList->end());
+    playerList->erase(newEnd, playerList->end());
   }
 
   return output;
@@ -815,4 +817,116 @@ void PlayersManager::AddExpForHeroes(const int exp) {
   for (auto &pl : m_HeroesList) {
     pl->AddExp(exp);
   }
+}
+
+/**
+ * @brief PlayersManager::GetAllDeadliestAllies
+ * @param launcherType : enable the check on list : boss or hero
+ * @return optional<std::vector<QString>> : if any, the list of the names of characters with minimal HP
+ */
+std::optional<std::vector<QString>>
+PlayersManager::GetAllDeadliestAllies(const characType &launcherType) const {
+  const std::vector<Character *> *playerList = nullptr;
+
+  if (launcherType == characType::Hero) {
+    playerList = &m_HeroesList;
+  } else if (launcherType == characType::Boss) {
+    playerList = &m_BossesList;
+  }
+  if (playerList == nullptr) {
+    return std::nullopt;
+  }
+
+  std::vector<QString> output;
+
+  const auto minElement =
+      std::min_element(playerList->begin(), playerList->end(),
+                       [](const Character *char1, const Character *char2) {
+                         if (char1 == nullptr && char2 == nullptr) {
+                           return false;
+                         }
+                         const auto &stat1 = std::get<StatsType<int>>(
+                             char1->m_Stats.m_AllStatsTable.at(STATS_HP));
+                         const auto &stat2 = std::get<StatsType<int>>(
+                             char2->m_Stats.m_AllStatsTable.at(STATS_HP));
+
+                         // ratio
+                         const double ratio1 = (stat1.m_MaxValue > 0)
+                                                  ? static_cast<double>(stat1.m_CurrentValue) /
+                                                        static_cast<double>(stat1.m_MaxValue)
+                                                  : 1;
+                         const double ratio2 = (stat2.m_MaxValue > 0)
+                                                   ? static_cast<double>(stat2.m_CurrentValue) /
+                                                         static_cast<double>(stat2.m_MaxValue)
+                                                   : 1;
+
+                         return ratio1 < ratio2;
+                       });
+
+  const auto cWithMin = static_cast<Character *>(*minElement);
+  const auto &chp =
+      std::get<StatsType<int>>(cWithMin->m_Stats.m_AllStatsTable.at(STATS_HP))
+          .m_CurrentValue;
+
+  std::for_each(
+      playerList->begin(), playerList->end(), [&](const Character *c) {
+        const auto &hp =
+            std::get<StatsType<int>>(c->m_Stats.m_AllStatsTable.at(STATS_HP))
+                .m_CurrentValue;
+        if (hp == chp) {
+          output.push_back(c->m_Name);
+        }
+      });
+
+  return !output.empty() ? std::optional(output) : std::nullopt;
+}
+
+/**
+ * @brief PlayersManager::ProcessDamageTXHealNeedyAlly
+ * Assess all the allies with the minimal hp ratio in a std::vector
+ * Choose randomly one in this list and increase its hp current value by 25% of damageTX
+ * @param launcherType
+ * @param damageTX
+ * @return QString: not used at the moment, should be used for the output on channel log
+ */
+QString PlayersManager::ProcessDamageTXHealNeedyAlly(const characType &launcherType, const int damageTX){
+
+    if(damageTX == 0){
+        return "";
+    }
+
+    std::vector<Character *> *playerList = GetPlayerListByType(launcherType).value_or(nullptr);
+    if (playerList == nullptr) {
+        return "";
+    }
+
+    const auto alliesStr = GetAllDeadliestAllies(launcherType).value_or(std::vector<QString>{});
+    if(alliesStr.empty()){
+       return "";
+    }
+    const auto randNb = get_random_nb(0, alliesStr.size() -1);
+    auto * c = GetCharacterByName(alliesStr[randNb]);
+    if(c == nullptr){
+        return "";
+    }
+    auto &hp =
+        std::get<StatsType<int>>(c->m_Stats.m_AllStatsTable.at(STATS_HP));
+    hp.m_CurrentValue = std::min(hp.m_MaxValue, hp.m_CurrentValue + static_cast<int>(0.25*damageTX));
+
+    return "";
+}
+
+std::optional<std::vector<Character *> *> PlayersManager::GetPlayerListByType(const characType &launcherType) {
+    std::vector<Character *> *playerList = nullptr;
+
+    if (launcherType == characType::Hero) {
+        playerList = &m_HeroesList;
+    } else if (launcherType == characType::Boss) {
+        playerList = &m_BossesList;
+    }
+    if (playerList == nullptr) {
+        return std::nullopt;
+    }
+
+    return (playerList == nullptr) ? std::nullopt : std::optional(playerList);
 }

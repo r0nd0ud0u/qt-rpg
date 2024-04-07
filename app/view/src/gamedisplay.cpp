@@ -141,12 +141,19 @@ void GameDisplay::NewRound() {
   activePlayer->m_HealRxOnTurn = 0;
 
   // process actions on last turn damage received
+  const bool isDamageTxLastTurn = activePlayer->m_LastDamageTX.find(gs->m_CurrentTurnNb - 1) != activePlayer->m_LastDamageTX.end();
+  // passive power is_crit_heal_after_crit
   if(activePlayer->m_Power.is_crit_heal_after_crit &&
-      activePlayer->m_LastDamageTX.find(gs->m_CurrentTurnNb - 1) != activePlayer->m_LastDamageTX.end() &&
+      isDamageTxLastTurn &&
       activePlayer->m_isLastAtkCritical){
       // in case of critical damage sent on last turn , next heal critical is enable
       activePlayer->m_AllBufs[static_cast<int>(BufTypes::nextHealAtkIsCrit)].m_isPassiveEnabled = true;
   };
+  // passive power
+  if(activePlayer->m_Power.is_damage_tx_heal_needy_ally &&
+      isDamageTxLastTurn){
+      gm->m_PlayersManager->ProcessDamageTXHealNeedyAlly(activePlayer->m_type, activePlayer->m_LastDamageTX[gs->m_CurrentTurnNb - 1]);
+  }
 
 
   // Update views
