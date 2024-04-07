@@ -842,7 +842,7 @@ PlayersManager::GetAllDeadliestAllies(const characType &launcherType) const {
   const auto minElement =
       std::min_element(playerList->begin(), playerList->end(),
                        [](const Character *char1, const Character *char2) {
-                         if (char1 == nullptr && char2 == nullptr) {
+                         if (char1 == nullptr || char2 == nullptr) {
                            return false;
                          }
                          const auto &stat1 = std::get<StatsType<int>>(
