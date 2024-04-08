@@ -56,7 +56,7 @@ public:
   std::tuple<bool, QString, QStringList> IsDodging(const std::vector<TargetInfo>& targetList); // pair1 isDodging?, pair2 playerName
   void AddExpForHeroes(const int exp);
   QString ProcessDamageTXHealNeedyAlly(const characType &launcherType, const int damageTX);
-  std::optional<std::vector<Character *> *> GetPlayerListByType(const characType &launcherType);
+  std::vector<Character *> * GetPlayerListByType(const characType &launcherType);
   std::optional<std::vector<QString>> GetAllDeadliestAllies(const characType &launcherType) const;
 
   std::vector<Character *> m_HeroesList;

@@ -895,11 +895,6 @@ QString PlayersManager::ProcessDamageTXHealNeedyAlly(const characType &launcherT
         return "";
     }
 
-    std::vector<Character *> *playerList = GetPlayerListByType(launcherType).value_or(nullptr);
-    if (playerList == nullptr) {
-        return "";
-    }
-
     const auto alliesStr = GetAllDeadliestAllies(launcherType).value_or(std::vector<QString>{});
     if(alliesStr.empty()){
        return "";
@@ -916,7 +911,14 @@ QString PlayersManager::ProcessDamageTXHealNeedyAlly(const characType &launcherT
     return "";
 }
 
-std::optional<std::vector<Character *> *> PlayersManager::GetPlayerListByType(const characType &launcherType) {
+/**
+ * @brief PlayersManager::GetPlayerListByType
+ * There is a number n of defined characType. => n list of characters
+ * That method returns a pointer to the list according the characType.
+ * nullptr if nothing has been found
+ * @return a pointer std::vector<Character *> *
+ */
+std::vector<Character *> * PlayersManager::GetPlayerListByType(const characType &launcherType) {
     std::vector<Character *> *playerList = nullptr;
 
     if (launcherType == characType::Hero) {
@@ -924,9 +926,6 @@ std::optional<std::vector<Character *> *> PlayersManager::GetPlayerListByType(co
     } else if (launcherType == characType::Boss) {
         playerList = &m_BossesList;
     }
-    if (playerList == nullptr) {
-        return std::nullopt;
-    }
 
-    return (playerList == nullptr) ? std::nullopt : std::optional(playerList);
+    return playerList;
 }
