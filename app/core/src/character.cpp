@@ -696,12 +696,30 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
   // return the true applied amount
   // add buf
   if (target != nullptr && sign == -1 && launch) {
-    amount = UpdateDamageByBuf(
-        target->m_AllBufs[static_cast<int>(BufTypes::damageRx)], amount);
-    amount = UpdateDamageByBuf(m_AllBufs[static_cast<int>(BufTypes::damageTx)],
-                               amount);
-    amount = UpdateDamageByBuf(
-        m_AllBufs[static_cast<int>(BufTypes::damageCritCapped)], amount);
+    auto *bufTx = target->m_AllBufs[static_cast<int>(BufTypes::damageTx)];
+    if (bufTx != nullptr) {
+      amount = update_damage_by_buf(bufTx->get_value(), bufTx->get_is_percent(),
+                                    amount);
+    }
+    auto *bufRx = target->m_AllBufs[static_cast<int>(BufTypes::damageRx)];
+    if (bufRx != nullptr) {
+      amount = update_damage_by_buf(bufRx->get_value(), bufRx->get_is_percent(),
+                                    amount);
+    }
+    auto *bufCrit =
+        target->m_AllBufs[static_cast<int>(BufTypes::damageCritCapped)];
+    if (bufCrit != nullptr) {
+      amount = update_damage_by_buf(bufCrit->get_value(),
+                                    bufCrit->get_is_percent(), amount);
+    }
+  }
+  if (target != nullptr && sign == 1 && launch) {
+    auto *bufMulti =
+        target->m_AllBufs[static_cast<int>(BufTypes::multiValueIfDmgPrevTurn)];
+    if (bufMulti != nullptr) {
+      amount = update_damage_by_buf(bufMulti->get_value(),
+                                    bufMulti->get_is_percent(), amount);
+    }
   }
   // is it a critical strike
   if (isCrit && ep.statsName == STATS_HP && launch) {
@@ -1037,6 +1055,9 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
       buf->set_is_passive_enabled(true);
     }
   }
+
+  if (effect.effect == EFFECT_BUF_MULTI_PV_IF_DMG_PREV_TURN) {
+    UpdateBuf(BufTypes::multiValueIfDmgPrevTurn, effect.value, true);
   }
 
   return std::make_pair(output, nbOfApplies);

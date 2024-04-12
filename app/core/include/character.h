@@ -41,6 +41,7 @@ enum class BufTypes {
   damageCritCapped,
   powPhyBuf,
   nextHealAtkIsCrit,
+  multiValueIfDmgPrevTurn,
   enumSize
 };
 
