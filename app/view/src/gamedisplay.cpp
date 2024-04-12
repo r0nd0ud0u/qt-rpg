@@ -352,6 +352,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
   // end of critical strike buf (if any)
   activatedPlayer->ResetBuf(BufTypes::damageCritCapped);
+  activatedPlayer->ResetBuf(BufTypes::multiValueIfDmgPrevTurn);
 
   /// Update game state
   // update effect on player manager

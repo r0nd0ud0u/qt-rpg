@@ -172,7 +172,8 @@ const std::set<QString> EFFECTS{"",
                                 EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT,
                                 EFFECT_REPEAT_AS_MANY_AS,
                                 CONDITION_ENNEMIES_DIED,
-                                EFFECT_IMPROVEMENT_STAT_BY_VALUE};
+                                EFFECT_IMPROVEMENT_STAT_BY_VALUE,
+                                EFFECT_BUF_MULTI_PV_IF_DMG_PREV_TURN};
 const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_NB_DECREASE_BY_TURN,
     EFFECT_NB_COOL_DOWN,

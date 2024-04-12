@@ -716,9 +716,8 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
   if (target != nullptr && sign == 1 && launch) {
     auto *bufMulti =
         target->m_AllBufs[static_cast<int>(BufTypes::multiValueIfDmgPrevTurn)];
-    if (bufMulti != nullptr) {
-      amount = update_damage_by_buf(bufMulti->get_value(),
-                                    bufMulti->get_is_percent(), amount);
+      if (bufMulti != nullptr && bufMulti->get_value() > 0) {
+      amount = update_heal_by_multi(amount, bufMulti->get_value());
     }
   }
   // is it a critical strike
