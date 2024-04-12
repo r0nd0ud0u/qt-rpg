@@ -108,11 +108,12 @@ public:
 
   QColor color = QColor("dark");
   // Buf
-  std::vector<Buf> m_AllBufs;
+  std::vector<Buffers *> m_AllBufs;
   int m_HealRxOnTurn = 0;
   /// Explain if the last attak has been critical or not
   bool m_isLastAtkCritical = false;
-  std::unordered_map<uint64_t, uint64_t> m_LastDamageTX; // key : turn number, value: damage transmitted
+  std::unordered_map<uint64_t, uint64_t>
+      m_LastDamageTX; // key : turn number, value: damage transmitted
   Powers m_Power;
 
 private:
@@ -147,7 +148,7 @@ private:
   void UpdateStatsToNextLevel();
   void UpdateBuf(const BufTypes &bufType, const int value,
                  const bool isPercent);
-  static int UpdateDamageByBuf(const Buf &bufDmg, const int value);
+  static int UpdateDamageByBuf(const Buffers *bufDmg, const int value);
 };
 
 #endif // CHARACTER_H

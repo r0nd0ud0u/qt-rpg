@@ -30,7 +30,8 @@ void Character::InitTables() {
   }
   // init buf
   for (int i = 0; i < static_cast<int>(BufTypes::enumSize); i++) {
-    m_AllBufs.push_back(Buf());
+    auto buf = buffers_new().into_raw();
+    m_AllBufs.push_back(buf);
   }
 }
 
@@ -192,8 +193,9 @@ void Character::LoadAtkJson() {
         param.subValueEffect = effect[EFFECT_SUB_VALUE].toInt();
         // processed
         param.isMagicAtk = atk.manaCost > 0;
-        if(atk.nature.is_heal){
-            atk.nature.is_heal = is_heal_effect(param.statsName.toStdString(), param.target.toStdString());
+        if (atk.nature.is_heal) {
+          atk.nature.is_heal = is_heal_effect(param.statsName.toStdString(),
+                                              param.target.toStdString());
         }
 
         atk.m_AllEffects.push_back(param);
@@ -496,9 +498,9 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
     effect.value = abs(amount);
     if (amount > 0) {
       target->m_HealRxOnTurn += amount;
-    } else{
-        const auto gs = Application::GetInstance().m_GameManager->m_GameState;
-        m_LastDamageTX[gs->m_CurrentTurnNb] += std::abs(amount);
+    } else {
+      const auto gs = Application::GetInstance().m_GameManager->m_GameState;
+      m_LastDamageTX[gs->m_CurrentTurnNb] += std::abs(amount);
     }
   }
 
@@ -831,14 +833,19 @@ QString Character::ProcessDecreaseByTurn(const effectParam &ep) const {
 
 void Character::UpdateBuf(const BufTypes &bufType, const int value,
                           const bool isPercent) {
-  auto &buf = m_AllBufs[static_cast<int>(bufType)];
-  buf.SetBuf(buf.m_Value + value, isPercent);
+  auto *buf = m_AllBufs[static_cast<int>(bufType)];
+  if (buf != nullptr) {
+    buf->set_buffers(buf->get_value() + value, isPercent);
+  }
 }
 
 void Character::ResetBuf(const BufTypes &bufType) {
-  auto &buf = m_AllBufs[static_cast<int>(bufType)];
-  buf.SetBuf(0, false);
-  buf.SetBuf(0, true);
+  auto *buf = m_AllBufs[static_cast<int>(bufType)];
+  if (buf != nullptr) {
+    // reset values {percent, decimal}
+    buf->set_buffers(0, false);
+    buf->set_buffers(0, true);
+  }
 }
 
 void Character::SetStatsOnEffect(StatsType<int> &stat, const int value,
@@ -1024,8 +1031,12 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
                  .arg(effect.statsName)
                  .arg(effect.nbTurns);
   }
-  if(effect.effect == EFFECT_NEXT_HEAL_IS_CRIT){
-      m_AllBufs[static_cast<int>(BufTypes::nextHealAtkIsCrit)].m_isPassiveEnabled = true;
+  if (effect.effect == EFFECT_NEXT_HEAL_IS_CRIT) {
+    auto *buf = m_AllBufs[static_cast<int>(BufTypes::nextHealAtkIsCrit)];
+    if (buf != nullptr) {
+      buf->set_is_passive_enabled(true);
+    }
+  }
   }
 
   return std::make_pair(output, nbOfApplies);
@@ -1074,33 +1085,37 @@ QString Character::ProcessAggro(const int atkValue) {
 
 /**
  * @brief Character::ProcessCriticalStrike
- * a critical strike can be enabled if the buf nextHealAtkIsCrit has been enabled or
- * if a random number has been drawn between [0,100]
+ * a critical strike can be enabled if the buf nextHealAtkIsCrit has been
+ * enabled or if a random number has been drawn between [0,100]
  *
  * Update m_isLastAtkCritical attribute
  * @param atk
  * @return
  */
-std::pair<bool, int> Character::ProcessCriticalStrike(const AttaqueType& atk) {
+std::pair<bool, int> Character::ProcessCriticalStrike(const AttaqueType &atk) {
   const auto &critStat =
       std::get<StatsType<int>>(m_Stats.m_AllStatsTable.at(STATS_CRIT));
   int64_t randNb = -1;
   const int critCapped = 60;
   const int maxCritUsed = std::min(critCapped, critStat.m_CurrentValue);
 
-  auto& isCritByBuf = m_AllBufs[static_cast<int>(BufTypes::nextHealAtkIsCrit)].m_isPassiveEnabled;
+  const auto &isCritByBuf =
+      m_AllBufs[static_cast<int>(BufTypes::nextHealAtkIsCrit)]
+          ->get_is_passive_enabled();
 
   bool isCrit = false;
-  if (randNb = get_random_nb(0, 100);
-      isCritByBuf && atk.nature.is_heal || randNb >= 0 && randNb < maxCritUsed) {
+  if (randNb = get_random_nb(0, 100); (isCritByBuf && atk.nature.is_heal) ||
+                                      (randNb >= 0 && randNb < maxCritUsed)) {
     // update buf dmg by crit capped
     UpdateBuf(BufTypes::damageCritCapped,
               min(0, critStat.m_CurrentValue - critCapped), false);
     // Reset isCritByBuf if it has been used
-    if(isCritByBuf){
-        isCritByBuf = true;
-    } else{
-        isCritByBuf = false;
+    if (isCritByBuf) {
+      m_AllBufs[static_cast<int>(BufTypes::nextHealAtkIsCrit)]
+          ->set_is_passive_enabled(true);
+    } else {
+      m_AllBufs[static_cast<int>(BufTypes::nextHealAtkIsCrit)]
+          ->set_is_passive_enabled(false);
     }
     isCrit = true;
   }
@@ -1349,28 +1364,31 @@ std::vector<effectParam> Character::LoadThrainTalent() const {
 }
 
 std::vector<effectParam> Character::LoadElaraTalent() const {
-    std::vector<effectParam> epTable;
+  std::vector<effectParam> epTable;
 
-    effectParam param1;
-    param1.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
-    param1.value = 10;
-    param1.nbTurns = 1000;
-    param1.reach = REACH_ZONE;
-    param1.statsName = STATS_ARM_MAG;
-    param1.target = TARGET_ALL_HEROES;
-    param1.subValueEffect = 0;
-    epTable.push_back(param1);
+  effectParam param1;
+  param1.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
+  param1.value = 10;
+  param1.nbTurns = 1000;
+  param1.reach = REACH_ZONE;
+  param1.statsName = STATS_ARM_MAG;
+  param1.target = TARGET_ALL_HEROES;
+  param1.subValueEffect = 0;
+  epTable.push_back(param1);
 
-    return epTable;
+  return epTable;
 }
 
-int Character::UpdateDamageByBuf(const Buf &bufDmg, const int value) {
+int Character::UpdateDamageByBuf(const Buffers *bufDmg, const int value) {
+  if (bufDmg == nullptr) {
+    return value;
+  }
   int output = value;
-  if (bufDmg.m_Value > 0) {
-    if (bufDmg.m_IsPercent) {
-      output += output * bufDmg.m_Value / 100;
+  if (bufDmg->get_value() > 0) {
+    if (bufDmg->get_is_percent()) {
+      output += output * bufDmg->get_value() / 100;
     } else if (output > 0) {
-      output += bufDmg.m_Value;
+      output += bufDmg->get_value();
     }
   }
 

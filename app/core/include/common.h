@@ -6,6 +6,8 @@
 #include <unordered_map>
 #include <variant>
 
+#include "rust-rpg-bridge/buffers.h"
+
 const QString OFFLINE_IMG = "./offlines/attak/img/";
 const QString OFFLINE_ATK = "./offlines/attak/";
 const QString OFFLINE_WEARING_EQUIPMENT = "./offlines/equipment/Personnages/";
@@ -191,18 +193,6 @@ const QString ENT_FORM = "Ent";
 const QString BEAR_FORM = "Ours";
 const QString STANDARD_FORM = "Standard";
 const std::set<QString> ALL_FORMS = {STANDARD_FORM, ENT_FORM, BEAR_FORM};
-
-struct Buf {
-  /// A buf can be passive, that is without being a change of value
-  bool m_isPassiveEnabled = false;
-  /// If it is active, it changes the value
-  int m_Value = 0;
-  bool m_IsPercent = false;
-  void SetBuf(const int value, const bool isPercent) {
-    m_Value = value;
-    m_IsPercent = isPercent;
-  }
-};
 
 template <class T> class StatsType {
 public:

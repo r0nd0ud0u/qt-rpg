@@ -129,32 +129,42 @@ void GameDisplay::NewRound() {
   if (activePlayer->m_Name == "Azrak Ombresang") {
     auto &localStat = std::get<StatsType<int>>(
         activePlayer->m_Stats.m_AllStatsTable[STATS_POW_PHY]);
-    auto &phyBuf =
+    auto *phyBuf =
         activePlayer->m_AllBufs[static_cast<int>(BufTypes::powPhyBuf)];
-    Character::SetStatsOnEffect(
-        localStat, -phyBuf.m_Value + activePlayer->m_HealRxOnTurn, true, false,
-        true);
-    phyBuf.m_Value = activePlayer->m_HealRxOnTurn;
+    if (phyBuf != nullptr) {
+      Character::SetStatsOnEffect(
+          localStat, -phyBuf->get_value() + activePlayer->m_HealRxOnTurn, true,
+          false, true);
+      phyBuf->set_buffers(activePlayer->m_HealRxOnTurn,
+                          phyBuf->get_is_percent());
+    }
   }
 
   // reset heal received on turn
   activePlayer->m_HealRxOnTurn = 0;
 
   // process actions on last turn damage received
-  const bool isDamageTxLastTurn = activePlayer->m_LastDamageTX.find(gs->m_CurrentTurnNb - 1) != activePlayer->m_LastDamageTX.end();
+  const bool isDamageTxLastTurn =
+      activePlayer->m_LastDamageTX.find(gs->m_CurrentTurnNb - 1) !=
+      activePlayer->m_LastDamageTX.end();
   // passive power is_crit_heal_after_crit
-  if(activePlayer->m_Power.is_crit_heal_after_crit &&
-      isDamageTxLastTurn &&
-      activePlayer->m_isLastAtkCritical){
-      // in case of critical damage sent on last turn , next heal critical is enable
-      activePlayer->m_AllBufs[static_cast<int>(BufTypes::nextHealAtkIsCrit)].m_isPassiveEnabled = true;
+  if (activePlayer->m_Power.is_crit_heal_after_crit && isDamageTxLastTurn &&
+      activePlayer->m_isLastAtkCritical) {
+    // in case of critical damage sent on last turn , next heal critical is
+    // enable
+    auto *buf =
+        activePlayer->m_AllBufs[static_cast<int>(BufTypes::nextHealAtkIsCrit)];
+    if (buf != nullptr) {
+      buf->set_is_passive_enabled(true);
+    }
   };
   // passive power
-  if(activePlayer->m_Power.is_damage_tx_heal_needy_ally &&
-      isDamageTxLastTurn){
-      gm->m_PlayersManager->ProcessDamageTXHealNeedyAlly(activePlayer->m_type, activePlayer->m_LastDamageTX[gs->m_CurrentTurnNb - 1]);
+  if (activePlayer->m_Power.is_damage_tx_heal_needy_ally &&
+      isDamageTxLastTurn) {
+    gm->m_PlayersManager->ProcessDamageTXHealNeedyAlly(
+        activePlayer->m_type,
+        activePlayer->m_LastDamageTX[gs->m_CurrentTurnNb - 1]);
   }
-
 
   // Update views
   // Update views after stats changes
@@ -278,7 +288,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   }
 
   // is critical Strike ??
-  const auto [isCrit, critRandNb] = activatedPlayer->ProcessCriticalStrike(currentAtk);
+  const auto [isCrit, critRandNb] =
+      activatedPlayer->ProcessCriticalStrike(currentAtk);
   QString critStr;
   if (isCrit) {
     critStr = "Coup Critique";
@@ -372,11 +383,12 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   for (const auto &dp : diedBossList) {
     emit SigUpdateChannelView(dp, "est mort.");
     // TODO what to do when a boss is dead
-     emit SigBossDead(dp);
+    emit SigBossDead(dp);
     ui->attak_page->RemoveTarget(dp);
     ui->add_exp_button->setEnabled(true);
     gm->m_GameState->RemoveDeadPlayerInTurn(dp);
-    gm->m_GameState->m_DiedEnnemies[gm->m_GameState->m_CurrentTurnNb].push_back(dp);
+    gm->m_GameState->m_DiedEnnemies[gm->m_GameState->m_CurrentTurnNb].push_back(
+        dp);
   }
   const QStringList diedHeroesList =
       gm->m_PlayersManager->CheckDiedPlayers(characType::Hero);

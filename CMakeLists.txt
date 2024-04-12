@@ -52,6 +52,7 @@ corrosion_add_cxxbridge(rust-rpg-bridge CRATE rust-rpg MANIFEST_PATH rust-rpg
     effect.rs
     attaque.rs
     powers.rs
+    buffers.rs
 )
 
 add_subdirectory(app)
