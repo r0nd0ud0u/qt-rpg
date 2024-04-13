@@ -397,6 +397,11 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
         }
       }
     }
+    if (e.statsName == STATS_HP && ALLIES_TARGETS.count(e.target) > 0 &&
+        m_ExtCharacter != nullptr &&
+        m_ExtCharacter->get_is_heal_atk_blocked()) {
+      return false;
+    }
   }
 
   const int manaCost = atk.manaCost * mana.m_MaxValue / 100;
@@ -624,6 +629,9 @@ void Character::RemoveMalusEffect(const effectParam &ep) {
     }
     if (ep.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
       SetStatsOnEffect(localStat, ep.value, false, false, true);
+    }
+    if (ep.effect == EFFECT_BLOCK_HEAL_ATK && m_ExtCharacter != nullptr) {
+      m_ExtCharacter->set_is_heal_atk_blocked(false);
     }
   }
 
@@ -1063,6 +1071,10 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
 
   if (effect.effect == EFFECT_BUF_MULTI_PV_IF_DMG_PREV_TURN) {
     UpdateBuf(BufTypes::multiValueIfDmgPrevTurn, effect.value, true);
+  }
+
+  if (effect.effect == EFFECT_BLOCK_HEAL_ATK && m_ExtCharacter != nullptr) {
+    m_ExtCharacter->set_is_heal_atk_blocked(true);
   }
 
   return std::make_pair(output, nbOfApplies);

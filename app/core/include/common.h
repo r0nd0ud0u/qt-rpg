@@ -36,23 +36,28 @@ const QString ATK_FORM = "Forme";
 const QString REACH_ZONE = "Zone";
 const QString REACH_INDIVIDUAL = "Individuel";
 const QString REACH_RAND_INDIVIDUAL = "Aleatoire Individuel";
-const std::set<QString> ALL_REACH = {"", REACH_ZONE, REACH_INDIVIDUAL, REACH_RAND_INDIVIDUAL};
+const std::set<QString> ALL_REACH = {"", REACH_ZONE, REACH_INDIVIDUAL,
+                                     REACH_RAND_INDIVIDUAL};
 // Target keys
 const QString TARGET_ENNEMY = "Ennemie";
 const QString TARGET_ALLY = "Allié";
 const QString TARGET_ONLY_ALLY = "Seulement les alliés";
 const QString TARGET_ALL_HEROES = "Tous les heroes";
 const QString TARGET_HIMSELF = "Soi-même";
-const std::set<QString> ALL_TARGETS = {"",
-                                       TARGET_ENNEMY,
-                                       TARGET_ALLY,
-                                       TARGET_ALL_HEROES,
-                                       TARGET_HIMSELF,
-                                       TARGET_ONLY_ALLY,
-                                       };
-const std::set<QString> ALLIES_TARGETS = {TARGET_ALLY, TARGET_ALL_HEROES,
-                                          TARGET_HIMSELF, TARGET_ONLY_ALLY,
-                                          };
+const std::set<QString> ALL_TARGETS = {
+    "",
+    TARGET_ENNEMY,
+    TARGET_ALLY,
+    TARGET_ALL_HEROES,
+    TARGET_HIMSELF,
+    TARGET_ONLY_ALLY,
+};
+const std::set<QString> ALLIES_TARGETS = {
+    TARGET_ALLY,
+    TARGET_ALL_HEROES,
+    TARGET_HIMSELF,
+    TARGET_ONLY_ALLY,
+};
 // Stats keys
 const QString STATS_HP = "PV";
 const QString STATS_MANA = "Mana";
@@ -155,6 +160,7 @@ const QString EFFECT_IMPROVEMENT_STAT_BY_VALUE = "Up par valeur";
 const QString EFFECT_NEXT_HEAL_IS_CRIT = "Prochaine attaque heal est crit";
 const QString EFFECT_BUF_MULTI_PV_IF_DMG_PREV_TURN =
     "Buf multi si dégâts au tour précédent";
+const QString EFFECT_BLOCK_HEAL_ATK = "Bloque attaque de soin";
 const std::set<QString> EFFECTS{"",
                                 EFFECT_REINIT,
                                 EFFECT_NB_COOL_DOWN,
@@ -171,7 +177,8 @@ const std::set<QString> EFFECTS{"",
                                 EFFECT_REPEAT_AS_MANY_AS,
                                 CONDITION_ENNEMIES_DIED,
                                 EFFECT_IMPROVEMENT_STAT_BY_VALUE,
-                                EFFECT_BUF_MULTI_PV_IF_DMG_PREV_TURN};
+                                EFFECT_BUF_MULTI_PV_IF_DMG_PREV_TURN,
+                                EFFECT_BLOCK_HEAL_ATK};
 const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_NB_DECREASE_BY_TURN,
     EFFECT_NB_COOL_DOWN,
@@ -185,6 +192,7 @@ const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_INTO_DAMAGE,
     EFFECT_NEXT_HEAL_IS_CRIT,
     EFFECT_BUF_MULTI_PV_IF_DMG_PREV_TURN,
+    EFFECT_BLOCK_HEAL_ATK,
 };
 const QString EFFECT_ARRAY = "Effet";
 const QString EFFECT_TYPE = "Type";
