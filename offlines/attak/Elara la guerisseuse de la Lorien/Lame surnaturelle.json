@@ -1,26 +1,26 @@
 {
-    "Cible": "Allié",
-    "Coût de mana": 15,
+    "Cible": "Ennemie",
+    "Coût de mana": 18,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Effet": [
         {
-            "Cible": "Soi-même",
-            "Portée": "Individuel",
-            "Stat": "",
-            "Tours actifs": 1,
-            "Type": "Dégâts au tour précédent",
-            "Valeur de l'effet": 0,
-            "Value": 0
-        },
-        {
-            "Cible": "Allié",
+            "Cible": "Ennemie",
             "Portée": "Individuel",
             "Stat": "PV",
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 130
+            "Value": 75
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "Cout critique",
+            "Tours actifs": 2,
+            "Type": "Up par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 10
         },
         {
             "Cible": "",
@@ -33,8 +33,8 @@
         }
     ],
     "Forme": "Standard",
-    "Niveau": 5,
-    "Nom": "Lumiere curative",
+    "Niveau": 6,
+    "Nom": "Lame surnaturelle",
     "Photo": "default.png",
     "Portée": "Individuel"
 }

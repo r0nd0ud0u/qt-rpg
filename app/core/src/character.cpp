@@ -500,7 +500,8 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
 
   // update effect value
   // keep the calcultated value for the HOT or DOT
-  if (effect.effect == EFFECT_VALUE_CHANGE) {
+  if (effect.effect == EFFECT_VALUE_CHANGE ||
+      effect.effect == EFFECT_PERCENT_CHANGE) {
     effect.value = abs(amount);
     if (amount > 0) {
       target->m_HealRxOnTurn += amount;
@@ -583,9 +584,9 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
               .arg(effect.statsName));
       break;
     }
+    const auto gs = Application::GetInstance().m_GameManager->m_GameState;
     // Condition number of died ennemies
     if (effect.effect == CONDITION_ENNEMIES_DIED) {
-      const auto gs = Application::GetInstance().m_GameManager->m_GameState;
       if (gs->m_CurrentTurnNb > 1 &&
           gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb - 1) > 0) {
       } else {
@@ -594,6 +595,18 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
             QString(
                 "Pas d'effect %1 activé. Aucun ennemi mort au tour précédent\n")
                 .arg(effect.effect));
+        break;
+      }
+    }
+    // Atk launched if the character did some damages on the previous turn
+    if (effect.effect == CONDITION_DMG_PREV_TURN) {
+      if (gs->m_CurrentTurnNb > 1 &&
+          m_LastDamageTX.count(gs->m_CurrentTurnNb - 1) > 0) {
+      } else {
+        conditionsAreOk = false;
+        allResultEffects.append(QString("Pas d'effect %1 activé. Pas de dégâts "
+                                        "infligés au tour précédent.\n")
+                                    .arg(effect.effect));
         break;
       }
     }
@@ -961,7 +974,9 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
   auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
 
   QString output;
-  int nbOfApplies = 1; // default value 1 for the nominal case
+  int nbOfApplies =
+      1 + m_AllBufs[static_cast<int>(BufTypes::applyEffectInit)]
+              ->get_value(); // default value 1 for the nominal case
 
   if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
     // TODO not ready to be used yet
@@ -976,6 +991,11 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
   }
   if (effect.effect == EFFECT_NB_DECREASE_ON_TURN) {
     nbOfApplies = ProcessDecreaseOnTurn(effect);
+    // At the moment. condition on "value == 0" to apply 'nbOfApplies' for all
+    // the effects of the current atk
+    if (effect.value == 0) {
+      UpdateBuf(BufTypes::applyEffectInit, nbOfApplies, false);
+    }
   }
   if (effect.effect == EFFECT_REINIT) {
     pm->ResetCounterOnOneStatsEffect(target, effect.statsName);

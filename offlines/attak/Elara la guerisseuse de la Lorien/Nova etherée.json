@@ -12,6 +12,15 @@
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 50
+        },
+		{
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "Vitesse",
+            "Tours actifs": 2,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 12
         }
     ],
     "Forme": "Standard",
