@@ -794,21 +794,26 @@ void PlayersManager::AddSupAtkTurn(
 }
 
 std::tuple<bool, QString, QStringList>
-PlayersManager::IsDodging(const std::vector<TargetInfo> &targetList) {
+PlayersManager::IsDodging(const std::vector<TargetInfo *> &targetList) {
   QString plName;
   QStringList output;
-  const bool isDodging = std::any_of(
-      targetList.begin(), targetList.end(),
-      [this, &plName, &output](const TargetInfo &ti) {
-        if (ti.m_IsTargeted) {
-          const auto *targetChara = this->GetCharacterByName(ti.m_Name);
-          plName = ti.m_Name;
-          const auto [isDodging, randNbStr] = targetChara->IsDodging();
-          output.append(randNbStr);
-          return isDodging;
-        }
-        return false;
-      });
+  const bool isDodging =
+      std::any_of(targetList.begin(), targetList.end(),
+                  [this, &plName, &output](const TargetInfo *ti) {
+                    if (ti == nullptr) {
+                      return false;
+                    }
+                    if (ti->get_is_targeted()) {
+                      const auto *targetChara =
+                          this->GetCharacterByName(ti->get_name().data());
+                      plName = ti->get_name().data();
+                      const auto [isDodging, randNbStr] =
+                          targetChara->IsDodging();
+                      output.append(randNbStr);
+                      return isDodging;
+                    }
+                    return false;
+                  });
 
   return std::make_tuple(isDodging, plName, output);
 }
@@ -822,7 +827,8 @@ void PlayersManager::AddExpForHeroes(const int exp) {
 /**
  * @brief PlayersManager::GetAllDeadliestAllies
  * @param launcherType : enable the check on list : boss or hero
- * @return optional<std::vector<QString>> : if any, the list of the names of characters with minimal HP
+ * @return optional<std::vector<QString>> : if any, the list of the names of
+ * characters with minimal HP
  */
 std::optional<std::vector<QString>>
 PlayersManager::GetAllDeadliestAllies(const characType &launcherType) const {
@@ -839,29 +845,29 @@ PlayersManager::GetAllDeadliestAllies(const characType &launcherType) const {
 
   std::vector<QString> output;
 
-  const auto minElement =
-      std::min_element(playerList->begin(), playerList->end(),
-                       [](const Character *char1, const Character *char2) {
-                         if (char1 == nullptr || char2 == nullptr) {
-                           return false;
-                         }
-                         const auto &stat1 = std::get<StatsType<int>>(
-                             char1->m_Stats.m_AllStatsTable.at(STATS_HP));
-                         const auto &stat2 = std::get<StatsType<int>>(
-                             char2->m_Stats.m_AllStatsTable.at(STATS_HP));
+  const auto minElement = std::min_element(
+      playerList->begin(), playerList->end(),
+      [](const Character *char1, const Character *char2) {
+        if (char1 == nullptr || char2 == nullptr) {
+          return false;
+        }
+        const auto &stat1 = std::get<StatsType<int>>(
+            char1->m_Stats.m_AllStatsTable.at(STATS_HP));
+        const auto &stat2 = std::get<StatsType<int>>(
+            char2->m_Stats.m_AllStatsTable.at(STATS_HP));
 
-                         // ratio
-                         const double ratio1 = (stat1.m_MaxValue > 0)
-                                                  ? static_cast<double>(stat1.m_CurrentValue) /
-                                                        static_cast<double>(stat1.m_MaxValue)
-                                                  : 1;
-                         const double ratio2 = (stat2.m_MaxValue > 0)
-                                                   ? static_cast<double>(stat2.m_CurrentValue) /
-                                                         static_cast<double>(stat2.m_MaxValue)
-                                                   : 1;
+        // ratio
+        const double ratio1 = (stat1.m_MaxValue > 0)
+                                  ? static_cast<double>(stat1.m_CurrentValue) /
+                                        static_cast<double>(stat1.m_MaxValue)
+                                  : 1;
+        const double ratio2 = (stat2.m_MaxValue > 0)
+                                  ? static_cast<double>(stat2.m_CurrentValue) /
+                                        static_cast<double>(stat2.m_MaxValue)
+                                  : 1;
 
-                         return ratio1 < ratio2;
-                       });
+        return ratio1 < ratio2;
+      });
 
   const auto cWithMin = static_cast<Character *>(*minElement);
   const auto &chp =
@@ -884,31 +890,36 @@ PlayersManager::GetAllDeadliestAllies(const characType &launcherType) const {
 /**
  * @brief PlayersManager::ProcessDamageTXHealNeedyAlly
  * Assess all the allies with the minimal hp ratio in a std::vector
- * Choose randomly one in this list and increase its hp current value by 25% of damageTX
+ * Choose randomly one in this list and increase its hp current value by 25% of
+ * damageTX
  * @param launcherType
  * @param damageTX
- * @return QString: not used at the moment, should be used for the output on channel log
+ * @return QString: not used at the moment, should be used for the output on
+ * channel log
  */
-QString PlayersManager::ProcessDamageTXHealNeedyAlly(const characType &launcherType, const int damageTX){
+QString
+PlayersManager::ProcessDamageTXHealNeedyAlly(const characType &launcherType,
+                                             const int damageTX) {
 
-    if(damageTX == 0){
-        return "";
-    }
-
-    const auto alliesStr = GetAllDeadliestAllies(launcherType).value_or(std::vector<QString>{});
-    if(alliesStr.empty()){
-       return "";
-    }
-    const auto randNb = get_random_nb(0, alliesStr.size() -1);
-    auto * c = GetCharacterByName(alliesStr[randNb]);
-    if(c == nullptr){
-        return "";
-    }
-    auto &hp =
-        std::get<StatsType<int>>(c->m_Stats.m_AllStatsTable.at(STATS_HP));
-    hp.m_CurrentValue = std::min(hp.m_MaxValue, hp.m_CurrentValue + static_cast<int>(0.25*damageTX));
-
+  if (damageTX == 0) {
     return "";
+  }
+
+  const auto alliesStr =
+      GetAllDeadliestAllies(launcherType).value_or(std::vector<QString>{});
+  if (alliesStr.empty()) {
+    return "";
+  }
+  const auto randNb = get_random_nb(0, alliesStr.size() - 1);
+  auto *c = GetCharacterByName(alliesStr[randNb]);
+  if (c == nullptr) {
+    return "";
+  }
+  auto &hp = std::get<StatsType<int>>(c->m_Stats.m_AllStatsTable.at(STATS_HP));
+  hp.m_CurrentValue = std::min(
+      hp.m_MaxValue, hp.m_CurrentValue + static_cast<int>(0.25 * damageTX));
+
+  return "";
 }
 
 /**
@@ -918,14 +929,51 @@ QString PlayersManager::ProcessDamageTXHealNeedyAlly(const characType &launcherT
  * nullptr if nothing has been found
  * @return a pointer std::vector<Character *> *
  */
-std::vector<Character *> * PlayersManager::GetPlayerListByType(const characType &launcherType) {
-    std::vector<Character *> *playerList = nullptr;
+std::vector<Character *> *
+PlayersManager::GetPlayerListByType(const characType &launcherType) {
+  std::vector<Character *> *playerList = nullptr;
 
-    if (launcherType == characType::Hero) {
-        playerList = &m_HeroesList;
-    } else if (launcherType == characType::Boss) {
-        playerList = &m_BossesList;
-    }
+  if (launcherType == characType::Hero) {
+    playerList = &m_HeroesList;
+  } else if (launcherType == characType::Boss) {
+    playerList = &m_BossesList;
+  }
 
-    return playerList;
+  return playerList;
+}
+
+/**
+ * @brief PlayersManager::ProcessIsRandomTarget
+ * For each character in the game, the boolean is_random_target is set to false.
+ * In case of atk with effect containing REACH_RAND_INDIVIDUAL,
+ * we have to process the one of should be chosen.
+ */
+void PlayersManager::ProcessIsRandomTarget() const {
+  // Reset
+  std::for_each(m_HeroesList.begin(), m_HeroesList.end(),
+                [&](const Character *c) {
+                  if (c != nullptr && c->m_ExtCharacter != nullptr) {
+                    c->m_ExtCharacter->set_is_random_target(false);
+                  }
+                });
+  std::for_each(m_BossesList.begin(), m_BossesList.end(),
+                [&](const Character *c) {
+                  if (c != nullptr && c->m_ExtCharacter != nullptr) {
+                    c->m_ExtCharacter->set_is_random_target(false);
+                  }
+                });
+
+  // get random numbers
+  const int64_t randHeroNb = get_random_nb(0, m_HeroesList.size() - 1);
+  const int64_t randBossNb = get_random_nb(0, m_BossesList.size() - 1);
+
+  // set who is the random reach
+  auto* hero = m_HeroesList[randHeroNb];
+  auto* boss = m_BossesList[randBossNb];
+  if(hero != nullptr && hero->m_ExtCharacter != nullptr){
+      hero->m_ExtCharacter->set_is_random_target(true);
+  }
+  if(boss != nullptr && boss->m_ExtCharacter != nullptr){
+      boss->m_ExtCharacter->set_is_random_target(true);
+  }
 }

@@ -22,6 +22,7 @@ Character::Character(const QString name, const characType type,
                      const Stats &stats)
     : m_Name(name), m_type(type), m_Stats(stats) {
   InitTables();
+  m_ExtCharacter = try_new_ext_character().into_raw();
 }
 
 void Character::InitTables() {
@@ -554,6 +555,11 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
         !targetedOnMainAtk) {
       continue;
     }
+    if (effect.reach == REACH_RAND_INDIVIDUAL &&
+        target->m_ExtCharacter != nullptr &&
+        !target->m_ExtCharacter->get_is_random_target()) {
+      continue;
+    }
 
     // Condition if applicable effect
     // TODO extract a method here with conditions
@@ -716,7 +722,7 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
   if (target != nullptr && sign == 1 && launch) {
     auto *bufMulti =
         target->m_AllBufs[static_cast<int>(BufTypes::multiValueIfDmgPrevTurn)];
-      if (bufMulti != nullptr && bufMulti->get_value() > 0) {
+    if (bufMulti != nullptr && bufMulti->get_value() > 0) {
       amount = update_heal_by_multi(amount, bufMulti->get_value());
     }
   }

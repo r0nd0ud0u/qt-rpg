@@ -31,7 +31,7 @@ private:
   AttaqueType m_CurAtk;
   QString m_CurObject;
   Character *m_CurPlayer = nullptr;
-  std::vector<TargetInfo> m_TargetedList;
+  std::vector<TargetInfo*> m_TargetedList;
   ActionsStackedWgType m_CurPage = ActionsStackedWgType::defaultType;
   QString m_Form = STANDARD_FORM;
 
@@ -52,7 +52,7 @@ private:
 
 signals:
   void SigLaunchAttak(const QString &atkName,
-                      const std::vector<TargetInfo> &targetList);
+                      const std::vector<TargetInfo*> &targetList);
 
 private slots:
   // Slots Table atk

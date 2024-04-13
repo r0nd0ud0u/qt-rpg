@@ -8,18 +8,14 @@
 #include <unordered_map>
 #include <vector>
 
+#include "rust-rpg-bridge/players_manager.h"
+
 struct GameAtkEffects {
   effectParam allAtkEffects;
   AttaqueType atk;
   QString launcher;
   QString target;
   int launchingTurn = 0;
-};
-
-struct TargetInfo{
-    QString m_Name;
-    bool m_IsTargeted = false;
-    bool m_IsBoss = false;
 };
 
 class PlayersManager {
@@ -53,11 +49,12 @@ public:
   void IncrementCounterEffect();
   QStringList CheckDiedPlayers(const characType& launcherType);
   void AddSupAtkTurn(const characType &launcherType, std::vector<QString>& playerOrderTable)const;
-  std::tuple<bool, QString, QStringList> IsDodging(const std::vector<TargetInfo>& targetList); // pair1 isDodging?, pair2 playerName
+  std::tuple<bool, QString, QStringList> IsDodging(const std::vector<TargetInfo*>& targetList); // pair1 isDodging?, pair2 playerName
   void AddExpForHeroes(const int exp);
   QString ProcessDamageTXHealNeedyAlly(const characType &launcherType, const int damageTX);
   std::vector<Character *> * GetPlayerListByType(const characType &launcherType);
   std::optional<std::vector<QString>> GetAllDeadliestAllies(const characType &launcherType) const;
+  void ProcessIsRandomTarget() const;
 
   std::vector<Character *> m_HeroesList;
   std::vector<Character *> m_BossesList;

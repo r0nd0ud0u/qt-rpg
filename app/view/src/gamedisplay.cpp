@@ -7,9 +7,8 @@
 #include "bossesview.h"
 #include "channel.h"
 #include "heroesview.h"
-#include "utils.h"
 
-#include <unordered_set>
+#include "rust-rpg-bridge/utils.h"
 
 GameDisplay::GameDisplay(QWidget *parent)
     : QWidget(parent), ui(new Ui::GameDisplay) {
@@ -248,7 +247,7 @@ void GameDisplay::EndOfGame() {
 }
 
 void GameDisplay::LaunchAttak(const QString &atkName,
-                              const std::vector<TargetInfo> &targetList) {
+                              const std::vector<TargetInfo *> &targetList) {
   const auto &gm = Application::GetInstance().m_GameManager;
 
   // Desactivate actions buttons
@@ -267,7 +266,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     return;
   }
   const auto &currentAtk = activatedPlayer->m_AttakList.at(atkName);
-  // Stats change on hero
+  // Process cost of the atk
   activatedPlayer->ProcessCost(atkName);
   emit SigUpdateChannelView(nameChara, QString("lance %1.").arg(atkName),
                             activatedPlayer->color);
@@ -300,16 +299,24 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       nameChara,
       QString("Test coup critique:%1 -> %2.\n").arg(critRandNb).arg(critStr));
 
+  // In case of effect with reach: REACH_RAND_INDIVIDUAL, process who is the
+  // random target
+  gm->m_PlayersManager->ProcessIsRandomTarget();
+
   // new effects on that turn
   std::unordered_map<QString, std::vector<effectParam>> newEffects;
   // Parse target list and apply atk and effects
-  for (const auto &target : targetList) {
+  for (const auto *target : targetList) {
+    if (target == nullptr) {
+      continue;
+    }
     QString channelLog;
-    auto *targetChara = gm->m_PlayersManager->GetCharacterByName(target.m_Name);
+    auto *targetChara =
+        gm->m_PlayersManager->GetCharacterByName(target->get_name().data());
     if (targetChara != nullptr) {
       // is dodging
       if (currentAtk.target == TARGET_ENNEMY &&
-          currentAtk.reach == REACH_ZONE && target.m_IsTargeted) {
+          currentAtk.reach == REACH_ZONE && target->get_is_targeted()) {
         const auto &[isDodgingZone, outputsRandnbZone] =
             targetChara->IsDodging();
         if (isDodgingZone) {
@@ -325,17 +332,18 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       }
       // EFFECT
       const auto &[conditionsOk, resultEffects, appliedEffects] =
-          activatedPlayer->ApplyAtkEffect(target.m_IsTargeted, currentAtk,
+          activatedPlayer->ApplyAtkEffect(target->get_is_targeted(), currentAtk,
                                           targetChara, isCrit);
 
       if (!resultEffects.isEmpty()) {
-        emit SigUpdateChannelView(nameChara,
-                                  QString("Sur %1: ").arg(target.m_Name) +
-                                      "\n" + resultEffects.join(""),
-                                  activatedPlayer->color);
+        emit SigUpdateChannelView(
+            nameChara,
+            QString("Sur %1: ").arg(target->get_name().data()) + "\n" +
+                resultEffects.join(""),
+            activatedPlayer->color);
       }
       // conditionsOk = false if effect reinit with unfulfilled condtions
-      if (target.m_IsTargeted && conditionsOk && !channelLog.isEmpty()) {
+      if (target->get_is_targeted() && conditionsOk && !channelLog.isEmpty()) {
         // Update channel view
         emit SigUpdateChannelView(nameChara, channelLog,
                                   activatedPlayer->color);
@@ -346,7 +354,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
         return;
       }
       // add applied effect to new effect Table
-      newEffects[target.m_Name] = appliedEffects;
+      newEffects[target->get_name().data()] = appliedEffects;
     }
   }
 

@@ -35,26 +35,24 @@ const QString ATK_FORM = "Forme";
 // Reach keys
 const QString REACH_ZONE = "Zone";
 const QString REACH_INDIVIDUAL = "Individuel";
-const std::set<QString> ALL_REACH = {"", REACH_ZONE, REACH_INDIVIDUAL};
+const QString REACH_RAND_INDIVIDUAL = "Aleatoire Individuel";
+const std::set<QString> ALL_REACH = {"", REACH_ZONE, REACH_INDIVIDUAL, REACH_RAND_INDIVIDUAL};
 // Target keys
 const QString TARGET_ENNEMY = "Ennemie";
 const QString TARGET_ALLY = "Allié";
 const QString TARGET_ONLY_ALLY = "Seulement les alliés";
 const QString TARGET_ALL_HEROES = "Tous les heroes";
 const QString TARGET_HIMSELF = "Soi-même";
-const QString TARGET_RAND_ENNEMY = "Ennemie aléatoire";
-const QString TARGET_RAND_HERO = "Hero aléatoire";
 const std::set<QString> ALL_TARGETS = {"",
                                        TARGET_ENNEMY,
                                        TARGET_ALLY,
                                        TARGET_ALL_HEROES,
                                        TARGET_HIMSELF,
                                        TARGET_ONLY_ALLY,
-                                       TARGET_RAND_ENNEMY,
-                                       TARGET_RAND_HERO};
+                                       };
 const std::set<QString> ALLIES_TARGETS = {TARGET_ALLY, TARGET_ALL_HEROES,
                                           TARGET_HIMSELF, TARGET_ONLY_ALLY,
-                                          TARGET_RAND_HERO};
+                                          };
 // Stats keys
 const QString STATS_HP = "PV";
 const QString STATS_MANA = "Mana";

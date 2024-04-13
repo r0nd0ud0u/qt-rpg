@@ -15,6 +15,7 @@
 
 #include "rust-rpg-bridge/attaque.h"
 #include "rust-rpg-bridge/powers.h"
+#include "rust-rpg-bridge/character.h"
 
 enum class characType { Hero, Boss };
 
@@ -116,6 +117,7 @@ public:
   std::unordered_map<uint64_t, uint64_t>
       m_LastDamageTX; // key : turn number, value: damage transmitted
   Powers m_Power;
+  ExtendedCharacter* m_ExtCharacter;
 
 private:
   template <class T>

@@ -4,8 +4,9 @@
 #include "Application.h"
 #include "character.h"
 #include "gamedisplay.h"
-#include "utils.h"
+#include "rust-rpg-bridge/players_manager.h"
 #include "rust-rpg-bridge/utils.h"
+#include "utils.h"
 
 #include <QCheckBox>
 #include <QStandardItemModel>
@@ -33,7 +34,7 @@ void ActionsView::addActionRow(QAbstractItemModel *model,
 void ActionsView::addInfoActionRow(QAbstractItemModel *model,
                                    const QVariant &statsType,
                                    const QVariant &value) const {
-  int index = model->rowCount();
+  const int index = model->rowCount();
   model->insertRow(index);
   model->setData(model->index(index, 0), statsType);
   model->setData(model->index(index, 1), value);
@@ -107,8 +108,9 @@ ActionsView::createInfoModel(QObject *parent,
     addInfoActionRow(model, ATK_BERSECK_COST, m_CurAtk.berseckCost);
     addInfoActionRow(model, ATK_LEVEL, m_CurAtk.level);
     for (const auto &e : m_CurAtk.m_AllEffects) {
-        const auto effectName = build_effect_name(e.effect.toStdString(), e.statsName.toStdString());
-        addInfoActionRow(model, effectName.data(), e.value);
+      const auto effectName = build_effect_name(
+          e.effect.toStdString(), e.statsName.toStdString(), true);
+      addInfoActionRow(model, effectName.data(), e.value);
     }
   }
 
@@ -127,8 +129,10 @@ void ActionsView::on_actions_table_view_clicked(const QModelIndex &index) {
   m_CurIndex = index;
   ui->atk_stats_table->setModel(createInfoModel(parentWidget(), m_CurPage));
   // enable/disable target
-  for (auto &tg : m_TargetedList) {
-    tg.m_IsTargeted = false;
+  for (auto *tg : m_TargetedList) {
+    if (tg != nullptr) {
+      tg->set_is_targeted(false);
+    }
   }
   ProcessEnableTargetsBoxes();
 }
@@ -158,12 +162,13 @@ void ActionsView::CreateTargetCheckBoxes(
     checkbox->setEnabled(false);
     ui->targets_widget->layout()->addWidget(checkbox);
     // init target
-    TargetInfo target;
-    target.m_Name = ply->m_Name;
-    target.m_IsTargeted = false;
-    target.m_IsBoss = ply->m_type == characType::Boss;
+    auto *target = target_info_new().into_raw();
+    const auto t = ply->m_Name.toStdString();
+    target->set_name(ply->m_Name.toStdString());
+    target->set_is_targeted(false);
+    target->set_is_boss(ply->m_type == characType::Boss);
     m_TargetedList.push_back(target);
-    const QString &name = target.m_Name;
+    const QString &name = target->get_name().data();
     connect(checkbox, &QCheckBox::clicked, this,
             [this, name]() { UpdateTargetList(name); });
   }
@@ -182,7 +187,10 @@ void ActionsView::InitTargetsWidget() {
 
 void ActionsView::UpdateTargetList(const QString &name) {
   for (int i = 0; i < m_TargetedList.size(); i++) {
-    const auto test = m_TargetedList[i];
+    auto *target = m_TargetedList[i];
+    if (target == nullptr) {
+      continue;
+    }
     auto *wg = static_cast<QCheckBox *>(
         ui->targets_widget->layout()->itemAt(i)->widget());
     if (wg == nullptr) {
@@ -192,33 +200,39 @@ void ActionsView::UpdateTargetList(const QString &name) {
       continue;
     }
 
-    if (name == m_TargetedList[i].m_Name) {
-      m_TargetedList[i].m_IsTargeted = !m_TargetedList[i].m_IsTargeted;
+    if (name == target->get_name().data()) {
+      target->set_is_targeted(!target->get_is_targeted());
+
     } else if ((m_CurPlayer->m_type == characType::Hero &&
-                !m_TargetedList[i].m_IsBoss) ||
+                !target->get_is_boss()) ||
                (m_CurPlayer->m_type == characType::Boss &&
-                m_TargetedList[i].m_IsBoss) ||
+                target->get_is_boss()) ||
                (m_CurPlayer->m_type == characType::Hero &&
-                m_TargetedList[i].m_IsBoss) ||
+                target->get_is_boss()) ||
                (m_CurPlayer->m_type == characType::Boss &&
-                !m_TargetedList[i].m_IsBoss)) {
+                !target->get_is_boss())) {
       if (m_CurAtk.reach == REACH_ZONE) {
-        m_TargetedList[i].m_IsTargeted = !m_TargetedList[i].m_IsTargeted;
+        target->set_is_targeted(!target->get_is_targeted());
       } else if (m_CurAtk.reach == REACH_INDIVIDUAL &&
-                 m_TargetedList[i].m_IsTargeted) {
-        m_TargetedList[i].m_IsTargeted = false;
+                 target->get_is_targeted()) {
+        target->set_is_targeted(false);
       }
     } else if (m_CurAtk.reach == REACH_INDIVIDUAL &&
-               m_TargetedList[i].m_IsTargeted) {
-      m_TargetedList[i].m_IsTargeted = false;
+               target->get_is_targeted()) {
+      target->set_is_targeted(false);
     }
     if (wg != nullptr) {
-      wg->setChecked(m_TargetedList[i].m_IsTargeted);
+      wg->setChecked(target->get_is_targeted());
     }
   }
-  const bool enableValidateBtn =
-      std::any_of(m_TargetedList.begin(), m_TargetedList.end(),
-                  [](const TargetInfo &info) { return info.m_IsTargeted; });
+  const bool enableValidateBtn = std::any_of(
+      m_TargetedList.begin(), m_TargetedList.end(), [](const TargetInfo *info) {
+        if (info == nullptr) {
+          return false;
+        } else {
+          return info->get_is_targeted();
+        }
+      });
   ui->validate_action->setEnabled(enableValidateBtn);
 }
 
@@ -238,25 +252,33 @@ void ActionsView::ProcessEnableTargetsBoxes() {
   if (m_CurPage == ActionsStackedWgType::attak) {
     for (int i = 0; i < m_TargetedList.size(); i++) {
 
+      const auto target = m_TargetedList[i];
+      if (target == nullptr) {
+        continue;
+      }
       if (m_CurAtk.target == TARGET_HIMSELF &&
-          m_TargetedList[i].m_Name != m_CurPlayer->m_Name) {
+          target->get_name().data() != m_CurPlayer->m_Name) {
         continue;
       } else if (m_CurPlayer->m_type == characType::Hero) {
         // TODO never entering here
-        if (m_TargetedList[i].m_IsBoss && m_CurAtk.target != TARGET_ENNEMY) {
+        if (target->get_is_boss() && m_CurAtk.target != TARGET_ENNEMY) {
           continue;
         }
-        if (!m_TargetedList[i].m_IsBoss &&
-            !(m_CurAtk.target == TARGET_ALLY ||
-              m_CurAtk.target == TARGET_ALL_HEROES ||
-              m_CurAtk.target == TARGET_HIMSELF)) {
+        if (!target->get_is_boss() && !(m_CurAtk.target == TARGET_ALLY ||
+                                        m_CurAtk.target == TARGET_ALL_HEROES ||
+                                        m_CurAtk.target == TARGET_HIMSELF)) {
+          continue;
+        }
+        if (!target->get_is_boss() && !(m_CurAtk.target == TARGET_ALLY ||
+                                        m_CurAtk.target == TARGET_ALL_HEROES ||
+                                        m_CurAtk.target == TARGET_HIMSELF)) {
           continue;
         }
       } else if (m_CurPlayer->m_type == characType::Boss) {
-        if (m_TargetedList[i].m_IsBoss && m_CurAtk.target == TARGET_ENNEMY) {
+        if (target->get_is_boss() && m_CurAtk.target == TARGET_ENNEMY) {
           continue;
         }
-        if (!m_TargetedList[i].m_IsBoss && m_CurAtk.target != TARGET_ENNEMY) {
+        if (!target->get_is_boss() && m_CurAtk.target != TARGET_ENNEMY) {
           continue;
         }
       }
@@ -279,8 +301,8 @@ void ActionsView::RemoveTarget(QString targetName) {
   auto *lay = ui->targets_widget->layout();
 
   int i = 0;
-  for (const auto &it : m_TargetedList) {
-    if (it.m_Name == targetName) {
+  for (const auto *it : m_TargetedList) {
+    if (it != nullptr && it->get_name().data() == targetName) {
       break;
     }
     i++;
@@ -288,8 +310,13 @@ void ActionsView::RemoveTarget(QString targetName) {
 
   const auto newEnd = std::remove_if(
       m_TargetedList.begin(), m_TargetedList.end(),
-      [&targetName](const TargetInfo &ti) {
-        return targetName == ti.m_Name; // remove elements where this is true
+      [&targetName](const TargetInfo *ti) {
+        if (ti == nullptr) {
+          return true;
+        } else {
+          return targetName ==
+                 ti->get_name().data(); // remove elements where this is true
+        }
       });
   m_TargetedList.erase(newEnd, m_TargetedList.end());
   auto *widget = lay->itemAt(i)->widget();
