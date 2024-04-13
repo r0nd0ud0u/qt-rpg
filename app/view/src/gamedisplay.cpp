@@ -121,7 +121,6 @@ void GameDisplay::NewRound() {
   for (const auto &te : terminatedEffects) {
     emit SigUpdateChannelView("GameState", te);
   }
-  gm->m_PlayersManager->DecreaseCoolDownEffects(activePlayer->m_Name);
   emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
 
   // update buf pow

@@ -43,6 +43,7 @@ enum class BufTypes {
   powPhyBuf,
   nextHealAtkIsCrit,
   multiValueIfDmgPrevTurn,
+  applyEffectInit,
   enumSize
 };
 

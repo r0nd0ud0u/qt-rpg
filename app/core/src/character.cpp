@@ -386,13 +386,11 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
   // check the impact of an effect on an atk here
   // Cooldown
   for (const auto &e : atk.m_AllEffects) {
-    // TODO rewrite the cooldown thing for an atk
     if (e.effect == EFFECT_NB_COOL_DOWN) {
       const auto &pm =
           Application::GetInstance().m_GameManager->m_PlayersManager;
       for (const auto &gae : pm->m_AllEffectsOnGame[m_Name]) {
-        if (atk.name == gae.atk.name && gae.allAtkEffects.effect == e.effect &&
-            gae.allAtkEffects.nbTurns > 0) {
+        if (atk.name == gae.atk.name && gae.allAtkEffects.effect == e.effect) {
           return false;
         }
       }
@@ -983,11 +981,19 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
     output = ProcessDecreaseByTurn(effect);
   }
   if (effect.effect == EFFECT_NB_COOL_DOWN) {
+    // Must be filled before changing value of nbTurns
     output = (m_Name == target->m_Name)
                  ? QString("Cooldown actif sur %1 de %2 tours.\n")
                        .arg(atk.name)
                        .arg(effect.nbTurns)
                  : "";
+    // example cooldown for 2 turns
+    // T1  nb turn -1
+    // T2 cooldown, nb turn -1
+    // T3 cooldown, nb turn -1
+    // T4 nb turn -1 => effect finished => can be launched
+    // => for a cooldown of n=2 turns, the init value of nbTurns = n + 2;
+    effect.nbTurns = effect.nbTurns + 2;
   }
   if (effect.effect == EFFECT_NB_DECREASE_ON_TURN) {
     nbOfApplies = ProcessDecreaseOnTurn(effect);

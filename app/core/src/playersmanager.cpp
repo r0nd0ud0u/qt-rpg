@@ -671,18 +671,6 @@ QString PlayersManager::DeleteAllBadEffect(const Character *chara) {
   return "supprime tous les effets néfastes.\n";
 }
 
-void PlayersManager::DecreaseCoolDownEffects(const QString &curPlayerName) {
-  if (m_AllEffectsOnGame.count(curPlayerName) == 0) {
-    return;
-  }
-  for (auto &gae : m_AllEffectsOnGame[curPlayerName]) {
-    if (gae.allAtkEffects.effect == EFFECT_NB_COOL_DOWN &&
-        gae.allAtkEffects.subValueEffect > 0) {
-      gae.allAtkEffects.subValueEffect--;
-    }
-  }
-}
-
 void PlayersManager::ImproveHotsOnPlayers(const int valuePercent,
                                           const characType launcherType) {
   std::vector<Character *> playerList;

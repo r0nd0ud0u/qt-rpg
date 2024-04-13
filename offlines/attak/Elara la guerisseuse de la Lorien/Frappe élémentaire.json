@@ -12,6 +12,15 @@
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 70
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "",
+            "Tours actifs": 5,
+            "Type": "Tours de recharge",
+            "Valeur de l'effet": 0,
+            "Value": 0
         }
     ],
     "Forme": "Standard",
