@@ -1,8 +1,11 @@
 {
+    "Aggro": 0,
     "Cible": "Ennemie",
-    "Coût de mana": 12,
+    "Coût de mana": 0,
     "Coût de rage": 0,
-    "Coût de vigueur": 0,
+    "Coût de vigueur": 1,
+    "Durée": 1,
+    "Dégâts": 0,
     "Effet": [
         {
             "Cible": "Ennemie",
@@ -11,16 +14,16 @@
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 40
+            "Value": 20
         },
         {
             "Cible": "Ennemie",
             "Portée": "Individuel",
-            "Stat": "Vitesse",
-            "Tours actifs": 6,
+            "Stat": "PV",
+            "Tours actifs": 4,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 10
+            "Value": 5
         },
         {
             "Cible": "",
@@ -32,10 +35,14 @@
             "Value": 0
         }
     ],
-    "Forme": "Standard",
-    "Niveau": 7,
-    "Nom": "Chaînes de la Rage",
-    "Photo": "Azrak Ombresang.png",
-    "Portée": "Individuel"
+    "Niveau": 1,
+    "Nom": "Fouet de Morgoth",
+    "Photo": "default.png",
+    "Portée": "Individuel",
+    "Regen mana": 0,
+    "Regen rage": 0,
+    "Regen vigueur": 0,
+    "Soin": 0,
+	"Forme": "Standard"
 }
 

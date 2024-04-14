@@ -20,14 +20,10 @@ void HeroPanel::UpdatePanel(Character *hero) {
   ui->hero_level->setText(
       QString("Lv: %1 Exp: %2").arg(hero->m_Level).arg(hero->m_Exp));
 
-  const auto &hp =
-      std::get<StatsType<int>>(m_Heroe->m_Stats.m_AllStatsTable[STATS_HP]);
-  const auto &mana =
-      std::get<StatsType<int>>(m_Heroe->m_Stats.m_AllStatsTable[STATS_MANA]);
-  const auto &vigor =
-      std::get<StatsType<int>>(m_Heroe->m_Stats.m_AllStatsTable[STATS_VIGOR]);
-  const auto &berseck =
-      std::get<StatsType<int>>(m_Heroe->m_Stats.m_AllStatsTable[STATS_BERSECK]);
+  const auto &hp = m_Heroe->m_Stats.m_AllStatsTable[STATS_HP];
+  const auto &mana = m_Heroe->m_Stats.m_AllStatsTable[STATS_MANA];
+  const auto &vigor = m_Heroe->m_Stats.m_AllStatsTable[STATS_VIGOR];
+  const auto &berseck = m_Heroe->m_Stats.m_AllStatsTable[STATS_BERSECK];
 
   ui->hero_name->setText(hero->m_Name);
 
@@ -162,6 +158,6 @@ void HeroPanel::InitComboBox() {
 }
 
 void HeroPanel::on_form_comboBox_currentTextChanged(const QString &arg1) {
-    emit SigUpdateCharaForm(m_Heroe->m_Name, arg1);
-    m_Heroe->m_SelectedForm = arg1;
+  emit SigUpdateCharaForm(m_Heroe->m_Name, arg1);
+  m_Heroe->m_SelectedForm = arg1;
 }

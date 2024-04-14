@@ -3,27 +3,27 @@
     "Cible": "Ennemie",
     "Coût de mana": 0,
     "Coût de rage": 0,
-    "Coût de vigueur": 0,
+    "Coût de vigueur": 1,
     "Durée": 1,
     "Dégâts": 0,
     "Effet": [
         {
             "Cible": "Ennemie",
-            "Portée": "Individuel",
+            "Portée": "Zone",
             "Stat": "PV",
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 30
+            "Value": 10
         },
         {
-            "Cible": "",
-            "Portée": "",
-            "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Esquive",
+            "Tours actifs": 2,
+            "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 0
+            "Value": 20
         },
         {
             "Cible": "",
@@ -35,14 +35,14 @@
             "Value": 0
         }
     ],
-    "Forme": "Ours",
     "Niveau": 1,
-    "Nom": "Atqourstest",
+    "Nom": "Tremblement terrestre",
     "Photo": "default.png",
-    "Portée": "Individuel",
+    "Portée": "Zone",
     "Regen mana": 0,
     "Regen rage": 0,
     "Regen vigueur": 0,
-    "Soin": 0
+    "Soin": 0,
+	"Forme": "Standard"
 }
 

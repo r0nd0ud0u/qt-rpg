@@ -6,6 +6,8 @@
 #include <unordered_map>
 #include <variant>
 
+#include "rust-rpg-bridge/buffers.h"
+
 const QString OFFLINE_IMG = "./offlines/attak/img/";
 const QString OFFLINE_ATK = "./offlines/attak/";
 const QString OFFLINE_WEARING_EQUIPMENT = "./offlines/equipment/Personnages/";
@@ -33,21 +35,29 @@ const QString ATK_FORM = "Forme";
 // Reach keys
 const QString REACH_ZONE = "Zone";
 const QString REACH_INDIVIDUAL = "Individuel";
-const std::set<QString> ALL_REACH = {"", REACH_ZONE, REACH_INDIVIDUAL};
+const QString REACH_RAND_INDIVIDUAL = "Aleatoire Individuel";
+const std::set<QString> ALL_REACH = {"", REACH_ZONE, REACH_INDIVIDUAL,
+                                     REACH_RAND_INDIVIDUAL};
 // Target keys
 const QString TARGET_ENNEMY = "Ennemie";
 const QString TARGET_ALLY = "Allié";
 const QString TARGET_ONLY_ALLY = "Seulement les alliés";
 const QString TARGET_ALL_HEROES = "Tous les heroes";
 const QString TARGET_HIMSELF = "Soi-même";
-const std::set<QString> ALL_TARGETS = {"",
-                                       TARGET_ENNEMY,
-                                       TARGET_ALLY,
-                                       TARGET_ALL_HEROES,
-                                       TARGET_HIMSELF,
-                                       TARGET_ONLY_ALLY};
-const std::set<QString> ALLIES_TARGETS = {TARGET_ALLY, TARGET_ALL_HEROES,
-                                          TARGET_HIMSELF, TARGET_ONLY_ALLY};
+const std::set<QString> ALL_TARGETS = {
+    "",
+    TARGET_ENNEMY,
+    TARGET_ALLY,
+    TARGET_ALL_HEROES,
+    TARGET_HIMSELF,
+    TARGET_ONLY_ALLY,
+};
+const std::set<QString> ALLIES_TARGETS = {
+    TARGET_ALLY,
+    TARGET_ALL_HEROES,
+    TARGET_HIMSELF,
+    TARGET_ONLY_ALLY,
+};
 // Stats keys
 const QString STATS_HP = "PV";
 const QString STATS_MANA = "Mana";
@@ -117,13 +127,19 @@ const std::set<QString> ALL_EQUIP{EQUIP_HEAD,
                                   EQUIP_RUNIQUE_TATOO_1,
                                   EQUIP_RUNIQUE_TATOO_2,
                                   EQUIP_RUNIQUE_TATOO_3};
-const std::set<QString> ALL_EQUIP_ON_BODY{
-    "",          EQUIP_HEAD,  EQUIP_NECKLACE,     EQUIP_CHEST,
-    EQUIP_SHOES, EQUIP_ARM,
-    EQUIP_RING,  EQUIP_PANTS, EQUIP_RIGHT_WEAPON, EQUIP_LEFT_WEAPON,
-    EQUIP_RUNIQUE_TATOO_1,
-    EQUIP_RUNIQUE_TATOO_2,
-    EQUIP_RUNIQUE_TATOO_3};
+const std::set<QString> ALL_EQUIP_ON_BODY{"",
+                                          EQUIP_HEAD,
+                                          EQUIP_NECKLACE,
+                                          EQUIP_CHEST,
+                                          EQUIP_SHOES,
+                                          EQUIP_ARM,
+                                          EQUIP_RING,
+                                          EQUIP_PANTS,
+                                          EQUIP_RIGHT_WEAPON,
+                                          EQUIP_LEFT_WEAPON,
+                                          EQUIP_RUNIQUE_TATOO_1,
+                                          EQUIP_RUNIQUE_TATOO_2,
+                                          EQUIP_RUNIQUE_TATOO_3};
 // Effect keys
 const QString EFFECT_REINIT = "Reinit";
 const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";
@@ -141,6 +157,11 @@ const QString EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT = "Up/down degats en %";
 const QString EFFECT_REPEAT_AS_MANY_AS = "Répète tant que possible";
 const QString CONDITION_ENNEMIES_DIED = "Ennemis morts tours précédents";
 const QString EFFECT_IMPROVEMENT_STAT_BY_VALUE = "Up par valeur";
+const QString EFFECT_NEXT_HEAL_IS_CRIT = "Prochaine attaque heal est crit";
+const QString EFFECT_BUF_MULTI =
+    "Buf multi";
+const QString EFFECT_BLOCK_HEAL_ATK = "Bloque attaque de soin";
+const QString CONDITION_DMG_PREV_TURN = "Dégâts au tour précédent";
 const std::set<QString> EFFECTS{"",
                                 EFFECT_REINIT,
                                 EFFECT_NB_COOL_DOWN,
@@ -156,7 +177,10 @@ const std::set<QString> EFFECTS{"",
                                 EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT,
                                 EFFECT_REPEAT_AS_MANY_AS,
                                 CONDITION_ENNEMIES_DIED,
-                                EFFECT_IMPROVEMENT_STAT_BY_VALUE};
+                                EFFECT_IMPROVEMENT_STAT_BY_VALUE,
+                                EFFECT_BUF_MULTI,
+                                EFFECT_BLOCK_HEAL_ATK,
+                                CONDITION_DMG_PREV_TURN};
 const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_NB_DECREASE_BY_TURN,
     EFFECT_NB_COOL_DOWN,
@@ -167,8 +191,10 @@ const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT,
     EFFECT_IMPROVEMENT_STAT_BY_VALUE,
     EFFECT_IMPROVE_BY_PERCENT_CHANGE,
-    EFFECT_INTO_DAMAGE
-
+    EFFECT_INTO_DAMAGE,
+    EFFECT_NEXT_HEAL_IS_CRIT,
+    EFFECT_BUF_MULTI,
+    EFFECT_BLOCK_HEAL_ATK,
 };
 const QString EFFECT_ARRAY = "Effet";
 const QString EFFECT_TYPE = "Type";
@@ -185,31 +211,22 @@ const QString BEAR_FORM = "Ours";
 const QString STANDARD_FORM = "Standard";
 const std::set<QString> ALL_FORMS = {STANDARD_FORM, ENT_FORM, BEAR_FORM};
 
-struct Buf {
-  int m_Value = 0;
-  bool m_IsPercent = false;
-  void SetBuf(const int value, const bool isPercent) {
-    m_Value = value;
-    m_IsPercent = isPercent;
-  }
-};
-
-template <class T> class StatsType {
+class StatsType {
 public:
   StatsType() = default; // Default constructor
   explicit StatsType(QString type) : m_Type(type) {}
-  T m_CurrentValue;
-  T m_StartingValue;
-  T m_MaxValue;
-  T m_RegenOnTurn;
-  T m_BaseEquipValue;
-  T m_RawMaxValue;
+  int m_CurrentValue;
+  int m_StartingValue;
+  int m_MaxValue;
+  int m_RegenOnTurn;
+  int m_BaseEquipValue;
+  int m_RawMaxValue;
   QString m_Type;
-  T m_BufEffectValue;
+  int m_BufEffectValue;
   int m_BufEffectPercent;
-  T m_BufEquipValue;
+  int m_BufEquipValue;
   int m_BufEquipPercent;
-  void InitValues(T starting, T current, T max, T regen) {
+  void InitValues(int starting, int current, int max, int regen) {
     m_CurrentValue = current;
     m_MaxValue = max;
     m_BufEffectPercent = 0;
@@ -225,31 +242,29 @@ public:
   };
 };
 
-using statsVariant = std::variant<StatsType<double>, StatsType<int>>;
-
 class Stats {
 public:
-  StatsType<int> m_HP = StatsType<int>(STATS_HP);
-  StatsType<int> m_Mana = StatsType<int>(STATS_MANA);
-  StatsType<int> m_Vigor = StatsType<int>(STATS_VIGOR);
-  StatsType<int> m_Berseck = StatsType<int>(STATS_BERSECK);
-  StatsType<int> m_BerseckRate = StatsType<int>(STATS_RATE_BERSECK);
-  StatsType<int> m_ArmPhy = StatsType<int>(STATS_ARM_PHY);
-  StatsType<int> m_ArmMag = StatsType<int>(STATS_ARM_MAG);
-  StatsType<int> m_PowPhy = StatsType<int>(STATS_POW_PHY);
-  StatsType<int> m_PowMag = StatsType<int>(STATS_POW_MAG);
-  StatsType<int> m_Aggro = StatsType<int>(STATS_AGGRO);
-  StatsType<int> m_AggroRate = StatsType<int>(STATS_RATE_AGGRO);
-  StatsType<int> m_Speed = StatsType<int>(STATS_SPEED);
+  StatsType m_HP = StatsType(STATS_HP);
+  StatsType m_Mana = StatsType(STATS_MANA);
+  StatsType m_Vigor = StatsType(STATS_VIGOR);
+  StatsType m_Berseck = StatsType(STATS_BERSECK);
+  StatsType m_BerseckRate = StatsType(STATS_RATE_BERSECK);
+  StatsType m_ArmPhy = StatsType(STATS_ARM_PHY);
+  StatsType m_ArmMag = StatsType(STATS_ARM_MAG);
+  StatsType m_PowPhy = StatsType(STATS_POW_PHY);
+  StatsType m_PowMag = StatsType(STATS_POW_MAG);
+  StatsType m_Aggro = StatsType(STATS_AGGRO);
+  StatsType m_AggroRate = StatsType(STATS_RATE_AGGRO);
+  StatsType m_Speed = StatsType(STATS_SPEED);
   // critical strike in %
-  StatsType<int> m_CriticalStrike = StatsType<int>(STATS_CRIT);
+  StatsType m_CriticalStrike = StatsType(STATS_CRIT);
   // dodge in %
-  StatsType<int> m_Dogde = StatsType<int>(STATS_DODGE);
-  StatsType<int> m_RegenHP = StatsType<int>(STATS_REGEN_HP);
-  StatsType<int> m_RegenMana = StatsType<int>(STATS_REGEN_MANA);
-  StatsType<int> m_RegenVigor = StatsType<int>(STATS_REGEN_VIGOR);
+  StatsType m_Dogde = StatsType(STATS_DODGE);
+  StatsType m_RegenHP = StatsType(STATS_REGEN_HP);
+  StatsType m_RegenMana = StatsType(STATS_REGEN_MANA);
+  StatsType m_RegenVigor = StatsType(STATS_REGEN_VIGOR);
 
-  std::unordered_map<QString, statsVariant> m_AllStatsTable = {
+  std::unordered_map<QString, StatsType> m_AllStatsTable = {
       {STATS_HP, m_HP},
       {STATS_MANA, m_Mana},
       {STATS_VIGOR, m_Vigor},

@@ -1,17 +1,17 @@
 {
     "Cible": "Allié",
-    "Coût de mana": 12,
+    "Coût de mana": 15,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Effet": [
         {
             "Cible": "Soi-même",
             "Portée": "Individuel",
-            "Stat": "PV",
+            "Stat": "",
             "Tours actifs": 1,
-            "Type": "Changement par %",
+            "Type": "Dégâts au tour précédent",
             "Valeur de l'effet": 0,
-            "Value": -15
+            "Value": 0
         },
         {
             "Cible": "Allié",
@@ -20,39 +20,21 @@
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 85
-        },
-        {
-            "Cible": "Allié",
-            "Portée": "Individuel",
-            "Stat": "Armure magique",
-            "Tours actifs": 2,
-            "Type": "Up par %",
-            "Valeur de l'effet": 0,
-            "Value": 50
-        },
-        {
-            "Cible": "Allié",
-            "Portée": "Individuel",
-            "Stat": "Armure physique",
-            "Tours actifs": 2,
-            "Type": "Up par %",
-            "Valeur de l'effet": 0,
-            "Value": 50
+            "Value": 130
         },
         {
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "",
-            "Tours actifs": 2,
+            "Tours actifs": 5,
             "Type": "Tours de recharge",
             "Valeur de l'effet": 0,
             "Value": 0
         }
     ],
     "Forme": "Standard",
-    "Niveau": 2,
-    "Nom": "Offrande vitale",
+    "Niveau": 5,
+    "Nom": "Lumiere curative",
     "Photo": "default.png",
     "Portée": "Individuel"
 }

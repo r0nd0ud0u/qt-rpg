@@ -1,5 +1,5 @@
 {
-    "Cible": "Ennemie",
+    "Cible": "Allié",
     "Coût de mana": 24,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
@@ -33,7 +33,7 @@
         }
     ],
     "Forme": "Standard",
-    "Niveau": 9,
+    "Niveau": 7,
     "Nom": "Benediction de la Lorien",
     "Photo": "default.png",
     "Portée": "Individuel"

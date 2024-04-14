@@ -11,8 +11,9 @@ StatsView::StatsView(QWidget *parent) : QWidget(parent), ui(new Ui::StatsView) {
 
   connect((GameDisplay *)parentWidget(), &GameDisplay::selectCharacter, this,
           &StatsView::UpdateStats);
-  connect((GameDisplay *)parentWidget(), &GameDisplay::SigUpdStatsOnSelCharacter,
-          this, &StatsView::UpdateDisplayedCharStats);
+  connect((GameDisplay *)parentWidget(),
+          &GameDisplay::SigUpdStatsOnSelCharacter, this,
+          &StatsView::UpdateDisplayedCharStats);
 }
 
 StatsView::~StatsView() { delete ui; }
@@ -40,14 +41,12 @@ QAbstractItemModel *StatsView::createStatsModel(QObject *parent) {
   // define curplayername
   m_CurPlayerName = selectedHero->m_Name;
 
-  for(const auto& stat : ALL_STATS){
-      if(stat.isEmpty()){
-          continue;
-      }
-      addStatRow(model, stat,
-                 std::get<StatsType<int>>(
-                     selectedHero->m_Stats.m_AllStatsTable.at(stat))
-                     .m_CurrentValue);
+  for (const auto &stat : ALL_STATS) {
+    if (stat.isEmpty()) {
+      continue;
+    }
+    addStatRow(model, stat,
+               selectedHero->m_Stats.m_AllStatsTable.at(stat).m_CurrentValue);
   }
 
   return model;
@@ -57,6 +56,4 @@ void StatsView::UpdateStats() {
   ui->stats_table->setModel(createStatsModel(parentWidget()));
 }
 
-void StatsView::UpdateDisplayedCharStats() {
-  UpdateStats();
-}
+void StatsView::UpdateDisplayedCharStats() { UpdateStats(); }

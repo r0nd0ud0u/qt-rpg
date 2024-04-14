@@ -4,14 +4,18 @@
 #include <QColor>
 #include <QString>
 
+#include <deque>
 #include <tuple>
 #include <unordered_map>
 #include <vector>
-#include <deque>
 
 #include "common.h"
 #include "effect.h"
 #include "stuff.h"
+
+#include "rust-rpg-bridge/attaque.h"
+#include "rust-rpg-bridge/character.h"
+#include "rust-rpg-bridge/powers.h"
 
 enum class characType { Hero, Boss };
 
@@ -27,10 +31,21 @@ public:
   QString namePhoto = "default.png";
   std::vector<effectParam> m_AllEffects = {};
   QString form = STANDARD_FORM;
+  AttaqueNature nature;
 };
 
 enum class InventoryType { healthPotion, manaPotion, enumSize };
-enum class BufTypes { defaultBuf, damageRx, damageTx, damageCritCapped, powPhyBuf, enumSize };
+enum class BufTypes {
+  defaultBuf = 0,
+  damageRx,
+  damageTx,
+  damageCritCapped,
+  powPhyBuf,
+  nextHealAtkIsCrit,
+  multiValue,
+  applyEffectInit,
+  enumSize
+};
 
 class Character {
 public:
@@ -59,7 +74,7 @@ public:
   QString RegenIntoDamage(const int atkValue, const QString &statsName) const;
 
   static void
-  SetStatsOnEffect(StatsType<int> &stat, const int value, const bool isUp,
+  SetStatsOnEffect(StatsType &stat, const int value, const char charSign,
                    const bool isPercent,
                    const bool updateEffect); // TODO à sortir dans un common
                                              // pour gerer les stats?
@@ -69,7 +84,8 @@ public:
   void SetEquipment(const std::unordered_map<QString, QString> &);
   void UpdateEquipmentOnJson() const;
   void ApplyEffeftOnStats(const bool updateEffect);
-  std::pair<bool, int> ProcessCriticalStrike(); // return isCrit, random number
+  std::pair<bool, int>
+  ProcessCriticalStrike(const AttaqueType &atk); // return isCrit, random number
   void ResetBuf(const BufTypes &bufType);
   void SetValuesForThalia(const bool isBear);
 
@@ -95,16 +111,19 @@ public:
 
   QColor color = QColor("dark");
   // Buf
-  std::vector<Buf> m_AllBufs;
+  std::vector<Buffers *> m_AllBufs;
   int m_HealRxOnTurn = 0;
+  /// Explain if the last attak has been critical or not
+  bool m_isLastAtkCritical = false;
+  std::unordered_map<uint64_t, uint64_t>
+      m_LastDamageTX; // key : turn number, value: damage transmitted
+  Powers m_Power;
+  ExtendedCharacter *m_ExtCharacter;
 
 private:
-  template <class T>
-  void ProcessAddEquip(StatsType<T> &charStat,
-                       const StatsType<T> &equipStat) const;
-  template <class T>
-  void ProcessRemoveEquip(StatsType<T> &charStat,
-                          const StatsType<T> &equipStat);
+  static void ProcessAddEquip(StatsType &charStat, const StatsType &equipStat);
+  static void ProcessRemoveEquip(StatsType &charStat,
+                                 const StatsType &equipStat);
   std::pair<int, int> ProcessCurrentValueOnEffect(
       effectParam &ep, const int nbOfApplies, const Stats &launcherStats,
       const bool launch, Character *target,
@@ -119,8 +138,6 @@ private:
   static int DamageByAtk(const Stats &launcherStats, const Stats &targetStats,
                          const bool isMagicAtk, const int atkValue,
                          const int nbTurns);
-  int GetSignEffectValue(const QString &target) const;
-  QChar GetCharEffectValue(const QString &target) const;
   int GetMaxNbOfApplies(const AttaqueType &atk) const;
   int ProcessBerseckOnRxAtk(const int nbOfApplies);
   std::pair<QString, int> ProcessEffectType(
@@ -130,7 +147,7 @@ private:
   void UpdateStatsToNextLevel();
   void UpdateBuf(const BufTypes &bufType, const int value,
                  const bool isPercent);
-  static int UpdateDamageByBuf(const Buf &bufDmg, const int value);
+  static int UpdateDamageByBuf(const Buffers *bufDmg, const int value);
 };
 
 #endif // CHARACTER_H
