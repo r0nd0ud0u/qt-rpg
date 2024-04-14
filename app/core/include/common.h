@@ -211,22 +211,22 @@ const QString BEAR_FORM = "Ours";
 const QString STANDARD_FORM = "Standard";
 const std::set<QString> ALL_FORMS = {STANDARD_FORM, ENT_FORM, BEAR_FORM};
 
-template <class T> class StatsType {
+class StatsType {
 public:
   StatsType() = default; // Default constructor
   explicit StatsType(QString type) : m_Type(type) {}
-  T m_CurrentValue;
-  T m_StartingValue;
-  T m_MaxValue;
-  T m_RegenOnTurn;
-  T m_BaseEquipValue;
-  T m_RawMaxValue;
+  int m_CurrentValue;
+  int m_StartingValue;
+  int m_MaxValue;
+  int m_RegenOnTurn;
+  int m_BaseEquipValue;
+  int m_RawMaxValue;
   QString m_Type;
-  T m_BufEffectValue;
+  int m_BufEffectValue;
   int m_BufEffectPercent;
-  T m_BufEquipValue;
+  int m_BufEquipValue;
   int m_BufEquipPercent;
-  void InitValues(T starting, T current, T max, T regen) {
+  void InitValues(int starting, int current, int max, int regen) {
     m_CurrentValue = current;
     m_MaxValue = max;
     m_BufEffectPercent = 0;
@@ -242,31 +242,29 @@ public:
   };
 };
 
-using statsVariant = std::variant<StatsType<double>, StatsType<int>>;
-
 class Stats {
 public:
-  StatsType<int> m_HP = StatsType<int>(STATS_HP);
-  StatsType<int> m_Mana = StatsType<int>(STATS_MANA);
-  StatsType<int> m_Vigor = StatsType<int>(STATS_VIGOR);
-  StatsType<int> m_Berseck = StatsType<int>(STATS_BERSECK);
-  StatsType<int> m_BerseckRate = StatsType<int>(STATS_RATE_BERSECK);
-  StatsType<int> m_ArmPhy = StatsType<int>(STATS_ARM_PHY);
-  StatsType<int> m_ArmMag = StatsType<int>(STATS_ARM_MAG);
-  StatsType<int> m_PowPhy = StatsType<int>(STATS_POW_PHY);
-  StatsType<int> m_PowMag = StatsType<int>(STATS_POW_MAG);
-  StatsType<int> m_Aggro = StatsType<int>(STATS_AGGRO);
-  StatsType<int> m_AggroRate = StatsType<int>(STATS_RATE_AGGRO);
-  StatsType<int> m_Speed = StatsType<int>(STATS_SPEED);
+  StatsType m_HP = StatsType(STATS_HP);
+  StatsType m_Mana = StatsType(STATS_MANA);
+  StatsType m_Vigor = StatsType(STATS_VIGOR);
+  StatsType m_Berseck = StatsType(STATS_BERSECK);
+  StatsType m_BerseckRate = StatsType(STATS_RATE_BERSECK);
+  StatsType m_ArmPhy = StatsType(STATS_ARM_PHY);
+  StatsType m_ArmMag = StatsType(STATS_ARM_MAG);
+  StatsType m_PowPhy = StatsType(STATS_POW_PHY);
+  StatsType m_PowMag = StatsType(STATS_POW_MAG);
+  StatsType m_Aggro = StatsType(STATS_AGGRO);
+  StatsType m_AggroRate = StatsType(STATS_RATE_AGGRO);
+  StatsType m_Speed = StatsType(STATS_SPEED);
   // critical strike in %
-  StatsType<int> m_CriticalStrike = StatsType<int>(STATS_CRIT);
+  StatsType m_CriticalStrike = StatsType(STATS_CRIT);
   // dodge in %
-  StatsType<int> m_Dogde = StatsType<int>(STATS_DODGE);
-  StatsType<int> m_RegenHP = StatsType<int>(STATS_REGEN_HP);
-  StatsType<int> m_RegenMana = StatsType<int>(STATS_REGEN_MANA);
-  StatsType<int> m_RegenVigor = StatsType<int>(STATS_REGEN_VIGOR);
+  StatsType m_Dogde = StatsType(STATS_DODGE);
+  StatsType m_RegenHP = StatsType(STATS_REGEN_HP);
+  StatsType m_RegenMana = StatsType(STATS_REGEN_MANA);
+  StatsType m_RegenVigor = StatsType(STATS_REGEN_VIGOR);
 
-  std::unordered_map<QString, statsVariant> m_AllStatsTable = {
+  std::unordered_map<QString, StatsType> m_AllStatsTable = {
       {STATS_HP, m_HP},
       {STATS_MANA, m_Mana},
       {STATS_VIGOR, m_Vigor},

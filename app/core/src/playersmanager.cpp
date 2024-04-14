@@ -15,155 +15,87 @@
 void PlayersManager::InitHeroes() {
 
   Stats stats;
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
-      .InitValues(135, 135, 135, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
-      .InitValues(160, 160, 160, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
-      .InitValues(40, 40, 40, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .InitValues(10, 10, 10, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
-      .InitValues(20, 20, 20, 0);
+  stats.m_AllStatsTable[STATS_HP].InitValues(135, 135, 135, 0);
+  stats.m_AllStatsTable[STATS_MANA].InitValues(160, 160, 160, 0);
+  stats.m_AllStatsTable[STATS_VIGOR].InitValues(40, 40, 40, 0);
+  stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_POW_PHY].InitValues(10, 10, 10, 0);
+  stats.m_AllStatsTable[STATS_POW_MAG].InitValues(20, 20, 20, 0);
   // TODO set max aggro 9999 is a good idea??
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
-      .InitValues(0, 0, 9999, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .InitValues(12, 12, 1000, 12);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
-      .InitValues(10, 10, 10, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
-      .InitValues(5, 5, 5, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
-      .InitValues(7, 7, 7, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
-      .InitValues(7, 7, 7, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
-      .InitValues(5, 5, 5, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
-      .InitValues(1, 1, 1, 0);
+  stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 9999, 0);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(12, 12, 1000, 12);
+  stats.m_AllStatsTable[STATS_CRIT].InitValues(10, 10, 10, 0);
+  stats.m_AllStatsTable[STATS_DODGE].InitValues(5, 5, 5, 0);
+  stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(7, 7, 7, 0);
+  stats.m_AllStatsTable[STATS_REGEN_MANA].InitValues(7, 7, 7, 0);
+  stats.m_AllStatsTable[STATS_REGEN_VIGOR].InitValues(5, 5, 5, 0);
+  stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(1, 1, 1, 0);
   const auto hero1 = new Character("Thalia", characType::Hero, stats);
   hero1->m_Forms.push_back(ENT_FORM);
   hero1->m_Forms.push_back(BEAR_FORM);
 
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
-      .InitValues(145, 145, 145, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
-      .InitValues(70, 70, 70, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
-      .InitValues(130, 130, 130, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .InitValues(20, 20, 20, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
-      .InitValues(10, 10, 10, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
-      .InitValues(0, 0, 9999, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .InitValues(10, 10, 1000, 10);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
-      .InitValues(12, 12, 12, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
-      .InitValues(6, 6, 6, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
-      .InitValues(7, 7, 7, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
-      .InitValues(7, 7, 7, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
-      .InitValues(5, 5, 5, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
-      .InitValues(1, 1, 1, 0);
+  stats.m_AllStatsTable[STATS_HP].InitValues(145, 145, 145, 0);
+  stats.m_AllStatsTable[STATS_MANA].InitValues(70, 70, 70, 0);
+  stats.m_AllStatsTable[STATS_VIGOR].InitValues(130, 130, 130, 0);
+  stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_POW_PHY].InitValues(20, 20, 20, 0);
+  stats.m_AllStatsTable[STATS_POW_MAG].InitValues(10, 10, 10, 0);
+  stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 9999, 0);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(10, 10, 1000, 10);
+  stats.m_AllStatsTable[STATS_CRIT].InitValues(12, 12, 12, 0);
+  stats.m_AllStatsTable[STATS_DODGE].InitValues(6, 6, 6, 0);
+  stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(7, 7, 7, 0);
+  stats.m_AllStatsTable[STATS_REGEN_MANA].InitValues(7, 7, 7, 0);
+  stats.m_AllStatsTable[STATS_REGEN_VIGOR].InitValues(5, 5, 5, 0);
+  stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(1, 1, 1, 0);
   const auto hero2 = new Character("Azrak Ombresang", characType::Hero, stats);
   hero2->m_Forms.push_back(STANDARD_FORM);
 
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
-      .InitValues(155, 155, 155, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
-      .InitValues(20, 20, 100, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
-      .InitValues(5, 5, 5, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .InitValues(50, 50, 50, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .InitValues(50, 50, 50, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .InitValues(20, 20, 20, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
-      .InitValues(0, 0, 9999, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .InitValues(5, 5, 1000, 5);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
-      .InitValues(8, 8, 8, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
-      .InitValues(5, 5, 5, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
-      .InitValues(7, 7, 7, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
-      .InitValues(3, 3, 3, 0);
+  stats.m_AllStatsTable[STATS_HP].InitValues(155, 155, 155, 0);
+  stats.m_AllStatsTable[STATS_MANA].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_BERSECK].InitValues(20, 20, 100, 0);
+  stats.m_AllStatsTable[STATS_VIGOR].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(5, 5, 5, 0);
+  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(50, 50, 50, 0);
+  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(50, 50, 50, 0);
+  stats.m_AllStatsTable[STATS_POW_PHY].InitValues(20, 20, 20, 0);
+  stats.m_AllStatsTable[STATS_POW_MAG].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 9999, 0);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(5, 5, 1000, 5);
+  stats.m_AllStatsTable[STATS_CRIT].InitValues(8, 8, 8, 0);
+  stats.m_AllStatsTable[STATS_DODGE].InitValues(5, 5, 5, 0);
+  stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(7, 7, 7, 0);
+  stats.m_AllStatsTable[STATS_REGEN_MANA].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_VIGOR].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(3, 3, 3, 0);
   const auto hero3 = new Character("Thraïn", characType::Hero, stats);
   hero3->m_Forms.push_back(STANDARD_FORM);
 
   // character flo
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
-      .InitValues(130, 130, 130, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
-      .InitValues(180, 180, 180, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
-      .InitValues(25, 25, 25, 0);
+  stats.m_AllStatsTable[STATS_HP].InitValues(130, 130, 130, 0);
+  stats.m_AllStatsTable[STATS_MANA].InitValues(180, 180, 180, 0);
+  stats.m_AllStatsTable[STATS_VIGOR].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_POW_PHY].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_POW_MAG].InitValues(25, 25, 25, 0);
   // TODO set max aggro 9999 is a good idea??
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
-      .InitValues(0, 0, 9999, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .InitValues(8, 8, 1000, 8);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
-      .InitValues(10, 10, 10, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
-      .InitValues(7, 7, 7, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
-      .InitValues(5, 5, 5, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
-      .InitValues(5, 5, 5, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
-      .InitValues(1, 1, 1, 0);
+  stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 9999, 0);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(8, 8, 1000, 8);
+  stats.m_AllStatsTable[STATS_CRIT].InitValues(10, 10, 10, 0);
+  stats.m_AllStatsTable[STATS_DODGE].InitValues(7, 7, 7, 0);
+  stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(5, 5, 5, 0);
+  stats.m_AllStatsTable[STATS_REGEN_MANA].InitValues(5, 5, 5, 0);
+  stats.m_AllStatsTable[STATS_REGEN_VIGOR].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(1, 1, 1, 0);
   const auto hero4 = new Character("Elara la guerisseuse de la Lorien",
                                    characType::Hero, stats);
   hero4->m_Forms.push_back(STANDARD_FORM);
@@ -213,80 +145,46 @@ void PlayersManager::InitHeroes() {
 
 void PlayersManager::InitBosses() {
   Stats stats;
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
-      .InitValues(7000, 7000, 7000, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
-      .InitValues(9999, 9999, 9999, 9999);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
-      .InitValues(9999, 9999, 9999, 9999);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .InitValues(580, 580, 580, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .InitValues(603, 603, 603, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .InitValues(100, 100, 100, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
-      .InitValues(200, 200, 200, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .InitValues(0, 0, 1000, 25);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
-      .InitValues(21, 21, 21, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
-      .InitValues(18, 18, 18, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
-      .InitValues(25, 25, 25, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
-      .InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_HP].InitValues(7000, 7000, 7000, 0);
+  stats.m_AllStatsTable[STATS_MANA].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_VIGOR].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(580, 580, 580, 0);
+  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(603, 603, 603, 0);
+  stats.m_AllStatsTable[STATS_POW_PHY].InitValues(100, 100, 100, 0);
+  stats.m_AllStatsTable[STATS_POW_MAG].InitValues(200, 200, 200, 0);
+  stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 1000, 25);
+  stats.m_AllStatsTable[STATS_CRIT].InitValues(21, 21, 21, 0);
+  stats.m_AllStatsTable[STATS_DODGE].InitValues(18, 18, 18, 0);
+  stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_MANA].InitValues(25, 25, 25, 0);
+  stats.m_AllStatsTable[STATS_REGEN_VIGOR].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(0, 0, 0, 0);
   const auto boss1 =
       new Character("La bouche du Mordor", characType::Boss, stats);
   boss1->color = QColor("red");
   // m_BossesList.push_back(boss1);
   boss1->m_Forms.push_back(STANDARD_FORM);
 
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
-      .InitValues(4000, 4000, 4000, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
-      .InitValues(9999, 9999, 9999, 9999);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
-      .InitValues(9999, 9999, 9999, 9999);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .InitValues(500, 500, 500, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .InitValues(500, 500, 500, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .InitValues(50, 50, 50, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
-      .InitValues(50, 50, 50, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .InitValues(0, 0, 1000, 10);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
-      .InitValues(10, 10, 10, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
-      .InitValues(10, 10, 10, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
-      .InitValues(25, 25, 25, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
-      .InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_HP].InitValues(4000, 4000, 4000, 0);
+  stats.m_AllStatsTable[STATS_MANA].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_VIGOR].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(500, 500, 500, 0);
+  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(500, 500, 500, 0);
+  stats.m_AllStatsTable[STATS_POW_PHY].InitValues(50, 50, 50, 0);
+  stats.m_AllStatsTable[STATS_POW_MAG].InitValues(50, 50, 50, 0);
+  stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 1000, 10);
+  stats.m_AllStatsTable[STATS_CRIT].InitValues(10, 10, 10, 0);
+  stats.m_AllStatsTable[STATS_DODGE].InitValues(10, 10, 10, 0);
+  stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_MANA].InitValues(25, 25, 25, 0);
+  stats.m_AllStatsTable[STATS_REGEN_VIGOR].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(0, 0, 0, 0);
 
   for (int i = 0; i < 5; i++) {
     const auto boss2 =
@@ -296,79 +194,45 @@ void PlayersManager::InitBosses() {
     // m_BossesList.push_back(boss2);
   }
 
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
-      .InitValues(7000, 7000, 7000, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
-      .InitValues(9999, 9999, 9999, 9999);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
-      .InitValues(9999, 9999, 9999, 9999);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .InitValues(500, 500, 500, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .InitValues(700, 700, 700, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .InitValues(140, 140, 140, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
-      .InitValues(200, 200, 200, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .InitValues(0, 0, 1000, 20);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
-      .InitValues(15, 15, 15, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
-      .InitValues(15, 15, 15, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
-      .InitValues(25, 25, 25, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
-      .InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_HP].InitValues(7000, 7000, 7000, 0);
+  stats.m_AllStatsTable[STATS_MANA].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_VIGOR].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(500, 500, 500, 0);
+  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(700, 700, 700, 0);
+  stats.m_AllStatsTable[STATS_POW_PHY].InitValues(140, 140, 140, 0);
+  stats.m_AllStatsTable[STATS_POW_MAG].InitValues(200, 200, 200, 0);
+  stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 1000, 20);
+  stats.m_AllStatsTable[STATS_CRIT].InitValues(15, 15, 15, 0);
+  stats.m_AllStatsTable[STATS_DODGE].InitValues(15, 15, 15, 0);
+  stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_MANA].InitValues(25, 25, 25, 0);
+  stats.m_AllStatsTable[STATS_REGEN_VIGOR].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(0, 0, 0, 0);
   const auto boss3 = new Character("Angmar", characType::Boss, stats);
   boss3->color = QColor("red");
   // m_BossesList.push_back(boss3);
   boss3->m_Forms.push_back(STANDARD_FORM);
 
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_HP])
-      .InitValues(20000, 20000, 20000, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_MANA])
-      .InitValues(9999, 9999, 9999, 9999);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_BERSECK])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_BERSECK])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_VIGOR])
-      .InitValues(9999, 9999, 9999, 9999);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_PHY])
-      .InitValues(800, 800, 800, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_ARM_MAG])
-      .InitValues(600, 600, 600, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_PHY])
-      .InitValues(250, 250, 250, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_POW_MAG])
-      .InitValues(120, 120, 120, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_AGGRO])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_SPEED])
-      .InitValues(0, 0, 1000, 20);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_CRIT])
-      .InitValues(20, 20, 20, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_DODGE])
-      .InitValues(20, 20, 20, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_HP])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_MANA])
-      .InitValues(25, 25, 25, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_REGEN_VIGOR])
-      .InitValues(0, 0, 0, 0);
-  std::get<StatsType<int>>(stats.m_AllStatsTable[STATS_RATE_AGGRO])
-      .InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_HP].InitValues(20000, 20000, 20000, 0);
+  stats.m_AllStatsTable[STATS_MANA].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_VIGOR].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(800, 800, 800, 0);
+  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(600, 600, 600, 0);
+  stats.m_AllStatsTable[STATS_POW_PHY].InitValues(250, 250, 250, 0);
+  stats.m_AllStatsTable[STATS_POW_MAG].InitValues(120, 120, 120, 0);
+  stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 1000, 20);
+  stats.m_AllStatsTable[STATS_CRIT].InitValues(20, 20, 20, 0);
+  stats.m_AllStatsTable[STATS_DODGE].InitValues(20, 20, 20, 0);
+  stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_MANA].InitValues(25, 25, 25, 0);
+  stats.m_AllStatsTable[STATS_REGEN_VIGOR].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(0, 0, 0, 0);
   const auto boss4 = new Character("Angmar le retour", characType::Boss, stats);
   boss4->color = QColor("red");
   m_BossesList.push_back(boss4);
@@ -427,7 +291,7 @@ void PlayersManager::LoadAllEquipmentsJson() {
           }
           // init
           auto &stuffStat =
-              std::get<StatsType<int>>(stuff.m_Stats.m_AllStatsTable[stats]);
+              stuff.m_Stats.m_AllStatsTable[stats];
           stuffStat.InitValues(0, 0, 0, 0);
           QJsonArray jsonArray = jsonDoc[stats].toArray();
           for (const auto &elem : jsonArray) {
@@ -560,21 +424,14 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
   }
   for (const auto &pl : playerList) {
 
-    auto &hp = std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable[STATS_HP]);
-    const auto &regenHp =
-        std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable[STATS_REGEN_HP]);
-    auto &mana =
-        std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable[STATS_MANA]);
-    const auto &regenMana =
-        std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable[STATS_REGEN_MANA]);
-    auto &berseck =
-        std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable[STATS_BERSECK]);
-    auto &vigor =
-        std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable[STATS_VIGOR]);
-    const auto &regenVigor = std::get<StatsType<int>>(
-        pl->m_Stats.m_AllStatsTable[STATS_REGEN_VIGOR]);
-    auto &speed =
-        std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable[STATS_SPEED]);
+    auto &hp = pl->m_Stats.m_AllStatsTable[STATS_HP];
+    const auto &regenHp = pl->m_Stats.m_AllStatsTable[STATS_REGEN_HP];
+    auto &mana = pl->m_Stats.m_AllStatsTable[STATS_MANA];
+    const auto &regenMana = pl->m_Stats.m_AllStatsTable[STATS_REGEN_MANA];
+    auto &berseck = pl->m_Stats.m_AllStatsTable[STATS_BERSECK];
+    auto &vigor = pl->m_Stats.m_AllStatsTable[STATS_VIGOR];
+    const auto &regenVigor = pl->m_Stats.m_AllStatsTable[STATS_REGEN_VIGOR];
+    auto &speed = pl->m_Stats.m_AllStatsTable[STATS_SPEED];
 
     hp.m_CurrentValue = std::min(
         hp.m_MaxValue,
@@ -728,8 +585,7 @@ QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
         if (pl == nullptr) {
           return false;
         }
-        const auto &hp =
-            std::get<StatsType<int>>(pl->m_Stats.m_AllStatsTable.at(STATS_HP));
+        const auto &hp = pl->m_Stats.m_AllStatsTable.at(STATS_HP);
         QString name = pl->m_Name;
         const bool isDead = hp.m_CurrentValue <= 0;
         if (isDead) {
@@ -766,12 +622,10 @@ void PlayersManager::AddSupAtkTurn(
   const int speedThreshold = 100;
   for (auto *pl1 : playerList1) {
     auto &speedPl1 =
-        std::get<StatsType<int>>(pl1->m_Stats.m_AllStatsTable.at(STATS_SPEED))
-            .m_CurrentValue;
+        pl1->m_Stats.m_AllStatsTable.at(STATS_SPEED).m_CurrentValue;
     for (const auto &pl2 : playerList2) {
       const auto &speedpl2 =
-          std::get<StatsType<int>>(pl2->m_Stats.m_AllStatsTable.at(STATS_SPEED))
-              .m_CurrentValue;
+          pl2->m_Stats.m_AllStatsTable.at(STATS_SPEED).m_CurrentValue;
       if (speedPl1 - speedpl2 >= speedThreshold) {
         speedPl1 -= speedThreshold;
         playerOrderTable.push_back(pl1->m_Name);
@@ -839,10 +693,8 @@ PlayersManager::GetAllDeadliestAllies(const characType &launcherType) const {
         if (char1 == nullptr || char2 == nullptr) {
           return false;
         }
-        const auto &stat1 = std::get<StatsType<int>>(
-            char1->m_Stats.m_AllStatsTable.at(STATS_HP));
-        const auto &stat2 = std::get<StatsType<int>>(
-            char2->m_Stats.m_AllStatsTable.at(STATS_HP));
+        const auto &stat1 = char1->m_Stats.m_AllStatsTable.at(STATS_HP);
+        const auto &stat2 = char2->m_Stats.m_AllStatsTable.at(STATS_HP);
 
         // ratio
         const double ratio1 = (stat1.m_MaxValue > 0)
@@ -859,14 +711,11 @@ PlayersManager::GetAllDeadliestAllies(const characType &launcherType) const {
 
   const auto cWithMin = static_cast<Character *>(*minElement);
   const auto &chp =
-      std::get<StatsType<int>>(cWithMin->m_Stats.m_AllStatsTable.at(STATS_HP))
-          .m_CurrentValue;
+      cWithMin->m_Stats.m_AllStatsTable.at(STATS_HP).m_CurrentValue;
 
   std::for_each(
       playerList->begin(), playerList->end(), [&](const Character *c) {
-        const auto &hp =
-            std::get<StatsType<int>>(c->m_Stats.m_AllStatsTable.at(STATS_HP))
-                .m_CurrentValue;
+        const auto &hp = c->m_Stats.m_AllStatsTable.at(STATS_HP).m_CurrentValue;
         if (hp == chp) {
           output.push_back(c->m_Name);
         }
@@ -903,7 +752,7 @@ PlayersManager::ProcessDamageTXHealNeedyAlly(const characType &launcherType,
   if (c == nullptr) {
     return "";
   }
-  auto &hp = std::get<StatsType<int>>(c->m_Stats.m_AllStatsTable.at(STATS_HP));
+  auto &hp = c->m_Stats.m_AllStatsTable.at(STATS_HP);
   hp.m_CurrentValue = std::min(
       hp.m_MaxValue, hp.m_CurrentValue + static_cast<int>(0.25 * damageTX));
 
@@ -956,12 +805,12 @@ void PlayersManager::ProcessIsRandomTarget() const {
   const int64_t randBossNb = get_random_nb(0, m_BossesList.size() - 1);
 
   // set who is the random reach
-  auto* hero = m_HeroesList[randHeroNb];
-  auto* boss = m_BossesList[randBossNb];
-  if(hero != nullptr && hero->m_ExtCharacter != nullptr){
-      hero->m_ExtCharacter->set_is_random_target(true);
+  auto *hero = m_HeroesList[randHeroNb];
+  auto *boss = m_BossesList[randBossNb];
+  if (hero != nullptr && hero->m_ExtCharacter != nullptr) {
+    hero->m_ExtCharacter->set_is_random_target(true);
   }
-  if(boss != nullptr && boss->m_ExtCharacter != nullptr){
-      boss->m_ExtCharacter->set_is_random_target(true);
+  if (boss != nullptr && boss->m_ExtCharacter != nullptr) {
+    boss->m_ExtCharacter->set_is_random_target(true);
   }
 }

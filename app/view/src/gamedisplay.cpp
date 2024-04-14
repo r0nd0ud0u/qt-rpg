@@ -125,8 +125,7 @@ void GameDisplay::NewRound() {
 
   // update buf pow
   if (activePlayer->m_Name == "Azrak Ombresang") {
-    auto &localStat = std::get<StatsType<int>>(
-        activePlayer->m_Stats.m_AllStatsTable[STATS_POW_PHY]);
+    auto &localStat = activePlayer->m_Stats.m_AllStatsTable[STATS_POW_PHY];
     auto *phyBuf =
         activePlayer->m_AllBufs[static_cast<int>(BufTypes::powPhyBuf)];
     if (phyBuf != nullptr) {

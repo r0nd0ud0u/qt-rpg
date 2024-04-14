@@ -14,8 +14,8 @@
 #include "stuff.h"
 
 #include "rust-rpg-bridge/attaque.h"
-#include "rust-rpg-bridge/powers.h"
 #include "rust-rpg-bridge/character.h"
+#include "rust-rpg-bridge/powers.h"
 
 enum class characType { Hero, Boss };
 
@@ -74,7 +74,7 @@ public:
   QString RegenIntoDamage(const int atkValue, const QString &statsName) const;
 
   static void
-  SetStatsOnEffect(StatsType<int> &stat, const int value, const bool isUp,
+  SetStatsOnEffect(StatsType &stat, const int value, const char charSign,
                    const bool isPercent,
                    const bool updateEffect); // TODO à sortir dans un common
                                              // pour gerer les stats?
@@ -118,15 +118,11 @@ public:
   std::unordered_map<uint64_t, uint64_t>
       m_LastDamageTX; // key : turn number, value: damage transmitted
   Powers m_Power;
-  ExtendedCharacter* m_ExtCharacter;
+  ExtendedCharacter *m_ExtCharacter;
 
 private:
-  template <class T>
-  void ProcessAddEquip(StatsType<T> &charStat,
-                       const StatsType<T> &equipStat) const;
-  template <class T>
-  void ProcessRemoveEquip(StatsType<T> &charStat,
-                          const StatsType<T> &equipStat);
+  void ProcessAddEquip(StatsType &charStat, const StatsType &equipStat) const;
+  void ProcessRemoveEquip(StatsType &charStat, const StatsType &equipStat);
   std::pair<int, int> ProcessCurrentValueOnEffect(
       effectParam &ep, const int nbOfApplies, const Stats &launcherStats,
       const bool launch, Character *target,
@@ -141,8 +137,6 @@ private:
   static int DamageByAtk(const Stats &launcherStats, const Stats &targetStats,
                          const bool isMagicAtk, const int atkValue,
                          const int nbTurns);
-  int GetSignEffectValue(const QString &target) const;
-  QChar GetCharEffectValue(const QString &target) const;
   int GetMaxNbOfApplies(const AttaqueType &atk) const;
   int ProcessBerseckOnRxAtk(const int nbOfApplies);
   std::pair<QString, int> ProcessEffectType(
