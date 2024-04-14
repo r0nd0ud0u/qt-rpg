@@ -601,10 +601,10 @@ void Character::RemoveMalusEffect(const effectParam &ep) {
       m_Stats.m_AllStatsTable.count(ep.statsName) > 0) {
     auto &localStat = m_Stats.m_AllStatsTable.at(ep.statsName);
     if (ep.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
-      SetStatsOnEffect(localStat, ep.value, false, true, true);
+      SetStatsOnEffect(localStat, ep.value, '-', true, true);
     }
     if (ep.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
-      SetStatsOnEffect(localStat, ep.value, false, false, true);
+      SetStatsOnEffect(localStat, ep.value, '-', false, true);
     }
     if (ep.effect == EFFECT_BLOCK_HEAL_ATK && m_ExtCharacter != nullptr) {
       m_ExtCharacter->set_is_heal_atk_blocked(false);
