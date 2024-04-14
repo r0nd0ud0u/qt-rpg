@@ -654,7 +654,7 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
       amount = ep.value;
     }
   } else if (launch && ep.statsName == STATS_HP &&
-             (ep.effect == EFFECT_VALUE_CHANGE)) {
+             (ep.effect == EFFECT_VALUE_CHANGE || ep.effect == EFFECT_PERCENT_CHANGE)) {
     if (ep.target == TARGET_ENNEMY) {
       amount = nbOfApplies * DamageByAtk(launcherStats, target->m_Stats,
                                          ep.isMagicAtk, ep.value, ep.nbTurns);
@@ -663,8 +663,12 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
       // HOT ou DOT
       const auto &launcherPowMag =
           launcherStats.m_AllStatsTable.at(STATS_POW_MAG);
-      amount =
-          nbOfApplies * (ep.value + launcherPowMag.m_CurrentValue / ep.nbTurns);
+      if(ep.effect == EFFECT_PERCENT_CHANGE){
+          amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
+      } else {
+          amount =
+              nbOfApplies * (ep.value + launcherPowMag.m_CurrentValue / ep.nbTurns);
+      }
     } else {
       // DOT -> create an effect to explicited say that is a damage on allies
       amount = nbOfApplies * ep.value;
@@ -935,9 +939,10 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
   auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
 
   QString output;
-  int nbOfApplies =
-      1 + m_AllBufs[static_cast<int>(BufTypes::applyEffectInit)]
-              ->get_value(); // default value 1 for the nominal case
+  int nbOfApplies = 1; // default value 1 for the nominal case
+  if (m_AllBufs[static_cast<int>(BufTypes::applyEffectInit)]->get_value() > 0)
+    nbOfApplies =
+        m_AllBufs[static_cast<int>(BufTypes::applyEffectInit)]->get_value();
 
   if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
     // TODO not ready to be used yet
@@ -964,6 +969,7 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
     // the effects of the current atk
     if (effect.value == 0) {
       UpdateBuf(BufTypes::applyEffectInit, nbOfApplies, false);
+      output = QString("L'attaque sera effectuée %1 fois\n").arg(nbOfApplies);
     }
   }
   if (effect.effect == EFFECT_REINIT) {
@@ -1011,11 +1017,11 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
     const char sign = get_char_effect_value(effect.target.toStdString());
     // common init
     auto &localStat = target->m_Stats.m_AllStatsTable[effect.statsName];
-    SetStatsOnEffect(localStat, effect.value, sign, true, true);
+    SetStatsOnEffect(localStat, nbOfApplies*effect.value, sign, true, true);
     output = QString("La stat %1 est modifiée de %2%3%.\n")
                  .arg(effect.statsName)
                  .arg(sign)
-                 .arg(effect.value);
+                 .arg(nbOfApplies*effect.value);
   }
   if (effect.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
     const char sign = get_char_effect_value(effect.target.toStdString());

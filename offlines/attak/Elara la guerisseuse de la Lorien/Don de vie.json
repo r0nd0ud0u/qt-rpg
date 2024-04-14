@@ -4,21 +4,30 @@
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Effet": [
-		{
+        {
             "Cible": "Soi-même",
             "Portée": "Individuel",
-            "Stat": "PV",
+            "Stat": "",
             "Tours actifs": 4,
             "Type": "Decroissement pendant le tour",
             "Valeur de l'effet": 3,
-            "Value": 32
+            "Value": 0
+        },
+        {
+            "Cible": "Allié",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": 30
         },
         {
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "PV",
             "Tours actifs": 1,
-            "Type": "Up par %",
+            "Type": "Changement par %",
             "Valeur de l'effet": 0,
             "Value": -15
         },
@@ -39,33 +48,6 @@
             "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 25
-        },
-        {
-            "Cible": "Allié",
-            "Portée": "Individuel",
-            "Stat": "Pouvoir magique",
-            "Tours actifs": 3,
-            "Type": "Up par %",
-            "Valeur de l'effet": 0,
-            "Value": 25
-        },
-        {
-            "Cible": "Allié",
-            "Portée": "Individuel",
-            "Stat": "Regen mana",
-            "Tours actifs": 1,
-            "Type": "Up par %",
-            "Valeur de l'effet": 0,
-            "Value": 10
-        },
-        {
-            "Cible": "Soi-même",
-            "Portée": "Individuel",
-            "Stat": "",
-            "Tours actifs": 6,
-            "Type": "Tours de recharge",
-            "Valeur de l'effet": 0,
-            "Value": 0
         }
     ],
     "Forme": "Standard",
