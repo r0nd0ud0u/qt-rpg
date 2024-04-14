@@ -24,7 +24,7 @@
         },
         {
             "Cible": "Soi-même",
-            "Portée": Individuel",
+            "Portée": "Individuel",
             "Stat": "",
             "Tours actifs": 5,
             "Type": "Tours de recharge",
