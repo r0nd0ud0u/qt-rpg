@@ -129,21 +129,23 @@ void GameDisplay::NewRound() {
     auto *phyBuf =
         activePlayer->m_AllBufs[static_cast<int>(BufTypes::powPhyBuf)];
     if (phyBuf != nullptr) {
-      Character::SetStatsOnEffect(
-          localStat, -phyBuf->get_value() + activePlayer->m_HealRxOnTurn, true,
-          false, true);
-      phyBuf->set_buffers(activePlayer->m_HealRxOnTurn,
-                          phyBuf->get_is_percent());
+      const auto &hpRxTable =
+          activePlayer->m_LastTxRx[static_cast<int>(amountType::healRx)];
+      int64_t hpRx = 0;
+      if (hpRxTable.find(gs->m_CurrentTurnNb - 1) != hpRxTable.end()) {
+          hpRx = hpRxTable.at(gs->m_CurrentTurnNb - 1);
+      };
+      Character::SetStatsOnEffect(localStat, -phyBuf->get_value() + hpRx, true,
+                                  false, true);
+      phyBuf->set_buffers(hpRx, phyBuf->get_is_percent());
     }
   }
 
-  // reset heal received on turn
-  activePlayer->m_HealRxOnTurn = 0;
-
   // process actions on last turn damage received
+  const auto& damageTx =
+      activePlayer->m_LastTxRx[static_cast<int>(amountType::damageTx)];
   const bool isDamageTxLastTurn =
-      activePlayer->m_LastDamageTX.find(gs->m_CurrentTurnNb - 1) !=
-      activePlayer->m_LastDamageTX.end();
+      damageTx.find(gs->m_CurrentTurnNb - 1) != damageTx.end();
   // passive power is_crit_heal_after_crit
   if (activePlayer->m_Power.is_crit_heal_after_crit && isDamageTxLastTurn &&
       activePlayer->m_isLastAtkCritical) {
@@ -159,8 +161,7 @@ void GameDisplay::NewRound() {
   if (activePlayer->m_Power.is_damage_tx_heal_needy_ally &&
       isDamageTxLastTurn) {
     gm->m_PlayersManager->ProcessDamageTXHealNeedyAlly(
-        activePlayer->m_type,
-        activePlayer->m_LastDamageTX[gs->m_CurrentTurnNb - 1]);
+          activePlayer->m_type, damageTx.at(gs->m_CurrentTurnNb - 1));
   }
 
   // Update views
@@ -264,7 +265,7 @@ bool GameDisplay::ProcessAtk(
         emit SigUpdateChannelView(
             targetChara->m_Name,
             QString("esquive.(%1)").arg(outputsRandnbZone));
-        return false;
+        return true;
       } else {
         emit SigUpdateChannelView(
             targetChara->m_Name,

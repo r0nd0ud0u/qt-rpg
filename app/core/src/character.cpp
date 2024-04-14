@@ -34,6 +34,7 @@ void Character::InitTables() {
     auto buf = buffers_new().into_raw();
     m_AllBufs.push_back(buf);
   }
+  m_LastTxRx.resize(static_cast<int>(amountType::enumSize));
 }
 
 int Character::DamageByAtk(const Stats &launcherStats, const Stats &targetStats,
@@ -443,35 +444,40 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
     result += (berseckAmount > 0) ? QString("recupère +%1 de râge.\n") : "";
   }
   // apply the effect
-  const auto [amount, maxAmount] = ProcessCurrentValueOnEffect(
+  const auto [amount, trueAmount] = ProcessCurrentValueOnEffect(
       effect, nbOfApplies, m_Stats, fromLaunch, target, isCrit);
 
   // TODO should be static and not on target ? pass target by argument
   result += target->ProcessOutputLogOnEffect(effect, amount, fromLaunch,
-                                             nbOfApplies, atk.name, maxAmount);
+                                             nbOfApplies, atk.name, trueAmount);
   // Apply regen effect turning into damage for all bosses
   // can be processed only after calcul of amount of atk
   if (!reload) {
-    result += RegenIntoDamage(maxAmount, effect.statsName);
+      result += RegenIntoDamage(trueAmount, effect.statsName);
   }
 
   // Process aggro
   if (effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE &&
       effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE &&
       (effect.statsName == STATS_HP || effect.statsName == STATS_AGGRO)) {
-    result += ProcessAggro(maxAmount);
+      result += ProcessAggro(trueAmount);
   }
 
   // update effect value
   // keep the calcultated value for the HOT or DOT
+  const auto gs = Application::GetInstance().m_GameManager->m_GameState;
   if (effect.effect == EFFECT_VALUE_CHANGE ||
       effect.effect == EFFECT_PERCENT_CHANGE) {
-    effect.value = abs(amount);
-    if (amount > 0) {
-      target->m_HealRxOnTurn += amount;
-    } else {
-      const auto gs = Application::GetInstance().m_GameManager->m_GameState;
-      m_LastDamageTX[gs->m_CurrentTurnNb] += std::abs(amount);
+      effect.value = abs(trueAmount);
+    // case 0 is not saved in m_LastTxRx
+      if (trueAmount > 0) {
+      target->m_LastTxRx[static_cast<int>(amountType::healRx)]
+                            [gs->m_CurrentTurnNb] += trueAmount;
+      m_LastTxRx[static_cast<int>(amountType::healTx)][gs->m_CurrentTurnNb] +=
+          trueAmount;
+      } else if (trueAmount < 0) {
+      m_LastTxRx[static_cast<int>(amountType::damageTx)][gs->m_CurrentTurnNb] +=
+              std::abs(trueAmount);
     }
   }
 
@@ -563,7 +569,8 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
     // Atk launched if the character did some damages on the previous turn
     if (effect.effect == CONDITION_DMG_PREV_TURN) {
       if (!(gs->m_CurrentTurnNb > 1 &&
-            m_LastDamageTX.count(gs->m_CurrentTurnNb - 1) > 0)) {
+            m_LastTxRx[static_cast<uint64_t>(amountType::damageTx)].count(
+                gs->m_CurrentTurnNb - 1) > 0)) {
         conditionsAreOk = false;
         allResultEffects.append(QString("Pas d'effect %1 activé. Pas de dégâts "
                                         "infligés au tour précédent.\n")
@@ -605,6 +612,9 @@ void Character::RemoveMalusEffect(const effectParam &ep) {
     }
     if (ep.effect == EFFECT_BLOCK_HEAL_ATK && m_ExtCharacter != nullptr) {
       m_ExtCharacter->set_is_heal_atk_blocked(false);
+    }
+    if(ep.effect == EFFECT_VALUE_CHANGE){
+        localStat.m_CurrentValue += ep.value;
     }
   }
 
@@ -713,7 +723,8 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     if (const auto *bufMulti =
             m_AllBufs[static_cast<int>(BufTypes::multiValue)];
         bufMulti != nullptr && bufMulti->get_value() > 0) {
-        amount = static_cast<int>(update_heal_by_multi(amount, bufMulti->get_value()));
+      amount =
+          static_cast<int>(update_heal_by_multi(amount, bufMulti->get_value()));
     }
   }
   // is it a critical strike
@@ -724,6 +735,10 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     output = sign * amount; // apply the sign after the calcul of amount
   }
 
+  if(ep.statsName == STATS_DODGE || ep.statsName == STATS_SPEED|| ep.statsName == STATS_CRIT){
+      localStat.m_CurrentValue += output;
+      return std::make_pair(output, output);
+  }
   int maxAmount = 0;
   if (output > 0) {
     localStat.m_CurrentValue =
@@ -1067,6 +1082,24 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
 
   if (effect.effect == EFFECT_BLOCK_HEAL_ATK && m_ExtCharacter != nullptr) {
     m_ExtCharacter->set_is_heal_atk_blocked(true);
+  }
+
+  const auto *gs = Application::GetInstance().m_GameManager->m_GameState;
+  if (effect.effect == EFFECT_REPEAT_IF_HEAL) {
+    const auto &healTxTable =
+        m_LastTxRx[static_cast<uint64_t>(amountType::healTx)];
+    if (healTxTable.find(gs->m_CurrentTurnNb - 1) == healTxTable.end()) {
+      output = QString("Attaque non répétée. Pas de heal au précédent tour\n");
+    } else {
+      const auto randNb = get_random_nb(0, effect.value);
+      if (randNb <= effect.value) {
+        nbOfApplies = effect.subValueEffect;
+        UpdateBuf(BufTypes::applyEffectInit, nbOfApplies, false);
+      }
+      output = QString("L'attaque est appliquée %1 fois. (rand nb:%2)\n")
+                   .arg(nbOfApplies)
+                   .arg(randNb);
+    }
   }
 
   return std::make_pair(output, nbOfApplies);

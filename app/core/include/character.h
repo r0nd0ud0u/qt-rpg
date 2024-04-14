@@ -46,6 +46,13 @@ enum class BufTypes {
   applyEffectInit,
   enumSize
 };
+enum class amountType {
+  damageRx = 0,
+  damageTx,
+  healRx,
+  healTx,
+  enumSize
+};
 
 class Character {
 public:
@@ -112,11 +119,9 @@ public:
   QColor color = QColor("dark");
   // Buf
   std::vector<Buffers *> m_AllBufs;
-  int m_HealRxOnTurn = 0;
   /// Explain if the last attak has been critical or not
   bool m_isLastAtkCritical = false;
-  std::unordered_map<uint64_t, uint64_t>
-      m_LastDamageTX; // key : turn number, value: damage transmitted
+  std::vector<std::unordered_map<uint64_t, uint64_t>> m_LastTxRx;
   Powers m_Power;
   ExtendedCharacter *m_ExtCharacter;
 

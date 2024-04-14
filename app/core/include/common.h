@@ -4,7 +4,6 @@
 #include <qobject.h>
 #include <set>
 #include <unordered_map>
-#include <variant>
 
 #include "rust-rpg-bridge/buffers.h"
 
@@ -162,6 +161,7 @@ const QString EFFECT_BUF_MULTI =
     "Buf multi";
 const QString EFFECT_BLOCK_HEAL_ATK = "Bloque attaque de soin";
 const QString CONDITION_DMG_PREV_TURN = "Dégâts au tour précédent";
+const QString EFFECT_REPEAT_IF_HEAL = "Répète l'attaque(en % de chance) après heal tour prec.";
 const std::set<QString> EFFECTS{"",
                                 EFFECT_REINIT,
                                 EFFECT_NB_COOL_DOWN,
@@ -180,7 +180,8 @@ const std::set<QString> EFFECTS{"",
                                 EFFECT_IMPROVEMENT_STAT_BY_VALUE,
                                 EFFECT_BUF_MULTI,
                                 EFFECT_BLOCK_HEAL_ATK,
-                                CONDITION_DMG_PREV_TURN};
+                                CONDITION_DMG_PREV_TURN,
+                                EFFECT_REPEAT_IF_HEAL,};
 const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_NB_DECREASE_BY_TURN,
     EFFECT_NB_COOL_DOWN,
