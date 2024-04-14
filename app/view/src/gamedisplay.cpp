@@ -244,6 +244,67 @@ void GameDisplay::EndOfGame() {
   emit SigUpdateChannelView("GameState", "Fin du jeu !!");
 }
 
+bool GameDisplay::ProcessAtk(
+    const TargetInfo *target, const AttaqueType &currentAtk,
+    Character *activatedPlayer, const bool isCrit, const QString &nameChara,
+    std::unordered_map<QString, std::vector<effectParam>> &newEffects) {
+  const auto &gm = Application::GetInstance().m_GameManager;
+  if (target == nullptr) {
+    return false;
+  }
+  QString channelLog;
+  auto *targetChara =
+      gm->m_PlayersManager->GetCharacterByName(target->get_name().data());
+  if (targetChara != nullptr) {
+    // is dodging
+    if (currentAtk.target == TARGET_ENNEMY && currentAtk.reach == REACH_ZONE &&
+        target->get_is_targeted()) {
+      const auto &[isDodgingZone, outputsRandnbZone] = targetChara->IsDodging();
+      if (isDodgingZone) {
+        emit SigUpdateChannelView(
+            targetChara->m_Name,
+            QString("esquive.(%1)").arg(outputsRandnbZone));
+        return false;
+      } else {
+        emit SigUpdateChannelView(
+            targetChara->m_Name,
+            QString("pas d'esquive.(%1)").arg(outputsRandnbZone));
+      }
+    }
+    // EFFECT
+    const auto &[conditionsOk, resultEffects, appliedEffects] =
+        activatedPlayer->ApplyAtkEffect(target->get_is_targeted(), currentAtk,
+                                        targetChara, isCrit);
+
+    if (!resultEffects.isEmpty()) {
+      emit SigUpdateChannelView(
+          nameChara,
+          QString("Sur %1: ").arg(target->get_name().data()) + "\n" +
+              resultEffects.join(""),
+          activatedPlayer->color);
+    }
+    // conditionsOk = false if effect reinit with unfulfilled condtions
+    if (target->get_is_targeted() && conditionsOk && !channelLog.isEmpty()) {
+      // Update channel view
+      emit SigUpdateChannelView(nameChara, channelLog, activatedPlayer->color);
+    }
+    if (!conditionsOk) {
+      ui->bag_button->setEnabled(true);
+      ui->attaque_button->setEnabled(true);
+      return false;
+    }
+    // add applied effect to new effect Table
+    newEffects[target->get_name().data()] = appliedEffects;
+  }
+
+  return true;
+}
+
+/**
+ * @brief GameDisplay::LaunchAttak
+ * Atk of the launcher is processed first to enable the potential bufs
+ * then the effets are processed on the other targets(ennemy and allies)
+ */
 void GameDisplay::LaunchAttak(const QString &atkName,
                               const std::vector<TargetInfo *> &targetList) {
   const auto &gm = Application::GetInstance().m_GameManager;
@@ -303,60 +364,26 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
   // new effects on that turn
   std::unordered_map<QString, std::vector<effectParam>> newEffects;
-  // Parse target list and apply atk and effects
+  // Process first the buf of the launcher
+  auto it = std::find_if(targetList.begin(), targetList.end(), [&](const TargetInfo* ti) {
+      if(ti != nullptr){
+         return nameChara == ti->get_name().data();
+      }
+      return false;
+  });
+  if(it != targetList.end()){
+      ProcessAtk(*it, currentAtk, activatedPlayer, isCrit, nameChara, newEffects);
+  }
   for (const auto *target : targetList) {
-    if (target == nullptr) {
-      continue;
-    }
-    QString channelLog;
-    auto *targetChara =
-        gm->m_PlayersManager->GetCharacterByName(target->get_name().data());
-    if (targetChara != nullptr) {
-      // is dodging
-      if (currentAtk.target == TARGET_ENNEMY &&
-          currentAtk.reach == REACH_ZONE && target->get_is_targeted()) {
-        const auto &[isDodgingZone, outputsRandnbZone] =
-            targetChara->IsDodging();
-        if (isDodgingZone) {
-          emit SigUpdateChannelView(
-              targetChara->m_Name,
-              QString("esquive.(%1)").arg(outputsRandnbZone));
+      if(target->get_name().data() == nameChara){
           continue;
-        } else {
-          emit SigUpdateChannelView(
-              targetChara->m_Name,
-              QString("pas d'esquive.(%1)").arg(outputsRandnbZone));
-        }
       }
-      // EFFECT
-      const auto &[conditionsOk, resultEffects, appliedEffects] =
-          activatedPlayer->ApplyAtkEffect(target->get_is_targeted(), currentAtk,
-                                          targetChara, isCrit);
-
-      if (!resultEffects.isEmpty()) {
-        emit SigUpdateChannelView(
-            nameChara,
-            QString("Sur %1: ").arg(target->get_name().data()) + "\n" +
-                resultEffects.join(""),
-            activatedPlayer->color);
-      }
-      // conditionsOk = false if effect reinit with unfulfilled condtions
-      if (target->get_is_targeted() && conditionsOk && !channelLog.isEmpty()) {
-        // Update channel view
-        emit SigUpdateChannelView(nameChara, channelLog,
-                                  activatedPlayer->color);
-      }
-      if (!conditionsOk) {
-        ui->bag_button->setEnabled(true);
-        ui->attaque_button->setEnabled(true);
-        return;
-      }
-      // add applied effect to new effect Table
-      newEffects[target->get_name().data()] = appliedEffects;
-    }
+      if(!ProcessAtk(target, currentAtk, activatedPlayer, isCrit, nameChara, newEffects)){
+          return;
+      };
   }
 
-  // end of critical strike buf (if any)
+  // end of activated bufs during turn
   activatedPlayer->ResetBuf(BufTypes::damageCritCapped);
   activatedPlayer->ResetBuf(BufTypes::multiValueIfDmgPrevTurn);
   activatedPlayer->ResetBuf(BufTypes::applyEffectInit);

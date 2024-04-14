@@ -685,26 +685,28 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
   // return the true applied amount
   // add buf
   if (target != nullptr && sign == -1 && launch) {
-    auto *bufTx = target->m_AllBufs[static_cast<int>(BufTypes::damageTx)];
+    auto *bufTx = m_AllBufs[static_cast<int>(BufTypes::damageTx)];
+    // launcher buf
     if (bufTx != nullptr) {
       amount = update_damage_by_buf(bufTx->get_value(), bufTx->get_is_percent(),
                                     amount);
     }
+    auto *bufCrit = m_AllBufs[static_cast<int>(BufTypes::damageCritCapped)];
+    if (bufCrit != nullptr) {
+      amount = update_damage_by_buf(bufCrit->get_value(),
+                                    bufCrit->get_is_percent(), amount);
+    }
+    // target buf
     auto *bufRx = target->m_AllBufs[static_cast<int>(BufTypes::damageRx)];
     if (bufRx != nullptr) {
       amount = update_damage_by_buf(bufRx->get_value(), bufRx->get_is_percent(),
                                     amount);
     }
-    auto *bufCrit =
-        target->m_AllBufs[static_cast<int>(BufTypes::damageCritCapped)];
-    if (bufCrit != nullptr) {
-      amount = update_damage_by_buf(bufCrit->get_value(),
-                                    bufCrit->get_is_percent(), amount);
-    }
   }
   if (target != nullptr && sign == 1 && launch) {
+    // launcher buf
     auto *bufMulti =
-        target->m_AllBufs[static_cast<int>(BufTypes::multiValueIfDmgPrevTurn)];
+        m_AllBufs[static_cast<int>(BufTypes::multiValueIfDmgPrevTurn)];
     if (bufMulti != nullptr && bufMulti->get_value() > 0) {
       amount = update_heal_by_multi(amount, bufMulti->get_value());
     }

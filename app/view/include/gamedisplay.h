@@ -21,11 +21,11 @@ public:
   ~GameDisplay();
   void AddNewCharacter(Character *);
   void AddNewStuff() const;
-  public slots:
+public slots:
   // slots which can be called by other windows
   void UpdateViews(const QString &name);
 signals:
-  void selectCharacter(const QString&);
+  void selectCharacter(const QString &);
   void SigUpdatePlayerPanel();
   void SigBossDead(QString);
   void SigEndOfGame();
@@ -35,11 +35,16 @@ signals:
       const std::unordered_map<QString, std::vector<GameAtkEffects>> &);
   void SigUpdStatsOnSelCharacter();
   void SigAddCharacter(Character *);
-  void SigSetFocusOnActivePlayer(const QString&, const characType&);
+  void SigSetFocusOnActivePlayer(const QString &, const characType &);
 
 private:
   Ui::GameDisplay *ui;
   void UpdateGameStatus();
+  bool
+  ProcessAtk(const TargetInfo *target, const AttaqueType& currentAtk,
+             Character *activatedPlayer, const bool isCrit,
+             const QString &nameChara,
+             std::unordered_map<QString, std::vector<effectParam>> &newEffects);
 
 private slots:
   void UpdateChannel();
@@ -50,14 +55,14 @@ private slots:
   void EndOfTurn();
   void EndOfGame();
   void NewRound();
-  void LaunchAttak(const QString &atkName, const std::vector<TargetInfo*> &);
+  void LaunchAttak(const QString &atkName, const std::vector<TargetInfo *> &);
   void on_add_boss_button_clicked();
   void on_mana_potion_button_clicked();
   void on_hp_potion_button_clicked();
   void on_berseck_potion_button_clicked();
   void on_vigor_potion_button_clicked();
   void on_add_exp_button_clicked();
-  void SlotUpdateActionViews(const QString& name,const QString& form);
+  void SlotUpdateActionViews(const QString &name, const QString &form);
 };
 
 #endif // GAMEDISPLAY_H
