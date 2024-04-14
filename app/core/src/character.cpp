@@ -314,7 +314,7 @@ void Character::ApplyEffeftOnStats(const bool updateEffect) {
 }
 
 void Character::ProcessAddEquip(StatsType &charStat,
-                                const StatsType &equipStat) const {
+                                const StatsType &equipStat) {
   if (equipStat.m_BufEquipPercent == 0 && equipStat.m_BufEquipValue == 0) {
     return;
   }
@@ -551,9 +551,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
     const auto gs = Application::GetInstance().m_GameManager->m_GameState;
     // Condition number of died ennemies
     if (effect.effect == CONDITION_ENNEMIES_DIED) {
-      if (gs->m_CurrentTurnNb > 1 &&
-          gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb - 1) > 0) {
-      } else {
+      {
         conditionsAreOk = false;
         allResultEffects.append(
             QString(
@@ -564,9 +562,8 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
     }
     // Atk launched if the character did some damages on the previous turn
     if (effect.effect == CONDITION_DMG_PREV_TURN) {
-      if (gs->m_CurrentTurnNb > 1 &&
-          m_LastDamageTX.count(gs->m_CurrentTurnNb - 1) > 0) {
-      } else {
+      if (!(gs->m_CurrentTurnNb > 1 &&
+            m_LastDamageTX.count(gs->m_CurrentTurnNb - 1) > 0)) {
         conditionsAreOk = false;
         allResultEffects.append(QString("Pas d'effect %1 activé. Pas de dégâts "
                                         "infligés au tour précédent.\n")
@@ -654,7 +651,8 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
       amount = ep.value;
     }
   } else if (launch && ep.statsName == STATS_HP &&
-             (ep.effect == EFFECT_VALUE_CHANGE || ep.effect == EFFECT_PERCENT_CHANGE)) {
+             (ep.effect == EFFECT_VALUE_CHANGE ||
+              ep.effect == EFFECT_PERCENT_CHANGE)) {
     if (ep.target == TARGET_ENNEMY) {
       amount = nbOfApplies * DamageByAtk(launcherStats, target->m_Stats,
                                          ep.isMagicAtk, ep.value, ep.nbTurns);
@@ -663,11 +661,11 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
       // HOT ou DOT
       const auto &launcherPowMag =
           launcherStats.m_AllStatsTable.at(STATS_POW_MAG);
-      if(ep.effect == EFFECT_PERCENT_CHANGE){
-          amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
+      if (ep.effect == EFFECT_PERCENT_CHANGE) {
+        amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
       } else {
-          amount =
-              nbOfApplies * (ep.value + launcherPowMag.m_CurrentValue / ep.nbTurns);
+        amount = nbOfApplies *
+                 (ep.value + launcherPowMag.m_CurrentValue / ep.nbTurns);
       }
     } else {
       // DOT -> create an effect to explicited say that is a damage on allies
@@ -689,30 +687,33 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
   // return the true applied amount
   // add buf
   if (target != nullptr && sign == -1 && launch) {
-    auto *bufTx = m_AllBufs[static_cast<int>(BufTypes::damageTx)];
     // launcher buf
-    if (bufTx != nullptr) {
-      amount = update_damage_by_buf(bufTx->get_value(), bufTx->get_is_percent(),
-                                    amount);
+    if (const auto *bufTx = m_AllBufs[static_cast<int>(BufTypes::damageTx)];
+        bufTx != nullptr) {
+      amount = static_cast<int>(update_damage_by_buf(
+          bufTx->get_value(), bufTx->get_is_percent(), amount));
     }
-    auto *bufCrit = m_AllBufs[static_cast<int>(BufTypes::damageCritCapped)];
-    if (bufCrit != nullptr) {
-      amount = update_damage_by_buf(bufCrit->get_value(),
-                                    bufCrit->get_is_percent(), amount);
+    if (const auto *bufCrit =
+            m_AllBufs[static_cast<int>(BufTypes::damageCritCapped)];
+        bufCrit != nullptr) {
+      amount = static_cast<int>(update_damage_by_buf(
+          bufCrit->get_value(), bufCrit->get_is_percent(), amount));
     }
     // target buf
-    auto *bufRx = target->m_AllBufs[static_cast<int>(BufTypes::damageRx)];
-    if (bufRx != nullptr) {
-      amount = update_damage_by_buf(bufRx->get_value(), bufRx->get_is_percent(),
-                                    amount);
+
+    if (const auto *bufRx =
+            target->m_AllBufs[static_cast<int>(BufTypes::damageRx)];
+        bufRx != nullptr) {
+      amount = static_cast<int>(update_damage_by_buf(
+          bufRx->get_value(), bufRx->get_is_percent(), amount));
     }
   }
   if (target != nullptr && sign == 1 && launch) {
     // launcher buf
-    auto *bufMulti =
-        m_AllBufs[static_cast<int>(BufTypes::multiValueIfDmgPrevTurn)];
-    if (bufMulti != nullptr && bufMulti->get_value() > 0) {
-      amount = update_heal_by_multi(amount, bufMulti->get_value());
+    if (const auto *bufMulti =
+            m_AllBufs[static_cast<int>(BufTypes::multiValue)];
+        bufMulti != nullptr && bufMulti->get_value() > 0) {
+        amount = static_cast<int>(update_heal_by_multi(amount, bufMulti->get_value()));
     }
   }
   // is it a critical strike
@@ -853,8 +854,8 @@ void Character::UpdateBuf(const BufTypes &bufType, const int value,
 
 void Character::ResetBuf(const BufTypes &bufType) {
   auto *buf = m_AllBufs[static_cast<int>(bufType)];
+  // Reset values {percent, decimal}
   if (buf != nullptr) {
-    // reset values {percent, decimal}
     buf->set_buffers(0, false);
     buf->set_buffers(0, true);
   }
@@ -941,8 +942,8 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
   QString output;
   int nbOfApplies = 1; // default value 1 for the nominal case
   if (m_AllBufs[static_cast<int>(BufTypes::applyEffectInit)]->get_value() > 0)
-    nbOfApplies =
-        m_AllBufs[static_cast<int>(BufTypes::applyEffectInit)]->get_value();
+    nbOfApplies = static_cast<int>(
+        m_AllBufs[static_cast<int>(BufTypes::applyEffectInit)]->get_value());
 
   if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
     // TODO not ready to be used yet
@@ -1017,11 +1018,11 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
     const char sign = get_char_effect_value(effect.target.toStdString());
     // common init
     auto &localStat = target->m_Stats.m_AllStatsTable[effect.statsName];
-    SetStatsOnEffect(localStat, nbOfApplies*effect.value, sign, true, true);
+    SetStatsOnEffect(localStat, nbOfApplies * effect.value, sign, true, true);
     output = QString("La stat %1 est modifiée de %2%3%.\n")
                  .arg(effect.statsName)
                  .arg(sign)
-                 .arg(nbOfApplies*effect.value);
+                 .arg(nbOfApplies * effect.value);
   }
   if (effect.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
     const char sign = get_char_effect_value(effect.target.toStdString());
@@ -1059,8 +1060,9 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
     }
   }
 
-  if (effect.effect == EFFECT_BUF_MULTI_PV_IF_DMG_PREV_TURN) {
-    UpdateBuf(BufTypes::multiValueIfDmgPrevTurn, effect.value, true);
+  if (effect.effect == EFFECT_BUF_MULTI) {
+    UpdateBuf(BufTypes::multiValue, effect.value, true);
+    output = QString("Le buf multi est activé.\n");
   }
 
   if (effect.effect == EFFECT_BLOCK_HEAL_ATK && m_ExtCharacter != nullptr) {

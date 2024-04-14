@@ -290,8 +290,7 @@ void PlayersManager::LoadAllEquipmentsJson() {
             continue;
           }
           // init
-          auto &stuffStat =
-              stuff.m_Stats.m_AllStatsTable[stats];
+          auto &stuffStat = stuff.m_Stats.m_AllStatsTable[stats];
           stuffStat.InitValues(0, 0, 0, 0);
           QJsonArray jsonArray = jsonDoc[stats].toArray();
           for (const auto &elem : jsonArray) {
@@ -649,10 +648,10 @@ PlayersManager::IsDodging(const std::vector<TargetInfo *> &targetList) {
                       const auto *targetChara =
                           this->GetCharacterByName(ti->get_name().data());
                       plName = ti->get_name().data();
-                      const auto [isDodging, randNbStr] =
+                      const auto [charIsDodging, randNbStr] =
                           targetChara->IsDodging();
                       output.append(randNbStr);
-                      return isDodging;
+                      return charIsDodging;
                     }
                     return false;
                   });
@@ -709,9 +708,8 @@ PlayersManager::GetAllDeadliestAllies(const characType &launcherType) const {
         return ratio1 < ratio2;
       });
 
-  const auto cWithMin = static_cast<Character *>(*minElement);
   const auto &chp =
-      cWithMin->m_Stats.m_AllStatsTable.at(STATS_HP).m_CurrentValue;
+      (*minElement)->m_Stats.m_AllStatsTable.at(STATS_HP).m_CurrentValue;
 
   std::for_each(
       playerList->begin(), playerList->end(), [&](const Character *c) {

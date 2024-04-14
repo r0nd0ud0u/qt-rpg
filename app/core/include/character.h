@@ -42,7 +42,7 @@ enum class BufTypes {
   damageCritCapped,
   powPhyBuf,
   nextHealAtkIsCrit,
-  multiValueIfDmgPrevTurn,
+  multiValue,
   applyEffectInit,
   enumSize
 };
@@ -121,8 +121,9 @@ public:
   ExtendedCharacter *m_ExtCharacter;
 
 private:
-  void ProcessAddEquip(StatsType &charStat, const StatsType &equipStat) const;
-  void ProcessRemoveEquip(StatsType &charStat, const StatsType &equipStat);
+  static void ProcessAddEquip(StatsType &charStat, const StatsType &equipStat);
+  static void ProcessRemoveEquip(StatsType &charStat,
+                                 const StatsType &equipStat);
   std::pair<int, int> ProcessCurrentValueOnEffect(
       effectParam &ep, const int nbOfApplies, const Stats &launcherStats,
       const bool launch, Character *target,

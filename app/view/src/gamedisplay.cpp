@@ -154,7 +154,7 @@ void GameDisplay::NewRound() {
     if (buf != nullptr) {
       buf->set_is_passive_enabled(true);
     }
-  };
+  }
   // passive power
   if (activePlayer->m_Power.is_damage_tx_heal_needy_ally &&
       isDamageTxLastTurn) {
@@ -253,9 +253,9 @@ bool GameDisplay::ProcessAtk(
     return false;
   }
   QString channelLog;
-  auto *targetChara =
-      gm->m_PlayersManager->GetCharacterByName(target->get_name().data());
-  if (targetChara != nullptr) {
+  if (auto *targetChara =
+          gm->m_PlayersManager->GetCharacterByName(target->get_name().data());
+      targetChara != nullptr) {
     // is dodging
     if (currentAtk.target == TARGET_ENNEMY && currentAtk.reach == REACH_ZONE &&
         target->get_is_targeted()) {
@@ -365,27 +365,29 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   // new effects on that turn
   std::unordered_map<QString, std::vector<effectParam>> newEffects;
   // Process first the buf of the launcher
-  auto it = std::find_if(targetList.begin(), targetList.end(), [&](const TargetInfo* ti) {
-      if(ti != nullptr){
-         return nameChara == ti->get_name().data();
-      }
-      return false;
-  });
-  if(it != targetList.end()){
-      ProcessAtk(*it, currentAtk, activatedPlayer, isCrit, nameChara, newEffects);
+  auto it = std::find_if(targetList.begin(), targetList.end(),
+                         [&](const TargetInfo *ti) {
+                           if (ti != nullptr) {
+                             return nameChara == ti->get_name().data();
+                           }
+                           return false;
+                         });
+  if (it != targetList.end()) {
+    ProcessAtk(*it, currentAtk, activatedPlayer, isCrit, nameChara, newEffects);
   }
   for (const auto *target : targetList) {
-      if(target->get_name().data() == nameChara){
-          continue;
-      }
-      if(!ProcessAtk(target, currentAtk, activatedPlayer, isCrit, nameChara, newEffects)){
-          return;
-      };
+    if (target->get_name().data() == nameChara) {
+      continue;
+    }
+    if (!ProcessAtk(target, currentAtk, activatedPlayer, isCrit, nameChara,
+                    newEffects)) {
+      return;
+    }
   }
 
   // end of activated bufs during turn
   activatedPlayer->ResetBuf(BufTypes::damageCritCapped);
-  activatedPlayer->ResetBuf(BufTypes::multiValueIfDmgPrevTurn);
+  activatedPlayer->ResetBuf(BufTypes::multiValue);
   activatedPlayer->ResetBuf(BufTypes::applyEffectInit);
 
   /// Update game state

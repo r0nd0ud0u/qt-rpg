@@ -158,8 +158,8 @@ const QString EFFECT_REPEAT_AS_MANY_AS = "Répète tant que possible";
 const QString CONDITION_ENNEMIES_DIED = "Ennemis morts tours précédents";
 const QString EFFECT_IMPROVEMENT_STAT_BY_VALUE = "Up par valeur";
 const QString EFFECT_NEXT_HEAL_IS_CRIT = "Prochaine attaque heal est crit";
-const QString EFFECT_BUF_MULTI_PV_IF_DMG_PREV_TURN =
-    "Buf multi si dégâts au tour précédent";
+const QString EFFECT_BUF_MULTI =
+    "Buf multi";
 const QString EFFECT_BLOCK_HEAL_ATK = "Bloque attaque de soin";
 const QString CONDITION_DMG_PREV_TURN = "Dégâts au tour précédent";
 const std::set<QString> EFFECTS{"",
@@ -178,7 +178,7 @@ const std::set<QString> EFFECTS{"",
                                 EFFECT_REPEAT_AS_MANY_AS,
                                 CONDITION_ENNEMIES_DIED,
                                 EFFECT_IMPROVEMENT_STAT_BY_VALUE,
-                                EFFECT_BUF_MULTI_PV_IF_DMG_PREV_TURN,
+                                EFFECT_BUF_MULTI,
                                 EFFECT_BLOCK_HEAL_ATK,
                                 CONDITION_DMG_PREV_TURN};
 const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
@@ -193,7 +193,7 @@ const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_IMPROVE_BY_PERCENT_CHANGE,
     EFFECT_INTO_DAMAGE,
     EFFECT_NEXT_HEAL_IS_CRIT,
-    EFFECT_BUF_MULTI_PV_IF_DMG_PREV_TURN,
+    EFFECT_BUF_MULTI,
     EFFECT_BLOCK_HEAL_ATK,
 };
 const QString EFFECT_ARRAY = "Effet";

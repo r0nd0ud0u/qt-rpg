@@ -4,12 +4,21 @@
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Effet": [
+		{
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "",
+            "Tours actifs": 1,
+            "Type": "Dégâts au tour précédent",
+            "Valeur de l'effet": 0,
+            "Value": 0
+        },
         {
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "",
             "Tours actifs": 1,
-            "Type": "Buf multi si dégâts au tour précédent",
+            "Type": "Buf multi",
             "Valeur de l'effet": 0,
             "Value": 3
         },
