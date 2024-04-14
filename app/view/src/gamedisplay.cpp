@@ -7,9 +7,8 @@
 #include "bossesview.h"
 #include "channel.h"
 #include "heroesview.h"
-#include "utils.h"
 
-#include <unordered_set>
+#include "rust-rpg-bridge/utils.h"
 
 GameDisplay::GameDisplay(QWidget *parent)
     : QWidget(parent), ui(new Ui::GameDisplay) {
@@ -122,21 +121,47 @@ void GameDisplay::NewRound() {
   for (const auto &te : terminatedEffects) {
     emit SigUpdateChannelView("GameState", te);
   }
-  gm->m_PlayersManager->DecreaseCoolDownEffects(activePlayer->m_Name);
   emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
 
   // update buf pow
   if (activePlayer->m_Name == "Azrak Ombresang") {
-    auto &localStat = std::get<StatsType<int>>(
-        activePlayer->m_Stats.m_AllStatsTable[STATS_POW_PHY]);
-    auto &phyBuf =
+    auto &localStat = activePlayer->m_Stats.m_AllStatsTable[STATS_POW_PHY];
+    auto *phyBuf =
         activePlayer->m_AllBufs[static_cast<int>(BufTypes::powPhyBuf)];
-    Character::SetStatsOnEffect(
-        localStat, -phyBuf.m_Value + activePlayer->m_HealRxOnTurn, true, false,
-        true);
-    phyBuf.m_Value = activePlayer->m_HealRxOnTurn;
+    if (phyBuf != nullptr) {
+      Character::SetStatsOnEffect(
+          localStat, -phyBuf->get_value() + activePlayer->m_HealRxOnTurn, true,
+          false, true);
+      phyBuf->set_buffers(activePlayer->m_HealRxOnTurn,
+                          phyBuf->get_is_percent());
+    }
   }
+
+  // reset heal received on turn
   activePlayer->m_HealRxOnTurn = 0;
+
+  // process actions on last turn damage received
+  const bool isDamageTxLastTurn =
+      activePlayer->m_LastDamageTX.find(gs->m_CurrentTurnNb - 1) !=
+      activePlayer->m_LastDamageTX.end();
+  // passive power is_crit_heal_after_crit
+  if (activePlayer->m_Power.is_crit_heal_after_crit && isDamageTxLastTurn &&
+      activePlayer->m_isLastAtkCritical) {
+    // in case of critical damage sent on last turn , next heal critical is
+    // enable
+    auto *buf =
+        activePlayer->m_AllBufs[static_cast<int>(BufTypes::nextHealAtkIsCrit)];
+    if (buf != nullptr) {
+      buf->set_is_passive_enabled(true);
+    }
+  }
+  // passive power
+  if (activePlayer->m_Power.is_damage_tx_heal_needy_ally &&
+      isDamageTxLastTurn) {
+    gm->m_PlayersManager->ProcessDamageTXHealNeedyAlly(
+        activePlayer->m_type,
+        activePlayer->m_LastDamageTX[gs->m_CurrentTurnNb - 1]);
+  }
 
   // Update views
   // Update views after stats changes
@@ -219,8 +244,69 @@ void GameDisplay::EndOfGame() {
   emit SigUpdateChannelView("GameState", "Fin du jeu !!");
 }
 
+bool GameDisplay::ProcessAtk(
+    const TargetInfo *target, const AttaqueType &currentAtk,
+    Character *activatedPlayer, const bool isCrit, const QString &nameChara,
+    std::unordered_map<QString, std::vector<effectParam>> &newEffects) {
+  const auto &gm = Application::GetInstance().m_GameManager;
+  if (target == nullptr) {
+    return false;
+  }
+  QString channelLog;
+  if (auto *targetChara =
+          gm->m_PlayersManager->GetCharacterByName(target->get_name().data());
+      targetChara != nullptr) {
+    // is dodging
+    if (currentAtk.target == TARGET_ENNEMY && currentAtk.reach == REACH_ZONE &&
+        target->get_is_targeted()) {
+      const auto &[isDodgingZone, outputsRandnbZone] = targetChara->IsDodging();
+      if (isDodgingZone) {
+        emit SigUpdateChannelView(
+            targetChara->m_Name,
+            QString("esquive.(%1)").arg(outputsRandnbZone));
+        return false;
+      } else {
+        emit SigUpdateChannelView(
+            targetChara->m_Name,
+            QString("pas d'esquive.(%1)").arg(outputsRandnbZone));
+      }
+    }
+    // EFFECT
+    const auto &[conditionsOk, resultEffects, appliedEffects] =
+        activatedPlayer->ApplyAtkEffect(target->get_is_targeted(), currentAtk,
+                                        targetChara, isCrit);
+
+    if (!resultEffects.isEmpty()) {
+      emit SigUpdateChannelView(
+          nameChara,
+          QString("Sur %1: ").arg(target->get_name().data()) + "\n" +
+              resultEffects.join(""),
+          activatedPlayer->color);
+    }
+    // conditionsOk = false if effect reinit with unfulfilled condtions
+    if (target->get_is_targeted() && conditionsOk && !channelLog.isEmpty()) {
+      // Update channel view
+      emit SigUpdateChannelView(nameChara, channelLog, activatedPlayer->color);
+    }
+    if (!conditionsOk) {
+      ui->bag_button->setEnabled(true);
+      ui->attaque_button->setEnabled(true);
+      return false;
+    }
+    // add applied effect to new effect Table
+    newEffects[target->get_name().data()] = appliedEffects;
+  }
+
+  return true;
+}
+
+/**
+ * @brief GameDisplay::LaunchAttak
+ * Atk of the launcher is processed first to enable the potential bufs
+ * then the effets are processed on the other targets(ennemy and allies)
+ */
 void GameDisplay::LaunchAttak(const QString &atkName,
-                              const std::vector<TargetInfo> &targetList) {
+                              const std::vector<TargetInfo *> &targetList) {
   const auto &gm = Application::GetInstance().m_GameManager;
 
   // Desactivate actions buttons
@@ -239,7 +325,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     return;
   }
   const auto &currentAtk = activatedPlayer->m_AttakList.at(atkName);
-  // Stats change on hero
+  // Process cost of the atk
   activatedPlayer->ProcessCost(atkName);
   emit SigUpdateChannelView(nameChara, QString("lance %1.").arg(atkName),
                             activatedPlayer->color);
@@ -260,7 +346,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   }
 
   // is critical Strike ??
-  const auto [isCrit, critRandNb] = activatedPlayer->ProcessCriticalStrike();
+  const auto [isCrit, critRandNb] =
+      activatedPlayer->ProcessCriticalStrike(currentAtk);
   QString critStr;
   if (isCrit) {
     critStr = "Coup Critique";
@@ -271,58 +358,37 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       nameChara,
       QString("Test coup critique:%1 -> %2.\n").arg(critRandNb).arg(critStr));
 
+  // In case of effect with reach: REACH_RAND_INDIVIDUAL, process who is the
+  // random target
+  gm->m_PlayersManager->ProcessIsRandomTarget();
+
   // new effects on that turn
   std::unordered_map<QString, std::vector<effectParam>> newEffects;
-  // Parse target list and apply atk and effects
-  for (const auto &target : targetList) {
-    QString channelLog;
-    auto *targetChara = gm->m_PlayersManager->GetCharacterByName(target.m_Name);
-    if (targetChara != nullptr) {
-      // is dodging
-      if (currentAtk.target == TARGET_ENNEMY &&
-          currentAtk.reach == REACH_ZONE && target.m_IsTargeted) {
-        const auto &[isDodgingZone, outputsRandnbZone] =
-            targetChara->IsDodging();
-        if (isDodgingZone) {
-          emit SigUpdateChannelView(
-              targetChara->m_Name,
-              QString("esquive.(%1)").arg(outputsRandnbZone));
-          continue;
-        } else {
-          emit SigUpdateChannelView(
-              targetChara->m_Name,
-              QString("pas d'esquive.(%1)").arg(outputsRandnbZone));
-        }
-      }
-      // EFFECT
-      const auto &[conditionsOk, resultEffects, appliedEffects] =
-          activatedPlayer->ApplyAtkEffect(target.m_IsTargeted, currentAtk,
-                                          targetChara, isCrit);
-
-      if (!resultEffects.isEmpty()) {
-        emit SigUpdateChannelView(nameChara,
-                                  QString("Sur %1: ").arg(target.m_Name) +
-                                      "\n" + resultEffects.join(""),
-                                  activatedPlayer->color);
-      }
-      // conditionsOk = false if effect reinit with unfulfilled condtions
-      if (target.m_IsTargeted && conditionsOk && !channelLog.isEmpty()) {
-        // Update channel view
-        emit SigUpdateChannelView(nameChara, channelLog,
-                                  activatedPlayer->color);
-      }
-      if (!conditionsOk) {
-        ui->bag_button->setEnabled(true);
-        ui->attaque_button->setEnabled(true);
-        return;
-      }
-      // add applied effect to new effect Table
-      newEffects[target.m_Name] = appliedEffects;
+  // Process first the buf of the launcher
+  auto it = std::find_if(targetList.begin(), targetList.end(),
+                         [&](const TargetInfo *ti) {
+                           if (ti != nullptr) {
+                             return nameChara == ti->get_name().data();
+                           }
+                           return false;
+                         });
+  if (it != targetList.end()) {
+    ProcessAtk(*it, currentAtk, activatedPlayer, isCrit, nameChara, newEffects);
+  }
+  for (const auto *target : targetList) {
+    if (target->get_name().data() == nameChara) {
+      continue;
+    }
+    if (!ProcessAtk(target, currentAtk, activatedPlayer, isCrit, nameChara,
+                    newEffects)) {
+      return;
     }
   }
 
-  // end of critical strike buf (if any)
+  // end of activated bufs during turn
   activatedPlayer->ResetBuf(BufTypes::damageCritCapped);
+  activatedPlayer->ResetBuf(BufTypes::multiValue);
+  activatedPlayer->ResetBuf(BufTypes::applyEffectInit);
 
   /// Update game state
   // update effect on player manager
@@ -354,11 +420,12 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   for (const auto &dp : diedBossList) {
     emit SigUpdateChannelView(dp, "est mort.");
     // TODO what to do when a boss is dead
-     emit SigBossDead(dp);
+    emit SigBossDead(dp);
     ui->attak_page->RemoveTarget(dp);
     ui->add_exp_button->setEnabled(true);
     gm->m_GameState->RemoveDeadPlayerInTurn(dp);
-    gm->m_GameState->m_DiedEnnemies[gm->m_GameState->m_CurrentTurnNb].push_back(dp);
+    gm->m_GameState->m_DiedEnnemies[gm->m_GameState->m_CurrentTurnNb].push_back(
+        dp);
   }
   const QStringList diedHeroesList =
       gm->m_PlayersManager->CheckDiedPlayers(characType::Hero);

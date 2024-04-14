@@ -30,6 +30,24 @@
             "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 0
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "Tours de recharge",
+            "Valeur de l'effet": 0,
+            "Value": 10
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "Bloque attaque de soin",
+            "Valeur de l'effet": 0,
+            "Value": 3
         }
     ],
     "Forme": "Standard",

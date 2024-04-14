@@ -17,13 +17,13 @@ void BossPanel::UpdatePanel(Character *boss) {
 
   m_Boss = boss;
 
-  const auto &hp =
-      std::get<StatsType<int>>(boss->m_Stats.m_AllStatsTable[STATS_HP]);
+  const auto &hp = boss->m_Stats.m_AllStatsTable[STATS_HP];
 
   ui->name_label->setText(boss->m_Name);
   ui->hp_bar->setFormat(QString::number(hp.m_CurrentValue) + "/" +
                         QString::number(hp.m_MaxValue) + " %p%");
-  int hpValue = (hp.m_MaxValue != 0) ?100 * hp.m_CurrentValue / hp.m_MaxValue : 10;
+  int hpValue =
+      (hp.m_MaxValue != 0) ? 100 * hp.m_CurrentValue / hp.m_MaxValue : 10;
   ui->hp_bar->setValue(hpValue);
 
   ui->hp_bar->setStyleSheet(
@@ -49,29 +49,28 @@ void BossPanel::SetActive(bool activated) {
   }
 }
 
-void BossPanel::on_edit_button_clicked()
-{
-    auto &appView = ApplicationView::GetInstance();
-    appView.GetCharacterWindow()->InitWindow(tabType::attak);
-    appView.ShowWindow(appView.GetCharacterWindow(), true);
+void BossPanel::on_edit_button_clicked() {
+  auto &appView = ApplicationView::GetInstance();
+  appView.GetCharacterWindow()->InitWindow(tabType::attak);
+  appView.ShowWindow(appView.GetCharacterWindow(), true);
 }
 
 void BossPanel::SetSelected(const bool selected) {
-    QFrame::Shape shape = QFrame::NoFrame;
-    int lineWidth = 0;
-    if (selected) {
-        shape = QFrame::Box;
-        lineWidth = 3;
-        ui->frame->setLineWidth(lineWidth);
-    }
-    ui->frame->setFrameShape(shape);
+  QFrame::Shape shape = QFrame::NoFrame;
+  int lineWidth = 0;
+  if (selected) {
+    shape = QFrame::Box;
+    lineWidth = 3;
+    ui->frame->setLineWidth(lineWidth);
+  }
+  ui->frame->setFrameShape(shape);
 
-    // update buttons
-    ui->edit_button->setEnabled(selected);
+  // update buttons
+  ui->edit_button->setEnabled(selected);
 }
 
 void BossPanel::mousePressEvent(QMouseEvent *event) {
-    if (event->button() == Qt::LeftButton) {
-        emit SigSelectedCharacterOnPanel(m_Boss->m_Name);
-    }
+  if (event->button() == Qt::LeftButton) {
+    emit SigSelectedCharacterOnPanel(m_Boss->m_Name);
+  }
 }
