@@ -1117,8 +1117,11 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
 
   if (effect.effect == EFFECT_BLOCK_HEAL_ATK && m_ExtCharacter != nullptr) {
     m_ExtCharacter->set_is_heal_atk_blocked(true);
+    // output must be written before modifying nbTurns
+    output = QString("Les attaques de soins sont bloqués pendant %1.\n").arg(effect.nbTurns);
     // Same calculation as cooldown effect
     effect.nbTurns += 2;
+
   }
 
   const auto *gs = Application::GetInstance().m_GameManager->m_GameState;

@@ -393,7 +393,7 @@ QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName,
   if (targetPl != nullptr) {
     for (auto &gae : gaeTable) {
       if (gae.launchingTurn == currentTurn) {
-        // effet is applicable at launch of one character and then at the next
+        // effect is applicable at launch of one character and then at the next
         // turn of the target
         continue;
       }
