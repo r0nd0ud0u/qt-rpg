@@ -296,6 +296,13 @@ bool GameDisplay::ProcessAtk(
     }
     // add applied effect to new effect Table
     newEffects[target->get_name().data()] = appliedEffects;
+
+    // Some bufs on the target are disabled at the end of the atk
+    targetChara->ResetBuf(BufTypes::changeByHealValue);
+    auto *buf = targetChara->m_AllBufs[static_cast<int>(BufTypes::changeByHealValue)];
+    if (buf != nullptr) {
+        buf->set_is_passive_enabled(false);
+    }
   }
 
   return true;

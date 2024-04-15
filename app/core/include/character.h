@@ -44,6 +44,7 @@ enum class BufTypes {
   nextHealAtkIsCrit,
   multiValue,
   applyEffectInit,
+    changeByHealValue,
   enumSize
 };
 enum class amountType {
@@ -68,7 +69,7 @@ public:
   bool CanBeLaunched(const AttaqueType &atk) const;
 
   // Effect
-  QString ApplyOneEffect(Character *target, effectParam &effect,
+  std::pair<QString, std::vector<effectParam>> ApplyOneEffect(Character *target, effectParam &effect,
                          const bool fromLaunch, const AttaqueType &atk,
                          const bool reload = false, const bool isCrit = false);
   std::tuple<bool, QStringList, std::vector<effectParam>>
@@ -151,7 +152,7 @@ private:
   QString ProcessAggro(const int atkValue);
   void UpdateStatsToNextLevel();
   void UpdateBuf(const BufTypes &bufType, const int value,
-                 const bool isPercent);
+                 const bool isPercent, const QString& stat);
   static int UpdateDamageByBuf(const Buffers *bufDmg, const int value);
 };
 

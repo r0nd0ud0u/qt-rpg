@@ -162,6 +162,7 @@ const QString EFFECT_BUF_MULTI =
 const QString EFFECT_BLOCK_HEAL_ATK = "Bloque attaque de soin";
 const QString CONDITION_DMG_PREV_TURN = "Dégâts au tour précédent";
 const QString EFFECT_REPEAT_IF_HEAL = "Répète l'attaque(en % de chance) après heal tour prec.";
+const QString EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL = "Buf par valeur d'autant de PV";
 const std::set<QString> EFFECTS{"",
                                 EFFECT_REINIT,
                                 EFFECT_NB_COOL_DOWN,
@@ -181,7 +182,8 @@ const std::set<QString> EFFECTS{"",
                                 EFFECT_BUF_MULTI,
                                 EFFECT_BLOCK_HEAL_ATK,
                                 CONDITION_DMG_PREV_TURN,
-                                EFFECT_REPEAT_IF_HEAL,};
+                                EFFECT_REPEAT_IF_HEAL,
+                                EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL,};
 const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_NB_DECREASE_BY_TURN,
     EFFECT_NB_COOL_DOWN,
@@ -196,6 +198,7 @@ const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_NEXT_HEAL_IS_CRIT,
     EFFECT_BUF_MULTI,
     EFFECT_BLOCK_HEAL_ATK,
+    EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL,
 };
 const QString EFFECT_ARRAY = "Effet";
 const QString EFFECT_TYPE = "Type";
