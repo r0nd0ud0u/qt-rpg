@@ -54,6 +54,7 @@ public:
   std::vector<Character *> * GetPlayerListByType(const characType &launcherType);
   std::optional<std::vector<QString>> GetAllDeadliestAllies(const characType &launcherType) const;
   void ProcessIsRandomTarget() const;
+  void ResetIsFirstRound() const;
 
   std::vector<Character *> m_HeroesList;
   std::vector<Character *> m_BossesList;
