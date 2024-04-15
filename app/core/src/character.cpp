@@ -603,7 +603,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
             m_LastTxRx[static_cast<uint64_t>(amountType::damageTx)].count(
                 gs->m_CurrentTurnNb - 1) > 0)) {
         conditionsAreOk = false;
-        allResultEffects.append(QString("Pas d'effect %1 activé. Pas de dégâts "
+        allResultEffects.append(QString("Pas d'effet activé. Pas de dégâts "
                                         "infligés au tour précédent.\n")
                                     .arg(effect.effect));
         break;
@@ -768,7 +768,8 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
 
   if (ep.statsName != STATS_HP && ep.statsName != STATS_MANA &&
       ep.statsName != STATS_VIGOR && ep.statsName != STATS_BERSECK) {
-    SetStatsOnEffect(localStat, output, '+', (ep.effect == EFFECT_PERCENT_CHANGE), true);
+    SetStatsOnEffect(localStat, output, '+',
+                     (ep.effect == EFFECT_PERCENT_CHANGE), true);
     return std::make_pair(output, output);
   }
   int maxAmount = 0;
@@ -1118,10 +1119,10 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
   if (effect.effect == EFFECT_BLOCK_HEAL_ATK && m_ExtCharacter != nullptr) {
     m_ExtCharacter->set_is_heal_atk_blocked(true);
     // output must be written before modifying nbTurns
-    output = QString("Les attaques de soins sont bloqués pendant %1.\n").arg(effect.nbTurns);
+    output = QString("Les attaques de soins sont bloqués pendant %1.\n")
+                 .arg(effect.nbTurns);
     // Same calculation as cooldown effect
     effect.nbTurns += 2;
-
   }
 
   const auto *gs = Application::GetInstance().m_GameManager->m_GameState;

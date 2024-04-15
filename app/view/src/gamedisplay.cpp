@@ -396,7 +396,9 @@ void GameDisplay::LaunchAttak(const QString &atkName,
                            return false;
                          });
   if (it != targetList.end()) {
-    ProcessAtk(*it, currentAtk, activatedPlayer, isCrit, nameChara, newEffects);
+      if(!ProcessAtk(*it, currentAtk, activatedPlayer, isCrit, nameChara, newEffects)){
+          return;
+      }
   }
   for (const auto *target : targetList) {
     if (target->get_name().data() == nameChara) {
