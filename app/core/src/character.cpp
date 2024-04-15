@@ -85,6 +85,7 @@ QString Character::RegenIntoDamage(const int atkValue,
     playerList = pm->m_BossesList;
   }
 
+  // TODO could be change by a buf
   for (const auto &e : pm->m_AllEffectsOnGame.at(m_Name)) {
     if (e.allAtkEffects.effect == EFFECT_INTO_DAMAGE &&
         statsName == e.allAtkEffects.statsName) {

@@ -124,10 +124,12 @@ void GameDisplay::NewRound() {
   emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
 
   // update buf pow
+  // passive azrak TODO extract in a function
   if (activePlayer->m_Name == "Azrak Ombresang") {
     auto &localStat = activePlayer->m_Stats.m_AllStatsTable[STATS_POW_PHY];
     auto *phyBuf =
         activePlayer->m_AllBufs[static_cast<int>(BufTypes::powPhyBuf)];
+    const auto test = phyBuf->get_value();
     if (phyBuf != nullptr) {
       const auto &hpRxTable =
           activePlayer->m_LastTxRx[static_cast<int>(amountType::healRx)];
@@ -135,6 +137,8 @@ void GameDisplay::NewRound() {
       if (hpRxTable.find(gs->m_CurrentTurnNb - 1) != hpRxTable.end()) {
           hpRx = hpRxTable.at(gs->m_CurrentTurnNb - 1);
       };
+      // -phyBuf->get_value() : buf previous turn
+      // hpRx : buf new turn
       Character::SetStatsOnEffect(localStat, -phyBuf->get_value() + hpRx, true,
                                   false, true);
       phyBuf->set_buffers(hpRx, phyBuf->get_is_percent());
