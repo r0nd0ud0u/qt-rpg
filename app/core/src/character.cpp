@@ -453,14 +453,14 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   // Apply regen effect turning into damage for all bosses
   // can be processed only after calcul of amount of atk
   if (!reload) {
-      result += RegenIntoDamage(trueAmount, effect.statsName);
+    result += RegenIntoDamage(trueAmount, effect.statsName);
   }
 
   // Process aggro
   if (effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE &&
       effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE &&
       (effect.statsName == STATS_HP || effect.statsName == STATS_AGGRO)) {
-      result += ProcessAggro(trueAmount);
+    result += ProcessAggro(trueAmount);
   }
 
   // update effect value
@@ -468,16 +468,16 @@ QString Character::ApplyOneEffect(Character *target, effectParam &effect,
   const auto gs = Application::GetInstance().m_GameManager->m_GameState;
   if (effect.effect == EFFECT_VALUE_CHANGE ||
       effect.effect == EFFECT_PERCENT_CHANGE) {
-      effect.value = abs(trueAmount);
+    effect.value = abs(trueAmount);
     // case 0 is not saved in m_LastTxRx
-      if (trueAmount > 0) {
+    if (trueAmount > 0) {
       target->m_LastTxRx[static_cast<int>(amountType::healRx)]
-                            [gs->m_CurrentTurnNb] += trueAmount;
+                        [gs->m_CurrentTurnNb] += trueAmount;
       m_LastTxRx[static_cast<int>(amountType::healTx)][gs->m_CurrentTurnNb] +=
           trueAmount;
-      } else if (trueAmount < 0) {
+    } else if (trueAmount < 0) {
       m_LastTxRx[static_cast<int>(amountType::damageTx)][gs->m_CurrentTurnNb] +=
-              std::abs(trueAmount);
+          std::abs(trueAmount);
     }
   }
 
@@ -610,12 +610,12 @@ void Character::RemoveMalusEffect(const effectParam &ep) {
     if (ep.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
       SetStatsOnEffect(localStat, ep.value, '-', false, true);
     }
-    if (ep.effect == EFFECT_BLOCK_HEAL_ATK && m_ExtCharacter != nullptr) {
+    if (ep.effect == EFFECT_VALUE_CHANGE) {
+      localStat.m_CurrentValue -= ep.value;
+    }
+  }
+  if (ep.effect == EFFECT_BLOCK_HEAL_ATK && m_ExtCharacter != nullptr) {
       m_ExtCharacter->set_is_heal_atk_blocked(false);
-    }
-    if(ep.effect == EFFECT_VALUE_CHANGE){
-        localStat.m_CurrentValue += ep.value;
-    }
   }
 
   // remove debuf/ buf
@@ -661,30 +661,22 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
       amount = ep.value;
     }
   } else if (launch && ep.statsName == STATS_HP &&
-             (ep.effect == EFFECT_VALUE_CHANGE ||
-              ep.effect == EFFECT_PERCENT_CHANGE)) {
+             ep.effect == EFFECT_VALUE_CHANGE) {
     if (ep.target == TARGET_ENNEMY) {
       amount = nbOfApplies * DamageByAtk(launcherStats, target->m_Stats,
                                          ep.isMagicAtk, ep.value, ep.nbTurns);
-      // TODO DOT ?
     } else if (ep.isMagicAtk) {
-      // HOT ou DOT
+      // HOT or DOT
       const auto &launcherPowMag =
           launcherStats.m_AllStatsTable.at(STATS_POW_MAG);
-      if (ep.effect == EFFECT_PERCENT_CHANGE) {
-        amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
-      } else {
-        amount = nbOfApplies *
-                 (ep.value + launcherPowMag.m_CurrentValue / ep.nbTurns);
-      }
+      amount =
+          nbOfApplies * (ep.value + launcherPowMag.m_CurrentValue / ep.nbTurns);
     } else {
-      // DOT -> create an effect to explicited say that is a damage on allies
       amount = nbOfApplies * ep.value;
     }
   }
   // value in percent
   else if (ep.effect == EFFECT_PERCENT_CHANGE) {
-    // TODO duplicate with EFFECT_IMPROVE_BY_PERCENT_CHANGE ?
     amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
   } else {
     amount = nbOfApplies * ep.value;
@@ -735,9 +727,10 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     output = sign * amount; // apply the sign after the calcul of amount
   }
 
-  if(ep.statsName == STATS_DODGE || ep.statsName == STATS_SPEED|| ep.statsName == STATS_CRIT){
-      localStat.m_CurrentValue += output;
-      return std::make_pair(output, output);
+  if (ep.statsName == STATS_DODGE || ep.statsName == STATS_SPEED ||
+      ep.statsName == STATS_CRIT) {
+    localStat.m_CurrentValue += output;
+    return std::make_pair(output, output);
   }
   int maxAmount = 0;
   if (output > 0) {
@@ -1082,6 +1075,8 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
 
   if (effect.effect == EFFECT_BLOCK_HEAL_ATK && m_ExtCharacter != nullptr) {
     m_ExtCharacter->set_is_heal_atk_blocked(true);
+      // Same calculation as cooldown effect
+      effect.nbTurns += 2;
   }
 
   const auto *gs = Application::GetInstance().m_GameManager->m_GameState;
@@ -1101,7 +1096,7 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
                    .arg(randNb);
     }
   }
-
+  output += QString("Effet appliqué %1 fois\n").arg(nbOfApplies);
   return std::make_pair(output, nbOfApplies);
 }
 

@@ -48,6 +48,15 @@
             "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 25
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "",
+            "Tours actifs": 6,
+            "Type": "Tours de recharge",
+            "Valeur de l'effet": 0,
+            "Value": 0
         }
     ],
     "Forme": "Standard",

@@ -1,5 +1,5 @@
 {
-    "Cible": "Ennemie",
+    "Cible": "Tous les heroes",
     "Coût de mana": 0,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
@@ -35,25 +35,25 @@
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "",
-            "Tours actifs": 0,
+            "Tours actifs": 10,
             "Type": "Tours de recharge",
             "Valeur de l'effet": 0,
-            "Value": 10
+            "Value": 0
         },
         {
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "",
-            "Tours actifs": 0,
+            "Tours actifs": 3,
             "Type": "Bloque attaque de soin",
             "Valeur de l'effet": 0,
-            "Value": 3
+            "Value": 0
         }
     ],
     "Forme": "Standard",
     "Niveau": 12,
     "Nom": "Non sans raison",
     "Photo": "default.png",
-    "Portée": "Individuel"
+    "Portée": "Zone"
 }
 
