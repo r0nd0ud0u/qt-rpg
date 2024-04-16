@@ -822,13 +822,13 @@ void PlayersManager::ResetIsFirstRound() const {
   std::for_each(m_HeroesList.begin(), m_HeroesList.end(),
                 [&](const Character *c) {
                   if (c != nullptr && c->m_ExtCharacter != nullptr) {
-                    c->m_ExtCharacter->set_is_first_round(false);
+                    c->m_ExtCharacter->set_is_first_round(true);
                   }
                 });
   std::for_each(m_BossesList.begin(), m_BossesList.end(),
                 [&](const Character *c) {
                   if (c != nullptr && c->m_ExtCharacter != nullptr) {
-                    c->m_ExtCharacter->set_is_first_round(false);
+                    c->m_ExtCharacter->set_is_first_round(true);
                   }
                 });
 }

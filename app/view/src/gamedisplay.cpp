@@ -114,7 +114,8 @@ void GameDisplay::NewRound() {
   if (activePlayer->m_ExtCharacter != nullptr &&
       activePlayer->m_ExtCharacter->get_is_first_round()) {
       // update boolean
-      activePlayer->m_ExtCharacter->set_is_first_round(true);
+      activePlayer->m_ExtCharacter->set_is_first_round(false);
+
     const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffectsOnPlayer(
         activePlayer->m_Name, gm->m_GameState->m_CurrentTurnNb, false);
     for (const auto &el : effectsLogs) {

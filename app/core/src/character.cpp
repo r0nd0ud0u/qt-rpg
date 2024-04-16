@@ -471,17 +471,16 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
       // This way, when effect is removed, the effect can be removed
       std::for_each(stats.begin(), stats.end(), [&](const ::rust::String &str) {
         effectParam ep;
-        ep.effect = EFFECT_VALUE_CHANGE;
+        ep.effect = EFFECT_IMPROVEMENT_STAT_BY_VALUE;
         ep.value = trueAmount;
         ep.isMagicAtk = true;
         ep.statsName = str.data();
         ep.nbTurns = buf->get_value();
-        const auto [amount2, trueAmount2] = ProcessCurrentValueOnEffect(
-            ep, 1, m_Stats, fromLaunch, target, isCrit);
+        const auto &[effectLog, nbOfApplies] = ProcessEffectType(ep, target, atk);
 
         // TODO should be static and not on target ? pass target by argument
-        result += target->ProcessOutputLogOnEffect(ep, amount2, fromLaunch, 1,
-                                                   atk.name, trueAmount2);
+        result += target->ProcessOutputLogOnEffect(ep, ep.value, fromLaunch, 1,
+                                                   atk.name, ep.value);
         newEffects.push_back(ep);
       });
     }
@@ -497,7 +496,7 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
   // update effect value
   // keep the calcultated value for the HOT or DOT
   const auto gs = Application::GetInstance().m_GameManager->m_GameState;
-  if (effect.effect == EFFECT_VALUE_CHANGE ||
+  if (effect.statsName == STATS_HP && effect.effect == EFFECT_VALUE_CHANGE ||
       effect.effect == EFFECT_PERCENT_CHANGE) {
     effect.value = abs(trueAmount);
     // case 0 is not saved in m_LastTxRx
