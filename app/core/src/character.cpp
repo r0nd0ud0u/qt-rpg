@@ -302,14 +302,14 @@ void Character::ApplyEffeftOnStats(const bool updateEffect) {
       auto &localStat = m_Stats.m_AllStatsTable[gae.allAtkEffects.statsName];
       SetStatsOnEffect(
           localStat, gae.allAtkEffects.value,
-          get_coeffsign_effect_value(gae.allAtkEffects.target.toStdString()),
+          '+',
           true, updateEffect);
     } else if (gae.allAtkEffects.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
       // common init
       auto &localStat = m_Stats.m_AllStatsTable[gae.allAtkEffects.statsName];
       SetStatsOnEffect(
           localStat, gae.allAtkEffects.value,
-          get_coeffsign_effect_value(gae.allAtkEffects.target.toStdString()),
+          '+',
           false, updateEffect);
     }
   }
@@ -638,15 +638,12 @@ void Character::RemoveMalusEffect(const effectParam &ep) {
   if (!ep.statsName.isEmpty() &&
       m_Stats.m_AllStatsTable.count(ep.statsName) > 0) {
     auto &localStat = m_Stats.m_AllStatsTable.at(ep.statsName);
+
     if (ep.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
-      SetStatsOnEffect(localStat, ep.value, '-', true, true);
+      SetStatsOnEffect(localStat, -ep.value, '-', true, true);
     }
     if (ep.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
-      SetStatsOnEffect(localStat, ep.value, '-', false, true);
-    }
-    if (ep.effect == EFFECT_VALUE_CHANGE) {
-      // localStat.m_CurrentValue -= ep.value;
-      SetStatsOnEffect(localStat, ep.value, '-', false, true);
+      SetStatsOnEffect(localStat, -ep.value, '-', false, true);
     }
   }
   if (ep.effect == EFFECT_BLOCK_HEAL_ATK && m_ExtCharacter != nullptr) {
@@ -1068,20 +1065,18 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
     const char sign = get_char_effect_value(effect.target.toStdString());
     // common init
     auto &localStat = target->m_Stats.m_AllStatsTable[effect.statsName];
-    SetStatsOnEffect(localStat, nbOfApplies * effect.value, sign, true, true);
+    SetStatsOnEffect(localStat, nbOfApplies * effect.value, '+', true, true);
     output = QString("La stat %1 est modifiée de %2%3%.\n")
                  .arg(effect.statsName)
                  .arg(sign)
                  .arg(nbOfApplies * effect.value);
   }
   if (effect.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
-    const char sign = get_char_effect_value(effect.target.toStdString());
     // common init
     auto &localStat = target->m_Stats.m_AllStatsTable[effect.statsName];
-    SetStatsOnEffect(localStat, effect.value, sign, false, true);
+    SetStatsOnEffect(localStat, effect.value, '+', false, true);
     output = QString("La stat %1 est modifiée de %2%3.\n")
                  .arg(effect.statsName)
-                 .arg(sign)
                  .arg(effect.value);
   }
   // only for aggro

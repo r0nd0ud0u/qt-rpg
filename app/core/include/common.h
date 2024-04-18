@@ -144,9 +144,10 @@ const QString EFFECT_REINIT = "Reinit";
 const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";
 const QString EFFECT_NB_DECREASE_ON_TURN = "Decroissement pendant le tour";
 const QString EFFECT_NB_DECREASE_BY_TURN = "Decroissement par tour";
+// Effect to improve cuurent value of a stat by value
 const QString EFFECT_VALUE_CHANGE = "Changement par valeur";
+// Effect to improve cuurent value of a stat by percent
 const QString EFFECT_PERCENT_CHANGE = "Changement par %";
-const QString EFFECT_IMPROVE_BY_PERCENT_CHANGE = "Up par %";
 const QString EFFECT_DELETE_BAD = "Supprime effet néfaste";
 const QString EFFECT_INTO_DAMAGE = "% (stats) en dégâts";
 const QString EFFECT_IMPROVE_HOTS = "Boost chaque HOT de .. %";
@@ -155,6 +156,9 @@ const QString EFFECT_BOOSTED_BY_HOTS =
 const QString EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT = "Up/down degats en %";
 const QString EFFECT_REPEAT_AS_MANY_AS = "Répète tant que possible";
 const QString CONDITION_ENNEMIES_DIED = "Ennemis morts tours précédents";
+// Effect to improve max value of a stat by percent (current value is updated by ratio)
+const QString EFFECT_IMPROVE_BY_PERCENT_CHANGE = "Up par %";
+// Effect to improve max value of a stat by value (current value is updated by ratio)
 const QString EFFECT_IMPROVEMENT_STAT_BY_VALUE = "Up par valeur";
 const QString EFFECT_NEXT_HEAL_IS_CRIT = "Prochaine attaque heal est crit";
 const QString EFFECT_BUF_MULTI =

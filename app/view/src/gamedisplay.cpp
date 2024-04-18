@@ -147,7 +147,7 @@ void GameDisplay::NewRound() {
         // -phyBuf->get_value() : buf previous turn
         // hpRx : buf new turn
         Character::SetStatsOnEffect(localStat, -phyBuf->get_value() + hpRx,
-                                    true, false, true);
+                                    '+', false, true);
         phyBuf->set_buffers(hpRx, phyBuf->get_is_percent());
       }
     }
