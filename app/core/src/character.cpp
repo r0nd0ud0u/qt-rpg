@@ -49,10 +49,10 @@ int Character::DamageByAtk(const Stats &launcherStats, const Stats &targetStats,
   int arm = 0;
   int damage = atkValue;
   if (isMagicAtk) {
-    damage += launcherPowMag.m_CurrentValue / nbTurns;
+    damage -= launcherPowMag.m_CurrentValue / nbTurns;
     arm = targetArmMag.m_CurrentValue;
   } else {
-    damage += launcherPowPhy.m_CurrentValue / nbTurns;
+    damage -= launcherPowPhy.m_CurrentValue / nbTurns;
     arm = targetArmPhy.m_CurrentValue;
   }
   const double protection = 1000.0 / (1000.0 + static_cast<double>(arm));
@@ -668,8 +668,6 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     return std::make_pair(0, 0);
   }
   int output = 0;
-  // heal or damage is suggested by sign
-  const int sign = get_coeffsign_effect_value(ep.target.toStdString());
 
   // common init
   auto &localStat = target->m_Stats.m_AllStatsTable[ep.statsName];
@@ -717,7 +715,7 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
   if (ep.statsName == STATS_HP) {
     // return the true applied amount
     // add buf
-    if (target != nullptr && sign == -1 && launch) {
+    if (target != nullptr && ep.target == TARGET_ENNEMY && launch) {
       // launcher buf
       if (const auto *bufTx = m_AllBufs[static_cast<int>(BufTypes::damageTx)];
           bufTx != nullptr) {
@@ -738,7 +736,7 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
             bufRx->get_value(), bufRx->get_is_percent(), amount));
       }
     }
-    if (target != nullptr && sign == 1 && launch) {
+    if (target != nullptr && ALLIES_TARGETS.count(ep.target) > 0 && launch) {
       // launcher buf
       if (const auto *bufMulti =
               m_AllBufs[static_cast<int>(BufTypes::multiValue)];
@@ -751,10 +749,10 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
 
   // is it a critical strike
   if (isCrit && ep.statsName == STATS_HP && launch) {
-    output = 2 * sign * amount;
+    output = 2 * amount;
   } else {
     // new value of stat
-    output = sign * amount; // apply the sign after the calcul of amount
+    output = amount;
   }
 
   if (ep.statsName != STATS_HP && ep.statsName != STATS_MANA &&
