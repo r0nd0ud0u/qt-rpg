@@ -11,25 +11,16 @@
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 50
+            "Value": -50
         },
         {
             "Cible": "Ennemie",
             "Portée": "Zone",
             "Stat": "Vitesse",
             "Tours actifs": 2,
-            "Type": "Changement par valeur",
+            "Type": "Up par valeur",
             "Valeur de l'effet": 0,
-            "Value": 12
-        },
-        {
-            "Cible": "",
-            "Portée": "",
-            "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
-            "Valeur de l'effet": 0,
-            "Value": 0
+            "Value": -12
         }
     ],
     "Forme": "Standard",

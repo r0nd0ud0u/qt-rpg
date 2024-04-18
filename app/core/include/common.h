@@ -4,7 +4,6 @@
 #include <qobject.h>
 #include <set>
 #include <unordered_map>
-#include <variant>
 
 #include "rust-rpg-bridge/buffers.h"
 
@@ -145,9 +144,10 @@ const QString EFFECT_REINIT = "Reinit";
 const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";
 const QString EFFECT_NB_DECREASE_ON_TURN = "Decroissement pendant le tour";
 const QString EFFECT_NB_DECREASE_BY_TURN = "Decroissement par tour";
+// Effect to improve cuurent value of a stat by value
 const QString EFFECT_VALUE_CHANGE = "Changement par valeur";
+// Effect to improve cuurent value of a stat by percent
 const QString EFFECT_PERCENT_CHANGE = "Changement par %";
-const QString EFFECT_IMPROVE_BY_PERCENT_CHANGE = "Up par %";
 const QString EFFECT_DELETE_BAD = "Supprime effet néfaste";
 const QString EFFECT_INTO_DAMAGE = "% (stats) en dégâts";
 const QString EFFECT_IMPROVE_HOTS = "Boost chaque HOT de .. %";
@@ -156,12 +156,17 @@ const QString EFFECT_BOOSTED_BY_HOTS =
 const QString EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT = "Up/down degats en %";
 const QString EFFECT_REPEAT_AS_MANY_AS = "Répète tant que possible";
 const QString CONDITION_ENNEMIES_DIED = "Ennemis morts tours précédents";
+// Effect to improve max value of a stat by percent (current value is updated by ratio)
+const QString EFFECT_IMPROVE_BY_PERCENT_CHANGE = "Up par %";
+// Effect to improve max value of a stat by value (current value is updated by ratio)
 const QString EFFECT_IMPROVEMENT_STAT_BY_VALUE = "Up par valeur";
 const QString EFFECT_NEXT_HEAL_IS_CRIT = "Prochaine attaque heal est crit";
 const QString EFFECT_BUF_MULTI =
     "Buf multi";
 const QString EFFECT_BLOCK_HEAL_ATK = "Bloque attaque de soin";
 const QString CONDITION_DMG_PREV_TURN = "Dégâts au tour précédent";
+const QString EFFECT_REPEAT_IF_HEAL = "Répète l'attaque(en % de chance) après heal tour prec.";
+const QString EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL = "Buf par valeur d'autant de PV";
 const std::set<QString> EFFECTS{"",
                                 EFFECT_REINIT,
                                 EFFECT_NB_COOL_DOWN,
@@ -180,7 +185,9 @@ const std::set<QString> EFFECTS{"",
                                 EFFECT_IMPROVEMENT_STAT_BY_VALUE,
                                 EFFECT_BUF_MULTI,
                                 EFFECT_BLOCK_HEAL_ATK,
-                                CONDITION_DMG_PREV_TURN};
+                                CONDITION_DMG_PREV_TURN,
+                                EFFECT_REPEAT_IF_HEAL,
+                                EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL,};
 const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_NB_DECREASE_BY_TURN,
     EFFECT_NB_COOL_DOWN,
@@ -195,6 +202,7 @@ const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_NEXT_HEAL_IS_CRIT,
     EFFECT_BUF_MULTI,
     EFFECT_BLOCK_HEAL_ATK,
+    EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL,
 };
 const QString EFFECT_ARRAY = "Effet";
 const QString EFFECT_TYPE = "Type";

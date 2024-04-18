@@ -24,7 +24,7 @@ Character *GameManager::GetSelectedHero() {
   return m_PlayersManager->m_SelectedHero;
 }
 
-void GameManager::ProcessOrderToPlay(std::vector<QString> &orderToPlay) const{
+void GameManager::ProcessOrderToPlay(std::vector<QString> &orderToPlay) const {
   // to be improved with stats
   // one player can play several times as well in different order
   orderToPlay.clear();
@@ -40,7 +40,7 @@ void GameManager::ProcessOrderToPlay(std::vector<QString> &orderToPlay) const{
   m_PlayersManager->AddSupAtkTurn(characType::Boss, orderToPlay);
 }
 
-QString GameManager::ProcessLogOrderToPlay() const{
+QString GameManager::ProcessLogOrderToPlay() const {
   QString logs;
   if (m_GameState == nullptr) {
     return "";
@@ -53,14 +53,17 @@ QString GameManager::ProcessLogOrderToPlay() const{
                 m_GameState->m_OrderToPlay.end(),
                 [&logs, &counter](const QString &plName) {
                   logs += QString("%1 %2\n").arg(counter).arg(plName);
-                    counter++;
+                  counter++;
                 });
 
   return logs;
 }
 
 Character *GameManager::GetCurrentPlayer() {
-  const auto &nameChara = m_GameState->GetCurrentPlayerName();
+  if (m_GameState == nullptr) {
+    return nullptr;
+  }
+  const auto nameChara = m_GameState->GetCurrentPlayerName();
   return m_PlayersManager->GetCharacterByName(nameChara);
 }
 
@@ -71,12 +74,11 @@ QString GameState::GetCurrentPlayerName() {
   return (m_CurrentRound > 0) ? m_OrderToPlay.at(m_CurrentRound - 1) : "";
 }
 
-void GameState::RemoveDeadPlayerInTurn(const QString& name){
-    const auto newEnd = std::remove_if(
-        m_OrderToPlay.begin(), m_OrderToPlay.end(),
-        [&name](const QString& localName) {
-            return localName ==
-                   name; // remove elements where this is true
-        });
-    m_OrderToPlay.erase(newEnd, m_OrderToPlay.end());
+void GameState::RemoveDeadPlayerInTurn(const QString &name) {
+  const auto newEnd = std::remove_if(
+      m_OrderToPlay.begin(), m_OrderToPlay.end(),
+      [&name](const QString &localName) {
+        return localName == name; // remove elements where this is true
+      });
+  m_OrderToPlay.erase(newEnd, m_OrderToPlay.end());
 }
