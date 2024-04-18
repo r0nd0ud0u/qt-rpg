@@ -457,7 +457,7 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
   if (!reload) {
     result += RegenIntoDamage(trueAmount, effect.statsName);
     // apply buf
-    auto *buf =
+    const auto *buf =
         target->m_AllBufs[static_cast<int>(BufTypes::changeByHealValue)];
     if (trueAmount > 0 && buf != nullptr && buf->get_is_passive_enabled()) {
       const auto &stats = buf->get_all_stat_name();
@@ -469,7 +469,7 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
         ep.value = trueAmount;
         ep.isMagicAtk = true;
         ep.statsName = str.data();
-        ep.nbTurns = buf->get_value();
+        ep.nbTurns = static_cast<int>(buf->get_value());
         const auto &[effectLog, nbOfApplies] =
             ProcessEffectType(ep, target, atk);
 

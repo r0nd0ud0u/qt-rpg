@@ -5,10 +5,10 @@
 
 class GameState{
 public:
-    uint16_t m_CurrentTurnNb = 0;
+    uint64_t m_CurrentTurnNb = 0;
     std::unordered_map<int, QString> m_DiedEnnemies; // key turn number, value name
     std::vector<QString> m_OrderToPlay;
-    uint16_t m_CurrentRound = 0; // max value = size of m_OrderToPlay
+    uint64_t m_CurrentRound = 0; // max value = size of m_OrderToPlay
 
     QString GetCurrentPlayerName();
     void RemoveDeadPlayerInTurn(const QString& name);
