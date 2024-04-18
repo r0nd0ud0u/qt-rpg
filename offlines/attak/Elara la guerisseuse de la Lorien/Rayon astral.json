@@ -11,7 +11,7 @@
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 50
+            "Value": -50
         },
         {
             "Cible": "Ennemie",
@@ -20,10 +20,10 @@
             "Tours actifs": 4,
             "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": 20
+            "Value": -20
         },
         {
-            "Cible": "Ennemie",
+            "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "",
             "Tours actifs": 3,
