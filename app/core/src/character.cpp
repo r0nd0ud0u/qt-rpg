@@ -300,17 +300,11 @@ void Character::ApplyEffeftOnStats(const bool updateEffect) {
     if (gae.allAtkEffects.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
       // common init
       auto &localStat = m_Stats.m_AllStatsTable[gae.allAtkEffects.statsName];
-      SetStatsOnEffect(
-          localStat, gae.allAtkEffects.value,
-          '+',
-          true, updateEffect);
+      SetStatsOnEffect(localStat, gae.allAtkEffects.value, true, updateEffect);
     } else if (gae.allAtkEffects.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
       // common init
       auto &localStat = m_Stats.m_AllStatsTable[gae.allAtkEffects.statsName];
-      SetStatsOnEffect(
-          localStat, gae.allAtkEffects.value,
-          '+',
-          false, updateEffect);
+      SetStatsOnEffect(localStat, gae.allAtkEffects.value, false, updateEffect);
     }
   }
 }
@@ -476,7 +470,8 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
         ep.isMagicAtk = true;
         ep.statsName = str.data();
         ep.nbTurns = buf->get_value();
-        const auto &[effectLog, nbOfApplies] = ProcessEffectType(ep, target, atk);
+        const auto &[effectLog, nbOfApplies] =
+            ProcessEffectType(ep, target, atk);
 
         // TODO should be static and not on target ? pass target by argument
         result += target->ProcessOutputLogOnEffect(ep, ep.value, fromLaunch, 1,
@@ -640,10 +635,10 @@ void Character::RemoveMalusEffect(const effectParam &ep) {
     auto &localStat = m_Stats.m_AllStatsTable.at(ep.statsName);
 
     if (ep.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
-      SetStatsOnEffect(localStat, -ep.value, '-', true, true);
+      SetStatsOnEffect(localStat, -ep.value, true, true);
     }
     if (ep.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
-      SetStatsOnEffect(localStat, -ep.value, '-', false, true);
+      SetStatsOnEffect(localStat, -ep.value, false, true);
     }
   }
   if (ep.effect == EFFECT_BLOCK_HEAL_ATK && m_ExtCharacter != nullptr) {
@@ -764,8 +759,8 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
 
   if (ep.statsName != STATS_HP && ep.statsName != STATS_MANA &&
       ep.statsName != STATS_VIGOR && ep.statsName != STATS_BERSECK) {
-    SetStatsOnEffect(localStat, output, '+',
-                     (ep.effect == EFFECT_PERCENT_CHANGE), true);
+    SetStatsOnEffect(localStat, output, (ep.effect == EFFECT_PERCENT_CHANGE),
+                     true);
     return std::make_pair(output, output);
   }
   int maxAmount = 0;
@@ -909,12 +904,8 @@ void Character::ResetBuf(const BufTypes &bufType) {
 }
 
 void Character::SetStatsOnEffect(StatsType &stat, const int value,
-                                 const char charSign, const bool isPercent,
+                                 const bool isPercent,
                                  const bool updateEffect) {
-  int sign = 1;
-  if (charSign == '-') {
-    sign = -1;
-  }
   const double ratio = (stat.m_MaxValue > 0)
                            ? static_cast<double>(stat.m_CurrentValue) /
                                  static_cast<double>(stat.m_MaxValue)
@@ -924,9 +915,9 @@ void Character::SetStatsOnEffect(StatsType &stat, const int value,
   stat.m_MaxValue = baseValue;
   if (updateEffect) {
     if (isPercent) {
-      stat.m_BufEffectPercent += sign * value;
+      stat.m_BufEffectPercent += value;
     } else {
-      stat.m_BufEffectValue += sign * value;
+      stat.m_BufEffectValue += value;
     }
   }
   // update maxvalue with all effects
@@ -1062,20 +1053,18 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
                  .arg(effect.nbTurns);
   }
   if (effect.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
-    const char sign = get_char_effect_value(effect.target.toStdString());
     // common init
     auto &localStat = target->m_Stats.m_AllStatsTable[effect.statsName];
-    SetStatsOnEffect(localStat, nbOfApplies * effect.value, '+', true, true);
-    output = QString("La stat %1 est modifiée de %2%3%.\n")
+    SetStatsOnEffect(localStat, nbOfApplies * effect.value, true, true);
+    output = QString("La stat %1 est modifiée de %2.\n")
                  .arg(effect.statsName)
-                 .arg(sign)
                  .arg(nbOfApplies * effect.value);
   }
   if (effect.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
     // common init
     auto &localStat = target->m_Stats.m_AllStatsTable[effect.statsName];
-    SetStatsOnEffect(localStat, effect.value, '+', false, true);
-    output = QString("La stat %1 est modifiée de %2%3.\n")
+    SetStatsOnEffect(localStat, effect.value, false, true);
+    output = QString("La stat %1 est modifiée de %2.\n")
                  .arg(effect.statsName)
                  .arg(effect.value);
   }

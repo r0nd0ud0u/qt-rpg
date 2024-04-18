@@ -113,8 +113,8 @@ void GameDisplay::NewRound() {
   // TODO create a method to do only on first round
   if (activePlayer->m_ExtCharacter != nullptr &&
       activePlayer->m_ExtCharacter->get_is_first_round()) {
-      // update boolean
-      activePlayer->m_ExtCharacter->set_is_first_round(false);
+    // update boolean
+    activePlayer->m_ExtCharacter->set_is_first_round(false);
 
     const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffectsOnPlayer(
         activePlayer->m_Name, gm->m_GameState->m_CurrentTurnNb, false);
@@ -147,7 +147,7 @@ void GameDisplay::NewRound() {
         // -phyBuf->get_value() : buf previous turn
         // hpRx : buf new turn
         Character::SetStatsOnEffect(localStat, -phyBuf->get_value() + hpRx,
-                                    '+', false, true);
+                                    false, true);
         phyBuf->set_buffers(hpRx, phyBuf->get_is_percent());
       }
     }
@@ -397,9 +397,10 @@ void GameDisplay::LaunchAttak(const QString &atkName,
                            return false;
                          });
   if (it != targetList.end()) {
-      if(!ProcessAtk(*it, currentAtk, activatedPlayer, isCrit, nameChara, newEffects)){
-          return;
-      }
+    if (!ProcessAtk(*it, currentAtk, activatedPlayer, isCrit, nameChara,
+                    newEffects)) {
+      return;
+    }
   }
   for (const auto *target : targetList) {
     if (target->get_name().data() == nameChara) {

@@ -44,16 +44,10 @@ enum class BufTypes {
   nextHealAtkIsCrit,
   multiValue,
   applyEffectInit,
-    changeByHealValue,
+  changeByHealValue,
   enumSize
 };
-enum class amountType {
-  damageRx = 0,
-  damageTx,
-  healRx,
-  healTx,
-  enumSize
-};
+enum class amountType { damageRx = 0, damageTx, healRx, healTx, enumSize };
 
 class Character {
 public:
@@ -69,9 +63,10 @@ public:
   bool CanBeLaunched(const AttaqueType &atk) const;
 
   // Effect
-  std::pair<QString, std::vector<effectParam>> ApplyOneEffect(Character *target, effectParam &effect,
-                         const bool fromLaunch, const AttaqueType &atk,
-                         const bool reload = false, const bool isCrit = false);
+  std::pair<QString, std::vector<effectParam>>
+  ApplyOneEffect(Character *target, effectParam &effect, const bool fromLaunch,
+                 const AttaqueType &atk, const bool reload = false,
+                 const bool isCrit = false);
   std::tuple<bool, QStringList, std::vector<effectParam>>
   ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
                  Character *target,
@@ -82,8 +77,7 @@ public:
   QString RegenIntoDamage(const int atkValue, const QString &statsName) const;
 
   static void
-  SetStatsOnEffect(StatsType &stat, const int value, const char charSign,
-                   const bool isPercent,
+  SetStatsOnEffect(StatsType &stat, const int value, const bool isPercent,
                    const bool updateEffect); // TODO à sortir dans un common
                                              // pour gerer les stats?
   std::pair<bool, QString> IsDodging() const;
@@ -151,8 +145,8 @@ private:
       const AttaqueType &atk); // pair1 output log, pair2 nbOfApplies
   QString ProcessAggro(const int atkValue);
   void UpdateStatsToNextLevel();
-  void UpdateBuf(const BufTypes &bufType, const int value,
-                 const bool isPercent, const QString& stat);
+  void UpdateBuf(const BufTypes &bufType, const int value, const bool isPercent,
+                 const QString &stat);
   static int UpdateDamageByBuf(const Buffers *bufDmg, const int value);
 };
 
