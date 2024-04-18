@@ -118,7 +118,7 @@ public:
   bool m_isLastAtkCritical = false;
   std::vector<std::unordered_map<uint64_t, uint64_t>> m_LastTxRx;
   Powers m_Power;
-  ExtendedCharacter *m_ExtCharacter;
+  ExtendedCharacter *m_ExtCharacter = nullptr;
 
 private:
   static void ProcessAddEquip(StatsType &charStat, const StatsType &equipStat);

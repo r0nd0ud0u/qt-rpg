@@ -105,6 +105,7 @@ void GameDisplay::NewRound() {
   auto *activePlayer = gm->GetCurrentPlayer();
   if (activePlayer == nullptr) {
     emit SigUpdateChannelView("Debug", "NewRound nullptr active player");
+    return;
   }
 
   // Apply effects
