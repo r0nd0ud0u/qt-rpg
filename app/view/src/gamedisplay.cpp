@@ -89,11 +89,10 @@ void GameDisplay::UpdateGameStatus() {
 }
 
 void GameDisplay::NewRound() {
-  const auto &gm = Application::GetInstance().m_GameManager;
-  if (gm.get() == nullptr) {
+  auto *gm = Application::GetInstance().m_GameManager.get();
+  if (gm == nullptr) {
     return;
   }
-
   // First update the game state
   auto *gs = gm->m_GameState;
   if (gs == nullptr) {
