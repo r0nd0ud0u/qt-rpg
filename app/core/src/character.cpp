@@ -921,7 +921,9 @@ void Character::SetStatsOnEffect(StatsType &stat, const int value,
   // update maxvalue with all effects
   stat.m_MaxValue +=
       stat.m_BufEffectValue + stat.m_BufEffectPercent * baseValue / 100;
-
+  // max value is positive
+  stat.m_MaxValue = std::max(0, stat.m_MaxValue);
+  // calcul of current-value by max-value
   stat.m_CurrentValue = static_cast<int>(std::round(stat.m_MaxValue * ratio));
 }
 

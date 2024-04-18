@@ -57,6 +57,15 @@
             "Type": "Tours de recharge",
             "Valeur de l'effet": 0,
             "Value": 0
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Mana",
+            "Tours actifs": 1,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": 10
         }
     ],
     "Forme": "Standard",
