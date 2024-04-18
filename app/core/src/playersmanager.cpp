@@ -117,8 +117,8 @@ void PlayersManager::InitHeroes() {
   stats.m_AllStatsTable[STATS_REGEN_VIGOR].InitValues(5, 5, 5, 0);
   stats.m_AllStatsTable[STATS_REGEN_MANA].InitValues(0, 0, 0, 0);
   stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(1, 1, 1, 0);
-  const auto hero5 = new Character("Lirion Vertefeuille",
-                                   characType::Hero, stats);
+  const auto hero5 =
+      new Character("Lirion Vertefeuille", characType::Hero, stats);
   hero5->m_Forms.push_back(STANDARD_FORM);
 
   // color
@@ -128,23 +128,21 @@ void PlayersManager::InitHeroes() {
   hero4->color = QColor("pink");
   hero4->color = QColor("brown");
 
-  m_HeroesList.push_back(hero1);
-  m_HeroesList.push_back(hero2);
-  m_HeroesList.push_back(hero3);
-  m_HeroesList.push_back(hero4);
-
-  for (auto *hero : m_HeroesList) {
-    hero->LoadAtkJson();
-    hero->LoadStuffJson();
+  std::set<Character *> heroes{hero1, hero2, hero3, hero4, hero5};
+  std::for_each(heroes.begin(), heroes.end(), [&](Character *h) {
+    m_AllHeroesList.push_back(h);
+    h->LoadAtkJson();
+    h->LoadStuffJson();
     std::unordered_map<QString, QString> table;
-    for (const auto &[name, stuff] : hero->m_WearingEquipment) {
+    for (const auto &[name, stuff] : h->m_WearingEquipment) {
       if (!stuff.m_Name.isEmpty()) {
         table[name] = stuff.m_Name;
       }
     }
-    hero->SetEquipment(table);
-    hero->ApplyEquipOnStats();
-  }
+    h->SetEquipment(table);
+    h->ApplyEquipOnStats();
+  });
+
   const auto epParamTalent1 = hero1->LoadThaliaTalent();
   const auto epParamTalent2 = hero2->LoadAzrakTalent();
   const auto epParamTalent3 = hero3->LoadThrainTalent();
@@ -187,7 +185,7 @@ void PlayersManager::InitBosses() {
   const auto boss1 =
       new Character("La bouche du Mordor", characType::Boss, stats);
   boss1->color = QColor("red");
-  // m_BossesList.push_back(boss1);
+  m_AllBossesList.push_back(boss1);
   boss1->m_Forms.push_back(STANDARD_FORM);
 
   stats.m_AllStatsTable[STATS_HP].InitValues(4000, 4000, 4000, 0);
@@ -213,7 +211,7 @@ void PlayersManager::InitBosses() {
         new Character(QString("Nazgul-%1").arg(i), characType::Boss, stats);
     boss2->m_Forms.push_back(STANDARD_FORM);
     boss2->color = QColor("red");
-    // m_BossesList.push_back(boss2);
+    m_AllBossesList.push_back(boss2);
   }
 
   stats.m_AllStatsTable[STATS_HP].InitValues(7000, 7000, 7000, 0);
@@ -235,7 +233,7 @@ void PlayersManager::InitBosses() {
   stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(0, 0, 0, 0);
   const auto boss3 = new Character("Angmar", characType::Boss, stats);
   boss3->color = QColor("red");
-  // m_BossesList.push_back(boss3);
+  m_AllBossesList.push_back(boss3);
   boss3->m_Forms.push_back(STANDARD_FORM);
 
   stats.m_AllStatsTable[STATS_HP].InitValues(20000, 20000, 20000, 0);
@@ -257,14 +255,33 @@ void PlayersManager::InitBosses() {
   stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(0, 0, 0, 0);
   const auto boss4 = new Character("Angmar le retour", characType::Boss, stats);
   boss4->color = QColor("red");
-  m_BossesList.push_back(boss4);
+  m_AllBossesList.push_back(boss4);
   boss4->m_Forms.push_back(STANDARD_FORM);
 
-  for (const auto &boss : m_BossesList) {
+  for (const auto &boss : m_AllBossesList) {
     boss->LoadAtkJson();
     boss->LoadStuffJson();
     boss->ApplyEquipOnStats();
   }
+}
+
+void PlayersManager::UpdateActivePlayers(const std::set<QString> &playersList) {
+  std::for_each(m_AllHeroesList.begin(), m_AllHeroesList.end(),
+                [&](Character *c) {
+                  if (c != nullptr && playersList.count(c->m_Name)) {
+                    m_HeroesList.push_back(c);
+                  }
+                });
+  if (!m_HeroesList.empty()) {
+    m_SelectedHero = m_HeroesList.front();
+  }
+
+  std::for_each(m_AllBossesList.begin(), m_AllBossesList.end(),
+                [&](Character *c) {
+                  if (c != nullptr && playersList.count(c->m_Name)) {
+                    m_BossesList.push_back(c);
+                  }
+                });
 }
 
 void PlayersManager::LoadAllEquipmentsJson() {

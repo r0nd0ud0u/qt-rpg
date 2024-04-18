@@ -78,6 +78,12 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>100</height>
+        </size>
+       </property>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <property name="spacing">
          <number>0</number>
@@ -299,6 +305,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>ImgCharacterView</class>
+   <extends>QWidget</extends>
+   <header location="global">imgcharacterview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>HeroesView</class>
    <extends>QWidget</extends>
    <header location="global">heroesview.h</header>
@@ -320,12 +332,6 @@
    <class>StatsView</class>
    <extends>QWidget</extends>
    <header location="global">statsview.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>ImgCharacterView</class>
-   <extends>QWidget</extends>
-   <header location="global">imgcharacterview.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

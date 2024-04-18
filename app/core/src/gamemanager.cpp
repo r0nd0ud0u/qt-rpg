@@ -12,7 +12,6 @@ void GameManager::InitPlayers() {
   m_PlayersManager->LoadAllEquipmentsJson();
   m_PlayersManager->InitHeroes();
   m_PlayersManager->InitBosses();
-  m_PlayersManager->m_SelectedHero = m_PlayersManager->m_HeroesList.front();
 }
 
 Character *GameManager::GetSelectedHero() {

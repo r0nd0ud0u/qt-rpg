@@ -39,6 +39,7 @@ void BossPanel::UpdatePanel(Character *boss) {
 }
 
 void BossPanel::SetActive(bool activated) {
+  ui->active_widget->setEnabled(activated);
   if (activated) {
     setStyleSheet("#active_widget { background:     #40b1fe;  } "
                   "#verticalWidget QLabel{color: white;}");
@@ -74,3 +75,5 @@ void BossPanel::mousePressEvent(QMouseEvent *event) {
     emit SigSelectedCharacterOnPanel(m_Boss->m_Name);
   }
 }
+
+bool BossPanel::GetActive() const { return ui->active_widget->isEnabled(); }
