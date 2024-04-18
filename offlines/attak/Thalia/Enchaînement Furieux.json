@@ -14,7 +14,7 @@
             "Tours actifs": 1,
             "Type": "Répète tant que possible",
             "Valeur de l'effet": 0,
-            "Value": 50
+            "Value": -50
         }
     ],
     "Forme": "Ours",

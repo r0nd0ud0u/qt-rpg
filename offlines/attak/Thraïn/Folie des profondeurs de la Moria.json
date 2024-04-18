@@ -14,7 +14,7 @@
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 55
+            "Value": -55
         },
         {
             "Cible": "Soi-même",
@@ -45,7 +45,7 @@
         },
         {
             "Cible": "Soi-même",
-            "Portée": "Soi-même",
+            "Portée": "Individuel",
             "Stat": "",
             "Tours actifs": 5,
             "Type": "Tours de recharge",

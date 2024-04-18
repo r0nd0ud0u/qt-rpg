@@ -89,11 +89,10 @@ void GameDisplay::UpdateGameStatus() {
 }
 
 void GameDisplay::NewRound() {
-  const auto &gm = Application::GetInstance().m_GameManager;
-  if (gm.get() == nullptr) {
+  auto *gm = Application::GetInstance().m_GameManager.get();
+  if (gm == nullptr) {
     return;
   }
-
   // First update the game state
   auto *gs = gm->m_GameState;
   if (gs == nullptr) {
@@ -106,61 +105,75 @@ void GameDisplay::NewRound() {
   auto *activePlayer = gm->GetCurrentPlayer();
   if (activePlayer == nullptr) {
     emit SigUpdateChannelView("Debug", "NewRound nullptr active player");
+    return;
   }
 
   // Apply effects
-  const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffectsOnPlayer(
-      activePlayer->m_Name, gm->m_GameState->m_CurrentTurnNb, false);
-  for (const auto &el : effectsLogs) {
-    emit SigUpdateChannelView("GameState", el);
-  }
-  // Update effect
-  const QStringList terminatedEffects =
-      gm->m_PlayersManager->RemoveTerminatedEffectsOnPlayer(
-          activePlayer->m_Name);
-  for (const auto &te : terminatedEffects) {
-    emit SigUpdateChannelView("GameState", te);
-  }
-  emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
+  // Assess first round for the player
+  // TODO create a method to do only on first round
+  if (activePlayer->m_ExtCharacter != nullptr &&
+      activePlayer->m_ExtCharacter->get_is_first_round()) {
+    // update boolean
+    activePlayer->m_ExtCharacter->set_is_first_round(false);
 
-  // update buf pow
-  if (activePlayer->m_Name == "Azrak Ombresang") {
-    auto &localStat = activePlayer->m_Stats.m_AllStatsTable[STATS_POW_PHY];
-    auto *phyBuf =
-        activePlayer->m_AllBufs[static_cast<int>(BufTypes::powPhyBuf)];
-    if (phyBuf != nullptr) {
-      Character::SetStatsOnEffect(
-          localStat, -phyBuf->get_value() + activePlayer->m_HealRxOnTurn, true,
-          false, true);
-      phyBuf->set_buffers(activePlayer->m_HealRxOnTurn,
-                          phyBuf->get_is_percent());
+    const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffectsOnPlayer(
+        activePlayer->m_Name, gm->m_GameState->m_CurrentTurnNb, false);
+    for (const auto &el : effectsLogs) {
+      emit SigUpdateChannelView("GameState", el);
     }
-  }
-
-  // reset heal received on turn
-  activePlayer->m_HealRxOnTurn = 0;
-
-  // process actions on last turn damage received
-  const bool isDamageTxLastTurn =
-      activePlayer->m_LastDamageTX.find(gs->m_CurrentTurnNb - 1) !=
-      activePlayer->m_LastDamageTX.end();
-  // passive power is_crit_heal_after_crit
-  if (activePlayer->m_Power.is_crit_heal_after_crit && isDamageTxLastTurn &&
-      activePlayer->m_isLastAtkCritical) {
-    // in case of critical damage sent on last turn , next heal critical is
-    // enable
-    auto *buf =
-        activePlayer->m_AllBufs[static_cast<int>(BufTypes::nextHealAtkIsCrit)];
-    if (buf != nullptr) {
-      buf->set_is_passive_enabled(true);
+    // Update effect
+    const QStringList terminatedEffects =
+        gm->m_PlayersManager->RemoveTerminatedEffectsOnPlayer(
+            activePlayer->m_Name);
+    for (const auto &te : terminatedEffects) {
+      emit SigUpdateChannelView("GameState", te);
     }
-  }
-  // passive power
-  if (activePlayer->m_Power.is_damage_tx_heal_needy_ally &&
-      isDamageTxLastTurn) {
-    gm->m_PlayersManager->ProcessDamageTXHealNeedyAlly(
-        activePlayer->m_type,
-        activePlayer->m_LastDamageTX[gs->m_CurrentTurnNb - 1]);
+    emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
+
+    // update buf pow
+    // passive azrak TODO extract in a function
+    if (activePlayer->m_Name == "Azrak Ombresang") {
+      auto &localStat = activePlayer->m_Stats.m_AllStatsTable[STATS_POW_PHY];
+      auto *phyBuf =
+          activePlayer->m_AllBufs[static_cast<int>(BufTypes::powPhyBuf)];
+      if (phyBuf != nullptr) {
+        const auto &hpRxTable =
+            activePlayer->m_LastTxRx[static_cast<int>(amountType::healRx)];
+        int64_t hpRx = 0;
+        if (hpRxTable.find(gs->m_CurrentTurnNb - 1) != hpRxTable.end()) {
+          hpRx = hpRxTable.at(gs->m_CurrentTurnNb - 1);
+        }
+        // -phyBuf->get_value() : buf previous turn
+        // hpRx : buf new turn
+        const auto addValue = static_cast<int>(-phyBuf->get_value() + hpRx);
+        Character::SetStatsOnEffect(localStat, addValue, false, true);
+        phyBuf->set_buffers(hpRx, phyBuf->get_is_percent());
+      }
+    }
+
+    // process actions on last turn damage received
+    const auto &damageTx =
+        activePlayer->m_LastTxRx[static_cast<int>(amountType::damageTx)];
+    const bool isDamageTxLastTurn =
+        damageTx.find(gs->m_CurrentTurnNb - 1) != damageTx.end();
+    // passive power is_crit_heal_after_crit
+    if (activePlayer->m_Power.is_crit_heal_after_crit && isDamageTxLastTurn &&
+        activePlayer->m_isLastAtkCritical) {
+      // in case of critical damage sent on last turn , next heal critical is
+      // enable
+      auto *buf =
+          activePlayer
+              ->m_AllBufs[static_cast<int>(BufTypes::nextHealAtkIsCrit)];
+      if (buf != nullptr) {
+        buf->set_is_passive_enabled(true);
+      }
+    }
+    // passive power
+    if (activePlayer->m_Power.is_damage_tx_heal_needy_ally &&
+        isDamageTxLastTurn) {
+      gm->m_PlayersManager->ProcessDamageTXHealNeedyAlly(
+          activePlayer->m_type, damageTx.at(gs->m_CurrentTurnNb - 1));
+    }
   }
 
   // Update views
@@ -202,6 +215,8 @@ void GameDisplay::StartNewTurn() {
 
   // Increment turn effects
   gm->m_PlayersManager->IncrementCounterEffect();
+  // Reset new round boolean for characters
+  gm->m_PlayersManager->ResetIsFirstRound();
   // Apply regen stats
   gm->m_PlayersManager->ApplyRegenStats(characType::Boss);
   gm->m_PlayersManager->ApplyRegenStats(characType::Hero);
@@ -264,7 +279,7 @@ bool GameDisplay::ProcessAtk(
         emit SigUpdateChannelView(
             targetChara->m_Name,
             QString("esquive.(%1)").arg(outputsRandnbZone));
-        return false;
+        return true;
       } else {
         emit SigUpdateChannelView(
             targetChara->m_Name,
@@ -295,6 +310,14 @@ bool GameDisplay::ProcessAtk(
     }
     // add applied effect to new effect Table
     newEffects[target->get_name().data()] = appliedEffects;
+
+    // Some bufs on the target are disabled at the end of the atk
+    targetChara->ResetBuf(BufTypes::changeByHealValue);
+    auto *buf =
+        targetChara->m_AllBufs[static_cast<int>(BufTypes::changeByHealValue)];
+    if (buf != nullptr) {
+      buf->set_is_passive_enabled(false);
+    }
   }
 
   return true;
@@ -373,7 +396,10 @@ void GameDisplay::LaunchAttak(const QString &atkName,
                            return false;
                          });
   if (it != targetList.end()) {
-    ProcessAtk(*it, currentAtk, activatedPlayer, isCrit, nameChara, newEffects);
+    if (!ProcessAtk(*it, currentAtk, activatedPlayer, isCrit, nameChara,
+                    newEffects)) {
+      return;
+    }
   }
   for (const auto *target : targetList) {
     if (target->get_name().data() == nameChara) {

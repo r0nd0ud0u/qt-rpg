@@ -26,7 +26,7 @@ void PlayersManager::InitHeroes() {
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(20, 20, 20, 0);
   // TODO set max aggro 9999 is a good idea??
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 9999, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(12, 12, 1000, 12);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(12, 12, 12, 12);
   stats.m_AllStatsTable[STATS_CRIT].InitValues(10, 10, 10, 0);
   stats.m_AllStatsTable[STATS_DODGE].InitValues(5, 5, 5, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(7, 7, 7, 0);
@@ -47,7 +47,7 @@ void PlayersManager::InitHeroes() {
   stats.m_AllStatsTable[STATS_POW_PHY].InitValues(20, 20, 20, 0);
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(10, 10, 10, 0);
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 9999, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(10, 10, 1000, 10);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(10, 10, 10, 10);
   stats.m_AllStatsTable[STATS_CRIT].InitValues(12, 12, 12, 0);
   stats.m_AllStatsTable[STATS_DODGE].InitValues(6, 6, 6, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(7, 7, 7, 0);
@@ -67,7 +67,7 @@ void PlayersManager::InitHeroes() {
   stats.m_AllStatsTable[STATS_POW_PHY].InitValues(20, 20, 20, 0);
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(0, 0, 0, 0);
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 9999, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(5, 5, 1000, 5);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(5, 5, 5, 5);
   stats.m_AllStatsTable[STATS_CRIT].InitValues(8, 8, 8, 0);
   stats.m_AllStatsTable[STATS_DODGE].InitValues(5, 5, 5, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(7, 7, 7, 0);
@@ -87,9 +87,8 @@ void PlayersManager::InitHeroes() {
   stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(0, 0, 0, 0);
   stats.m_AllStatsTable[STATS_POW_PHY].InitValues(0, 0, 0, 0);
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(25, 25, 25, 0);
-  // TODO set max aggro 9999 is a good idea??
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 9999, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(8, 8, 1000, 8);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(8, 8, 8, 8);
   stats.m_AllStatsTable[STATS_CRIT].InitValues(10, 10, 10, 0);
   stats.m_AllStatsTable[STATS_DODGE].InitValues(7, 7, 7, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(5, 5, 5, 0);
@@ -100,11 +99,34 @@ void PlayersManager::InitHeroes() {
                                    characType::Hero, stats);
   hero4->m_Forms.push_back(STANDARD_FORM);
 
+  // Lirion Vertefeuille
+  stats.m_AllStatsTable[STATS_HP].InitValues(100, 100, 100, 0);
+  stats.m_AllStatsTable[STATS_MANA].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_VIGOR].InitValues(170, 170, 170, 0);
+  stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_POW_MAG].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_POW_PHY].InitValues(30, 30, 30, 0);
+  stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 9999, 0);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(15, 15, 15, 15);
+  stats.m_AllStatsTable[STATS_CRIT].InitValues(12, 12, 12, 0);
+  stats.m_AllStatsTable[STATS_DODGE].InitValues(2, 2, 2, 0);
+  stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(5, 5, 5, 0);
+  stats.m_AllStatsTable[STATS_REGEN_VIGOR].InitValues(5, 5, 5, 0);
+  stats.m_AllStatsTable[STATS_REGEN_MANA].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(1, 1, 1, 0);
+  const auto hero5 = new Character("Lirion Vertefeuille",
+                                   characType::Hero, stats);
+  hero5->m_Forms.push_back(STANDARD_FORM);
+
   // color
   hero1->color = QColor("green");
   hero2->color = QColor("orange");
   hero3->color = QColor("blue");
   hero4->color = QColor("pink");
+  hero4->color = QColor("brown");
 
   m_HeroesList.push_back(hero1);
   m_HeroesList.push_back(hero2);
@@ -155,7 +177,7 @@ void PlayersManager::InitBosses() {
   stats.m_AllStatsTable[STATS_POW_PHY].InitValues(100, 100, 100, 0);
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(200, 200, 200, 0);
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 1000, 25);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 25);
   stats.m_AllStatsTable[STATS_CRIT].InitValues(21, 21, 21, 0);
   stats.m_AllStatsTable[STATS_DODGE].InitValues(18, 18, 18, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
@@ -178,7 +200,7 @@ void PlayersManager::InitBosses() {
   stats.m_AllStatsTable[STATS_POW_PHY].InitValues(50, 50, 50, 0);
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(50, 50, 50, 0);
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 1000, 10);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 10);
   stats.m_AllStatsTable[STATS_CRIT].InitValues(10, 10, 10, 0);
   stats.m_AllStatsTable[STATS_DODGE].InitValues(10, 10, 10, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
@@ -204,7 +226,7 @@ void PlayersManager::InitBosses() {
   stats.m_AllStatsTable[STATS_POW_PHY].InitValues(140, 140, 140, 0);
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(200, 200, 200, 0);
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 1000, 20);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 20);
   stats.m_AllStatsTable[STATS_CRIT].InitValues(15, 15, 15, 0);
   stats.m_AllStatsTable[STATS_DODGE].InitValues(15, 15, 15, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
@@ -226,7 +248,7 @@ void PlayersManager::InitBosses() {
   stats.m_AllStatsTable[STATS_POW_PHY].InitValues(250, 250, 250, 0);
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(120, 120, 120, 0);
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 1000, 20);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 20);
   stats.m_AllStatsTable[STATS_CRIT].InitValues(20, 20, 20, 0);
   stats.m_AllStatsTable[STATS_DODGE].InitValues(20, 20, 20, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
@@ -393,13 +415,13 @@ QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName,
   if (targetPl != nullptr) {
     for (auto &gae : gaeTable) {
       if (gae.launchingTurn == currentTurn) {
-        // effet is applicable at launch of one character and then at the next
+        // effect is applicable at launch of one character and then at the next
         // turn of the target
         continue;
       }
       auto *launcherPl = GetCharacterByName(gae.launcher);
       if (launcherPl != nullptr) {
-        const auto output = launcherPl->ApplyOneEffect(
+        const auto [output, _] = launcherPl->ApplyOneEffect(
             targetPl, gae.allAtkEffects, fromLaunch, gae.atk);
         if (!output.isEmpty()) {
           localLog.append(output);
@@ -811,4 +833,24 @@ void PlayersManager::ProcessIsRandomTarget() const {
   if (boss != nullptr && boss->m_ExtCharacter != nullptr) {
     boss->m_ExtCharacter->set_is_random_target(true);
   }
+}
+
+/**
+ * @brief PlayersManager::ResetIsFirstRound
+ * The boolean is_first_round is reset for all the characters of the game.
+ */
+void PlayersManager::ResetIsFirstRound() const {
+  // Reset
+  std::for_each(m_HeroesList.begin(), m_HeroesList.end(),
+                [&](const Character *c) {
+                  if (c != nullptr && c->m_ExtCharacter != nullptr) {
+                    c->m_ExtCharacter->set_is_first_round(true);
+                  }
+                });
+  std::for_each(m_BossesList.begin(), m_BossesList.end(),
+                [&](const Character *c) {
+                  if (c != nullptr && c->m_ExtCharacter != nullptr) {
+                    c->m_ExtCharacter->set_is_first_round(true);
+                  }
+                });
 }
