@@ -17,9 +17,12 @@ public:
 
 signals:
     void showGameDisplay();
+    void SigShowGameCharacters();
 
 private slots:
     void on_pushButton_clicked();
+
+    void on_charactersPushButton_clicked();
 
 private:
     Ui::HostPage *ui;

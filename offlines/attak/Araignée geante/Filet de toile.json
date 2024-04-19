@@ -14,7 +14,7 @@
             "Tours actifs": 2,
             "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": 50
+            "Value": -50
         },
         {
             "Cible": "Ennemie",
@@ -23,7 +23,7 @@
             "Tours actifs": 2,
             "Type": "Up par valeur",
             "Valeur de l'effet": 0,
-            "Value": 10
+            "Value": -10
         },
         {
             "Cible": "",

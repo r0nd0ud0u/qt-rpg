@@ -7,13 +7,14 @@
 
 StatsView::StatsView(QWidget *parent) : QWidget(parent), ui(new Ui::StatsView) {
   ui->setupUi(this);
-  ui->stats_table->setModel(createStatsModel(parent));
 
   connect((GameDisplay *)parentWidget(), &GameDisplay::selectCharacter, this,
           &StatsView::UpdateStats);
   connect((GameDisplay *)parentWidget(),
           &GameDisplay::SigUpdStatsOnSelCharacter, this,
           &StatsView::UpdateDisplayedCharStats);
+  connect((GameDisplay *)parentWidget(), &GameDisplay::SigGameDisplayStart,
+          this, &StatsView::UpdateStats);
 }
 
 StatsView::~StatsView() { delete ui; }

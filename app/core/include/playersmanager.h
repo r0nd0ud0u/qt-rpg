@@ -31,8 +31,9 @@ public:
                           const int currentTurn);
   QStringList RemoveTerminatedEffectsOnPlayer(const QString &curPlayerName);
   QStringList ApplyEffectsOnPlayer(const QString &curPlayerName,
-                                   const int currentTurn, const bool fromLaunch);
-  void ApplyRegenStats(const characType& type);
+                                   const int currentTurn,
+                                   const bool fromLaunch);
+  void ApplyRegenStats(const characType &type);
 
   static QString FormatAtkOnEnnemy(const int damage);
   static QString FormatAtkOnAlly(const int damage);
@@ -46,23 +47,33 @@ public:
   void ImproveHotsOnPlayers(const int valuePercent,
                             const characType launcherType);
   void IncrementCounterEffect();
-  QStringList CheckDiedPlayers(const characType& launcherType);
-  void AddSupAtkTurn(const characType &launcherType, std::vector<QString>& playerOrderTable)const;
-  std::tuple<bool, QString, QStringList> IsDodging(const std::vector<TargetInfo*>& targetList); // pair1 isDodging?, pair2 playerName
+  QStringList CheckDiedPlayers(const characType &launcherType);
+  void AddSupAtkTurn(const characType &launcherType,
+                     std::vector<QString> &playerOrderTable) const;
+  std::tuple<bool, QString, QStringList>
+  IsDodging(const std::vector<TargetInfo *>
+                &targetList); // pair1 isDodging?, pair2 playerName
   void AddExpForHeroes(const int exp);
-  QString ProcessDamageTXHealNeedyAlly(const characType &launcherType, const int damageTX);
-  std::vector<Character *> * GetPlayerListByType(const characType &launcherType);
-  std::optional<std::vector<QString>> GetAllDeadliestAllies(const characType &launcherType) const;
+  QString ProcessDamageTXHealNeedyAlly(const characType &launcherType,
+                                       const int damageTX);
+  std::vector<Character *> *GetPlayerListByType(const characType &launcherType);
+  std::optional<std::vector<QString>>
+  GetAllDeadliestAllies(const characType &launcherType) const;
   void ProcessIsRandomTarget() const;
   void ResetIsFirstRound() const;
+  void UpdateActivePlayers(const std::set<QString> &playersList);
 
+  // Available characters to create a party
+  std::vector<Character *> m_AllHeroesList;
+  std::vector<Character *> m_AllBossesList;
+  // Used characters in a party
   std::vector<Character *> m_HeroesList;
   std::vector<Character *> m_BossesList;
   Character *m_SelectedHero = nullptr;
   Character *m_ActivePlayer = nullptr;
-  std::unordered_map<QString, std::unordered_map<QString,Stuff>> m_Equipments; // key 1 body name, key2 {equipName, equip value-stats}
+  std::unordered_map<QString, std::unordered_map<QString, Stuff>>
+      m_Equipments; // key 1 body name, key2 {equipName, equip value-stats}
   std::unordered_map<QString, std::vector<GameAtkEffects>>
       m_AllEffectsOnGame; // key target
-
 };
 #endif // PLAYERS__MANAGER_H

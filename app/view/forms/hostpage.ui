@@ -21,6 +21,13 @@
      </property>
     </widget>
    </item>
+   <item>
+    <widget class="CompBigPrimaryButton" name="charactersPushButton">
+     <property name="text">
+      <string>Game Characters</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>

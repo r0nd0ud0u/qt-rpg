@@ -33,6 +33,7 @@ set(SOURCES
         src/editstatpanel.cpp
         src/equiponbodypanel.cpp
         src/equiponbodyview.cpp
+        src/gamecharacters.cpp
 )
 
 set(HEADERS
@@ -61,6 +62,7 @@ set(HEADERS
         include/editstatpanel.h
         include/equiponbodypanel.h
         include/equiponbodyview.h
+        include/gamecharacters.h
 )
 
 set(FORMS
@@ -87,6 +89,7 @@ set(FORMS
         forms/editstatpanel.ui
         forms/equiponbodypanel.ui
         forms/equiponbodyview.ui
+        forms/gamecharacters.ui
 
     )
 
