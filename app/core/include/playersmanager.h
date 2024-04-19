@@ -61,7 +61,7 @@ public:
   GetAllDeadliestAllies(const characType &launcherType) const;
   void ProcessIsRandomTarget() const;
   void ResetIsFirstRound() const;
-  void UpdateActivePlayers(const std::set<QString> &playersList);
+  bool UpdateActivePlayers(const std::set<QString> &playersList);
 
   // Available characters to create a party
   std::vector<Character *> m_AllHeroesList;
