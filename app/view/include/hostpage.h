@@ -15,6 +15,8 @@ public:
     explicit HostPage(QWidget *parent = nullptr);
     ~HostPage();
 
+    void ActiveNewGame(const bool value);
+
 signals:
     void showGameDisplay();
     void SigShowGameCharacters();
