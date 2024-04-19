@@ -4,7 +4,13 @@ The goal of this game is to add a higher dimension to a classic narative RPG wit
 
 You can create your own characters, equipments.
 
-That software is based on C++, CMake and Qt framework.
+That software is based on C++, CMake and Qt framework(5 or 6).
+
+## My configuration
+Qt : 5.15.2 or 6.6.1
+Compilators : 
+	- mingw (Release or debug)
+	- msvc 2019 (only for release. still a problem with linking in debug)
 
 A lib in Rust ![lib-rpg](https://github.com/r0nd0ud0u/lib-rpg) is loaded and will step by step be the core of the game.
 
