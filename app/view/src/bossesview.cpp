@@ -10,7 +10,6 @@ BossesView::BossesView(QWidget *parent)
   ui->setupUi(this);
   setStyleSheet(
       "#main_widget{ background:     #000000;} QLabel{color: white;}");
-  InitBossPanels();
 
   connect((GameDisplay *)parentWidget(), &GameDisplay::SigUpdatePlayerPanel,
           this, &BossesView::UpdateAllPanels);
@@ -23,6 +22,8 @@ BossesView::BossesView(QWidget *parent)
           &BossesView::SetFocusOn);
   connect((GameDisplay *)parentWidget(), &GameDisplay::selectCharacter, this,
           &BossesView::UpdateSelected);
+  connect((GameDisplay *)parentWidget(), &GameDisplay::SigGameDisplayStart,
+          this, &BossesView::InitBossPanels);
 }
 
 BossesView::~BossesView() {

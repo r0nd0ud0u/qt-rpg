@@ -105,6 +105,7 @@ void HeroPanel::UpdatePanel(Character *hero) {
 
 void HeroPanel::SetActive(const bool activated) {
   ui->form_comboBox->setEnabled(activated);
+  ui->active_widget->setEnabled(activated);
   if (activated) {
     setStyleSheet("#active_widget{ background:     #40b1fe;  } ");
   } else {
@@ -112,6 +113,8 @@ void HeroPanel::SetActive(const bool activated) {
     setStyleSheet("#active_widget{ background:     grey;  } ");
   }
 }
+
+bool HeroPanel::GetActive() const { return ui->active_widget->isEnabled(); }
 
 void HeroPanel::SetSelected(const bool selected) {
   QFrame::Shape shape = QFrame::NoFrame;

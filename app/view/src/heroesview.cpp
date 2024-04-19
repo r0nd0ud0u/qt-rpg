@@ -12,7 +12,6 @@ HeroesView::HeroesView(QWidget *parent)
   setStyleSheet(
       "#left_widget{ background:     #808080;} "
       "#right_widget{background:     #808080;} QLabel{color: white;}");
-  InitHeroPanel();
 
   connect((GameDisplay *)parentWidget(), &GameDisplay::SigUpdatePlayerPanel,
           this, &HeroesView::UpdateAllPanels);
@@ -21,6 +20,8 @@ HeroesView::HeroesView(QWidget *parent)
           &HeroesView::SetFocusOn);
   connect((GameDisplay *)parentWidget(), &GameDisplay::selectCharacter, this,
           &HeroesView::UpdateSelected);
+  connect((GameDisplay *)parentWidget(), &GameDisplay::SigGameDisplayStart,
+          this, &HeroesView::InitHeroPanel);
 }
 
 HeroesView::~HeroesView() {
@@ -69,11 +70,12 @@ void HeroesView::SlotClickedOnHeroPanel(const QString &name) {
   emit SigClickedOnHeroPanel(name);
 }
 
-void HeroesView::SlotSelectedForm(const QString &playerName, const QString &form) {
-    emit SigSelectedFormOnHeroPanel(playerName ,form);
+void HeroesView::SlotSelectedForm(const QString &playerName,
+                                  const QString &form) {
+  emit SigSelectedFormOnHeroPanel(playerName, form);
 }
 
-void HeroesView::UpdateSelected(const QString &name)  const{
+void HeroesView::UpdateSelected(const QString &name) const {
   for (auto *hero : m_HeroPanels) {
     if (hero == nullptr) {
       continue;

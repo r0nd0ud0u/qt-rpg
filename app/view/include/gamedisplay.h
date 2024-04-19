@@ -24,6 +24,7 @@ public:
 public slots:
   // slots which can be called by other windows
   void UpdateViews(const QString &name);
+  void UpdateActivePlayers();
 signals:
   void selectCharacter(const QString &);
   void SigUpdatePlayerPanel();
@@ -36,12 +37,13 @@ signals:
   void SigUpdStatsOnSelCharacter();
   void SigAddCharacter(Character *);
   void SigSetFocusOnActivePlayer(const QString &, const characType &);
+  void SigGameDisplayStart();
 
 private:
   Ui::GameDisplay *ui;
   void UpdateGameStatus();
   bool
-  ProcessAtk(const TargetInfo *target, const AttaqueType& currentAtk,
+  ProcessAtk(const TargetInfo *target, const AttaqueType &currentAtk,
              Character *activatedPlayer, const bool isCrit,
              const QString &nameChara,
              std::unordered_map<QString, std::vector<effectParam>> &newEffects);

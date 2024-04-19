@@ -18,6 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <widget class="HostPage" name="page"/>
+      <widget class="GameCharacters" name="page_3"/>
       <widget class="GameDisplay" name="page_2"/>
      </widget>
     </item>
@@ -46,6 +47,12 @@
    <class>GameDisplay</class>
    <extends>QWidget</extends>
    <header location="global">gamedisplay.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GameCharacters</class>
+   <extends>QWidget</extends>
+   <header location="global">gamecharacters.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

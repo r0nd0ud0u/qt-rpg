@@ -555,3 +555,10 @@ void GameDisplay::SlotUpdateActionViews(const QString &name,
   ui->bag_button->setEnabled(true);
   ui->attak_page->UpdateActions(ActionsStackedWgType::attak);
 }
+
+void GameDisplay::UpdateActivePlayers() {
+  emit SigGameDisplayStart();
+  emit selectCharacter(
+      Application::GetInstance()
+          .m_GameManager->m_PlayersManager->m_SelectedHero->m_Name);
+}
