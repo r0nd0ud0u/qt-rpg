@@ -49,7 +49,6 @@ void MainWindow::ShowPageGameDisplay() {
   emit SigUpdateActivePlayers();
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(SecondaryPages::gameDisplay));
-      static_cast<int>(SecondaryPages::gameDisplay));
 }
 
 void MainWindow::ShowGameCharacters() {

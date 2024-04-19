@@ -4,6 +4,11 @@ The goal of this game is to add a higher dimension to a classic narative RPG wit
 
 You can create your own characters, equipments.
 
+That software is based on C++, CMake and Qt framework.
+
+A lib in Rust ![lib-rpg](https://github.com/r0nd0ud0u/lib-rpg) is loaded and will step by step be the core of the game.
+
+
 ## Host page
 
 ![image](https://github.com/r0nd0ud0u/qt-rpg/assets/57643172/a046602a-88f3-4377-a10f-c3be570ae11f)
@@ -24,8 +29,8 @@ Then the button "Start Game" is enabled and you can click on it to start the gam
 ![image](https://github.com/r0nd0ud0u/qt-rpg/assets/57643172/56f0da82-0c15-4895-a596-addee30f1bd7)
 
 ## Basic commands
-- To start a turn, click om the button "Prochain tour"
-- Your actions could be by toggling atk/bag buttons:
-  - choose only one atk
+- To start a turn, click on the button "Prochain tour"
+- By toggling atk/bag buttons <your actions could be :
+  - one atk
   - use as much potions as you want in the bag
 When your actions are done, click on "Fin du round" button.
