@@ -265,7 +265,10 @@ void PlayersManager::InitBosses() {
   }
 }
 
-void PlayersManager::UpdateActivePlayers(const std::set<QString> &playersList) {
+bool PlayersManager::UpdateActivePlayers(const std::set<QString> &playersList) {
+    if(playersList.empty()){
+        return false;
+    }
   std::for_each(m_AllHeroesList.begin(), m_AllHeroesList.end(),
                 [&](Character *c) {
                   if (c != nullptr && playersList.count(c->m_Name)) {
@@ -282,6 +285,7 @@ void PlayersManager::UpdateActivePlayers(const std::set<QString> &playersList) {
                     m_BossesList.push_back(c);
                   }
                 });
+  return (m_HeroesList.size() > 0 && m_BossesList.size() > 0);
 }
 
 void PlayersManager::LoadAllEquipmentsJson() {

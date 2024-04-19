@@ -34,9 +34,17 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow() { delete ui; }
 
+/**
+ * @brief MainWindow::ShowPageGameDisplay
+ * The game display will be shown only if at least one boss
+ * and at least one hero have been chosen in "game characters" page beforehand
+ */
 void MainWindow::ShowPageGameDisplay() {
-  if (const auto *gm = Application::GetInstance().m_GameManager.get(); gm != nullptr && gm->m_PlayersManager != nullptr) {
-    gm->m_PlayersManager->UpdateActivePlayers(m_ActivePlayers);
+  if (const auto *gm = Application::GetInstance().m_GameManager.get();
+      gm != nullptr && gm->m_PlayersManager != nullptr) {
+    if (!gm->m_PlayersManager->UpdateActivePlayers(m_ActivePlayers)) {
+      return;
+    }
   }
   emit SigUpdateActivePlayers();
   ui->stackedWidget->setCurrentIndex(
@@ -51,6 +59,7 @@ void MainWindow::ShowGameCharacters() {
 void MainWindow::ShowHostPage() {
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(SecondaryPages::hostPage));
+  ui->page->ActiveNewGame(!m_ActivePlayers.empty());
 }
 
 void MainWindow::UpdateActiveCharacters(const std::set<QString> &playersList) {

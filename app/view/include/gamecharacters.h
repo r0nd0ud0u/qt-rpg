@@ -22,7 +22,7 @@ signals:
 
 private slots:
   void on_back_pushButton_clicked();
-  void ActivatePanel(const QString &name);
+  void ActivatePanel(const QString &name) const;
 
 private:
   Ui::GameCharacters *ui;
