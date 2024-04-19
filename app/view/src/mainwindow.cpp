@@ -35,8 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::ShowPageGameDisplay() {
-  const auto *gm = Application::GetInstance().m_GameManager.get();
-  if (gm != nullptr && gm->m_PlayersManager != nullptr) {
+  if (const auto *gm = Application::GetInstance().m_GameManager.get(); gm != nullptr && gm->m_PlayersManager != nullptr) {
     gm->m_PlayersManager->UpdateActivePlayers(m_ActivePlayers);
   }
   emit SigUpdateActivePlayers();

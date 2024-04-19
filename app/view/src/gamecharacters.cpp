@@ -86,7 +86,7 @@ void GameCharacters::on_back_pushButton_clicked() {
   emit SigBackToHostPage(activeCh);
 }
 
-void GameCharacters::ActivatePanel(const QString &name) {
+void GameCharacters::ActivatePanel(const QString &name) const {
   for (auto *hero : m_HeroesList) {
     if (name == hero->m_Heroe->m_Name) {
       hero->SetActive(!hero->GetActive());
