@@ -1132,9 +1132,9 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
     // 2 steps
     // enable the buf
     // update the stats by ther excedent of heal
-    auto *buf =
-        target->m_AllBufs[static_cast<int>(BufTypes::changeByHealValue)];
-    if (buf != nullptr) {
+    if (auto *buf =
+            target->m_AllBufs[static_cast<int>(BufTypes::changeByHealValue)];
+        buf != nullptr) {
       buf->set_is_passive_enabled(true);
       buf->add_stat_name(effect.statsName.toStdString());
       buf->set_buffers(effect.nbTurns, false);
@@ -1236,8 +1236,7 @@ std::pair<bool, int> Character::ProcessCriticalStrike(const AttaqueType &atk) {
  */
 std::pair<bool, QString> Character::IsDodging(const AttaqueType &atk) const {
   bool isDodging = false;
-  const int ULTIMATE_LEVEL = 13;
-  if (atk.level == ULTIMATE_LEVEL) {
+  if (const int ULTIMATE_LEVEL = 13; atk.level == ULTIMATE_LEVEL) {
     return std::make_pair(isDodging, "");
   }
 
