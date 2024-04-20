@@ -1,41 +1,41 @@
 {
     "Cible": "Soi-même",
-    "Coût de mana": 0,
+    "Coût de mana": 1,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Effet": [
         {
             "Cible": "Soi-même",
             "Portée": "Individuel",
-            "Stat": "Rage",
-            "Tours actifs": 1,
-            "Type": "Changement par valeur",
-            "Valeur de l'effet": 0,
-            "Value": 10
-        },
-        {
-            "Cible": "Soi-même",
-            "Portée": "Individuel",
-            "Stat": "Esquive",
-            "Tours actifs": 2,
+            "Stat": "Vitesse",
+            "Tours actifs": 3,
             "Type": "Up par valeur",
             "Valeur de l'effet": 0,
-            "Value": 20
+            "Value": 80
         },
         {
             "Cible": "Soi-même",
             "Portée": "Individuel",
-            "Stat": "Aggro",
-            "Tours actifs": 1,
-            "Type": "Changement par valeur",
+            "Stat": "Armure physique",
+            "Tours actifs": 3,
+            "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": 20
+            "Value": 180
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Cout critique",
+            "Tours actifs": 3,
+            "Type": "Up par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 50
         }
     ],
     "Forme": "Standard",
-    "Niveau": 2,
-    "Nom": "Bouclier Défensif ",
-    "Photo": "Thraïn.png",
+    "Niveau": 1,
+    "Nom": "suce moi ma poule",
+    "Photo": "default.png",
     "Portée": "Individuel"
 }
 

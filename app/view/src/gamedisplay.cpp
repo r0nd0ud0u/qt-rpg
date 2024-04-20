@@ -138,7 +138,7 @@ void GameDisplay::NewRound() {
           activePlayer->m_AllBufs[static_cast<int>(BufTypes::powPhyBuf)];
       if (phyBuf != nullptr) {
         const auto &hpRxTable =
-            activePlayer->m_LastTxRx[static_cast<int>(amountType::healRx)];
+            activePlayer->m_LastTxRx[static_cast<int>(amountType::overHealRx)];
         int64_t hpRx = 0;
         if (hpRxTable.find(gs->m_CurrentTurnNb - 1) != hpRxTable.end()) {
           hpRx = hpRxTable.at(gs->m_CurrentTurnNb - 1);
@@ -274,7 +274,8 @@ bool GameDisplay::ProcessAtk(
     // is dodging
     if (currentAtk.target == TARGET_ENNEMY && currentAtk.reach == REACH_ZONE &&
         target->get_is_targeted()) {
-      const auto &[isDodgingZone, outputsRandnbZone] = targetChara->IsDodging();
+      const auto &[isDodgingZone, outputsRandnbZone] =
+          targetChara->IsDodging(currentAtk);
       if (isDodgingZone) {
         emit SigUpdateChannelView(
             targetChara->m_Name,
@@ -357,7 +358,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   if (currentAtk.target == TARGET_ENNEMY &&
       currentAtk.reach == REACH_INDIVIDUAL) {
     const auto &[isDodging, plName, outputsRandNb] =
-        gm->m_PlayersManager->IsDodging(targetList);
+        gm->m_PlayersManager->IsDodging(targetList, currentAtk);
     if (isDodging) {
       emit SigUpdateChannelView(
           plName, QString("esquive.(%1)").arg(outputsRandNb.first()));

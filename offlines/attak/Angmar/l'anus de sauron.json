@@ -1,6 +1,6 @@
 {
     "Cible": "Ennemie",
-    "Coût de mana": 16,
+    "Coût de mana": 1,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Effet": [
@@ -10,22 +10,31 @@
             "Stat": "PV",
             "Tours actifs": 1,
             "Type": "Changement par valeur",
-            "Valeur de l'effet": 0,
-            "Value": -50
+            "Valeur de l'effet": 1,
+            "Value": -100
         },
         {
             "Cible": "Ennemie",
             "Portée": "Zone",
-            "Stat": "Vitesse",
-            "Tours actifs": 2,
+            "Stat": "PV",
+            "Tours actifs": 5,
             "Type": "Changement par valeur",
+            "Valeur de l'effet": 4,
+            "Value": -15
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
             "Valeur de l'effet": 0,
-            "Value": -12
+            "Value": 0
         }
     ],
     "Forme": "Standard",
-    "Niveau": 8,
-    "Nom": "Nova etherée",
+    "Niveau": 1,
+    "Nom": "l'anus de sauron",
     "Photo": "default.png",
     "Portée": "Zone"
 }

@@ -1,6 +1,6 @@
 {
     "Cible": "Ennemie",
-    "Coût de mana": 15,
+    "Coût de mana": 0,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Effet": [
@@ -8,33 +8,33 @@
             "Cible": "Ennemie",
             "Portée": "Individuel",
             "Stat": "PV",
-            "Tours actifs": 1,
+            "Tours actifs": 6,
             "Type": "Changement par valeur",
-            "Valeur de l'effet": 0,
-            "Value": -70
+            "Valeur de l'effet": 3,
+            "Value": -60
         },
         {
-            "Cible": "Soi-même",
+            "Cible": "Ennemie",
             "Portée": "Individuel",
-            "Stat": "",
-            "Tours actifs": 5,
-            "Type": "Tours de recharge",
-            "Valeur de l'effet": 0,
-            "Value": 0
-        },
-        {
-            "Cible": "Soi-même",
-            "Portée": "Individuel",
-            "Stat": "",
+            "Stat": "Mana",
             "Tours actifs": 1,
-            "Type": "Répète l'attaque(en % de chance) après heal tour prec.",
+            "Type": "Changement par %",
             "Valeur de l'effet": 1,
-            "Value": 50
+            "Value": -25
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "Vigor",
+            "Tours actifs": 1,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 1,
+            "Value": -25
         }
     ],
     "Forme": "Standard",
-    "Niveau": 11,
-    "Nom": "Frappe élémentaire",
+    "Niveau": 1,
+    "Nom": "Marc la petite Tortue",
     "Photo": "default.png",
     "Portée": "Individuel"
 }
