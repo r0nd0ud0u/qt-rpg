@@ -32,7 +32,7 @@
       </widget>
       <widget class="StuffsView" name="edit_stuff_view">
        <attribute name="title">
-        <string>Edit stuff</string>
+        <string>Add stuff</string>
        </attribute>
       </widget>
       <widget class="EquipOnBodyView" name="use_stuff_view">
