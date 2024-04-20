@@ -47,7 +47,7 @@ enum class BufTypes {
   changeByHealValue,
   enumSize
 };
-enum class amountType { damageRx = 0, damageTx, healRx, healTx, enumSize };
+enum class amountType { damageRx = 0, damageTx, healRx, healTx, overHealRx, enumSize };
 
 class Character {
 public:

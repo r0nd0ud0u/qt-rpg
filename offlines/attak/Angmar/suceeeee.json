@@ -1,41 +1,41 @@
 {
-    "Cible": "Soi-même",
+    "Cible": "Ennemie",
     "Coût de mana": 0,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Effet": [
         {
-            "Cible": "Soi-même",
+            "Cible": "Ennemie",
             "Portée": "Individuel",
-            "Stat": "Rage",
+            "Stat": "PV",
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 10
+            "Value": 140
         },
         {
-            "Cible": "Soi-même",
+            "Cible": "Ennemie",
             "Portée": "Individuel",
-            "Stat": "Esquive",
-            "Tours actifs": 2,
+            "Stat": "Armure magique",
+            "Tours actifs": 4,
             "Type": "Up par valeur",
             "Valeur de l'effet": 0,
-            "Value": 20
+            "Value": -400
         },
         {
-            "Cible": "Soi-même",
+            "Cible": "Ennemie",
             "Portée": "Individuel",
-            "Stat": "Aggro",
-            "Tours actifs": 1,
-            "Type": "Changement par valeur",
-            "Valeur de l'effet": 0,
-            "Value": 20
+            "Stat": "Armure physique",
+            "Tours actifs": 4,
+            "Type": "Up par valeur",
+            "Valeur de l'effet": 4,
+            "Value": -400
         }
     ],
     "Forme": "Standard",
-    "Niveau": 2,
-    "Nom": "Bouclier Défensif ",
-    "Photo": "Thraïn.png",
+    "Niveau": 1,
+    "Nom": "suceeeee",
+    "Photo": "default.png",
     "Portée": "Individuel"
 }
 

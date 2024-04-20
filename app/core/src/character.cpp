@@ -504,6 +504,7 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
       m_LastTxRx[static_cast<int>(amountType::damageTx)][gs->m_CurrentTurnNb] +=
           std::abs(trueAmount);
     }
+    target->m_LastTxRx[static_cast<int>(amountType::overHealRx)][gs->m_CurrentTurnNb] += amount - trueAmount;
   }
 
   return std::make_pair(result, newEffects);
@@ -1117,7 +1118,7 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
     } else {
       const auto randNb = get_random_nb(0, effect.value);
       if (randNb <= effect.value) {
-        nbOfApplies = effect.subValueEffect;
+        nbOfApplies += effect.subValueEffect;
         UpdateBuf(BufTypes::applyEffectInit, nbOfApplies, false, "");
       }
       output = QString("L'attaque est appliquée %1 fois. (rand nb:%2)\n")

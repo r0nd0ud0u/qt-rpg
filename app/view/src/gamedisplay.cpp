@@ -138,7 +138,7 @@ void GameDisplay::NewRound() {
           activePlayer->m_AllBufs[static_cast<int>(BufTypes::powPhyBuf)];
       if (phyBuf != nullptr) {
         const auto &hpRxTable =
-            activePlayer->m_LastTxRx[static_cast<int>(amountType::healRx)];
+            activePlayer->m_LastTxRx[static_cast<int>(amountType::overHealRx)];
         int64_t hpRx = 0;
         if (hpRxTable.find(gs->m_CurrentTurnNb - 1) != hpRxTable.end()) {
           hpRx = hpRxTable.at(gs->m_CurrentTurnNb - 1);
