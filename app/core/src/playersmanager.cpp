@@ -214,7 +214,7 @@ void PlayersManager::InitBosses() {
     m_AllBossesList.push_back(boss2);
   }
 
-  stats.m_AllStatsTable[STATS_HP].InitValues(7000, 7000, 7000, 0);
+  stats.m_AllStatsTable[STATS_HP].InitValues(20000, 20000, 20000, 0);
   stats.m_AllStatsTable[STATS_MANA].InitValues(9999, 9999, 9999, 9999);
   stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
   stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
@@ -224,7 +224,7 @@ void PlayersManager::InitBosses() {
   stats.m_AllStatsTable[STATS_POW_PHY].InitValues(140, 140, 140, 0);
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(200, 200, 200, 0);
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 20);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 25);
   stats.m_AllStatsTable[STATS_CRIT].InitValues(15, 15, 15, 0);
   stats.m_AllStatsTable[STATS_DODGE].InitValues(15, 15, 15, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
