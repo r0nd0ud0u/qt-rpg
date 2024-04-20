@@ -47,7 +47,7 @@ enum class BufTypes {
   changeByHealValue,
   enumSize
 };
-enum class amountType { damageRx = 0, damageTx, healRx, healTx, enumSize };
+enum class amountType { damageRx = 0, damageTx, healRx, healTx, overHealRx, enumSize };
 
 class Character {
 public:
@@ -80,7 +80,7 @@ public:
   SetStatsOnEffect(StatsType &stat, const int value, const bool isPercent,
                    const bool updateEffect); // TODO à sortir dans un common
                                              // pour gerer les stats?
-  std::pair<bool, QString> IsDodging() const;
+  std::pair<bool, QString> IsDodging(const AttaqueType& atk) const;
   void UsePotion(const QString &statsName);
   void AddExp(const int newXp);
   void SetEquipment(const std::unordered_map<QString, QString> &);

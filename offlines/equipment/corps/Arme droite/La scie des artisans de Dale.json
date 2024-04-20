@@ -45,8 +45,8 @@
     ],
     "Pouvoir magique": [
         {
-            "percent": 8,
-            "value": 0
+            "percent": 0,
+            "value": 80
         }
     ],
     "Pouvoir physique": [

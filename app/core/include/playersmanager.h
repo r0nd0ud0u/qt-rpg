@@ -51,8 +51,8 @@ public:
   void AddSupAtkTurn(const characType &launcherType,
                      std::vector<QString> &playerOrderTable) const;
   std::tuple<bool, QString, QStringList>
-  IsDodging(const std::vector<TargetInfo *>
-                &targetList); // pair1 isDodging?, pair2 playerName
+  IsDodging(const std::vector<TargetInfo *> &targetList,
+            const AttaqueType &atk); // pair1 isDodging?, pair2 playerName
   void AddExpForHeroes(const int exp);
   QString ProcessDamageTXHealNeedyAlly(const characType &launcherType,
                                        const int damageTX);
