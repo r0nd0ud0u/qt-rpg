@@ -692,7 +692,7 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
       amount = ep.value;
     }
   } else if (launch && ep.statsName == STATS_HP &&
-             ep.effect == EFFECT_VALUE_CHANGE) {
+             EFFECTS_HOT_OR_DOT.count(ep.effect) > 0) {
     if (ep.value < 0) {
       amount = nbOfApplies * DamageByAtk(launcherStats, target->m_Stats,
                                          ep.isMagicAtk, ep.value, ep.nbTurns);
@@ -1228,8 +1228,19 @@ std::pair<bool, int> Character::ProcessCriticalStrike(const AttaqueType &atk) {
   return std::make_pair(isCrit, randNb);
 }
 
-std::pair<bool, QString> Character::IsDodging() const {
+/**
+ * @brief Character::IsDodging
+ * An ultimate atk cannot be dodged.
+ * @param atk
+ * @return
+ */
+std::pair<bool, QString> Character::IsDodging(const AttaqueType &atk) const {
   bool isDodging = false;
+  const int ULTIMATE_LEVEL = 13;
+  if (atk.level == ULTIMATE_LEVEL) {
+    return std::make_pair(isDodging, "");
+  }
+
   const auto &stat = m_Stats.m_AllStatsTable.at(STATS_DODGE);
   const int DEFAULT_RAND = -1;
   int64_t randNb = DEFAULT_RAND;

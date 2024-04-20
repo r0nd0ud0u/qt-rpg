@@ -266,9 +266,9 @@ void PlayersManager::InitBosses() {
 }
 
 bool PlayersManager::UpdateActivePlayers(const std::set<QString> &playersList) {
-    if(playersList.empty()){
-        return false;
-    }
+  if (playersList.empty()) {
+    return false;
+  }
   std::for_each(m_AllHeroesList.begin(), m_AllHeroesList.end(),
                 [&](Character *c) {
                   if (c != nullptr && playersList.count(c->m_Name)) {
@@ -487,8 +487,7 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
         std::min(vigor.m_MaxValue,
                  vigor.m_CurrentValue +
                      vigor.m_MaxValue * regenVigor.m_CurrentValue / 100);
-    speed.m_CurrentValue =
-        std::min(speed.m_MaxValue, speed.m_CurrentValue + speed.m_RegenOnTurn);
+    speed.m_CurrentValue = speed.m_CurrentValue + speed.m_RegenOnTurn;
   }
 }
 
@@ -678,12 +677,13 @@ void PlayersManager::AddSupAtkTurn(
 }
 
 std::tuple<bool, QString, QStringList>
-PlayersManager::IsDodging(const std::vector<TargetInfo *> &targetList) {
+PlayersManager::IsDodging(const std::vector<TargetInfo *> &targetList,
+                          const AttaqueType &atk) {
   QString plName;
   QStringList output;
   const bool isDodging =
       std::any_of(targetList.begin(), targetList.end(),
-                  [this, &plName, &output](const TargetInfo *ti) {
+                  [this, &plName, &output, &atk](const TargetInfo *ti) {
                     if (ti == nullptr) {
                       return false;
                     }
@@ -692,7 +692,7 @@ PlayersManager::IsDodging(const std::vector<TargetInfo *> &targetList) {
                           this->GetCharacterByName(ti->get_name().data());
                       plName = ti->get_name().data();
                       const auto [charIsDodging, randNbStr] =
-                          targetChara->IsDodging();
+                          targetChara->IsDodging(atk);
                       output.append(randNbStr);
                       return charIsDodging;
                     }

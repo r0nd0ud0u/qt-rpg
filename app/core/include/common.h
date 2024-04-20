@@ -154,6 +154,7 @@ const QString EFFECT_IMPROVE_HOTS = "Boost chaque HOT de .. %";
 const QString EFFECT_BOOSTED_BY_HOTS =
     "Boost l'effet par nb HOTS presents en %";
 const QString EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT = "Up/down degats en %";
+// Assess the nob of applies for a stat
 const QString EFFECT_REPEAT_AS_MANY_AS = "Répète tant que possible";
 const QString CONDITION_ENNEMIES_DIED = "Ennemis morts tours précédents";
 // Effect to improve max value of a stat by percent (current value is updated by ratio)
@@ -204,6 +205,11 @@ const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_BLOCK_HEAL_ATK,
     EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL,
 };
+const std::set<QString> EFFECTS_HOT_OR_DOT = {
+    EFFECT_VALUE_CHANGE,
+    EFFECT_REPEAT_AS_MANY_AS
+}
+;
 const QString EFFECT_ARRAY = "Effet";
 const QString EFFECT_TYPE = "Type";
 const QString EFFECT_VALUE = "Value";
