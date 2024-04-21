@@ -38,7 +38,6 @@ signals:
   void SigAddCharacter(Character *);
   void SigSetFocusOnActivePlayer(const QString &, const characType &);
   void SigGameDisplayStart();
-  void SigUpdateEquipByLoot(const std::vector<EditStuff>&);
 
 private:
   Ui::GameDisplay *ui;

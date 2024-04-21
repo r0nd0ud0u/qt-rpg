@@ -20,14 +20,13 @@ public:
   explicit CharacterWindow(QWidget *parent = nullptr);
   ~CharacterWindow();
   void InitWindow(const tabType &type, const bool index = false);
+  void UpdateView(const std::vector<EditStuff>& esTable);
 
 signals:
   void SigNewCharacter(Character *);
   void SigAddNewStuff();
   void SigUseNewStuff(const QString &);
 
-public slots:
-  void UpdateView(const std::vector<EditStuff>& esTable);
 private slots:
   void on_pushButton_clicked();
 
