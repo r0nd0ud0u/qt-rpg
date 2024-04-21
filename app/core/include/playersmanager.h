@@ -10,7 +10,8 @@
 
 #include "rust-rpg-bridge/players_manager.h"
 
-struct GameAtkEffects {
+class GameAtkEffects {
+public:
   effectParam allAtkEffects;
   AttaqueType atk;
   QString launcher;

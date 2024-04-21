@@ -231,7 +231,7 @@ void PlayersManager::InitBosses() {
     m_AllBossesList.push_back(boss2);
   }
 
-  stats.m_AllStatsTable[STATS_HP].InitValues(10, 10, 10, 0);
+  stats.m_AllStatsTable[STATS_HP].InitValues(50000, 50000, 50000, 0);
   stats.m_AllStatsTable[STATS_MANA].InitValues(9999, 9999, 9999, 9999);
   stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
   stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
@@ -278,6 +278,30 @@ void PlayersManager::InitBosses() {
   m_AllBossesList.push_back(boss4);
   boss4->m_BossClass.m_Rank = 4;
   boss4->m_Forms.push_back(STANDARD_FORM);
+
+  stats.m_AllStatsTable[STATS_HP].InitValues(10, 10, 10, 0);
+  stats.m_AllStatsTable[STATS_MANA].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_VIGOR].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(800, 800, 800, 0);
+  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(100, 100, 100, 0);
+  stats.m_AllStatsTable[STATS_POW_PHY].InitValues(180, 180, 180, 0);
+  stats.m_AllStatsTable[STATS_POW_MAG].InitValues(180, 180, 180, 0);
+  stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 28);
+  stats.m_AllStatsTable[STATS_REGEN_SPEED].InitValues(28, 28, 28, 0);
+  stats.m_AllStatsTable[STATS_CRIT].InitValues(18, 18, 18, 0);
+  stats.m_AllStatsTable[STATS_DODGE].InitValues(14, 14, 14, 0);
+  stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_MANA].InitValues(25, 25, 25, 0);
+  stats.m_AllStatsTable[STATS_REGEN_VIGOR].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(0, 0, 0, 0);
+  const auto boss5 = new Character("Angmar10PV", characType::Boss, stats);
+  boss5->color = QColor("red");
+  boss5->m_BossClass.m_Rank = 4;
+  m_AllBossesList.push_back(boss5);
+  boss5->m_Forms.push_back(STANDARD_FORM);
 
   for (const auto &boss : m_AllBossesList) {
     boss->LoadAtkJson();
