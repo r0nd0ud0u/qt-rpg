@@ -487,7 +487,10 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
         std::min(vigor.m_MaxValue,
                  vigor.m_CurrentValue +
                      vigor.m_MaxValue * regenVigor.m_CurrentValue / 100);
-    speed.m_CurrentValue = speed.m_CurrentValue + speed.m_RegenOnTurn;
+    // Speed
+    speed.m_CurrentValue += speed.m_RegenOnTurn;
+    speed.m_MaxValue += speed.m_RegenOnTurn;
+    speed.m_RawMaxValue += speed.m_RegenOnTurn;
   }
 }
 
@@ -668,7 +671,12 @@ void PlayersManager::AddSupAtkTurn(
       const auto &speedpl2 =
           pl2->m_Stats.m_AllStatsTable.at(STATS_SPEED).m_CurrentValue;
       if (speedPl1 - speedpl2 >= speedThreshold) {
+        // Update of current value and max value
         speedPl1 -= speedThreshold;
+        pl1->m_Stats.m_AllStatsTable.at(STATS_SPEED).m_MaxValue -=
+            speedThreshold;
+        pl1->m_Stats.m_AllStatsTable.at(STATS_SPEED).m_RawMaxValue -=
+            speedThreshold;
         playerOrderTable.push_back(pl1->m_Name);
         break;
       }

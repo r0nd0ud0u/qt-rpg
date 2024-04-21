@@ -32,6 +32,8 @@ public:
   std::vector<effectParam> m_AllEffects = {};
   QString form = STANDARD_FORM;
   AttaqueNature nature;
+
+  static constexpr double COEFF_CRIT_STATS = 1.5;
 };
 
 enum class InventoryType { healthPotion, manaPotion, enumSize };
@@ -143,7 +145,7 @@ private:
   std::pair<QString, int> ProcessEffectType(
       effectParam &effect, Character *target,
       const AttaqueType &atk); // pair1 output log, pair2 nbOfApplies
-  QString ProcessAggro(const int atkValue);
+  QString ProcessAggro(const int atkValue, const int aggroValue);
   void UpdateStatsToNextLevel();
   void UpdateBuf(const BufTypes &bufType, const int value, const bool isPercent,
                  const QString &stat);
