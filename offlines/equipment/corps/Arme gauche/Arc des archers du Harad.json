@@ -2,7 +2,7 @@
     "Aggro": [
         {
             "percent": 0,
-            "value": 44
+            "value": 0
         }
     ],
     "Armure magique": [
@@ -17,7 +17,7 @@
             "value": 0
         }
     ],
-    "Categorie": "Tete",
+    "Categorie": "Arme gauche",
     "Cout critique": [
         {
             "percent": 0,
@@ -36,7 +36,7 @@
             "value": 0
         }
     ],
-    "Nom": "tete1",
+    "Nom": "Arc des archers du Harad",
     "PV": [
         {
             "percent": 0,
@@ -46,13 +46,13 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 60
         }
     ],
     "Pouvoir physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 60
         }
     ],
     "Rage": [
@@ -64,7 +64,7 @@
     "Regeneration Mana": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Regeneration PV": [
@@ -100,7 +100,7 @@
     "Vitesse": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ]
 }

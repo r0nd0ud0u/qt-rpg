@@ -1,40 +1,40 @@
 {
-    "Cible": "Soi-même",
+    "Cible": "Ennemie",
     "Coût de mana": 1,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Effet": [
         {
-            "Cible": "Soi-même",
-            "Portée": "Individuel",
-            "Stat": "Regen vitesse",
-            "Tours actifs": 3,
-            "Type": "Up par valeur",
-            "Valeur de l'effet": 0,
-            "Value": 80
-        },
-        {
-            "Cible": "Soi-même",
-            "Portée": "Individuel",
-            "Stat": "Armure physique",
-            "Tours actifs": 3,
-            "Type": "Up par %",
-            "Valeur de l'effet": 0,
-            "Value": 180
-        },
-        {
-            "Cible": "Soi-même",
+            "Cible": "Ennemie",
             "Portée": "Individuel",
             "Stat": "Cout critique",
             "Tours actifs": 3,
             "Type": "Up par valeur",
             "Valeur de l'effet": 0,
-            "Value": 50
+            "Value": 100
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "Esquive",
+            "Tours actifs": 3,
+            "Type": "Up par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -100
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -20
         }
     ],
     "Forme": "Standard",
     "Niveau": 1,
-    "Nom": "suce moi ma poule",
+    "Nom": "caca culotte",
     "Photo": "default.png",
     "Portée": "Individuel"
 }
