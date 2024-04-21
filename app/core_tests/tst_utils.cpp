@@ -1,5 +1,6 @@
 #include <QtTest>
 
+#include "Application.h"
 #include "playersmanager.h"
 #include "utils.h"
 
@@ -36,6 +37,7 @@ public:
 private slots:
   void GetDeadliestAlly_works();
   void ProcessDamageTXHealNeedyAlly_works();
+  void LootNewEquipments_works();
 };
 
 void player_manager_tests::GetDeadliestAlly_works() {
@@ -81,6 +83,14 @@ void player_manager_tests::ProcessDamageTXHealNeedyAlly_works() {
 
   pl.ProcessDamageTXHealNeedyAlly(characType::Hero, 100);
   QCOMPARE(25, c1->m_Stats.m_AllStatsTable.at(STATS_HP).m_CurrentValue);
+}
+
+void player_manager_tests::LootNewEquipments_works(){
+    PlayersManager pl;
+    pl.InitBosses();
+    pl.InitRandomEquip();
+    const auto result = pl.LootNewEquipments("Angmar");
+    QCOMPARE(4, result.size());
 }
 
 int main(int argc, char *argv[]) {

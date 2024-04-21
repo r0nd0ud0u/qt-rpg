@@ -9,8 +9,13 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include "bossclass.h"
 #include "rust-rpg-bridge/attaque.h"
 #include "rust-rpg-bridge/utils.h"
+
+#include "utils.h"
+#include <fstream>
+#include <iostream>
 
 void PlayersManager::InitHeroes() {
 
@@ -133,9 +138,14 @@ void PlayersManager::InitHeroes() {
   hero4->color = QColor("pink");
   hero4->color = QColor("brown");
 
-  std::set<Character *> heroes{hero1, hero2, hero3, hero4, hero5};
+  std::set<Character *> heroes{hero4, hero1, hero2, hero3, hero5};
+  // TODO re order that list
+  m_AllHeroesList.push_back(hero4);
+  m_AllHeroesList.push_back(hero1);
+  m_AllHeroesList.push_back(hero2);
+  m_AllHeroesList.push_back(hero3);
+  m_AllHeroesList.push_back(hero5);
   std::for_each(heroes.begin(), heroes.end(), [&](Character *h) {
-    m_AllHeroesList.push_back(h);
     h->LoadAtkJson();
     h->LoadStuffJson();
     std::unordered_map<QString, QString> table;
@@ -145,7 +155,7 @@ void PlayersManager::InitHeroes() {
       }
     }
     h->SetEquipment(table);
-    h->ApplyEquipOnStats();
+    h->ApplyEquipOnStats(m_AllEffectsOnGame[h->m_Name]);
   });
 
   const auto epParamTalent1 = hero1->LoadThaliaTalent();
@@ -159,9 +169,9 @@ void PlayersManager::InitHeroes() {
   AddGameEffectOnAtk(hero3->m_Name, AttaqueType(), hero3->m_Name,
                      epParamTalent3, 0);
 
-  hero1->ApplyEffeftOnStats(true);
-  hero2->ApplyEffeftOnStats(true);
-  hero3->ApplyEffeftOnStats(true);
+  hero1->ApplyEffeftOnStats(true, m_AllEffectsOnGame[hero1->m_Name]);
+  hero2->ApplyEffeftOnStats(true, m_AllEffectsOnGame[hero2->m_Name]);
+  hero3->ApplyEffeftOnStats(true, m_AllEffectsOnGame[hero3->m_Name]);
 
   // add passive powers
   hero4->m_Power.is_crit_heal_after_crit = true;
@@ -221,7 +231,7 @@ void PlayersManager::InitBosses() {
     m_AllBossesList.push_back(boss2);
   }
 
-  stats.m_AllStatsTable[STATS_HP].InitValues(50000, 50000, 50000, 0);
+  stats.m_AllStatsTable[STATS_HP].InitValues(10, 10, 10, 0);
   stats.m_AllStatsTable[STATS_MANA].InitValues(9999, 9999, 9999, 9999);
   stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
   stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
@@ -241,6 +251,7 @@ void PlayersManager::InitBosses() {
   stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(0, 0, 0, 0);
   const auto boss3 = new Character("Angmar", characType::Boss, stats);
   boss3->color = QColor("red");
+  boss3->m_BossClass.m_Rank = 4;
   m_AllBossesList.push_back(boss3);
   boss3->m_Forms.push_back(STANDARD_FORM);
 
@@ -265,12 +276,13 @@ void PlayersManager::InitBosses() {
   const auto boss4 = new Character("Angmar le retour", characType::Boss, stats);
   boss4->color = QColor("red");
   m_AllBossesList.push_back(boss4);
+  boss4->m_BossClass.m_Rank = 4;
   boss4->m_Forms.push_back(STANDARD_FORM);
 
   for (const auto &boss : m_AllBossesList) {
     boss->LoadAtkJson();
     boss->LoadStuffJson();
-    boss->ApplyEquipOnStats();
+    boss->ApplyEquipOnStats(m_AllEffectsOnGame[boss->m_Name]);
   }
 }
 
@@ -336,6 +348,7 @@ void PlayersManager::LoadAllEquipmentsJson() {
 
         Stuff stuff;
         stuff.m_Name = jsonDoc[EQUIP_NAME].toString();
+        stuff.m_UniqueName = jsonDoc[EQUIP_UNIQUE_NAME].toString();
 
         for (const auto &stats : ALL_STATS) {
           if (stuff.m_Stats.m_AllStatsTable.count(stats) == 0) {
@@ -363,7 +376,9 @@ void PlayersManager::LoadAllEquipmentsJson() {
             }
           }
         }
-        m_Equipments[jsonDoc[EQUIP_CATEGORY].toString()][stuff.m_Name] = stuff;
+        const auto name =
+            (stuff.m_UniqueName.isEmpty()) ? stuff.m_Name : stuff.m_UniqueName;
+        m_Equipments[jsonDoc[EQUIP_CATEGORY].toString()][name] = stuff;
       }
     }
   }
@@ -892,4 +907,91 @@ void PlayersManager::ResetIsFirstRound() const {
                     c->m_ExtCharacter->set_is_first_round(true);
                   }
                 });
+}
+
+std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
+  int64_t rank = 0;
+  for (auto *boss : m_AllBossesList) {
+    if (boss != nullptr && name == boss->m_Name) {
+      rank = boss->m_BossClass.m_Rank;
+      break;
+    }
+  }
+  const auto nbOfLoots = rank;
+  const auto probaLoot = (rank < BossClass::PROBA_LOOTS.size())
+                             ? BossClass::PROBA_LOOTS.at(rank)
+                             : std::vector<uint64_t>{};
+
+  int stuffClass = 0;
+  std::vector<Stuff> newStuffs;
+  for (int i = 0; i < nbOfLoots; i++) {
+    const auto randProba = get_random_nb(0, 100);
+    // Assess the rank of the loot
+    for (int j = 0; j < probaLoot.size() - 1; j++) {
+      if (randProba >= probaLoot[j] && randProba < probaLoot[j + 1]) {
+        stuffClass = j + 1;
+        break;
+      }
+    }
+
+    // Create stuff
+    Stuff stuff;
+    // add name
+    const auto randEquipType = get_random_nb(0, RAND_EQUIP_ON_BODY.size() - 1);
+    const auto equipType = RAND_EQUIP_ON_BODY.at(randEquipType);
+    const auto indexEquipName =
+        get_random_nb(0, m_RandomEquipName[equipType].size() - 1);
+    stuff.m_UniqueName =
+        QString("%1-%2-%3")
+            .arg(m_RandomEquipName[equipType].at(indexEquipName))
+            .arg(stuffClass)
+            .arg(Utils::getCurrentTimeAsString());
+    stuff.m_Name = m_RandomEquipName[equipType].at(indexEquipName);
+    // add body part
+    stuff.m_BodyPart = equipType;
+    // add class
+    stuff.m_Rank = stuffClass;
+    // stuffClass == nb of effects of the loot
+    const auto nbOfEffets = stuffClass;
+
+    for (int k = 0; k < nbOfEffets; k++) {
+      const auto index = get_random_nb(0, BossClass::BONUS_STAT_STR.size() - 1);
+      const auto stat = BossClass::BONUS_STAT_STR.at(index);
+      const auto *bonus = BossClass::BONUS_LIST.at(stat).at(stuffClass - 1);
+      if (bonus->get_is_percent()) {
+        stuff.m_Stats.m_AllStatsTable[stat].m_BufEquipPercent =
+            bonus->get_value();
+      } else {
+        stuff.m_Stats.m_AllStatsTable[stat].m_BufEquipValue =
+            bonus->get_value();
+      }
+    }
+
+    newStuffs.push_back(stuff);
+  }
+
+  return newStuffs;
+}
+
+void PlayersManager::InitRandomEquip() {
+  for (const auto &equip : RAND_EQUIP_ON_BODY) {
+    // Create an object of ifstream (input file stream) class
+    std::ifstream inputFile;
+    // Open a file named "example.txt" for reading
+    const QString path = OFFLINE_RAND_NAME_STUFF + equip + ".txt";
+    inputFile.open(path.toStdString());
+
+    // Check if the file is opened successfully
+    if (!inputFile.is_open()) {
+      return; // Return an error code
+    }
+
+    std::string line;
+    while (std::getline(inputFile, line)) {
+      line = line.substr(2);
+      m_RandomEquipName[equip].push_back(QString::fromStdString(line));
+    }
+    // Close the file when done
+    inputFile.close();
+  }
 }

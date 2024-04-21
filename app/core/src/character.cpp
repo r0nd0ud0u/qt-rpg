@@ -12,6 +12,8 @@
 #include "Application.h"
 #include "rust-rpg-bridge/utils.h"
 
+#include "playersmanager.h"
+
 #include <cmath>
 
 using namespace std;
@@ -23,6 +25,9 @@ Character::Character(const QString name, const characType type,
     : m_Name(name), m_type(type), m_Stats(stats) {
   InitTables();
   m_ExtCharacter = try_new_ext_character().into_raw();
+  if (m_type == characType::Boss) {
+    m_Level = INT_MAX;
+  }
 }
 
 void Character::InitTables() {
@@ -278,27 +283,24 @@ void Character::LoadStuffJson() {
   }
 }
 
-void Character::ApplyEquipOnStats() {
+void Character::ApplyEquipOnStats(const std::vector<GameAtkEffects>& allGae) {
 
   for (const auto &[body, stuff] : m_WearingEquipment) {
     if (stuff.m_Name.isEmpty()) {
       continue;
     }
     for (const auto &stats : ALL_STATS) {
-        if (m_Stats.m_AllStatsTable.count(stats) == 1 && stuff.m_Stats.m_AllStatsTable.count(stats) > 0) {
+      if (m_Stats.m_AllStatsTable.count(stats) == 1 &&
+          stuff.m_Stats.m_AllStatsTable.count(stats) > 0) {
         ProcessAddEquip(m_Stats.m_AllStatsTable[stats],
                         stuff.m_Stats.m_AllStatsTable.at(stats));
       }
     }
   }
-  ApplyEffeftOnStats(false);
+  ApplyEffeftOnStats(false,allGae);
 }
 
-void Character::ApplyEffeftOnStats(const bool updateEffect) {
-  const auto &allGae =
-      Application::GetInstance()
-          .m_GameManager->m_PlayersManager->m_AllEffectsOnGame[m_Name];
-
+void Character::ApplyEffeftOnStats(const bool updateEffect, const std::vector<GameAtkEffects>& allGae) {
   for (const auto &gae : allGae) {
     if (gae.allAtkEffects.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
       // common init

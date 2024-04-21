@@ -6,13 +6,6 @@
 #include "stuffpanel.h"
 #include "stuff.h"
 
-struct EditStuff {
-    Stuff m_Stuff;
-    QString m_Name;
-    QString m_BodyPart;
-    bool updated = false;
-};
-
 
 namespace Ui {
 class StuffsView;

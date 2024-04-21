@@ -62,6 +62,8 @@ public:
   void ProcessIsRandomTarget() const;
   void ResetIsFirstRound() const;
   bool UpdateActivePlayers(const std::set<QString> &playersList);
+  std::vector<Stuff> LootNewEquipments(const QString& name);
+  void InitRandomEquip();
 
   // Available characters to create a party
   std::vector<Character *> m_AllHeroesList;
@@ -75,5 +77,6 @@ public:
       m_Equipments; // key 1 body name, key2 {equipName, equip value-stats}
   std::unordered_map<QString, std::vector<GameAtkEffects>>
       m_AllEffectsOnGame; // key target
+  std::unordered_map<QString, std::vector<QString>> m_RandomEquipName;
 };
 #endif // PLAYERS__MANAGER_H

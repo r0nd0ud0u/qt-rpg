@@ -7,6 +7,7 @@
 #include "bossesview.h"
 #include "channel.h"
 #include "heroesview.h"
+#include "stuff.h"
 
 #include "rust-rpg-bridge/utils.h"
 
@@ -30,6 +31,11 @@ GameDisplay::GameDisplay(QWidget *parent)
           &GameDisplay::EndOfTurn);
   connect(ui->attak_page, &ActionsView::SigLaunchAttak, this,
           &GameDisplay::LaunchAttak);
+
+  //
+  connect(this, &GameDisplay::SigUpdateEquipByLoot,
+          ApplicationView::GetInstance().GetCharacterWindow(),
+          &CharacterWindow::UpdateView);
 
   // init display default page
   ui->stackedWidget->setCurrentIndex(
@@ -447,6 +453,35 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   for (const auto &dp : diedBossList) {
     emit SigUpdateChannelView(dp, "est mort.");
     // TODO what to do when a boss is dead
+    const auto newEquip = gm->m_PlayersManager->LootNewEquipments(dp);
+
+    // LOOT
+    std::vector<EditStuff> allLoots;
+    for (const auto *hero : gm->m_PlayersManager->m_HeroesList) {
+      if (hero == nullptr) {
+        continue;
+      }
+      QStringList logLoot;
+      if (!newEquip.empty()) {
+        logLoot.append(QString("Loot pour %1:").arg(hero->m_Name));
+      }
+      for (const auto &e : newEquip) {
+        gm->m_PlayersManager->m_Equipments[e.m_BodyPart][e.m_UniqueName] = e;
+        logLoot.append(QString("- %1").arg(e.m_UniqueName));
+      }
+      std::for_each(newEquip.begin(), newEquip.end(), [&](const Stuff &s) {
+        EditStuff es;
+        es.m_Stuff = s;
+        es.m_BodyPart = s.m_BodyPart;
+        es.m_Name = s.m_UniqueName;
+        EditStuff::SaveStuffInJson(es, s.m_BodyPart);
+        allLoots.push_back(es);
+      });
+      emit SigUpdateChannelView("GameState", logLoot.join('\n'));
+    }
+    // update view for the equipments
+    emit SigUpdateEquipByLoot(allLoots);
+
     emit SigBossDead(dp);
     ui->attak_page->RemoveTarget(dp);
     ui->add_exp_button->setEnabled(true);

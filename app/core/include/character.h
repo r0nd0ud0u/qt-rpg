@@ -12,10 +12,14 @@
 #include "common.h"
 #include "effect.h"
 #include "stuff.h"
+#include "bossclass.h"
 
 #include "rust-rpg-bridge/attaque.h"
 #include "rust-rpg-bridge/character.h"
 #include "rust-rpg-bridge/powers.h"
+
+// forward declaration
+class GameAtkEffects;
 
 enum class characType { Hero, Boss };
 
@@ -61,7 +65,7 @@ public:
   void AddAtq(const AttaqueType &atq);
   void LoadAtkJson();
   void LoadStuffJson();
-  void ApplyEquipOnStats();
+  void ApplyEquipOnStats(const std::vector<GameAtkEffects>& allGae);
   bool CanBeLaunched(const AttaqueType &atk) const;
 
   // Effect
@@ -87,7 +91,7 @@ public:
   void AddExp(const int newXp);
   void SetEquipment(const std::unordered_map<QString, QString> &);
   void UpdateEquipmentOnJson() const;
-  void ApplyEffeftOnStats(const bool updateEffect);
+  void ApplyEffeftOnStats(const bool updateEffect, const std::vector<GameAtkEffects>& allGae);
   std::pair<bool, int>
   ProcessCriticalStrike(const AttaqueType &atk); // return isCrit, random number
   void ResetBuf(const BufTypes &bufType);
@@ -121,6 +125,8 @@ public:
   std::vector<std::unordered_map<uint64_t, uint64_t>> m_LastTxRx;
   Powers m_Power;
   ExtendedCharacter *m_ExtCharacter = nullptr;
+  BossClass m_BossClass;
+
 
 private:
   static void ProcessAddEquip(StatsType &charStat, const StatsType &equipStat);
