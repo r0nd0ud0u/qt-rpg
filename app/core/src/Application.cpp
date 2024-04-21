@@ -14,8 +14,7 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv) {
   g_pApp = this;
 }
 
-Application::~Application() {
-}
+Application::~Application() {}
 
 Application &Application::GetInstance() { return *g_pApp; }
 
@@ -40,11 +39,11 @@ Application &Application::GetInstance() { return *g_pApp; }
 // }
 
 void Application::Init() {
-    m_GameManager = std::make_unique<GameManager>();
+  m_GameManager = std::make_unique<GameManager>();
   if (m_GameManager != nullptr) {
     m_GameManager->InitPlayers();
   }
-  srand((unsigned) time(nullptr));
+  srand((unsigned)time(nullptr));
   // ReadGlobalParameters("skycbt-mission-window.ini");
   // QDir logDir(QString::fromStdString(m_global_ini.GLOBAL.m_LOG_PATH));
   // logDir.mkpath(".");
@@ -59,6 +58,7 @@ void Application::Init() {
 }
 
 void Application::log(const QString &txt) {
+  return;
   if (!m_logFile.isOpen())
     return;
 

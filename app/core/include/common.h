@@ -11,6 +11,7 @@ const QString OFFLINE_IMG = "./offlines/attak/img/";
 const QString OFFLINE_ATK = "./offlines/attak/";
 const QString OFFLINE_WEARING_EQUIPMENT = "./offlines/equipment/Personnages/";
 const QString OFFLINE_ROOT_EQUIPMENT = "./offlines/equipment/corps/";
+const QString OFFLINE_RAND_NAME_STUFF = "./offlines/equipment/random/";
 
 // json keys
 // ATK keys
@@ -108,6 +109,7 @@ const QString EQUIP_SHOES = "Chaussures";
 const QString EQUIP_ARM = "Bras";
 const QString EQUIP_RING = "Anneau";
 const QString EQUIP_NAME = "Nom";
+const QString EQUIP_UNIQUE_NAME = "Nom unique";
 const QString EQUIP_RIGHT_WEAPON = "Arme gauche";
 const QString EQUIP_LEFT_WEAPON = "Arme droite";
 const QString EQUIP_CATEGORY = "Categorie";
@@ -141,6 +143,17 @@ const std::set<QString> ALL_EQUIP_ON_BODY{"",
                                           EQUIP_RUNIQUE_TATOO_1,
                                           EQUIP_RUNIQUE_TATOO_2,
                                           EQUIP_RUNIQUE_TATOO_3};
+const std::vector<QString> RAND_EQUIP_ON_BODY{
+                                          EQUIP_HEAD,
+                                          EQUIP_NECKLACE,
+                                          EQUIP_CHEST,
+                                          EQUIP_SHOES,
+                                          EQUIP_ARM,
+                                          EQUIP_RING,
+                                          EQUIP_PANTS,
+                                          EQUIP_RIGHT_WEAPON,
+                                          EQUIP_LEFT_WEAPON,
+                                          };
 // Effect keys
 const QString EFFECT_REINIT = "Reinit";
 const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";
@@ -242,12 +255,12 @@ class StatsType {
 public:
   StatsType() = default; // Default constructor
   explicit StatsType(QString type) : m_Type(type) {}
-  int m_CurrentValue;
-  int m_StartingValue;
-  int m_MaxValue;
-  int m_RegenOnTurn;
+  int m_CurrentValue = 0;
+  int m_StartingValue = 0;
+  int m_MaxValue = 0;
+  int m_RegenOnTurn = 0;
   int m_BaseEquipValue = 0;
-  int m_RawMaxValue;
+  int m_RawMaxValue = 0;
   QString m_Type;
   int m_BufEffectValue = 0;
   int m_BufEffectPercent = 0;
