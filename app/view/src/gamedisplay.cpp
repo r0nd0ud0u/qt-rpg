@@ -32,11 +32,6 @@ GameDisplay::GameDisplay(QWidget *parent)
   connect(ui->attak_page, &ActionsView::SigLaunchAttak, this,
           &GameDisplay::LaunchAttak);
 
-  //
-  connect(this, &GameDisplay::SigUpdateEquipByLoot,
-          ApplicationView::GetInstance().GetCharacterWindow(),
-          &CharacterWindow::UpdateView);
-
   // init display default page
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(ActionsStackedWgType::defaultType));
@@ -480,7 +475,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       emit SigUpdateChannelView("GameState", logLoot.join('\n'));
     }
     // update view for the equipments
-    emit SigUpdateEquipByLoot(allLoots);
+    ApplicationView::GetInstance().GetCharacterWindow()->UpdateView(allLoots);
 
     emit SigBossDead(dp);
     ui->attak_page->RemoveTarget(dp);
