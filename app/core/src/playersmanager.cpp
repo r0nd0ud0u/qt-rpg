@@ -26,7 +26,8 @@ void PlayersManager::InitHeroes() {
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(20, 20, 20, 0);
   // TODO set max aggro 9999 is a good idea??
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 9999, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(12, 12, 12, 12);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(12, 12, 12, 0);
+  stats.m_AllStatsTable[STATS_REGEN_SPEED].InitValues(12, 12, 12, 0);
   stats.m_AllStatsTable[STATS_CRIT].InitValues(10, 10, 10, 0);
   stats.m_AllStatsTable[STATS_DODGE].InitValues(5, 5, 5, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(7, 7, 7, 0);
@@ -47,7 +48,8 @@ void PlayersManager::InitHeroes() {
   stats.m_AllStatsTable[STATS_POW_PHY].InitValues(20, 20, 20, 0);
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(10, 10, 10, 0);
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 9999, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(10, 10, 10, 10);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(10, 10, 10, 0);
+  stats.m_AllStatsTable[STATS_REGEN_SPEED].InitValues(10, 10, 10, 0);
   stats.m_AllStatsTable[STATS_CRIT].InitValues(12, 12, 12, 0);
   stats.m_AllStatsTable[STATS_DODGE].InitValues(6, 6, 6, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(7, 7, 7, 0);
@@ -67,7 +69,8 @@ void PlayersManager::InitHeroes() {
   stats.m_AllStatsTable[STATS_POW_PHY].InitValues(20, 20, 20, 0);
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(0, 0, 0, 0);
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 9999, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(5, 5, 5, 5);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(5, 5, 5, 0);
+  stats.m_AllStatsTable[STATS_REGEN_SPEED].InitValues(5, 5, 5, 0);
   stats.m_AllStatsTable[STATS_CRIT].InitValues(8, 8, 8, 0);
   stats.m_AllStatsTable[STATS_DODGE].InitValues(5, 5, 5, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(7, 7, 7, 0);
@@ -88,7 +91,8 @@ void PlayersManager::InitHeroes() {
   stats.m_AllStatsTable[STATS_POW_PHY].InitValues(0, 0, 0, 0);
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(25, 25, 25, 0);
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 9999, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(8, 8, 8, 8);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(8, 8, 8, 0);
+  stats.m_AllStatsTable[STATS_REGEN_SPEED].InitValues(8, 8, 8, 0);
   stats.m_AllStatsTable[STATS_CRIT].InitValues(10, 10, 10, 0);
   stats.m_AllStatsTable[STATS_DODGE].InitValues(7, 7, 7, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(5, 5, 5, 0);
@@ -110,7 +114,8 @@ void PlayersManager::InitHeroes() {
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(0, 0, 0, 0);
   stats.m_AllStatsTable[STATS_POW_PHY].InitValues(30, 30, 30, 0);
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 9999, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(15, 15, 15, 15);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(15, 15, 15, 0);
+  stats.m_AllStatsTable[STATS_REGEN_SPEED].InitValues(15, 15, 15, 0);
   stats.m_AllStatsTable[STATS_CRIT].InitValues(12, 12, 12, 0);
   stats.m_AllStatsTable[STATS_DODGE].InitValues(2, 2, 2, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(5, 5, 5, 0);
@@ -175,7 +180,8 @@ void PlayersManager::InitBosses() {
   stats.m_AllStatsTable[STATS_POW_PHY].InitValues(100, 100, 100, 0);
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(200, 200, 200, 0);
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 25);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_SPEED].InitValues(25, 25, 25, 0);
   stats.m_AllStatsTable[STATS_CRIT].InitValues(21, 21, 21, 0);
   stats.m_AllStatsTable[STATS_DODGE].InitValues(18, 18, 18, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
@@ -198,7 +204,8 @@ void PlayersManager::InitBosses() {
   stats.m_AllStatsTable[STATS_POW_PHY].InitValues(50, 50, 50, 0);
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(50, 50, 50, 0);
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 10);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_SPEED].InitValues(10, 10, 10, 0);
   stats.m_AllStatsTable[STATS_CRIT].InitValues(10, 10, 10, 0);
   stats.m_AllStatsTable[STATS_DODGE].InitValues(10, 10, 10, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
@@ -214,19 +221,20 @@ void PlayersManager::InitBosses() {
     m_AllBossesList.push_back(boss2);
   }
 
-  stats.m_AllStatsTable[STATS_HP].InitValues(20000, 20000, 20000, 0);
+  stats.m_AllStatsTable[STATS_HP].InitValues(50000, 50000, 50000, 0);
   stats.m_AllStatsTable[STATS_MANA].InitValues(9999, 9999, 9999, 9999);
   stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
   stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
   stats.m_AllStatsTable[STATS_VIGOR].InitValues(9999, 9999, 9999, 9999);
-  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(500, 500, 500, 0);
-  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(700, 700, 700, 0);
-  stats.m_AllStatsTable[STATS_POW_PHY].InitValues(140, 140, 140, 0);
-  stats.m_AllStatsTable[STATS_POW_MAG].InitValues(200, 200, 200, 0);
+  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(800, 800, 800, 0);
+  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(100, 100, 100, 0);
+  stats.m_AllStatsTable[STATS_POW_PHY].InitValues(180, 180, 180, 0);
+  stats.m_AllStatsTable[STATS_POW_MAG].InitValues(180, 180, 180, 0);
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 25);
-  stats.m_AllStatsTable[STATS_CRIT].InitValues(15, 15, 15, 0);
-  stats.m_AllStatsTable[STATS_DODGE].InitValues(15, 15, 15, 0);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 28);
+  stats.m_AllStatsTable[STATS_REGEN_SPEED].InitValues(28, 28, 28, 0);
+  stats.m_AllStatsTable[STATS_CRIT].InitValues(18, 18, 18, 0);
+  stats.m_AllStatsTable[STATS_DODGE].InitValues(14, 14, 14, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
   stats.m_AllStatsTable[STATS_REGEN_MANA].InitValues(25, 25, 25, 0);
   stats.m_AllStatsTable[STATS_REGEN_VIGOR].InitValues(0, 0, 0, 0);
@@ -246,7 +254,8 @@ void PlayersManager::InitBosses() {
   stats.m_AllStatsTable[STATS_POW_PHY].InitValues(250, 250, 250, 0);
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(120, 120, 120, 0);
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
-  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 20);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_SPEED].InitValues(20, 20, 20, 0);
   stats.m_AllStatsTable[STATS_CRIT].InitValues(20, 20, 20, 0);
   stats.m_AllStatsTable[STATS_DODGE].InitValues(20, 20, 20, 0);
   stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
@@ -474,6 +483,7 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
     auto &vigor = pl->m_Stats.m_AllStatsTable[STATS_VIGOR];
     const auto &regenVigor = pl->m_Stats.m_AllStatsTable[STATS_REGEN_VIGOR];
     auto &speed = pl->m_Stats.m_AllStatsTable[STATS_SPEED];
+    const auto &regenSpeed = pl->m_Stats.m_AllStatsTable[STATS_REGEN_SPEED];
 
     hp.m_CurrentValue = std::min(
         hp.m_MaxValue,
@@ -488,9 +498,9 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
                  vigor.m_CurrentValue +
                      vigor.m_MaxValue * regenVigor.m_CurrentValue / 100);
     // Speed
-    speed.m_CurrentValue += speed.m_RegenOnTurn;
-    speed.m_MaxValue += speed.m_RegenOnTurn;
-    speed.m_RawMaxValue += speed.m_RegenOnTurn;
+    speed.m_CurrentValue += regenSpeed.m_CurrentValue;
+    speed.m_MaxValue += regenSpeed.m_CurrentValue;
+    speed.m_RawMaxValue += regenSpeed.m_CurrentValue;
   }
 }
 

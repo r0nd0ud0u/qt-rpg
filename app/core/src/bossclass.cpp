@@ -23,7 +23,7 @@ std::unordered_map<QString, std::vector<Buffers *>> BossClass::BONUS_LIST{
     {STATS_POW_MAG, GetBuffer(false,  20, 20)},
     {STATS_POW_PHY, GetBuffer(false, 20, 20)},
     {STATS_DODGE, GetBuffer(false, 1, 1)},
-    {STATS_SPEED, GetBuffer(false, 2, 3)},
+    {STATS_REGEN_SPEED, GetBuffer(false, 2, 3)},
     {STATS_CRIT, GetBuffer(false, 2, 1)}};
 
 std::vector<uint64_t> BossClass::ARMOR{

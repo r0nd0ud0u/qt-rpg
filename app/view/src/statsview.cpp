@@ -48,11 +48,6 @@ QAbstractItemModel *StatsView::createStatsModel(QObject *parent) {
       continue;
     }
     addStatRow(model, stat, statsTable.at(stat).m_CurrentValue);
-    // TODO for vigor, mana, hp, berseck
-    if (stat == STATS_SPEED && statsTable.at(stat).m_RegenOnTurn >= 0) {
-      addStatRow(model, QString("%1 rate").arg(stat),
-                 statsTable.at(stat).m_RegenOnTurn);
-    }
   }
 
   return model;

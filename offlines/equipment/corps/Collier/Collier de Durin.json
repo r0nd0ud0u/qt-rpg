@@ -14,10 +14,10 @@
     "Armure physique": [
         {
             "percent": 0,
-            "value": 30
+            "value": 50
         }
     ],
-    "Categorie": "Bras droit",
+    "Categorie": "Collier",
     "Cout critique": [
         {
             "percent": 0,
@@ -36,10 +36,10 @@
             "value": 0
         }
     ],
-    "Nom": "tesst1",
+    "Nom": "Collier de Durin",
     "PV": [
         {
-            "percent": 0,
+            "percent": 7,
             "value": 0
         }
     ],

@@ -75,6 +75,7 @@ const QString STATS_REGEN_MANA = "Regeneration Mana";
 const QString STATS_REGEN_VIGOR = "Regeneration vigueur";
 const QString STATS_RATE_BERSECK = "Taux rage";
 const QString STATS_RATE_AGGRO = "Taux aggro";
+const QString STATS_REGEN_SPEED = "Regen vitesse";
 
 const std::set<QString> ALL_STATS = {"",
                                      STATS_HP,
@@ -93,7 +94,8 @@ const std::set<QString> ALL_STATS = {"",
                                      STATS_REGEN_MANA,
                                      STATS_REGEN_VIGOR,
                                      STATS_RATE_BERSECK,
-                                     STATS_RATE_AGGRO};
+                                     STATS_RATE_AGGRO,
+                                     STATS_REGEN_SPEED};
 const std::set<QString> ON_PERCENT_STATS = {STATS_MANA, STATS_VIGOR};
 const std::set<QString> STATS_TO_LEVEL_UP = {STATS_HP, STATS_MANA, STATS_VIGOR,
                                              STATS_POW_PHY, STATS_POW_MAG};
@@ -167,7 +169,8 @@ const QString EFFECT_BUF_MULTI = "Buf multi";
 const QString EFFECT_BLOCK_HEAL_ATK = "Bloque attaque de soin";
 // Conditions on effect
 // Atk is enable if damages are been tx during previous turn
-const QString EFFECT_COND_DMG_PREV_TURN = "Active effet si Dégâts au tour précédent";
+const QString EFFECT_COND_DMG_PREV_TURN =
+    "Active effet si Dégâts au tour précédent";
 // Condition on atk
 // Atk is enable if damages are been tx during previous turn
 const QString CONDITION_DMG_PREV_TURN = "Dégâts au tour précédent";
@@ -176,7 +179,8 @@ const QString EFFECT_REPEAT_IF_HEAL =
     "Répète l'attaque(en % de chance) après heal tour prec.";
 const QString EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL =
     "Buf par valeur d'autant de PV";
-// Effect to modify the regen rate of stats such as vigor, mana, speed, hp, berseck by value.
+// Effect to modify the regen rate of stats such as vigor, mana, speed, hp,
+// berseck by value.
 const QString EFFECT_UPDATE_TURN_RATE = "Update regen par valeur";
 const std::set<QString> EFFECTS{"",
                                 EFFECT_REINIT,
@@ -216,8 +220,7 @@ const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_BUF_MULTI,
     EFFECT_BLOCK_HEAL_ATK,
     EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL,
-    EFFECT_UPDATE_TURN_RATE
-};
+    EFFECT_UPDATE_TURN_RATE};
 const std::set<QString> EFFECTS_HOT_OR_DOT = {EFFECT_VALUE_CHANGE,
                                               EFFECT_REPEAT_AS_MANY_AS};
 const QString EFFECT_ARRAY = "Effet";

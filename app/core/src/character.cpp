@@ -285,7 +285,7 @@ void Character::ApplyEquipOnStats() {
       continue;
     }
     for (const auto &stats : ALL_STATS) {
-      if (m_Stats.m_AllStatsTable.count(stats) == 1) {
+        if (m_Stats.m_AllStatsTable.count(stats) == 1 && stuff.m_Stats.m_AllStatsTable.count(stats) > 0) {
         ProcessAddEquip(m_Stats.m_AllStatsTable[stats],
                         stuff.m_Stats.m_AllStatsTable.at(stats));
       }
@@ -441,9 +441,8 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
 
   // Apply crit on effects
   const std::set<QString> BOOSTED_EFFECTS_BY_CRIT{
-      EFFECT_IMPROVE_BY_PERCENT_CHANGE, EFFECT_IMPROVEMENT_STAT_BY_VALUE,
-      EFFECT_UPDATE_TURN_RATE};
-  if (BOOSTED_EFFECTS_BY_CRIT.count(effect.effect) > 0) {
+      EFFECT_IMPROVE_BY_PERCENT_CHANGE, EFFECT_IMPROVEMENT_STAT_BY_VALUE};
+  if (isCrit && BOOSTED_EFFECTS_BY_CRIT.count(effect.effect) > 0) {
     effect.subValueEffect =
         std::lround(AttaqueType::COEFF_CRIT_STATS *
                     static_cast<double>(effect.subValueEffect));

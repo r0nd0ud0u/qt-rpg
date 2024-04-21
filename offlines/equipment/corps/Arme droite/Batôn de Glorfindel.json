@@ -7,20 +7,20 @@
     ],
     "Armure magique": [
         {
-            "percent": 10,
+            "percent": 0,
             "value": 0
         }
     ],
     "Armure physique": [
         {
-            "percent": 10,
+            "percent": 0,
             "value": 0
         }
     ],
-    "Categorie": "Arme gauche",
+    "Categorie": "Arme droite",
     "Cout critique": [
         {
-            "percent": 0,
+            "percent": 3,
             "value": 0
         }
     ],
@@ -32,11 +32,11 @@
     ],
     "Mana": [
         {
-            "percent": 0,
+            "percent": 7,
             "value": 0
         }
     ],
-    "Nom": "Masse des des defenseurs de la porte ouest",
+    "Nom": "Batôn de Glorfindel",
     "PV": [
         {
             "percent": 0,
@@ -57,7 +57,7 @@
     ],
     "Rage": [
         {
-            "percent": 15,
+            "percent": 0,
             "value": 0
         }
     ],

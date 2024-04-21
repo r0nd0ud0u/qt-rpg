@@ -7,9 +7,9 @@
         {
             "Cible": "Soi-même",
             "Portée": "Individuel",
-            "Stat": "Vitesse",
+            "Stat": "Regen vitesse",
             "Tours actifs": 3,
-            "Type": "Update regen par valeur",
+            "Type": "Up par valeur",
             "Valeur de l'effet": 0,
             "Value": 80
         },
