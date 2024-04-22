@@ -7,7 +7,7 @@
         {
             "Cible": "Soi-même",
             "Portée": "Individuel",
-            "Stat": "Vitesse",
+            "Stat": "Regen vitesse",
             "Tours actifs": 3,
             "Type": "Up par valeur",
             "Valeur de l'effet": 0,
@@ -33,7 +33,7 @@
         }
     ],
     "Forme": "Standard",
-    "Niveau": 1,
+    "Niveau": 5,
     "Nom": "suce moi ma poule",
     "Photo": "default.png",
     "Portée": "Individuel"

@@ -12,6 +12,8 @@
 #include "Application.h"
 #include "rust-rpg-bridge/utils.h"
 
+#include "playersmanager.h"
+
 #include <cmath>
 
 using namespace std;
@@ -23,6 +25,9 @@ Character::Character(const QString name, const characType type,
     : m_Name(name), m_type(type), m_Stats(stats) {
   InitTables();
   m_ExtCharacter = try_new_ext_character().into_raw();
+  if (m_type == characType::Boss) {
+    m_Level = INT_MAX;
+  }
 }
 
 void Character::InitTables() {
@@ -278,27 +283,24 @@ void Character::LoadStuffJson() {
   }
 }
 
-void Character::ApplyEquipOnStats() {
+void Character::ApplyEquipOnStats(const std::vector<GameAtkEffects>& allGae) {
 
   for (const auto &[body, stuff] : m_WearingEquipment) {
     if (stuff.m_Name.isEmpty()) {
       continue;
     }
     for (const auto &stats : ALL_STATS) {
-      if (m_Stats.m_AllStatsTable.count(stats) == 1) {
+      if (m_Stats.m_AllStatsTable.count(stats) == 1 &&
+          stuff.m_Stats.m_AllStatsTable.count(stats) > 0) {
         ProcessAddEquip(m_Stats.m_AllStatsTable[stats],
                         stuff.m_Stats.m_AllStatsTable.at(stats));
       }
     }
   }
-  ApplyEffeftOnStats(false);
+  ApplyEffeftOnStats(false,allGae);
 }
 
-void Character::ApplyEffeftOnStats(const bool updateEffect) {
-  const auto &allGae =
-      Application::GetInstance()
-          .m_GameManager->m_PlayersManager->m_AllEffectsOnGame[m_Name];
-
+void Character::ApplyEffeftOnStats(const bool updateEffect, const std::vector<GameAtkEffects>& allGae) {
   for (const auto &gae : allGae) {
     if (gae.allAtkEffects.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
       // common init
@@ -439,6 +441,16 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
     return std::make_pair("", newEffects);
   }
 
+  // Apply crit on effects
+  const std::set<QString> BOOSTED_EFFECTS_BY_CRIT{
+      EFFECT_IMPROVE_BY_PERCENT_CHANGE, EFFECT_IMPROVEMENT_STAT_BY_VALUE};
+  if (isCrit && BOOSTED_EFFECTS_BY_CRIT.count(effect.effect) > 0) {
+    effect.subValueEffect =
+        std::lround(AttaqueType::COEFF_CRIT_STATS *
+                    static_cast<double>(effect.subValueEffect));
+    effect.value = std::lround(AttaqueType::COEFF_CRIT_STATS *
+                               static_cast<double>(effect.value));
+  }
   const auto &[effectLog, nbOfApplies] = ProcessEffectType(effect, target, atk);
   result += effectLog;
 
@@ -486,9 +498,14 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
 
   // Process aggro
   if (effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE &&
-      effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE &&
-      (effect.statsName == STATS_HP || effect.statsName == STATS_AGGRO)) {
-    result += ProcessAggro(trueAmount);
+      effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
+    if (effect.statsName == STATS_HP) {
+      // process aggro for the launcher
+      result += ProcessAggro(trueAmount, 0);
+    } else if (effect.statsName == STATS_AGGRO) {
+      // Add aggro to a target
+      result += target->ProcessAggro(0, effect.value);
+    }
   }
 
   // update effect value
@@ -645,6 +662,9 @@ void Character::RemoveMalusEffect(const effectParam &ep) {
     if (ep.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
       SetStatsOnEffect(localStat, -ep.value, false, true);
     }
+    if (ep.effect == EFFECT_UPDATE_TURN_RATE) {
+      localStat.m_RegenOnTurn -= ep.value;
+    }
   }
   if (ep.effect == EFFECT_BLOCK_HEAL_ATK && m_ExtCharacter != nullptr) {
     m_ExtCharacter->set_is_heal_atk_blocked(false);
@@ -667,9 +687,11 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
   if (ep.value == 0) {
     return std::make_pair(0, 0);
   }
+  // TODO maybe the only effects should be effect_value change and percent ?
   if (ep.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE ||
       ep.effect == EFFECT_IMPROVEMENT_STAT_BY_VALUE ||
-      ep.effect == EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL) {
+      ep.effect == EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL ||
+      ep.effect == EFFECT_UPDATE_TURN_RATE) {
     return std::make_pair(0, 0);
   }
   int output = 0;
@@ -755,6 +777,11 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
   // is it a critical strike
   if (isCrit && ep.statsName == STATS_HP && launch) {
     output = 2 * amount;
+  } else if (isCrit && launch) {
+    output = std::lround(AttaqueType::COEFF_CRIT_STATS *
+                         static_cast<double>(amount));
+    // value of effect is updated by crit
+    ep.value = output;
   } else {
     // new value of stat
     output = amount;
@@ -858,7 +885,7 @@ int Character::ProcessDecreaseOnTurn(const effectParam &ep) const {
     const int stepLimit = (intMax / ep.subValueEffect); // get percentual
     const auto maxLimit = stepLimit * counter;
     if (const auto randNb = get_random_nb(intMin, intMax);
-        randNb >= 0 && randNb < maxLimit) {
+        randNb >= 0 && randNb <= maxLimit) {
       nbOfApplies++;
     } else {
       break;
@@ -876,7 +903,7 @@ QString Character::ProcessDecreaseByTurn(const effectParam &ep) const {
   const int stepLimit = (intMax / ep.nbTurns); // get percentual
   const auto maxLimit = stepLimit * (ep.nbTurns - ep.counterTurn);
   if (const auto randNb = get_random_nb(intMin, intMax);
-      !(randNb >= 0 && randNb < maxLimit)) {
+      !(randNb >= 0 && randNb <= maxLimit)) {
     output = QString("%1 n'a pas d'effet").arg(EFFECT_NB_DECREASE_BY_TURN);
   }
 
@@ -976,6 +1003,7 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
   }
 
   auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+  const auto *gs = Application::GetInstance().m_GameManager->m_GameState;
 
   QString output;
   int nbOfApplies = 1; // default value 1 for the nominal case
@@ -1050,13 +1078,18 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
   if (effect.effect == EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT) {
     if (effect.target == TARGET_ENNEMY) {
       target->UpdateBuf(BufTypes::damageRx, effect.value, true, "");
+      output =
+          QString("Les dégâts reçus sont modifiés de %1% pendant %2 tours.\n")
+              .arg(effect.value)
+              .arg(effect.nbTurns);
     } else {
       target->UpdateBuf(BufTypes::damageTx, effect.value, true, "");
+      output =
+          QString(
+              "Les dégâts transmis sont modifiés de %1% pendant %2 tours.\n")
+              .arg(effect.value)
+              .arg(effect.nbTurns);
     }
-
-    output = QString("Les dégâts sont boostés de %1% pour %2 tours.\n")
-                 .arg(effect.value)
-                 .arg(effect.nbTurns);
   }
   if (effect.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
     // common init
@@ -1097,8 +1130,19 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
   }
 
   if (effect.effect == EFFECT_BUF_MULTI) {
-    UpdateBuf(BufTypes::multiValue, effect.value, true, "");
-    output = QString("Le buf multi est activé.\n");
+    // TODO at the moment condition is in that effect which is used only for
+    // "fleur de vie sangunaire"
+    // TODO conditions on at, conditions on effect to take buf-multi and dmg
+    // condtion apart here
+    if (gs->m_CurrentTurnNb > 1 &&
+        m_LastTxRx[static_cast<uint64_t>(amountType::damageTx)].count(
+            gs->m_CurrentTurnNb - 1) > 0) {
+      UpdateBuf(BufTypes::multiValue, effect.value, true, "");
+      output = QString("Le buf multi est activé.\n");
+    } else {
+      output = QString(
+          "Le buf multi n'est pas activé. Pas de dégâts au tour précédent\n");
+    }
   }
 
   if (effect.effect == EFFECT_BLOCK_HEAL_ATK && m_ExtCharacter != nullptr) {
@@ -1110,7 +1154,6 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
     effect.nbTurns += 2;
   }
 
-  const auto *gs = Application::GetInstance().m_GameManager->m_GameState;
   if (effect.effect == EFFECT_REPEAT_IF_HEAL) {
     const auto &healTxTable =
         m_LastTxRx[static_cast<uint64_t>(amountType::healTx)];
@@ -1141,6 +1184,13 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
     }
     output += QString("Effet soignant avec excédent de soin, activé!\n");
   }
+  if (effect.effect == EFFECT_UPDATE_TURN_RATE) {
+    auto &localStat = target->m_Stats.m_AllStatsTable[effect.statsName];
+    localStat.m_RegenOnTurn += effect.value;
+    output += QString("Update regen par valeur sur %1: %2\n")
+                  .arg(effect.statsName)
+                  .arg(effect.value);
+  }
 
   if (!output.isEmpty()) {
     output += QString("Effet appliqué %1 fois\n").arg(nbOfApplies);
@@ -1152,40 +1202,46 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
  * @brief Character::ProcessAggro
  * Keep only the last 5 aggro generated after a heal or a damage
  * Sum them to process the current value of stats aggro
+ * the current value of aggro must be positive
+ * the negative values are still kept in the 5 last value through
  * @param atkValue
  * @return a QString to output in channel log the result
  */
-QString Character::ProcessAggro(const int atkValue) {
+QString Character::ProcessAggro(const int atkValue, const int aggroValue) {
   const double aggroNorm = 20.0; // random value at the moment
-  const auto genAggro =
-      std::lround(static_cast<double>(abs(atkValue)) / aggroNorm);
-  if (genAggro == 0) {
+  int localAggro = aggroValue;
+
+  // Aggro filled by atkValue or input aggro value ?
+  if (atkValue != 0) {
+    localAggro = std::lround(static_cast<double>(abs(atkValue)) / aggroNorm);
+  }
+  // case null aggro
+  if (localAggro == 0) {
     return "Pas d'aggro.\n";
   }
   // keep the last 5
-  m_LastAggros.push_back(genAggro);
+  m_LastAggros.push_back(localAggro);
   if (m_LastAggros.size() == 6) {
     m_LastAggros.pop_front();
   }
-  // update current aggro stat with the sum of the last 5
+  // update current aggro stat with the sum of the last 5, the output must be
+  // positive
   auto &aggroStat = m_Stats.m_AllStatsTable[STATS_AGGRO];
   const int oldAggro = aggroStat.m_CurrentValue;
   aggroStat.m_CurrentValue =
-      accumulate(m_LastAggros.begin(), m_LastAggros.end(), 0);
+      std::max(0, accumulate(m_LastAggros.begin(), m_LastAggros.end(), 0));
 
   QStringList aggroItems;
   std::for_each(
       m_LastAggros.begin(), m_LastAggros.end(),
       [&aggroItems](const int &n) { aggroItems.append(QString::number(n)); });
 
-  return (genAggro > 0)
-             ? QString("+%1 aggro pour %2, old: %3, new: %4, items=(%5)\n")
-                   .arg(genAggro)
-                   .arg(m_Name)
-                   .arg(oldAggro)
-                   .arg(aggroStat.m_CurrentValue)
-                   .arg(aggroItems.join(","))
-             : "";
+  return QString("Gen Aggro:%1 pour %2, old: %3, new: %4, items=(%5)\n")
+      .arg(localAggro)
+      .arg(m_Name)
+      .arg(oldAggro)
+      .arg(aggroStat.m_CurrentValue)
+      .arg(aggroItems.join(","));
 }
 
 /**
@@ -1209,7 +1265,7 @@ std::pair<bool, int> Character::ProcessCriticalStrike(const AttaqueType &atk) {
 
   bool isCrit = false;
   if (randNb = get_random_nb(0, 100); (isCritByBuf && atk.nature.is_heal) ||
-                                      (randNb >= 0 && randNb < maxCritUsed)) {
+                                      (randNb >= 0 && randNb <= maxCritUsed)) {
     // update buf dmg by crit capped
     UpdateBuf(BufTypes::damageCritCapped,
               min(0, critStat.m_CurrentValue - critCapped), false, "");
@@ -1237,14 +1293,14 @@ std::pair<bool, int> Character::ProcessCriticalStrike(const AttaqueType &atk) {
 std::pair<bool, QString> Character::IsDodging(const AttaqueType &atk) const {
   bool isDodging = false;
   if (const int ULTIMATE_LEVEL = 13; atk.level == ULTIMATE_LEVEL) {
-    return std::make_pair(isDodging, "");
+    return std::make_pair(isDodging, "ultimate");
   }
 
   const auto &stat = m_Stats.m_AllStatsTable.at(STATS_DODGE);
   const int DEFAULT_RAND = -1;
   int64_t randNb = DEFAULT_RAND;
   if (randNb = get_random_nb(0, 100);
-      randNb >= 0 && randNb < stat.m_CurrentValue) {
+      randNb >= 0 && randNb <= stat.m_CurrentValue) {
     isDodging = true;
   }
   return std::make_pair(isDodging, QString::number(randNb));
