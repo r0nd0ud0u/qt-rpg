@@ -935,6 +935,8 @@ void PlayersManager::ResetIsFirstRound() const {
 
 std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
   int64_t rank = 0;
+  int stuffClass = 0;
+  std::vector<Stuff> newStuffs;
   for (auto *boss : m_AllBossesList) {
     if (boss != nullptr && name == boss->m_Name) {
       rank = boss->m_BossClass.m_Rank;
@@ -946,8 +948,9 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
                              ? BossClass::PROBA_LOOTS.at(rank)
                              : std::vector<uint64_t>{};
 
-  int stuffClass = 0;
-  std::vector<Stuff> newStuffs;
+  if (nbOfLoots == 0) {
+    return newStuffs;
+  }
   for (int i = 0; i < nbOfLoots; i++) {
     const auto randProba = get_random_nb(0, 100);
     // Assess the rank of the loot
@@ -990,6 +993,11 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
             bonus->get_value();
       }
     }
+    const auto armurBonus = (stuffClass < BossClass::ARMOR.size())
+                                ? BossClass::ARMOR[stuffClass]
+                                : BossClass::ARMOR[BossClass::ARMOR.size() - 1];
+    stuff.m_Stats.m_AllStatsTable[STATS_ARM_MAG].m_BufEquipValue += armurBonus;
+    stuff.m_Stats.m_AllStatsTable[STATS_ARM_PHY].m_BufEquipValue += armurBonus;
 
     newStuffs.push_back(stuff);
   }
