@@ -10,15 +10,15 @@
 #include <QMessageBox>
 
 #include "character.h"
-#include <Application.h>
 #include "effectview.h"
+#include <Application.h>
 
 EditAttakView::EditAttakView(QWidget *parent)
     : QWidget(parent), ui(new Ui::EditAttakView) {
   ui->setupUi(this);
 
-    connect(ui->effect_widget, &EffectView::SigTableUpdated, this,
-            &EditAttakView::UpdateEffectOn);
+  connect(ui->effect_widget, &EffectView::SigTableUpdated, this,
+          &EditAttakView::UpdateEffectOn);
 }
 
 EditAttakView::~EditAttakView() { delete ui; }
@@ -58,7 +58,7 @@ void EditAttakView::InitView() {
 
   // Update view
   if (!m_AttakList.empty()) {
-      const int firstIdx = 0;
+    const int firstIdx = 0;
     ui->atk_list_view->setCurrentIndex(model->index(firstIdx));
     // send index of atk to update effect table
     ui->effect_widget->SetVectorSize(m_AttakList.size());
@@ -74,21 +74,21 @@ void EditAttakView::InitView() {
 
 void EditAttakView::InitDefaultView() {
 
-    // Create model
-    auto *model = new QStringListModel(this);
-    // Make data
-    QStringList List;
-    // Init List and m_AttakList
-    m_AttakList.clear();
+  // Create model
+  auto *model = new QStringListModel(this);
+  // Make data
+  QStringList List;
+  // Init List and m_AttakList
+  m_AttakList.clear();
 
-    // Populate our model
-    model->setStringList(List);
+  // Populate our model
+  model->setStringList(List);
 
-    // Glue model and view together
-    ui->atk_list_view->setModel(model);
+  // Glue model and view together
+  ui->atk_list_view->setModel(model);
 
-    EnableAllWidgets(false);
-    ui->apply_button->setEnabled(false);
+  EnableAllWidgets(false);
+  ui->apply_button->setEnabled(false);
 }
 
 void EditAttakView::on_apply_button_clicked() { Apply(); }
@@ -101,14 +101,18 @@ void EditAttakView::Apply() {
   // we have to copy the followings ones after applying.
   std::vector<effectParam> tmpTable;
   const int MAX_CUR_EFFECTS = 3;
-  if(m_AttakList[GetIndexSelectedRow()].type.m_AllEffects.size() > MAX_CUR_EFFECTS){
-      for(int i = MAX_CUR_EFFECTS; i < m_AttakList[GetIndexSelectedRow()].type.m_AllEffects.size(); i++){
-          tmpTable.push_back(m_AttakList[GetIndexSelectedRow()].type.m_AllEffects[i]);
-      }
+  if (m_AttakList[GetIndexSelectedRow()].type.m_AllEffects.size() >
+      MAX_CUR_EFFECTS) {
+    for (int i = MAX_CUR_EFFECTS;
+         i < m_AttakList[GetIndexSelectedRow()].type.m_AllEffects.size(); i++) {
+      tmpTable.push_back(
+          m_AttakList[GetIndexSelectedRow()].type.m_AllEffects[i]);
+    }
   }
-  m_AttakList[GetIndexSelectedRow()].type.m_AllEffects = ui->effect_widget->GetTable();
-  for(const auto& atk : tmpTable){
-      m_AttakList[GetIndexSelectedRow()].type.m_AllEffects.push_back(atk);
+  m_AttakList[GetIndexSelectedRow()].type.m_AllEffects =
+      ui->effect_widget->GetTable();
+  for (const auto &atk : tmpTable) {
+    m_AttakList[GetIndexSelectedRow()].type.m_AllEffects.push_back(atk);
   }
 }
 
@@ -217,7 +221,7 @@ void EditAttakView::InitComboBoxes() {
     ui->reach_comboBox->addItem(reach);
   }
   for (const auto &form : ALL_FORMS) {
-      ui->form_comboBox->addItem(form);
+    ui->form_comboBox->addItem(form);
   }
   // List all attak png string and add them to photo_comboBox
   QString directoryPath = OFFLINE_IMG; // Replace with the actual path
@@ -242,7 +246,8 @@ void EditAttakView::InitComboBoxes() {
           &EditAttakView::on_form_comboBox_currentTextChanged);
 }
 
-void EditAttakView::UpdateValues(const EditAttak &selectedAttak, const int index) {
+void EditAttakView::UpdateValues(const EditAttak &selectedAttak,
+                                 const int index) {
   ui->target_comboBox->setCurrentText(selectedAttak.type.target);
   ui->reach_comboBox->setCurrentText(selectedAttak.type.reach);
   ui->form_comboBox->setCurrentText(selectedAttak.type.form);
@@ -268,9 +273,7 @@ void EditAttakView::EnableAllWidgets(const bool value) const {
   }
 }
 
-void EditAttakView::UpdateEffectOn(){
-    ui->apply_button->setEnabled(true);
-}
+void EditAttakView::UpdateEffectOn() { ui->apply_button->setEnabled(true); }
 
 void EditAttakView::on_atk_list_view_clicked(const QModelIndex &index) {
   const int idx = index.row();
@@ -287,7 +290,6 @@ void EditAttakView::on_atk_list_view_clicked(const QModelIndex &index) {
 
   // disable apply button
   ui->apply_button->setEnabled(false);
-
 }
 
 void EditAttakView::on_new_atk_button_clicked() {
@@ -302,7 +304,7 @@ void EditAttakView::on_new_atk_button_clicked() {
   // update m_AttakList
   m_AttakList.push_back(EditAttak());
   m_AttakList.back().updated = true;
-  UpdateValues(m_AttakList.back(),ui->atk_list_view->model()->rowCount() - 1);
+  UpdateValues(m_AttakList.back(), ui->atk_list_view->model()->rowCount() - 1);
 
   EnableAllWidgets(true);
   if (ui->atk_list_view->model()->rowCount() == 1) {
@@ -319,7 +321,8 @@ void EditAttakView::on_photo_comboBox_currentTextChanged(const QString &arg1) {
   auto qp = QPixmap(OFFLINE_IMG + arg1);
 
   // Resize the photo
-  QPixmap scaledPixmap = qp.scaledToHeight(300); // Set the desired width and height
+  QPixmap scaledPixmap =
+      qp.scaledToHeight(300); // Set the desired width and height
 
   ui->img_char->setPixmap(scaledPixmap);
   OnValueChange(GetIndexSelectedRow());
@@ -363,9 +366,8 @@ void EditAttakView::on_level_spinBox_valueChanged(int arg1) {
   m_AttakList[GetIndexSelectedRow()].type.level = static_cast<uint8_t>(arg1);
 }
 
-void EditAttakView::on_form_comboBox_currentTextChanged(const QString &arg1)
-{
-    OnValueChange(GetIndexSelectedRow());
-    m_AttakList[GetIndexSelectedRow()].type.form = arg1;
+void EditAttakView::on_form_comboBox_currentTextChanged(const QString &arg1) {
+  OnValueChange(GetIndexSelectedRow());
+  m_AttakList[GetIndexSelectedRow()].type.form = arg1;
 }
 // end form layout changed

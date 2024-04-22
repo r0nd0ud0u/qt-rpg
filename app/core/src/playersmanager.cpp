@@ -15,7 +15,6 @@
 
 #include "utils.h"
 #include <fstream>
-#include <iostream>
 
 void PlayersManager::InitHeroes() {
 
@@ -934,25 +933,26 @@ void PlayersManager::ResetIsFirstRound() const {
 }
 
 std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
-  int64_t rank = 0;
+  uint64_t rank = 0;
   int stuffClass = 0;
   std::vector<Stuff> newStuffs;
-  for (auto *boss : m_AllBossesList) {
+  for (const auto *boss : m_AllBossesList) {
     if (boss != nullptr && name == boss->m_Name) {
       rank = boss->m_BossClass.m_Rank;
       break;
     }
   }
   const auto nbOfLoots = rank;
-  const auto probaLoot = (rank < BossClass::PROBA_LOOTS.size())
-                             ? BossClass::PROBA_LOOTS.at(rank)
-                             : std::vector<uint64_t>{};
+  const auto probaLoot =
+      (rank < static_cast<uint64_t>(BossClass::PROBA_LOOTS.size()))
+          ? BossClass::PROBA_LOOTS.at(rank)
+          : std::vector<uint64_t>{};
 
   if (nbOfLoots == 0) {
     return newStuffs;
   }
   for (int i = 0; i < nbOfLoots; i++) {
-    const auto randProba = get_random_nb(0, 100);
+    const auto randProba = static_cast<uint64_t>(get_random_nb(0, 100));
     // Assess the rank of the loot
     for (int j = 0; j < probaLoot.size() - 1; j++) {
       if (randProba >= probaLoot[j] && randProba < probaLoot[j + 1]) {
@@ -965,7 +965,7 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
     Stuff stuff;
     // add name
     const auto randEquipType = get_random_nb(0, RAND_EQUIP_ON_BODY.size() - 1);
-    const auto equipType = RAND_EQUIP_ON_BODY.at(randEquipType);
+    const auto &equipType = RAND_EQUIP_ON_BODY.at(randEquipType);
     const auto indexEquipName =
         get_random_nb(0, m_RandomEquipName[equipType].size() - 1);
     stuff.m_UniqueName =
@@ -983,7 +983,7 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
 
     for (int k = 0; k < nbOfEffets; k++) {
       const auto index = get_random_nb(0, BossClass::BONUS_STAT_STR.size() - 1);
-      const auto stat = BossClass::BONUS_STAT_STR.at(index);
+      const auto &stat = BossClass::BONUS_STAT_STR.at(index);
       const auto *bonus = BossClass::BONUS_LIST.at(stat).at(stuffClass - 1);
       if (bonus->get_is_percent()) {
         stuff.m_Stats.m_AllStatsTable[stat].m_BufEquipPercent =
