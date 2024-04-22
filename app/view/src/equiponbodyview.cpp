@@ -10,12 +10,12 @@ EquipOnBodyView::EquipOnBodyView(QWidget *parent)
 }
 
 EquipOnBodyView::~EquipOnBodyView() {
-    for (auto *it : m_PanelList) {
-        delete it;
-        it = nullptr;
-    }
-    m_PanelList.clear();
-    delete ui;
+  for (auto *it : m_PanelList) {
+    delete it;
+    it = nullptr;
+  }
+  m_PanelList.clear();
+  delete ui;
 }
 
 void EquipOnBodyView::InitEditEquipment() {
@@ -37,26 +37,29 @@ void EquipOnBodyView::InitEditEquipment() {
 void EquipOnBodyView::AddItemInComboBox(const EditStuff &es) const {
   for (const auto &panel : m_PanelList) {
     if (panel->m_BodyName == es.m_BodyPart) {
-      panel->AddItemInComboBox(es.m_Name);
+      const auto name = (es.m_Stuff.m_UniqueName.isEmpty())
+                            ? es.m_Name
+                            : es.m_Stuff.m_UniqueName;
+      panel->AddItemInComboBox(name);
       break;
     }
   }
 }
 
 // Init the view with the selected hero or boss
-void EquipOnBodyView::InitView(Character *player) const{
+void EquipOnBodyView::InitView(Character *player) const {
   if (player == nullptr) {
     return;
   }
   for (const auto &panel : m_PanelList) {
     if (player->m_WearingEquipment.count(panel->m_BodyName) > 0) {
-          panel->SetValue(player->m_WearingEquipment.at(panel->m_BodyName).m_Name);
+      panel->SetValue(player->m_WearingEquipment.at(panel->m_BodyName).m_Name);
     }
   }
 }
 
 std::unordered_map<QString, QString>
-EquipOnBodyView::GetCurrentEquipmentTable() const{
+EquipOnBodyView::GetCurrentEquipmentTable() const {
   std::unordered_map<QString, QString> output;
   for (const auto &panel : m_PanelList) {
     if (!panel->m_Equipment.isEmpty()) {

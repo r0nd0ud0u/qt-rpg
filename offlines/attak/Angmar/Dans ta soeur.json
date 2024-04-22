@@ -6,21 +6,21 @@
     "Effet": [
         {
             "Cible": "Ennemie",
-            "Portée": "Zone",
+            "Portée": "Individuel",
             "Stat": "PV",
             "Tours actifs": 1,
-            "Type": "Changement par %",
+            "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": -40
+            "Value": -75
         },
         {
             "Cible": "Ennemie",
-            "Portée": "Zone",
-            "Stat": "Esquive",
-            "Tours actifs": 4,
-            "Type": "Up par valeur",
+            "Portée": "Individuel",
+            "Stat": "",
+            "Tours actifs": 2,
+            "Type": "Up/down degats en %",
             "Valeur de l'effet": 0,
-            "Value": -20
+            "Value": 300
         },
         {
             "Cible": "",
@@ -33,9 +33,9 @@
         }
     ],
     "Forme": "Standard",
-    "Niveau": 1,
-    "Nom": "fais un bisou à mémé",
+    "Niveau": 6,
+    "Nom": "Dans ta soeur",
     "Photo": "default.png",
-    "Portée": "Zone"
+    "Portée": "Individuel"
 }
 

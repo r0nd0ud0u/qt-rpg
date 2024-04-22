@@ -1,14 +1,6 @@
 #include "stuffsview.h"
 #include "ui_stuffsview.h"
 
-#include <QDir>
-#include <QFile>
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
-
-#include <QMessageBox>
-
 StuffsView::StuffsView(QWidget *parent)
     : QWidget(parent), ui(new Ui::StuffsView) {
   ui->setupUi(this);
@@ -38,11 +30,6 @@ void StuffsView::InitEditStuffsView() {
 }
 
 EditStuff StuffsView::Save() {
-  QFile file;
-  QDir logDir;
-  QString path = OFFLINE_ROOT_EQUIPMENT;
-  logDir.mkpath(path);
-
   // prepare result
   EditStuff editStuff;
   editStuff.m_Name = ui->name_textEdit->toPlainText();
@@ -66,47 +53,7 @@ EditStuff StuffsView::Save() {
   m_EditStuffList.clear();
   m_EditStuffList.push_back(editStuff);
 
-  for (const auto &es : m_EditStuffList) {
-    // init json doc
-    QJsonObject obj;
-
-    obj.insert(EQUIP_NAME, es.m_Name);
-    obj.insert(EQUIP_CATEGORY, ui->body_comboBox->currentText());
-    for (const auto &stats : ALL_STATS) {
-      if (es.m_Stuff.m_Stats.m_AllStatsTable.count(stats) == 0) {
-        continue;
-      }
-      const auto &equipStats = es.m_Stuff.m_Stats.m_AllStatsTable.at(stats);
-      QJsonObject item;
-      QJsonArray jsonArray;
-      obj.insert(stats, equipStats.m_CurrentValue);
-      item["percent"] = equipStats.m_BufEquipPercent;
-      item["value"] = equipStats.m_BufEquipValue;
-      jsonArray.append(item);
-      if (!jsonArray.empty()) {
-        obj[stats] = jsonArray;
-      }
-    }
-
-    // output json
-    QJsonDocument doc(obj);
-    QString logFilePath = logDir.filePath(
-        path + ui->body_comboBox->currentText() + "\\" + es.m_Name + ".json");
-    file.setFileName(logFilePath);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-      QMessageBox::information(
-          nullptr, tr("Error log file"),
-          tr("Log file could not be created at %1. No log will be produced.")
-              .arg(logFilePath));
-    }
-    QTextStream out(&file);
-#if QT_VERSION_MAJOR == 6
-    out.setEncoding(QStringConverter::Encoding::Utf8);
-#else
-    out.setCodec("UTF-8");
-#endif
-    out << doc.toJson() << "\n";
-  }
+  EditStuff::SaveStuffInJson(editStuff, ui->body_comboBox->currentText());
 
   // clean edit stuff view after one save
   ui->name_textEdit->setText("");

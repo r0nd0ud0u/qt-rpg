@@ -42,12 +42,12 @@ QAbstractItemModel *StatsView::createStatsModel(QObject *parent) {
   // define curplayername
   m_CurPlayerName = selectedHero->m_Name;
 
+  const auto &statsTable = selectedHero->m_Stats.m_AllStatsTable;
   for (const auto &stat : ALL_STATS) {
     if (stat.isEmpty()) {
       continue;
     }
-    addStatRow(model, stat,
-               selectedHero->m_Stats.m_AllStatsTable.at(stat).m_CurrentValue);
+    addStatRow(model, stat, statsTable.at(stat).m_CurrentValue);
   }
 
   return model;

@@ -12,10 +12,14 @@
 #include "common.h"
 #include "effect.h"
 #include "stuff.h"
+#include "bossclass.h"
 
 #include "rust-rpg-bridge/attaque.h"
 #include "rust-rpg-bridge/character.h"
 #include "rust-rpg-bridge/powers.h"
+
+// forward declaration
+class GameAtkEffects;
 
 enum class characType { Hero, Boss };
 
@@ -32,6 +36,8 @@ public:
   std::vector<effectParam> m_AllEffects = {};
   QString form = STANDARD_FORM;
   AttaqueNature nature;
+
+  static constexpr double COEFF_CRIT_STATS = 1.5;
 };
 
 enum class InventoryType { healthPotion, manaPotion, enumSize };
@@ -59,7 +65,7 @@ public:
   void AddAtq(const AttaqueType &atq);
   void LoadAtkJson();
   void LoadStuffJson();
-  void ApplyEquipOnStats();
+  void ApplyEquipOnStats(const std::vector<GameAtkEffects>& allGae);
   bool CanBeLaunched(const AttaqueType &atk) const;
 
   // Effect
@@ -85,7 +91,7 @@ public:
   void AddExp(const int newXp);
   void SetEquipment(const std::unordered_map<QString, QString> &);
   void UpdateEquipmentOnJson() const;
-  void ApplyEffeftOnStats(const bool updateEffect);
+  void ApplyEffeftOnStats(const bool updateEffect, const std::vector<GameAtkEffects>& allGae);
   std::pair<bool, int>
   ProcessCriticalStrike(const AttaqueType &atk); // return isCrit, random number
   void ResetBuf(const BufTypes &bufType);
@@ -119,6 +125,8 @@ public:
   std::vector<std::unordered_map<uint64_t, uint64_t>> m_LastTxRx;
   Powers m_Power;
   ExtendedCharacter *m_ExtCharacter = nullptr;
+  BossClass m_BossClass;
+
 
 private:
   static void ProcessAddEquip(StatsType &charStat, const StatsType &equipStat);
@@ -143,7 +151,7 @@ private:
   std::pair<QString, int> ProcessEffectType(
       effectParam &effect, Character *target,
       const AttaqueType &atk); // pair1 output log, pair2 nbOfApplies
-  QString ProcessAggro(const int atkValue);
+  QString ProcessAggro(const int atkValue, const int aggroValue);
   void UpdateStatsToNextLevel();
   void UpdateBuf(const BufTypes &bufType, const int value, const bool isPercent,
                  const QString &stat);

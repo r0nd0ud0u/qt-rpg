@@ -11,6 +11,7 @@ const QString OFFLINE_IMG = "./offlines/attak/img/";
 const QString OFFLINE_ATK = "./offlines/attak/";
 const QString OFFLINE_WEARING_EQUIPMENT = "./offlines/equipment/Personnages/";
 const QString OFFLINE_ROOT_EQUIPMENT = "./offlines/equipment/corps/";
+const QString OFFLINE_RAND_NAME_STUFF = "./offlines/equipment/random/";
 
 // json keys
 // ATK keys
@@ -75,6 +76,7 @@ const QString STATS_REGEN_MANA = "Regeneration Mana";
 const QString STATS_REGEN_VIGOR = "Regeneration vigueur";
 const QString STATS_RATE_BERSECK = "Taux rage";
 const QString STATS_RATE_AGGRO = "Taux aggro";
+const QString STATS_REGEN_SPEED = "Regen vitesse";
 
 const std::set<QString> ALL_STATS = {"",
                                      STATS_HP,
@@ -93,7 +95,8 @@ const std::set<QString> ALL_STATS = {"",
                                      STATS_REGEN_MANA,
                                      STATS_REGEN_VIGOR,
                                      STATS_RATE_BERSECK,
-                                     STATS_RATE_AGGRO};
+                                     STATS_RATE_AGGRO,
+                                     STATS_REGEN_SPEED};
 const std::set<QString> ON_PERCENT_STATS = {STATS_MANA, STATS_VIGOR};
 const std::set<QString> STATS_TO_LEVEL_UP = {STATS_HP, STATS_MANA, STATS_VIGOR,
                                              STATS_POW_PHY, STATS_POW_MAG};
@@ -106,6 +109,7 @@ const QString EQUIP_SHOES = "Chaussures";
 const QString EQUIP_ARM = "Bras";
 const QString EQUIP_RING = "Anneau";
 const QString EQUIP_NAME = "Nom";
+const QString EQUIP_UNIQUE_NAME = "Nom unique";
 const QString EQUIP_RIGHT_WEAPON = "Arme gauche";
 const QString EQUIP_LEFT_WEAPON = "Arme droite";
 const QString EQUIP_CATEGORY = "Categorie";
@@ -139,6 +143,17 @@ const std::set<QString> ALL_EQUIP_ON_BODY{"",
                                           EQUIP_RUNIQUE_TATOO_1,
                                           EQUIP_RUNIQUE_TATOO_2,
                                           EQUIP_RUNIQUE_TATOO_3};
+const std::vector<QString> RAND_EQUIP_ON_BODY{
+                                          EQUIP_HEAD,
+                                          EQUIP_NECKLACE,
+                                          EQUIP_CHEST,
+                                          EQUIP_SHOES,
+                                          EQUIP_ARM,
+                                          EQUIP_RING,
+                                          EQUIP_PANTS,
+                                          EQUIP_RIGHT_WEAPON,
+                                          EQUIP_LEFT_WEAPON,
+                                          };
 // Effect keys
 const QString EFFECT_REINIT = "Reinit";
 const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";
@@ -156,18 +171,30 @@ const QString EFFECT_BOOSTED_BY_HOTS =
 const QString EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT = "Up/down degats en %";
 // Assess the nob of applies for a stat
 const QString EFFECT_REPEAT_AS_MANY_AS = "Répète tant que possible";
-const QString CONDITION_ENNEMIES_DIED = "Ennemis morts tours précédents";
-// Effect to improve max value of a stat by percent (current value is updated by ratio)
+// Effect to improve max value of a stat by percent (current value is updated by
+// ratio)
 const QString EFFECT_IMPROVE_BY_PERCENT_CHANGE = "Up par %";
-// Effect to improve max value of a stat by value (current value is updated by ratio)
+// Effect to improve max value of a stat by value (current value is updated by
+// ratio)
 const QString EFFECT_IMPROVEMENT_STAT_BY_VALUE = "Up par valeur";
 const QString EFFECT_NEXT_HEAL_IS_CRIT = "Prochaine attaque heal est crit";
-const QString EFFECT_BUF_MULTI =
-    "Buf multi";
+const QString EFFECT_BUF_MULTI = "Buf multi";
 const QString EFFECT_BLOCK_HEAL_ATK = "Bloque attaque de soin";
+// Conditions on effect
+// Atk is enable if damages are been tx during previous turn
+const QString EFFECT_COND_DMG_PREV_TURN =
+    "Active effet si Dégâts au tour précédent";
+// Condition on atk
+// Atk is enable if damages are been tx during previous turn
 const QString CONDITION_DMG_PREV_TURN = "Dégâts au tour précédent";
-const QString EFFECT_REPEAT_IF_HEAL = "Répète l'attaque(en % de chance) après heal tour prec.";
-const QString EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL = "Buf par valeur d'autant de PV";
+const QString CONDITION_ENNEMIES_DIED = "Ennemis morts tours précédents";
+const QString EFFECT_REPEAT_IF_HEAL =
+    "Répète l'attaque(en % de chance) après heal tour prec.";
+const QString EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL =
+    "Buf par valeur d'autant de PV";
+// Effect to modify the regen rate of stats such as vigor, mana, speed, hp,
+// berseck by value.
+const QString EFFECT_UPDATE_TURN_RATE = "Update regen par valeur";
 const std::set<QString> EFFECTS{"",
                                 EFFECT_REINIT,
                                 EFFECT_NB_COOL_DOWN,
@@ -188,7 +215,9 @@ const std::set<QString> EFFECTS{"",
                                 EFFECT_BLOCK_HEAL_ATK,
                                 CONDITION_DMG_PREV_TURN,
                                 EFFECT_REPEAT_IF_HEAL,
-                                EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL,};
+                                EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL,
+                                EFFECT_UPDATE_TURN_RATE,
+                                EFFECT_COND_DMG_PREV_TURN};
 const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_NB_DECREASE_BY_TURN,
     EFFECT_NB_COOL_DOWN,
@@ -204,12 +233,9 @@ const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_BUF_MULTI,
     EFFECT_BLOCK_HEAL_ATK,
     EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL,
-};
-const std::set<QString> EFFECTS_HOT_OR_DOT = {
-    EFFECT_VALUE_CHANGE,
-    EFFECT_REPEAT_AS_MANY_AS
-}
-;
+    EFFECT_UPDATE_TURN_RATE};
+const std::set<QString> EFFECTS_HOT_OR_DOT = {EFFECT_VALUE_CHANGE,
+                                              EFFECT_REPEAT_AS_MANY_AS};
 const QString EFFECT_ARRAY = "Effet";
 const QString EFFECT_TYPE = "Type";
 const QString EFFECT_VALUE = "Value";
@@ -229,27 +255,21 @@ class StatsType {
 public:
   StatsType() = default; // Default constructor
   explicit StatsType(QString type) : m_Type(type) {}
-  int m_CurrentValue;
-  int m_StartingValue;
-  int m_MaxValue;
-  int m_RegenOnTurn;
-  int m_BaseEquipValue;
-  int m_RawMaxValue;
+  int m_CurrentValue = 0;
+  int m_StartingValue = 0;
+  int m_MaxValue = 0;
+  int m_RegenOnTurn = 0;
+  int m_BaseEquipValue = 0;
+  int m_RawMaxValue = 0;
   QString m_Type;
-  int m_BufEffectValue;
-  int m_BufEffectPercent;
-  int m_BufEquipValue;
-  int m_BufEquipPercent;
+  int m_BufEffectValue = 0;
+  int m_BufEffectPercent = 0;
+  int m_BufEquipValue = 0;
+  int m_BufEquipPercent = 0;
   void InitValues(int starting, int current, int max, int regen) {
     m_CurrentValue = current;
     m_MaxValue = max;
-    m_BufEffectPercent = 0;
-    m_BufEquipPercent = 0;
-    m_BaseEquipValue = 0;
-    m_BufEquipValue = 0;
-    m_BufEffectValue = 0;
     m_RawMaxValue = max;
-
     m_RegenOnTurn = regen;
     // not processed ?
     m_StartingValue = starting;

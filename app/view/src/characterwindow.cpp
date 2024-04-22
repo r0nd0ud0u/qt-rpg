@@ -85,7 +85,7 @@ void CharacterWindow::Apply(){
         if (auto *ch = pm->m_SelectedHero; ch != nullptr) {
             const auto &table = ui->use_stuff_view->GetCurrentEquipmentTable();
             ch->SetEquipment(table);
-            ch->ApplyEquipOnStats();
+            ch->ApplyEquipOnStats(pm->m_AllEffectsOnGame[ch->m_Name]);
             ch->UpdateEquipmentOnJson();
             emit SigUseNewStuff(ch->m_Name);
         }
@@ -96,4 +96,10 @@ void CharacterWindow::Apply(){
 void CharacterWindow::on_tabWidget_currentChanged(int index) {
   ApplicationView::GetInstance().GetCharacterWindow()->InitWindow(
       static_cast<tabType>(index), false);
+}
+
+void CharacterWindow::UpdateView(const std::vector<EditStuff>& esTable){
+    for(const auto & es : esTable){
+       ui->use_stuff_view->AddItemInComboBox(es);
+    }
 }
