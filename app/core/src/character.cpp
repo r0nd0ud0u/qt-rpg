@@ -511,8 +511,7 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
   // update effect value
   // keep the calcultated value for the HOT or DOT
   const auto gs = Application::GetInstance().m_GameManager->m_GameState;
-  if (effect.statsName == STATS_HP && effect.effect == EFFECT_VALUE_CHANGE ||
-      effect.effect == EFFECT_PERCENT_CHANGE) {
+  if (effect.statsName == STATS_HP && EFFECTS_HOT_OR_DOT.count(effect.effect) > 0) {
     effect.value = trueAmount;
     // case 0 is not saved in m_LastTxRx
     if (trueAmount > 0) {
