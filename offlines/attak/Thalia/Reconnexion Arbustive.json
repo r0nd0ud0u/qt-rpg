@@ -20,7 +20,7 @@
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "PV",
-            "Tours actifs": 4,
+            "Tours actifs": 5,
             "Type": "% (stats) en dégâts",
             "Valeur de l'effet": 50,
             "Value": 0
@@ -29,7 +29,7 @@
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "",
-            "Tours actifs": 5,
+            "Tours actifs": 6,
             "Type": "Tours de recharge",
             "Valeur de l'effet": 0,
             "Value": 0

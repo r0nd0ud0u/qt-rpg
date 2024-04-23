@@ -11,11 +11,20 @@
             "Cible": "Allié",
             "Portée": "Individuel",
             "Stat": "PV",
-            "Tours actifs": 3,
+            "Tours actifs": 5,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 20
-        }
+            "Value": 20	
+        },
+		{
+			"Cible": "Allié",
+            "Portée": "Individuel",
+            "Stat": "Regen vitesse",
+            "Tours actifs": 5,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 10		
+		}	
     ],
     "Forme": "Ent",
     "Niveau": 1,
