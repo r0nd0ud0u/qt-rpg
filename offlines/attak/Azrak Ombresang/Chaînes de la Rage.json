@@ -1,6 +1,6 @@
 {
     "Cible": "Ennemie",
-    "Coût de mana": 12,
+    "Coût de mana": 15,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Effet": [
@@ -11,7 +11,7 @@
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": -40
+            "Value": -80
         },
         {
             "Cible": "Ennemie",
