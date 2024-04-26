@@ -278,6 +278,7 @@ void PlayersManager::InitBosses() {
   boss4->m_BossClass.m_Rank = 4;
   boss4->m_Forms.push_back(STANDARD_FORM);
 
+  // Angmar 10 PV
   stats.m_AllStatsTable[STATS_HP].InitValues(10, 10, 10, 0);
   stats.m_AllStatsTable[STATS_MANA].InitValues(9999, 9999, 9999, 9999);
   stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
@@ -301,6 +302,31 @@ void PlayersManager::InitBosses() {
   boss5->m_BossClass.m_Rank = 4;
   m_AllBossesList.push_back(boss5);
   boss5->m_Forms.push_back(STANDARD_FORM);
+
+  // Carcaroth
+  stats.m_AllStatsTable[STATS_HP].InitValues(84000, 84000, 84000, 0);
+  stats.m_AllStatsTable[STATS_MANA].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_VIGOR].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_POW_PHY].InitValues(100, 100, 100, 0);
+  stats.m_AllStatsTable[STATS_POW_MAG].InitValues(100, 100, 100, 0);
+  stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_SPEED].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_CRIT].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_DODGE].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_MANA].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_VIGOR].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(0, 0, 0, 0);
+  const auto boss6 = new Character("Carcaroth", characType::Boss, stats);
+  boss6->color = QColor("red");
+  boss6->m_BossClass.m_Rank = 4;
+  m_AllBossesList.push_back(boss6);
+  boss6->m_Forms.push_back(STANDARD_FORM);
 
   for (const auto &boss : m_AllBossesList) {
     boss->LoadAtkJson();

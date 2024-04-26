@@ -418,8 +418,9 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   // end of activated bufs during turn
   activatedPlayer->ResetBuf(BufTypes::damageCritCapped);
   activatedPlayer->ResetBuf(BufTypes::multiValue);
+  int a = activatedPlayer->m_AllBufs[static_cast<int>(BufTypes::applyEffectInit)]->get_value();
   activatedPlayer->ResetBuf(BufTypes::applyEffectInit);
-
+  a = activatedPlayer->m_AllBufs[static_cast<int>(BufTypes::applyEffectInit)]->get_value();
   /// Update game state
   // update effect on player manager
   for (const auto &[targetName, epTable] : newEffects) {

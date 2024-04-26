@@ -2,7 +2,7 @@
     "Cible": "Ennemie",
     "Coût de mana": 0,
     "Coût de rage": 0,
-    "Coût de vigueur": 0,
+    "Coût de vigueur": 1,
     "Effet": [
         {
             "Cible": "Ennemie",
@@ -11,49 +11,57 @@
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": -55
+            "Value": -50
         },
         {
             "Cible": "Soi-même",
             "Portée": "Individuel",
-            "Stat": "PV",
-            "Tours actifs": 1,
-            "Type": "Changement par %",
+            "Stat": "Armure magique",
+            "Tours actifs": 50,
+            "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": -30
+            "Value": 50
         },
         {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Armure physique",
+            "Tours actifs": 50,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 50
+        },
+         {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Cout critique",
+            "Tours actifs": 50,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 7
+        },
+         {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Regen vitesse",
+            "Tours actifs": 50,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 10
+        },
+         {
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "Esquive",
-            "Tours actifs": 2,
+            "Tours actifs": 50,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": -10
-        },
-        {
-            "Cible": "Soi-même",
-            "Portée": "Individuel",
-            "Stat": "Rage",
-            "Tours actifs": 1,
-            "Type": "Changement par valeur",
-            "Valeur de l'effet": 0,
-            "Value": 45
-        },
-        {
-            "Cible": "Soi-même",
-            "Portée": "Individuel",
-            "Stat": "",
-            "Tours actifs": 5,
-            "Type": "Tours de recharge",
-            "Valeur de l'effet": 0,
-            "Value": 0
+            "Value": 5
         }
     ],
     "Forme": "Standard",
-    "Niveau": 8,
-    "Nom": "Folie des profondeurs de la Moria",
+    "Niveau": 5,
+    "Nom": "5",
     "Photo": "default.png",
     "Portée": "Individuel"
 }
-

@@ -1007,7 +1007,8 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
   const auto *gs = Application::GetInstance().m_GameManager->m_GameState;
 
   QString output;
-  int nbOfApplies = 1; // default value 1 for the nominal case
+  int nbOfApplies = 1; // default value 1 for the nominal case;
+  int a = m_AllBufs[static_cast<int>(BufTypes::applyEffectInit)]->get_value();
   if (m_AllBufs[static_cast<int>(BufTypes::applyEffectInit)]->get_value() > 0) {
     nbOfApplies = static_cast<int>(
         m_AllBufs[static_cast<int>(BufTypes::applyEffectInit)]->get_value());
