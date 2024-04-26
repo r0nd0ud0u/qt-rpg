@@ -8,7 +8,7 @@
     "Dégâts": 0,
     "Effet": [
         {
-            "Cible": "Allié",
+            "Cible": "Tous les heroes",
             "Portée": "Zone",
             "Stat": "PV",
             "Tours actifs": 5,
@@ -17,7 +17,7 @@
             "Value": 25
         },
         {
-            "Cible": "Allié",
+            "Cible": "Tous les heroes",
             "Portée": "Zone",
             "Stat": "Regeneration Mana",
             "Tours actifs": 5,
@@ -26,7 +26,7 @@
             "Value": 2
         },
         {
-            "Cible": "Allié",
+            "Cible": "Tous les heroes",
             "Portée": "Zone",
             "Stat": "Esquive",
             "Tours actifs": 5,

@@ -144,16 +144,10 @@ const std::set<QString> ALL_EQUIP_ON_BODY{"",
                                           EQUIP_RUNIQUE_TATOO_2,
                                           EQUIP_RUNIQUE_TATOO_3};
 const std::vector<QString> RAND_EQUIP_ON_BODY{
-                                          EQUIP_HEAD,
-                                          EQUIP_NECKLACE,
-                                          EQUIP_CHEST,
-                                          EQUIP_SHOES,
-                                          EQUIP_ARM,
-                                          EQUIP_RING,
-                                          EQUIP_PANTS,
-                                          EQUIP_RIGHT_WEAPON,
-                                          EQUIP_LEFT_WEAPON,
-                                          };
+    EQUIP_HEAD,  EQUIP_NECKLACE,     EQUIP_CHEST,
+    EQUIP_SHOES, EQUIP_ARM,          EQUIP_RING,
+    EQUIP_PANTS, EQUIP_RIGHT_WEAPON, EQUIP_LEFT_WEAPON,
+};
 // Effect keys
 const QString EFFECT_REINIT = "Reinit";
 const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";
@@ -234,8 +228,9 @@ const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_BLOCK_HEAL_ATK,
     EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL,
     EFFECT_UPDATE_TURN_RATE};
-const std::set<QString> EFFECTS_HOT_OR_DOT = {EFFECT_VALUE_CHANGE,
-                                              EFFECT_REPEAT_AS_MANY_AS};
+const std::set<QString> EFFECTS_HOT_OR_DOT = {
+    EFFECT_VALUE_CHANGE, EFFECT_REPEAT_AS_MANY_AS, EFFECT_PERCENT_CHANGE,
+    EFFECT_NB_DECREASE_ON_TURN};
 const QString EFFECT_ARRAY = "Effet";
 const QString EFFECT_TYPE = "Type";
 const QString EFFECT_VALUE = "Value";

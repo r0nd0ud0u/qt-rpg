@@ -13,7 +13,7 @@
             "Stat": "PV",
             "Tours actifs": 1,
             "Type": "Ennemis morts tours précédents",
-            "Valeur de l'effet": 10,
+            "Valeur de l'effet": 20,
             "Value": 0
         },
         {
@@ -22,7 +22,7 @@
             "Stat": "Mana",
             "Tours actifs": 1,
             "Type": "Ennemis morts tours précédents",
-            "Valeur de l'effet": 10,
+            "Valeur de l'effet": 20,
             "Value": 0
         },
         {
@@ -31,9 +31,20 @@
             "Stat": "Vigor",
             "Tours actifs": 1,
             "Type": "Ennemis morts tours précédents",
-            "Valeur de l'effet": 10,
+            "Valeur de l'effet": 20,
             "Value": 0
-        }
+        }, 
+	{
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Up/down degats en %",
+            "Tours actifs": 1,
+            "Type": "Ennemis morts tours précédents",
+            "Valeur de l'effet": 20,
+            "Value": 0
+         },
+
+
     ],
     "Forme": "Standard",
     "Niveau": 10,

@@ -283,7 +283,7 @@ void Character::LoadStuffJson() {
   }
 }
 
-void Character::ApplyEquipOnStats(const std::vector<GameAtkEffects>& allGae) {
+void Character::ApplyEquipOnStats(const std::vector<GameAtkEffects> &allGae) {
 
   for (const auto &[body, stuff] : m_WearingEquipment) {
     if (stuff.m_Name.isEmpty()) {
@@ -297,10 +297,11 @@ void Character::ApplyEquipOnStats(const std::vector<GameAtkEffects>& allGae) {
       }
     }
   }
-  ApplyEffeftOnStats(false,allGae);
+  ApplyEffeftOnStats(false, allGae);
 }
 
-void Character::ApplyEffeftOnStats(const bool updateEffect, const std::vector<GameAtkEffects>& allGae) {
+void Character::ApplyEffeftOnStats(const bool updateEffect,
+                                   const std::vector<GameAtkEffects> &allGae) {
   for (const auto &gae : allGae) {
     if (gae.allAtkEffects.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
       // common init
@@ -461,27 +462,27 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
     result += (berseckAmount > 0) ? QString("recupère +%1 de râge.\n") : "";
   }
   // apply the effect
-  const auto [amount, trueAmount] = ProcessCurrentValueOnEffect(
+  const auto [maxAmountSent, realAmountSent] = ProcessCurrentValueOnEffect(
       effect, nbOfApplies, m_Stats, fromLaunch, target, isCrit);
 
   // TODO should be static and not on target ? pass target by argument
-  result += target->ProcessOutputLogOnEffect(effect, amount, fromLaunch,
-                                             nbOfApplies, atk.name, trueAmount);
+  result += target->ProcessOutputLogOnEffect(
+      effect, maxAmountSent, fromLaunch, nbOfApplies, atk.name, realAmountSent);
   // Apply regen effect turning into damage for all bosses
   // can be processed only after calcul of amount of atk
   if (!reload) {
-    result += RegenIntoDamage(trueAmount, effect.statsName);
+    result += RegenIntoDamage(realAmountSent, effect.statsName);
     // apply buf
     const auto *buf =
         target->m_AllBufs[static_cast<int>(BufTypes::changeByHealValue)];
-    if (trueAmount > 0 && buf != nullptr && buf->get_is_passive_enabled()) {
+    if (realAmountSent > 0 && buf != nullptr && buf->get_is_passive_enabled()) {
       const auto &stats = buf->get_all_stat_name();
       // update of the value of the buffer by trueAmount
       // This way, when effect is removed, the effect can be removed
       std::for_each(stats.begin(), stats.end(), [&](const ::rust::String &str) {
         effectParam ep;
         ep.effect = EFFECT_IMPROVEMENT_STAT_BY_VALUE;
-        ep.value = trueAmount;
+        ep.value = realAmountSent;
         ep.isMagicAtk = true;
         ep.statsName = str.data();
         ep.nbTurns = static_cast<int>(buf->get_value());
@@ -501,7 +502,7 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
       effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
     if (effect.statsName == STATS_HP) {
       // process aggro for the launcher
-      result += ProcessAggro(trueAmount, 0);
+      result += ProcessAggro(realAmountSent, 0);
     } else if (effect.statsName == STATS_AGGRO) {
       // Add aggro to a target
       result += target->ProcessAggro(0, effect.value);
@@ -511,21 +512,21 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
   // update effect value
   // keep the calcultated value for the HOT or DOT
   const auto gs = Application::GetInstance().m_GameManager->m_GameState;
-  if (effect.statsName == STATS_HP && effect.effect == EFFECT_VALUE_CHANGE ||
-      effect.effect == EFFECT_PERCENT_CHANGE) {
-    effect.value = trueAmount;
+  if (effect.statsName == STATS_HP &&
+      EFFECTS_HOT_OR_DOT.count(effect.effect) > 0) {
+    effect.value = maxAmountSent;
     // case 0 is not saved in m_LastTxRx
-    if (trueAmount > 0) {
+    if (realAmountSent > 0) {
       target->m_LastTxRx[static_cast<int>(amountType::healRx)]
-                        [gs->m_CurrentTurnNb] += trueAmount;
+                        [gs->m_CurrentTurnNb] += realAmountSent;
       m_LastTxRx[static_cast<int>(amountType::healTx)][gs->m_CurrentTurnNb] +=
-          trueAmount;
-    } else if (trueAmount < 0) {
+          realAmountSent;
+    } else if (realAmountSent < 0) {
       m_LastTxRx[static_cast<int>(amountType::damageTx)][gs->m_CurrentTurnNb] +=
-          std::abs(trueAmount);
+          std::abs(realAmountSent);
     }
     target->m_LastTxRx[static_cast<int>(amountType::overHealRx)]
-                      [gs->m_CurrentTurnNb] += amount - trueAmount;
+                      [gs->m_CurrentTurnNb] += maxAmountSent - realAmountSent;
   }
 
   return std::make_pair(result, newEffects);
@@ -1067,7 +1068,7 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
     }
   }
   if (effect.effect == EFFECT_IMPROVE_HOTS) {
-    pm->ImproveHotsOnPlayers(effect.subValueEffect, target->m_type);
+    pm->ImproveHotsOnPlayers(effect.value, target->m_type);
     output =
         QString("Les HOTs sont boostés de %1%.\n").arg(effect.subValueEffect);
   }
