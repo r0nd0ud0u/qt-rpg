@@ -11,7 +11,7 @@
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "Pouvoir physique",
-            "Tours actifs": 3,
+            "Tours actifs": 4,
             "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 30
@@ -20,10 +20,10 @@
             "Cible": "Seulement les alliés",
             "Portée": "Zone",
             "Stat": "Pouvoir physique",
-            "Tours actifs": 3,
+            "Tours actifs": 4,
             "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": 10
+            "Value": 15
         },
         {
             "Cible": "Soi-même",

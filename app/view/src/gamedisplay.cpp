@@ -148,6 +148,8 @@ void GameDisplay::NewRound() {
         // hpRx : buf new turn
         const auto addValue = static_cast<int>(-phyBuf->get_value() + hpRx);
         Character::SetStatsOnEffect(localStat, addValue, false, true);
+        qDebug() << QString("Montant total overheal prev tour: %1\n").arg(hpRx);
+        qDebug() << QString("Pow phy azrak: %1\n").arg(addValue);
         phyBuf->set_buffers(hpRx, phyBuf->get_is_percent());
       }
     }

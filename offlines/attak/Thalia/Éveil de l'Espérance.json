@@ -14,7 +14,7 @@
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 50
+            "Value": 100
         },
         {
             "Cible": "Allié",
@@ -33,7 +33,17 @@
             "Type": "Reinit",
             "Valeur de l'effet": 0,
             "Value": 0
-        }
+        },
+		{
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "",
+            "Tours actifs": 5,
+            "Type": "Tours de recharge",
+            "Valeur de l'effet": 1000,
+            "Value": 10
+        },
+		
     ],
     "Forme": "Ent",
     "Niveau": 9,
