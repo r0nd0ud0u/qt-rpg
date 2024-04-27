@@ -163,6 +163,9 @@ const QString EFFECT_IMPROVE_HOTS = "Boost chaque HOT de .. %";
 const QString EFFECT_BOOSTED_BY_HOTS =
     "Boost l'effet par nb HOTS presents en %";
 const QString EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT = "Up/down degats en %";
+const QString EFFECT_CHANGE_DAMAGES_RX_BY_PERCENT = "Up/down degats RX en %";
+const QString EFFECT_CHANGE_HEAL_RX_BY_PERCENT = "Up/down heal RX en %";
+const QString EFFECT_CHANGE_HEAL_TX_BY_PERCENT = "Up/down heal TX en %";
 // Assess the nob of applies for a stat
 const QString EFFECT_REPEAT_AS_MANY_AS = "Répète tant que possible";
 // Effect to improve max value of a stat by percent (current value is updated by

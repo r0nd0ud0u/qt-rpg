@@ -444,8 +444,9 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
 
   // Apply crit on effects
   const std::set<QString> BOOSTED_EFFECTS_BY_CRIT{
-      EFFECT_IMPROVE_BY_PERCENT_CHANGE, EFFECT_IMPROVEMENT_STAT_BY_VALUE,
-      EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT};
+      EFFECT_IMPROVE_BY_PERCENT_CHANGE,     EFFECT_IMPROVEMENT_STAT_BY_VALUE,
+      EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT, EFFECT_CHANGE_DAMAGES_RX_BY_PERCENT,
+      EFFECT_CHANGE_HEAL_RX_BY_PERCENT,     EFFECT_CHANGE_HEAL_TX_BY_PERCENT};
   if (isCrit && BOOSTED_EFFECTS_BY_CRIT.count(effect.effect) > 0) {
     effect.subValueEffect =
         std::lround(AttaqueType::COEFF_CRIT_STATS *
@@ -672,11 +673,17 @@ void Character::RemoveMalusEffect(const effectParam &ep) {
   // remove debuf/ buf
   // on damages
   if (ep.effect == EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT) {
-    if (ep.target == TARGET_ENNEMY) {
-      UpdateBuf(BufTypes::damageRx, -ep.value, true, "");
-    } else {
-      UpdateBuf(BufTypes::damageTx, -ep.value, true, "");
-    }
+    UpdateBuf(BufTypes::damageTx, -ep.value, true, "");
+  }
+  if (ep.effect == EFFECT_CHANGE_DAMAGES_RX_BY_PERCENT) {
+    UpdateBuf(BufTypes::damageRx, -ep.value, true, "");
+  }
+  // on heal
+  if (ep.effect == EFFECT_CHANGE_HEAL_RX_BY_PERCENT) {
+    UpdateBuf(BufTypes::healRx, -ep.value, true, "");
+  }
+  if (ep.effect == EFFECT_CHANGE_HEAL_TX_BY_PERCENT) {
+    UpdateBuf(BufTypes::healTx, -ep.value, true, "");
   }
 }
 
@@ -740,14 +747,26 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
   }
 
   if (ep.statsName == STATS_HP) {
-    // return the true applied amount
+    auto absAmount = abs(amount);
+    // update_damage_by_buf update the absolute value
+    // assess of sign needed
+    const auto sign = (amount > 0) ? 1 : -1;
     // add buf
+    if (target != nullptr && ALLIES_TARGETS.count(ep.target) > 0 && launch) {
+      if (const auto *bufHpTx = m_AllBufs[static_cast<int>(BufTypes::healTx)];
+          bufHpTx != nullptr) {
+        absAmount = static_cast<int>(update_damage_by_buf(
+            bufHpTx->get_value(), bufHpTx->get_is_percent(), absAmount));
+      }
+      if (const auto *bufHpRx = m_AllBufs[static_cast<int>(BufTypes::healRx)];
+          bufHpRx != nullptr) {
+        absAmount = static_cast<int>(update_damage_by_buf(
+            bufHpRx->get_value(), bufHpRx->get_is_percent(), absAmount));
+      }
+    }
+
     if (target != nullptr && ep.target == TARGET_ENNEMY && launch) {
       // launcher buf
-      // update_damage_by_buf update the absolute value
-      // assess of sign needed
-      const auto sign = (amount > 0) ? 1 : -1;
-      auto absAmount = abs(amount);
       if (const auto *bufTx = m_AllBufs[static_cast<int>(BufTypes::damageTx)];
           bufTx != nullptr) {
         absAmount = static_cast<int>(update_damage_by_buf(
@@ -1091,19 +1110,32 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
   }
   if (effect.effect == EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT) {
     effect.value = nbOfApplies * effect.value;
-    if (effect.target == TARGET_ENNEMY) {
-      target->UpdateBuf(BufTypes::damageRx, effect.value, true, "");
-      output =
-          QString("Les dégâts reçus sont modifiés de %1% pendant %2 tours.")
-              .arg(effect.value)
-              .arg(effect.nbTurns);
-    } else {
-      target->UpdateBuf(BufTypes::damageTx, effect.value, true, "");
-      output =
-          QString("Les dégâts transmis sont modifiés de %1% pendant %2 tours.")
-              .arg(effect.value)
-              .arg(effect.nbTurns);
-    }
+    target->UpdateBuf(BufTypes::damageTx, effect.value, true, "");
+    output =
+        QString("Les dégâts transmis sont modifiés de %1% pendant %2 tours.")
+            .arg(effect.value)
+            .arg(effect.nbTurns);
+  }
+  if (effect.effect == EFFECT_CHANGE_DAMAGES_RX_BY_PERCENT) {
+    effect.value = nbOfApplies * effect.value;
+    target->UpdateBuf(BufTypes::damageRx, effect.value, true, "");
+    output = QString("Les dégâts reçus sont modifiés de %1% pendant %2 tours.")
+                 .arg(effect.value)
+                 .arg(effect.nbTurns);
+  }
+  if (effect.effect == EFFECT_CHANGE_HEAL_RX_BY_PERCENT) {
+    effect.value = nbOfApplies * effect.value;
+    target->UpdateBuf(BufTypes::healRx, effect.value, true, "");
+    output = QString("Les heal reçus sont modifiés de %1% pendant %2 tours.")
+                 .arg(effect.value)
+                 .arg(effect.nbTurns);
+  }
+  if (effect.effect == EFFECT_CHANGE_HEAL_TX_BY_PERCENT) {
+    effect.value = nbOfApplies * effect.value;
+    target->UpdateBuf(BufTypes::healTx, effect.value, true, "");
+    output = QString("Les heal transmis sont modifiés de %1% pendant %2 tours.")
+                 .arg(effect.value)
+                 .arg(effect.nbTurns);
   }
   if (effect.effect == EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
     // common init
