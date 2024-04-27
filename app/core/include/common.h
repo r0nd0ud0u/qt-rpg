@@ -188,7 +188,6 @@ const QString EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL =
     "Buf par valeur d'autant de PV";
 // Effect to modify the regen rate of stats such as vigor, mana, speed, hp,
 // berseck by value.
-const QString EFFECT_UPDATE_TURN_RATE = "Update regen par valeur";
 const std::set<QString> EFFECTS{"",
                                 EFFECT_REINIT,
                                 EFFECT_NB_COOL_DOWN,
@@ -210,7 +209,6 @@ const std::set<QString> EFFECTS{"",
                                 CONDITION_DMG_PREV_TURN,
                                 EFFECT_REPEAT_IF_HEAL,
                                 EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL,
-                                EFFECT_UPDATE_TURN_RATE,
                                 EFFECT_COND_DMG_PREV_TURN};
 const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_NB_DECREASE_BY_TURN,
@@ -226,8 +224,7 @@ const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_NEXT_HEAL_IS_CRIT,
     EFFECT_BUF_MULTI,
     EFFECT_BLOCK_HEAL_ATK,
-    EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL,
-    EFFECT_UPDATE_TURN_RATE};
+    EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL};
 const std::set<QString> EFFECTS_HOT_OR_DOT = {
     EFFECT_VALUE_CHANGE, EFFECT_REPEAT_AS_MANY_AS, EFFECT_PERCENT_CHANGE,
     EFFECT_NB_DECREASE_ON_TURN};

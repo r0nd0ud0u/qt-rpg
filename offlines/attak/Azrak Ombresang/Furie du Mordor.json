@@ -25,6 +25,24 @@
             "Valeur de l'effet": 0,
             "Value": 15
         },
+		{
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Pouvoir magique",
+            "Tours actifs": 4,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 30
+        },
+        {
+            "Cible": "Seulement les alliés",
+            "Portée": "Zone",
+            "Stat": "Pouvoir magique",
+            "Tours actifs": 4,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 15
+        },
         {
             "Cible": "Soi-même",
             "Portée": "Individuel",
