@@ -281,13 +281,14 @@ bool GameDisplay::ProcessAtk(
           targetChara->IsDodging(currentAtk);
       if (isDodgingZone) {
         emit SigUpdateChannelView(
-            targetChara->m_Name,
-            QString("esquive.(%1)").arg(outputsRandnbZone));
+            targetChara->m_Name, QString("esquive.(%1)").arg(outputsRandnbZone),
+            targetChara->color);
         return true;
       } else {
         emit SigUpdateChannelView(
             targetChara->m_Name,
-            QString("pas d'esquive.(%1)").arg(outputsRandnbZone));
+            QString("pas d'esquive.(%1)").arg(outputsRandnbZone),
+            targetChara->color);
       }
     }
     // EFFECT
@@ -354,8 +355,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   const auto &currentAtk = activatedPlayer->m_AttakList.at(atkName);
   // Process cost of the atk
   activatedPlayer->ProcessCost(atkName);
-  emit SigUpdateChannelView(nameChara, QString("lance %1.").arg(atkName),
-                            activatedPlayer->color);
+  QStringList launchingStr;
+  launchingStr.append(QString("lance %1.").arg(atkName));
 
   // is Dodging
   if (currentAtk.target == TARGET_ENNEMY &&
@@ -363,12 +364,15 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     const auto &[isDodging, plName, outputsRandNb] =
         gm->m_PlayersManager->IsDodging(targetList, currentAtk);
     if (isDodging) {
-      emit SigUpdateChannelView(
-          plName, QString("esquive.(%1)").arg(outputsRandNb.first()));
+      launchingStr.append(
+          QString("%1 esquive.(%2)").arg(plName).arg(outputsRandNb.first()));
+      emit SigUpdateChannelView(nameChara, launchingStr.join("\n"),
+                                activatedPlayer->color);
       return;
     } else {
-      emit SigUpdateChannelView(
-          plName, QString("pas d'esquive.(%1)").arg(outputsRandNb.first()));
+      launchingStr.append(QString("%1 n'esquive pas.(%2)")
+                              .arg(plName)
+                              .arg(outputsRandNb.first()));
     }
   }
 
@@ -377,13 +381,13 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       activatedPlayer->ProcessCriticalStrike(currentAtk);
   QString critStr;
   if (isCrit) {
-    critStr = "Coup Critique";
+    critStr = "Coup critique";
   } else {
-    critStr = "pas de coup critique";
+    critStr = "Pas de coup critique";
   }
-  emit SigUpdateChannelView(
-      nameChara,
-      QString("Test coup critique:%1 -> %2.\n").arg(critRandNb).arg(critStr));
+  launchingStr.append(QString("%1 (%2)").arg(critStr).arg(critRandNb));
+  emit SigUpdateChannelView(nameChara, launchingStr.join("\n"),
+                            activatedPlayer->color);
 
   // In case of effect with reach: REACH_RAND_INDIVIDUAL, process who is the
   // random target
@@ -418,9 +422,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   // end of activated bufs during turn
   activatedPlayer->ResetBuf(BufTypes::damageCritCapped);
   activatedPlayer->ResetBuf(BufTypes::multiValue);
-  int a = activatedPlayer->m_AllBufs[static_cast<int>(BufTypes::applyEffectInit)]->get_value();
   activatedPlayer->ResetBuf(BufTypes::applyEffectInit);
-  a = activatedPlayer->m_AllBufs[static_cast<int>(BufTypes::applyEffectInit)]->get_value();
   /// Update game state
   // update effect on player manager
   for (const auto &[targetName, epTable] : newEffects) {
@@ -434,8 +436,10 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     // Some effects like "delete one bad effect" need to be updated
     const QStringList terminatedEffects =
         gm->m_PlayersManager->RemoveTerminatedEffectsOnPlayer(targetName);
-    for (const auto &te : terminatedEffects) {
-      emit SigUpdateChannelView(nameChara, te);
+
+    if (!terminatedEffects.isEmpty()) {
+      emit SigUpdateChannelView(nameChara, terminatedEffects.join("\n"),
+                                activatedPlayer->color);
     }
   }
   // update all effect panel
