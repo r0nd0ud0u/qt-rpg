@@ -40,7 +40,7 @@ QAbstractItemModel *EquipmentView::createEquipmentModel(QObject *parent) {
     if (e.isEmpty()) {
       continue;
     }
-    addEquipmentRow(model, e, selectedHero->m_WearingEquipment.at(e).m_Name);
+    addEquipmentRow(model, e, selectedHero->m_WearingEquipment.at(e).m_UniqueName);
   }
 
   return model;

@@ -33,6 +33,7 @@ Character::Character(const QString name, const characType type,
 void Character::InitTables() {
   for (const auto &e : ALL_EQUIP) {
     m_WearingEquipment[e].m_Name = "";
+    m_WearingEquipment[e].m_UniqueName = "";
   }
   // init buf
   for (int i = 0; i < static_cast<int>(BufTypes::enumSize); i++) {
@@ -107,7 +108,7 @@ QString Character::RegenIntoDamage(const int atkValue,
       }
     }
   }
-  return channelLog;
+  return channelLog + "\n";
 }
 
 void Character::ProcessCost(const QString &atkName) {
@@ -278,7 +279,7 @@ void Character::LoadStuffJson() {
     const auto jsonDoc = QJsonDocument::fromJson(msg.toUtf8());
     // decode json
     for (const auto &e : ALL_EQUIP) {
-      m_WearingEquipment[e].m_Name = jsonDoc[e].toString();
+      m_WearingEquipment[e].m_UniqueName = jsonDoc[e].toString();
     }
   }
 }
@@ -444,9 +445,13 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
 
   // Apply crit on effects
   const std::set<QString> BOOSTED_EFFECTS_BY_CRIT{
-      EFFECT_IMPROVE_BY_PERCENT_CHANGE,     EFFECT_IMPROVEMENT_STAT_BY_VALUE,
-      EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT, EFFECT_CHANGE_DAMAGES_RX_BY_PERCENT,
-      EFFECT_CHANGE_HEAL_RX_BY_PERCENT,     EFFECT_CHANGE_HEAL_TX_BY_PERCENT};
+      EFFECT_IMPROVE_BY_PERCENT_CHANGE,
+      EFFECT_IMPROVEMENT_STAT_BY_VALUE,
+      EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT,
+      EFFECT_CHANGE_DAMAGES_RX_BY_PERCENT,
+      EFFECT_CHANGE_HEAL_RX_BY_PERCENT,
+      EFFECT_CHANGE_HEAL_TX_BY_PERCENT,
+      EFFECT_INTO_DAMAGE};
   if (isCrit && BOOSTED_EFFECTS_BY_CRIT.count(effect.effect) > 0) {
     effect.subValueEffect =
         std::lround(AttaqueType::COEFF_CRIT_STATS *
@@ -707,7 +712,6 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
 
   // common init
   auto &localStat = target->m_Stats.m_AllStatsTable[ep.statsName];
-  const int delta = localStat.m_MaxValue - localStat.m_CurrentValue;
   int amount = 0;
 
   // HP
@@ -823,6 +827,7 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     // heal
     localStat.m_CurrentValue =
         min(output + localStat.m_CurrentValue, localStat.m_MaxValue);
+    const int delta = localStat.m_MaxValue - localStat.m_CurrentValue;
     maxAmount = min(delta, output);
   } else {
     // damage
@@ -1075,6 +1080,7 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
   }
   if (effect.effect == EFFECT_REINIT) {
     pm->ResetCounterOnOneStatsEffect(target, effect.statsName);
+    // TODO change the nb of applies of 0
     nbOfApplies = 0;
     if (effect.value == 0) {
       if (effect.statsName != STATS_HP) {
@@ -1101,8 +1107,7 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
   }
   if (effect.effect == EFFECT_IMPROVE_HOTS) {
     pm->ImproveHotsOnPlayers(effect.value, target->m_type);
-    output =
-        QString("Les HOTs sont boostés de %1%.").arg(effect.subValueEffect);
+    output = QString("Les HOTs sont boostés de %1%.").arg(effect.value);
   }
   if (effect.effect == EFFECT_BOOSTED_BY_HOTS) {
     const auto nbHots = pm->GetNbOfStatsInEffectList(target, STATS_HP);
@@ -1230,11 +1235,12 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
       buf->add_stat_name(effect.statsName.toStdString());
       buf->set_buffers(effect.nbTurns, false);
     }
-    output += QString("Effet soignant avec excédent de soin, activé!");
+    output += QString("Buf avec excédent de soin sur %1.").arg(effect.effect);
   }
 
   if (!output.isEmpty()) {
-    output += QString(" (Effet appliqué %1 fois)\n").arg(nbOfApplies);
+    output +=
+        QString(" (Effet appliqué %1 fois)\n").arg(std::max(1, nbOfApplies));
   }
   return std::make_pair(output, nbOfApplies);
 }
@@ -1415,7 +1421,7 @@ void Character::UpdateEquipmentOnJson() const {
     if (bodyPart.isEmpty()) {
       continue;
     }
-    obj.insert(bodyPart, equip.m_Name);
+    obj.insert(bodyPart, equip.m_UniqueName);
   }
   // output attak json
   QJsonDocument doc(obj);
