@@ -4,31 +4,39 @@
     "Coût de rage": 0,
     "Coût de vigueur": 1,
     "Effet": [
-      {
+
+           {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "Esquive",
+            "Tours actifs": 2,
+            "Type": "Up par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -50
+          },
+        {
             "Cible": "Ennemie",
             "Portée": "Individuel",
             "Stat": "PV",
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": -210
+            "Value": -600
         },
-
         {
-            "Cible": "Soi-même",
+            "Cible": "Ennemie",
             "Portée": "Individuel",
-            "Stat": "Armure physique",
+            "Stat": "Pouvoir physique",
             "Tours actifs": 3,
-            "Type": "Changement par valeur",
+            "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": 650
+            "Value": 300
         }
-  
-        
     ],
     "Forme": "Standard",
     "Niveau": 5,
-    "Nom": "Formation du Rohan",
+    "Nom": "Evisceration bestiale",
     "Photo": "default.png",
     "Portée": "Individuel"
 }
+

@@ -8,33 +8,24 @@
             "Cible": "Ennemie",
             "Portée": "Zone",
             "Stat": "PV",
-            "Tours actifs": 1,
+            "Tours actifs": 4,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": -100
         },
         {
-            "Cible": "Soi-même",
-            "Portée": "Individuel",
-            "Stat": "Regen vitesse",
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "Esquive",
             "Tours actifs": 4,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 60
-        },
-         {
-            "Cible": "Ennemie",
-            "Portée": "Zone",
-            "Stat": "PV",
-            "Tours actifs": 5,
-            "Type": "Changement par valeur",
-            "Valeur de l'effet": 0,
-            "Value": -350
+            "Value": -25
         }
     ],
     "Forme": "Standard",
-    "Niveau": 6,
-    "Nom": "Fracas des terres sauvages",
+    "Niveau": 3,
+    "Nom": "Fléau Ent",
     "Photo": "default.png",
     "Portée": "Zone"
 }

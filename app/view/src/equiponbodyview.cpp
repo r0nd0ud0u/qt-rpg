@@ -53,7 +53,7 @@ void EquipOnBodyView::InitView(Character *player) const {
   }
   for (const auto &panel : m_PanelList) {
     if (player->m_WearingEquipment.count(panel->m_BodyName) > 0) {
-      panel->SetValue(player->m_WearingEquipment.at(panel->m_BodyName).m_Name);
+      panel->SetValue(player->m_WearingEquipment.at(panel->m_BodyName).m_UniqueName);
     }
   }
 }

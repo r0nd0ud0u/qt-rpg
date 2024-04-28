@@ -1,24 +1,24 @@
 {
-    "Cible": "Soi-même",
+    "Cible": "Ennemie",
     "Coût de mana": 0,
     "Coût de rage": 0,
     "Coût de vigueur": 1,
     "Effet": [
       {
-            "Cible": "Soi-mêmee",
+            "Cible": "Ennemie",
             "Portée": "Individuel",
             "Stat": "PV",
-            "Tours actifs": 3,
-            "Type": "Up/down degats en %",
+            "Tours actifs": 1,
+            "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 100
+            "Value": -230
         }
   
         
     ],
     "Forme": "Standard",
-    "Niveau": -,
-    "Nom": "Massacre Rohirrim",
+    "Niveau": 2,
+    "Nom": "Frappe de l'aurore boréale",
     "Photo": "default.png",
     "Portée": "Individuel"
 }

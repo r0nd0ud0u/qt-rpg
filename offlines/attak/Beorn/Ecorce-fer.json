@@ -4,12 +4,12 @@
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Effet": [
-      {
+        {
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "Armure physique",
             "Tours actifs": 3,
-            "Type": "Changement par %",
+            "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 300
         },
@@ -22,6 +22,7 @@
             "Valeur de l'effet": 0,
             "Value": -100
         }
+      
     ],
     "Forme": "Standard",
     "Niveau": 8,
@@ -29,3 +30,4 @@
     "Photo": "default.png",
     "Portée": "Zone"
 }
+

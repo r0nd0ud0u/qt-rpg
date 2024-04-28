@@ -10,10 +10,11 @@
 #include <QJsonObject>
 
 #include "bossclass.h"
+#include "utils.h"
+
 #include "rust-rpg-bridge/attaque.h"
 #include "rust-rpg-bridge/utils.h"
 
-#include "utils.h"
 #include <fstream>
 
 void PlayersManager::InitHeroes() {
@@ -148,9 +149,9 @@ void PlayersManager::InitHeroes() {
     h->LoadAtkJson();
     h->LoadStuffJson();
     std::unordered_map<QString, QString> table;
-    for (const auto &[name, stuff] : h->m_WearingEquipment) {
-      if (!stuff.m_Name.isEmpty()) {
-        table[name] = stuff.m_Name;
+    for (auto &[bodypart, stuff] : h->m_WearingEquipment) {
+      if (!bodypart.isEmpty()) {
+        table[bodypart] = stuff.m_UniqueName;
       }
     }
     h->SetEquipment(table);
@@ -335,7 +336,7 @@ void PlayersManager::InitBosses() {
   stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
   stats.m_AllStatsTable[STATS_VIGOR].InitValues(9999, 9999, 9999, 9999);
   stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(600, 600, 600, 0);
-  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(750, 750,750, 0);
+  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(750, 750, 750, 0);
   stats.m_AllStatsTable[STATS_POW_PHY].InitValues(120, 120, 120, 0);
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(150, 150, 150, 0);
   stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
@@ -359,7 +360,7 @@ void PlayersManager::InitBosses() {
   stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
   stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
   stats.m_AllStatsTable[STATS_VIGOR].InitValues(9999, 9999, 9999, 9999);
-  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(9999,9999,9999, 0);
+  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(9999, 9999, 9999, 0);
   stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(400, 400, 400, 0);
   stats.m_AllStatsTable[STATS_POW_PHY].InitValues(50, 50, 50, 0);
   stats.m_AllStatsTable[STATS_POW_MAG].InitValues(100, 100, 100, 0);
@@ -548,9 +549,14 @@ PlayersManager::RemoveTerminatedEffectsOnPlayer(const QString &curPlayerName) {
   auto &gaeTable = m_AllEffectsOnGame[curPlayerName];
   for (auto it = gaeTable.begin(); it != gaeTable.end(); it++) {
     if (it->allAtkEffects.counterTurn == it->allAtkEffects.nbTurns) {
-      QString terminated("L'effet %1 sur %2 est terminé.");
-      terminated =
-          terminated.arg(it->allAtkEffects.statsName).arg(curPlayerName);
+      const auto effectName =
+          build_effect_name(it->allAtkEffects.effect.toStdString(),
+                            it->allAtkEffects.statsName.toStdString(), true)
+              .data();
+      const auto terminated = QString("L'effet %1 sur %2 est terminé.(%3)")
+                                  .arg(effectName)
+                                  .arg(curPlayerName)
+                                  .arg(it->atk.name);
       sl.push_back(terminated);
       // remove malus effect from player
       auto *player = GetCharacterByName(curPlayerName);
@@ -580,17 +586,29 @@ QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName,
   auto *targetPl = GetCharacterByName(curPlayerName);
 
   QStringList localLog;
-  localLog.append(QString("Sur %1: ").arg(curPlayerName));
 
   if (targetPl != nullptr) {
+    int hotAndDot = 0;
     for (auto &gae : gaeTable) {
       if (gae.launchingTurn == currentTurn) {
         // effect is applicable at launch of one character and then at the next
         // turn of the target
         continue;
       }
-      auto *launcherPl = GetCharacterByName(gae.launcher);
-      if (launcherPl != nullptr) {
+      if (gae.allAtkEffects.statsName == STATS_HP &&
+          EFFECTS_HOT_OR_DOT.count(gae.allAtkEffects.effect) > 0) {
+        // sum of hot and dot
+        hotAndDot += gae.allAtkEffects.value;
+        QString type = "DOT->";
+        if (gae.allAtkEffects.value > 0) {
+          type = "HOT->";
+        }
+        localLog.append(QString("%1 valeur: %2, atk: %3")
+                            .arg(type)
+                            .arg(gae.allAtkEffects.value)
+                            .arg(gae.atk.name));
+      } else if (auto *launcherPl = GetCharacterByName(gae.launcher);
+                 launcherPl != nullptr) {
         const auto [output, _] = launcherPl->ApplyOneEffect(
             targetPl, gae.allAtkEffects, fromLaunch, gae.atk);
         if (!output.isEmpty()) {
@@ -598,8 +616,17 @@ QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName,
         }
       }
     }
+    auto &localStat = targetPl->m_Stats.m_AllStatsTable[STATS_HP];
+    localStat.m_CurrentValue += hotAndDot;
+    if (hotAndDot != 0) {
+      localLog.append(QString("HOT et DOT totaux: %1").arg(hotAndDot));
+      // current value must be included between 0 and max value
+      localStat.m_CurrentValue =
+          std::min(localStat.m_CurrentValue, localStat.m_MaxValue);
+      localStat.m_CurrentValue = std::max(localStat.m_CurrentValue, 0);
+    }
   }
-  if (localLog.size() > 1) {
+  if (!localLog.isEmpty()) {
     logs.append(localLog.join("\n"));
   }
 
@@ -1062,6 +1089,10 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
         break;
       }
     }
+    // no loot found
+    if (stuffClass == 0) {
+      continue;
+    }
 
     // Create stuff
     Stuff stuff;
@@ -1095,8 +1126,9 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
             bonus->get_value();
       }
     }
-    const auto armurBonus = (stuffClass < BossClass::ARMOR.size())
-                                ? BossClass::ARMOR[stuffClass]
+    // armur bonus does not contain 'no loot'(0) whereas stuffClass is starting at 'no loot'(0)
+    const auto armurBonus = (stuffClass - 1 < BossClass::ARMOR.size())
+                                ? BossClass::ARMOR[stuffClass - 1]
                                 : BossClass::ARMOR[BossClass::ARMOR.size() - 1];
     stuff.m_Stats.m_AllStatsTable[STATS_ARM_MAG].m_BufEquipValue += armurBonus;
     stuff.m_Stats.m_AllStatsTable[STATS_ARM_PHY].m_BufEquipValue += armurBonus;

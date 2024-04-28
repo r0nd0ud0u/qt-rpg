@@ -11,22 +11,31 @@
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": -130
+            "Value": -100
         },
         {
             "Cible": "Ennemie",
             "Portée": "zone",
-            "Stat": "Rgen vitesse",
+            "Stat": "Armure magique",
             "Tours actifs": 3,
-            "Type": "Changement par valeur",
+            "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": -30
+            "Value": -20
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "zone",
+            "Stat": "Armure physique",
+            "Tours actifs": 3,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": -20
         }
     ],
     "Forme": "Standard",
-    "Niveau": 2,
-    "Nom": "Fulgurance sylvestre",
+    "Niveau": 1,
+    "Nom": "Seraphin de la terre sauvage",
     "Photo": "default.png",
-    "Portée": "zone"
+    "Portée": "Zone"
 }
 

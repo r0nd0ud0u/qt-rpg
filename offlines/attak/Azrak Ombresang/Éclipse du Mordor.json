@@ -33,6 +33,15 @@
             "Type": "Tours de recharge",
             "Valeur de l'effet": 0,
             "Value": 0
+        },
+        {
+            "Cible": "Tous les heroes",
+            "Portée": "Zone",
+            "Stat": "",
+            "Tours actifs": 3,
+            "Type": "Up/down heal TX en %",
+            "Valeur de l'effet": 0,
+            "Value": 25
         }
     ],
     "Forme": "Standard",
