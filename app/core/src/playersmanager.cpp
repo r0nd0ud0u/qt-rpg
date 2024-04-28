@@ -780,6 +780,7 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
       const auto index = get_random_nb(0, BossClass::BONUS_STAT_STR.size() - 1);
       const auto &stat = BossClass::BONUS_STAT_STR.at(index);
       const auto *bonus = BossClass::BONUS_LIST.at(stat).at(stuffClass - 1);
+      stuff.m_StatsUpByLoot.push_back(stat);
       if (bonus->get_is_percent()) {
         stuff.m_Stats.m_AllStatsTable[stat].m_BufEquipPercent =
             bonus->get_value();

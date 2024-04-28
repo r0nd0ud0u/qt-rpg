@@ -119,6 +119,9 @@ void player_manager_tests::LootNewEquipments_works() {
   pl.InitRandomEquip();
   const auto result = pl.LootNewEquipments("Angmar");
   QCOMPARE(4, result.size());
+  for (const auto& s : result) {
+    QCOMPARE(s.m_Rank, s.m_StatsUpByLoot.size());
+  }
 }
 
 int main(int argc, char *argv[]) {
