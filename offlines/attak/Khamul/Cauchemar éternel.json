@@ -1,0 +1,31 @@
+{
+    "Cible": "Ennemie",
+    "Coût de mana": 0,
+    "Coût de rage": 0,
+    "Coût de vigueur": 1,
+    "Effet": [
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Pouvoir magique",
+            "Tours actifs": 6,
+            "Type": "Up par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 190
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Pouvoir physique",
+            "Tours actifs": 6,
+            "Type": "Up par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 190
+        }
+    ],
+    "Forme": "Standard",
+    "Niveau": 1,
+    "Nom": "Cauchemar éternel",
+    "Photo": "default.png",
+    "Portée": "Individuel"
+}

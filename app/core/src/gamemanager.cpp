@@ -11,6 +11,7 @@ void GameManager::InitPlayers() {
   // finally selected hero is init
   m_PlayersManager->LoadAllEquipmentsJson();
   m_PlayersManager->InitRandomEquip();
+  m_PlayersManager->LoadAllCharactersJson();
   m_PlayersManager->InitHeroes();
   m_PlayersManager->InitBosses();
 }

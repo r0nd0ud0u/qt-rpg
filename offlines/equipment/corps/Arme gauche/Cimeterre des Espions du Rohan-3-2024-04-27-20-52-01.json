@@ -1,0 +1,108 @@
+{
+    "Aggro": [
+        {
+            "percent": 0,
+            "value": 0
+        }
+    ],
+    "Armure magique": [
+        {
+            "percent": 0,
+            "value": 0
+        }
+    ],
+    "Armure physique": [
+        {
+            "percent": 0,
+            "value": 0
+        }
+    ],
+    "Categorie": "Arme gauche",
+    "Cout critique": [
+        {
+            "percent": 0,
+            "value": 4
+        }
+    ],
+    "Esquive": [
+        {
+            "percent": 0,
+            "value": 0
+        }
+    ],
+    "Mana": [
+        {
+            "percent": 0,
+            "value": 0
+        }
+    ],
+    "Nom": "Cimeterre des Espions du Rohan",
+    "Nom unique": "Cimeterre des Espions du Rohan-3-2024-04-27-20-52-01",
+    "PV": [
+        {
+            "percent": 0,
+            "value": 0
+        }
+    ],
+    "Pouvoir magique": [
+        {
+            "percent": 0,
+            "value": 60
+        }
+    ],
+    "Pouvoir physique": [
+        {
+            "percent": 0,
+            "value": 0
+        }
+    ],
+    "Rage": [
+        {
+            "percent": 0,
+            "value": 0
+        }
+    ],
+    "Regeneration Mana": [
+        {
+            "percent": 0,
+            "value": 4
+        }
+    ],
+    "Regeneration PV": [
+        {
+            "percent": 0,
+            "value": 0
+        }
+    ],
+    "Regeneration vigueur": [
+        {
+            "percent": 0,
+            "value": 0
+        }
+    ],
+    "Taux aggro": [
+        {
+            "percent": 0,
+            "value": 0
+        }
+    ],
+    "Taux rage": [
+        {
+            "percent": 0,
+            "value": 0
+        }
+    ],
+    "Vigor": [
+        {
+            "percent": 0,
+            "value": 0
+        }
+    ],
+    "Vitesse": [
+        {
+            "percent": 0,
+            "value": 0
+        }
+    ]
+}
+

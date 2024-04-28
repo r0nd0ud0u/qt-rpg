@@ -30,7 +30,7 @@ void HeroPanel::UpdatePanel(Character *hero) {
   // hp
   ui->hp_Bar->setFormat(QString::number(hp.m_CurrentValue) + "/" +
                         QString::number(hp.m_MaxValue) + " %p%");
-  int hpValue = 100 * hp.m_CurrentValue / hp.m_MaxValue;
+  int hpValue = (hp.m_MaxValue > 0) ? 100 * hp.m_CurrentValue / hp.m_MaxValue : 0;
   ui->hp_Bar->setValue(hpValue);
 
   // mana

@@ -76,39 +76,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="start_spinBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximum">
-         <number>9999</number>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QSpinBox" name="max_spinBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimum">
-         <number>-1</number>
-        </property>
-        <property name="maximum">
-         <number>9999</number>
-        </property>
-        <property name="value">
-         <number>-1</number>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="regen_spinBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>

@@ -1,0 +1,116 @@
+{
+    "Aggro": [
+        {
+            "Current": 0,
+            "Max": 9999
+        }
+    ],
+    "Armure magique": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Armure physique": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Couleur": "brown",
+    "Cout critique": [
+        {
+            "Current": 12,
+            "Max": 12
+        }
+    ],
+    "Esquive": [
+        {
+            "Current": 2,
+            "Max": 2
+        }
+    ],
+    "Mana": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Niveau": 1,
+    "Nom": "Lirion Vertefeuille",
+    "PV": [
+        {
+            "Current": 100,
+            "Max": 100
+        }
+    ],
+    "Pouvoir magique": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Pouvoir physique": [
+        {
+            "Current": 30,
+            "Max": 30
+        }
+    ],
+    "Rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regen vitesse": [
+        {
+            "Current": 15,
+            "Max": 15
+        }
+    ],
+    "Regeneration Mana": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regeneration PV": [
+        {
+            "Current": 5,
+            "Max": 5
+        }
+    ],
+    "Regeneration vigueur": [
+        {
+            "Current": 5,
+            "Max": 5
+        }
+    ],
+    "Taux aggro": [
+        {
+            "Current": 1,
+            "Max": 1
+        }
+    ],
+    "Taux rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Type": "Hero",
+    "Vigor": [
+        {
+            "Current": 170,
+            "Max": 170
+        }
+    ],
+    "Vitesse": [
+        {
+            "Current": 15,
+            "Max": 15
+        }
+    ],
+	"Rang": 4
+}
+

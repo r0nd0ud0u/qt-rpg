@@ -1,0 +1,116 @@
+{
+    "Aggro": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Armure magique": [
+        {
+            "Current": 600,
+            "Max": 600
+        }
+    ],
+    "Armure physique": [
+        {
+            "Current": 800,
+            "Max": 800
+        }
+    ],
+    "Couleur": "dark",
+    "Cout critique": [
+        {
+            "Current": 20,
+            "Max": 20
+        }
+    ],
+    "Esquive": [
+        {
+            "Current": 20,
+            "Max": 20
+        }
+    ],
+    "Mana": [
+        {
+            "Current": 9999,
+            "Max": 9999
+        }
+    ],
+    "Niveau": 2147483647,
+    "Nom": "Angmar le retour",
+    "PV": [
+        {
+            "Current": 20000,
+            "Max": 20000
+        }
+    ],
+    "Pouvoir magique": [
+        {
+            "Current": 120,
+            "Max": 120
+        }
+    ],
+    "Pouvoir physique": [
+        {
+            "Current": 250,
+            "Max": 250
+        }
+    ],
+    "Rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regen vitesse": [
+        {
+            "Current": 20,
+            "Max": 20
+        }
+    ],
+    "Regeneration Mana": [
+        {
+            "Current": 25,
+            "Max": 25
+        }
+    ],
+    "Regeneration PV": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regeneration vigueur": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Taux aggro": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Taux rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Type": "Boss",
+    "Vigor": [
+        {
+            "Current": 9999,
+            "Max": 9999
+        }
+    ],
+    "Vitesse": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+	"Rang": 4
+}
+

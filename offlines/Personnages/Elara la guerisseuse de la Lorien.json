@@ -1,0 +1,116 @@
+{
+    "Aggro": [
+        {
+            "Current": 0,
+            "Max": 9999
+        }
+    ],
+    "Armure magique": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Armure physique": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Couleur": "pink",
+    "Cout critique": [
+        {
+            "Current": 10,
+            "Max": 10
+        }
+    ],
+    "Esquive": [
+        {
+            "Current": 7,
+            "Max": 7
+        }
+    ],
+    "Mana": [
+        {
+            "Current": 180,
+            "Max": 180
+        }
+    ],
+    "Niveau": 1,
+    "Nom": "Elara la guerisseuse de la Lorien",
+    "PV": [
+        {
+            "Current": 130,
+            "Max": 130
+        }
+    ],
+    "Pouvoir magique": [
+        {
+            "Current": 25,
+            "Max": 25
+        }
+    ],
+    "Pouvoir physique": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regen vitesse": [
+        {
+            "Current": 8,
+            "Max": 8
+        }
+    ],
+    "Regeneration Mana": [
+        {
+            "Current": 5,
+            "Max": 5
+        }
+    ],
+    "Regeneration PV": [
+        {
+            "Current": 5,
+            "Max": 5
+        }
+    ],
+    "Regeneration vigueur": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Taux aggro": [
+        {
+            "Current": 1,
+            "Max": 1
+        }
+    ],
+    "Taux rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Type": "Hero",
+    "Vigor": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Vitesse": [
+        {
+            "Current": 8,
+            "Max": 8
+        }
+    ],
+	"Rang": 4
+}
+

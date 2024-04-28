@@ -13,6 +13,7 @@
 #include "rust-rpg-bridge/utils.h"
 
 #include "playersmanager.h"
+#include "utils.h"
 
 #include <cmath>
 
@@ -25,6 +26,7 @@ Character::Character(const QString name, const characType type,
     : m_Name(name), m_type(type), m_Stats(stats) {
   InitTables();
   m_ExtCharacter = try_new_ext_character().into_raw();
+  m_ExtCharacter->set_is_first_round(true);
   if (m_type == characType::Boss) {
     m_Level = INT_MAX;
   }
@@ -361,10 +363,13 @@ void Character::ProcessRemoveEquip(StatsType &charStat,
 /// \brief Character::CanBeLaunched
 /// The attak can be launched if the character has enough mana, vigor and
 /// berseck.
+/// If the atk can be launched, true is returned and the optional<QString> is
+/// set to nullopt Otherwise the boolean is false and a reason must be set.
 ///
-bool Character::CanBeLaunched(const AttaqueType &atk) const {
+std::pair<bool, std::optional<QString>>
+Character::CanBeLaunched(const AttaqueType &atk) const {
   if (atk.level > m_Level) {
-    return false;
+    return std::make_pair(false, "Bloqué par niveau");
   }
   const auto &mana = m_Stats.m_AllStatsTable.at(STATS_MANA);
   const auto &berseck = m_Stats.m_AllStatsTable.at(STATS_BERSECK);
@@ -378,14 +383,16 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
           Application::GetInstance().m_GameManager->m_PlayersManager;
       for (const auto &gae : pm->m_AllEffectsOnGame[m_Name]) {
         if (atk.name == gae.atk.name && gae.allAtkEffects.effect == e.effect) {
-          return false;
+          return std::make_pair(false, QString("Cooldown(%1 tour(s))")
+                                           .arg(gae.allAtkEffects.nbTurns -
+                                                gae.allAtkEffects.counterTurn));
         }
       }
     }
     if (e.statsName == STATS_HP && ALLIES_TARGETS.count(e.target) > 0 &&
         m_ExtCharacter != nullptr &&
         m_ExtCharacter->get_is_heal_atk_blocked()) {
-      return false;
+      return std::make_pair(false, "Heal atk bloqué");
     }
   }
 
@@ -395,10 +402,10 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
 
   if (manaCost <= mana.m_CurrentValue && vigorCost <= vigor.m_CurrentValue &&
       berseckCost <= berseck.m_CurrentValue) {
-    return true;
+    return std::make_pair(true, nullopt);
   }
 
-  return false;
+  return std::make_pair(false, "Trop cher!");
 }
 
 std::pair<QString, std::vector<effectParam>>
@@ -1408,7 +1415,7 @@ void Character::SetEquipment(
         }
         stuff.m_Name = "";
         auto &local = stuff.m_Stats.m_AllStatsTable[stat];
-        local.InitValues(0, 0, 0, 0);
+        local.InitValues(0, 0);
       }
     }
   }
@@ -1612,8 +1619,50 @@ int Character::UpdateDamageByBuf(const Buffers *bufDmg, const int value) {
 void Character::SetValuesForThalia(const bool isBear) {
   auto &localstat = m_Stats.m_AllStatsTable[STATS_BERSECK];
   if (isBear) {
-    localstat.InitValues(20, 20, 100, 0);
+    localstat.InitValues(20, 20);
   } else {
-    localstat.InitValues(0, 0, 0, 0);
+    localstat.InitValues(0, 0);
   }
+}
+
+/**
+ * @brief Character::GetRandomAtkNumber
+ * Returns a random atk number to automatically launch the atk for a boss.
+ * The random number is included in [1; m_AttakList size]
+ */
+std::optional<int> Character::GetRandomAtkNumber() {
+  if (m_type == characType::Hero) {
+    return nullopt;
+  }
+  if (m_AttakList.empty()) {
+    return nullopt;
+  }
+  return static_cast<int>(get_random_nb(1, m_AttakList.size()));
+}
+
+/**
+ * @brief Character::FormatStringRandAtk
+ * Returns a formatted string on the launched atk
+ * Returns nullopt
+ * - in case of atk list empty
+ * - in case of rand number
+ */
+std::optional<QString> Character::FormatStringRandAtk(const int rand) {
+  if (m_AtksByLevel.empty()) {
+    return nullopt;
+  }
+  if (rand > m_AtksByLevel.size()) {
+    return nullopt;
+  }
+  // rand nb is included in [1; m_AttakList size]
+  return QString("Lance l'attaque #%1(%2).")
+      .arg(m_AtksByLevel.at(rand - 1).name)
+      .arg(rand);
+}
+
+void Character::SortAtkByLevel() {
+  for (const auto &[atkName, atk] : m_AttakList) {
+    m_AtksByLevel.push_back(atk);
+  }
+  std::sort(m_AtksByLevel.begin(), m_AtksByLevel.end(), Utils::CompareByLevel);
 }

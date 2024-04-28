@@ -38,7 +38,7 @@ private:
   // Table of attaks
   QAbstractItemModel *createModel(QObject *parent,
                                   const ActionsStackedWgType &typePage);
-  void addActionRow(QAbstractItemModel *model, const QVariant &action) const;
+  void addActionRow(QAbstractItemModel *model, const QVariant &action, const std::optional<QString>& reason) const;
   // Table of stats of the selected atk
   QAbstractItemModel *createInfoModel(QObject *parent,
                                       const ActionsStackedWgType &typePage);

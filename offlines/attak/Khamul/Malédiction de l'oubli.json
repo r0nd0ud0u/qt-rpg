@@ -1,0 +1,31 @@
+{
+    "Cible": "Ennemie",
+    "Coût de mana": 0,
+    "Coût de rage": 0,
+    "Coût de vigueur": 1,
+    "Effet": [
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 6,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -140
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 4,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 400
+        }
+    ],
+    "Forme": "Standard",
+    "Niveau": 5,
+    "Nom": "Malédiction de l'oubli",
+    "Photo": "default.png",
+    "Portée": "Individuel"
+}

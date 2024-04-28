@@ -25,10 +25,14 @@ ActionsView::~ActionsView() {
 }
 
 void ActionsView::addActionRow(QAbstractItemModel *model,
-                               const QVariant &action) const {
+                               const QVariant &action,
+                               const std::optional<QString> &reason) const {
   int index = model->rowCount();
   model->insertRow(index);
   model->setData(model->index(index, 0), action);
+  if (reason != std::nullopt) {
+      model->setData(model->index(index, 1), reason.value());
+  }
 }
 
 void ActionsView::addInfoActionRow(QAbstractItemModel *model,
@@ -50,28 +54,23 @@ ActionsView::createModel(QObject *parent,
 
   // attak view
   if (typePage == ActionsStackedWgType::attak) {
-    model = new QStandardItemModel(0, 1, parent);
-    // TODO maybe use another container got atk list
-    std::vector<AttaqueType> tmpAtkList;
-    for (const auto &[atkName, atk] : m_CurPlayer->m_AttakList) {
-      tmpAtkList.push_back(atk);
-    }
-    std::sort(tmpAtkList.begin(), tmpAtkList.end(), Utils::CompareByLevel);
+    model = new QStandardItemModel(0, 2, parent);
     // for init
     if (!m_CurPlayer->m_Forms.empty() && m_Form == STANDARD_FORM) {
       m_Form = m_CurPlayer->m_Forms.front();
     } else {
       m_Form = m_CurPlayer->m_SelectedForm;
     }
-    for (const auto &atk : tmpAtkList) {
+    for (const auto &atk : m_CurPlayer->m_AtksByLevel) {
       if (m_Form != atk.form) {
         continue;
       }
-      addActionRow(model, atk.name);
+      const auto [canBeLaunched, reason] = m_CurPlayer->CanBeLaunched(atk);
+      addActionRow(model, atk.name, reason);
       // disable atk in case of not enough resources, still displayed!
       for (int column = 0; column < model->columnCount(); ++column) {
         auto *item = model->item(model->rowCount() - 1, column);
-        if (item != nullptr && !m_CurPlayer->CanBeLaunched(atk)) {
+        if (item != nullptr && !canBeLaunched) {
           item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
         }
       }
