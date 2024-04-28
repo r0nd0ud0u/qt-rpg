@@ -59,7 +59,7 @@
     "Rage": [
         {
             "Current": 20,
-            "Max": 20
+            "Max": 100
         }
     ],
     "Regen vitesse": [
@@ -110,6 +110,7 @@
             "Current": 5,
             "Max": 5
         }
-    ]
+    ],
+	"Rang": 4
 }
 

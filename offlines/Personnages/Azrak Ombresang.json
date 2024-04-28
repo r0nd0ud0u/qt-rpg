@@ -102,7 +102,7 @@
     "Vigor": [
         {
             "Current": 130,
-            "Max": 13
+            "Max": 130
         }
     ],
     "Vitesse": [
@@ -110,6 +110,7 @@
             "Current": 10,
             "Max": 10
         }
-    ]
+    ],
+	"Rang": 4
 }
 
