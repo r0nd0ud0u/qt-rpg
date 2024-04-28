@@ -361,10 +361,13 @@ void Character::ProcessRemoveEquip(StatsType &charStat,
 /// \brief Character::CanBeLaunched
 /// The attak can be launched if the character has enough mana, vigor and
 /// berseck.
+/// If the atk can be launched, true is returned and the optional<QString> is
+/// set to nullopt Otherwise the boolean is false and a reason must be set.
 ///
-bool Character::CanBeLaunched(const AttaqueType &atk) const {
+std::pair<bool, std::optional<QString>>
+Character::CanBeLaunched(const AttaqueType &atk) const {
   if (atk.level > m_Level) {
-    return false;
+    return std::make_pair(false, "Bloqué par niveau");
   }
   const auto &mana = m_Stats.m_AllStatsTable.at(STATS_MANA);
   const auto &berseck = m_Stats.m_AllStatsTable.at(STATS_BERSECK);
@@ -378,14 +381,16 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
           Application::GetInstance().m_GameManager->m_PlayersManager;
       for (const auto &gae : pm->m_AllEffectsOnGame[m_Name]) {
         if (atk.name == gae.atk.name && gae.allAtkEffects.effect == e.effect) {
-          return false;
+          return std::make_pair(false, QString("Cooldown(%1 tour(s))")
+                                           .arg(gae.allAtkEffects.nbTurns -
+                                                gae.allAtkEffects.counterTurn));
         }
       }
     }
     if (e.statsName == STATS_HP && ALLIES_TARGETS.count(e.target) > 0 &&
         m_ExtCharacter != nullptr &&
         m_ExtCharacter->get_is_heal_atk_blocked()) {
-      return false;
+      return std::make_pair(false, "Heal atk bloqué");
     }
   }
 
@@ -395,10 +400,10 @@ bool Character::CanBeLaunched(const AttaqueType &atk) const {
 
   if (manaCost <= mana.m_CurrentValue && vigorCost <= vigor.m_CurrentValue &&
       berseckCost <= berseck.m_CurrentValue) {
-    return true;
+    return std::make_pair(true, nullopt);
   }
 
-  return false;
+  return std::make_pair(false, "Trop cher!");
 }
 
 std::pair<QString, std::vector<effectParam>>

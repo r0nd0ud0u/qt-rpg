@@ -147,6 +147,7 @@ void PlayersManager::InitHeroes() {
   m_AllHeroesList.push_back(hero5);
   std::for_each(heroes.begin(), heroes.end(), [&](Character *h) {
     h->LoadAtkJson();
+    h->SortAtkByLevel();
     h->LoadStuffJson();
     std::unordered_map<QString, QString> table;
     for (auto &[bodypart, stuff] : h->m_WearingEquipment) {
@@ -407,6 +408,7 @@ void PlayersManager::InitBosses() {
 
   for (const auto &boss : m_AllBossesList) {
     boss->LoadAtkJson();
+    boss->SortAtkByLevel();
     boss->LoadStuffJson();
     boss->ApplyEquipOnStats(m_AllEffectsOnGame[boss->m_Name]);
   }

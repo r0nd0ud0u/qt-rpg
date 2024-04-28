@@ -75,7 +75,8 @@ public:
   void LoadAtkJson();
   void LoadStuffJson();
   void ApplyEquipOnStats(const std::vector<GameAtkEffects> &allGae);
-  bool CanBeLaunched(const AttaqueType &atk) const;
+  // std::pair<bool, QString>, 1: canBeLaunched, 2: reason in case it is false
+  std::pair<bool, std::optional<QString>>  CanBeLaunched(const AttaqueType &atk) const;
 
   // Effect
   std::pair<QString, std::vector<effectParam>>
@@ -106,6 +107,7 @@ public:
   ProcessCriticalStrike(const AttaqueType &atk); // return isCrit, random number
   void ResetBuf(const BufTypes &bufType);
   void SetValuesForThalia(const bool isBear);
+  void SortAtkByLevel();
 
   // Temporary
   std::vector<effectParam> LoadThaliaTalent() const;
@@ -120,6 +122,8 @@ public:
       m_WearingEquipment; // key: body, value: equipmentName
   std::unordered_map<QString, AttaqueType>
       m_AttakList; // key: attak name, value: AttakType struct
+  // That vector contains all the atks from m_AttakList and is sorted by level.
+  std::vector<AttaqueType> m_AtksByLevel;
   int m_Level = 1;
   int m_Exp = 0;
   int m_NextLevel = 100;
