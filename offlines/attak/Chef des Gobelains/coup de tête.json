@@ -1,7 +1,7 @@
 {
     "Aggro": 0,
     "Cible": "Ennemie",
-    "Coût de mana": 1,
+    "Coût de mana": 0,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Durée": 1,
@@ -11,19 +11,19 @@
             "Cible": "Ennemie",
             "Portée": "Zone",
             "Stat": "PV",
-            "Tours actifs": 1,
+            "Tours actifs": 3,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": -70
+            "Value": -30
         },
         {
-            "Cible": "Ennemie",
-            "Portée": "Zone",
-            "Stat": "Esquive",
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "PV",
             "Tours actifs": 2,
-            "Type": "Up par valeur",
+            "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": -5
+            "Value": 50
         },
         {
             "Cible": "",
@@ -36,8 +36,8 @@
         }
     ],
     "Forme": "Standard",
-    "Niveau": 1,
-    "Nom": "Cri stridant",
+    "Niveau": 2,
+    "Nom": "coup de tête",
     "Photo": "default.png",
     "Portée": "Zone",
     "Regen mana": 0,

@@ -10,34 +10,34 @@
         {
             "Cible": "Ennemie",
             "Portée": "Zone",
-            "Stat": "PV",
-            "Tours actifs": 1,
-            "Type": "Changement par valeur",
+            "Stat": "Cout critique",
+            "Tours actifs": 2,
+            "Type": "Up par valeur",
             "Valeur de l'effet": 0,
-            "Value": -70
+            "Value": -25
         },
         {
             "Cible": "Ennemie",
             "Portée": "Zone",
-            "Stat": "Esquive",
-            "Tours actifs": 2,
-            "Type": "Up par valeur",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "Changement de valeur",
             "Valeur de l'effet": 0,
-            "Value": -5
+            "Value": 20
         },
         {
-            "Cible": "",
-            "Portée": "",
-            "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "PV",
+            "Tours actifs": 3,
+            "Type": "Changement de valeur",
             "Valeur de l'effet": 0,
-            "Value": 0
+            "Value": 10
         }
     ],
     "Forme": "Standard",
-    "Niveau": 1,
-    "Nom": "Cri stridant",
+    "Niveau": 4,
+    "Nom": "kick boxing",
     "Photo": "default.png",
     "Portée": "Zone",
     "Regen mana": 0,
