@@ -107,6 +107,8 @@ public:
   ProcessCriticalStrike(const AttaqueType &atk); // return isCrit, random number
   void ResetBuf(const BufTypes &bufType);
   void SetValuesForThalia(const bool isBear);
+  std::optional<int> GetRandomAtkNumber();
+  std::optional<QString> FormatStringRandAtk(const int rand);
   void SortAtkByLevel();
 
   // Temporary

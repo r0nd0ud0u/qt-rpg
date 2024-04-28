@@ -178,6 +178,17 @@ void GameDisplay::NewRound() {
     }
   }
 
+  // Assess boss atk
+  const auto randAtkNb = activePlayer->GetRandomAtkNumber();
+  if (randAtkNb.has_value()) {
+    const auto randAtkStr =
+        activePlayer->FormatStringRandAtk(randAtkNb.value());
+    if (randAtkStr.has_value()) {
+      emit SigUpdateChannelView(activePlayer->m_Name, randAtkStr.value(),
+                                activePlayer->color);
+    }
+  }
+
   // Update views
   // Update views after stats changes
   // Players panels views

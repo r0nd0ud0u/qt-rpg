@@ -13,6 +13,7 @@
 #include "rust-rpg-bridge/utils.h"
 
 #include "playersmanager.h"
+#include "utils.h"
 
 #include <cmath>
 
@@ -1621,4 +1622,46 @@ void Character::SetValuesForThalia(const bool isBear) {
   } else {
     localstat.InitValues(0, 0, 0, 0);
   }
+}
+
+/**
+ * @brief Character::GetRandomAtkNumber
+ * Returns a random atk number to automatically launch the atk for a boss.
+ * The random number is included in [1; m_AttakList size]
+ */
+std::optional<int> Character::GetRandomAtkNumber() {
+  if (m_type == characType::Hero) {
+    return nullopt;
+  }
+  if (m_AttakList.empty()) {
+    return nullopt;
+  }
+  return static_cast<int>(get_random_nb(1, m_AttakList.size()));
+}
+
+/**
+ * @brief Character::FormatStringRandAtk
+ * Returns a formatted string on the launched atk
+ * Returns nullopt
+ * - in case of atk list empty
+ * - in case of rand number
+ */
+std::optional<QString> Character::FormatStringRandAtk(const int rand) {
+  if (m_AtksByLevel.empty()) {
+    return nullopt;
+  }
+  if (rand > m_AtksByLevel.size()) {
+    return nullopt;
+  }
+  // rand nb is included in [1; m_AttakList size]
+  return QString("Lance l'attaque #%1(%2).")
+      .arg(m_AtksByLevel.at(rand - 1).name)
+      .arg(rand);
+}
+
+void Character::SortAtkByLevel() {
+  for (const auto &[atkName, atk] : m_AttakList) {
+    m_AtksByLevel.push_back(atk);
+  }
+  std::sort(m_AtksByLevel.begin(), m_AtksByLevel.end(), Utils::CompareByLevel);
 }
