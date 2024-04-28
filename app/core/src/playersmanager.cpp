@@ -1163,3 +1163,41 @@ void PlayersManager::InitRandomEquip() {
     inputFile.close();
   }
 }
+
+/**
+ * @brief PlayersManager::GetHeroMostAggro
+ * Returns the name of the hero character with the most aggro and the value of
+ * the aggro In case of empty list, returns nullopt In case of equal aggro, the
+ * output hero is randomly picked among the aggro-equal ones.
+ */
+std::optional<std::pair<QString, int>>
+PlayersManager::GetHeroMostAggro() const {
+  std::vector<const Character *> mostAggroCh;
+  if (m_HeroesList.empty()) {
+    return std::nullopt;
+  }
+  std::for_each(
+      m_HeroesList.begin(), m_HeroesList.end(), [&](const Character *c) {
+        if (!mostAggroCh.empty()) {
+          const auto &aggroStat1 = mostAggroCh.front()
+                                       ->m_Stats.m_AllStatsTable.at(STATS_AGGRO)
+                                       .m_CurrentValue;
+          const auto &aggroStat2 =
+              c->m_Stats.m_AllStatsTable.at(STATS_AGGRO).m_CurrentValue;
+          if (aggroStat1 < aggroStat2) {
+            mostAggroCh.clear();
+            mostAggroCh.push_back(c);
+          } else if (aggroStat1 == aggroStat2) {
+            mostAggroCh.push_back(c);
+          }
+        } else {
+          mostAggroCh.push_back(c);
+        }
+      });
+  const auto randNb = get_random_nb(0, mostAggroCh.size() - 1);
+
+  return std::make_pair(mostAggroCh[randNb]->m_Name,
+                        mostAggroCh[randNb]
+                            ->m_Stats.m_AllStatsTable.at(STATS_AGGRO)
+                            .m_CurrentValue);
+}
