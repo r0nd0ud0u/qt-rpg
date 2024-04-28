@@ -4,6 +4,8 @@
 #include "playersmanager.h"
 #include "utils.h"
 
+//#include "tst_characters.cpp"
+
 class utils_tests : public QObject {
   Q_OBJECT
 
@@ -28,6 +30,31 @@ void utils_tests::CompareByLevel_works() {
   atk1.level = 3;
   result = Utils::CompareByLevel(atk1, atk2);
   Q_ASSERT(!result);
+}
+
+class character_tests : public QObject {
+  Q_OBJECT
+
+private slots:
+  void TestThalia_works();
+};
+
+void character_tests::TestThalia_works() {
+  const QString thalia = "Thalia";
+  const QString azrakRx = "Azrak Ombresang";
+  const std::set<QString> activePlayers{thalia, azrakRx};
+  auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+  // add heroes
+  pm->UpdateActivePlayers(activePlayers);
+  auto *thaliaCh = pm->GetCharacterByName(thalia);
+  auto *AzrakChRx = pm->GetCharacterByName(azrakRx);
+
+  // attaque 1
+  AttaqueType atk1 = thaliaCh->m_AtksByLevel[0];
+  const auto &[conditionsOk, resultEffects, appliedEffects] =
+      thaliaCh->ApplyAtkEffect(true, atk1, AzrakChRx, false);
+
+  QCOMPARE(true, conditionsOk);
 }
 
 class player_manager_tests : public QObject {
@@ -85,20 +112,27 @@ void player_manager_tests::ProcessDamageTXHealNeedyAlly_works() {
   QCOMPARE(25, c1->m_Stats.m_AllStatsTable.at(STATS_HP).m_CurrentValue);
 }
 
-void player_manager_tests::LootNewEquipments_works(){
-    PlayersManager pl;
-    pl.InitBosses();
-    pl.InitRandomEquip();
-    const auto result = pl.LootNewEquipments("Angmar");
-    QCOMPARE(4, result.size());
+void player_manager_tests::LootNewEquipments_works() {
+  PlayersManager pl;
+  pl.LoadAllCharactersJson();
+  pl.InitBosses();
+  pl.InitRandomEquip();
+  const auto result = pl.LootNewEquipments("Angmar");
+  QCOMPARE(4, result.size());
 }
 
 int main(int argc, char *argv[]) {
+  auto app = std::make_unique<Application>(argc, argv);
+  app->Init();
+
   utils_tests test;
   QTest::qExec(&test);
 
   player_manager_tests test2;
   QTest::qExec(&test2);
+
+  character_tests test3;
+  QTest::qExec(&test3);
 
   return 0;
 }

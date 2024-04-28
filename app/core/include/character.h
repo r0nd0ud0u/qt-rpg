@@ -111,6 +111,11 @@ public:
   std::optional<int> GetRandomAtkNumber();
   std::optional<QString> FormatStringRandAtk(const int rand);
   void SortAtkByLevel();
+  std::pair<int, int> ProcessCurrentValueOnEffect(
+      effectParam &ep, const int nbOfApplies, const Stats &launcherStats,
+      const bool launch, Character *target,
+      const bool isCrit) const; // value 1 isCrit, value 2 total amount value 3
+      // maxamount, value 4: crit randNb
 
   // Temporary
   std::vector<effectParam> LoadThaliaTalent() const;
@@ -149,11 +154,6 @@ private:
   static void ProcessAddEquip(StatsType &charStat, const StatsType &equipStat);
   static void ProcessRemoveEquip(StatsType &charStat,
                                  const StatsType &equipStat);
-  std::pair<int, int> ProcessCurrentValueOnEffect(
-      effectParam &ep, const int nbOfApplies, const Stats &launcherStats,
-      const bool launch, Character *target,
-      const bool isCrit) const; // value 1 isCrit, value 2 total amount value 3
-                                // maxamount, value 4: crit randNb
   QString ProcessOutputLogOnEffect(const effectParam &ep, const int amount,
                                    const bool fromLaunch, const int nbOfApplies,
                                    const QString &atkName,
