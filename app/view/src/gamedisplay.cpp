@@ -119,16 +119,15 @@ void GameDisplay::NewRound() {
 
     const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffectsOnPlayer(
         activePlayer->m_Name, gm->m_GameState->m_CurrentTurnNb, false);
-    for (const auto &el : effectsLogs) {
-      emit SigUpdateChannelView("GameState", el);
-    }
+    emit SigUpdateChannelView(activePlayer->m_Name, effectsLogs.join("\n"),
+                              activePlayer->color);
     // Update effect
     const QStringList terminatedEffects =
         gm->m_PlayersManager->RemoveTerminatedEffectsOnPlayer(
             activePlayer->m_Name);
-    for (const auto &te : terminatedEffects) {
-      emit SigUpdateChannelView("GameState", te);
-    }
+    emit SigUpdateChannelView(activePlayer->m_Name,
+                              terminatedEffects.join("\n"),
+                              activePlayer->color);
     emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
 
     // update buf pow
@@ -270,7 +269,6 @@ bool GameDisplay::ProcessAtk(
   if (target == nullptr) {
     return false;
   }
-  QString channelLog;
   if (auto *targetChara =
           gm->m_PlayersManager->GetCharacterByName(target->get_name().data());
       targetChara != nullptr) {
@@ -298,15 +296,10 @@ bool GameDisplay::ProcessAtk(
 
     if (!resultEffects.isEmpty()) {
       emit SigUpdateChannelView(
-          nameChara,
+          activatedPlayer->m_Name,
           QString("Sur %1: ").arg(target->get_name().data()) + "\n" +
               resultEffects.join(""),
           activatedPlayer->color);
-    }
-    // conditionsOk = false if effect reinit with unfulfilled condtions
-    if (target->get_is_targeted() && conditionsOk && !channelLog.isEmpty()) {
-      // Update channel view
-      emit SigUpdateChannelView(nameChara, channelLog, activatedPlayer->color);
     }
     if (!conditionsOk) {
       ui->bag_button->setEnabled(true);
@@ -386,7 +379,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     critStr = "Pas de coup critique";
   }
   launchingStr.append(QString("%1 (%2)").arg(critStr).arg(critRandNb));
-  emit SigUpdateChannelView(nameChara, launchingStr.join("\n"),
+  emit SigUpdateChannelView(activatedPlayer->m_Name, launchingStr.join("\n"),
                             activatedPlayer->color);
 
   // In case of effect with reach: REACH_RAND_INDIVIDUAL, process who is the
@@ -438,7 +431,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
         gm->m_PlayersManager->RemoveTerminatedEffectsOnPlayer(targetName);
 
     if (!terminatedEffects.isEmpty()) {
-      emit SigUpdateChannelView(nameChara, terminatedEffects.join("\n"),
+      emit SigUpdateChannelView(activatedPlayer->m_Name,
+                                terminatedEffects.join("\n"),
                                 activatedPlayer->color);
     }
   }
@@ -453,16 +447,15 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   const QStringList diedBossList =
       gm->m_PlayersManager->CheckDiedPlayers(characType::Boss);
   for (const auto &dp : diedBossList) {
-    emit SigUpdateChannelView(dp, "est mort.");
-    // TODO what to do when a boss is dead
-    const auto newEquip = gm->m_PlayersManager->LootNewEquipments(dp);
-
+    emit SigUpdateChannelView("GameState", QString("%1 est mort.").arg(dp));
     // LOOT
     std::vector<EditStuff> allLoots;
     for (const auto *hero : gm->m_PlayersManager->m_HeroesList) {
       if (hero == nullptr) {
         continue;
       }
+      // TODO what to do when a boss is dead
+      const auto newEquip = gm->m_PlayersManager->LootNewEquipments(dp);
       QStringList logLoot;
       if (!newEquip.empty()) {
         logLoot.append(QString("Loot pour %1:").arg(hero->m_Name));
@@ -494,7 +487,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   const QStringList diedHeroesList =
       gm->m_PlayersManager->CheckDiedPlayers(characType::Hero);
   for (const auto &dp : diedHeroesList) {
-    emit SigUpdateChannelView(dp, "est mort.");
+    emit SigUpdateChannelView("GameState", QString("%1 est mort.").arg(dp));
   }
 
   // Check end of game

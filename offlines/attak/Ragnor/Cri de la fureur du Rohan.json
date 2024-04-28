@@ -9,7 +9,7 @@
             "Portée": "Individuel",
             "Stat": "Pouvoir magique",
             "Tours actifs": 2,
-            "Type": "Changement par valeur",
+            "Type": "Up par valeur",
             "Valeur de l'effet": 0,
             "Value": 60
         },
@@ -19,7 +19,7 @@
             "Portée": "Individuel",
             "Stat": "Pouvoir physique",
             "Tours actifs": 2,
-            "Type": "Changement par valeur",
+            "Type": "Up par valeur",
             "Valeur de l'effet": 0,
             "Value": 60
         },
@@ -27,9 +27,9 @@
        {
             "Cible": "Soi-même",
             "Portée": "Individuel",
-            "Stat": "critique",
+            "Stat": "Cout critique",
             "Tours actifs": 3,
-            "Type": "Changement par valeur",
+            "Type": "Up par valeur",
             "Valeur de l'effet": 0,
             "Value": 25
         }

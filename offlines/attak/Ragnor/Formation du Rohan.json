@@ -4,29 +4,31 @@
     "Coût de rage": 0,
     "Coût de vigueur": 1,
     "Effet": [
-        {
+      {
             "Cible": "Ennemie",
-            "Portée": "zone",
+            "Portée": "Individuel",
             "Stat": "PV",
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": -110
+            "Value": -210
         },
+
         {
-            "Cible": "Ennemie",
-            "Portée": "zone",
-            "Stat": "Cout critique",
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Armure physique",
             "Tours actifs": 3,
-            "Type": "Changement par valeur",
+            "Type": "Up par valeur",
             "Valeur de l'effet": 0,
-            "Value": -30
+            "Value": 650
         }
+  
+        
     ],
     "Forme": "Standard",
-    "Niveau": 3,
-    "Nom": "Rugissement des monts brumeux",
+    "Niveau": 5,
+    "Nom": "Formation du Rohan",
     "Photo": "default.png",
-    "Portée": "zone"
+    "Portée": "Individuel"
 }
-

@@ -4,41 +4,41 @@
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Effet": [
-      {
+        {
             "Cible": "Ennemie",
             "Portée": "Zone",
             "Stat": "PV",
             "Tours actifs": 1,
-            "Type": "Changement par valeur,
+            "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 150
+            "Value": -150
         },
-   {
+        {
             "Cible": "Ennemie",
             "Portée": "Zone",
             "Stat": "Mana",
             "Tours actifs": 1,
-            "Type": "Changement par %,
+            "Type": "Changement par %",
             "Valeur de l'effet": 0,
-            "Value": 25
+            "Value": -25
         },
-   {
+        {
             "Cible": "Ennemie",
             "Portée": "Zone",
             "Stat": "Vigor",
             "Tours actifs": 1,
-            "Type": "Changement par %,
+            "Type": "Changement par %",
             "Valeur de l'effet": 0,
-            "Value": 25
+            "Value": -25
         },
-   {
+        {
             "Cible": "Ennemie",
             "Portée": "Zone",
             "Stat": "Rage",
             "Tours actifs": 1,
-            "Type": "Changement par %,
+            "Type": "Changement par %",
             "Valeur de l'effet": 0,
-            "Value": 25
+            "Value": -25
         }
     ],
     "Forme": "Standard",
@@ -47,3 +47,4 @@
     "Photo": "default.png",
     "Portée": "Zone"
 }
+

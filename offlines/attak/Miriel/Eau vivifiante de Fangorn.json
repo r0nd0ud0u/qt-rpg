@@ -1,13 +1,22 @@
 {
-    "Cible": "Ennemie",
+    "Cible": "Allié",
     "Coût de mana": 1,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Effet": [
       {
-            "Cible": "Soi-même",
+            "Cible": "Allié",
             "Portée": "Individuel",
             "Stat": "Cout critique",
+            "Tours actifs": 4,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 30
+        },
+        {
+            "Cible": "Allié",
+            "Portée": "Individuel",
+            "Stat": "Regen vitesse",
             "Tours actifs": 4,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
@@ -20,12 +29,12 @@
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": -120
+            "Value": -75
         }
     ],
     "Forme": "Standard",
-    "Niveau": 7,
-    "Nom": "Brulure du feu sacré",
+    "Niveau": 1,
+    "Nom": "Eau vivifiante de Fangorn",
     "Photo": "default.png",
-    "Portée": "Zone"
+    "Portée": "Individuel"
 }

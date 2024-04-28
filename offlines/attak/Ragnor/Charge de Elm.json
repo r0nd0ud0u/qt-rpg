@@ -1,29 +1,26 @@
 {
-    "Aggro": 0,
     "Cible": "Ennemie",
     "Coût de mana": 0,
     "Coût de rage": 0,
-    "Coût de vigueur": 0,
-    "Durée": 1,
-    "Dégâts": 0,
+    "Coût de vigueur": 1,
     "Effet": [
         {
             "Cible": "Ennemie",
             "Portée": "Individuel",
-            "Stat": "PV",
-            "Tours actifs": 1,
-            "Type": "Changement par valeur",
+            "Stat": "",
+            "Tours actifs": 2,
+            "Type": "Up/down degats en %",
             "Valeur de l'effet": 0,
-            "Value": -15
+            "Value": -40
         },
         {
-            "Cible": "Soi-même",
-            "Portée": "Individuel",
-            "Stat": "Cout critique",
-            "Tours actifs": 2,
-            "Type": "Up par valeur",
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
             "Valeur de l'effet": 0,
-            "Value": 10
+            "Value": 0
         },
         {
             "Cible": "",
@@ -37,12 +34,8 @@
     ],
     "Forme": "Standard",
     "Niveau": 1,
-    "Nom": "Jet de pierres ",
+    "Nom": "Charge de Elm",
     "Photo": "default.png",
-    "Portée": "Individuel",
-    "Regen mana": 0,
-    "Regen rage": 0,
-    "Regen vigueur": 0,
-    "Soin": 0
+    "Portée": "Individuel"
 }
 
