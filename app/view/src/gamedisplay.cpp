@@ -179,8 +179,8 @@ void GameDisplay::NewRound() {
   }
 
   // Assess boss atk
-  const auto randAtkNb = activePlayer->GetRandomAtkNumber();
-  if (randAtkNb.has_value()) {
+  if (const auto randAtkNb = activePlayer->GetRandomAtkNumber();
+      randAtkNb.has_value()) {
     QStringList logTargetAtk;
     const auto randAtkStr =
         activePlayer->FormatStringRandAtk(randAtkNb.value());
@@ -188,8 +188,8 @@ void GameDisplay::NewRound() {
       logTargetAtk.append(randAtkStr.value());
     }
     // Choose the hero target with the most aggro in case of individual reach
-    const auto heroAgg = gm->m_PlayersManager->GetHeroMostAggro();
-    if (heroAgg.has_value()) {
+    if (const auto heroAgg = gm->m_PlayersManager->GetHeroMostAggro();
+        heroAgg.has_value()) {
       logTargetAtk.append(QString("%1 a le + d'aggro(%2)")
                               .arg(heroAgg->first)
                               .arg(heroAgg->second));

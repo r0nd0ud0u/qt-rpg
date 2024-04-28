@@ -76,7 +76,8 @@ public:
   void LoadStuffJson();
   void ApplyEquipOnStats(const std::vector<GameAtkEffects> &allGae);
   // std::pair<bool, QString>, 1: canBeLaunched, 2: reason in case it is false
-  std::pair<bool, std::optional<QString>>  CanBeLaunched(const AttaqueType &atk) const;
+  std::pair<bool, std::optional<QString>>
+  CanBeLaunched(const AttaqueType &atk) const;
 
   // Effect
   std::pair<QString, std::vector<effectParam>>
