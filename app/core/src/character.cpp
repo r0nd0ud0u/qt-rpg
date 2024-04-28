@@ -26,6 +26,7 @@ Character::Character(const QString name, const characType type,
     : m_Name(name), m_type(type), m_Stats(stats) {
   InitTables();
   m_ExtCharacter = try_new_ext_character().into_raw();
+  m_ExtCharacter->set_is_first_round(true);
   if (m_type == characType::Boss) {
     m_Level = INT_MAX;
   }

@@ -111,6 +111,7 @@ const QString CH_CURRENT_VALUE = "Current";
 const QString CH_MAX_VALUE = "Max";
 const QString CH_LEVEL = "Niveau";
 const QString CH_COLOR = "Couleur";
+const QString CH_RANK = "Rang";
 
 // equipment keys
 const QString EQUIP_HEAD = "Tete";

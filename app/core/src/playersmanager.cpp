@@ -1242,6 +1242,7 @@ void PlayersManager::OutputCharactersInJson(
     obj.insert(CH_TYPE, type);
     obj.insert(CH_LEVEL, h->m_Level);
     obj.insert(CH_COLOR, h->m_ColorStr);
+    obj.insert(CH_RANK, h->m_BossClass.m_Rank);
 
     for (const auto &stats : ALL_STATS) {
       if (h->m_Stats.m_AllStatsTable.count(stats) == 0) {
@@ -1304,7 +1305,7 @@ void PlayersManager::LoadAllCharactersJson() {
       const auto jsonDoc = QJsonDocument::fromJson(msg.toUtf8());
       // decode json
 
-      Character *c = new Character();
+      Character *c = new Character("", characType::Hero, {});
       c->m_Name = jsonDoc[CH_NAME].toString();
       c->m_type = (jsonDoc[CH_TYPE].toString() == CH_TYPE_BOSS)
                       ? characType::Boss
@@ -1312,6 +1313,7 @@ void PlayersManager::LoadAllCharactersJson() {
       c->m_Level = jsonDoc[CH_LEVEL].toDouble();
       c->color = QColor(jsonDoc[CH_COLOR].toString());
       c->m_ColorStr = jsonDoc[CH_COLOR].toString();
+      c->m_BossClass.m_Rank = jsonDoc[CH_RANK].toDouble();
 
       for (const auto &stats : ALL_STATS) {
         if (c->m_Stats.m_AllStatsTable.count(stats) == 0) {
@@ -1327,18 +1329,6 @@ void PlayersManager::LoadAllCharactersJson() {
                 static_cast<int>(item[CH_CURRENT_VALUE].toDouble());
             const auto max = static_cast<int>(item[CH_MAX_VALUE].toDouble());
             c->m_Stats.m_AllStatsTable[stats].InitValues(current, max);
-            // for (const auto &key : item.keys()) {
-            //     const auto &val = item[key];
-            //     if (val.isDouble()) {
-            //         if (key == "percent") {
-            //             stuffStat.m_BufEquipPercent =
-            //                 static_cast<int>(val.toDouble());
-            //         } else if (key == "value") {
-            //             stuffStat.m_BufEquipValue =
-            //                 static_cast<int>(val.toDouble());
-            //         }
-            //     }
-            // }
           }
         }
       }
