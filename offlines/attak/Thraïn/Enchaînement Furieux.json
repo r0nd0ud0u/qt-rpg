@@ -1,11 +1,8 @@
 {
-    "Aggro": 0,
     "Cible": "Ennemie",
     "Coût de mana": 0,
-    "Coût de rage": 15,
+    "Coût de rage": 20,
     "Coût de vigueur": 0,
-    "Durée": 1,
-    "Dégâts": 0,
     "Effet": [
         {
             "Cible": "Ennemie",
@@ -15,16 +12,30 @@
             "Type": "Répète tant que possible",
             "Valeur de l'effet": 0,
             "Value": -50
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
+        },
+        {
+            "Cible": "",
+            "Portée": "",
+            "Stat": "",
+            "Tours actifs": 0,
+            "Type": "",
+            "Valeur de l'effet": 0,
+            "Value": 0
         }
     ],
     "Forme": "Standard",
     "Niveau": 9,
     "Nom": "Enchaînement Furieux",
     "Photo": "Thraïn.png",
-    "Portée": "Individuel",
-    "Regen mana": 0,
-    "Regen rage": 0,
-    "Regen vigueur": 0,
-    "Soin": 0
+    "Portée": "Individuel"
 }
 

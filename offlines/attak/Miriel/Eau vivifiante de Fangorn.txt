@@ -1,0 +1,40 @@
+{
+    "Cible": "Allié",
+    "Coût de mana": 1,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
+    "Effet": [
+      {
+            "Cible": "Allié",
+            "Portée": "Individuel",
+            "Stat": "Cout critique",
+            "Tours actifs": 4,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 30
+        },
+        {
+            "Cible": "Allié",
+            "Portée": "Individuel",
+            "Stat": "Regen vitesse",
+            "Tours actifs": 4,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 30
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -75
+        }
+    ],
+    "Forme": "Standard",
+    "Niveau": 1,
+    "Nom": "Eau vivifiante de Fangorn",
+    "Photo": "default.png",
+    "Portée": "individuel"
+}

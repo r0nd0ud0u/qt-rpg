@@ -1,0 +1,41 @@
+{
+    "Cible": "Allié",
+    "Coût de mana": 1,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
+    "Effet": [
+      {
+            "Cible": "Allié",
+            "Portée": "Individuel",
+            "Stat": "Pouvoir physique",
+            "Tours actifs": 3,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": 100
+        },
+        {
+            "Cible": "Allié",
+            "Portée": "Individuel",
+            "Stat": "Armure physique",
+            "Tours actifs": 4,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 1500
+        },
+        {
+             "Cible": "Allié",
+            "Portée": "Individuel",
+            "Stat": "Regen vitesse",
+            "Tours actifs": 3,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 60
+        },
+        
+    ],
+    "Forme": "Standard",
+    "Niveau": 6,
+    "Nom": "Désespoir apocalyptique",
+    "Photo": "default.png",
+    "Portée": "individuel"
+}

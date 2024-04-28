@@ -1,0 +1,43 @@
+{
+    "Cible": "Allié",
+    "Coût de mana": 0,
+    "Coût de rage": 0,
+    "Coût de vigueur": 1,
+    "Effet": [
+      {
+            "Cible": "Allié",
+            "Portée": "Individuel",
+            "Stat": "Pouvoir magique",
+            "Tours actifs": 2,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 60
+        },
+
+       {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Pouvoir physique",
+            "Tours actifs": 2,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 60
+        },
+  
+       {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "critique",
+            "Tours actifs": 3,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 25
+        }
+        
+    ],
+    "Forme": "Standard",
+    "Niveau": 3,
+    "Nom": "Cri de la fureur du Rohan",
+    "Photo": "default.png",
+    "Portée": "Individuel"
+}

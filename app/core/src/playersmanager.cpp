@@ -278,6 +278,7 @@ void PlayersManager::InitBosses() {
   boss4->m_BossClass.m_Rank = 4;
   boss4->m_Forms.push_back(STANDARD_FORM);
 
+  // Angmar 10 PV
   stats.m_AllStatsTable[STATS_HP].InitValues(10, 10, 10, 0);
   stats.m_AllStatsTable[STATS_MANA].InitValues(9999, 9999, 9999, 9999);
   stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
@@ -301,6 +302,107 @@ void PlayersManager::InitBosses() {
   boss5->m_BossClass.m_Rank = 4;
   m_AllBossesList.push_back(boss5);
   boss5->m_Forms.push_back(STANDARD_FORM);
+
+  // Carcaroth
+  stats.m_AllStatsTable[STATS_HP].InitValues(84000, 84000, 84000, 0);
+  stats.m_AllStatsTable[STATS_MANA].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_VIGOR].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_POW_PHY].InitValues(100, 100, 100, 0);
+  stats.m_AllStatsTable[STATS_POW_MAG].InitValues(100, 100, 100, 0);
+  stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_SPEED].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_CRIT].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_DODGE].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_MANA].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_VIGOR].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(0, 0, 0, 0);
+  const auto boss6 = new Character("Carcaroth", characType::Boss, stats);
+  boss6->color = QColor("red");
+  boss6->m_BossClass.m_Rank = 4;
+  m_AllBossesList.push_back(boss6);
+  boss6->m_Forms.push_back(STANDARD_FORM);
+
+  // beorn
+  stats.m_AllStatsTable[STATS_HP].InitValues(65000, 65000, 65000, 0);
+  stats.m_AllStatsTable[STATS_MANA].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_VIGOR].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(600, 600, 600, 0);
+  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(750, 750,750, 0);
+  stats.m_AllStatsTable[STATS_POW_PHY].InitValues(120, 120, 120, 0);
+  stats.m_AllStatsTable[STATS_POW_MAG].InitValues(150, 150, 150, 0);
+  stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_SPEED].InitValues(24, 24, 24, 0);
+  stats.m_AllStatsTable[STATS_CRIT].InitValues(18, 18, 18, 0);
+  stats.m_AllStatsTable[STATS_DODGE].InitValues(5, 5, 5, 0);
+  stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_MANA].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_VIGOR].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(0, 0, 0, 0);
+  const auto boss7 = new Character("Beorn", characType::Boss, stats);
+  boss7->color = QColor("red");
+  boss7->m_BossClass.m_Rank = 5;
+  m_AllBossesList.push_back(boss7);
+  boss7->m_Forms.push_back(STANDARD_FORM);
+
+  // miriel
+  stats.m_AllStatsTable[STATS_HP].InitValues(17000, 17000, 17000, 0);
+  stats.m_AllStatsTable[STATS_MANA].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_VIGOR].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(9999,9999,9999, 0);
+  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(400, 400, 400, 0);
+  stats.m_AllStatsTable[STATS_POW_PHY].InitValues(50, 50, 50, 0);
+  stats.m_AllStatsTable[STATS_POW_MAG].InitValues(100, 100, 100, 0);
+  stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_SPEED].InitValues(10, 10, 10, 0);
+  stats.m_AllStatsTable[STATS_CRIT].InitValues(22, 22, 22, 0);
+  stats.m_AllStatsTable[STATS_DODGE].InitValues(12, 12, 12, 0);
+  stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_MANA].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_VIGOR].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(0, 0, 0, 0);
+  const auto boss8 = new Character("Miriel", characType::Boss, stats);
+  boss8->color = QColor("red");
+  boss8->m_BossClass.m_Rank = 4;
+  m_AllBossesList.push_back(boss8);
+  boss8->m_Forms.push_back(STANDARD_FORM);
+
+  // ragnor
+
+  stats.m_AllStatsTable[STATS_HP].InitValues(45000, 45000, 45000, 0);
+  stats.m_AllStatsTable[STATS_MANA].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_BERSECK].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_VIGOR].InitValues(9999, 9999, 9999, 9999);
+  stats.m_AllStatsTable[STATS_ARM_PHY].InitValues(700, 700, 700, 0);
+  stats.m_AllStatsTable[STATS_ARM_MAG].InitValues(9999, 9999, 9999, 0);
+  stats.m_AllStatsTable[STATS_POW_PHY].InitValues(110, 110, 110, 0);
+  stats.m_AllStatsTable[STATS_POW_MAG].InitValues(40, 40, 40, 0);
+  stats.m_AllStatsTable[STATS_AGGRO].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_SPEED].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_SPEED].InitValues(28, 28, 28, 0);
+  stats.m_AllStatsTable[STATS_CRIT].InitValues(16, 16, 16, 0);
+  stats.m_AllStatsTable[STATS_DODGE].InitValues(5, 5, 5, 0);
+  stats.m_AllStatsTable[STATS_REGEN_HP].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_MANA].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_REGEN_VIGOR].InitValues(0, 0, 0, 0);
+  stats.m_AllStatsTable[STATS_RATE_AGGRO].InitValues(0, 0, 0, 0);
+  const auto boss9 = new Character("Ragnor", characType::Boss, stats);
+  boss9->color = QColor("red");
+  boss9->m_BossClass.m_Rank = 4;
+  m_AllBossesList.push_back(boss9);
+  boss9->m_Forms.push_back(STANDARD_FORM);
 
   for (const auto &boss : m_AllBossesList) {
     boss->LoadAtkJson();

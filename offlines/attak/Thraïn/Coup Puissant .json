@@ -17,19 +17,28 @@
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "",
-            "Tours actifs": 3,
+            "Tours actifs": 4,
             "Type": "Tours de recharge",
             "Valeur de l'effet": 0,
             "Value": 0
         },
         {
-            "Cible": "",
-            "Portée": "",
-            "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "Armure physique",
+            "Tours actifs": 3,
+            "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": 0
+            "Value": -25
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "Regen vitesse",
+            "Tours actifs": 3,
+            "Type": "Up par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -15
         }
     ],
     "Forme": "Standard",

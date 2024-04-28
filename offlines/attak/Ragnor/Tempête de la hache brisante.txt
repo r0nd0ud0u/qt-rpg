@@ -1,0 +1,24 @@
+{
+    "Cible": "Ennemie",
+    "Coût de mana": 0,
+    "Coût de rage": 0,
+    "Coût de vigueur": 1,
+    "Effet": [
+      {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "PV",
+            "Tours actifs": 6,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -80
+        }
+  
+        
+    ],
+    "Forme": "Standard",
+    "Niveau": 4,
+    "Nom": "Tempête de la hache brisante",
+    "Photo": "default.png",
+    "Portée": "Zone"
+}

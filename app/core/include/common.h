@@ -163,6 +163,9 @@ const QString EFFECT_IMPROVE_HOTS = "Boost chaque HOT de .. %";
 const QString EFFECT_BOOSTED_BY_HOTS =
     "Boost l'effet par nb HOTS presents en %";
 const QString EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT = "Up/down degats en %";
+const QString EFFECT_CHANGE_DAMAGES_RX_BY_PERCENT = "Up/down degats RX en %";
+const QString EFFECT_CHANGE_HEAL_RX_BY_PERCENT = "Up/down heal RX en %";
+const QString EFFECT_CHANGE_HEAL_TX_BY_PERCENT = "Up/down heal TX en %";
 // Assess the nob of applies for a stat
 const QString EFFECT_REPEAT_AS_MANY_AS = "Répète tant que possible";
 // Effect to improve max value of a stat by percent (current value is updated by
@@ -188,7 +191,6 @@ const QString EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL =
     "Buf par valeur d'autant de PV";
 // Effect to modify the regen rate of stats such as vigor, mana, speed, hp,
 // berseck by value.
-const QString EFFECT_UPDATE_TURN_RATE = "Update regen par valeur";
 const std::set<QString> EFFECTS{"",
                                 EFFECT_REINIT,
                                 EFFECT_NB_COOL_DOWN,
@@ -210,7 +212,6 @@ const std::set<QString> EFFECTS{"",
                                 CONDITION_DMG_PREV_TURN,
                                 EFFECT_REPEAT_IF_HEAL,
                                 EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL,
-                                EFFECT_UPDATE_TURN_RATE,
                                 EFFECT_COND_DMG_PREV_TURN};
 const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_NB_DECREASE_BY_TURN,
@@ -226,8 +227,7 @@ const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_NEXT_HEAL_IS_CRIT,
     EFFECT_BUF_MULTI,
     EFFECT_BLOCK_HEAL_ATK,
-    EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL,
-    EFFECT_UPDATE_TURN_RATE};
+    EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL};
 const std::set<QString> EFFECTS_HOT_OR_DOT = {
     EFFECT_VALUE_CHANGE, EFFECT_REPEAT_AS_MANY_AS, EFFECT_PERCENT_CHANGE,
     EFFECT_NB_DECREASE_ON_TURN};

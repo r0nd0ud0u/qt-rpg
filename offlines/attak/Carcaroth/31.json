@@ -1,0 +1,40 @@
+{
+    "Cible": "Ennemie",
+    "Coût de mana": 0,
+    "Coût de rage": 0,
+    "Coût de vigueur": 1,
+    "Effet": [
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -310
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Armure magique",
+            "Tours actifs": 50,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 310
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Armure physique",
+            "Tours actifs": 50,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 310
+        }
+    ],
+    "Forme": "Standard",
+    "Niveau": 31,
+    "Nom": "31",
+    "Photo": "default.png",
+    "Portée": "Individuel"
+}

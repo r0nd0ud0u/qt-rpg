@@ -1,0 +1,24 @@
+{
+    "Cible": "Soi-même",
+    "Coût de mana": 0,
+    "Coût de rage": 0,
+    "Coût de vigueur": 1,
+    "Effet": [
+      {
+            "Cible": "Soi-mêmee",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 3,
+            "Type": "Up/down degats en %",
+            "Valeur de l'effet": 0,
+            "Value": 100
+        }
+  
+        
+    ],
+    "Forme": "Standard",
+    "Niveau": -,
+    "Nom": "Massacre Rohirrim",
+    "Photo": "default.png",
+    "Portée": "Individuel"
+}

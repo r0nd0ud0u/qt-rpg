@@ -23,7 +23,7 @@
             "Tours actifs": 2,
             "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": 15
+            "Value": 25
         },
         {
             "Cible": "Tous les heroes",
@@ -32,7 +32,7 @@
             "Tours actifs": 2,
             "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": 15
+            "Value": 25
         },
 		{
             "Cible": "Tous les heroes",
@@ -41,7 +41,7 @@
             "Tours actifs": 2,
             "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": 15
+            "Value": 25
         },
         {
             "Cible": "Soi-même",

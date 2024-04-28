@@ -1,0 +1,31 @@
+{
+    "Cible": "Ennemie",
+    "Coût de mana": 1,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
+    "Effet": [
+      {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "PV",
+            "Tours actifs": 4,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": 450
+        },
+         {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "Esquive",
+            "Tours actifs": 4,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 25
+        }
+    ],
+    "Forme": "Standard",
+    "Niveau": 3,
+    "Nom": "Fléau Ent",
+    "Photo": "default.png",
+    "Portée": "Zone"
+}

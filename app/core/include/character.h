@@ -9,10 +9,10 @@
 #include <unordered_map>
 #include <vector>
 
+#include "bossclass.h"
 #include "common.h"
 #include "effect.h"
 #include "stuff.h"
-#include "bossclass.h"
 
 #include "rust-rpg-bridge/attaque.h"
 #include "rust-rpg-bridge/character.h"
@@ -45,6 +45,8 @@ enum class BufTypes {
   defaultBuf = 0,
   damageRx,
   damageTx,
+  healTx,
+  healRx,
   damageCritCapped,
   powPhyBuf,
   nextHealAtkIsCrit,
@@ -53,7 +55,14 @@ enum class BufTypes {
   changeByHealValue,
   enumSize
 };
-enum class amountType { damageRx = 0, damageTx, healRx, healTx, overHealRx, enumSize };
+enum class amountType {
+  damageRx = 0,
+  damageTx,
+  healRx,
+  healTx,
+  overHealRx,
+  enumSize
+};
 
 class Character {
 public:
@@ -65,7 +74,7 @@ public:
   void AddAtq(const AttaqueType &atq);
   void LoadAtkJson();
   void LoadStuffJson();
-  void ApplyEquipOnStats(const std::vector<GameAtkEffects>& allGae);
+  void ApplyEquipOnStats(const std::vector<GameAtkEffects> &allGae);
   bool CanBeLaunched(const AttaqueType &atk) const;
 
   // Effect
@@ -86,12 +95,13 @@ public:
   SetStatsOnEffect(StatsType &stat, const int value, const bool isPercent,
                    const bool updateEffect); // TODO à sortir dans un common
                                              // pour gerer les stats?
-  std::pair<bool, QString> IsDodging(const AttaqueType& atk) const;
+  std::pair<bool, QString> IsDodging(const AttaqueType &atk) const;
   void UsePotion(const QString &statsName);
   void AddExp(const int newXp);
   void SetEquipment(const std::unordered_map<QString, QString> &);
   void UpdateEquipmentOnJson() const;
-  void ApplyEffeftOnStats(const bool updateEffect, const std::vector<GameAtkEffects>& allGae);
+  void ApplyEffeftOnStats(const bool updateEffect,
+                          const std::vector<GameAtkEffects> &allGae);
   std::pair<bool, int>
   ProcessCriticalStrike(const AttaqueType &atk); // return isCrit, random number
   void ResetBuf(const BufTypes &bufType);
@@ -126,7 +136,6 @@ public:
   Powers m_Power;
   ExtendedCharacter *m_ExtCharacter = nullptr;
   BossClass m_BossClass;
-
 
 private:
   static void ProcessAddEquip(StatsType &charStat, const StatsType &equipStat);

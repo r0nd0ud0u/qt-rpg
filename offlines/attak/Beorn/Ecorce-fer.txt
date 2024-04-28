@@ -1,0 +1,31 @@
+{
+    "Cible": "Ennemie",
+    "Coût de mana": 1,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
+    "Effet": [
+      {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Armure physique",
+            "Tours actifs": 3,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": 300
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -100
+        }
+    ],
+    "Forme": "Standard",
+    "Niveau": 8,
+    "Nom": "Ecorce-fer",
+    "Photo": "default.png",
+    "Portée": "Zone"
+}
