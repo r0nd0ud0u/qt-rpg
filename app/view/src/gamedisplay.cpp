@@ -178,6 +178,26 @@ void GameDisplay::NewRound() {
     }
   }
 
+  // Assess boss atk
+  if (const auto randAtkNb = activePlayer->GetRandomAtkNumber();
+      randAtkNb.has_value()) {
+    QStringList logTargetAtk;
+    const auto randAtkStr =
+        activePlayer->FormatStringRandAtk(randAtkNb.value());
+    if (randAtkStr.has_value()) {
+      logTargetAtk.append(randAtkStr.value());
+    }
+    // Choose the hero target with the most aggro in case of individual reach
+    if (const auto heroAgg = gm->m_PlayersManager->GetHeroMostAggro();
+        heroAgg.has_value()) {
+      logTargetAtk.append(QString("%1 a le + d'aggro(%2)")
+                              .arg(heroAgg->first)
+                              .arg(heroAgg->second));
+    }
+    emit SigUpdateChannelView(activePlayer->m_Name, logTargetAtk.join("\n"),
+                              activePlayer->color);
+  }
+
   // Update views
   // Update views after stats changes
   // Players panels views

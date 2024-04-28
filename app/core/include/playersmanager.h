@@ -65,6 +65,9 @@ public:
   bool UpdateActivePlayers(const std::set<QString> &playersList);
   std::vector<Stuff> LootNewEquipments(const QString& name);
   void InitRandomEquip();
+  std::optional<std::pair<QString, int>> GetHeroMostAggro() const;
+  void OutputCharactersInJson(const std::vector<Character*>& l) const;
+  void LoadAllCharactersJson();
 
   // Available characters to create a party
   std::vector<Character *> m_AllHeroesList;

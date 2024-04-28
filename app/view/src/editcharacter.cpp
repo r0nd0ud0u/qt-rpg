@@ -41,17 +41,10 @@ void EditCharacter::AddCharacter(Character *ch) const {
 
   for (const auto &panel : m_PanelList) {
     if (panel->m_MaxValue == -1) {
-      panel->m_MaxValue = panel->m_StartingValue;
+      panel->m_MaxValue = 0;
     }
-    if (panel->m_RegenValue == -1) {
-      panel->m_RegenValue = panel->m_StartingValue;
-    }
-    ch->m_Stats.m_AllStatsTable[panel->m_Name].InitValues(
-        panel->m_StartingValue, panel->m_StartingValue, panel->m_MaxValue,
-        panel->m_RegenValue);
+    ch->m_Stats.m_AllStatsTable[panel->m_Name].InitValues(panel->m_MaxValue, panel->m_MaxValue);
     // reset panel
-    panel->m_StartingValue = -1;
     panel->m_MaxValue = -1;
-    panel->m_RegenValue = -1;
   }
 }
