@@ -8,16 +8,16 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 100
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 100
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Collier",
     "Cout critique": [
         {
             "percent": 0,
@@ -27,7 +27,7 @@
     "Esquive": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Mana": [
@@ -36,17 +36,18 @@
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Collier des Chevaliers Errants",
+    "Nom unique": "Collier des Chevaliers Errants-4-2024-04-27-20-18-49",
     "PV": [
         {
-            "percent": 0,
+            "percent": 15,
             "value": 0
         }
     ],
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 60
+            "value": 0
         }
     ],
     "Pouvoir physique": [
@@ -59,6 +60,12 @@
         {
             "percent": 0,
             "value": 0
+        }
+    ],
+    "Regen vitesse": [
+        {
+            "percent": 0,
+            "value": 5
         }
     ],
     "Regeneration Mana": [
@@ -93,7 +100,7 @@
     ],
     "Vigor": [
         {
-            "percent": 0,
+            "percent": 15,
             "value": 0
         }
     ],

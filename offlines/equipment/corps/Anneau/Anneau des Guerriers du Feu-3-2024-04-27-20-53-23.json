@@ -17,7 +17,7 @@
             "value": 0
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Anneau",
     "Cout critique": [
         {
             "percent": 0,
@@ -36,7 +36,8 @@
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Anneau des Guerriers du Feu",
+    "Nom unique": "Anneau des Guerriers du Feu-3-2024-04-27-20-53-23",
     "PV": [
         {
             "percent": 0,
@@ -46,7 +47,7 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 60
+            "value": 0
         }
     ],
     "Pouvoir physique": [
@@ -70,7 +71,7 @@
     "Regeneration PV": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Regeneration vigueur": [
@@ -97,10 +98,10 @@
             "value": 0
         }
     ],
-    "Vitesse": [
+    "Regen vitesse": [
         {
             "percent": 0,
-            "value": 0
+            "value":4 
         }
     ]
 }

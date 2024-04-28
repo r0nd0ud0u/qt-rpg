@@ -8,16 +8,16 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 100
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 100
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Anneau",
     "Cout critique": [
         {
             "percent": 0,
@@ -27,7 +27,7 @@
     "Esquive": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Mana": [
@@ -36,7 +36,8 @@
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Sceau des Chasseurs de l'Ombre",
+    "Nom unique": "Sceau des Chasseurs de l'Ombre-4-2024-04-27-20-18-49",
     "PV": [
         {
             "percent": 0,
@@ -46,7 +47,7 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 60
+            "value": 0
         }
     ],
     "Pouvoir physique": [
@@ -93,7 +94,7 @@
     ],
     "Vigor": [
         {
-            "percent": 0,
+            "percent": 15,
             "value": 0
         }
     ],

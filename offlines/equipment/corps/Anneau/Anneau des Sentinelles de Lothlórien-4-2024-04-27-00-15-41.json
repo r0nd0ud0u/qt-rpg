@@ -8,16 +8,16 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 200
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 100
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Anneau",
     "Cout critique": [
         {
             "percent": 0,
@@ -36,7 +36,8 @@
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Anneau des Sentinelles de Lothlórien",
+    "Nom unique": "Anneau des Sentinelles de Lothlórien-4-2024-04-27-00-15-41",
     "PV": [
         {
             "percent": 0,
@@ -46,7 +47,7 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 60
+            "value": 80
         }
     ],
     "Pouvoir physique": [
@@ -59,6 +60,12 @@
         {
             "percent": 0,
             "value": 0
+        }
+    ],
+    "Regen vitesse": [
+        {
+            "percent": 0,
+            "value": 5
         }
     ],
     "Regeneration Mana": [

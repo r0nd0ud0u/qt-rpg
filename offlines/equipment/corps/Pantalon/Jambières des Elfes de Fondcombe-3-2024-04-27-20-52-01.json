@@ -14,10 +14,10 @@
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 75
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Pantalon",
     "Cout critique": [
         {
             "percent": 0,
@@ -36,10 +36,11 @@
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Jambières des Elfes de Fondcombe",
+    "Nom unique": "Jambières des Elfes de Fondcombe-3-2024-04-27-20-52-01",
     "PV": [
         {
-            "percent": 0,
+            "percent": 11,
             "value": 0
         }
     ],
@@ -57,7 +58,7 @@
     ],
     "Rage": [
         {
-            "percent": 0,
+            "percent": 11,
             "value": 0
         }
     ],

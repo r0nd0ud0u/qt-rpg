@@ -8,20 +8,20 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 100
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 100
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Tete",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 5
         }
     ],
     "Esquive": [
@@ -36,17 +36,18 @@
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Casque de la Dernière Alliance",
+    "Nom unique": "Casque de la Dernière Alliance-4-2024-04-27-17-27-05",
     "PV": [
         {
-            "percent": 0,
+            "percent": 15,
             "value": 0
         }
     ],
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 60
+            "value": 0
         }
     ],
     "Pouvoir physique": [
@@ -57,8 +58,14 @@
     ],
     "Rage": [
         {
-            "percent": 0,
+            "percent": 15,
             "value": 0
+        }
+    ],
+    "Regen vitesse": [
+        {
+            "percent": 0,
+            "value": 5
         }
     ],
     "Regeneration Mana": [

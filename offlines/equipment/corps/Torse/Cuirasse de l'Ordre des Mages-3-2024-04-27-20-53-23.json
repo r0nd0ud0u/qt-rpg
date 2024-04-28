@@ -8,20 +8,20 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 100
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 200
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Torse",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 5
         }
     ],
     "Esquive": [
@@ -36,7 +36,8 @@
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Cuirasse de l'Ordre des Mages",
+    "Nom unique": "Cuirasse de l'Ordre des Mages-3-2024-04-27-20-53-23",
     "PV": [
         {
             "percent": 0,
@@ -46,19 +47,25 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 60
+            "value": 80
         }
     ],
     "Pouvoir physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 80
         }
     ],
     "Rage": [
         {
             "percent": 0,
             "value": 0
+        }
+    ],
+    "Regen vitesse": [
+        {
+            "percent": 0,
+            "value": 5
         }
     ],
     "Regeneration Mana": [

@@ -36,7 +36,8 @@
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Shuriken des Elfes de Rivendell",
+    "Nom unique": "Shuriken des Elfes de Rivendell-3-2024-04-27-20-53-23",
     "PV": [
         {
             "percent": 0,
@@ -52,7 +53,7 @@
     "Pouvoir physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 60
         }
     ],
     "Rage": [

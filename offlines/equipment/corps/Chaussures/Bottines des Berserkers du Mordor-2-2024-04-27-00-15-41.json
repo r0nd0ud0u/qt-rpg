@@ -14,10 +14,10 @@
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 75
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Chaussures",
     "Cout critique": [
         {
             "percent": 0,
@@ -36,7 +36,8 @@
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Bottines des Berserkers du Mordor",
+    "Nom unique": "Bottines des Berserkers du Mordor-2-2024-04-27-00-15-41",
     "PV": [
         {
             "percent": 0,
@@ -46,7 +47,7 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 60
+            "value": 40
         }
     ],
     "Pouvoir physique": [
@@ -93,7 +94,7 @@
     ],
     "Vigor": [
         {
-            "percent": 0,
+            "percent": 7,
             "value": 0
         }
     ],

@@ -1,0 +1,115 @@
+{
+    "Aggro": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Armure magique": [
+        {
+            "Current": 603,
+            "Max": 603
+        }
+    ],
+    "Armure physique": [
+        {
+            "Current": 580,
+            "Max": 580
+        }
+    ],
+    "Couleur": "dark",
+    "Cout critique": [
+        {
+            "Current": 21,
+            "Max": 21
+        }
+    ],
+    "Esquive": [
+        {
+            "Current": 18,
+            "Max": 18
+        }
+    ],
+    "Mana": [
+        {
+            "Current": 9999,
+            "Max": 9999
+        }
+    ],
+    "Niveau": 2147483647,
+    "Nom": "La bouche du Mordor",
+    "PV": [
+        {
+            "Current": 7000,
+            "Max": 7000
+        }
+    ],
+    "Pouvoir magique": [
+        {
+            "Current": 200,
+            "Max": 200
+        }
+    ],
+    "Pouvoir physique": [
+        {
+            "Current": 100,
+            "Max": 100
+        }
+    ],
+    "Rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regen vitesse": [
+        {
+            "Current": 25,
+            "Max": 25
+        }
+    ],
+    "Regeneration Mana": [
+        {
+            "Current": 25,
+            "Max": 25
+        }
+    ],
+    "Regeneration PV": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regeneration vigueur": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Taux aggro": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Taux rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Type": "Boss",
+    "Vigor": [
+        {
+            "Current": 9999,
+            "Max": 9999
+        }
+    ],
+    "Vitesse": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ]
+}
+

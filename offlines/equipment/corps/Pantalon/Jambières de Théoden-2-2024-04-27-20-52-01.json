@@ -8,16 +8,16 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 150
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 75
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Pantalon",
     "Cout critique": [
         {
             "percent": 0,
@@ -36,7 +36,8 @@
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Jambières de Théoden",
+    "Nom unique": "Jambières de Théoden-2-2024-04-27-20-52-01",
     "PV": [
         {
             "percent": 0,
@@ -88,7 +89,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 0
+            "value": 3
         }
     ],
     "Vigor": [

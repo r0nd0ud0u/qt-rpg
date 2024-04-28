@@ -14,10 +14,10 @@
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 75
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Anneau",
     "Cout critique": [
         {
             "percent": 0,
@@ -36,7 +36,8 @@
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Bague des Marchands de Minas Morgul",
+    "Nom unique": "Bague des Marchands de Minas Morgul-2-2024-04-27-01-54-41",
     "PV": [
         {
             "percent": 0,
@@ -46,7 +47,7 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 60
+            "value": 0
         }
     ],
     "Pouvoir physique": [
@@ -70,7 +71,7 @@
     "Regeneration PV": [
         {
             "percent": 0,
-            "value": 0
+            "value": 3
         }
     ],
     "Regeneration vigueur": [
@@ -93,7 +94,7 @@
     ],
     "Vigor": [
         {
-            "percent": 0,
+            "percent": 7,
             "value": 0
         }
     ],

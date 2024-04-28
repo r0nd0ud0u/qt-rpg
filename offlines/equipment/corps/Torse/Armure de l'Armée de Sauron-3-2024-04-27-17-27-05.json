@@ -8,20 +8,20 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 175
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 100
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Torse",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Esquive": [
@@ -36,7 +36,8 @@
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Armure de l'Armée de Sauron",
+    "Nom unique": "Armure de l'Armée de Sauron-3-2024-04-27-17-27-05",
     "PV": [
         {
             "percent": 0,
@@ -46,7 +47,7 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 60
+            "value": 0
         }
     ],
     "Pouvoir physique": [
@@ -88,7 +89,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 0
+            "value": 3
         }
     ],
     "Vigor": [

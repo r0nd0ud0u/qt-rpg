@@ -1,0 +1,115 @@
+{
+    "Aggro": [
+        {
+            "Current": 0,
+            "Max": 9999
+        }
+    ],
+    "Armure magique": [
+        {
+            "Current": 50,
+            "Max": 50
+        }
+    ],
+    "Armure physique": [
+        {
+            "Current": 50,
+            "Max": 50
+        }
+    ],
+    "Couleur": "blue",
+    "Cout critique": [
+        {
+            "Current": 8,
+            "Max": 8
+        }
+    ],
+    "Esquive": [
+        {
+            "Current": 5,
+            "Max": 5
+        }
+    ],
+    "Mana": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Niveau": 1,
+    "Nom": "Thraïn",
+    "PV": [
+        {
+            "Current": 155,
+            "Max": 155
+        }
+    ],
+    "Pouvoir magique": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Pouvoir physique": [
+        {
+            "Current": 20,
+            "Max": 20
+        }
+    ],
+    "Rage": [
+        {
+            "Current": 20,
+            "Max": 20
+        }
+    ],
+    "Regen vitesse": [
+        {
+            "Current": 5,
+            "Max": 5
+        }
+    ],
+    "Regeneration Mana": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regeneration PV": [
+        {
+            "Current": 7,
+            "Max": 7
+        }
+    ],
+    "Regeneration vigueur": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Taux aggro": [
+        {
+            "Current": 3,
+            "Max": 3
+        }
+    ],
+    "Taux rage": [
+        {
+            "Current": 5,
+            "Max": 5
+        }
+    ],
+    "Type": "Hero",
+    "Vigor": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Vitesse": [
+        {
+            "Current": 5,
+            "Max": 5
+        }
+    ]
+}
+

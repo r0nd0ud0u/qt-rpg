@@ -14,14 +14,14 @@
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 75
         }
     ],
     "Categorie": "Arme droite",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 3
         }
     ],
     "Esquive": [
@@ -36,7 +36,8 @@
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Bouclier des Sentinelles de la Comté",
+    "Nom unique": "Bouclier des Sentinelles de la Comté-2-2024-04-27-20-53-23",
     "PV": [
         {
             "percent": 0,
@@ -46,7 +47,7 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 60
+            "value": 0
         }
     ],
     "Pouvoir physique": [
@@ -64,7 +65,7 @@
     "Regeneration Mana": [
         {
             "percent": 0,
-            "value": 0
+            "value": 3
         }
     ],
     "Regeneration PV": [

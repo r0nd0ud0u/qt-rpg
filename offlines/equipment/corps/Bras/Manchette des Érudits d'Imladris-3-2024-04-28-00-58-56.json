@@ -8,16 +8,16 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 100
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 100
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Bras",
     "Cout critique": [
         {
             "percent": 0,
@@ -32,11 +32,12 @@
     ],
     "Mana": [
         {
-            "percent": 0,
+            "percent": 11,
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Manchette des Érudits d'Imladris",
+    "Nom unique": "Manchette des Érudits d'Imladris-3-2024-04-28-00-58-56",
     "PV": [
         {
             "percent": 0,
@@ -46,7 +47,7 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 60
+            "value": 0
         }
     ],
     "Pouvoir physique": [
@@ -70,7 +71,7 @@
     "Regeneration PV": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Regeneration vigueur": [
@@ -88,7 +89,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 0
+            "value": 3
         }
     ],
     "Vigor": [

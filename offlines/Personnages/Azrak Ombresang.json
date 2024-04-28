@@ -1,0 +1,115 @@
+{
+    "Aggro": [
+        {
+            "Current": 0,
+            "Max": 9999
+        }
+    ],
+    "Armure magique": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Armure physique": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Couleur": "orange",
+    "Cout critique": [
+        {
+            "Current": 12,
+            "Max": 12
+        }
+    ],
+    "Esquive": [
+        {
+            "Current": 6,
+            "Max": 6
+        }
+    ],
+    "Mana": [
+        {
+            "Current": 70,
+            "Max": 70
+        }
+    ],
+    "Niveau": 1,
+    "Nom": "Azrak Ombresang",
+    "PV": [
+        {
+            "Current": 145,
+            "Max": 145
+        }
+    ],
+    "Pouvoir magique": [
+        {
+            "Current": 10,
+            "Max": 10
+        }
+    ],
+    "Pouvoir physique": [
+        {
+            "Current": 20,
+            "Max": 20
+        }
+    ],
+    "Rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regen vitesse": [
+        {
+            "Current": 10,
+            "Max": 10
+        }
+    ],
+    "Regeneration Mana": [
+        {
+            "Current": 7,
+            "Max": 7
+        }
+    ],
+    "Regeneration PV": [
+        {
+            "Current": 7,
+            "Max": 7
+        }
+    ],
+    "Regeneration vigueur": [
+        {
+            "Current": 5,
+            "Max": 5
+        }
+    ],
+    "Taux aggro": [
+        {
+            "Current": 1,
+            "Max": 1
+        }
+    ],
+    "Taux rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Type": "Hero",
+    "Vigor": [
+        {
+            "Current": 130,
+            "Max": 13
+        }
+    ],
+    "Vitesse": [
+        {
+            "Current": 10,
+            "Max": 10
+        }
+    ]
+}
+

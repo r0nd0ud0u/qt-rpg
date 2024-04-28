@@ -8,16 +8,16 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 100
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 200
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Tete",
     "Cout critique": [
         {
             "percent": 0,
@@ -36,17 +36,18 @@
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Heaume de l'Armée de Thranduil",
+    "Nom unique": "Heaume de l'Armée de Thranduil-4-2024-04-27-01-54-41",
     "PV": [
         {
-            "percent": 0,
+            "percent": 15,
             "value": 0
         }
     ],
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 60
+            "value": 80
         }
     ],
     "Pouvoir physique": [
@@ -70,7 +71,7 @@
     "Regeneration PV": [
         {
             "percent": 0,
-            "value": 0
+            "value": 5
         }
     ],
     "Regeneration vigueur": [

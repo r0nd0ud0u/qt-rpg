@@ -14,7 +14,7 @@
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 75
         }
     ],
     "Categorie": "Arme droite",
@@ -36,7 +36,8 @@
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Glaive des Seigneurs de Dale",
+    "Nom unique": "Glaive des Seigneurs de Dale-2-2024-04-28-00-57-02",
     "PV": [
         {
             "percent": 0,
@@ -46,7 +47,7 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 60
+            "value": 0
         }
     ],
     "Pouvoir physique": [
@@ -88,7 +89,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 0
+            "value": 2
         }
     ],
     "Vigor": [

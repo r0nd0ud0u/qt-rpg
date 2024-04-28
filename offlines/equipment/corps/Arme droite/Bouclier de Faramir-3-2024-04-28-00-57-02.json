@@ -8,13 +8,13 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 100
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 100
         }
     ],
     "Categorie": "Arme droite",
@@ -32,11 +32,12 @@
     ],
     "Mana": [
         {
-            "percent": 0,
+            "percent": 11,
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Bouclier de Faramir",
+    "Nom unique": "Bouclier de Faramir-3-2024-04-28-00-57-02",
     "PV": [
         {
             "percent": 0,
@@ -46,7 +47,7 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 60
+            "value": 0
         }
     ],
     "Pouvoir physique": [
@@ -61,10 +62,16 @@
             "value": 0
         }
     ],
+    "Regen vitesse": [
+        {
+            "percent": 0,
+            "value": 4
+        }
+    ],
     "Regeneration Mana": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Regeneration PV": [

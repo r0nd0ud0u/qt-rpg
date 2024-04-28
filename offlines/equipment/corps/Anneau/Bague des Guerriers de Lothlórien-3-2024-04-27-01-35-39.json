@@ -8,20 +8,20 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 100
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 100
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Anneau",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Esquive": [
@@ -36,10 +36,11 @@
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Bague des Guerriers de Lothlórien",
+    "Nom unique": "Bague des Guerriers de Lothlórien-3-2024-04-27-01-35-39",
     "PV": [
         {
-            "percent": 0,
+            "percent": 11,
             "value": 0
         }
     ],

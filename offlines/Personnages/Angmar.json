@@ -1,0 +1,115 @@
+{
+    "Aggro": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Armure magique": [
+        {
+            "Current": 100,
+            "Max": 100
+        }
+    ],
+    "Armure physique": [
+        {
+            "Current": 800,
+            "Max": 800
+        }
+    ],
+    "Couleur": "dark",
+    "Cout critique": [
+        {
+            "Current": 18,
+            "Max": 18
+        }
+    ],
+    "Esquive": [
+        {
+            "Current": 14,
+            "Max": 14
+        }
+    ],
+    "Mana": [
+        {
+            "Current": 9999,
+            "Max": 9999
+        }
+    ],
+    "Niveau": 2147483647,
+    "Nom": "Angmar",
+    "PV": [
+        {
+            "Current": 50000,
+            "Max": 50000
+        }
+    ],
+    "Pouvoir magique": [
+        {
+            "Current": 180,
+            "Max": 180
+        }
+    ],
+    "Pouvoir physique": [
+        {
+            "Current": 180,
+            "Max": 180
+        }
+    ],
+    "Rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regen vitesse": [
+        {
+            "Current": 28,
+            "Max": 28
+        }
+    ],
+    "Regeneration Mana": [
+        {
+            "Current": 25,
+            "Max": 25
+        }
+    ],
+    "Regeneration PV": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regeneration vigueur": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Taux aggro": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Taux rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Type": "Boss",
+    "Vigor": [
+        {
+            "Current": 9999,
+            "Max": 9999
+        }
+    ],
+    "Vitesse": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ]
+}
+

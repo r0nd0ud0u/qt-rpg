@@ -8,20 +8,20 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 100
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 100
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Arme gauche",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Esquive": [
@@ -36,7 +36,8 @@
             "value": 0
         }
     ],
-    "Nom": "Bâton du roi sorcier d'Angmar",
+    "Nom": "Cimeterre des Espions du Rohan",
+    "Nom unique": "Cimeterre des Espions du Rohan-3-2024-04-27-20-52-01",
     "PV": [
         {
             "percent": 0,
@@ -64,7 +65,7 @@
     "Regeneration Mana": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Regeneration PV": [
