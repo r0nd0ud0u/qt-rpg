@@ -1,31 +1,32 @@
 {
     "Cible": "Ennemie",
-    "Coût de mana": 1,
+    "Coût de mana": 0,
     "Coût de rage": 0,
-    "Coût de vigueur": 0,
+    "Coût de vigueur": 1,
     "Effet": [
-      {
+        {
             "Cible": "Ennemie",
             "Portée": "Zone",
             "Stat": "PV",
-            "Tours actifs": 4,
-            "Type": "Changement par %",
-            "Valeur de l'effet": 0,
-            "Value": 450
-        },
-         {
-            "Cible": "Ennemie",
-            "Portée": "Zone",
-            "Stat": "Esquive",
-            "Tours actifs": 4,
+            "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": 25
+            "Value": -130
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "Regen vitesse",
+            "Tours actifs": 3,
+            "Type": "Up par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -30
         }
     ],
     "Forme": "Standard",
-    "Niveau": 3,
-    "Nom": "Fléau Ent",
+    "Niveau": 2,
+    "Nom": "Fulgurance sylvestre",
     "Photo": "default.png",
     "Portée": "Zone"
 }
+

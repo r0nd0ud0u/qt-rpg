@@ -8,22 +8,22 @@
     "Dégâts": 0,
     "Effet": [
         {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "",
+            "Tours actifs": 3,
+            "Type": "Up/down degats en %",
+            "Valeur de l'effet": 0,
+            "Value": 30
+        },
+        {
             "Cible": "Ennemie",
-            "Portée": "Zone",
+            "Portée": "Individuel",
             "Stat": "PV",
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": -70
-        },
-        {
-            "Cible": "Ennemie",
-            "Portée": "Zone",
-            "Stat": "Esquive",
-            "Tours actifs": 2,
-            "Type": "Up par valeur",
-            "Valeur de l'effet": 0,
-            "Value": -5
+            "Value": -50
         },
         {
             "Cible": "",
@@ -36,10 +36,10 @@
         }
     ],
     "Forme": "Standard",
-    "Niveau": 1,
-    "Nom": "Cri stridant",
+    "Niveau": 3,
+    "Nom": "Frappe succinte",
     "Photo": "default.png",
-    "Portée": "Zone",
+    "Portée": "Individuel",
     "Regen mana": 0,
     "Regen rage": 0,
     "Regen vigueur": 0,

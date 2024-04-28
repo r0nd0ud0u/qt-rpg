@@ -1,31 +1,31 @@
 {
     "Cible": "Ennemie",
-    "Coût de mana": 1,
+    "Coût de mana": 0,
     "Coût de rage": 0,
-    "Coût de vigueur": 0,
+    "Coût de vigueur": 1,
     "Effet": [
-      {
-            "Cible": "Ennemie",
-            "Portée": "Zone",
-            "Stat": "Pouvoir magique",
+		{
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "",
             "Tours actifs": 3,
-            "Type": "Changement par %",
+            "Type": "Up/down degats en %",
             "Valeur de l'effet": 0,
-            "Value": 300
+            "Value": 100
         },
-        {
+		{
             "Cible": "Ennemie",
             "Portée": "Zone",
             "Stat": "PV",
             "Tours actifs": 1,
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
-            "Value": -500
-        }
+            "Value": -30
+        }		
     ],
     "Forme": "Standard",
-    "Niveau": 9,
-    "Nom": "Souffle de la Lorien",
+    "Niveau": 6,
+    "Nom": "Massacre Rohirrim",
     "Photo": "default.png",
     "Portée": "Zone"
 }

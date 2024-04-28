@@ -4,7 +4,7 @@
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Effet": [
-      {
+        {
             "Cible": "Allié",
             "Portée": "Individuel",
             "Stat": "PV",
@@ -17,16 +17,16 @@
             "Cible": "Allié",
             "Portée": "Individuel",
             "Stat": "Armure physique",
-            "Tours actifs": 4,
-            "Type": "Changement par valeur",
+            "Tours actifs": 3,
+            "Type": "Up par valeur",
             "Valeur de l'effet": 0,
             "Value": 500
         }
-        
     ],
     "Forme": "Standard",
     "Niveau": 2,
     "Nom": "Amour revigorant",
     "Photo": "default.png",
-    "Portée": "individuel"
+    "Portée": "Individuel"
 }
+
