@@ -1414,7 +1414,7 @@ void Character::SetEquipment(
         }
         stuff.m_Name = "";
         auto &local = stuff.m_Stats.m_AllStatsTable[stat];
-        local.InitValues(0, 0, 0, 0);
+        local.InitValues(0, 0);
       }
     }
   }
@@ -1618,9 +1618,9 @@ int Character::UpdateDamageByBuf(const Buffers *bufDmg, const int value) {
 void Character::SetValuesForThalia(const bool isBear) {
   auto &localstat = m_Stats.m_AllStatsTable[STATS_BERSECK];
   if (isBear) {
-    localstat.InitValues(20, 20, 100, 0);
+    localstat.InitValues(20, 20);
   } else {
-    localstat.InitValues(0, 0, 0, 0);
+    localstat.InitValues(0, 0);
   }
 }
 

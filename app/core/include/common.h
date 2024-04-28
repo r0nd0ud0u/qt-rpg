@@ -12,6 +12,7 @@ const QString OFFLINE_ATK = "./offlines/attak/";
 const QString OFFLINE_WEARING_EQUIPMENT = "./offlines/equipment/Personnages/";
 const QString OFFLINE_ROOT_EQUIPMENT = "./offlines/equipment/corps/";
 const QString OFFLINE_RAND_NAME_STUFF = "./offlines/equipment/random/";
+const QString OFFLINE_CHARACTERS = "./offlines/Personnages/";
 
 // json keys
 // ATK keys
@@ -100,6 +101,17 @@ const std::set<QString> ALL_STATS = {"",
 const std::set<QString> ON_PERCENT_STATS = {STATS_MANA, STATS_VIGOR};
 const std::set<QString> STATS_TO_LEVEL_UP = {STATS_HP, STATS_MANA, STATS_VIGOR,
                                              STATS_POW_PHY, STATS_POW_MAG};
+
+// Characters keys
+const QString CH_NAME = "Nom";
+const QString CH_TYPE = "Type";
+const QString CH_TYPE_HERO = "Hero";
+const QString CH_TYPE_BOSS = "Boss";
+const QString CH_CURRENT_VALUE = "Current";
+const QString CH_MAX_VALUE = "Max";
+const QString CH_LEVEL = "Niveau";
+const QString CH_COLOR = "Couleur";
+
 // equipment keys
 const QString EQUIP_HEAD = "Tete";
 const QString EQUIP_NECKLACE = "Collier";
@@ -251,9 +263,7 @@ public:
   StatsType() = default; // Default constructor
   explicit StatsType(QString type) : m_Type(type) {}
   int m_CurrentValue = 0;
-  int m_StartingValue = 0;
   int m_MaxValue = 0;
-  int m_RegenOnTurn = 0;
   int m_BaseEquipValue = 0;
   int m_RawMaxValue = 0;
   QString m_Type;
@@ -261,13 +271,10 @@ public:
   int m_BufEffectPercent = 0;
   int m_BufEquipValue = 0;
   int m_BufEquipPercent = 0;
-  void InitValues(int starting, int current, int max, int regen) {
+  void InitValues(int current, int max) {
     m_CurrentValue = current;
     m_MaxValue = max;
     m_RawMaxValue = max;
-    m_RegenOnTurn = regen;
-    // not processed ?
-    m_StartingValue = starting;
   };
 };
 
@@ -292,6 +299,7 @@ public:
   StatsType m_RegenHP = StatsType(STATS_REGEN_HP);
   StatsType m_RegenMana = StatsType(STATS_REGEN_MANA);
   StatsType m_RegenVigor = StatsType(STATS_REGEN_VIGOR);
+  StatsType m_RegenSpeed = StatsType(STATS_REGEN_SPEED);
 
   std::unordered_map<QString, StatsType> m_AllStatsTable = {
       {STATS_HP, m_HP},
@@ -310,7 +318,9 @@ public:
       {STATS_DODGE, m_Dogde},
       {STATS_REGEN_HP, m_RegenHP},
       {STATS_REGEN_MANA, m_RegenMana},
-      {STATS_REGEN_VIGOR, m_RegenVigor}};
+      {STATS_REGEN_VIGOR, m_RegenVigor},
+      {STATS_REGEN_SPEED, m_RegenSpeed}
+  };
 };
 
 #endif // COMMON_H

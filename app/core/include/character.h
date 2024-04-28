@@ -130,8 +130,9 @@ public:
   int m_Exp = 0;
   int m_NextLevel = 100;
   std::deque<int> m_LastAggros; // keep the last five aggros and sum them
-  std::vector<QString> m_Forms;
+  std::vector<QString> m_Forms = std::vector<QString>{STANDARD_FORM};
   QString m_SelectedForm = STANDARD_FORM;
+  QString m_ColorStr = "dark";
 
   QColor color = QColor("dark");
   // Buf
