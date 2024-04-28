@@ -14,10 +14,10 @@
     "Armure physique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 0
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Collier",
     "Cout critique": [
         {
             "percent": 0,
@@ -32,12 +32,12 @@
     ],
     "Mana": [
         {
-            "percent": 11,
+            "percent": 0,
             "value": 0
         }
     ],
-    "Nom": "Bouclier de Faramir",
-    "Nom unique": "Bouclier de Faramir-3-2024-04-28-00-57-02",
+    "Nom": "Collier des Soldats d'Osgiliath",
+    "Nom unique": "Collier des Soldats d'Osgiliath-3-2024-04-28-21-49-52",
     "PV": [
         {
             "percent": 0,
@@ -65,7 +65,7 @@
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 4
+            "value": 0
         }
     ],
     "Regeneration Mana": [
@@ -83,7 +83,7 @@
     "Regeneration vigueur": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Taux aggro": [

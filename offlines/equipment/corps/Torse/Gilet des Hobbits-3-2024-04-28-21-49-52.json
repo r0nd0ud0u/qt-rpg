@@ -14,10 +14,10 @@
     "Armure physique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 225
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Torse",
     "Cout critique": [
         {
             "percent": 0,
@@ -32,15 +32,15 @@
     ],
     "Mana": [
         {
-            "percent": 11,
+            "percent": 0,
             "value": 0
         }
     ],
-    "Nom": "Bouclier de Faramir",
-    "Nom unique": "Bouclier de Faramir-3-2024-04-28-00-57-02",
+    "Nom": "Gilet des Hobbits",
+    "Nom unique": "Gilet des Hobbits-3-2024-04-28-21-49-52",
     "PV": [
         {
-            "percent": 0,
+            "percent": 11,
             "value": 0
         }
     ],
@@ -65,13 +65,13 @@
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 4
+            "value": 0
         }
     ],
     "Regeneration Mana": [
         {
             "percent": 0,
-            "value": 4
+            "value": 0
         }
     ],
     "Regeneration PV": [

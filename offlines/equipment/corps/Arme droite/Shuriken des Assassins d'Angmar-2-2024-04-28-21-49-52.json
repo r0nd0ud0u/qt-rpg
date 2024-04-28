@@ -8,13 +8,13 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 50
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 50
         }
     ],
     "Categorie": "Arme droite",
@@ -27,17 +27,17 @@
     "Esquive": [
         {
             "percent": 0,
-            "value": 0
+            "value": 2
         }
     ],
     "Mana": [
         {
-            "percent": 11,
+            "percent": 0,
             "value": 0
         }
     ],
-    "Nom": "Bouclier de Faramir",
-    "Nom unique": "Bouclier de Faramir-3-2024-04-28-00-57-02",
+    "Nom": "Shuriken des Assassins d'Angmar",
+    "Nom unique": "Shuriken des Assassins d'Angmar-2-2024-04-28-21-49-52",
     "PV": [
         {
             "percent": 0,
@@ -47,7 +47,7 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 40
         }
     ],
     "Pouvoir physique": [
@@ -65,13 +65,13 @@
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 4
+            "value": 0
         }
     ],
     "Regeneration Mana": [
         {
             "percent": 0,
-            "value": 4
+            "value": 0
         }
     ],
     "Regeneration PV": [

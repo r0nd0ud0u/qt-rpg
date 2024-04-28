@@ -18,7 +18,7 @@
             "Portée": "Individuel",
             "Stat": "Regen vitesse",
             "Tours actifs": 5,
-            "Type": "Changement par valeur",
+            "Type": "Up par valeur",
             "Valeur de l'effet": 0,
             "Value": 10
         },

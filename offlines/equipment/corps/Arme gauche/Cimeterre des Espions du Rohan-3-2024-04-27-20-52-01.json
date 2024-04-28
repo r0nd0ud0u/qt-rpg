@@ -8,13 +8,13 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 100
+            "value": 0
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 100
+            "value": 0
         }
     ],
     "Categorie": "Arme gauche",

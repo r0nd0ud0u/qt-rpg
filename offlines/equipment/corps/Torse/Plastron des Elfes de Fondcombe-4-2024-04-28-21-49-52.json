@@ -8,16 +8,16 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 200
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 100
         }
     ],
-    "Categorie": "Arme droite",
+    "Categorie": "Torse",
     "Cout critique": [
         {
             "percent": 0,
@@ -32,12 +32,12 @@
     ],
     "Mana": [
         {
-            "percent": 11,
+            "percent": 0,
             "value": 0
         }
     ],
-    "Nom": "Bouclier de Faramir",
-    "Nom unique": "Bouclier de Faramir-3-2024-04-28-00-57-02",
+    "Nom": "Plastron des Elfes de Fondcombe",
+    "Nom unique": "Plastron des Elfes de Fondcombe-4-2024-04-28-21-49-52",
     "PV": [
         {
             "percent": 0,
@@ -47,7 +47,7 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 80
         }
     ],
     "Pouvoir physique": [
@@ -58,20 +58,20 @@
     ],
     "Rage": [
         {
-            "percent": 0,
+            "percent": 15,
             "value": 0
         }
     ],
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 4
+            "value": 0
         }
     ],
     "Regeneration Mana": [
         {
             "percent": 0,
-            "value": 4
+            "value": 0
         }
     ],
     "Regeneration PV": [
@@ -95,7 +95,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Vigor": [

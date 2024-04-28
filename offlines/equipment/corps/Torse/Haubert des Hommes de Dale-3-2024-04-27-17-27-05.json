@@ -8,13 +8,13 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 100
+            "value": 75
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 100
+            "value": 75
         }
     ],
     "Categorie": "Torse",
@@ -100,7 +100,7 @@
     ],
     "Vigor": [
         {
-            "percent": 0,
+            "percent": 11,
             "value": 0
         }
     ],
