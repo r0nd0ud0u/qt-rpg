@@ -739,6 +739,7 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
           ? BossClass::PROBA_LOOTS.at(rank)
           : std::vector<uint64_t>{};
 
+  // No loot
   if (nbOfLoots == 0) {
     return newStuffs;
   }
@@ -776,10 +777,26 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
     // stuffClass == nb of effects of the loot
     const auto nbOfEffets = stuffClass;
 
+    // Init BONUS_STAT_STR bool used stats
+    // one stat must be improved just once
+    std::set<int> bonusUsed;
+    for (int bonusIdx = 0; bonusIdx < BossClass::BONUS_STAT_STR.size();bonusIdx++) {
+      bonusUsed.insert(bonusIdx);
+    }
+
+    // Update 'nbOfEffets' effects for one stuff
+    // one stat can be updated only once
     for (int k = 0; k < nbOfEffets; k++) {
-      const auto index = get_random_nb(0, BossClass::BONUS_STAT_STR.size() - 1);
-      const auto &stat = BossClass::BONUS_STAT_STR.at(index);
+      // get a random bonus in index in bonusUsed
+      const auto index = get_random_nb(0, bonusUsed.size() - 1);
+      auto localBonusIt = bonusUsed.begin();
+      std::advance(localBonusIt, index);
+
+      const auto &stat = BossClass::BONUS_STAT_STR.at(*localBonusIt);
       const auto *bonus = BossClass::BONUS_LIST.at(stat).at(stuffClass - 1);
+      // store the name of the updated stats
+      stuff.m_StatsUpByLoot.push_back(stat);
+      // Update is on percent or value
       if (bonus->get_is_percent()) {
         stuff.m_Stats.m_AllStatsTable[stat].m_BufEquipPercent =
             bonus->get_value();
@@ -787,14 +804,25 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
         stuff.m_Stats.m_AllStatsTable[stat].m_BufEquipValue =
             bonus->get_value();
       }
+      // Erase index of bonusUsed for the next effect to be updated
+      if (localBonusIt != bonusUsed.end()) {
+        bonusUsed.erase(localBonusIt);
+      }
     }
-    // armur bonus does not contain 'no loot'(0) whereas stuffClass is starting
-    // at 'no loot'(0)
-    const auto armurBonus = (stuffClass - 1 < BossClass::ARMOR.size())
-                                ? BossClass::ARMOR[stuffClass - 1]
-                                : BossClass::ARMOR[BossClass::ARMOR.size() - 1];
-    stuff.m_Stats.m_AllStatsTable[STATS_ARM_MAG].m_BufEquipValue += armurBonus;
-    stuff.m_Stats.m_AllStatsTable[STATS_ARM_PHY].m_BufEquipValue += armurBonus;
+    // Armur bonus does not contain 'no loot'(0) whereas stuffClass is starting
+    // at 'no loot'(0) This bonus is for all body parts with some exceptions
+    if (const std::set<QString> armurBonusExceptions{EQUIP_NECKLACE, EQUIP_ARM,
+                                                     EQUIP_RING};
+        armurBonusExceptions.count(stuff.m_BodyPart) == 0) {
+      const auto armurBonus =
+          (stuffClass - 1 < BossClass::ARMOR.size())
+              ? BossClass::ARMOR[stuffClass - 1]
+              : BossClass::ARMOR[BossClass::ARMOR.size() - 1];
+      stuff.m_Stats.m_AllStatsTable[STATS_ARM_MAG].m_BufEquipValue +=
+          armurBonus;
+      stuff.m_Stats.m_AllStatsTable[STATS_ARM_PHY].m_BufEquipValue +=
+          armurBonus;
+    }
 
     newStuffs.push_back(stuff);
   }

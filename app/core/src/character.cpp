@@ -757,58 +757,60 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     return std::make_pair(0, 0);
   }
 
+  // Assess buf/debuf
+  int bufDebuf = 0;
   if (ep.statsName == STATS_HP) {
-    auto absAmount = abs(amount);
-    // update_damage_by_buf update the absolute value
-    // assess of sign needed
-    const auto sign = (amount > 0) ? 1 : -1;
-    // add buf
-    if (target != nullptr && ALLIES_TARGETS.count(ep.target) > 0 && launch) {
-      if (const auto *bufHpTx = m_AllBufs[static_cast<int>(BufTypes::healTx)];
-          bufHpTx != nullptr) {
-        absAmount = static_cast<int>(update_damage_by_buf(
-            bufHpTx->get_value(), bufHpTx->get_is_percent(), absAmount));
-      }
-      if (const auto *bufHpRx = m_AllBufs[static_cast<int>(BufTypes::healRx)];
-          bufHpRx != nullptr) {
-        absAmount = static_cast<int>(update_damage_by_buf(
-            bufHpRx->get_value(), bufHpRx->get_is_percent(), absAmount));
-      }
-    }
-
-    if (target != nullptr && ep.target == TARGET_ENNEMY && launch) {
-      // launcher buf
-      if (const auto *bufTx = m_AllBufs[static_cast<int>(BufTypes::damageTx)];
-          bufTx != nullptr) {
-        absAmount = static_cast<int>(update_damage_by_buf(
-            bufTx->get_value(), bufTx->get_is_percent(), absAmount));
-      }
-      if (const auto *bufCrit =
-              m_AllBufs[static_cast<int>(BufTypes::damageCritCapped)];
-          bufCrit != nullptr) {
-        absAmount = static_cast<int>(update_damage_by_buf(
-            bufCrit->get_value(), bufCrit->get_is_percent(), absAmount));
-      }
-      // target buf
-      if (const auto *bufRx =
-              target->m_AllBufs[static_cast<int>(BufTypes::damageRx)];
-          bufRx != nullptr) {
-        absAmount = static_cast<int>(update_damage_by_buf(
-            bufRx->get_value(), bufRx->get_is_percent(), absAmount));
-      }
-      // update amount + add sign
-      amount = absAmount * sign;
-    }
-    if (target != nullptr && ALLIES_TARGETS.count(ep.target) > 0 && launch) {
-      // launcher buf
+    if (const bool isHeal = ALLIES_TARGETS.count(ep.target) > 0 && amount > 0;
+        isHeal && launch) {
+      // Launcher TX
+      // raw amount of heal is multiplied
       if (const auto *bufMulti =
-              m_AllBufs[static_cast<int>(BufTypes::multiValue)];
+              target->m_AllBufs[static_cast<int>(BufTypes::multiValue)];
           bufMulti != nullptr && bufMulti->get_value() > 0) {
         amount = static_cast<int>(
             update_heal_by_multi(amount, bufMulti->get_value()));
       }
+      // Launcher TX
+      if (const auto *bufHpTx = m_AllBufs[static_cast<int>(BufTypes::healTx)];
+          bufHpTx != nullptr) {
+        bufDebuf += static_cast<int>(update_damage_by_buf(
+            bufHpTx->get_value(), bufHpTx->get_is_percent(), amount));
+      }
+      // Receiver RX
+      if (const auto *bufHpRx =
+              target->m_AllBufs[static_cast<int>(BufTypes::healRx)];
+          bufHpRx != nullptr) {
+        bufDebuf += static_cast<int>(update_damage_by_buf(
+            bufHpRx->get_value(), bufHpRx->get_is_percent(), amount));
+      }
+    }
+
+    if (const bool isDamage = ep.target == TARGET_ENNEMY && amount < 0;
+        isDamage && launch) {
+      // Launcher TX
+      if (const auto *bufTx = m_AllBufs[static_cast<int>(BufTypes::damageTx)];
+          bufTx != nullptr) {
+        bufDebuf += static_cast<int>(update_damage_by_buf(
+            bufTx->get_value(), bufTx->get_is_percent(), amount));
+      }
+      // Launcher TX
+      if (const auto *bufCrit =
+              m_AllBufs[static_cast<int>(BufTypes::damageCritCapped)];
+          bufCrit != nullptr) {
+        bufDebuf += static_cast<int>(update_damage_by_buf(
+            bufCrit->get_value(), bufCrit->get_is_percent(), amount));
+      }
+      // Receiver RX
+      if (const auto *bufRx =
+              target->m_AllBufs[static_cast<int>(BufTypes::damageRx)];
+          bufRx != nullptr) {
+        bufDebuf += static_cast<int>(update_damage_by_buf(
+            bufRx->get_value(), bufRx->get_is_percent(), amount));
+      }
     }
   }
+  // Update amount by buf/debuf
+  amount += bufDebuf;
 
   // is it a critical strike
   if (isCrit && ep.statsName == STATS_HP && launch) {
