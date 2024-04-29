@@ -780,8 +780,8 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
     // Init BONUS_STAT_STR bool used stats
     // one stat must be improved just once
     std::set<int> bonusUsed;
-    for (int i = 0; i < BossClass::BONUS_STAT_STR.size(); i++) {
-      bonusUsed.insert(i);
+    for (int bonusIdx = 0; bonusIdx < BossClass::BONUS_STAT_STR.size();bonusIdx++) {
+      bonusUsed.insert(bonusIdx);
     }
 
     // Update 'nbOfEffets' effects for one stuff
@@ -811,9 +811,9 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
     }
     // Armur bonus does not contain 'no loot'(0) whereas stuffClass is starting
     // at 'no loot'(0) This bonus is for all body parts with some exceptions
-    const std::set<QString> armurBonusExceptions{EQUIP_NECKLACE, EQUIP_ARM,
-                                                 EQUIP_RING};
-    if (armurBonusExceptions.count(stuff.m_BodyPart) == 0) {
+    if (const std::set<QString> armurBonusExceptions{EQUIP_NECKLACE, EQUIP_ARM,
+                                                     EQUIP_RING};
+        armurBonusExceptions.count(stuff.m_BodyPart) == 0) {
       const auto armurBonus =
           (stuffClass - 1 < BossClass::ARMOR.size())
               ? BossClass::ARMOR[stuffClass - 1]
