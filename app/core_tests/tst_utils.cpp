@@ -1,3 +1,4 @@
+#include <QDebug>
 #include <QtTest>
 
 #include "Application.h"
@@ -114,13 +115,21 @@ void player_manager_tests::ProcessDamageTXHealNeedyAlly_works() {
 
 void player_manager_tests::LootNewEquipments_works() {
   PlayersManager pl;
-  pl.LoadAllCharactersJson();
-  pl.InitBosses();
-  pl.InitRandomEquip();
-  const auto result = pl.LootNewEquipments("Angmar");
+  auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+  const auto result = pm->LootNewEquipments("Angmar");
+  // rank if Angmar is 4 => 4 loots
   QCOMPARE(4, result.size());
-  for (const auto& s : result) {
+  for (const auto &s : result) {
     QCOMPARE(s.m_Rank, s.m_StatsUpByLoot.size());
+    for (const auto &stats : s.m_StatsUpByLoot) {
+      if (s.m_Stats.m_AllStatsTable.count(stats) == 0) {
+        continue;
+      }
+      auto &stuffStat = s.m_Stats.m_AllStatsTable.at(stats);
+      const auto actual =
+          (stuffStat.m_BufEquipPercent > 0 || stuffStat.m_BufEquipValue > 0);
+      QCOMPARE(true, actual);
+    }
   }
 }
 
