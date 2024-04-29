@@ -11,6 +11,8 @@
 
 #include "rust-rpg-bridge/utils.h"
 
+#include <QDebug>
+
 GameDisplay::GameDisplay(QWidget *parent)
     : QWidget(parent), ui(new Ui::GameDisplay) {
   ui->setupUi(this);
