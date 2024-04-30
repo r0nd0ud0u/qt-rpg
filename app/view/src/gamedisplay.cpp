@@ -147,6 +147,21 @@ void GameDisplay::NewRound() {
         }
         // -phyBuf->get_value() : buf previous turn
         // hpRx : buf new turn
+        QStringList azrakOverHeal;
+        if (static_cast<int>(gs->m_CurrentTurnNb) - 2 > 0) {
+          azrakOverHeal.append(QString("Overheal: Tour%1: -%2")
+                                   .arg(gs->m_CurrentTurnNb - 2)
+                                   .arg(phyBuf->get_value()));
+        }
+        azrakOverHeal.append(QString("Overheal: Tour%1: +%2")
+                                 .arg(gs->m_CurrentTurnNb - 1)
+                                 .arg(hpRx));
+        azrakOverHeal.append(QString("Overheal total: Tour%1: +%2")
+                                 .arg(gs->m_CurrentTurnNb - 1)
+                                 .arg(hpRx-phyBuf->get_value()));
+        emit SigUpdateChannelView(activePlayer->m_Name,
+                                  azrakOverHeal.join("\n"),
+                                  activePlayer->color);
         const auto addValue = static_cast<int>(-phyBuf->get_value() + hpRx);
         Character::SetStatsOnEffect(localStat, addValue, false, true);
         qDebug() << QString("Montant total overheal prev tour: %1\n").arg(hpRx);
