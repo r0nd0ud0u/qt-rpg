@@ -280,6 +280,16 @@ QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName,
     localStat.m_CurrentValue += hotAndDot;
     if (hotAndDot != 0) {
       localLog.append(QString("HOT et DOT totaux: %1").arg(hotAndDot));
+      // update buf overheal
+      const int deltaOverHeal = localStat.m_CurrentValue - localStat.m_MaxValue;
+      if (deltaOverHeal > 0) {
+        const auto *gs = Application::GetInstance().m_GameManager->m_GameState;
+        targetPl->m_LastTxRx[static_cast<int>(amountType::overHealRx)]
+                            [gs->m_CurrentTurnNb] += deltaOverHeal;
+        localLog.append(QString("Ajout Overheal tour%1: %2")
+                            .arg(gs->m_CurrentTurnNb)
+                            .arg(deltaOverHeal));
+      }
       // current value must be included between 0 and max value
       localStat.m_CurrentValue =
           std::min(localStat.m_CurrentValue, localStat.m_MaxValue);
@@ -780,7 +790,8 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
     // Init BONUS_STAT_STR bool used stats
     // one stat must be improved just once
     std::set<int> bonusUsed;
-    for (int bonusIdx = 0; bonusIdx < BossClass::BONUS_STAT_STR.size();bonusIdx++) {
+    for (int bonusIdx = 0; bonusIdx < BossClass::BONUS_STAT_STR.size();
+         bonusIdx++) {
       bonusUsed.insert(bonusIdx);
     }
 

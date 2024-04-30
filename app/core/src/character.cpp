@@ -541,6 +541,7 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
     }
     target->m_LastTxRx[static_cast<int>(amountType::overHealRx)]
                       [gs->m_CurrentTurnNb] += maxAmountSent - realAmountSent;
+    result += QString("Ajout Overheal pour tour%1: %2\n").arg(gs->m_CurrentTurnNb).arg(maxAmountSent - realAmountSent);
   }
 
   return std::make_pair(result, newEffects);
