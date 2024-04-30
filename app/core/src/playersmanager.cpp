@@ -822,8 +822,8 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
     }
     // Armur bonus does not contain 'no loot'(0) whereas stuffClass is starting
     // at 'no loot'(0) This bonus is for all body parts with some exceptions
-    if (const std::set<QString> armurBonusExceptions{EQUIP_NECKLACE, EQUIP_ARM,
-                                                     EQUIP_RING};
+    if (const std::set<QString> armurBonusExceptions{
+            EQUIP_NECKLACE, EQUIP_ARM, EQUIP_RING_RIGHT, EQUIP_RING_LEFT};
         armurBonusExceptions.count(stuff.m_BodyPart) == 0) {
       const auto armurBonus =
           (stuffClass - 1 < BossClass::ARMOR.size())

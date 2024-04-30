@@ -8,20 +8,20 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 100
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 100
         }
     ],
-    "Categorie": "Anneau",
+    "Categorie": "Anneau droit",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 4
+            "value": 0
         }
     ],
     "Esquive": [
@@ -36,11 +36,11 @@
             "value": 0
         }
     ],
-    "Nom": "Anneau de Khazad-dûm",
-    "Nom unique": "Anneau de Khazad-dûm-3-2024-04-28-21-49-52",
+    "Nom": "Sceau des Hobbits",
+    "Nom unique": "Sceau des Hobbits-3-2024-04-28-00-57-02",
     "PV": [
         {
-            "percent": 0,
+            "percent": 11,
             "value": 0
         }
     ],
@@ -58,12 +58,6 @@
     ],
     "Rage": [
         {
-            "percent": 11,
-            "value": 0
-        }
-    ],
-    "Regen vitesse": [
-        {
             "percent": 0,
             "value": 0
         }
@@ -71,13 +65,13 @@
     "Regeneration Mana": [
         {
             "percent": 0,
-            "value": 4
+            "value": 0
         }
     ],
     "Regeneration PV": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Regeneration vigueur": [
@@ -100,7 +94,7 @@
     ],
     "Vigor": [
         {
-            "percent": 0,
+            "percent": 11,
             "value": 0
         }
     ],
