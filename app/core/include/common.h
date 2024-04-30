@@ -120,7 +120,8 @@ const QString EQUIP_CHEST = "Torse";
 const QString EQUIP_PANTS = "Pantalon";
 const QString EQUIP_SHOES = "Chaussures";
 const QString EQUIP_ARM = "Bras";
-const QString EQUIP_RING = "Anneau";
+const QString EQUIP_RING_RIGHT = "Anneau droit";
+const QString EQUIP_RING_LEFT = "Anneau gauche";
 const QString EQUIP_NAME = "Nom";
 const QString EQUIP_UNIQUE_NAME = "Nom unique";
 const QString EQUIP_RIGHT_WEAPON = "Arme gauche";
@@ -134,7 +135,8 @@ const std::set<QString> ALL_EQUIP{EQUIP_HEAD,
                                   EQUIP_CHEST,
                                   EQUIP_SHOES,
                                   EQUIP_ARM,
-                                  EQUIP_RING,
+                                  EQUIP_RING_RIGHT,
+                                  EQUIP_RING_LEFT,
                                   EQUIP_PANTS,
                                   EQUIP_NAME,
                                   EQUIP_RIGHT_WEAPON,
@@ -149,7 +151,8 @@ const std::set<QString> ALL_EQUIP_ON_BODY{"",
                                           EQUIP_CHEST,
                                           EQUIP_SHOES,
                                           EQUIP_ARM,
-                                          EQUIP_RING,
+                                          EQUIP_RING_RIGHT,
+                                          EQUIP_RING_LEFT,
                                           EQUIP_PANTS,
                                           EQUIP_RIGHT_WEAPON,
                                           EQUIP_LEFT_WEAPON,
@@ -157,9 +160,9 @@ const std::set<QString> ALL_EQUIP_ON_BODY{"",
                                           EQUIP_RUNIQUE_TATOO_2,
                                           EQUIP_RUNIQUE_TATOO_3};
 const std::vector<QString> RAND_EQUIP_ON_BODY{
-    EQUIP_HEAD,  EQUIP_NECKLACE,     EQUIP_CHEST,
-    EQUIP_SHOES, EQUIP_ARM,          EQUIP_RING,
-    EQUIP_PANTS, EQUIP_RIGHT_WEAPON, EQUIP_LEFT_WEAPON,
+    EQUIP_HEAD,         EQUIP_NECKLACE,    EQUIP_CHEST,     EQUIP_SHOES,
+    EQUIP_ARM,          EQUIP_RING_RIGHT,  EQUIP_RING_LEFT, EQUIP_PANTS,
+    EQUIP_RIGHT_WEAPON, EQUIP_LEFT_WEAPON,
 };
 // Effect keys
 const QString EFFECT_REINIT = "Reinit";
@@ -320,8 +323,7 @@ public:
       {STATS_REGEN_HP, m_RegenHP},
       {STATS_REGEN_MANA, m_RegenMana},
       {STATS_REGEN_VIGOR, m_RegenVigor},
-      {STATS_REGEN_SPEED, m_RegenSpeed}
-  };
+      {STATS_REGEN_SPEED, m_RegenSpeed}};
 };
 
 #endif // COMMON_H

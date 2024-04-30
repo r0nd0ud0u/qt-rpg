@@ -8,16 +8,16 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 100
+            "value": 75
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 100
+            "value": 0
         }
     ],
-    "Categorie": "Anneau",
+    "Categorie": "Anneau droit",
     "Cout critique": [
         {
             "percent": 0,
@@ -36,11 +36,11 @@
             "value": 0
         }
     ],
-    "Nom": "Sceau des Hobbits",
-    "Nom unique": "Sceau des Hobbits-3-2024-04-28-00-57-02",
+    "Nom": "Anneau des Guerriers du Feu",
+    "Nom unique": "Anneau des Guerriers du Feu-3-2024-04-27-20-53-23",
     "PV": [
         {
-            "percent": 11,
+            "percent": 0,
             "value": 0
         }
     ],
@@ -94,14 +94,14 @@
     ],
     "Vigor": [
         {
-            "percent": 11,
+            "percent": 0,
             "value": 0
         }
     ],
-    "Vitesse": [
+    "Regen vitesse": [
         {
             "percent": 0,
-            "value": 0
+            "value":4 
         }
     ]
 }
