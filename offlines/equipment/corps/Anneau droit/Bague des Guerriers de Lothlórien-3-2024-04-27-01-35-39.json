@@ -17,17 +17,17 @@
             "value": 100
         }
     ],
-    "Categorie": "Anneau",
+    "Categorie": "Anneau droit",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Esquive": [
         {
             "percent": 0,
-            "value": 4
+            "value": 0
         }
     ],
     "Mana": [
@@ -36,18 +36,18 @@
             "value": 0
         }
     ],
-    "Nom": "Sceau des Chasseurs de l'Ombre",
-    "Nom unique": "Sceau des Chasseurs de l'Ombre-4-2024-04-27-20-18-49",
+    "Nom": "Bague des Guerriers de Lothlórien",
+    "Nom unique": "Bague des Guerriers de Lothlórien-3-2024-04-27-01-35-39",
     "PV": [
         {
-            "percent": 0,
+            "percent": 11,
             "value": 0
         }
     ],
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 60
         }
     ],
     "Pouvoir physique": [
@@ -94,7 +94,7 @@
     ],
     "Vigor": [
         {
-            "percent": 15,
+            "percent": 0,
             "value": 0
         }
     ],

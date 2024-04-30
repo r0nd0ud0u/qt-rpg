@@ -8,7 +8,7 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 100
+            "value": 200
         }
     ],
     "Armure physique": [
@@ -17,11 +17,11 @@
             "value": 100
         }
     ],
-    "Categorie": "Anneau",
+    "Categorie": "Anneau droit",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 4
+            "value": 0
         }
     ],
     "Esquive": [
@@ -36,18 +36,18 @@
             "value": 0
         }
     ],
-    "Nom": "Bague des Guerriers de Lothlórien",
-    "Nom unique": "Bague des Guerriers de Lothlórien-3-2024-04-27-01-35-39",
+    "Nom": "Anneau des Sentinelles de Lothlórien",
+    "Nom unique": "Anneau des Sentinelles de Lothlórien-4-2024-04-27-00-15-41",
     "PV": [
         {
-            "percent": 11,
+            "percent": 0,
             "value": 0
         }
     ],
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 60
+            "value": 80
         }
     ],
     "Pouvoir physique": [
@@ -60,6 +60,12 @@
         {
             "percent": 0,
             "value": 0
+        }
+    ],
+    "Regen vitesse": [
+        {
+            "percent": 0,
+            "value": 5
         }
     ],
     "Regeneration Mana": [
