@@ -8,20 +8,20 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 0
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 0
         }
     ],
-    "Categorie": "Anneau",
+    "Categorie": "Anneau droit",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Esquive": [
@@ -36,8 +36,8 @@
             "value": 0
         }
     ],
-    "Nom": "Bague des Marchands de Minas Morgul",
-    "Nom unique": "Bague des Marchands de Minas Morgul-2-2024-04-27-01-54-41",
+    "Nom": "Anneau de Khazad-dûm",
+    "Nom unique": "Anneau de Khazad-dûm-3-2024-04-28-21-49-52",
     "PV": [
         {
             "percent": 0,
@@ -58,6 +58,12 @@
     ],
     "Rage": [
         {
+            "percent": 11,
+            "value": 0
+        }
+    ],
+    "Regen vitesse": [
+        {
             "percent": 0,
             "value": 0
         }
@@ -65,13 +71,13 @@
     "Regeneration Mana": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Regeneration PV": [
         {
             "percent": 0,
-            "value": 3
+            "value": 0
         }
     ],
     "Regeneration vigueur": [
@@ -94,7 +100,7 @@
     ],
     "Vigor": [
         {
-            "percent": 7,
+            "percent": 0,
             "value": 0
         }
     ],
