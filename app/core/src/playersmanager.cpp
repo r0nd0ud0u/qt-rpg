@@ -303,6 +303,12 @@ QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName,
   return logs;
 }
 
+/**
+ * @brief PlayersManager::ApplyRegenStats
+ * Hp, mana, berseck, vigor and speed are updated through their respective regen
+ * stat. Regen on {hp, mana and vigor} are by % Regen on {berseck and speed} is
+ * by value
+ */
 void PlayersManager::ApplyRegenStats(const characType &type) {
   std::vector<Character *> playerList = m_HeroesList;
   if (type == characType::Hero) {
@@ -311,32 +317,40 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
     playerList = m_BossesList;
   }
   for (const auto &pl : playerList) {
+    if (pl == nullptr || pl->IsDead()) {
+      continue;
+    }
 
     auto &hp = pl->m_Stats.m_AllStatsTable[STATS_HP];
-    const auto &regenHp = pl->m_Stats.m_AllStatsTable[STATS_REGEN_HP];
     auto &mana = pl->m_Stats.m_AllStatsTable[STATS_MANA];
-    const auto &regenMana = pl->m_Stats.m_AllStatsTable[STATS_REGEN_MANA];
     auto &berseck = pl->m_Stats.m_AllStatsTable[STATS_BERSECK];
-    const auto &regenBerseck = pl->m_Stats.m_AllStatsTable[STATS_RATE_BERSECK];
     auto &vigor = pl->m_Stats.m_AllStatsTable[STATS_VIGOR];
-    const auto &regenVigor = pl->m_Stats.m_AllStatsTable[STATS_REGEN_VIGOR];
     auto &speed = pl->m_Stats.m_AllStatsTable[STATS_SPEED];
+
+    const auto &regenHp = pl->m_Stats.m_AllStatsTable[STATS_REGEN_HP];
+    const auto &regenMana = pl->m_Stats.m_AllStatsTable[STATS_REGEN_MANA];
+    const auto &regenBerseck = pl->m_Stats.m_AllStatsTable[STATS_RATE_BERSECK];
+    const auto &regenVigor = pl->m_Stats.m_AllStatsTable[STATS_REGEN_VIGOR];
     const auto &regenSpeed = pl->m_Stats.m_AllStatsTable[STATS_REGEN_SPEED];
 
+    // hp
     hp.m_CurrentValue = std::min(
         hp.m_MaxValue,
         hp.m_CurrentValue + hp.m_MaxValue * regenHp.m_CurrentValue / 100);
+    // mana
     mana.m_CurrentValue = std::min(
         mana.m_MaxValue,
         mana.m_CurrentValue + mana.m_MaxValue * regenMana.m_CurrentValue / 100);
+    // vigor
     vigor.m_CurrentValue =
         std::min(vigor.m_MaxValue,
                  vigor.m_CurrentValue +
                      vigor.m_MaxValue * regenVigor.m_CurrentValue / 100);
+    // berseck
     berseck.m_CurrentValue =
         std::min(berseck.m_MaxValue,
                  berseck.m_CurrentValue + regenBerseck.m_CurrentValue);
-    // Speed
+    // speed
     speed.m_CurrentValue += regenSpeed.m_CurrentValue;
     speed.m_MaxValue += regenSpeed.m_CurrentValue;
     speed.m_RawMaxValue += regenSpeed.m_CurrentValue;
@@ -467,21 +481,19 @@ QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
     return QStringList();
   }
 
-  if (launcherType == characType::Hero) {
-    return QStringList();
-  }
-
   QStringList output;
-
   const auto newEnd = std::remove_if(
-      playerList->begin(), playerList->end(), [&output](const Character *pl) {
+      playerList->begin(), playerList->end(), [&](Character *pl) {
         if (pl == nullptr) {
           return false;
         }
         const auto &hp = pl->m_Stats.m_AllStatsTable.at(STATS_HP);
-        QString name = pl->m_Name;
-        const bool isDead = hp.m_CurrentValue <= 0;
+        const QString name = pl->m_Name;
+        const bool isDead = pl->IsDead();
         if (isDead) {
+          ResetAllEffectsOnPlayer(pl);
+          // process actions on dead hero
+          pl->ProcessDeath();
           output.append(pl->m_Name);
         }
         return isDead; // remove elements where this is true
@@ -1018,4 +1030,19 @@ void PlayersManager::LoadAllCharactersJson() {
       }
     }
   }
+}
+
+/**
+ * @brief PlayersManager::ResetAllEffectsOnPlayer
+ * All effects on one player are removed
+ * The condition is met by equaling all the counter turn to nbTurns of effect
+ */
+void PlayersManager::ResetAllEffectsOnPlayer(const Character *chara) {
+  if (chara == nullptr || m_AllEffectsOnGame.count(chara->m_Name) == 0) {
+    return;
+  }
+  for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
+    e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
+  }
+  RemoveTerminatedEffectsOnPlayer(chara->m_Name);
 }

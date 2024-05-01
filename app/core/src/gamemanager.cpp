@@ -31,8 +31,16 @@ void GameManager::ProcessOrderToPlay(std::vector<QString> &orderToPlay) const {
   orderToPlay.clear();
 
   for (const auto &hero : m_PlayersManager->m_HeroesList) {
-    orderToPlay.push_back(hero->m_Name);
+    if (hero->IsDead()) {
+      orderToPlay.push_back(hero->m_Name);
+    } else {
+        deadHeroes.push_back(hero->m_Name);
+    }
   }
+
+  std::for_each(deadHeroes.begin(), deadHeroes.end(), [&](const QString& name){
+      orderToPlay.push_back(name);
+  });
   for (const auto &boss : m_PlayersManager->m_BossesList) {
     orderToPlay.push_back(boss->m_Name);
   }
