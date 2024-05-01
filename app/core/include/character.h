@@ -116,6 +116,8 @@ public:
       const bool launch, Character *target,
       const bool isCrit) const; // value 1 isCrit, value 2 total amount value 3
       // maxamount, value 4: crit randNb
+  bool IsDead() const;
+  void ProcessDeath();
 
   // Temporary
   std::vector<effectParam> LoadThaliaTalent() const;

@@ -110,6 +110,11 @@ void GameDisplay::NewRound() {
     emit SigUpdateChannelView("Debug", "NewRound nullptr active player");
     return;
   }
+  // The player can play the round only if alive
+  if(activePlayer->IsDead()){
+      emit SigUpdateChannelView(activePlayer->m_Name, "est mort.",activePlayer->color);
+      return;
+  }
 
   // Apply effects
   // Assess first round for the player
@@ -473,12 +478,6 @@ void GameDisplay::LaunchAttak(const QString &atkName,
                                 activatedPlayer->color);
     }
   }
-  // update all effect panel
-  emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
-  // update views of heroes and bosses
-  emit SigUpdatePlayerPanel();
-  // update stats view
-  emit SigUpdStatsOnSelCharacter();
 
   // check who is dead!
   const QStringList diedBossList =
@@ -526,6 +525,13 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   for (const auto &dp : diedHeroesList) {
     emit SigUpdateChannelView("GameState", QString("%1 est mort.").arg(dp));
   }
+
+  // update all effect panel
+  emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
+  // update views of heroes and bosses
+  emit SigUpdatePlayerPanel();
+  // update stats view
+  emit SigUpdStatsOnSelCharacter();
 
   // Check end of game
   if (gm->m_PlayersManager->m_BossesList.empty()) {

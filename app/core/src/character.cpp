@@ -1673,3 +1673,27 @@ void Character::SortAtkByLevel() {
   }
   std::sort(m_AtksByLevel.begin(), m_AtksByLevel.end(), Utils::CompareByLevel);
 }
+
+/**
+ * @brief Character::IsDead
+ * A player is dead the stats HP has the current value equal to 0.
+ */
+bool Character::IsDead() const{
+    return (m_Stats.m_AllStatsTable.at(STATS_HP).m_CurrentValue ==0);
+}
+
+/**
+ * @brief Character::ProcessDeath
+ * When a player is dead, all the bufs are reset
+ * The effects are reset by the player manager
+ */
+void Character::ProcessDeath(){
+    // Reset all bufs except passive talent
+    std::for_each(m_AllBufs.begin(), m_AllBufs.end(), [](Buffers* buf){
+        if(buf != nullptr){
+            buf->set_buffers(0, false);
+            buf->set_buffers(0, true);
+            buf->set_is_passive_enabled(false);
+        }
+    });
+}
