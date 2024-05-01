@@ -29,7 +29,11 @@ Character *GameManager::GetSelectedHero() {
 
 /**
  * @brief GameManager::ProcessOrderToPlay
- *
+ * Each turn the order of playing for the characters is processed.
+ * First the hero are playing one turn. Then the bosses, one turn.
+ * The order of round between heroes and separately bosses is determined by the highest speed.
+ * If one hero is dead, he will be last on the list of playing heroes (maybe he can be revived).
+ * Then there is a process to assess a supplementary turn for heroes and for bosses.
  */
 void GameManager::ProcessOrderToPlay(std::vector<QString> &orderToPlay) const {
   // to be improved with stats
@@ -40,16 +44,19 @@ void GameManager::ProcessOrderToPlay(std::vector<QString> &orderToPlay) const {
   std::sort(m_PlayersManager->m_HeroesList.begin(), m_PlayersManager->m_HeroesList.end(), Utils::CompareBySpeed);
   std::vector<QString> deadHeroes;
   for (const auto &hero : m_PlayersManager->m_HeroesList) {
-    if (hero->IsDead()) {
+    if (!hero->IsDead()) {
       orderToPlay.push_back(hero->m_Name);
     } else {
         deadHeroes.push_back(hero->m_Name);
     }
   }
-
+  // add dead heroes
   std::for_each(deadHeroes.begin(), deadHeroes.end(), [&](const QString& name){
       orderToPlay.push_back(name);
   });
+  // add bosses
+  // sort by speed
+  std::sort(m_PlayersManager->m_BossesList.begin(), m_PlayersManager->m_BossesList.end(), Utils::CompareBySpeed);
   for (const auto &boss : m_PlayersManager->m_BossesList) {
     orderToPlay.push_back(boss->m_Name);
   }
