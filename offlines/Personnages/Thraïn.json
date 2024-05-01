@@ -94,8 +94,8 @@
     ],
     "Taux rage": [
         {
-            "Current": 5,
-            "Max": 5
+            "Current": 0,
+            "Max": 0
         }
     ],
     "Type": "Hero",
