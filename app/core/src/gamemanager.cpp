@@ -1,5 +1,7 @@
 #include "gamemanager.h"
 
+#include "utils.h"
+
 void GameManager::InitPlayers() {
   // init the game
   m_GameState = new GameState();
@@ -25,11 +27,18 @@ Character *GameManager::GetSelectedHero() {
   return m_PlayersManager->m_SelectedHero;
 }
 
+/**
+ * @brief GameManager::ProcessOrderToPlay
+ *
+ */
 void GameManager::ProcessOrderToPlay(std::vector<QString> &orderToPlay) const {
   // to be improved with stats
   // one player can play several times as well in different order
   orderToPlay.clear();
 
+  // sort by speed
+  std::sort(m_PlayersManager->m_HeroesList.begin(), m_PlayersManager->m_HeroesList.end(), Utils::CompareBySpeed);
+  std::vector<QString> deadHeroes;
   for (const auto &hero : m_PlayersManager->m_HeroesList) {
     if (hero->IsDead()) {
       orderToPlay.push_back(hero->m_Name);
