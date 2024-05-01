@@ -156,7 +156,7 @@ void GameDisplay::NewRound() {
         azrakOverHeal.append(QString("Overheal: Tour%1: +%2")
                                  .arg(gs->m_CurrentTurnNb - 1)
                                  .arg(hpRx));
-        azrakOverHeal.append(QString("Overheal total: Tour%1: +%2")
+        azrakOverHeal.append(QString("Overheal total: Tour%1: %2")
                                  .arg(gs->m_CurrentTurnNb - 1)
                                  .arg(hpRx-phyBuf->get_value()));
         emit SigUpdateChannelView(activePlayer->m_Name,

@@ -541,7 +541,9 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
     }
     target->m_LastTxRx[static_cast<int>(amountType::overHealRx)]
                       [gs->m_CurrentTurnNb] += maxAmountSent - realAmountSent;
-    result += QString("Ajout Overheal pour tour%1: %2\n").arg(gs->m_CurrentTurnNb).arg(maxAmountSent - realAmountSent);
+    result += QString("Ajout Overheal pour tour%1: %2\n")
+                  .arg(gs->m_CurrentTurnNb)
+                  .arg(maxAmountSent - realAmountSent);
   }
 
   return std::make_pair(result, newEffects);
@@ -1324,8 +1326,10 @@ std::pair<bool, int> Character::ProcessCriticalStrike(const AttaqueType &atk) {
   if (randNb = get_random_nb(0, 100); (isCritByBuf && atk.nature.is_heal) ||
                                       (randNb >= 0 && randNb <= maxCritUsed)) {
     // update buf dmg by crit capped
-    UpdateBuf(BufTypes::damageCritCapped,
-              min(0, critStat.m_CurrentValue - critCapped), false, "");
+    if (critStat.m_CurrentValue > critCapped) {
+      UpdateBuf(BufTypes::damageCritCapped,
+                min(0, critStat.m_CurrentValue - critCapped), false, "");
+    }
     // Reset isCritByBuf if it has been used
     if (isCritByBuf) {
       m_AllBufs[static_cast<int>(BufTypes::nextHealAtkIsCrit)]
