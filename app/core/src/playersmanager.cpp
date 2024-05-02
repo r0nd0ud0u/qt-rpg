@@ -466,7 +466,7 @@ void PlayersManager::IncrementCounterEffect() {
 }
 
 /// Boss is deleted from list
-/// Hero has only his life staying at 0.
+/// Hero has his life staying at 0. All effects and bufs are reset.
 /// That method returns a QStringlist with the different died played.
 /// That list will be displayed on channel logs.
 QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
@@ -482,29 +482,38 @@ QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
   }
 
   QStringList output;
-  const auto newEnd = std::remove_if(
-      playerList->begin(), playerList->end(), [&](Character *pl) {
-        if (pl == nullptr) {
-          return false;
-        }
-        const auto &hp = pl->m_Stats.m_AllStatsTable.at(STATS_HP);
-        const QString name = pl->m_Name;
-        const bool isDead = pl->IsDead();
-        if (isDead) {
-          ResetAllEffectsOnPlayer(pl);
-          // process actions on dead hero
-          pl->ProcessDeath();
-          output.append(pl->m_Name);
-        }
-        return isDead; // remove elements where this is true
-      });
 
   // Delete only boss player
   if (launcherType == characType::Boss) {
+    const auto newEnd = std::remove_if(
+        playerList->begin(), playerList->end(), [&](Character *pl) {
+          if (pl == nullptr) {
+            return false;
+          }
+          const bool isDead = pl->IsDead();
+          if (isDead) {
+            output.append(pl->m_Name);
+          }
+          return isDead; // remove elements where this is true
+        });
     // TODO check if bosses has another phase
     // if yes init that phase
     // if not erase the boss of the list
     playerList->erase(newEnd, playerList->end());
+  }
+
+  if (launcherType == characType::Hero){
+      std::for_each(playerList->begin(), playerList->end(), [&](Character *pl) {
+          if (pl == nullptr) {
+            return;
+          }
+          if (pl->IsDead()) {
+              ResetAllEffectsOnPlayer(pl);
+              // process actions on dead hero
+              pl->ProcessDeath();
+              output.append(pl->m_Name);
+          }
+      });
   }
 
   return output;
