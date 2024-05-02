@@ -72,6 +72,11 @@ void PlayersManager::InitBosses() {
   }
 }
 
+void PlayersManager::ClearHeroBossList(){
+    m_HeroesList.clear();
+    m_BossesList.clear();
+}
+
 bool PlayersManager::UpdateActivePlayers(const std::set<QString> &playersList) {
   if (playersList.empty()) {
     return false;
@@ -502,18 +507,18 @@ QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
     playerList->erase(newEnd, playerList->end());
   }
 
-  if (launcherType == characType::Hero){
-      std::for_each(playerList->begin(), playerList->end(), [&](Character *pl) {
-          if (pl == nullptr) {
-            return;
-          }
-          if (pl->IsDead()) {
-              ResetAllEffectsOnPlayer(pl);
-              // process actions on dead hero
-              pl->ProcessDeath();
-              output.append(pl->m_Name);
-          }
-      });
+  if (launcherType == characType::Hero) {
+    std::for_each(playerList->begin(), playerList->end(), [&](Character *pl) {
+      if (pl == nullptr) {
+        return;
+      }
+      if (pl->IsDead()) {
+        ResetAllEffectsOnPlayer(pl);
+        // process actions on dead hero
+        pl->ProcessDeath();
+        output.append(pl->m_Name);
+      }
+    });
   }
 
   return output;
@@ -535,6 +540,9 @@ void PlayersManager::AddSupAtkTurn(
 
   const int speedThreshold = 100;
   for (auto *pl1 : playerList1) {
+    if (pl1->IsDead()) {
+      continue;
+    }
     auto &speedPl1 =
         pl1->m_Stats.m_AllStatsTable.at(STATS_SPEED).m_CurrentValue;
     for (const auto &pl2 : playerList2) {
