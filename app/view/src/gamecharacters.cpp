@@ -26,6 +26,7 @@ GameCharacters::~GameCharacters() {
 
 void GameCharacters::InitAllHeroesPanel() {
 
+  m_HeroesList.clear();
   const auto &app = Application::GetInstance();
   if (app.m_GameManager != nullptr &&
       app.m_GameManager->m_PlayersManager != nullptr) {
@@ -47,7 +48,7 @@ void GameCharacters::InitAllHeroesPanel() {
 }
 
 void GameCharacters::InitAllBossesPanel() {
-
+  m_BossesList.clear();
   const auto &app = Application::GetInstance();
   if (app.m_GameManager != nullptr &&
       app.m_GameManager->m_PlayersManager != nullptr) {
