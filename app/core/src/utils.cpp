@@ -9,6 +9,14 @@ bool Utils::CompareByLevel(const AttaqueType &obj1, const AttaqueType &obj2) {
   return obj1.level < obj2.level;
 }
 
+bool Utils::CompareBySpeed(const Character *c1, const Character *c2) {
+  if (c1 == nullptr || c2 == nullptr) {
+    return false;
+  }
+  return c1->m_Stats.m_AllStatsTable.at(STATS_SPEED).m_CurrentValue >
+         c2->m_Stats.m_AllStatsTable.at(STATS_SPEED).m_CurrentValue;
+}
+
 QString Utils::getCurrentTimeAsString() {
   const auto now = std::chrono::system_clock::now();
   const auto time_t_now = std::chrono::system_clock::to_time_t(now);

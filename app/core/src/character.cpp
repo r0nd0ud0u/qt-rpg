@@ -418,14 +418,6 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
   }
   QString result;
 
-  // increment counter turn, effect is used
-  // it means update only the dot and hot, not the changes on max values of
-  // stats can be improved
-  if (fromLaunch && effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE &&
-      effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE) {
-    effect.counterTurn++;
-  }
-
   // conditions
   if (effect.effect == CONDITION_ENNEMIES_DIED) {
     const auto gs = Application::GetInstance().m_GameManager->m_GameState;
@@ -652,13 +644,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
     if (!resultEffect.isEmpty()) {
       allResultEffects.append(resultEffect);
     }
-    // from two-occurences(more than one turn) an effect is stored, result
-    // effect must be not empty it means the effect has an effect -> TODO can be
-    // replaced by a boolean applied effect to process in ApplyOneEffect
-    if (appliedEffect.nbTurns - appliedEffect.counterTurn > 0 &&
-        !resultEffect.isEmpty()) {
-      allAppliedEffects.push_back(appliedEffect);
-    }
+    allAppliedEffects.push_back(appliedEffect);
     // update allAppliedEffects by newEffects created
     std::for_each(
         newEffects.begin(), newEffects.end(),
@@ -1074,12 +1060,12 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
                        .arg(effect.nbTurns)
                  : "";
     // example cooldown for 2 turns
-    // T1  nb turn -1
+    // T1  no change
     // T2 cooldown, nb turn -1
     // T3 cooldown, nb turn -1
     // T4 nb turn -1 => effect finished => can be launched
-    // => for a cooldown of n=2 turns, the init value of nbTurns = n + 2;
-    effect.nbTurns = effect.nbTurns + 2;
+    // => for a cooldown of n=2 turns, the init value of nbTurns = n + 1;
+    effect.nbTurns = effect.nbTurns + 1;
   }
   if (effect.effect == EFFECT_NB_DECREASE_ON_TURN) {
     nbOfApplies = ProcessDecreaseOnTurn(effect);
@@ -1216,7 +1202,7 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
     output = QString("Les attaques de soins sont bloqués pendant %1.")
                  .arg(effect.nbTurns);
     // Same calculation as cooldown effect
-    effect.nbTurns += 2;
+    effect.nbTurns += 1;
   }
 
   if (effect.effect == EFFECT_REPEAT_IF_HEAL) {
