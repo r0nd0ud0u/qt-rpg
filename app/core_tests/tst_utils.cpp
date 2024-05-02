@@ -66,6 +66,7 @@ private slots:
   void GetDeadliestAlly_works();
   void ProcessDamageTXHealNeedyAlly_works();
   void LootNewEquipments_works();
+  void CheckDiedPlayers_works();
 };
 
 void player_manager_tests::GetDeadliestAlly_works() {
@@ -131,6 +132,30 @@ void player_manager_tests::LootNewEquipments_works() {
       QCOMPARE(true, actual);
     }
   }
+}
+
+void player_manager_tests::CheckDiedPlayers_works() {
+  auto *gm = Application::GetInstance().m_GameManager.get();
+  gm->m_PlayersManager->ClearHeroBossList();
+
+  auto result = gm->m_PlayersManager->CheckDiedPlayers(characType::Boss);
+  QVERIFY(result.isEmpty());
+  result = gm->m_PlayersManager->CheckDiedPlayers(characType::Hero);
+  QVERIFY(result.isEmpty());
+  Stats stats;
+  gm->m_PlayersManager->m_HeroesList.push_back(
+      new Character("c1", characType::Hero, stats));
+  result = gm->m_PlayersManager->CheckDiedPlayers(characType::Hero);
+  QCOMPARE(1, result.size());
+  QCOMPARE("c1", result.front());
+  QCOMPARE(1, gm->m_PlayersManager->m_HeroesList.size());
+
+  gm->m_PlayersManager->m_BossesList.push_back(
+      new Character("b1", characType::Boss, stats));
+  result = gm->m_PlayersManager->CheckDiedPlayers(characType::Boss);
+  QCOMPARE(1, result.size());
+  QCOMPARE("b1", result.front());
+  QCOMPARE(0, gm->m_PlayersManager->m_BossesList.size());
 }
 
 class game_manager_tests : public QObject {
