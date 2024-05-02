@@ -24,6 +24,7 @@ public:
   PlayersManager() = default;
   void InitHeroes();
   void InitBosses();
+  void ClearHeroBossList();
   void LoadAllEquipmentsJson();
   Character *GetCharacterByName(const QString &name);
   void AddGameEffectOnAtk(const QString &launcherName, const AttaqueType &atk,
