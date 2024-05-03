@@ -1556,7 +1556,7 @@ std::vector<effectParam> Character::LoadThrainTalent() const {
 
   effectParam param3;
   param3.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
-  param3.value = 35;
+  param3.value = 15;
   param3.nbTurns = 1000;
   param3.reach = REACH_INDIVIDUAL;
   param3.statsName = STATS_ARM_PHY;
@@ -1566,13 +1566,23 @@ std::vector<effectParam> Character::LoadThrainTalent() const {
 
   effectParam param4;
   param4.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
-  param4.value = 35;
+  param4.value = 15;
   param4.nbTurns = 1000;
   param4.reach = REACH_INDIVIDUAL;
   param4.statsName = STATS_ARM_MAG;
   param4.target = TARGET_HIMSELF;
   param4.subValueEffect = 0;
   epTable.push_back(param4);
+
+  effectParam param5;
+  param5.effect = EFFECT_IMPROVE_BY_PERCENT_CHANGE;
+  param5.value = 5;
+  param5.nbTurns = 1000;
+  param5.reach = REACH_INDIVIDUAL;
+  param5.statsName = STATS_ARM_MAG;
+  param5.target = TARGET_HIMSELF;
+  param5.subValueEffect = 0;
+  epTable.push_back(param5);
 
   return epTable;
 }
