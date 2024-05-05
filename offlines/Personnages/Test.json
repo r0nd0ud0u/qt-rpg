@@ -32,8 +32,8 @@
     ],
     "Mana": [
         {
-            "Current": 160,
-            "Max": 160
+            "Current": 200,
+            "Max": 200
         }
     ],
     "Niveau": 1,
@@ -58,8 +58,8 @@
     ],
     "Rage": [
         {
-            "Current": 0,
-            "Max": 0
+            "Current": 200,
+            "Max": 200
         }
     ],
     "Regen vitesse": [
@@ -99,10 +99,10 @@
         }
     ],
     "Type": "Hero",
-    "Vigor": [
+    "Vigueur": [
         {
-            "Current": 40,
-            "Max": 40
+            "Current": 200,
+            "Max": 200
         }
     ],
     "Vitesse": [
