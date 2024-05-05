@@ -167,7 +167,10 @@ const std::vector<QString> RAND_EQUIP_ON_BODY{
 // Effect keys
 const QString EFFECT_REINIT = "Reinit";
 const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";
+// Effect to execute an atk with a decreasing success rate defined by a step
+// on effect value
 const QString EFFECT_NB_DECREASE_ON_TURN = "Decroissement pendant le tour";
+// not used
 const QString EFFECT_NB_DECREASE_BY_TURN = "Decroissement par tour";
 // Effect to improve cuurent value of a stat by value
 const QString EFFECT_VALUE_CHANGE = "Changement par valeur";
