@@ -38,6 +38,7 @@ class character_tests : public QObject {
 
 private slots:
   void TestThalia_works();
+  void GetMaxNbOfApplies_works();
 };
 
 void character_tests::TestThalia_works() {
@@ -56,6 +57,38 @@ void character_tests::TestThalia_works() {
       thaliaCh->ApplyAtkEffect(true, atk1, AzrakChRx, false);
 
   QCOMPARE(true, conditionsOk);
+}
+
+AttaqueType SimpleAtkMana(){
+    AttaqueType atk;
+    atk.manaCost = 10;
+    return atk;
+}
+
+AttaqueType SimpleAtkVigor(){
+    AttaqueType atk;
+    atk.vigorCost = 10;
+    return atk;
+}
+
+AttaqueType SimpleAtkBerseck(){
+    AttaqueType atk;
+    atk.berseckCost = 10;
+    return atk;
+}
+
+void character_tests::GetMaxNbOfApplies_works() {
+    Stats stats;
+    stats.m_AllStatsTable[STATS_MANA].InitValues(100, 100);
+    stats.m_AllStatsTable[STATS_VIGOR].InitValues(100, 100);
+    stats.m_AllStatsTable[STATS_BERSECK].InitValues(100, 100);
+    auto* c = new Character("",characType::Hero, stats);
+    auto result = c->GetMaxNbOfApplies(SimpleAtkMana());
+    QCOMPARE(10, result);
+    result = c->GetMaxNbOfApplies(SimpleAtkVigor());
+    QCOMPARE(10, result);
+    result = c->GetMaxNbOfApplies(SimpleAtkBerseck());
+    QCOMPARE(10, result);
 }
 
 class player_manager_tests : public QObject {

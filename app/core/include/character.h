@@ -118,6 +118,7 @@ public:
       // maxamount, value 4: crit randNb
   bool IsDead() const;
   void ProcessDeath();
+  int GetMaxNbOfApplies(const AttaqueType &atk) const;
 
   // Temporary
   std::vector<effectParam> LoadThaliaTalent() const;
@@ -165,7 +166,6 @@ private:
   static int DamageByAtk(const Stats &launcherStats, const Stats &targetStats,
                          const bool isMagicAtk, const int atkValue,
                          const int nbTurns);
-  int GetMaxNbOfApplies(const AttaqueType &atk) const;
   int ProcessBerseckOnRxAtk(const int nbOfApplies);
   std::pair<QString, int> ProcessEffectType(
       effectParam &effect, Character *target,
