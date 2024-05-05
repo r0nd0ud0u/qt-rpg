@@ -72,9 +72,9 @@ void PlayersManager::InitBosses() {
   }
 }
 
-void PlayersManager::ClearHeroBossList(){
-    m_HeroesList.clear();
-    m_BossesList.clear();
+void PlayersManager::ClearHeroBossList() {
+  m_HeroesList.clear();
+  m_BossesList.clear();
 }
 
 bool PlayersManager::UpdateActivePlayers(const std::set<QString> &playersList) {
@@ -222,7 +222,10 @@ PlayersManager::RemoveTerminatedEffectsOnPlayer(const QString &curPlayerName) {
                                   .arg(effectName)
                                   .arg(curPlayerName)
                                   .arg(it->atk.name);
-      sl.push_back(terminated);
+      // One-turn effect are not logged out
+      if (it->allAtkEffects.nbTurns > 1) {
+        sl.push_back(terminated);
+      }
       // remove malus effect from player
       auto *player = GetCharacterByName(curPlayerName);
       if (player != nullptr) {
