@@ -741,6 +741,9 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     } else {
       amount = nbOfApplies * ep.value;
     }
+  } else if (ep.effect == EFFECT_PERCENT_CHANGE) {
+    // example for mana
+    amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
   } else {
     amount = nbOfApplies * ep.value;
   }
@@ -899,9 +902,9 @@ QString Character::ProcessOutputLogOnEffect(
     output = QString("l'effet %1: %2/%3 (appliqué %4/%5).")
                  .arg(effectName)
                  .arg(maxAmount)
-                 .arg(QString::number(displayedValue)
-                          .arg(nbOfApplies)
-                          .arg(QString::number(potentialAttempts)));
+                 .arg(QString::number(displayedValue))
+                 .arg(nbOfApplies)
+                 .arg(QString::number(potentialAttempts));
   }
   if (!output.isEmpty()) {
     output += "\n";
