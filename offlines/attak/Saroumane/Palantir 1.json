@@ -1,0 +1,31 @@
+{
+    "Cible": "Soi-même",
+    "Coût de mana": 1,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
+    "Effet": [
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Pouvoir physique",
+            "Tours actifs": 1,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": 100
+        },
+       {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Pouvoir magique",
+            "Tours actifs": 1,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": 100
+        }
+    ],
+    "Forme": "Standard",
+    "Niveau": 13,
+    "Nom": "Palantir 1",
+    "Photo": "default.png",
+    "Portée": "Individuel"
+}

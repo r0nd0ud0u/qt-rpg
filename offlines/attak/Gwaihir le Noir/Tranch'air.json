@@ -1,0 +1,33 @@
+{
+    "Cible": "Ennemie",
+    "Coût de mana": 0,
+    "Coût de rage": 0,
+    "Coût de vigueur": 1,
+    "Effet": [
+         {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "Cout critique",
+            "Tours actifs": 1,
+            "Type": "Up par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 50
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -110
+        }
+       
+    ],
+    "Forme": "Standard",
+    "Niveau": 7,
+    "Nom": "Tranch'air",
+    "Photo": "default.png",
+    "Portée": "Zone"
+}
+

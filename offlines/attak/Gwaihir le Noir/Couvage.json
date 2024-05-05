@@ -1,0 +1,71 @@
+{
+    "Cible": "Soi-même",
+    "Coût de mana": 0,
+    "Coût de rage": 0,
+    "Coût de vigueur": 1,
+    "Effet": [
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Esquive",
+            "Tours actifs": 1,
+            "Type": "Up par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -100
+        },
+      {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Armure physique",
+            "Tours actifs": 1,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": -50
+        },
+         {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Armure magique",
+            "Tours actifs": 1,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": -50
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Regen vitesse",
+            "Tours actifs": 2,
+            "Type": "Up par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 100
+        },
+         {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Cout critique",
+            "Tours actifs": 3,
+            "Type": "Up par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 50
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Up/down degats en %",
+            "Tours actifs": 3,
+            "Type": "Up par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 50
+        }
+
+
+    ],
+    "Forme": "Standard",
+    "Niveau": 2,
+    "Nom": "Couvage",
+    "Photo": "default.png",
+    "Portée": "Individuel"
+}
+
+
