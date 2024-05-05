@@ -62,7 +62,7 @@ const std::set<QString> ALLIES_TARGETS = {
 // Stats keys
 const QString STATS_HP = "PV";
 const QString STATS_MANA = "Mana";
-const QString STATS_VIGOR = "Vigor";
+const QString STATS_VIGOR = "Vigueur";
 const QString STATS_BERSECK = "Rage";
 const QString STATS_ARM_PHY = "Armure physique";
 const QString STATS_ARM_MAG = "Armure magique";
