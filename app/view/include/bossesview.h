@@ -29,7 +29,7 @@ private:
   std::vector<BossPanel *> m_BossPanels;
 
 private slots:
-  void UpdateAllPanels();
+  void UpdateAllPanels(const std::unordered_map<QString, std::vector<GameAtkEffects>> &);
   void RemoveBoss(QString);
   void AddBossPanel(Character *ch);
   void SetFocusOn(const QString &name, const characType &);

@@ -1541,6 +1541,7 @@ std::vector<effectParam> Character::LoadAzrakTalent() const {
   param1.statsName = STATS_REGEN_MANA;
   param1.target = TARGET_HIMSELF;
   param1.subValueEffect = 0;
+  param1.passiveTalent = true;
   epTable.push_back(param1);
 
   return epTable;
@@ -1558,6 +1559,7 @@ std::vector<effectParam> Character::LoadThrainTalent() const {
   param1.target = TARGET_HIMSELF;
   param1.subValueEffect = 0;
   epTable.push_back(param1);
+  param1.passiveTalent = true;
 
   effectParam param2;
   param2.effect = EFFECT_IMPROVEMENT_STAT_BY_VALUE;
@@ -1567,6 +1569,7 @@ std::vector<effectParam> Character::LoadThrainTalent() const {
   param2.statsName = STATS_HP;
   param2.target = TARGET_HIMSELF;
   param2.subValueEffect = 0;
+  param2.passiveTalent = true;
   epTable.push_back(param2);
 
   effectParam param3;
@@ -1577,6 +1580,7 @@ std::vector<effectParam> Character::LoadThrainTalent() const {
   param3.statsName = STATS_ARM_PHY;
   param3.target = TARGET_HIMSELF;
   param3.subValueEffect = 0;
+  param3.passiveTalent = true;
   epTable.push_back(param3);
 
   effectParam param4;
@@ -1587,6 +1591,7 @@ std::vector<effectParam> Character::LoadThrainTalent() const {
   param4.statsName = STATS_ARM_MAG;
   param4.target = TARGET_HIMSELF;
   param4.subValueEffect = 0;
+  param4.passiveTalent = true;
   epTable.push_back(param4);
 
   effectParam param5;
@@ -1597,6 +1602,7 @@ std::vector<effectParam> Character::LoadThrainTalent() const {
   param5.statsName = STATS_ARM_MAG;
   param5.target = TARGET_HIMSELF;
   param5.subValueEffect = 0;
+  param5.passiveTalent = true;
   epTable.push_back(param5);
 
   return epTable;
@@ -1613,6 +1619,7 @@ std::vector<effectParam> Character::LoadElaraTalent() const {
   param1.statsName = STATS_ARM_MAG;
   param1.target = TARGET_ALL_HEROES;
   param1.subValueEffect = 0;
+  param1.passiveTalent = true;
   epTable.push_back(param1);
 
   return epTable;

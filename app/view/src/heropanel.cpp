@@ -9,7 +9,8 @@ HeroPanel::HeroPanel(QWidget *parent) : QWidget(parent), ui(new Ui::HeroPanel) {
 
 HeroPanel::~HeroPanel() { delete ui; }
 
-void HeroPanel::UpdatePanel(Character *hero) {
+void HeroPanel::UpdatePanel(Character *hero,
+                            const std::vector<GameAtkEffects> &table) {
   if (hero == nullptr) {
     return;
   }
@@ -30,7 +31,8 @@ void HeroPanel::UpdatePanel(Character *hero) {
   // hp
   ui->hp_Bar->setFormat(QString::number(hp.m_CurrentValue) + "/" +
                         QString::number(hp.m_MaxValue) + " %p%");
-  int hpValue = (hp.m_MaxValue > 0) ? 100 * hp.m_CurrentValue / hp.m_MaxValue : 0;
+  int hpValue =
+      (hp.m_MaxValue > 0) ? 100 * hp.m_CurrentValue / hp.m_MaxValue : 0;
   ui->hp_Bar->setValue(hpValue);
 
   // mana
@@ -59,6 +61,59 @@ void HeroPanel::UpdatePanel(Character *hero) {
     vigorValue = 100 * vigor.m_CurrentValue / vigor.m_MaxValue;
   }
   ui->vigor_bar->setValue(vigorValue);
+
+  // for all hot/dot and buf/debuf updates
+  int nbBufs = 0;
+  int nbDebufs = 0;
+  // hot dot symbols update
+  if (!table.empty()) {
+    int nbHots = 0;
+    int nbDots = 0;
+    std::for_each(table.begin(), table.end(), [&](const GameAtkEffects &gae) {
+      if (!gae.allAtkEffects.passiveTalent) {
+        // update HOT symbol
+        if (gae.allAtkEffects.statsName == STATS_HP &&
+            gae.allAtkEffects.value > 0) {
+          nbHots++;
+        }
+        // update DOT symbol
+        else if (gae.allAtkEffects.statsName == STATS_HP &&
+                 gae.allAtkEffects.value > 0) {
+          nbDots++;
+        }
+        // update buf symbol
+        else if (gae.allAtkEffects.statsName != STATS_HP &&
+                 gae.allAtkEffects.value > 0) {
+          nbBufs++;
+        }
+        // update debuf symbol
+        else if (gae.allAtkEffects.statsName != STATS_HP &&
+                 gae.allAtkEffects.value < 0) {
+          nbDebufs++;
+        }
+      }
+    });
+
+    ui->verticalWidget->SetHotDotValues(nbHots, nbDots);
+  }
+
+  // buf/debuf symbols update
+  const auto &buffs = hero->m_AllBufs;
+  for (int i = 0; i < hero->m_AllBufs.size(); i++) {
+    const auto &value = buffs[i]->get_value();
+    if (i == static_cast<int>(BufTypes::damageRx)) {
+      if (value < 0) {
+        nbBufs++;
+      } else if (value > 0) {
+        nbDebufs++;
+      }
+    } else if (value > 0) {
+      nbBufs++;
+    } else if (value < 0) {
+      nbDebufs++;
+    }
+  }
+  ui->verticalWidget->SetBufDebufValues(nbBufs, nbDebufs);
 
   ui->hp_Bar->setStyleSheet(
       "QProgressBar{text-align: center; border-style: solid; padding: 1px; "

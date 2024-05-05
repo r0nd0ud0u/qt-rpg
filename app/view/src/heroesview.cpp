@@ -44,7 +44,7 @@ void HeroesView::InitHeroPanel() {
       }
       auto *heroPanel = new HeroPanel();
       heroPanel->SetPixmap(it->m_Name);
-      heroPanel->UpdatePanel(it);
+      heroPanel->UpdatePanel(it, {});
       ui->left_widget->layout()->addWidget(heroPanel);
       m_HeroPanels.push_back(heroPanel);
       heroPanel->InitComboBox();
@@ -101,12 +101,17 @@ void HeroesView::ActivatePanel(const QString &heroName) {
   }
 }
 
-void HeroesView::UpdateAllPanels() {
+void HeroesView::UpdateAllPanels(
+    const std::unordered_map<QString, std::vector<GameAtkEffects>>
+        &allPlEffects) {
   for (auto *heroPanel : m_HeroPanels) {
     if (heroPanel == nullptr) {
       continue;
     }
-    heroPanel->UpdatePanel(heroPanel->m_Heroe);
+    const auto plEffects = (allPlEffects.count(heroPanel->m_Heroe->m_Name) > 0)
+                               ? allPlEffects.at(heroPanel->m_Heroe->m_Name)
+                               : std::vector<GameAtkEffects>();
+    heroPanel->UpdatePanel(heroPanel->m_Heroe, plEffects);
   }
 }
 

@@ -234,7 +234,7 @@ void GameDisplay::NewRound() {
   ui->attak_page->SetCurrentPlayer(activePlayer);
   // set focus on active player
   emit SigSetFocusOnActivePlayer(activePlayer->m_Name, activePlayer->m_type);
-  emit SigUpdatePlayerPanel();
+  emit SigUpdatePlayerPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
   emit SigUpdateChannelView("GameState", QString("Round %1/%2")
                                              .arg(gs->m_CurrentRound)
                                              .arg(gs->m_OrderToPlay.size()));
@@ -267,7 +267,7 @@ void GameDisplay::StartNewTurn() {
   gm->m_PlayersManager->ApplyRegenStats(characType::Boss);
   gm->m_PlayersManager->ApplyRegenStats(characType::Hero);
   // Update views after stats changes
-  emit SigUpdatePlayerPanel();
+  emit SigUpdatePlayerPanel({});
 
   // For each turn now
   // Process the order of the players
@@ -531,7 +531,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   // update all effect panel
   emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
   // update views of heroes and bosses
-  emit SigUpdatePlayerPanel();
+  emit SigUpdatePlayerPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
   // update stats view
   emit SigUpdStatsOnSelCharacter();
 
@@ -567,7 +567,7 @@ void GameDisplay::on_mana_potion_button_clicked() {
   auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_MANA);
-    emit SigUpdatePlayerPanel();
+      emit SigUpdatePlayerPanel({});
   }
 }
 
@@ -575,7 +575,7 @@ void GameDisplay::on_hp_potion_button_clicked() {
   auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_HP);
-    emit SigUpdatePlayerPanel();
+      emit SigUpdatePlayerPanel({});
   }
 }
 
@@ -583,7 +583,7 @@ void GameDisplay::on_berseck_potion_button_clicked() {
   auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_BERSECK);
-    emit SigUpdatePlayerPanel();
+      emit SigUpdatePlayerPanel({});
   }
 }
 
@@ -591,7 +591,7 @@ void GameDisplay::on_vigor_potion_button_clicked() {
   auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_VIGOR);
-    emit SigUpdatePlayerPanel();
+      emit SigUpdatePlayerPanel({});
   }
 }
 
@@ -599,7 +599,7 @@ void GameDisplay::on_add_exp_button_clicked() {
   Application::GetInstance().m_GameManager->m_PlayersManager->AddExpForHeroes(
       ui->exp_spinBox->value());
   // update level + exp label of each hero panel
-  emit SigUpdatePlayerPanel();
+  emit SigUpdatePlayerPanel({});
   emit selectCharacter(
       Application::GetInstance()
           .m_GameManager->m_PlayersManager->m_SelectedHero->m_Name);
@@ -618,7 +618,7 @@ void GameDisplay::SlotUpdateActionViews(const QString &name,
   }
   if (name == "Thalia") {
     activatedPlayer->SetValuesForThalia(form == BEAR_FORM);
-    emit SigUpdatePlayerPanel();
+      emit SigUpdatePlayerPanel({});
   }
 
   // update form

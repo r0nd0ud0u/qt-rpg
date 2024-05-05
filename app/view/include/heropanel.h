@@ -5,6 +5,7 @@
 #include <QWidget>
 
 #include "character.h"
+#include "playersmanager.h"
 
 namespace Ui {
 class HeroPanel;
@@ -16,7 +17,7 @@ class HeroPanel : public QWidget {
 public:
   explicit HeroPanel(QWidget *parent = nullptr);
   ~HeroPanel();
-  void UpdatePanel(Character *hero);
+  void UpdatePanel(Character *hero, const std::vector<GameAtkEffects>& table);
   void SetActive(const bool activated);
   bool GetActive() const;
   void SetSelected(const bool selected);
