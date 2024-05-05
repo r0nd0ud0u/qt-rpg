@@ -28,7 +28,7 @@
         {
             "Cible": "Soi-même",
             "Portée": "Individuel",
-            "Stat": "Vigor",
+            "Stat": "Vigueur",
             "Tours actifs": 1,
             "Type": "Ennemis morts tours précédents",
             "Valeur de l'effet": 20,

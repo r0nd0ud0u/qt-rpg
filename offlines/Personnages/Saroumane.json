@@ -99,7 +99,7 @@
         }
     ],
     "Type": "Boss",
-    "Vigor": [
+    "Vigueur": [
         {
             "Current": 9999,
             "Max": 99999
