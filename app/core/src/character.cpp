@@ -461,12 +461,6 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
   const auto &[effectLog, nbOfApplies] = ProcessEffectType(effect, target, atk);
   result += effectLog;
 
-  // apply amount on berseck character if target is ennemy
-  if (const bool isOnEnnemy = effect.target == TARGET_ENNEMY;
-      effect.statsName == STATS_HP && isOnEnnemy) {
-    const auto berseckAmount = target->ProcessBerseckOnRxAtk(nbOfApplies);
-    result += (berseckAmount > 0) ? QString("recupère +%1 de râge.\n") : "";
-  }
   // apply the effect
   const auto [maxAmountSent, realAmountSent] = ProcessCurrentValueOnEffect(
       effect, nbOfApplies, m_Stats, fromLaunch, target, isCrit);
@@ -503,6 +497,13 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
     }
   }
 
+  // Processes after processing final amount
+  // apply amount on berseck character if target is ennemy
+  if (const bool isOnEnnemy = effect.target == TARGET_ENNEMY;
+      effect.statsName == STATS_HP && isOnEnnemy) {
+      const auto berseckAmount = target->ProcessBerseckOnRxAtk(nbOfApplies);
+      result += (berseckAmount > 0) ? QString("recupère +%1 de râge.\n").arg(berseckAmount) : "";
+  }
   // Process aggro
   if (effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE &&
       effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
@@ -990,29 +991,40 @@ void Character::SetStatsOnEffect(StatsType &stat, const int value,
   stat.m_CurrentValue = static_cast<int>(std::round(stat.m_MaxValue * ratio));
 }
 
+/**
+ * @brief Character::GetMaxNbOfApplies
+ * Assess the maximum of applies for a kind of atk
+ * Current value of Mana and vigor stats are %.
+ * Current value of Berseck is a value.
+ */
 int Character::GetMaxNbOfApplies(const AttaqueType &atk) const {
-  int maxNb = 0;
   int cost = 0;
   QString statName;
   if (atk.manaCost > 0) {
-    cost = atk.manaCost;
     statName = STATS_MANA;
+      // init cost, not final value
+      cost = atk.manaCost;
   }
-  if (atk.vigorCost > 0) {
-    cost = atk.vigorCost;
+  else if (atk.vigorCost > 0) {
+      // init cost, not final value
+      cost = atk.vigorCost;
     statName = STATS_VIGOR;
   }
-  if (atk.berseckCost > 0) {
-    cost = atk.berseckCost;
+  else if (atk.berseckCost > 0) {
+      // init and final value of cost
+      cost = atk.berseckCost;
     statName = STATS_BERSECK;
   }
-  if (m_Stats.m_AllStatsTable.count(statName) == 0 || cost == 0) {
+  const auto &localStat = m_Stats.m_AllStatsTable.at(statName);
+  if (!statName.isEmpty() && m_Stats.m_AllStatsTable.count(statName) == 0) {
     return 0;
   }
 
-  const auto &localStat = m_Stats.m_AllStatsTable.at(statName);
+  if (statName != STATS_BERSECK) {
+      cost *= localStat.m_RawMaxValue/100;
+  }
 
-  return maxNb = localStat.m_CurrentValue / cost;
+  return localStat.m_CurrentValue / cost;
 }
 
 // apply amount on berseck character

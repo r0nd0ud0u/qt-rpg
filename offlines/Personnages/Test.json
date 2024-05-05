@@ -1,0 +1,116 @@
+	{
+    "Aggro": [
+        {
+            "Current": 0,
+            "Max": 9999
+        }
+    ],
+    "Armure magique": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Armure physique": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Couleur": "green",
+    "Cout critique": [
+        {
+            "Current": 10,
+            "Max": 10
+        }
+    ],
+    "Esquive": [
+        {
+            "Current": 5,
+            "Max": 5
+        }
+    ],
+    "Mana": [
+        {
+            "Current": 160,
+            "Max": 160
+        }
+    ],
+    "Niveau": 1,
+    "Nom": "Test",
+    "PV": [
+        {
+            "Current": 135,
+            "Max": 135
+        }
+    ],
+    "Pouvoir magique": [
+        {
+            "Current": 20,
+            "Max": 20
+        }
+    ],
+    "Pouvoir physique": [
+        {
+            "Current": 10,
+            "Max": 10
+        }
+    ],
+    "Rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regen vitesse": [
+        {
+            "Current": 12,
+            "Max": 12
+        }
+    ],
+    "Regeneration Mana": [
+        {
+            "Current": 7,
+            "Max": 7
+        }
+    ],
+    "Regeneration PV": [
+        {
+            "Current": 7,
+            "Max": 7
+        }
+    ],
+    "Regeneration vigueur": [
+        {
+            "Current": 5,
+            "Max": 5
+        }
+    ],
+    "Taux aggro": [
+        {
+            "Current": 1,
+            "Max": 1
+        }
+    ],
+    "Taux rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Type": "Hero",
+    "Vigor": [
+        {
+            "Current": 40,
+            "Max": 40
+        }
+    ],
+    "Vitesse": [
+        {
+            "Current": 12,
+            "Max": 12
+        }
+    ],
+	"Rang": 4
+}
+

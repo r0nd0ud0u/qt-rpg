@@ -124,11 +124,7 @@ void GameDisplay::NewRound() {
     // update boolean
     activePlayer->m_ExtCharacter->set_is_first_round(false);
 
-    const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffectsOnPlayer(
-        activePlayer->m_Name, gm->m_GameState->m_CurrentTurnNb, false);
-    emit SigUpdateChannelView(activePlayer->m_Name, effectsLogs.join("\n"),
-                              activePlayer->color);
-    // Update effect
+    // Remove terminated effect
     const QStringList terminatedEffects =
         gm->m_PlayersManager->RemoveTerminatedEffectsOnPlayer(
             activePlayer->m_Name);
@@ -136,6 +132,12 @@ void GameDisplay::NewRound() {
                               terminatedEffects.join("\n"),
                               activePlayer->color);
     emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
+
+    // Update effect
+    const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffectsOnPlayer(
+        activePlayer->m_Name, gm->m_GameState->m_CurrentTurnNb, false);
+    emit SigUpdateChannelView(activePlayer->m_Name, effectsLogs.join("\n"),
+                              activePlayer->color);
 
     // update buf pow
     // passive azrak TODO extract in a function
