@@ -461,12 +461,6 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
   const auto &[effectLog, nbOfApplies] = ProcessEffectType(effect, target, atk);
   result += effectLog;
 
-  // apply amount on berseck character if target is ennemy
-  if (const bool isOnEnnemy = effect.target == TARGET_ENNEMY;
-      effect.statsName == STATS_HP && isOnEnnemy) {
-    const auto berseckAmount = target->ProcessBerseckOnRxAtk(nbOfApplies);
-    result += (berseckAmount > 0) ? QString("recupère +%1 de râge.\n") : "";
-  }
   // apply the effect
   const auto [maxAmountSent, realAmountSent] = ProcessCurrentValueOnEffect(
       effect, nbOfApplies, m_Stats, fromLaunch, target, isCrit);
@@ -503,6 +497,13 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
     }
   }
 
+  // Processes after processing final amount
+  // apply amount on berseck character if target is ennemy
+  if (const bool isOnEnnemy = effect.target == TARGET_ENNEMY;
+      effect.statsName == STATS_HP && isOnEnnemy) {
+      const auto berseckAmount = target->ProcessBerseckOnRxAtk(nbOfApplies);
+      result += (berseckAmount > 0) ? QString("recupère +%1 de râge.\n").arg(berseckAmount) : "";
+  }
   // Process aggro
   if (effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE &&
       effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
