@@ -1,0 +1,40 @@
+{
+    "Cible": "Ennemie",
+    "Coût de mana": 0,
+    "Coût de rage": 0,
+    "Coût de vigueur": 1,
+    "Effet": [
+        {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "Mana",
+            "Tours actifs": 1,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": -20
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "Vigueur",
+            "Tours actifs": 1,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": -20
+        },
+           {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "Rage",
+            "Tours actifs": 1,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": -20
+        }
+    ],
+    "Forme": "Standard",
+    "Niveau": 12,
+    "Nom": "Courroux du traître (attaque la plus couteuse)",
+    "Photo": "default.png",
+    "Portée": "Zone"
+}

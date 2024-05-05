@@ -1,0 +1,60 @@
+{
+    "Cible": "Ennemie",
+    "Coût de mana": 1,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
+    "Effet": [
+
+       {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "PV",
+            "Tours actifs": 30,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": -12
+        },
+       {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "Regen PV",
+            "Tours actifs": 30,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": -25
+        },
+     {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "Regen vigueur",
+            "Tours actifs": 30,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": -25
+        },
+      {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "Regen rage",
+            "Tours actifs": 30,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": -25
+        },  
+	{
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "Regen mana",
+            "Tours actifs": 30,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": -25
+        }
+    ],
+    "Forme": "Standard",
+    "Niveau": 4,
+    "Nom": "Orage du Mordor",
+    "Photo": "default.png",
+    "Portée": "Zone"
+}
+

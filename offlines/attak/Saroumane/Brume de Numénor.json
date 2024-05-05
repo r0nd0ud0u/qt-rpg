@@ -1,0 +1,51 @@
+{
+    "Cible": "Ennemie",
+    "Coût de mana": 1,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
+    "Effet": [
+    {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Cout critique",
+            "Tours actifs": 1,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -100
+        },
+       {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": -85
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "Pouvoir magique",
+            "Tours actifs": 2,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": 150
+        },
+        {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "Pouvoir physique",
+            "Tours actifs": 2,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": 150
+        }
+    
+    ],
+    "Forme": "Standard",
+    "Niveau": 1,
+    "Nom": "Brume de Numénor",
+    "Photo": "default.png",
+    "Portée": "Zone"
+}
+

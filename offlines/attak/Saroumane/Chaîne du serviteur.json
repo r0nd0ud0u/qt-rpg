@@ -1,0 +1,22 @@
+{
+    "Cible": "Ennemie",
+    "Coût de mana": 1,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
+    "Effet": [
+       {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -10
+        }
+    ],
+    "Forme": "Standard",
+    "Niveau": 8,
+    "Nom": "Chaine du serviteur (folie du joueur)",
+    "Photo": "default.png",
+    "Portée": "Individuel"
+}
