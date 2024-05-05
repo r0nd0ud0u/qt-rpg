@@ -501,8 +501,10 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
   // apply amount on berseck character if target is ennemy
   if (const bool isOnEnnemy = effect.target == TARGET_ENNEMY;
       effect.statsName == STATS_HP && isOnEnnemy) {
-      const auto berseckAmount = target->ProcessBerseckOnRxAtk(nbOfApplies);
-      result += (berseckAmount > 0) ? QString("recupère +%1 de râge.\n").arg(berseckAmount) : "";
+    const auto berseckAmount = target->ProcessBerseckOnRxAtk(nbOfApplies);
+    result += (berseckAmount > 0)
+                  ? QString("recupère +%1 de râge.\n").arg(berseckAmount)
+                  : "";
   }
   // Process aggro
   if (effect.effect != EFFECT_IMPROVEMENT_STAT_BY_VALUE &&
@@ -824,15 +826,14 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
   int maxAmount = 0;
   if (output > 0) {
     // heal
+    const int delta = localStat.m_MaxValue - localStat.m_CurrentValue;
     localStat.m_CurrentValue =
         min(output + localStat.m_CurrentValue, localStat.m_MaxValue);
-    const int delta = localStat.m_MaxValue - localStat.m_CurrentValue;
     maxAmount = min(delta, output);
   } else {
     // damage
-    int tmp = localStat.m_CurrentValue;
+    const int tmp = localStat.m_CurrentValue;
     localStat.m_CurrentValue = max(0, localStat.m_CurrentValue + output);
-    // TODO change it
     maxAmount = min(tmp, output);
   }
 
@@ -878,28 +879,29 @@ QString Character::ProcessOutputLogOnEffect(
 
   if (ep.statsName == STATS_HP) {
     if (fromLaunch) {
-      output = QString("%1 %5/%6 PV avec l'effet %2 (appliqué %3/%4).")
+      output = QString("%1 %2/%3 PV avec l'effet %4 (appliqué %5/%6).")
                    .arg(healOrDamageLog)
-                   .arg(effectName)
-                   .arg(nbOfApplies)
-                   .arg(QString::number(potentialAttempts))
-                   .arg(maxAmount)
-                   .arg(QString::number(displayedValue));
-    } else {
-      output = QString("%1 %3/%4 PV avec l'effet %2-(%5).")
-                   .arg(healOrDamageLog)
-                   .arg(effectName)
                    .arg(maxAmount)
                    .arg(QString::number(displayedValue))
+                   .arg(effectName)
+                   .arg(nbOfApplies)
+                   .arg(QString::number(potentialAttempts));
+
+    } else {
+      output = QString("%1 %2/%3 PV avec l'effet %4-(%5).")
+                   .arg(healOrDamageLog)
+                   .arg(maxAmount)
+                   .arg(QString::number(displayedValue))
+                   .arg(effectName)
                    .arg(atkName);
     }
   } else if (ep.statsName != STATS_HP) {
-    output = QString("l'effet %1: %4/%5 (appliqué %2/%3).")
+    output = QString("l'effet %1: %2/%3 (appliqué %4/%5).")
                  .arg(effectName)
-                 .arg(nbOfApplies)
-                 .arg(QString::number(potentialAttempts))
                  .arg(maxAmount)
-                 .arg(QString::number(displayedValue));
+                 .arg(QString::number(displayedValue)
+                          .arg(nbOfApplies)
+                          .arg(QString::number(potentialAttempts)));
   }
   if (!output.isEmpty()) {
     output += "\n";
@@ -1002,17 +1004,15 @@ int Character::GetMaxNbOfApplies(const AttaqueType &atk) const {
   QString statName;
   if (atk.manaCost > 0) {
     statName = STATS_MANA;
-      // init cost, not final value
-      cost = atk.manaCost;
-  }
-  else if (atk.vigorCost > 0) {
-      // init cost, not final value
-      cost = atk.vigorCost;
+    // init cost, not final value
+    cost = atk.manaCost;
+  } else if (atk.vigorCost > 0) {
+    // init cost, not final value
+    cost = atk.vigorCost;
     statName = STATS_VIGOR;
-  }
-  else if (atk.berseckCost > 0) {
-      // init and final value of cost
-      cost = atk.berseckCost;
+  } else if (atk.berseckCost > 0) {
+    // init and final value of cost
+    cost = atk.berseckCost;
     statName = STATS_BERSECK;
   }
   const auto &localStat = m_Stats.m_AllStatsTable.at(statName);
@@ -1021,7 +1021,7 @@ int Character::GetMaxNbOfApplies(const AttaqueType &atk) const {
   }
 
   if (statName != STATS_BERSECK) {
-      cost *= localStat.m_RawMaxValue/100;
+    cost *= localStat.m_RawMaxValue / 100;
   }
 
   return localStat.m_CurrentValue / cost;
@@ -1245,7 +1245,7 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
       buf->add_stat_name(effect.statsName.toStdString());
       buf->set_buffers(effect.nbTurns, false);
     }
-    output += QString("Buf avec excédent de soin sur %1.").arg(effect.effect);
+    output += QString("Buf %1 par excédent de soin.").arg(effect.statsName);
   }
 
   if (!output.isEmpty()) {
@@ -1686,8 +1686,8 @@ void Character::SortAtkByLevel() {
  * @brief Character::IsDead
  * A player is dead the stats HP has the current value equal to 0.
  */
-bool Character::IsDead() const{
-    return (m_Stats.m_AllStatsTable.at(STATS_HP).m_CurrentValue ==0);
+bool Character::IsDead() const {
+  return (m_Stats.m_AllStatsTable.at(STATS_HP).m_CurrentValue == 0);
 }
 
 /**
@@ -1695,13 +1695,13 @@ bool Character::IsDead() const{
  * When a player is dead, all the bufs are reset
  * The effects are reset by the player manager
  */
-void Character::ProcessDeath(){
-    // Reset all bufs except passive talent
-    std::for_each(m_AllBufs.begin(), m_AllBufs.end(), [](Buffers* buf){
-        if(buf != nullptr){
-            buf->set_buffers(0, false);
-            buf->set_buffers(0, true);
-            buf->set_is_passive_enabled(false);
-        }
-    });
+void Character::ProcessDeath() {
+  // Reset all bufs except passive talent
+  std::for_each(m_AllBufs.begin(), m_AllBufs.end(), [](Buffers *buf) {
+    if (buf != nullptr) {
+      buf->set_buffers(0, false);
+      buf->set_buffers(0, true);
+      buf->set_is_passive_enabled(false);
+    }
+  });
 }
