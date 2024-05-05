@@ -1,0 +1,40 @@
+{
+    "Cible": "Ennemie",
+    "Coût de mana": 1,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
+    "Effet": [
+      {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -220
+        },
+       {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "Armure magique",
+            "Tours actifs": 3,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": -30
+        },
+     {
+            "Cible": "Ennemie",
+            "Portée": "Zone",
+            "Stat": "Armure physique",
+            "Tours actifs": 3,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": -30
+        }
+    ],
+    "Forme": "Standard",
+    "Niveau": 3,
+    "Nom": "La main blanche",
+    "Photo": "default.png",
+    "Portée": "Zone"
+}

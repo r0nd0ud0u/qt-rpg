@@ -1,0 +1,58 @@
+{
+    "Cible": "Soi-même",
+    "Coût de mana": 1,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
+    "Effet": [
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Regen vitesse",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 100
+        },
+      {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Armure physique",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": -40
+        },
+         {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Armure magique",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": -40
+        },
+         {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Cout critique",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 100
+        },
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Pouvoir magique",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 50
+        }
+    ],
+    "Forme": "Standard",
+    "Niveau": 10,
+    "Nom": "Rugissement d'Uruk'hai",
+    "Photo": "default.png",
+    "Portée": "Individuel"
+}
