@@ -2,7 +2,9 @@
 #include <qobject.h>
 
 #include "Application.h"
+
 #include "classes/attak.cpp"
+#include "classes/character_fixtures.cpp"
 
 class character_tests : public QObject {
   Q_OBJECT
@@ -11,6 +13,7 @@ private slots:
   void TestThalia_works();
   void GetMaxNbOfApplies_works();
   void ChangeByPercent_works();
+  void GetBufDebufNumbers_works();
 };
 
 void character_tests::TestThalia_works() {
@@ -32,12 +35,7 @@ void character_tests::TestThalia_works() {
 }
 
 void character_tests::ChangeByPercent_works() {
-  const QString testName = "Test";
-  const std::set<QString> activePlayers{testName};
-  auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
-  // add heroes
-  pm->UpdateActivePlayers(activePlayers);
-  auto *testCh = pm->GetCharacterByName(testName);
+  auto *testCh = GetTestCharacter();
 
   // attaque 1
   AttaqueType atk1 =
@@ -78,6 +76,26 @@ void character_tests::GetMaxNbOfApplies_works() {
   QCOMPARE(10, result);
   result = c->GetMaxNbOfApplies(SimpleAtkBerseck());
   QCOMPARE(10, result);
+}
+
+void character_tests::GetBufDebufNumbers_works() {
+  auto *testCh = GetTestCharacter();
+  auto result = testCh->GetBufDebufNumbers();
+  QVERIFY(result.has_value());
+
+  for (int i = 0; i < static_cast<int>(BufTypes::enumSize); i++) {
+    if (i == static_cast<int>(BufTypes::damageRx)) {
+      testCh->m_AllBufs[i]->set_buffers(-10, false);
+    } else {
+      testCh->m_AllBufs[i]->set_buffers(10, false);
+    }
+  }
+  result = testCh->GetBufDebufNumbers();
+  QVERIFY(result.has_value());
+  QCOMPARE(result->hot, 0);
+  QCOMPARE(result->dot, 0);
+  QCOMPARE(result->debuf, 0);
+  QCOMPARE(result->buf, static_cast<int>(BufTypes::enumSize));
 }
 
 int main(int argc, char *argv[]) {

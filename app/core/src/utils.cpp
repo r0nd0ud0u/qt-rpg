@@ -30,6 +30,12 @@ QString Utils::getCurrentTimeAsString() {
   return QString::fromStdString(oss.str());
 }
 
+/**
+ * @brief Utils::GetNbOfActiveEffects
+ * Returns the number of hot, dot, buf and dot for all the effects in one attak.
+ * The number of one-turn effect (damage or heal etc., change by value and %) is
+ * assessed.
+ */
 std::optional<EffectsTypeNb>
 Utils::GetNbOfActiveEffects(const std::vector<GameAtkEffects> &table) {
   EffectsTypeNb nbs;

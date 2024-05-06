@@ -1716,22 +1716,27 @@ void Character::ProcessDeath() {
   });
 }
 
-std::optional<EffectsTypeNb> Character::GetBufDebufNumbers() const{
-    EffectsTypeNb nbs;
-    const auto &buffs = m_AllBufs;
-    for (int i = 0; i < buffs.size(); i++) {
-        const auto &value = buffs[i]->get_value();
-        if (i == static_cast<int>(BufTypes::damageRx)) {
-            if (value < 0) {
-                nbs.buf++;
-            } else if (value > 0) {
-                nbs.debuf++;
-            }
-        } else if (value > 0) {
-            nbs.buf++;
-        } else if (value < 0) {
-            nbs.debuf++;
-        }
+/**
+ * @brief Character::GetBufDebufNumbers
+ * @return Returns the numbers of buf and debuf assessed in the list of
+ * buf/debuf.
+ */
+std::optional<EffectsTypeNb> Character::GetBufDebufNumbers() const {
+  EffectsTypeNb nbs;
+  const auto &buffs = m_AllBufs;
+  for (int i = 0; i < buffs.size(); i++) {
+    const auto &value = buffs[i]->get_value();
+    if (i == static_cast<int>(BufTypes::damageRx)) {
+      if (value < 0) {
+        nbs.buf++;
+      } else if (value > 0) {
+        nbs.debuf++;
+      }
+    } else if (value > 0) {
+      nbs.buf++;
+    } else if (value < 0) {
+      nbs.debuf++;
     }
-    return (buffs.size() > 0) ? std::optional(nbs) : std::nullopt;
+  }
+  return (buffs.size() > 0) ? std::optional(nbs) : std::nullopt;
 }
