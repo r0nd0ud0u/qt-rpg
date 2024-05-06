@@ -69,9 +69,7 @@ void MainWindow::UpdateActiveCharacters(const std::set<QString> &playersList) {
 
 void MainWindow::AddNewCharacter(Character *ch) { emit SigNewCharacter(ch); }
 
-void MainWindow::AddNewStuff() {
-    emit SigAddNewStuff();
-}
+void MainWindow::AddNewStuff() { emit SigAddNewStuff(); }
 
 void MainWindow::UpdateStuffOnUse(const QString &playerName) {
   emit SigNewStuffOnUse(playerName);

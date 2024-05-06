@@ -78,6 +78,7 @@ void PlayersManager::ClearHeroBossList() {
 }
 
 bool PlayersManager::UpdateActivePlayers(const std::set<QString> &playersList) {
+  ClearHeroBossList();
   if (playersList.empty()) {
     return false;
   }

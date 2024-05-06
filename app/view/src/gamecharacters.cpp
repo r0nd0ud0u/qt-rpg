@@ -21,11 +21,15 @@ GameCharacters::~GameCharacters() {
     it = nullptr;
   }
   m_HeroesList.clear();
+  for (auto *it : m_BossesList) {
+    delete it;
+    it = nullptr;
+  }
+  m_BossesList.clear();
   delete ui;
 }
 
 void GameCharacters::InitAllHeroesPanel() {
-
   m_HeroesList.clear();
   const auto &app = Application::GetInstance();
   if (app.m_GameManager != nullptr &&
