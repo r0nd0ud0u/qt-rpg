@@ -70,7 +70,7 @@ void BossesView::ActivatePanel(const QString &bossName) {
   }
 }
 
-void BossesView::UpdateAllPanels(const std::unordered_map<QString, std::vector<GameAtkEffects>> & table) {
+void BossesView::UpdateAllPanels([[maybe_unused]] const std::unordered_map<QString, std::vector<GameAtkEffects>> & table) {
   for (auto &panel : m_BossPanels) {
     panel->UpdatePanel(panel->m_Boss);
   }
