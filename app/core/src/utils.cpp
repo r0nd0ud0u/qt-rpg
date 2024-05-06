@@ -1,5 +1,8 @@
 #include "utils.h"
 
+#include "character.h"
+#include "playersmanager.h"
+
 #include <chrono>
 #include <ctime> // for std::localtime
 #include <iomanip>
@@ -25,4 +28,46 @@ QString Utils::getCurrentTimeAsString() {
   std::ostringstream oss;
   oss << std::put_time(local_tm, "%Y-%m-%d-%H-%M-%S");
   return QString::fromStdString(oss.str());
+}
+
+std::optional<EffectsTypeNb>
+Utils::GetNbOfActiveEffects(const std::vector<GameAtkEffects> &table) {
+  EffectsTypeNb nbs;
+  // for all hot/dot and buf/debuf updates
+  // hot dot symbols update
+  if (!table.empty()) {
+    std::for_each(table.begin(), table.end(), [&](const GameAtkEffects &gae) {
+      if (!gae.allAtkEffects.passiveTalent) {
+        // update HOT symbol
+        if (gae.allAtkEffects.statsName == STATS_HP &&
+            EFFECTS_HOT_OR_DOT.count(gae.allAtkEffects.effect) > 0 &&
+            gae.allAtkEffects.value > 0 && gae.allAtkEffects.nbTurns > 1) {
+          nbs.hot++;
+        }
+        // update DOT symbol
+        else if (gae.allAtkEffects.statsName == STATS_HP &&
+                 EFFECTS_HOT_OR_DOT.count(gae.allAtkEffects.effect) > 0 &&
+                 gae.allAtkEffects.value > 0 && gae.allAtkEffects.nbTurns > 1) {
+          nbs.dot++;
+        }
+        // update buf symbol
+        else if (gae.allAtkEffects.value > 0 &&
+                 !(EFFECTS_HOT_OR_DOT.count(gae.allAtkEffects.effect) > 0 &&
+                   gae.allAtkEffects.nbTurns == 1)) {
+          nbs.buf++;
+        }
+        // update debuf symbol
+        else if (gae.allAtkEffects.value < 0 &&
+                 !(EFFECTS_HOT_OR_DOT.count(gae.allAtkEffects.effect) > 0 &&
+                   gae.allAtkEffects.nbTurns == 1)) {
+          nbs.debuf++;
+        } else if (EFFECTS_HOT_OR_DOT.count(gae.allAtkEffects.effect) > 0 &&
+                   gae.allAtkEffects.nbTurns == 1) {
+          nbs.oneTurnHotDot++;
+        }
+      }
+    });
+    return std::optional(nbs);
+  }
+  return std::nullopt;
 }

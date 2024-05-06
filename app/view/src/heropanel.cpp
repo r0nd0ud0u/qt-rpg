@@ -2,6 +2,7 @@
 #include "ui_heropanel.h"
 
 #include "ApplicationView.h"
+#include "utils.h"
 
 HeroPanel::HeroPanel(QWidget *parent) : QWidget(parent), ui(new Ui::HeroPanel) {
   ui->setupUi(this);
@@ -65,54 +66,21 @@ void HeroPanel::UpdatePanel(Character *hero,
   // for all hot/dot and buf/debuf updates
   int nbBufs = 0;
   int nbDebufs = 0;
-  // hot dot symbols update
-  if (!table.empty()) {
-    int nbHots = 0;
-    int nbDots = 0;
-    std::for_each(table.begin(), table.end(), [&](const GameAtkEffects &gae) {
-      if (!gae.allAtkEffects.passiveTalent) {
-        // update HOT symbol
-        if (gae.allAtkEffects.statsName == STATS_HP &&
-            gae.allAtkEffects.value > 0) {
-          nbHots++;
-        }
-        // update DOT symbol
-        else if (gae.allAtkEffects.statsName == STATS_HP &&
-                 gae.allAtkEffects.value > 0) {
-          nbDots++;
-        }
-        // update buf symbol
-        else if (gae.allAtkEffects.statsName != STATS_HP &&
-                 gae.allAtkEffects.value > 0) {
-          nbBufs++;
-        }
-        // update debuf symbol
-        else if (gae.allAtkEffects.statsName != STATS_HP &&
-                 gae.allAtkEffects.value < 0) {
-          nbDebufs++;
-        }
-      }
-    });
-
-    ui->verticalWidget->SetHotDotValues(nbHots, nbDots);
+  // hot, dot, buf, debuf by ongoing effects
+  const auto effectsNbs = Utils::GetNbOfActiveEffects(table);
+  if (effectsNbs.has_value()) {
+    ui->verticalWidget->SetHotDotValues(effectsNbs->hot, effectsNbs->dot);
+    nbBufs += effectsNbs->buf;
+    nbDebufs += effectsNbs->debuf;
   }
 
-  // buf/debuf symbols update
-  const auto &buffs = hero->m_AllBufs;
-  for (int i = 0; i < hero->m_AllBufs.size(); i++) {
-    const auto &value = buffs[i]->get_value();
-    if (i == static_cast<int>(BufTypes::damageRx)) {
-      if (value < 0) {
-        nbBufs++;
-      } else if (value > 0) {
-        nbDebufs++;
-      }
-    } else if (value > 0) {
-      nbBufs++;
-    } else if (value < 0) {
-      nbDebufs++;
-    }
+  // buf/debuf nbs by ongoing buf/debuf table
+  const auto bufDebufNbs = hero->GetBufDebufNumbers();
+  if (bufDebufNbs.has_value()) {
+    nbBufs += bufDebufNbs->buf;
+    nbDebufs += bufDebufNbs->debuf;
   }
+
   ui->verticalWidget->SetBufDebufValues(nbBufs, nbDebufs);
 
   ui->hp_Bar->setStyleSheet(

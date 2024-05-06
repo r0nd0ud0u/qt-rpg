@@ -4,6 +4,7 @@
 # General Files
 set(SOURCES
     attak.cpp
+    character_fixtures.cpp
 )
 
 add_library(classes STATIC ${SOURCES})
