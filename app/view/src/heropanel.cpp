@@ -2,6 +2,7 @@
 #include "ui_heropanel.h"
 
 #include "ApplicationView.h"
+#include "utils.h"
 
 HeroPanel::HeroPanel(QWidget *parent) : QWidget(parent), ui(new Ui::HeroPanel) {
   ui->setupUi(this);
@@ -9,7 +10,8 @@ HeroPanel::HeroPanel(QWidget *parent) : QWidget(parent), ui(new Ui::HeroPanel) {
 
 HeroPanel::~HeroPanel() { delete ui; }
 
-void HeroPanel::UpdatePanel(Character *hero) {
+void HeroPanel::UpdatePanel(Character *hero,
+                            const std::vector<GameAtkEffects> &table) {
   if (hero == nullptr) {
     return;
   }
@@ -30,7 +32,8 @@ void HeroPanel::UpdatePanel(Character *hero) {
   // hp
   ui->hp_Bar->setFormat(QString::number(hp.m_CurrentValue) + "/" +
                         QString::number(hp.m_MaxValue) + " %p%");
-  int hpValue = (hp.m_MaxValue > 0) ? 100 * hp.m_CurrentValue / hp.m_MaxValue : 0;
+  int hpValue =
+      (hp.m_MaxValue > 0) ? 100 * hp.m_CurrentValue / hp.m_MaxValue : 0;
   ui->hp_Bar->setValue(hpValue);
 
   // mana
@@ -59,6 +62,26 @@ void HeroPanel::UpdatePanel(Character *hero) {
     vigorValue = 100 * vigor.m_CurrentValue / vigor.m_MaxValue;
   }
   ui->vigor_bar->setValue(vigorValue);
+
+  // for all hot/dot and buf/debuf updates
+  int nbBufs = 0;
+  int nbDebufs = 0;
+  // hot, dot, buf, debuf by ongoing effects
+  const auto effectsNbs = Utils::GetNbOfActiveEffects(table);
+  if (effectsNbs.has_value()) {
+    ui->verticalWidget->SetHotDotValues(effectsNbs->hot, effectsNbs->dot);
+    nbBufs += effectsNbs->buf;
+    nbDebufs += effectsNbs->debuf;
+  }
+
+  // buf/debuf nbs by ongoing buf/debuf table
+  const auto bufDebufNbs = hero->GetBufDebufNumbers();
+  if (bufDebufNbs.has_value()) {
+    nbBufs += bufDebufNbs->buf;
+    nbDebufs += bufDebufNbs->debuf;
+  }
+
+  ui->verticalWidget->SetBufDebufValues(nbBufs, nbDebufs);
 
   ui->hp_Bar->setStyleSheet(
       "QProgressBar{text-align: center; border-style: solid; padding: 1px; "

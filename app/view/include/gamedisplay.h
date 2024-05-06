@@ -27,7 +27,7 @@ public slots:
   void UpdateActivePlayers();
 signals:
   void selectCharacter(const QString &);
-  void SigUpdatePlayerPanel();
+  void SigUpdatePlayerPanel(const std::unordered_map<QString, std::vector<GameAtkEffects>> &);
   void SigBossDead(QString);
   void SigEndOfGame();
   void SigUpdateChannelView(const QString &, const QString &,

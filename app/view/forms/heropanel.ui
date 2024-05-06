@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>590</width>
-    <height>197</height>
+    <height>209</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -150,34 +150,7 @@
          <property name="bottomMargin">
           <number>9</number>
          </property>
-         <item row="2" column="1">
-          <widget class="QProgressBar" name="hp_Bar">
-           <property name="font">
-            <font>
-             <pointsize>9</pointsize>
-            </font>
-           </property>
-           <property name="value">
-            <number>50</number>
-           </property>
-           <property name="format">
-            <string>%p%</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QProgressBar" name="bersecker_bar">
-           <property name="font">
-            <font>
-             <pointsize>9</pointsize>
-            </font>
-           </property>
-           <property name="value">
-            <number>0</number>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
+         <item row="1" column="1">
           <widget class="QWidget" name="hero_info" native="true">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <property name="spacing">
@@ -204,6 +177,12 @@
             </item>
             <item>
              <widget class="QLabel" name="hero_level">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="font">
                <font>
                 <pointsize>11</pointsize>
@@ -215,37 +194,25 @@
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="DotView" name="verticalWidget" native="true">
-              <layout class="QVBoxLayout" name="verticalLayout_3"/>
-             </widget>
-            </item>
            </layout>
           </widget>
          </item>
-         <item row="9" column="1">
-          <widget class="Line" name="line">
-           <property name="lineWidth">
-            <number>5</number>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="1">
-          <widget class="QProgressBar" name="vigor_bar">
+         <item row="3" column="1">
+          <widget class="QProgressBar" name="hp_Bar">
            <property name="font">
             <font>
              <pointsize>9</pointsize>
             </font>
            </property>
            <property name="value">
-            <number>100</number>
+            <number>50</number>
+           </property>
+           <property name="format">
+            <string>%p%</string>
            </property>
           </widget>
          </item>
-         <item row="4" column="1">
+         <item row="5" column="1">
           <widget class="QProgressBar" name="mana_bar">
            <property name="font">
             <font>
@@ -257,33 +224,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="hp_label">
-           <property name="font">
-            <font>
-             <pointsize>9</pointsize>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>HP</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="mana_label">
-           <property name="font">
-            <font>
-             <pointsize>9</pointsize>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>Mana</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
+         <item row="7" column="0">
           <widget class="QLabel" name="bersecker_label">
            <property name="font">
             <font>
@@ -296,7 +237,67 @@
            </property>
           </widget>
          </item>
-         <item row="8" column="0">
+         <item row="7" column="1">
+          <widget class="QProgressBar" name="bersecker_bar">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
+           <property name="value">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="1">
+          <widget class="QProgressBar" name="vigor_bar">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
+           <property name="value">
+            <number>100</number>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="1">
+          <widget class="Line" name="line">
+           <property name="lineWidth">
+            <number>5</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="hp_label">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>HP</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="mana_label">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Mana</string>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="0">
           <widget class="QLabel" name="vigor_label">
            <property name="font">
             <font>
@@ -307,6 +308,11 @@
            <property name="text">
             <string>Vigor</string>
            </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="DotView" name="verticalWidget" native="true">
+           <layout class="QVBoxLayout" name="verticalLayout_3"/>
           </widget>
          </item>
         </layout>

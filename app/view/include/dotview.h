@@ -15,6 +15,9 @@ public:
     explicit DotView(QWidget *parent = nullptr);
     ~DotView();
 
+    void SetHotDotValues(const int hot, const int dotf);
+    void SetBufDebufValues(const int buf, const int debuf);
+
 private:
     Ui::DotView *ui;
 };

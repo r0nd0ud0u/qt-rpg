@@ -37,7 +37,7 @@ void GameCharacters::InitAllHeroesPanel() {
       }
       auto *heroPanel = new HeroPanel();
       heroPanel->SetPixmap(it->m_Name);
-      heroPanel->UpdatePanel(it);
+      heroPanel->UpdatePanel(it, {});
       ui->heroScrollAreaWidgetContents->layout()->addWidget(heroPanel);
       connect(heroPanel, &HeroPanel::SigPanelSelectCharacter, this,
               &GameCharacters::ActivatePanel);
