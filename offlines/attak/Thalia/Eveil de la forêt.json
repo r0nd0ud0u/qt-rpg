@@ -57,7 +57,16 @@
             "Type": "Boost l'effet par nb HOTS presents en %",
             "Valeur de l'effet": 20,
             "Value": 80
-        }
+        },
+	{
+            "Cible": "Tous les heroes",
+            "Portée": "Zone",
+            "Stat": "Pouvoir magique",
+            "Tours actifs": 4,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 10
+	}
     ],
     "Forme": "Standard",
     "Niveau": 13,
