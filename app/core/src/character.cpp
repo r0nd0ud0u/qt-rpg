@@ -1738,5 +1738,5 @@ std::optional<EffectsTypeNb> Character::GetBufDebufNumbers() const {
       nbs.debuf++;
     }
   }
-  return (buffs.size() > 0) ? std::optional(nbs) : std::nullopt;
+  return (!buffs.empty()) ? std::optional(nbs) : std::nullopt;
 }
