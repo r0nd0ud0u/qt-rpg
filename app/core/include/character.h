@@ -13,6 +13,7 @@
 #include "common.h"
 #include "effect.h"
 #include "stuff.h"
+#include "utils.h" // for EffectsTypeNb struct
 
 #include "rust-rpg-bridge/attaque.h"
 #include "rust-rpg-bridge/character.h"
@@ -119,6 +120,7 @@ public:
   bool IsDead() const;
   void ProcessDeath();
   int GetMaxNbOfApplies(const AttaqueType &atk) const;
+  std::optional<EffectsTypeNb> GetBufDebufNumbers() const;
 
   // Temporary
   std::vector<effectParam> LoadThaliaTalent() const;

@@ -2,15 +2,17 @@
 #include <QtTest>
 
 #include "Application.h"
-#include "playersmanager.h"
 #include "utils.h"
 
+// fixtures
+#include "classes/character_fixtures.cpp"
 
 class utils_tests : public QObject {
   Q_OBJECT
 
 private slots:
   void CompareByLevel_works();
+  void GetNbOfActiveEffects_works();
 };
 
 void utils_tests::CompareByLevel_works() {
@@ -32,146 +34,39 @@ void utils_tests::CompareByLevel_works() {
   Q_ASSERT(!result);
 }
 
-class player_manager_tests : public QObject {
-  Q_OBJECT
+void utils_tests::GetNbOfActiveEffects_works() {
+  auto *testCh = GetTestCharacter();
+  AttaqueType atk1 =
+      testCh->m_AttakList["mana-vigor-berseck-changepercent-hero"];
+  auto pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+  pm->AddGameEffectOnAtk("Test", atk1, "Test", atk1.m_AllEffects, 1);
+  // empty table
+  auto result = Utils::GetNbOfActiveEffects({});
+  QVERIFY(!result.has_value());
+  // filled table with one-turn effects
+  result = Utils::GetNbOfActiveEffects(pm->m_AllEffectsOnGame["Test"]);
+  QVERIFY(result.has_value());
+  QCOMPARE(result.value().buf, 0);
+  QCOMPARE(result.value().debuf, 0);
+  QCOMPARE(result.value().hot, 0);
+  QCOMPARE(result.value().dot, 0);
+  QCOMPARE(result.value().oneTurnHotDot, 3);
 
-public:
-private slots:
-  void GetDeadliestAlly_works();
-  void ProcessDamageTXHealNeedyAlly_works();
-  void LootNewEquipments_works();
-  void CheckDiedPlayers_works();
-};
-
-void player_manager_tests::GetDeadliestAlly_works() {
-
-  PlayersManager pl;
-  Character *c1 = new Character;
-  Character *c2 = new Character;
-
-  // case pv c1 < pv c2
-  c1->m_Stats.m_AllStatsTable.at(STATS_HP).m_CurrentValue = 0;
-  c1->m_Stats.m_AllStatsTable.at(STATS_HP).m_MaxValue = 1000;
-  c2->m_Stats.m_AllStatsTable.at(STATS_HP).m_CurrentValue = 1000;
-  c2->m_Stats.m_AllStatsTable.at(STATS_HP).m_MaxValue = 1000;
-  c1->m_Name = "c1";
-  c2->m_Name = "c2";
-  pl.m_HeroesList.push_back(c1);
-  pl.m_HeroesList.push_back(c2);
-
-  const auto output = pl.GetAllDeadliestAllies(characType::Hero);
-  QCOMPARE("c1", output.value().front());
-
-  // case pv c1 == pv c2
-  c2->m_Stats.m_AllStatsTable.at(STATS_HP).m_CurrentValue = 0;
-  const auto output2 = pl.GetAllDeadliestAllies(characType::Hero).value();
-  QCOMPARE("c1", output2.front());
-  QCOMPARE("c2", output2.at(1));
-}
-
-void player_manager_tests::ProcessDamageTXHealNeedyAlly_works() {
-  PlayersManager pl;
-  Character *c1 = new Character;
-  Character *c2 = new Character;
-
-  // case pv c1 < pv c2
-  c1->m_Stats.m_AllStatsTable.at(STATS_HP).m_CurrentValue = 0;
-  c1->m_Stats.m_AllStatsTable.at(STATS_HP).m_MaxValue = 1000;
-  c2->m_Stats.m_AllStatsTable.at(STATS_HP).m_CurrentValue = 1000;
-  c2->m_Stats.m_AllStatsTable.at(STATS_HP).m_MaxValue = 1000;
-  c1->m_Name = "c1";
-  c2->m_Name = "c2";
-  pl.m_HeroesList.push_back(c1);
-  pl.m_HeroesList.push_back(c2);
-
-  pl.ProcessDamageTXHealNeedyAlly(characType::Hero, 100);
-  QCOMPARE(25, c1->m_Stats.m_AllStatsTable.at(STATS_HP).m_CurrentValue);
-}
-
-void player_manager_tests::LootNewEquipments_works() {
-  PlayersManager pl;
-  auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
-  const auto result = pm->LootNewEquipments("Angmar");
-  // rank if Angmar is 4 => 4 loots
-  QCOMPARE(4, result.size());
-  for (const auto &s : result) {
-    QCOMPARE(s.m_Rank, s.m_StatsUpByLoot.size());
-    for (const auto &stats : s.m_StatsUpByLoot) {
-      if (s.m_Stats.m_AllStatsTable.count(stats) == 0) {
-        continue;
-      }
-      auto &stuffStat = s.m_Stats.m_AllStatsTable.at(stats);
-      const auto actual =
-          (stuffStat.m_BufEquipPercent > 0 || stuffStat.m_BufEquipValue > 0);
-      QCOMPARE(true, actual);
-    }
-  }
-}
-
-void player_manager_tests::CheckDiedPlayers_works() {
-  auto *gm = Application::GetInstance().m_GameManager.get();
-  gm->m_PlayersManager->ClearHeroBossList();
-
-  auto result = gm->m_PlayersManager->CheckDiedPlayers(characType::Boss);
-  QVERIFY(result.isEmpty());
-  result = gm->m_PlayersManager->CheckDiedPlayers(characType::Hero);
-  QVERIFY(result.isEmpty());
-  Stats stats;
-  gm->m_PlayersManager->m_HeroesList.push_back(
-      new Character("c1", characType::Hero, stats));
-  result = gm->m_PlayersManager->CheckDiedPlayers(characType::Hero);
-  QCOMPARE(1, result.size());
-  QCOMPARE("c1", result.front());
-  QCOMPARE(1, gm->m_PlayersManager->m_HeroesList.size());
-
-  gm->m_PlayersManager->m_BossesList.push_back(
-      new Character("b1", characType::Boss, stats));
-  result = gm->m_PlayersManager->CheckDiedPlayers(characType::Boss);
-  QCOMPARE(1, result.size());
-  QCOMPARE("b1", result.front());
-  QCOMPARE(0, gm->m_PlayersManager->m_BossesList.size());
-}
-
-class game_manager_tests : public QObject {
-  Q_OBJECT
-
-public:
-private slots:
-  void ProcessOrderToPlay_works();
-};
-
-void game_manager_tests::ProcessOrderToPlay_works() {
-  auto *gm = Application::GetInstance().m_GameManager.get();
-  std::vector<QString> listPl;
-
-  gm->m_PlayersManager->ClearHeroBossList();
-  // init heroes
-  Stats stats;
-  // speed increasing by 10
-  stats.m_AllStatsTable[STATS_SPEED].m_CurrentValue = 0;
-  stats.m_AllStatsTable[STATS_HP].m_CurrentValue = 10;
-  auto *hero1 = new Character("h1", characType::Hero, stats);
-  stats.m_AllStatsTable[STATS_SPEED].m_CurrentValue += 10;
-  stats.m_AllStatsTable[STATS_HP].m_CurrentValue = 10;
-  auto *hero2 = new Character("h2", characType::Hero, stats);
-  stats.m_AllStatsTable[STATS_SPEED].m_CurrentValue += 10;
-  // no hp
-  stats.m_AllStatsTable[STATS_HP].m_CurrentValue = 0;
-  auto *hero3 = new Character("h3", characType::Hero, stats);
-  // init boss
-  stats.m_AllStatsTable[STATS_SPEED].m_CurrentValue += 10;
-  auto *boss = new Character("b1", characType::Boss, stats);
-
-  gm->m_PlayersManager->m_HeroesList.push_back(hero1);
-  gm->m_PlayersManager->m_HeroesList.push_back(hero2);
-  gm->m_PlayersManager->m_HeroesList.push_back(hero3);
-  gm->m_PlayersManager->m_BossesList.push_back(boss);
-  gm->ProcessOrderToPlay(listPl);
-  QCOMPARE(4, listPl.size());
-  QCOMPARE("h2", listPl[0]);
-  QCOMPARE("h1", listPl[1]);
-  QCOMPARE("h3", listPl[2]);
-  QCOMPARE("b1", listPl[3]);
+  // Test with several effects
+  pm->m_AllEffectsOnGame["Test"].clear();
+  AttaqueType atk2 = testCh->m_AttakList["GetNbOfActiveEffects"];
+  pm->AddGameEffectOnAtk("Test", atk2, "Test", atk2.m_AllEffects, 1);
+  result = Utils::GetNbOfActiveEffects(pm->m_AllEffectsOnGame["Test"]);
+  QVERIFY(result.has_value());
+  QCOMPARE(result.value().buf, 3);
+  QCOMPARE(result.value().debuf, 7);
+  QCOMPARE(result.value().hot, 0);
+  QCOMPARE(result.value().dot, 0);
+  QCOMPARE(result.value().oneTurnHotDot, 2);
+  const auto sumBufNbs = result.value().buf + result.value().debuf +
+                         result.value().hot + result.value().dot +
+                         result.value().oneTurnHotDot;
+  QCOMPARE(atk2.m_AllEffects.size(), sumBufNbs);
 }
 
 int main(int argc, char *argv[]) {
@@ -180,16 +75,6 @@ int main(int argc, char *argv[]) {
 
   utils_tests test;
   QTest::qExec(&test);
-
-  // player_manager_tests test2;
-  // QTest::qExec(&test2);
-
-  // game_manager_tests test4;
-  // QTest::qExec(&test4);
-
-  // character_tests test3;
-  // QTest::qExec(&test3);
-
 
   return 0;
 }
