@@ -393,6 +393,24 @@ int PlayersManager::GetNbOfStatsInEffectList(const Character *chara,
   return counter;
 }
 
+/**
+ * @brief PlayersManager::GetNbOfActiveHotsOnHeroes
+ * @return the number of hots on all heroes
+ */
+int PlayersManager::GetNbOfActiveHotsOnHeroes() const {
+  int counter = 0;
+  for (const auto &[name, allE] : m_AllEffectsOnGame) {
+    for (const auto &e : allE) {
+      if (e.allAtkEffects.statsName == STATS_HP && e.allAtkEffects.value > 0 &&
+          e.allAtkEffects.nbTurns > 1 &&
+          EFFECTS_HOT_OR_DOT.count(e.allAtkEffects.effect) > 0) {
+        counter++;
+      }
+    }
+  }
+  return counter;
+}
+
 void PlayersManager::ResetCounterOnOneStatsEffect(const Character *chara,
                                                   const QString &statsName) {
   if (chara == nullptr || m_AllEffectsOnGame.count(chara->m_Name) == 0) {
@@ -458,7 +476,9 @@ void PlayersManager::ImproveHotsOnPlayers(const int valuePercent,
     }
     for (auto &e : m_AllEffectsOnGame[pl->m_Name]) {
       if (e.allAtkEffects.statsName == STATS_HP &&
-          ALLIES_TARGETS.count(e.allAtkEffects.target) > 0) {
+          ALLIES_TARGETS.count(e.allAtkEffects.target) > 0 &&
+          EFFECTS_HOT_OR_DOT.count(e.allAtkEffects.effect) > 0 &&
+          e.allAtkEffects.value > 0 && e.allAtkEffects.nbTurns > 1) {
         e.allAtkEffects.value += e.allAtkEffects.value * valuePercent / 100;
       }
     }

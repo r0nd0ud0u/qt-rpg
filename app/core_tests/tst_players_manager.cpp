@@ -4,6 +4,8 @@
 #include "Application.h"
 #include "playersmanager.h"
 
+#include "classes/attak.cpp"
+#include "classes/character_fixtures.cpp"
 
 class player_manager_tests : public QObject {
   Q_OBJECT
@@ -14,6 +16,7 @@ private slots:
   void ProcessDamageTXHealNeedyAlly_works();
   void LootNewEquipments_works();
   void CheckDiedPlayers_works();
+  void GetNbOfActiveHotsOnHeroes_works();
 };
 
 void player_manager_tests::GetDeadliestAlly_works() {
@@ -105,7 +108,18 @@ void player_manager_tests::CheckDiedPlayers_works() {
   QCOMPARE(0, gm->m_PlayersManager->m_BossesList.size());
 }
 
+void player_manager_tests::GetNbOfActiveHotsOnHeroes_works(){
+    auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+    pm->m_AllEffectsOnGame.clear();
+    auto result = pm->GetNbOfActiveHotsOnHeroes();
+    QCOMPARE(0, result);
 
+    auto *testCh = GetTestCharacter();
+    AttaqueType atk1 = SimpleHot();
+    pm->AddGameEffectOnAtk("Test", atk1, "Test", atk1.m_AllEffects, 1);
+    result = pm->GetNbOfActiveHotsOnHeroes();
+    QCOMPARE(1, result);
+}
 
 int main(int argc, char *argv[]) {
   auto app = std::make_unique<Application>(argc, argv);
