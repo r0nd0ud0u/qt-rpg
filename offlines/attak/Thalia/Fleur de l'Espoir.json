@@ -33,7 +33,16 @@
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": -5
-        }
+        }, 	
+        {
+            "Cible": "Tous les heroes",
+            "Portée": "Zone",
+            "Stat": "Pouvoir magique",
+            "Tours actifs": 5,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 10
+	}
     ],
     "Forme": "Standard",
     "Niveau": 6,

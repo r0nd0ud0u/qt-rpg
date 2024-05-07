@@ -67,16 +67,16 @@ void HeroPanel::UpdatePanel(Character *hero,
   int nbBufs = 0;
   int nbDebufs = 0;
   // hot, dot, buf, debuf by ongoing effects
-  const auto effectsNbs = Utils::GetNbOfActiveEffects(table);
-  if (effectsNbs.has_value()) {
+  if (const auto effectsNbs = Utils::GetNbOfActiveEffects(table);
+      effectsNbs.has_value()) {
     ui->verticalWidget->SetHotDotValues(effectsNbs->hot, effectsNbs->dot);
     nbBufs += effectsNbs->buf;
     nbDebufs += effectsNbs->debuf;
   }
 
   // buf/debuf nbs by ongoing buf/debuf table
-  const auto bufDebufNbs = hero->GetBufDebufNumbers();
-  if (bufDebufNbs.has_value()) {
+  if (const auto bufDebufNbs = hero->GetBufDebufNumbers();
+      bufDebufNbs.has_value()) {
     nbBufs += bufDebufNbs->buf;
     nbDebufs += bufDebufNbs->debuf;
   }

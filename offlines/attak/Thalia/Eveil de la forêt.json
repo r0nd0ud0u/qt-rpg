@@ -3,8 +3,23 @@
     "Coût de mana": 23,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
-    "Effet": [
-        {
+    "Effet": [{
+            "Cible": "Tous les heroes",
+            "Portée": "Zone",
+            "Stat": "Pouvoir magique",
+            "Tours actifs": 4,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 10
+        }, {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "",
+            "Tours actifs": 1,
+            "Type": "Boost l'effet par nb HOTS presents en %",
+            "Valeur de l'effet": 0,
+            "Value": 20
+        }, {
             "Cible": "Tous les heroes",
             "Portée": "Zone",
             "Stat": "PV",
@@ -12,8 +27,7 @@
             "Type": "Reinit",
             "Valeur de l'effet": 0,
             "Value": 0
-        },
-        {
+        }, {
             "Cible": "Allié",
             "Portée": "Zone",
             "Stat": "PV",
@@ -21,8 +35,7 @@
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 80
-        },
-        {
+        }, {
             "Cible": "Allié",
             "Portée": "Zone",
             "Stat": "",
@@ -30,8 +43,7 @@
             "Type": "Supprime effet néfaste",
             "Valeur de l'effet": 1000,
             "Value": 0
-        },
-        {
+        }, {
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "",
@@ -39,24 +51,14 @@
             "Type": "Tours de recharge",
             "Valeur de l'effet": 1000,
             "Value": 10
-        },
-        {
-            "Cible": "Soi-même",
-            "Portée": "Individuel",
+        }, {
+            "Cible": "Tous les heroes",
+            "Portée": "Zone",
             "Stat": "",
             "Tours actifs": 1,
             "Type": "Boost chaque HOT de .. %",
             "Valeur de l'effet": 0,
             "Value": 33
-        },
-        {
-            "Cible": "Soi-même",
-            "Portée": "Individuel",
-            "Stat": "PV",
-            "Tours actifs": 1,
-            "Type": "Boost l'effet par nb HOTS presents en %",
-            "Valeur de l'effet": 20,
-            "Value": 80
         }
     ],
     "Forme": "Standard",
@@ -65,4 +67,3 @@
     "Photo": "Thalia.png",
     "Portée": "Zone"
 }
-

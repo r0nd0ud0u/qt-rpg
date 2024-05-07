@@ -460,6 +460,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   activatedPlayer->ResetBuf(BufTypes::damageCritCapped);
   activatedPlayer->ResetBuf(BufTypes::multiValue);
   activatedPlayer->ResetBuf(BufTypes::applyEffectInit);
+  activatedPlayer->ResetBuf(BufTypes::boostedByHots);
   /// Update game state
   // update effect on player manager
   for (const auto &[targetName, epTable] : newEffects) {

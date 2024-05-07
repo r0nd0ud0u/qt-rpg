@@ -15,25 +15,16 @@
             "Type": "Decroissement pendant le tour",
             "Valeur de l'effet": 3,
             "Value": 32
-        },
+        },	
         {
-            "Cible": "",
-            "Portée": "",
-            "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
+            "Cible": "Tous les heroes",
+            "Portée": "Zone",
+            "Stat": "Pouvoir magique",
+            "Tours actifs": 4,
+            "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": 0
-        },
-        {
-            "Cible": "",
-            "Portée": "",
-            "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
-            "Valeur de l'effet": 0,
-            "Value": 0
-        }
+            "Value": 10
+         }
     ],
     "Forme": "Standard",
     "Niveau": 2,
