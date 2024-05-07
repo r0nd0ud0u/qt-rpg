@@ -778,6 +778,13 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
         bufDebuf += static_cast<int>(update_damage_by_buf(
             bufHpRx->get_value(), bufHpRx->get_is_percent(), amount));
       }
+      // Launcher TX
+      if (const auto *bufNbHots =
+              m_AllBufs[static_cast<int>(BufTypes::boostedByHots)];
+          bufNbHots != nullptr) {
+        bufDebuf += static_cast<int>(update_damage_by_buf(
+            bufNbHots->get_value(), bufNbHots->get_is_percent(), amount));
+      }
     }
 
     if (const bool isDamage = ep.target == TARGET_ENNEMY && amount < 0;
@@ -1123,8 +1130,11 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
     output = QString("Les HOTs sont boostés de %1%.").arg(effect.value);
   }
   if (effect.effect == EFFECT_BOOSTED_BY_HOTS) {
-    const auto nbHots = pm->GetNbOfStatsInEffectList(target, STATS_HP);
-    effect.value = effect.value * (effect.subValueEffect / 100) * nbHots;
+    const auto nbHots = pm->GetNbOfActiveHotsOnHeroes();
+    const auto buf = (effect.value) * nbHots;
+    UpdateBuf(BufTypes::boostedByHots, buf, true, "");
+    output = QString("Le soin de cette attaque sera boosté de %1%.")
+                 .arg(effect.value);
   }
   if (effect.effect == EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT) {
     effect.value = nbOfApplies * effect.value;
@@ -1738,5 +1748,5 @@ std::optional<EffectsTypeNb> Character::GetBufDebufNumbers() const {
       nbs.debuf++;
     }
   }
-  return (buffs.size() > 0) ? std::optional(nbs) : std::nullopt;
+  return (!buffs.empty()) ? std::optional(nbs) : std::nullopt;
 }

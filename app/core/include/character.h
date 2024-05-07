@@ -54,6 +54,7 @@ enum class BufTypes {
   multiValue,
   applyEffectInit,
   changeByHealValue,
+  boostedByHots,
   enumSize
 };
 enum class amountType {
@@ -116,7 +117,7 @@ public:
       effectParam &ep, const int nbOfApplies, const Stats &launcherStats,
       const bool launch, Character *target,
       const bool isCrit) const; // value 1 isCrit, value 2 total amount value 3
-      // maxamount, value 4: crit randNb
+                                // maxamount, value 4: crit randNb
   bool IsDead() const;
   void ProcessDeath();
   int GetMaxNbOfApplies(const AttaqueType &atk) const;

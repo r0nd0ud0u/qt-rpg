@@ -70,6 +70,7 @@ public:
   void OutputCharactersInJson(const std::vector<Character*>& l) const;
   void LoadAllCharactersJson();
   void ResetAllEffectsOnPlayer(const Character *chara);
+  int GetNbOfActiveHotsOnHeroes() const;
 
   // Available characters to create a party
   std::vector<Character *> m_AllHeroesList;
