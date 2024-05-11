@@ -38,6 +38,7 @@
     ],
     "Niveau": 2147483647,
     "Nom": "Gobenain-3",
+	"Photo": "Gobenain",
     "PV": [
         {
             "Current": 1000,
