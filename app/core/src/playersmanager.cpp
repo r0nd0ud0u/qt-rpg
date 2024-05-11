@@ -970,6 +970,7 @@ void PlayersManager::OutputCharactersInJson(
     QJsonObject obj;
 
     obj.insert(CH_NAME, h->m_Name);
+    obj.insert(CH_PHOTO_NAME, h->m_PhotoName);
     const auto type =
         (h->m_type == characType::Boss) ? CH_TYPE_BOSS : CH_TYPE_HERO;
     obj.insert(CH_TYPE, type);
@@ -1040,6 +1041,7 @@ void PlayersManager::LoadAllCharactersJson() {
 
       auto *c = new Character("", characType::Hero, {});
       c->m_Name = jsonDoc[CH_NAME].toString();
+      c->m_PhotoName = jsonDoc[CH_PHOTO_NAME].toString();
       c->m_type = (jsonDoc[CH_TYPE].toString() == CH_TYPE_BOSS)
                       ? characType::Boss
                       : characType::Hero;

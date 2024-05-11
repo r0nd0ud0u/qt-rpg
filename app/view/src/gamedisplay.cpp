@@ -47,6 +47,7 @@ void GameDisplay::UpdateChannel() { ui->channel_lay->ShowPageStuffs(); }
 
 void GameDisplay::UpdateViews(const QString &name) {
   const auto &app = Application::GetInstance();
+  QString photo;
   // lambda function to add here
   for (auto *hero : app.m_GameManager->m_PlayersManager->m_HeroesList) {
     if (hero->m_Name == name) {
@@ -60,7 +61,13 @@ void GameDisplay::UpdateViews(const QString &name) {
       break;
     }
   }
-  emit selectCharacter(name);
+  const auto *c = app.m_GameManager->m_PlayersManager->m_SelectedHero;
+  if (c == nullptr) {
+    photo = "";
+  } else {
+    photo = (c->m_PhotoName.isEmpty()) ? c->m_Name : c->m_PhotoName;
+  }
+  emit selectCharacter(name, photo);
 }
 
 void GameDisplay::on_attaque_button_clicked() {
@@ -111,9 +118,10 @@ void GameDisplay::NewRound() {
     return;
   }
   // The player can play the round only if alive
-  if(activePlayer->IsDead()){
-      emit SigUpdateChannelView(activePlayer->m_Name, "est mort.",activePlayer->color);
-      return;
+  if (activePlayer->IsDead()) {
+    emit SigUpdateChannelView(activePlayer->m_Name, "est mort.",
+                              activePlayer->color);
+    return;
   }
 
   // Apply effects
@@ -165,7 +173,7 @@ void GameDisplay::NewRound() {
                                  .arg(hpRx));
         azrakOverHeal.append(QString("Overheal total: Tour%1: %2")
                                  .arg(gs->m_CurrentTurnNb - 1)
-                                 .arg(hpRx-phyBuf->get_value()));
+                                 .arg(hpRx - phyBuf->get_value()));
         emit SigUpdateChannelView(activePlayer->m_Name,
                                   azrakOverHeal.join("\n"),
                                   activePlayer->color);
@@ -240,7 +248,7 @@ void GameDisplay::NewRound() {
                                              .arg(gs->m_OrderToPlay.size()));
   // auto select hero
   gm->m_PlayersManager->m_SelectedHero = activePlayer;
-  emit selectCharacter(activePlayer->m_Name);
+  emit selectCharacter(activePlayer->m_Name, activePlayer->m_PhotoName);
 
   // set atk view on
   // do it after hero has been activated and selected
@@ -568,7 +576,7 @@ void GameDisplay::on_mana_potion_button_clicked() {
   auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_MANA);
-      emit SigUpdatePlayerPanel({});
+    emit SigUpdatePlayerPanel({});
   }
 }
 
@@ -576,7 +584,7 @@ void GameDisplay::on_hp_potion_button_clicked() {
   auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_HP);
-      emit SigUpdatePlayerPanel({});
+    emit SigUpdatePlayerPanel({});
   }
 }
 
@@ -584,7 +592,7 @@ void GameDisplay::on_berseck_potion_button_clicked() {
   auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_BERSECK);
-      emit SigUpdatePlayerPanel({});
+    emit SigUpdatePlayerPanel({});
   }
 }
 
@@ -592,7 +600,7 @@ void GameDisplay::on_vigor_potion_button_clicked() {
   auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_VIGOR);
-      emit SigUpdatePlayerPanel({});
+    emit SigUpdatePlayerPanel({});
   }
 }
 
@@ -601,9 +609,12 @@ void GameDisplay::on_add_exp_button_clicked() {
       ui->exp_spinBox->value());
   // update level + exp label of each hero panel
   emit SigUpdatePlayerPanel({});
-  emit selectCharacter(
-      Application::GetInstance()
-          .m_GameManager->m_PlayersManager->m_SelectedHero->m_Name);
+  const auto *c = Application::GetInstance()
+                      .m_GameManager->m_PlayersManager->m_SelectedHero;
+  if (c == nullptr) {
+    return;
+  }
+  emit selectCharacter(c->m_Name, c->m_PhotoName);
 }
 
 void GameDisplay::SlotUpdateActionViews(const QString &name,
@@ -619,7 +630,7 @@ void GameDisplay::SlotUpdateActionViews(const QString &name,
   }
   if (name == "Thalia") {
     activatedPlayer->SetValuesForThalia(form == BEAR_FORM);
-      emit SigUpdatePlayerPanel({});
+    emit SigUpdatePlayerPanel({});
   }
 
   // update form
@@ -635,7 +646,7 @@ void GameDisplay::SlotUpdateActionViews(const QString &name,
 
 void GameDisplay::UpdateActivePlayers() {
   emit SigGameDisplayStart();
-  emit selectCharacter(
-      Application::GetInstance()
-          .m_GameManager->m_PlayersManager->m_SelectedHero->m_Name);
+  const auto *pl = Application::GetInstance()
+                       .m_GameManager->m_PlayersManager->m_SelectedHero;
+  emit selectCharacter(pl->m_Name, pl->m_PhotoName);
 }
