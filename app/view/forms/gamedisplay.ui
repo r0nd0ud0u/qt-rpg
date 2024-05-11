@@ -223,7 +223,7 @@
             <bool>true</bool>
            </property>
            <property name="text">
-            <string>Add Exp</string>
+            <string>Add Level</string>
            </property>
           </widget>
          </item>

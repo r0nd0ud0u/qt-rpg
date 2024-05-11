@@ -1400,14 +1400,14 @@ void Character::UsePotion(const QString &statsName) {
       stat.m_CurrentValue + boost * stat.m_MaxValue / 100, stat.m_MaxValue);
 }
 
+/**
+ * @brief Character::AddExp
+ * Add levels to characters
+ */
 void Character::AddExp(const int newXp) {
   m_Exp += newXp;
-
-  while (m_Exp >= m_NextLevel) {
-    m_Level += 1;
-    m_NextLevel += m_NextLevel + m_NextLevel * 20 / 100;
-    UpdateStatsToNextLevel();
-  }
+  m_Level += 1;
+  UpdateStatsToNextLevel();
 }
 
 void Character::SetEquipment(

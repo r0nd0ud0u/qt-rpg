@@ -345,16 +345,16 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
     // hp
     hp.m_CurrentValue = std::min(
         hp.m_MaxValue,
-        hp.m_CurrentValue + hp.m_MaxValue * regenHp.m_CurrentValue / 100);
+        hp.m_CurrentValue + regenHp.m_CurrentValue);
     // mana
     mana.m_CurrentValue = std::min(
         mana.m_MaxValue,
-        mana.m_CurrentValue + mana.m_MaxValue * regenMana.m_CurrentValue / 100);
+        mana.m_CurrentValue + regenMana.m_CurrentValue);
     // vigor
     vigor.m_CurrentValue =
         std::min(vigor.m_MaxValue,
                  vigor.m_CurrentValue +
-                     vigor.m_MaxValue * regenVigor.m_CurrentValue / 100);
+                regenVigor.m_CurrentValue);
     // berseck
     berseck.m_CurrentValue =
         std::min(berseck.m_MaxValue,
@@ -876,7 +876,8 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
     // Armur bonus does not contain 'no loot'(0) whereas stuffClass is starting
     // at 'no loot'(0) This bonus is for all body parts with some exceptions
     if (const std::set<QString> armurBonusExceptions{
-            EQUIP_NECKLACE, EQUIP_ARM, EQUIP_RING_RIGHT, EQUIP_RING_LEFT};
+            EQUIP_NECKLACE, EQUIP_LEFT_WEAPON, EQUIP_RIGHT_WEAPON,
+            EQUIP_RING_RIGHT, EQUIP_RING_LEFT};
         armurBonusExceptions.count(stuff.m_BodyPart) == 0) {
       const auto armurBonus =
           (stuffClass - 1 < BossClass::ARMOR.size())
