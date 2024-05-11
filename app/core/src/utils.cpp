@@ -53,7 +53,7 @@ Utils::GetNbOfActiveEffects(const std::vector<GameAtkEffects> &table) {
         // update DOT symbol
         else if (gae.allAtkEffects.statsName == STATS_HP &&
                  EFFECTS_HOT_OR_DOT.count(gae.allAtkEffects.effect) > 0 &&
-                 gae.allAtkEffects.value > 0 && gae.allAtkEffects.nbTurns > 1) {
+                 gae.allAtkEffects.value < 0 && gae.allAtkEffects.nbTurns > 1) {
           nbs.dot++;
         }
         // update buf symbol
