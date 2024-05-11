@@ -7,17 +7,17 @@
     ],
     "Armure magique": [
         {
-            "Current": 600,
-            "Max": 600
+            "Current": 100,
+            "Max": 100
         }
     ],
     "Armure physique": [
         {
-            "Current": 600,
-            "Max": 600
+            "Current": 100,
+            "Max": 100
         }
     ],
-    "Couleur": "dark",
+    "Couleur": "red",
     "Cout critique": [
         {
             "Current": 20,
@@ -37,23 +37,23 @@
         }
     ],
     "Niveau": 2147483647,
-    "Nom": "Angmar le retour",
+    "Nom": "Gobenain-3",
     "PV": [
         {
-            "Current": 20000,
-            "Max": 20000
+            "Current": 1000,
+            "Max": 1000
         }
     ],
     "Pouvoir magique": [
         {
-            "Current": 120,
-            "Max": 120
+            "Current": 20,
+            "Max": 20
         }
     ],
     "Pouvoir physique": [
         {
-            "Current": 250,
-            "Max": 250
+            "Current": 20,
+            "Max": 20
         }
     ],
     "Rage": [
@@ -111,6 +111,6 @@
             "Max": 0
         }
     ],
-	"Rang": 4
+	"Rang": 1
 }
 
