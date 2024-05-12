@@ -22,7 +22,7 @@
             "Valeur de l'effet": 0,
             "Value": 0
         },
-		{
+        {
             "Cible": "Tous les heroes",
             "Portée": "Zone",
             "Stat": "PV",
@@ -51,7 +51,7 @@
         }
     ],
     "Forme": "Standard",
-    "Niveau": 12,
+    "Niveau": 13,
     "Nom": "Non sans raison",
     "Photo": "default.png",
     "Portée": "Zone"

@@ -27,7 +27,7 @@
             "Portée": "Zone",
             "Stat": "Cout critique",
             "Tours actifs": 3,
-            "Type": "Changement par valeur",
+            "Type": "Up par valeur",
             "Valeur de l'effet": 0,
             "Value": -10
         }

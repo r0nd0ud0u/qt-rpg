@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>464</width>
     <height>300</height>
    </rect>
   </property>
@@ -28,10 +28,10 @@
         <bool>false</bool>
        </attribute>
        <attribute name="horizontalHeaderMinimumSectionSize">
-        <number>50</number>
+        <number>80</number>
        </attribute>
        <attribute name="horizontalHeaderDefaultSectionSize">
-        <number>200</number>
+        <number>150</number>
        </attribute>
        <attribute name="verticalHeaderVisible">
         <bool>false</bool>
@@ -64,6 +64,18 @@
    </item>
    <item>
     <widget class="QWidget" name="targets_widget" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>350</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>350</height>
+      </size>
+     </property>
      <layout class="QVBoxLayout" name="target_lay"/>
     </widget>
    </item>

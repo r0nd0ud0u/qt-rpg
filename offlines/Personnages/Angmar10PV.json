@@ -38,6 +38,7 @@
     ],
     "Niveau": 2147483647,
     "Nom": "Angmar10PV",
+	"Photo": "Angmar",
     "PV": [
         {
             "Current": 10,

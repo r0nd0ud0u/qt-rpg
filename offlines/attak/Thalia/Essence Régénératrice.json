@@ -22,15 +22,15 @@
             "Valeur de l'effet": 0,
             "Value": 10
         },
-	{
-            "Cible": "Tous les heroes",
-            "Portée": "Zone",
+        {
+            "Cible": "Allié",
+            "Portée": "Individuel",
             "Stat": "Pouvoir magique",
             "Tours actifs": 5,
             "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 10
-	}
+        }
     ],
     "Forme": "Standard",
     "Niveau": 1,

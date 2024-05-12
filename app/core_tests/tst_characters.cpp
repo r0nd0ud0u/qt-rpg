@@ -14,6 +14,7 @@ private slots:
   void GetMaxNbOfApplies_works();
   void ChangeByPercent_works();
   void GetBufDebufNumbers_works();
+  void InitAggroOnTurn_works();
 };
 
 void character_tests::TestThalia_works() {
@@ -96,6 +97,30 @@ void character_tests::GetBufDebufNumbers_works() {
   QCOMPARE(result->dot, 0);
   QCOMPARE(result->debuf, 0);
   QCOMPARE(result->buf, static_cast<int>(BufTypes::enumSize));
+}
+
+void character_tests::InitAggroOnTurn_works() {
+  auto *testCh = GetTestCharacter();
+
+  testCh->InitAggroOnTurn(0);
+  const auto &aggroStat =
+      testCh->m_Stats.m_AllStatsTable[STATS_AGGRO].m_CurrentValue;
+  QCOMPARE(aggroStat, 0);
+
+  testCh->m_LastTxRx[static_cast<int>(amountType::aggro)][0] = 0;
+  testCh->m_LastTxRx[static_cast<int>(amountType::aggro)][1] = 10;
+  testCh->m_LastTxRx[static_cast<int>(amountType::aggro)][2] = 10;
+  testCh->m_LastTxRx[static_cast<int>(amountType::aggro)][3] = 10;
+  testCh->m_LastTxRx[static_cast<int>(amountType::aggro)][4] = 10;
+  testCh->m_LastTxRx[static_cast<int>(amountType::aggro)][5] = 10;
+  testCh->m_LastTxRx[static_cast<int>(amountType::aggro)][6] = 0;
+  testCh->m_LastTxRx[static_cast<int>(amountType::aggro)][7] = 0;
+
+  testCh->InitAggroOnTurn(6);
+  QCOMPARE(aggroStat, 50);
+
+  testCh->InitAggroOnTurn(7);
+  QCOMPARE(aggroStat, 40);
 }
 
 int main(int argc, char *argv[]) {

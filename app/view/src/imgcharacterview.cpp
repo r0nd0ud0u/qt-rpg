@@ -13,28 +13,22 @@ ImgCharacterView::ImgCharacterView(QWidget *parent)
 
 ImgCharacterView::~ImgCharacterView() { delete ui; }
 
-void ImgCharacterView::UpdateView(QString name) {
+void ImgCharacterView::UpdateView(QString name, const QString &photo) {
 
   const auto &app = Application::GetInstance();
   if (name.isEmpty() || app.m_GameManager == nullptr ||
       app.m_GameManager->m_PlayersManager == nullptr) {
     return;
   }
-
-  const auto &heroList = app.m_GameManager->m_PlayersManager->m_HeroesList;
-  // Case hero list empty
-  if (heroList.empty()) {
-    return;
-  }
-
-  SetPixmap(name, 300);
-
+  const auto localPhoto = (photo.isEmpty()) ? name : photo;
+  SetPixmap(localPhoto, 300);
 }
 
-void ImgCharacterView::SetPixmap(const QString& name, const int scalingHeight){
-    // Update image character
-    auto qp = QPixmap(OFFLINE_IMG + name + ".png");
-    QPixmap scaledPixmap = qp.scaledToHeight(scalingHeight); // Set the desired width and height
-    ui->img_label->setPixmap(scaledPixmap);
-    ui->img_label->setScaledContents(true);
+void ImgCharacterView::SetPixmap(const QString &name, const int scalingHeight) {
+  // Update image character
+  auto qp = QPixmap(OFFLINE_IMG + name + ".png");
+  QPixmap scaledPixmap =
+      qp.scaledToHeight(scalingHeight); // Set the desired width and height
+  ui->img_label->setPixmap(scaledPixmap);
+  ui->img_label->setScaledContents(true);
 }

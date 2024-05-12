@@ -17,10 +17,10 @@
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "Regeneration Mana",
-            "Tours actifs": 3,
+            "Tours actifs": 4,
             "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": 200
+            "Value": 500
         },
         {
             "Cible": "Soi-même",

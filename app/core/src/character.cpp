@@ -408,6 +408,10 @@ Character::CanBeLaunched(const AttaqueType &atk) const {
   return std::make_pair(false, "Trop cher!");
 }
 
+/**
+ * @brief Character::ApplyOneEffect
+ * Effect is not processed if target is already dead
+ */
 std::pair<QString, std::vector<effectParam>>
 Character::ApplyOneEffect(Character *target, effectParam &effect,
                           const bool fromLaunch, const AttaqueType &atk,
@@ -416,7 +420,14 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
   if (target == nullptr) {
     return std::make_pair("No  target character", newEffects);
   }
+  if(target->IsDead()){
+      return std::make_pair("", newEffects);
+  }
+
   QString result;
+  // TODO pass turn by arg
+  const int currentTurn =
+      Application::GetInstance().m_GameManager->m_GameState->m_CurrentTurnNb;
 
   // conditions
   if (effect.effect == CONDITION_ENNEMIES_DIED) {
@@ -511,10 +522,10 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
       effect.effect != EFFECT_IMPROVE_BY_PERCENT_CHANGE) {
     if (effect.statsName == STATS_HP) {
       // process aggro for the launcher
-      result += ProcessAggro(realAmountSent, 0);
+      result += ProcessAggro(realAmountSent, 0, currentTurn);
     } else if (effect.statsName == STATS_AGGRO) {
       // Add aggro to a target
-      result += target->ProcessAggro(0, effect.value);
+      result += target->ProcessAggro(0, effect.value, currentTurn);
     }
   }
 
@@ -1110,8 +1121,14 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
       }
     }
     if (effect.statsName == STATS_AGGRO) {
-      target->m_LastAggros.clear();
       auto &localStat = target->m_Stats.m_AllStatsTable[effect.statsName];
+      const auto currentTurn = Application::GetInstance()
+                                   .m_GameManager->m_GameState->m_CurrentTurnNb;
+      for (int i = 0; i < 5; i++) {
+        target
+            ->m_LastTxRx[static_cast<int>(amountType::aggro)][currentTurn - i] =
+            0;
+      }
       localStat.m_CurrentValue = 0;
       output = QString("Effect %1 %2 est activé.")
                    .arg(effect.effect)
@@ -1270,14 +1287,13 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
 
 /**
  * @brief Character::ProcessAggro
- * Keep only the last 5 aggro generated after a heal or a damage
- * Sum them to process the current value of stats aggro
- * the current value of aggro must be positive
- * the negative values are still kept in the 5 last value through
+ * Process the aggro by normalizing the atkValue (constant)
+ * That output is accumulating to the aggro of the turn
  * @param atkValue
  * @return a QString to output in channel log the result
  */
-QString Character::ProcessAggro(const int atkValue, const int aggroValue) {
+QString Character::ProcessAggro(const int atkValue, const int aggroValue,
+                                const int nbTurn) {
   const double aggroNorm = 20.0; // random value at the moment
   int localAggro = aggroValue;
 
@@ -1289,29 +1305,21 @@ QString Character::ProcessAggro(const int atkValue, const int aggroValue) {
   if (localAggro == 0) {
     return "Pas d'aggro.\n";
   }
-  // keep the last 5
-  m_LastAggros.push_back(localAggro);
-  if (m_LastAggros.size() == 6) {
-    m_LastAggros.pop_front();
-  }
-  // update current aggro stat with the sum of the last 5, the output must be
-  // positive
+  // Update aggro
+  m_LastTxRx[static_cast<int>(amountType::aggro)][nbTurn] += localAggro;
   auto &aggroStat = m_Stats.m_AllStatsTable[STATS_AGGRO];
   const int oldAggro = aggroStat.m_CurrentValue;
-  aggroStat.m_CurrentValue =
-      std::max(0, accumulate(m_LastAggros.begin(), m_LastAggros.end(), 0));
+  aggroStat.m_CurrentValue +=
+      m_LastTxRx[static_cast<int>(amountType::aggro)][nbTurn];
+  const QString aggroItems =
+      QString::number(m_LastTxRx[static_cast<int>(amountType::aggro)][nbTurn]);
 
-  QStringList aggroItems;
-  std::for_each(
-      m_LastAggros.begin(), m_LastAggros.end(),
-      [&aggroItems](const int &n) { aggroItems.append(QString::number(n)); });
-
-  return QString("Gen Aggro:%1 pour %2, old: %3, new: %4, items=(%5)\n")
+  return QString("Gen Aggro:%1 pour %2, old: %3, new: %4\n")
       .arg(localAggro)
       .arg(m_Name)
       .arg(oldAggro)
       .arg(aggroStat.m_CurrentValue)
-      .arg(aggroItems.join(","));
+      .arg(aggroItems);
 }
 
 /**
@@ -1324,6 +1332,8 @@ QString Character::ProcessAggro(const int atkValue, const int aggroValue) {
  * @return
  */
 std::pair<bool, int> Character::ProcessCriticalStrike(const AttaqueType &atk) {
+    return std::make_pair(true, 0);
+
   const auto &critStat = m_Stats.m_AllStatsTable.at(STATS_CRIT);
   int64_t randNb = -1;
   const int critCapped = 60;
@@ -1400,14 +1410,14 @@ void Character::UsePotion(const QString &statsName) {
       stat.m_CurrentValue + boost * stat.m_MaxValue / 100, stat.m_MaxValue);
 }
 
+/**
+ * @brief Character::AddExp
+ * Add levels to characters
+ */
 void Character::AddExp(const int newXp) {
   m_Exp += newXp;
-
-  while (m_Exp >= m_NextLevel) {
-    m_Level += 1;
-    m_NextLevel += m_NextLevel + m_NextLevel * 20 / 100;
-    UpdateStatsToNextLevel();
-  }
+  m_Level += 1;
+  UpdateStatsToNextLevel();
 }
 
 void Character::SetEquipment(
@@ -1724,6 +1734,18 @@ void Character::ProcessDeath() {
       buf->set_is_passive_enabled(false);
     }
   });
+
+  // Decrease stats
+  auto &aggro = m_Stats.m_AllStatsTable[STATS_AGGRO];
+  const auto currentTurn = Application::GetInstance()
+                               .m_GameManager->m_GameState->m_CurrentTurnNb;
+  for (int i = 0; i < 5; i++) {
+      m_LastTxRx[static_cast<int>(amountType::aggro)][currentTurn - i] =
+          0;
+  }
+  m_Stats.m_AllStatsTable[STATS_AGGRO].m_CurrentValue = 0;
+  m_Stats.m_AllStatsTable[STATS_HP].m_CurrentValue = 0;
+  m_Stats.m_AllStatsTable[STATS_SPEED].m_CurrentValue = 1;
 }
 
 /**
@@ -1749,4 +1771,22 @@ std::optional<EffectsTypeNb> Character::GetBufDebufNumbers() const {
     }
   }
   return (!buffs.empty()) ? std::optional(nbs) : std::nullopt;
+}
+
+/**
+ * @brief Character::InitAggroOnTurn
+ * Set the aggro of m_LastTxRx to 0 on each turn
+ * Assess the amount of aggro of the last 5 turns
+ */
+void Character::InitAggroOnTurn(const int turnNb) {
+  auto &aggroStat = m_Stats.m_AllStatsTable[STATS_AGGRO];
+  aggroStat.m_CurrentValue = 0;
+  const int nbTurnOnAggro = 5;
+  for (int i = 1; i < nbTurnOnAggro + 1; i++) {
+    if (i <= m_LastTxRx[static_cast<int>(amountType::aggro)].size()) {
+      aggroStat.m_CurrentValue +=
+          m_LastTxRx[static_cast<int>(amountType::aggro)][turnNb - i];
+    }
+  }
+  m_LastTxRx[static_cast<int>(amountType::aggro)][turnNb] = 0;
 }

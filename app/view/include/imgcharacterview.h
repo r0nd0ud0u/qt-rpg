@@ -22,7 +22,7 @@ private:
     Ui::ImgCharacterView *ui;
 
 private slots:
-    void UpdateView(QString name);
+    void UpdateView(QString name, const QString& photo);
 
 
 };

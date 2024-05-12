@@ -17,6 +17,8 @@ private slots:
   void LootNewEquipments_works();
   void CheckDiedPlayers_works();
   void GetNbOfActiveHotsOnHeroes_works();
+  void RemoveTerminatedEffectsOnPlayer_works();
+  void ResetAllEffectsOnPlayer_works();
 };
 
 void player_manager_tests::GetDeadliestAlly_works() {
@@ -108,17 +110,54 @@ void player_manager_tests::CheckDiedPlayers_works() {
   QCOMPARE(0, gm->m_PlayersManager->m_BossesList.size());
 }
 
-void player_manager_tests::GetNbOfActiveHotsOnHeroes_works(){
-    auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
-    pm->m_AllEffectsOnGame.clear();
-    auto result = pm->GetNbOfActiveHotsOnHeroes();
-    QCOMPARE(0, result);
+void player_manager_tests::GetNbOfActiveHotsOnHeroes_works() {
+  auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+  pm->m_AllEffectsOnGame.clear();
+  auto result = pm->GetNbOfActiveHotsOnHeroes();
+  QCOMPARE(0, result);
 
+  auto *testCh = GetTestCharacter();
+  AttaqueType atk1 = SimpleHot();
+  pm->AddGameEffectOnAtk("Test", atk1, "Test", atk1.m_AllEffects, 1);
+  result = pm->GetNbOfActiveHotsOnHeroes();
+  QCOMPARE(1, result);
+}
+
+void player_manager_tests::RemoveTerminatedEffectsOnPlayer_works() {
+  auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+  auto *testCh = GetTestCharacter();
+  pm->m_AllEffectsOnGame.clear();
+  QCOMPARE(0, pm->m_AllEffectsOnGame["Test"].size());
+
+  pm->RemoveTerminatedEffectsOnPlayer("Test");
+  QCOMPARE(0, pm->m_AllEffectsOnGame["Test"].size());
+
+  AttaqueType atk1 = SimpleHot();
+  pm->AddGameEffectOnAtk("Test", atk1, "Test", atk1.m_AllEffects, 1);
+
+  AttaqueType atk2 = SimpleHot();
+  atk2.m_AllEffects.front().counterTurn = atk2.m_AllEffects.front().nbTurns;
+  pm->AddGameEffectOnAtk("Test", atk2, "Test", atk2.m_AllEffects, 1);
+  pm->RemoveTerminatedEffectsOnPlayer("Test");
+  QCOMPARE(1, pm->m_AllEffectsOnGame["Test"].size());
+}
+
+void player_manager_tests::ResetAllEffectsOnPlayer_works(){
+    auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
     auto *testCh = GetTestCharacter();
+    pm->m_AllEffectsOnGame.clear();
+    pm->ResetAllEffectsOnPlayer(testCh);
+
+    QCOMPARE(0, pm->m_AllEffectsOnGame["Test"].size());
+
     AttaqueType atk1 = SimpleHot();
     pm->AddGameEffectOnAtk("Test", atk1, "Test", atk1.m_AllEffects, 1);
-    result = pm->GetNbOfActiveHotsOnHeroes();
-    QCOMPARE(1, result);
+
+    AttaqueType atk2 = SimpleHot();
+    pm->AddGameEffectOnAtk("Test", atk2, "Test", atk2.m_AllEffects, 1);
+    pm->ResetAllEffectsOnPlayer(testCh);
+
+    QCOMPARE(0, pm->m_AllEffectsOnGame["Test"].size());
 }
 
 int main(int argc, char *argv[]) {
