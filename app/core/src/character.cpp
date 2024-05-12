@@ -408,6 +408,10 @@ Character::CanBeLaunched(const AttaqueType &atk) const {
   return std::make_pair(false, "Trop cher!");
 }
 
+/**
+ * @brief Character::ApplyOneEffect
+ * Effect is not processed if target is already dead
+ */
 std::pair<QString, std::vector<effectParam>>
 Character::ApplyOneEffect(Character *target, effectParam &effect,
                           const bool fromLaunch, const AttaqueType &atk,
@@ -416,6 +420,10 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
   if (target == nullptr) {
     return std::make_pair("No  target character", newEffects);
   }
+  if(target->IsDead()){
+      return std::make_pair("", newEffects);
+  }
+
   QString result;
   // TODO pass turn by arg
   const int currentTurn =
@@ -1324,6 +1332,8 @@ QString Character::ProcessAggro(const int atkValue, const int aggroValue,
  * @return
  */
 std::pair<bool, int> Character::ProcessCriticalStrike(const AttaqueType &atk) {
+    return std::make_pair(true, 0);
+
   const auto &critStat = m_Stats.m_AllStatsTable.at(STATS_CRIT);
   int64_t randNb = -1;
   const int critCapped = 60;
@@ -1724,9 +1734,18 @@ void Character::ProcessDeath() {
       buf->set_is_passive_enabled(false);
     }
   });
+
   // Decrease stats
-  m_Stats.m_AllStatsTable[STATS_SPEED].m_CurrentValue = 1;
+  auto &aggro = m_Stats.m_AllStatsTable[STATS_AGGRO];
+  const auto currentTurn = Application::GetInstance()
+                               .m_GameManager->m_GameState->m_CurrentTurnNb;
+  for (int i = 0; i < 5; i++) {
+      m_LastTxRx[static_cast<int>(amountType::aggro)][currentTurn - i] =
+          0;
+  }
   m_Stats.m_AllStatsTable[STATS_AGGRO].m_CurrentValue = 0;
+  m_Stats.m_AllStatsTable[STATS_HP].m_CurrentValue = 0;
+  m_Stats.m_AllStatsTable[STATS_SPEED].m_CurrentValue = 1;
 }
 
 /**
