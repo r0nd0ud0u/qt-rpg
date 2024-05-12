@@ -72,6 +72,8 @@ void HeroPanel::UpdatePanel(Character *hero,
     ui->verticalWidget->SetHotDotValues(effectsNbs->hot, effectsNbs->dot);
     nbBufs += effectsNbs->buf;
     nbDebufs += effectsNbs->debuf;
+  } else {
+      ui->verticalWidget->SetHotDotValues(0, 0);
   }
 
   // buf/debuf nbs by ongoing buf/debuf table

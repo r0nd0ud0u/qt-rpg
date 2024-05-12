@@ -1724,6 +1724,9 @@ void Character::ProcessDeath() {
       buf->set_is_passive_enabled(false);
     }
   });
+  // Decrease stats
+  m_Stats.m_AllStatsTable[STATS_SPEED].m_CurrentValue = 1;
+  m_Stats.m_AllStatsTable[STATS_AGGRO].m_CurrentValue = 0;
 }
 
 /**

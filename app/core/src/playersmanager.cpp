@@ -343,18 +343,14 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
     const auto &regenSpeed = pl->m_Stats.m_AllStatsTable[STATS_REGEN_SPEED];
 
     // hp
-    hp.m_CurrentValue = std::min(
-        hp.m_MaxValue,
-        hp.m_CurrentValue + regenHp.m_CurrentValue);
+    hp.m_CurrentValue =
+        std::min(hp.m_MaxValue, hp.m_CurrentValue + regenHp.m_CurrentValue);
     // mana
     mana.m_CurrentValue = std::min(
-        mana.m_MaxValue,
-        mana.m_CurrentValue + regenMana.m_CurrentValue);
+        mana.m_MaxValue, mana.m_CurrentValue + regenMana.m_CurrentValue);
     // vigor
-    vigor.m_CurrentValue =
-        std::min(vigor.m_MaxValue,
-                 vigor.m_CurrentValue +
-                regenVigor.m_CurrentValue);
+    vigor.m_CurrentValue = std::min(
+        vigor.m_MaxValue, vigor.m_CurrentValue + regenVigor.m_CurrentValue);
     // berseck
     berseck.m_CurrentValue =
         std::min(berseck.m_MaxValue,
@@ -1086,7 +1082,9 @@ void PlayersManager::ResetAllEffectsOnPlayer(const Character *chara) {
     return;
   }
   for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
-    e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
+    if (!e.allAtkEffects.passiveTalent) {
+      e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
+    }
   }
   RemoveTerminatedEffectsOnPlayer(chara->m_Name);
 }
