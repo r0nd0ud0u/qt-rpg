@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>590</width>
-    <height>209</height>
+    <height>161</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -156,6 +156,18 @@
             <property name="spacing">
              <number>0</number>
             </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
              <widget class="QLabel" name="hero_name">
               <property name="sizePolicy">
@@ -199,6 +211,12 @@
          </item>
          <item row="3" column="1">
           <widget class="QProgressBar" name="hp_Bar">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>20</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>9</pointsize>
@@ -214,6 +232,12 @@
          </item>
          <item row="5" column="1">
           <widget class="QProgressBar" name="mana_bar">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>20</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>9</pointsize>
@@ -233,12 +257,18 @@
             </font>
            </property>
            <property name="text">
-            <string>Bersecker</string>
+            <string>Bers</string>
            </property>
           </widget>
          </item>
          <item row="7" column="1">
           <widget class="QProgressBar" name="bersecker_bar">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>20</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>9</pointsize>
@@ -251,6 +281,12 @@
          </item>
          <item row="9" column="1">
           <widget class="QProgressBar" name="vigor_bar">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>20</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>9</pointsize>
@@ -293,7 +329,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Mana</string>
+            <string>PM</string>
            </property>
           </widget>
          </item>
@@ -306,13 +342,41 @@
             </font>
            </property>
            <property name="text">
-            <string>Vigor</string>
+            <string>Vig</string>
            </property>
           </widget>
          </item>
          <item row="0" column="1">
           <widget class="DotView" name="verticalWidget" native="true">
-           <layout class="QVBoxLayout" name="verticalLayout_3"/>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>20</height>
+            </size>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+           </layout>
           </widget>
          </item>
         </layout>
@@ -334,26 +398,6 @@
            </property>
            <property name="text">
             <string>Edit</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="stuff_button">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Add stuff</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="talent_tree_button">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Arbre de talents</string>
            </property>
           </widget>
          </item>

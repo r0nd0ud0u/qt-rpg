@@ -153,9 +153,6 @@ void HeroPanel::SetSelected(const bool selected) {
 
   // update buttons
   ui->edit_button->setEnabled(selected);
-  ui->talent_tree_button->setEnabled(
-      false); // TODO arbre des talents not coded yet
-  ui->stuff_button->setEnabled(selected);
 }
 
 void HeroPanel::mousePressEvent(QMouseEvent *event) {
@@ -173,7 +170,7 @@ void HeroPanel::on_edit_button_clicked() const {
 void HeroPanel::SetPixmap(const QString &name) {
   // Update image character
   // Resize the photo
-  ui->img_character->SetPixmap(name, 200);
+  ui->img_character->SetPixmap(name, 100);
 }
 
 void HeroPanel::InitComboBox() {
