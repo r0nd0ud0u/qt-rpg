@@ -2,76 +2,76 @@
     "Aggro": [
         {
             "Current": 0,
-            "Max": 0
+            "Max": 9999
         }
     ],
     "Armure magique": [
         {
-            "Current": 500,
-            "Max": 500
+            "Current": 2800,
+            "Max": 2800
         }
     ],
     "Armure physique": [
         {
-            "Current": 500,
-            "Max": 500
+            "Current": 2800,
+            "Max": 2800
         }
     ],
-    "Couleur": "dark",
+    "Couleur": "blue",
     "Cout critique": [
         {
-            "Current": 10,
-            "Max": 10
+            "Current": 15,
+            "Max": 15
         }
     ],
     "Esquive": [
         {
-            "Current": 10,
-            "Max": 10
+            "Current": 12,
+            "Max": 12
         }
     ],
     "Mana": [
-        {
-            "Current": 9999,
-            "Max": 9999
-        }
-    ],
-    "Niveau": 2147483647,
-    "Nom": "Nazgul-0",
-    "PV": [
-        {
-            "Current": 4000,
-            "Max": 4000
-        }
-    ],
-    "Pouvoir magique": [
-        {
-            "Current": 50,
-            "Max": 50
-        }
-    ],
-    "Pouvoir physique": [
-        {
-            "Current": 50,
-            "Max": 50
-        }
-    ],
-    "Rage": [
         {
             "Current": 0,
             "Max": 0
         }
     ],
+    "Niveau": 20,
+    "Nom": "Vouragor le robuste",
+    "PV": [
+        {
+            "Current": 100000,
+            "Max": 100000
+        }
+    ],
+    "Pouvoir magique": [
+        {
+            "Current": 500,
+            "Max": 500
+        }
+    ],
+    "Pouvoir physique": [
+        {
+            "Current": 500,
+            "Max": 500
+        }
+    ],
+    "Rage": [
+        {
+            "Current": 0,
+            "Max": 100
+        }
+    ],
     "Regen vitesse": [
         {
-            "Current": 10,
-            "Max": 10
+            "Current": 15,
+            "Max": 15
         }
     ],
     "Regeneration Mana": [
         {
-            "Current": 25,
-            "Max": 25
+            "Current": 0,
+            "Max": 0
         }
     ],
     "Regeneration PV": [
@@ -99,18 +99,18 @@
         }
     ],
     "Type": "Boss",
-    "Vigueur": [
-        {
-            "Current": 9999,
-            "Max": 9999
-        }
-    ],
-    "Vitesse": [
+    "Vigor": [
         {
             "Current": 0,
             "Max": 0
         }
     ],
-	"Rang": 4
+    "Vitesse": [
+        {
+            "Current": 5,
+            "Max": 5
+        }
+    ],
+	"Rang": 5
 }
 
