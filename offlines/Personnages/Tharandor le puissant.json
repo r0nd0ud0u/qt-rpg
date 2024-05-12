@@ -1,0 +1,116 @@
+{
+    "Aggro": [
+        {
+            "Current": 0,
+            "Max": 9999
+        }
+    ],
+    "Armure magique": [
+        {
+            "Current": 2000,
+            "Max": 2000
+        }
+    ],
+    "Armure physique": [
+        {
+            "Current": 2000,
+            "Max": 2000
+        }
+    ],
+    "Couleur": "blue",
+    "Cout critique": [
+        {
+            "Current": 15,
+            "Max": 15
+        }
+    ],
+    "Esquive": [
+        {
+            "Current": 12,
+            "Max": 12
+        }
+    ],
+    "Mana": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Niveau": 20,
+    "Nom": "Tharandor le puissant",
+    "PV": [
+        {
+            "Current": 100000,
+            "Max": 100000
+        }
+    ],
+    "Pouvoir magique": [
+        {
+            "Current": 1000,
+            "Max": 1000
+        }
+    ],
+    "Pouvoir physique": [
+        {
+            "Current": 1000,
+            "Max": 1000
+        }
+    ],
+    "Rage": [
+        {
+            "Current": 0,
+            "Max": 100
+        }
+    ],
+    "Regen vitesse": [
+        {
+            "Current": 15,
+            "Max": 15
+        }
+    ],
+    "Regeneration Mana": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regeneration PV": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regeneration vigueur": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Taux aggro": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Taux rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Type": "Boss",
+    "Vigor": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Vitesse": [
+        {
+            "Current": 5,
+            "Max": 5
+        }
+    ],
+	"Rang": 5
+}
+
