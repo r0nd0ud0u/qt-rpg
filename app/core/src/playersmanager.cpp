@@ -343,18 +343,14 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
     const auto &regenSpeed = pl->m_Stats.m_AllStatsTable[STATS_REGEN_SPEED];
 
     // hp
-    hp.m_CurrentValue = std::min(
-        hp.m_MaxValue,
-        hp.m_CurrentValue + hp.m_MaxValue * regenHp.m_CurrentValue / 100);
+    hp.m_CurrentValue =
+        std::min(hp.m_MaxValue, hp.m_CurrentValue + regenHp.m_CurrentValue);
     // mana
     mana.m_CurrentValue = std::min(
-        mana.m_MaxValue,
-        mana.m_CurrentValue + mana.m_MaxValue * regenMana.m_CurrentValue / 100);
+        mana.m_MaxValue, mana.m_CurrentValue + regenMana.m_CurrentValue);
     // vigor
-    vigor.m_CurrentValue =
-        std::min(vigor.m_MaxValue,
-                 vigor.m_CurrentValue +
-                     vigor.m_MaxValue * regenVigor.m_CurrentValue / 100);
+    vigor.m_CurrentValue = std::min(
+        vigor.m_MaxValue, vigor.m_CurrentValue + regenVigor.m_CurrentValue);
     // berseck
     berseck.m_CurrentValue =
         std::min(berseck.m_MaxValue,
@@ -876,7 +872,8 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
     // Armur bonus does not contain 'no loot'(0) whereas stuffClass is starting
     // at 'no loot'(0) This bonus is for all body parts with some exceptions
     if (const std::set<QString> armurBonusExceptions{
-            EQUIP_NECKLACE, EQUIP_ARM, EQUIP_RING_RIGHT, EQUIP_RING_LEFT};
+            EQUIP_NECKLACE, EQUIP_LEFT_WEAPON, EQUIP_RIGHT_WEAPON,
+            EQUIP_RING_RIGHT, EQUIP_RING_LEFT};
         armurBonusExceptions.count(stuff.m_BodyPart) == 0) {
       const auto armurBonus =
           (stuffClass - 1 < BossClass::ARMOR.size())
@@ -969,6 +966,7 @@ void PlayersManager::OutputCharactersInJson(
     QJsonObject obj;
 
     obj.insert(CH_NAME, h->m_Name);
+    obj.insert(CH_PHOTO_NAME, h->m_PhotoName);
     const auto type =
         (h->m_type == characType::Boss) ? CH_TYPE_BOSS : CH_TYPE_HERO;
     obj.insert(CH_TYPE, type);
@@ -1039,6 +1037,7 @@ void PlayersManager::LoadAllCharactersJson() {
 
       auto *c = new Character("", characType::Hero, {});
       c->m_Name = jsonDoc[CH_NAME].toString();
+      c->m_PhotoName = jsonDoc[CH_PHOTO_NAME].toString();
       c->m_type = (jsonDoc[CH_TYPE].toString() == CH_TYPE_BOSS)
                       ? characType::Boss
                       : characType::Hero;
@@ -1083,7 +1082,9 @@ void PlayersManager::ResetAllEffectsOnPlayer(const Character *chara) {
     return;
   }
   for (auto &e : m_AllEffectsOnGame[chara->m_Name]) {
-    e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
+    if (!e.allAtkEffects.passiveTalent) {
+      e.allAtkEffects.counterTurn = e.allAtkEffects.nbTurns;
+    }
   }
   RemoveTerminatedEffectsOnPlayer(chara->m_Name);
 }

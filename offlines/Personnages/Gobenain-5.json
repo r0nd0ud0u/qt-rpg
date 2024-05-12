@@ -1,0 +1,116 @@
+{
+    "Aggro": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Armure magique": [
+        {
+            "Current": 400,
+            "Max": 400
+        }
+    ],
+    "Armure physique": [
+        {
+            "Current": 400,
+            "Max": 400
+        }
+    ],
+    "Couleur": "red",
+    "Cout critique": [
+        {
+            "Current": 20,
+            "Max": 20
+        }
+    ],
+    "Esquive": [
+        {
+            "Current": 20,
+            "Max": 20
+        }
+    ],
+    "Mana": [
+        {
+            "Current": 9999,
+            "Max": 9999
+        }
+    ],
+    "Niveau": 2147483647,
+    "Nom": "Gobenain-5",
+    "PV": [
+        {
+            "Current": 9000,
+            "Max": 9000
+        }
+    ],
+    "Pouvoir magique": [
+        {
+            "Current": 80,
+            "Max": 80
+        }
+    ],
+    "Pouvoir physique": [
+        {
+            "Current": 80,
+            "Max": 80
+        }
+    ],
+    "Rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regen vitesse": [
+        {
+            "Current": 20,
+            "Max": 20
+        }
+    ],
+    "Regeneration Mana": [
+        {
+            "Current": 25,
+            "Max": 25
+        }
+    ],
+    "Regeneration PV": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regeneration vigueur": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Taux aggro": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Taux rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Type": "Boss",
+    "Vigueur": [
+        {
+            "Current": 9999,
+            "Max": 9999
+        }
+    ],
+    "Vitesse": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+	"Rang": 4
+}
+

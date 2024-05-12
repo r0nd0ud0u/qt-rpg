@@ -38,6 +38,7 @@
     ],
     "Niveau": 2147483647,
     "Nom": "Carcaroth",
+	"Photo": "Warg",
     "PV": [
         {
             "Current": 84000,

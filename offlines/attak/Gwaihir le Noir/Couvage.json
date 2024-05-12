@@ -8,7 +8,7 @@
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "Esquive",
-            "Tours actifs": 1,
+            "Tours actifs": 2,
             "Type": "Up par valeur",
             "Valeur de l'effet": 0,
             "Value": -100
@@ -17,7 +17,7 @@
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "Armure physique",
-            "Tours actifs": 1,
+            "Tours actifs": 2,
             "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": -50
@@ -26,7 +26,7 @@
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "Armure magique",
-            "Tours actifs": 1,
+            "Tours actifs": 2,
             "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": -50
