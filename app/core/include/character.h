@@ -63,6 +63,7 @@ enum class amountType {
   healRx,
   healTx,
   overHealRx,
+  aggro,
   enumSize
 };
 
@@ -122,6 +123,7 @@ public:
   void ProcessDeath();
   int GetMaxNbOfApplies(const AttaqueType &atk) const;
   std::optional<EffectsTypeNb> GetBufDebufNumbers() const;
+  void InitAggroOnTurn(const int turnNb);
 
   // Temporary
   std::vector<effectParam> LoadThaliaTalent() const;
@@ -142,7 +144,6 @@ public:
   int m_Level = 1;
   int m_Exp = 0;
   int m_NextLevel = 100;
-  std::deque<int> m_LastAggros; // keep the last five aggros and sum them
   std::vector<QString> m_Forms = std::vector<QString>{STANDARD_FORM};
   QString m_SelectedForm = STANDARD_FORM;
   QString m_ColorStr = "dark";
@@ -174,7 +175,7 @@ private:
   std::pair<QString, int> ProcessEffectType(
       effectParam &effect, Character *target,
       const AttaqueType &atk); // pair1 output log, pair2 nbOfApplies
-  QString ProcessAggro(const int atkValue, const int aggroValue);
+  QString ProcessAggro(const int atkValue, const int aggroValue, const int nbTurn);
   void UpdateStatsToNextLevel();
   void UpdateBuf(const BufTypes &bufType, const int value, const bool isPercent,
                  const QString &stat);

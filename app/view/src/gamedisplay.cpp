@@ -132,6 +132,8 @@ void GameDisplay::NewRound() {
     // update boolean
     activePlayer->m_ExtCharacter->set_is_first_round(false);
 
+    // init aggro
+    activePlayer->InitAggroOnTurn(gs->m_CurrentTurnNb);
     // Remove terminated effect
     const QStringList terminatedEffects =
         gm->m_PlayersManager->RemoveTerminatedEffectsOnPlayer(
@@ -146,7 +148,6 @@ void GameDisplay::NewRound() {
         activePlayer->m_Name, gm->m_GameState->m_CurrentTurnNb, false);
     emit SigUpdateChannelView(activePlayer->m_Name, effectsLogs.join("\n"),
                               activePlayer->color);
-
     // update buf pow
     // passive azrak TODO extract in a function
     if (activePlayer->m_Name == "Azrak Ombresang") {
