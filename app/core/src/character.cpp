@@ -478,14 +478,6 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
   auto [maxAmountSent, realAmountSent] = ProcessCurrentValueOnEffect(
       effect, nbOfApplies, m_Stats, fromLaunch, target, isCrit);
 
-  // Process maxAmountSent after potential block
-  // a block can be done only on damages from an ennemy
-  if (fromLaunch && m_IsBlockingAtk && effect.statsName == STATS_HP &&
-      EFFECTS_HOT_OR_DOT.count(effect.effect) > 0 && realAmountSent > 0) {
-    realAmountSent = 10 * realAmountSent / 100;
-    result += "L'attaque est bloquée.\n";
-  }
-
   // TODO should be static and not on target ? pass target by argument
   result += target->ProcessOutputLogOnEffect(
       effect, maxAmountSent, fromLaunch, nbOfApplies, atk.name, realAmountSent);
@@ -863,6 +855,11 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     maxAmount = min(delta, output);
   } else {
     // damage
+    // Process maxAmountSent after potential block
+    // a block can be done only on damages from an ennemy
+    if (launch && target->m_IsBlockingAtk && ep.statsName == STATS_HP) {
+      output = 10 * output / 100;
+    }
     const int tmp = localStat.m_CurrentValue;
     localStat.m_CurrentValue = max(0, localStat.m_CurrentValue + output);
     maxAmount = min(tmp, output);
@@ -910,13 +907,16 @@ QString Character::ProcessOutputLogOnEffect(
 
   if (ep.statsName == STATS_HP) {
     if (fromLaunch) {
-      output = QString("%1 %2/%3 PV avec l'effet %4 (appliqué %5/%6).")
-                   .arg(healOrDamageLog)
-                   .arg(maxAmount)
-                   .arg(QString::number(displayedValue))
-                   .arg(effectName)
-                   .arg(nbOfApplies)
-                   .arg(QString::number(potentialAttempts));
+      if (m_IsBlockingAtk) {
+        output = "L'attaque est bloquée.\n";
+      }
+      output += QString("%1 %2/%3 PV avec l'effet %4 (appliqué %5/%6).")
+                    .arg(healOrDamageLog)
+                    .arg(maxAmount)
+                    .arg(QString::number(displayedValue))
+                    .arg(effectName)
+                    .arg(nbOfApplies)
+                    .arg(QString::number(potentialAttempts));
 
     } else {
       output = QString("%1 %2/%3 PV avec l'effet %4-(%5).")
