@@ -159,7 +159,7 @@ public:
   Powers m_Power;
   ExtendedCharacter *m_ExtCharacter = nullptr;
   BossClass m_BossClass;
-  CharacterClass m_Class = CharacterClass::defaultClass;
+  CharacterClass m_Class = CharacterClass::Standard;
   bool m_IsBlockingAtk = false;
 
 private:
