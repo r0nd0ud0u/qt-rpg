@@ -479,14 +479,6 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
   auto [maxAmountSent, realAmountSent] = ProcessCurrentValueOnEffect(
       effect, nbOfApplies, m_Stats, fromLaunch, target, isCrit);
 
-  // Process maxAmountSent after potential block
-  // a block can be done only on damages from an ennemy
-  if (fromLaunch && m_IsBlockingAtk && effect.statsName == STATS_HP &&
-      EFFECTS_HOT_OR_DOT.count(effect.effect) > 0 && realAmountSent > 0) {
-    realAmountSent = 10 * realAmountSent / 100;
-    result += "L'attaque est bloquée.\n";
-  }
-
   // TODO should be static and not on target ? pass target by argument
   result += target->ProcessOutputLogOnEffect(
       effect, maxAmountSent, fromLaunch, nbOfApplies, atk.name, realAmountSent);
