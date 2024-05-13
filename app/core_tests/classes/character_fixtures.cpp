@@ -7,6 +7,7 @@ Character GetTestCharacter(){
     const std::set<QString> activePlayers{testName};
     auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
     // add heroes
+    pm->LoadAllCharactersJson();
     pm->UpdateActivePlayers(activePlayers);
     auto testCh = pm->GetCharacterByName(testName);
 
