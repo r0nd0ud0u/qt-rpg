@@ -266,7 +266,7 @@ const QString EFFECT_SUB_VALUE = "Valeur de l'effet";
 const QString ENT_FORM = "Ent";
 const QString BEAR_FORM = "Ours";
 const QString STANDARD_FORM = "Standard";
-
+const std::set<QString> ALL_FORMS = {STANDARD_FORM, ENT_FORM, BEAR_FORM};
 
 // Class keys
 const QString STANDARD_CLASS = "Standard";
