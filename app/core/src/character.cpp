@@ -420,8 +420,8 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
   if (target == nullptr) {
     return std::make_pair("No  target character", newEffects);
   }
-  if(target->IsDead()){
-      return std::make_pair("", newEffects);
+  if (target->IsDead()) {
+    return std::make_pair("", newEffects);
   }
 
   QString result;
@@ -988,6 +988,16 @@ void Character::ResetBuf(const BufTypes &bufType) {
   }
 }
 
+/**
+ * @brief Character::SetStatsOnEffect
+ * @param stat
+ * stat.m_RawMaxValue of a stat cannot be equal to 0.
+ *
+ * @param value
+ * @param isPercent
+ * @param updateEffect: false -> enable to update current value et max value
+ * only with equipments buf.
+ */
 void Character::SetStatsOnEffect(StatsType &stat, const int value,
                                  const bool isPercent,
                                  const bool updateEffect) {
@@ -995,6 +1005,9 @@ void Character::SetStatsOnEffect(StatsType &stat, const int value,
                            ? static_cast<double>(stat.m_CurrentValue) /
                                  static_cast<double>(stat.m_MaxValue)
                            : 1;
+  if (stat.m_RawMaxValue == 0) {
+    return;
+  }
   const auto baseValue = stat.m_RawMaxValue + stat.m_BufEquipValue +
                          stat.m_BufEquipPercent * stat.m_RawMaxValue / 100;
   stat.m_MaxValue = baseValue;
@@ -1332,7 +1345,7 @@ QString Character::ProcessAggro(const int atkValue, const int aggroValue,
  * @return
  */
 std::pair<bool, int> Character::ProcessCriticalStrike(const AttaqueType &atk) {
-    return std::make_pair(true, 0);
+  return std::make_pair(true, 0);
 
   const auto &critStat = m_Stats.m_AllStatsTable.at(STATS_CRIT);
   int64_t randNb = -1;
@@ -1737,11 +1750,10 @@ void Character::ProcessDeath() {
 
   // Decrease stats
   auto &aggro = m_Stats.m_AllStatsTable[STATS_AGGRO];
-  const auto currentTurn = Application::GetInstance()
-                               .m_GameManager->m_GameState->m_CurrentTurnNb;
+  const auto currentTurn =
+      Application::GetInstance().m_GameManager->m_GameState->m_CurrentTurnNb;
   for (int i = 0; i < 5; i++) {
-      m_LastTxRx[static_cast<int>(amountType::aggro)][currentTurn - i] =
-          0;
+    m_LastTxRx[static_cast<int>(amountType::aggro)][currentTurn - i] = 0;
   }
   m_Stats.m_AllStatsTable[STATS_AGGRO].m_CurrentValue = 0;
   m_Stats.m_AllStatsTable[STATS_HP].m_CurrentValue = 0;
