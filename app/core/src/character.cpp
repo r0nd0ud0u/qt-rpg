@@ -473,8 +473,18 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
   result += effectLog;
 
   // apply the effect
-  const auto [maxAmountSent, realAmountSent] = ProcessCurrentValueOnEffect(
+  // maxAmountSent is const
+  // realAmountSent can be modified in case of block
+  auto [maxAmountSent, realAmountSent] = ProcessCurrentValueOnEffect(
       effect, nbOfApplies, m_Stats, fromLaunch, target, isCrit);
+
+  // Process maxAmountSent after potential block
+  // a block can be done only on damages from an ennemy
+  if (fromLaunch && m_IsBlockingAtk && effect.statsName == STATS_HP &&
+      EFFECTS_HOT_OR_DOT.count(effect.effect) > 0 && realAmountSent > 0) {
+    realAmountSent = 10 * realAmountSent / 100;
+    result += "L'attaque est bloquée.\n";
+  }
 
   // TODO should be static and not on target ? pass target by argument
   result += target->ProcessOutputLogOnEffect(
@@ -1801,4 +1811,15 @@ void Character::InitAggroOnTurn(const int turnNb) {
     }
   }
   m_LastTxRx[static_cast<int>(amountType::aggro)][turnNb] = 0;
+}
+
+/**
+ * @brief Character::ProcessBlock
+ * @param isDodging
+ * Process if a atk can be blocked according value of "dodge" early processed
+ * and according the class of the the character
+ * Only a tank could blocked an atk
+ */
+void Character::ProcessBlock(const bool isDodging) {
+  m_IsBlockingAtk = m_Class == CharacterClass::Tank && isDodging;
 }

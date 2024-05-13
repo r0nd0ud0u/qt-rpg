@@ -41,7 +41,6 @@ public:
   static constexpr double COEFF_CRIT_STATS = 1.5;
 };
 
-enum class InventoryType { healthPotion, manaPotion, enumSize };
 enum class BufTypes {
   defaultBuf = 0,
   damageRx,
@@ -66,6 +65,8 @@ enum class amountType {
   aggro,
   enumSize
 };
+
+enum class CharacterClass { Standard = 0, Tank, enumSize };
 
 class Character {
 public:
@@ -124,6 +125,7 @@ public:
   int GetMaxNbOfApplies(const AttaqueType &atk) const;
   std::optional<EffectsTypeNb> GetBufDebufNumbers() const;
   void InitAggroOnTurn(const int turnNb);
+  void ProcessBlock(const bool isDodging);
 
   // Temporary
   std::vector<effectParam> LoadThaliaTalent() const;
@@ -157,6 +159,8 @@ public:
   Powers m_Power;
   ExtendedCharacter *m_ExtCharacter = nullptr;
   BossClass m_BossClass;
+  CharacterClass m_Class = CharacterClass::defaultClass;
+  bool m_IsBlockingAtk = false;
 
 private:
   static void ProcessAddEquip(StatsType &charStat, const StatsType &equipStat);
@@ -175,7 +179,8 @@ private:
   std::pair<QString, int> ProcessEffectType(
       effectParam &effect, Character *target,
       const AttaqueType &atk); // pair1 output log, pair2 nbOfApplies
-  QString ProcessAggro(const int atkValue, const int aggroValue, const int nbTurn);
+  QString ProcessAggro(const int atkValue, const int aggroValue,
+                       const int nbTurn);
   void UpdateStatsToNextLevel();
   void UpdateBuf(const BufTypes &bufType, const int value, const bool isPercent,
                  const QString &stat);

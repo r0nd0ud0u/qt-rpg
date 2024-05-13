@@ -113,6 +113,8 @@ const QString CH_MAX_VALUE = "Max";
 const QString CH_LEVEL = "Niveau";
 const QString CH_COLOR = "Couleur";
 const QString CH_RANK = "Rang";
+const QString CH_FORM = "Forme";
+const QString CH_CLASS = "Classe";
 
 // equipment keys
 const QString EQUIP_HEAD = "Tete";
@@ -264,7 +266,12 @@ const QString EFFECT_SUB_VALUE = "Valeur de l'effet";
 const QString ENT_FORM = "Ent";
 const QString BEAR_FORM = "Ours";
 const QString STANDARD_FORM = "Standard";
-const std::set<QString> ALL_FORMS = {STANDARD_FORM, ENT_FORM, BEAR_FORM};
+
+
+// Class keys
+const QString STANDARD_CLASS = "Standard";
+const QString TANK_CLASS = "tank";
+const std::set<QString> ALL_CLASSES = {STANDARD_CLASS, TANK_CLASS};
 
 class StatsType {
 public:

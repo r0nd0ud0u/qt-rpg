@@ -326,20 +326,27 @@ bool GameDisplay::ProcessAtk(
           gm->m_PlayersManager->GetCharacterByName(target->get_name().data());
       targetChara != nullptr) {
     // is dodging
+    // a tank cannot dodge
     if (currentAtk.target == TARGET_ENNEMY && currentAtk.reach == REACH_ZONE &&
         target->get_is_targeted()) {
       const auto &[isDodgingZone, outputsRandnbZone] =
           targetChara->IsDodging(currentAtk);
       if (isDodgingZone) {
-        emit SigUpdateChannelView(
-            targetChara->m_Name, QString("esquive.(%1)").arg(outputsRandnbZone),
-            targetChara->color);
-        return true;
-      } else {
-        emit SigUpdateChannelView(
-            targetChara->m_Name,
-            QString("pas d'esquive.(%1)").arg(outputsRandnbZone),
-            targetChara->color);
+        // can dodge ?
+        if (targetChara->m_Class != CharacterClass::Tank) {
+          emit SigUpdateChannelView(
+              targetChara->m_Name,
+              QString("esquive.(%1)").arg(outputsRandnbZone),
+              targetChara->color);
+          return true;
+        } else {
+          emit SigUpdateChannelView(
+              targetChara->m_Name,
+              QString("pas d'esquive.(%1)").arg(outputsRandnbZone),
+              targetChara->color);
+        }
+        // process block
+        targetChara->ProcessBlock(isDodgingZone);
       }
     }
     // EFFECT
@@ -405,8 +412,10 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   launchingStr.append(QString("lance %1.").arg(atkName));
 
   // is Dodging
+  // a tank cannot dodge
   if (currentAtk.target == TARGET_ENNEMY &&
-      currentAtk.reach == REACH_INDIVIDUAL) {
+      currentAtk.reach == REACH_INDIVIDUAL &&
+      activatedPlayer->m_Class != CharacterClass::Tank) {
     const auto &[isDodging, plName, outputsRandNb] =
         gm->m_PlayersManager->IsDodging(targetList, currentAtk);
     if (isDodging) {
