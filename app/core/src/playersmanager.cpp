@@ -952,6 +952,10 @@ PlayersManager::GetHeroMostAggro() const {
                             .m_CurrentValue);
 }
 
+/**
+ * @brief PlayersManager::OutputCharactersInJson
+ * output in json all the characters from a list of Character object
+ */
 void PlayersManager::OutputCharactersInJson(
     const std::vector<Character *> &l) const {
   for (const auto *h : l) {
@@ -973,6 +977,12 @@ void PlayersManager::OutputCharactersInJson(
     obj.insert(CH_LEVEL, h->m_Level);
     obj.insert(CH_COLOR, h->m_ColorStr);
     obj.insert(CH_RANK, h->m_BossClass.m_Rank);
+    obj.insert(CH_FORM, h->m_SelectedForm);
+    auto classCh = STANDARD_CLASS;
+    if(h->m_Class == CharacterClass::Tank){
+        classCh = TANK_CLASS;
+    }
+    obj.insert(CH_CLASS, classCh);
 
     for (const auto &stats : ALL_STATS) {
       if (h->m_Stats.m_AllStatsTable.count(stats) == 0) {
@@ -1037,6 +1047,13 @@ void PlayersManager::LoadAllCharactersJson() {
 
       auto *c = new Character("", characType::Hero, {});
       c->m_Name = jsonDoc[CH_NAME].toString();
+      c->m_SelectedForm = jsonDoc[CH_FORM].toString();
+      const auto &classCh = jsonDoc[CH_CLASS].toString();
+      if (classCh == TANK_CLASS) {
+          c->m_Class = CharacterClass::Tank;
+      } else{
+         c->m_Class = CharacterClass::Standard;
+      }
       c->m_PhotoName = jsonDoc[CH_PHOTO_NAME].toString();
       c->m_type = (jsonDoc[CH_TYPE].toString() == CH_TYPE_BOSS)
                       ? characType::Boss
