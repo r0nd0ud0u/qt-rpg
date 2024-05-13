@@ -15,6 +15,7 @@ private slots:
   void ChangeByPercent_works();
   void GetBufDebufNumbers_works();
   void InitAggroOnTurn_works();
+  void SetStatsOnEffect_works();
 };
 
 void character_tests::TestThalia_works() {
@@ -121,6 +122,68 @@ void character_tests::InitAggroOnTurn_works() {
 
   testCh->InitAggroOnTurn(7);
   QCOMPARE(aggroStat, 40);
+}
+
+void character_tests::SetStatsOnEffect_works(){
+    Stats stats;
+    auto& hp = stats.m_HP;
+    //init current value
+    hp.m_MaxValue = 100;
+    hp.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
+    hp.m_BufEffectPercent = 0;
+    hp.m_BufEffectValue = 0;
+
+    // raw value 0 => stat is not changing
+    hp.m_RawMaxValue = 0;
+    Character::SetStatsOnEffect(hp, 10, true, false);
+    QCOMPARE(100, hp.m_MaxValue);
+    QCOMPARE(50, hp.m_CurrentValue);
+    QCOMPARE(0, hp.m_RawMaxValue);
+
+    // no update of effect
+    hp.m_RawMaxValue = 100;
+    Character::SetStatsOnEffect(hp, 10, true, false);
+    QCOMPARE(100, hp.m_MaxValue);
+    QCOMPARE(50, hp.m_CurrentValue);
+    // effect
+    // percent
+    //init current value
+    hp.m_MaxValue = 100;
+    hp.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
+    hp.m_BufEffectPercent = 0;
+    hp.m_BufEffectValue = 0;
+    Character::SetStatsOnEffect(hp, 10, true, true);
+    QCOMPARE(110, hp.m_MaxValue);
+    QCOMPARE(55, hp.m_CurrentValue);
+    // value
+    //init current value
+    hp.m_MaxValue = 100;
+    hp.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
+    hp.m_BufEffectPercent = 0;
+    hp.m_BufEffectValue = 0;
+    Character::SetStatsOnEffect(hp, 10, false, true);
+    QCOMPARE(110, hp.m_MaxValue);
+    QCOMPARE(55, hp.m_CurrentValue);
+
+    // negative value
+    // percent
+    //init current value
+    hp.m_MaxValue = 100;
+    hp.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
+    hp.m_BufEffectPercent = 0;
+    hp.m_BufEffectValue = 0;
+    Character::SetStatsOnEffect(hp, -10, true, true);
+    QCOMPARE(90, hp.m_MaxValue);
+    QCOMPARE(45, hp.m_CurrentValue);
+    // value
+    //init current value
+    hp.m_MaxValue = 100;
+    hp.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
+    hp.m_BufEffectPercent = 0;
+    hp.m_BufEffectValue = 0;
+    Character::SetStatsOnEffect(hp, -10, false, true);
+    QCOMPARE(90, hp.m_MaxValue);
+    QCOMPARE(45, hp.m_CurrentValue);
 }
 
 int main(int argc, char *argv[]) {
