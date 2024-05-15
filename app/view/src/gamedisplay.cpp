@@ -414,8 +414,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   // is Dodging
   // a tank cannot dodge
   if (currentAtk.target == TARGET_ENNEMY &&
-      currentAtk.reach == REACH_INDIVIDUAL &&
-      activatedPlayer->m_Class != CharacterClass::Tank) {
+      currentAtk.reach == REACH_INDIVIDUAL) {
     const auto &[isDodging, plName, outputsRandNb] =
         gm->m_PlayersManager->IsDodging(targetList, currentAtk);
     const auto indivTarget =

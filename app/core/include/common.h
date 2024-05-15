@@ -269,7 +269,7 @@ const QString STANDARD_FORM = "Standard";
 const std::set<QString> ALL_FORMS = {STANDARD_FORM, ENT_FORM, BEAR_FORM};
 
 // Class keys
-const QString STANDARD_CLASS = "Standard";
+const QString STANDARD_CLASS = "standard";
 const QString TANK_CLASS = "tank";
 const std::set<QString> ALL_CLASSES = {STANDARD_CLASS, TANK_CLASS};
 
