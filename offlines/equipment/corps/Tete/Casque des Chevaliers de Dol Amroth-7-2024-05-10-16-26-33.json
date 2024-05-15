@@ -8,20 +8,20 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 25
+            "value": 225
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 25
+            "value": 175
         }
     ],
     "Categorie": "Tete",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Esquive": [
@@ -32,15 +32,15 @@
     ],
     "Mana": [
         {
-            "percent": 0,
+            "percent": 11,
             "value": 0
         }
     ],
     "Nom": "Casque des Chevaliers de Dol Amroth",
-    "Nom unique": "Casque des Chevaliers de Dol Amroth-1-2024-05-12-00-00-58",
+    "Nom unique": "Casque des Chevaliers de Dol Amroth-3-2024-05-10-16-26-33",
     "PV": [
         {
-            "percent": 0,
+            "percent": 11,
             "value": 0
         }
     ],
@@ -58,14 +58,14 @@
     ],
     "Rage": [
         {
-            "percent": 3,
+            "percent": 0,
             "value": 0
         }
     ],
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Regeneration Mana": [
@@ -95,12 +95,12 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 0
+            "value": 3
         }
     ],
     "Vigueur": [
         {
-            "percent": 0,
+            "percent": 11,
             "value": 0
         }
     ],
