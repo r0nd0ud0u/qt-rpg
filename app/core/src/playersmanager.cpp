@@ -594,12 +594,13 @@ PlayersManager::IsDodging(const std::vector<TargetInfo *> &targetList,
                       return false;
                     }
                     if (ti->get_is_targeted()) {
-                      const auto *targetChara =
+                      auto *targetChara =
                           this->GetCharacterByName(ti->get_name().data());
                       plName = ti->get_name().data();
                       const auto [charIsDodging, randNbStr] =
                           targetChara->IsDodging(atk);
                       output.append(randNbStr);
+                      targetChara->ProcessBlock(charIsDodging);
                       return charIsDodging;
                     }
                     return false;

@@ -414,20 +414,23 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   // is Dodging
   // a tank cannot dodge
   if (currentAtk.target == TARGET_ENNEMY &&
-      currentAtk.reach == REACH_INDIVIDUAL &&
-      activatedPlayer->m_Class != CharacterClass::Tank) {
+      currentAtk.reach == REACH_INDIVIDUAL) {
     const auto &[isDodging, plName, outputsRandNb] =
         gm->m_PlayersManager->IsDodging(targetList, currentAtk);
-    if (isDodging) {
-      launchingStr.append(
-          QString("%1 esquive.(%2)").arg(plName).arg(outputsRandNb.first()));
-      emit SigUpdateChannelView(nameChara, launchingStr.join("\n"),
-                                activatedPlayer->color);
-      return;
-    } else {
-      launchingStr.append(QString("%1 n'esquive pas.(%2)")
-                              .arg(plName)
-                              .arg(outputsRandNb.first()));
+    const auto indivTarget =
+        gm->m_PlayersManager->GetCharacterByName(plName);
+    if (indivTarget != nullptr && indivTarget->m_Class != CharacterClass::Tank) {
+      if (isDodging) {
+        launchingStr.append(
+            QString("%1 esquive.(%2)").arg(plName).arg(outputsRandNb.first()));
+        emit SigUpdateChannelView(nameChara, launchingStr.join("\n"),
+                                  activatedPlayer->color);
+        return;
+      } else {
+        launchingStr.append(QString("%1 n'esquive pas.(%2)")
+                                .arg(plName)
+                                .arg(outputsRandNb.first()));
+      }
     }
   }
 
