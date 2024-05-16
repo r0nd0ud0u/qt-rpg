@@ -755,7 +755,9 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     } else {
       amount = nbOfApplies * ep.value;
     }
-  } else if (ep.effect == EFFECT_PERCENT_CHANGE) {
+  } else if (ep.effect == EFFECT_PERCENT_CHANGE && ep.statsName == STATS_HP &&
+             ep.statsName == STATS_MANA && ep.statsName == STATS_VIGOR &&
+             ep.statsName == STATS_BERSECK) {
     // example for mana
     amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
   } else {
@@ -815,7 +817,7 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
               m_AllBufs[static_cast<int>(BufTypes::damageCritCapped)];
           bufCrit != nullptr && bufCrit->get_value() > 0) {
         // improve crit coeff
-          coeffCrit += static_cast<double>(bufCrit->get_value())/ 100.0;
+        coeffCrit += static_cast<double>(bufCrit->get_value()) / 100.0;
       }
       // Receiver RX
       if (const auto *bufRx =
@@ -831,7 +833,7 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
 
   // is it a critical strike
   if (isCrit && ep.statsName == STATS_HP && launch) {
-      output = std::lround(coeffCrit * static_cast<double>(amount));
+    output = std::lround(coeffCrit * static_cast<double>(amount));
   } else if (isCrit && launch) {
     output = std::lround(AttaqueType::COEFF_CRIT_STATS *
                          static_cast<double>(amount));
