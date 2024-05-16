@@ -767,6 +767,7 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
   }
 
   // Assess buf/debuf
+  double coeffCrit = AttaqueType::COEFF_CRIT_DMG;
   int bufDebuf = 0;
   if (ep.statsName == STATS_HP) {
     if (const bool isHeal = ALLIES_TARGETS.count(ep.target) > 0 && amount > 0;
@@ -812,9 +813,9 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
       // Launcher TX
       if (const auto *bufCrit =
               m_AllBufs[static_cast<int>(BufTypes::damageCritCapped)];
-          bufCrit != nullptr) {
-        bufDebuf += static_cast<int>(update_damage_by_buf(
-            bufCrit->get_value(), bufCrit->get_is_percent(), amount));
+          bufCrit != nullptr && bufCrit->get_value() > 0) {
+        // improve crit coeff
+          coeffCrit += static_cast<double>(bufCrit->get_value())/ 100.0;
       }
       // Receiver RX
       if (const auto *bufRx =
@@ -830,7 +831,7 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
 
   // is it a critical strike
   if (isCrit && ep.statsName == STATS_HP && launch) {
-    output = 2 * amount;
+      output = std::lround(coeffCrit * static_cast<double>(amount));
   } else if (isCrit && launch) {
     output = std::lround(AttaqueType::COEFF_CRIT_STATS *
                          static_cast<double>(amount));
@@ -1371,7 +1372,7 @@ std::pair<bool, int> Character::ProcessCriticalStrike(const AttaqueType &atk) {
     // update buf dmg by crit capped
     if (critStat.m_CurrentValue > critCapped) {
       UpdateBuf(BufTypes::damageCritCapped,
-                min(0, critStat.m_CurrentValue - critCapped), false, "");
+                critStat.m_CurrentValue - critCapped, false, "");
     }
     // Reset isCritByBuf if it has been used
     if (isCritByBuf) {
