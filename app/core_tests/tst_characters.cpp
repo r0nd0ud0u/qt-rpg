@@ -16,6 +16,7 @@ private slots:
   void GetBufDebufNumbers_works();
   void InitAggroOnTurn_works();
   void SetStatsOnEffect_works();
+  void TestAtkBlocked();
 };
 
 void character_tests::TestThalia_works() {
@@ -37,33 +38,32 @@ void character_tests::TestThalia_works() {
 }
 
 void character_tests::ChangeByPercent_works() {
-  auto *testCh = GetTestCharacter();
-
+  auto testCh = GetTestCharacter();
   // attaque 1
   AttaqueType atk1 =
-      testCh->m_AttakList["mana-vigor-berseck-changepercent-ennemy"];
+      testCh.m_AttakList["mana-vigor-berseck-changepercent-ennemy"];
   const int expectedMana =
-      testCh->m_Stats.m_AllStatsTable[STATS_MANA].m_CurrentValue +
+      testCh.m_Stats.m_AllStatsTable[STATS_MANA].m_CurrentValue +
       atk1.m_AllEffects[0].value *
-          testCh->m_Stats.m_AllStatsTable[STATS_MANA].m_MaxValue / 100;
+          testCh.m_Stats.m_AllStatsTable[STATS_MANA].m_MaxValue / 100;
   const int expectedVigor =
-      testCh->m_Stats.m_AllStatsTable[STATS_VIGOR].m_CurrentValue +
+      testCh.m_Stats.m_AllStatsTable[STATS_VIGOR].m_CurrentValue +
       atk1.m_AllEffects[1].value *
-          testCh->m_Stats.m_AllStatsTable[STATS_VIGOR].m_MaxValue / 100;
+          testCh.m_Stats.m_AllStatsTable[STATS_VIGOR].m_MaxValue / 100;
   const int expectedBerseck =
-      testCh->m_Stats.m_AllStatsTable[STATS_BERSECK].m_CurrentValue +
+      testCh.m_Stats.m_AllStatsTable[STATS_BERSECK].m_CurrentValue +
       atk1.m_AllEffects[2].value *
-          testCh->m_Stats.m_AllStatsTable[STATS_BERSECK].m_MaxValue / 100;
+          testCh.m_Stats.m_AllStatsTable[STATS_BERSECK].m_MaxValue / 100;
   const auto &[conditionsOk, resultEffects, appliedEffects] =
-      testCh->ApplyAtkEffect(true, atk1, testCh, false);
+      testCh.ApplyAtkEffect(true, atk1, &testCh, false);
 
   QCOMPARE(true, conditionsOk);
   QCOMPARE(expectedMana,
-           testCh->m_Stats.m_AllStatsTable[STATS_MANA].m_CurrentValue);
+           testCh.m_Stats.m_AllStatsTable[STATS_MANA].m_CurrentValue);
   QCOMPARE(expectedVigor,
-           testCh->m_Stats.m_AllStatsTable[STATS_VIGOR].m_CurrentValue);
+           testCh.m_Stats.m_AllStatsTable[STATS_VIGOR].m_CurrentValue);
   QCOMPARE(expectedBerseck,
-           testCh->m_Stats.m_AllStatsTable[STATS_BERSECK].m_CurrentValue);
+           testCh.m_Stats.m_AllStatsTable[STATS_BERSECK].m_CurrentValue);
 }
 
 void character_tests::GetMaxNbOfApplies_works() {
@@ -81,46 +81,51 @@ void character_tests::GetMaxNbOfApplies_works() {
 }
 
 void character_tests::GetBufDebufNumbers_works() {
-  auto *testCh = GetTestCharacter();
-  auto result = testCh->GetBufDebufNumbers();
+  auto testCh = GetTestCharacter();
+  auto result = testCh.GetBufDebufNumbers();
   QVERIFY(result.has_value());
 
   for (int i = 0; i < static_cast<int>(BufTypes::enumSize); i++) {
     if (i == static_cast<int>(BufTypes::damageRx)) {
-      testCh->m_AllBufs[i]->set_buffers(-10, false);
+      testCh.m_AllBufs[i]->set_buffers(-10, false);
     } else {
-      testCh->m_AllBufs[i]->set_buffers(10, false);
+      testCh.m_AllBufs[i]->set_buffers(10, false);
     }
   }
-  result = testCh->GetBufDebufNumbers();
+  result = testCh.GetBufDebufNumbers();
   QVERIFY(result.has_value());
   QCOMPARE(result->hot, 0);
   QCOMPARE(result->dot, 0);
   QCOMPARE(result->debuf, 0);
   QCOMPARE(result->buf, static_cast<int>(BufTypes::enumSize));
+
+  // reset
+  for (int i = 0; i < static_cast<int>(BufTypes::enumSize); i++) {
+      testCh.m_AllBufs[i]->set_buffers(0, false);
+  }
 }
 
 void character_tests::InitAggroOnTurn_works() {
-  auto *testCh = GetTestCharacter();
+  auto testCh = GetTestCharacter();
 
-  testCh->InitAggroOnTurn(0);
+  testCh.InitAggroOnTurn(0);
   const auto &aggroStat =
-      testCh->m_Stats.m_AllStatsTable[STATS_AGGRO].m_CurrentValue;
+      testCh.m_Stats.m_AllStatsTable[STATS_AGGRO].m_CurrentValue;
   QCOMPARE(aggroStat, 0);
 
-  testCh->m_LastTxRx[static_cast<int>(amountType::aggro)][0] = 0;
-  testCh->m_LastTxRx[static_cast<int>(amountType::aggro)][1] = 10;
-  testCh->m_LastTxRx[static_cast<int>(amountType::aggro)][2] = 10;
-  testCh->m_LastTxRx[static_cast<int>(amountType::aggro)][3] = 10;
-  testCh->m_LastTxRx[static_cast<int>(amountType::aggro)][4] = 10;
-  testCh->m_LastTxRx[static_cast<int>(amountType::aggro)][5] = 10;
-  testCh->m_LastTxRx[static_cast<int>(amountType::aggro)][6] = 0;
-  testCh->m_LastTxRx[static_cast<int>(amountType::aggro)][7] = 0;
+  testCh.m_LastTxRx[static_cast<int>(amountType::aggro)][0] = 0;
+  testCh.m_LastTxRx[static_cast<int>(amountType::aggro)][1] = 10;
+  testCh.m_LastTxRx[static_cast<int>(amountType::aggro)][2] = 10;
+  testCh.m_LastTxRx[static_cast<int>(amountType::aggro)][3] = 10;
+  testCh.m_LastTxRx[static_cast<int>(amountType::aggro)][4] = 10;
+  testCh.m_LastTxRx[static_cast<int>(amountType::aggro)][5] = 10;
+  testCh.m_LastTxRx[static_cast<int>(amountType::aggro)][6] = 0;
+  testCh.m_LastTxRx[static_cast<int>(amountType::aggro)][7] = 0;
 
-  testCh->InitAggroOnTurn(6);
+  testCh.InitAggroOnTurn(6);
   QCOMPARE(aggroStat, 50);
 
-  testCh->InitAggroOnTurn(7);
+  testCh.InitAggroOnTurn(7);
   QCOMPARE(aggroStat, 40);
 }
 
@@ -184,6 +189,32 @@ void character_tests::SetStatsOnEffect_works(){
     Character::SetStatsOnEffect(hp, -10, false, true);
     QCOMPARE(90, hp.m_MaxValue);
     QCOMPARE(45, hp.m_CurrentValue);
+}
+
+void character_tests::TestAtkBlocked() {
+    // boss
+    auto testCh = GetTestCharacter();
+    testCh.m_type = characType::Boss;
+    // hero
+    auto ch2 = GetTestCharacter();
+    ch2.m_type = characType::Hero;
+    // to make calculs easy on mana at
+    testCh.m_Stats.m_AllStatsTable[STATS_POW_MAG].m_CurrentValue = 0;
+    ch2.m_Stats.m_AllStatsTable[STATS_ARM_MAG].m_CurrentValue = 0;
+    // init hp
+    ch2.m_Stats.m_AllStatsTable[STATS_HP].m_CurrentValue = 50;
+    ch2.m_Stats.m_AllStatsTable[STATS_HP].m_MaxValue = 50;
+    const auto &[conditionsOk, resultEffects, appliedEffects] =
+        testCh.ApplyAtkEffect(true, SimpleAtkMana(), &ch2, false);
+
+    QCOMPARE(40, ch2.m_Stats.m_AllStatsTable[STATS_HP].m_CurrentValue);
+
+    ch2.m_IsBlockingAtk = true;
+    const auto &[conditionsOk2, resultEffects2, appliedEffects2] =
+        testCh.ApplyAtkEffect(true, SimpleAtkMana(), &ch2, false);
+
+    // 10% of 10 = 1 => 40 -1 = 39
+    QCOMPARE(39, ch2.m_Stats.m_AllStatsTable[STATS_HP].m_CurrentValue);
 }
 
 int main(int argc, char *argv[]) {

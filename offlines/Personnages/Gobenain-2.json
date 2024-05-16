@@ -7,14 +7,14 @@
     ],
     "Armure magique": [
         {
-            "Current": 100,
-            "Max": 100
+            "Current": 1324,
+            "Max": 1342
         }
     ],
     "Armure physique": [
         {
-            "Current": 100,
-            "Max": 100
+            "Current": 1234,
+            "Max": 1234
         }
     ],
     "Couleur": "red",
@@ -41,20 +41,20 @@
 	"Photo": "Gobenain",
     "PV": [
         {
-            "Current": 1000,
-            "Max": 1000
+            "Current": 100250,
+            "Max": 100250
         }
     ],
     "Pouvoir magique": [
         {
-            "Current": 20,
-            "Max": 20
+            "Current": 620,
+            "Max": 620
         }
     ],
     "Pouvoir physique": [
         {
-            "Current": 20,
-            "Max": 20
+            "Current": 120,
+            "Max": 120
         }
     ],
     "Rage": [
@@ -112,6 +112,6 @@
             "Max": 0
         }
     ],
-	"Rang": 1
+	"Rang": 3
 }
 

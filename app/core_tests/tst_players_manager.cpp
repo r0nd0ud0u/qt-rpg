@@ -116,7 +116,6 @@ void player_manager_tests::GetNbOfActiveHotsOnHeroes_works() {
   auto result = pm->GetNbOfActiveHotsOnHeroes();
   QCOMPARE(0, result);
 
-  auto *testCh = GetTestCharacter();
   AttaqueType atk1 = SimpleHot();
   pm->AddGameEffectOnAtk("Test", atk1, "Test", atk1.m_AllEffects, 1);
   result = pm->GetNbOfActiveHotsOnHeroes();
@@ -125,7 +124,6 @@ void player_manager_tests::GetNbOfActiveHotsOnHeroes_works() {
 
 void player_manager_tests::RemoveTerminatedEffectsOnPlayer_works() {
   auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
-  auto *testCh = GetTestCharacter();
   pm->m_AllEffectsOnGame.clear();
   QCOMPARE(0, pm->m_AllEffectsOnGame["Test"].size());
 
@@ -144,9 +142,9 @@ void player_manager_tests::RemoveTerminatedEffectsOnPlayer_works() {
 
 void player_manager_tests::ResetAllEffectsOnPlayer_works(){
     auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
-    auto *testCh = GetTestCharacter();
+    auto testCh = GetTestCharacter();
     pm->m_AllEffectsOnGame.clear();
-    pm->ResetAllEffectsOnPlayer(testCh);
+    pm->ResetAllEffectsOnPlayer(&testCh);
 
     QCOMPARE(0, pm->m_AllEffectsOnGame["Test"].size());
 
@@ -155,7 +153,7 @@ void player_manager_tests::ResetAllEffectsOnPlayer_works(){
 
     AttaqueType atk2 = SimpleHot();
     pm->AddGameEffectOnAtk("Test", atk2, "Test", atk2.m_AllEffects, 1);
-    pm->ResetAllEffectsOnPlayer(testCh);
+    pm->ResetAllEffectsOnPlayer(&testCh);
 
     QCOMPARE(0, pm->m_AllEffectsOnGame["Test"].size());
 }

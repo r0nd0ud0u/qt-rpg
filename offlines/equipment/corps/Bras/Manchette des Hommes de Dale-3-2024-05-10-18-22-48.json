@@ -8,13 +8,13 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 150
+            "value": 225
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 113
         }
     ],
     "Categorie": "Bras",
@@ -47,7 +47,7 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 60
+            "value": 90
         }
     ],
     "Pouvoir physique": [
@@ -95,7 +95,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 3
+            "value": 5
         }
     ],
     "Vigueur": [

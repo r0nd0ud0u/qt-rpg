@@ -17,22 +17,13 @@
             "Value": -25
         },
         {
-            "Cible": "",
-            "Portée": "",
-            "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
+           "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "Armure physique",
+            "Tours actifs": 3,
+            "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": 0
-        },
-        {
-            "Cible": "",
-            "Portée": "",
-            "Stat": "",
-            "Tours actifs": 0,
-            "Type": "",
-            "Valeur de l'effet": 0,
-            "Value": 0
+            "Value": -20
         }
     ],
     "Niveau": 1,

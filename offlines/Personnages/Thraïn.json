@@ -24,6 +24,7 @@
             "Max": 8
         }
     ],
+	"Classe": "tank",
     "Esquive": [
         {
             "Current": 5,

@@ -8,7 +8,7 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 113
         }
     ],
     "Armure physique": [
@@ -21,18 +21,18 @@
     "Cout critique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 6
         }
     ],
     "Esquive": [
         {
             "percent": 0,
-            "value": 3
+            "value": 9
         }
     ],
     "Mana": [
         {
-            "percent": 0,
+            "percent": 17,
             "value": 0
         }
     ],
@@ -65,7 +65,7 @@
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 4
+            "value": 6
         }
     ],
     "Regeneration Mana": [
@@ -95,7 +95,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 0
+            "value": 2
         }
     ],
     "Vigueur": [

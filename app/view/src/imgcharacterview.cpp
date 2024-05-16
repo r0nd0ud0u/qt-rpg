@@ -26,9 +26,11 @@ void ImgCharacterView::UpdateView(QString name, const QString &photo) {
 
 void ImgCharacterView::SetPixmap(const QString &name, const int scalingHeight) {
   // Update image character
+    //return;
   auto qp = QPixmap(OFFLINE_IMG + name + ".png");
   QPixmap scaledPixmap =
       qp.scaledToHeight(scalingHeight); // Set the desired width and height
+ // ui->img_label->setPixmap(qp.scaled(171, 300, Qt::KeepAspectRatio, Qt::SmoothTransformation));
   ui->img_label->setPixmap(scaledPixmap);
   ui->img_label->setScaledContents(true);
 }

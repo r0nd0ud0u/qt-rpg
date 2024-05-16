@@ -8,13 +8,13 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 113
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 150
+            "value": 225
         }
     ],
     "Categorie": "Torse",
@@ -32,12 +32,12 @@
     ],
     "Mana": [
         {
-            "percent": 11,
+            "percent": 17,
             "value": 0
         }
     ],
     "Nom": "Tunique des Chevaliers de Dol Amroth",
-    "Nom unique": "Tunique des Chevaliers de Dol Amroth-3-2024-05-11-02-14-30",
+    "Nom unique": "Tunique des Chevaliers de Dol Amroth-3.1.5-2024-05-11-02-14-30",
     "PV": [
         {
             "percent": 0,
@@ -83,7 +83,7 @@
     "Regeneration vigueur": [
         {
             "percent": 0,
-            "value": 4
+            "value": 6
         }
     ],
     "Taux aggro": [

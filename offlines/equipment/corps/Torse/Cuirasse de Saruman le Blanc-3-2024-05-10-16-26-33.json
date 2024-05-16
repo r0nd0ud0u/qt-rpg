@@ -8,20 +8,20 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 150
+            "value": 375
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 375
         }
     ],
     "Categorie": "Torse",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 4
+            "value": 6
         }
     ],
     "Esquive": [
@@ -37,10 +37,10 @@
         }
     ],
     "Nom": "Cuirasse de Saruman le Blanc",
-    "Nom unique": "Cuirasse de Saruman le Blanc-3-2024-05-10-16-26-33",
+    "Nom unique": "Cuirasse de Saruman le Blanc-7-2024-05-10-16-26-33",
     "PV": [
         {
-            "percent": 0,
+            "percent": 17,
             "value": 0
         }
     ],
@@ -77,13 +77,13 @@
     "Regeneration PV": [
         {
             "percent": 0,
-            "value": 0
+            "value": 3
         }
     ],
     "Regeneration vigueur": [
         {
             "percent": 0,
-            "value": 4
+            "value": 6
         }
     ],
     "Taux aggro": [
@@ -95,7 +95,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 0
+            "value": 5
         }
     ],
     "Vigueur": [
