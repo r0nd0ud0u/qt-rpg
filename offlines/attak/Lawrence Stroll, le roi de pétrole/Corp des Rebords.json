@@ -1,0 +1,44 @@
+{
+    "Aggro": 0,
+    "Cible": "Allié",
+    "Coût de mana": 1,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
+    "Durée": 1,
+    "Dégâts": 0,
+    "Effet": [
+        {
+            "Cible": "Seulement les alliés",
+            "Portée": "Zone",
+            "Stat": "PV",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 25
+        },
+        {
+            "Cible": "Seulement les alliés",
+            "Portée": "Zone",
+            "Stat": "Armure magique",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 25
+        },
+		{
+            "Cible": "Seulement les alliés",
+            "Portée": "Zone",
+            "Stat": "Armure physique",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 25
+        }
+    ],
+    "Forme": "Standard",
+    "Niveau": 1,
+    "Nom": "Corp des Rebords",
+    "Photo": "default.png",
+    "Portée": "Zone"
+}
+

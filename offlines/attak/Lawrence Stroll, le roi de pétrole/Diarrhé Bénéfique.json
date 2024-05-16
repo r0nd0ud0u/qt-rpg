@@ -1,0 +1,32 @@
+{
+    "Cible": "Allié",
+    "Coût de mana": 1,
+    "Coût de rage": 0,
+    "Coût de vigueur": 0,
+    "Effet": [
+        {
+            "Cible": "Seulement les Alliés",
+            "Portée": "Zone",
+            "Stat": "PV",
+            "Tours actifs": 5,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 25
+        },
+        {
+            "Cible": "Seulement les Alliés",
+            "Portée": "Zone",
+            "Stat": "Esquive",
+            "Tours actifs": 5,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -10
+        }
+    ],
+    "Forme": "Standard",
+    "Niveau": 5,
+    "Nom": "Diarrhé Bénéfique",
+    "Photo": "",
+    "Portée": "Zone"
+}
+
