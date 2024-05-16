@@ -3,7 +3,6 @@
 
 #include <QObject>
 
-
 class Character;
 class AttaqueType;
 class GameAtkEffects;

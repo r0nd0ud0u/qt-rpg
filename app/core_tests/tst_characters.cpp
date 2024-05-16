@@ -189,6 +189,15 @@ void character_tests::SetStatsOnEffect_works(){
     Character::SetStatsOnEffect(hp, -10, false, true);
     QCOMPARE(90, hp.m_MaxValue);
     QCOMPARE(45, hp.m_CurrentValue);
+
+    auto& armPhy = stats.m_ArmPhy;
+    armPhy.m_MaxValue = 100;
+    armPhy.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
+    armPhy.m_BufEffectPercent = 0;
+    armPhy.m_BufEffectValue = 0;
+    Character::SetStatsOnEffect(armPhy, 100, true, true);
+    QCOMPARE(100, armPhy.m_MaxValue);
+    QCOMPARE(100, armPhy.m_CurrentValue);
 }
 
 void character_tests::TestAtkBlocked() {
