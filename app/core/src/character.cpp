@@ -1356,8 +1356,6 @@ QString Character::ProcessAggro(const int atkValue, const int aggroValue,
  * @return
  */
 std::pair<bool, int> Character::ProcessCriticalStrike(const AttaqueType &atk) {
-  return std::make_pair(true, 0);
-
   const auto &critStat = m_Stats.m_AllStatsTable.at(STATS_CRIT);
   int64_t randNb = -1;
   const int critCapped = 60;
