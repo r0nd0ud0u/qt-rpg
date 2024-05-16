@@ -1,0 +1,79 @@
+{
+    "Aggro": 0,
+    "Cible": "Ennemie",
+    "Coût de mana": 0,
+    "Coût de rage": 0,
+    "Coût de vigueur": 1,
+    "Durée": 1,
+    "Dégâts": 0,
+    "Effet": [
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "Esquive",
+            "Tours actifs": 2,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -25
+        },
+        {
+           "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 5,
+            "Type": "Changement par %",
+            "Valeur de l'effet": 0,
+            "Value": -10
+        }
+        {
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Pouvoir physique",
+            "Tours actifs": 3,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 10
+        },
+        {
+            "Cible": "Seulement les alliés",
+            "Portée": "Zone",
+            "Stat": "Pouvoir physique",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 10
+        },
+		{
+            "Cible": "Soi-même",
+            "Portée": "Individuel",
+            "Stat": "Pouvoir magique",
+            "Tours actifs": 3,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 10
+        },
+        {
+            "Cible": "Seulement les alliés",
+            "Portée": "Zone",
+            "Stat": "Pouvoir magique",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": 10
+        },
+		{
+            "Cible": "Allié",
+            "Portée": "Zone",
+            "Stat": "PV",
+            "Tours actifs": 3,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": 100
+        }
+    ],
+    "Niveau": 1,
+    "Nom": "Bouillon de Héros",
+    "Photo": "default.png",
+    "Portée": "Individuel"
+}
+
