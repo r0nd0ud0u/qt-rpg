@@ -21,7 +21,7 @@
     "Cout critique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 10
         }
     ],
     "Esquive": [
@@ -40,7 +40,7 @@
     "Nom unique": "Jambières des Guerriers de Rhûn-8-2024-05-11-12-35-28",
     "PV": [
         {
-            "percent": 0,
+            "percent": 15,
             "value": 0
         }
     ],
@@ -100,7 +100,7 @@
     ],
     "Vigueur": [
         {
-            "percent": 11,
+            "percent": 26,
             "value": 0       
         }
     ],

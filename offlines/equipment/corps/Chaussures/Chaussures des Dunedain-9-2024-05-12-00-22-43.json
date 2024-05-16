@@ -40,14 +40,14 @@
     "Nom unique": "Chaussures des Dunedain-9-2024-05-12-00-22-43",
     "PV": [
         {
-            "percent": 11,
+            "percent": 26,
             "value": 0
         }
     ],
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 80
+            "value": 240
         }
     ],
     "Pouvoir physique": [
@@ -65,7 +65,7 @@
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 0
+            "value": 5
         }
     ],
     "Regeneration Mana": [

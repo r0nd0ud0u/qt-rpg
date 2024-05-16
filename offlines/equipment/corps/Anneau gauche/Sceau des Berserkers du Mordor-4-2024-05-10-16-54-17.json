@@ -21,7 +21,7 @@
     "Cout critique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 10
         }
     ],
     "Esquive": [
@@ -40,13 +40,13 @@
     "Nom unique": "Sceau des Berserkers du Mordor-4-2024-05-10-16-54-17",
     "PV": [
         {
-            "percent": 15,
+            "percent": 30,
             "value": 0
         }
     ],
     "Pouvoir magique": [
         {
-            "percent": 0,
+            "percent": 80,
             "value": 0
         }
     ],

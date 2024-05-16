@@ -8,13 +8,13 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 113
+            "value": 213
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 100
         }
     ],
     "Categorie": "Collier",
@@ -40,7 +40,7 @@
     "Nom unique": "Pendentif des Chevaliers de Dol Amroth-7-2024-05-12-00-22-43",
     "PV": [
         {
-            "percent": 0,
+            "percent": 15,
             "value": 0
         }
     ],
@@ -95,7 +95,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 2
+            "value": 7
         }
     ],
     "Vigueur": [
