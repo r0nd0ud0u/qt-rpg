@@ -587,24 +587,22 @@ PlayersManager::IsDodging(const std::vector<TargetInfo *> &targetList,
                           const AttaqueType &atk) {
   QString plName;
   QStringList output;
-  const bool isDodging =
-      std::any_of(targetList.begin(), targetList.end(),
-                  [this, &plName, &output, &atk](const TargetInfo *ti) {
-                    if (ti == nullptr) {
-                      return false;
-                    }
-                    if (ti->get_is_targeted()) {
-                      auto *targetChara =
-                          this->GetCharacterByName(ti->get_name().data());
-                      plName = ti->get_name().data();
-                      const auto [charIsDodging, randNbStr] =
-                          targetChara->IsDodging(atk);
-                      output.append(randNbStr);
-                      targetChara->ProcessBlock(charIsDodging);
-                      return charIsDodging;
-                    }
-                    return false;
-                  });
+  const bool isDodging = std::any_of(
+      targetList.begin(), targetList.end(),
+      [this, &plName, &output, &atk](const TargetInfo *ti) {
+        if (ti == nullptr) {
+          return false;
+        }
+        if (ti->get_is_targeted()) {
+          auto *targetChara = this->GetCharacterByName(ti->get_name().data());
+          plName = ti->get_name().data();
+          const auto [charIsDodging, randNbStr] = targetChara->IsDodging(atk);
+          output.append(randNbStr);
+          targetChara->ProcessBlock(charIsDodging);
+          return charIsDodging;
+        }
+        return false;
+      });
 
   return std::make_tuple(isDodging, plName, output);
 }
@@ -980,8 +978,8 @@ void PlayersManager::OutputCharactersInJson(
     obj.insert(CH_RANK, h->m_BossClass.m_Rank);
     obj.insert(CH_FORM, h->m_SelectedForm);
     auto classCh = STANDARD_CLASS;
-    if(h->m_Class == CharacterClass::Tank){
-        classCh = TANK_CLASS;
+    if (h->m_Class == CharacterClass::Tank) {
+      classCh = TANK_CLASS;
     }
     obj.insert(CH_CLASS, classCh);
 
@@ -1049,11 +1047,11 @@ void PlayersManager::LoadAllCharactersJson() {
       auto *c = new Character("", characType::Hero, {});
       c->m_Name = jsonDoc[CH_NAME].toString();
       c->m_SelectedForm = jsonDoc[CH_FORM].toString();
-      const auto &classCh = jsonDoc[CH_CLASS].toString();
-      if (classCh == TANK_CLASS) {
-          c->m_Class = CharacterClass::Tank;
-      } else{
-         c->m_Class = CharacterClass::Standard;
+      if (const auto &classCh = jsonDoc[CH_CLASS].toString();
+          classCh == TANK_CLASS) {
+        c->m_Class = CharacterClass::Tank;
+      } else {
+        c->m_Class = CharacterClass::Standard;
       }
       c->m_PhotoName = jsonDoc[CH_PHOTO_NAME].toString();
       c->m_type = (jsonDoc[CH_TYPE].toString() == CH_TYPE_BOSS)
