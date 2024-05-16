@@ -3,6 +3,15 @@
 AttaqueType SimpleAtkMana(){
     AttaqueType atk;
     atk.manaCost = 10;
+    effectParam ep;
+    ep.effect = EFFECT_VALUE_CHANGE;
+    ep.value = -10;
+    ep.nbTurns = 1;
+    ep.isMagicAtk = true;
+    ep.statsName = STATS_HP;
+    ep.target = TARGET_ENNEMY;
+    ep.reach = REACH_INDIVIDUAL;
+    atk.m_AllEffects.push_back(ep);
     return atk;
 }
 

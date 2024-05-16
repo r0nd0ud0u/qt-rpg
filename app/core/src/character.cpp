@@ -175,7 +175,8 @@ void Character::LoadAtkJson() {
       AttaqueType atk;
       atk.name = json[ATK_NAME].toString();
       atk.namePhoto = json[ATK_PHOTO].toString();
-      atk.form = json[ATK_FORM].toString();
+      const auto form = json[ATK_FORM].toString();
+      atk.form = form.isEmpty() ? STANDARD_FORM : form;
       atk.level = static_cast<uint8_t>(json[ATK_LEVEL].toInt());
       atk.manaCost = static_cast<uint32_t>(json[ATK_MANA_COST].toInt());
       atk.vigorCost = static_cast<uint32_t>(json[ATK_VIGOR_COST].toInt());
@@ -473,7 +474,9 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
   result += effectLog;
 
   // apply the effect
-  const auto [maxAmountSent, realAmountSent] = ProcessCurrentValueOnEffect(
+  // maxAmountSent is const
+  // realAmountSent can be modified in case of block
+  auto [maxAmountSent, realAmountSent] = ProcessCurrentValueOnEffect(
       effect, nbOfApplies, m_Stats, fromLaunch, target, isCrit);
 
   // TODO should be static and not on target ? pass target by argument
@@ -853,6 +856,11 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     maxAmount = min(delta, output);
   } else {
     // damage
+    // Process maxAmountSent after potential block
+    // a block can be done only on damages from an ennemy
+    if (launch && target->m_IsBlockingAtk && ep.statsName == STATS_HP) {
+      output = 10 * output / 100;
+    }
     const int tmp = localStat.m_CurrentValue;
     localStat.m_CurrentValue = max(0, localStat.m_CurrentValue + output);
     maxAmount = min(tmp, output);
@@ -900,13 +908,16 @@ QString Character::ProcessOutputLogOnEffect(
 
   if (ep.statsName == STATS_HP) {
     if (fromLaunch) {
-      output = QString("%1 %2/%3 PV avec l'effet %4 (appliqué %5/%6).")
-                   .arg(healOrDamageLog)
-                   .arg(maxAmount)
-                   .arg(QString::number(displayedValue))
-                   .arg(effectName)
-                   .arg(nbOfApplies)
-                   .arg(QString::number(potentialAttempts));
+      if (m_IsBlockingAtk) {
+        output = "L'attaque est bloquée.\n";
+      }
+      output += QString("%1 %2/%3 PV avec l'effet %4 (appliqué %5/%6).")
+                    .arg(healOrDamageLog)
+                    .arg(maxAmount)
+                    .arg(QString::number(displayedValue))
+                    .arg(effectName)
+                    .arg(nbOfApplies)
+                    .arg(QString::number(potentialAttempts));
 
     } else {
       output = QString("%1 %2/%3 PV avec l'effet %4-(%5).")
@@ -1801,4 +1812,15 @@ void Character::InitAggroOnTurn(const int turnNb) {
     }
   }
   m_LastTxRx[static_cast<int>(amountType::aggro)][turnNb] = 0;
+}
+
+/**
+ * @brief Character::ProcessBlock
+ * @param isDodging
+ * Process if a atk can be blocked according value of "dodge" early processed
+ * and according the class of the the character
+ * Only a tank could blocked an atk
+ */
+void Character::ProcessBlock(const bool isDodging) {
+  m_IsBlockingAtk = m_Class == CharacterClass::Tank && isDodging;
 }

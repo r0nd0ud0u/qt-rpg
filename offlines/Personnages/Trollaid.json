@@ -1,0 +1,116 @@
+{
+    "Aggro": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Armure magique": [
+        {
+            "Current": 1750,
+            "Max": 1750
+        }
+    ],
+    "Armure physique": [
+        {
+            "Current": 1750,
+            "Max": 1750
+        }
+    ],
+    "Couleur": "purple",
+    "Cout critique": [
+        {
+            "Current": 25,
+            "Max": 25
+        }
+    ],
+    "Esquive": [
+        {
+            "Current": 12,
+            "Max": 12
+        }
+    ],
+    "Mana": [
+        {
+            "Current": 9999,
+            "Max": 9999
+        }
+    ],
+    "Niveau": 2147483647,
+    "Nom": "Trollaid",
+    "PV": [
+        {
+            "Current": 1111111,
+            "Max": 1111111
+        }
+    ],
+    "Pouvoir magique": [
+        {
+            "Current": 250,
+            "Max": 250
+        }
+    ],
+    "Pouvoir physique": [
+        {
+            "Current": 150,
+            "Max": 150
+        }
+    ],
+    "Rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regen vitesse": [
+        {
+            "Current": 24,
+            "Max": 24
+        }
+    ],
+    "Regeneration Mana": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regeneration PV": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regeneration vigueur": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Taux aggro": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Taux rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Type": "Boss",
+    "Vigueur": [
+        {
+            "Current": 9999,
+            "Max": 99999
+        }
+    ],
+    "Vitesse": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+	"Rang": 4
+}
+

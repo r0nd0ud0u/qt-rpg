@@ -1,0 +1,116 @@
+{
+    "Aggro": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Armure magique": [
+        {
+            "Current": 1000,
+            "Max": 1000
+        }
+    ],
+    "Armure physique": [
+        {
+            "Current": 3000,
+            "Max": 3000
+        }
+    ],
+    "Couleur": "green",
+    "Cout critique": [
+        {
+            "Current": 25,
+            "Max": 25
+        }
+    ],
+    "Esquive": [
+        {
+            "Current": 8,
+            "Max": 8
+        }
+    ],
+    "Mana": [
+        {
+            "Current": 9999,
+            "Max": 9999
+        }
+    ],
+    "Niveau": 2147483647,
+    "Nom": "pTroll",
+    "PV": [
+        {
+            "Current": 1111111,
+            "Max": 1111111
+        }
+    ],
+    "Pouvoir magique": [
+        {
+            "Current": 150,
+            "Max": 150
+        }
+    ],
+    "Pouvoir physique": [
+        {
+            "Current": 50,
+            "Max": 50
+        }
+    ],
+    "Rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regen vitesse": [
+        {
+            "Current": 10,
+            "Max": 10
+        }
+    ],
+    "Regeneration Mana": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regeneration PV": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Regeneration vigueur": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Taux aggro": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Taux rage": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+    "Type": "Boss",
+    "Vigueur": [
+        {
+            "Current": 9999,
+            "Max": 99999
+        }
+    ],
+    "Vitesse": [
+        {
+            "Current": 0,
+            "Max": 0
+        }
+    ],
+	"Rang": 4
+}
+

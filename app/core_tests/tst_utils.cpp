@@ -35,9 +35,9 @@ void utils_tests::CompareByLevel_works() {
 }
 
 void utils_tests::GetNbOfActiveEffects_works() {
-  auto *testCh = GetTestCharacter();
+  auto testCh = GetTestCharacter();
   AttaqueType atk1 =
-      testCh->m_AttakList["mana-vigor-berseck-changepercent-hero"];
+      testCh.m_AttakList["mana-vigor-berseck-changepercent-hero"];
   auto pm = Application::GetInstance().m_GameManager->m_PlayersManager;
   pm->AddGameEffectOnAtk("Test", atk1, "Test", atk1.m_AllEffects, 1);
   // empty table
@@ -54,7 +54,7 @@ void utils_tests::GetNbOfActiveEffects_works() {
 
   // Test with several effects
   pm->m_AllEffectsOnGame["Test"].clear();
-  AttaqueType atk2 = testCh->m_AttakList["GetNbOfActiveEffects"];
+  AttaqueType atk2 = testCh.m_AttakList["GetNbOfActiveEffects"];
   pm->AddGameEffectOnAtk("Test", atk2, "Test", atk2.m_AllEffects, 1);
   result = Utils::GetNbOfActiveEffects(pm->m_AllEffectsOnGame["Test"]);
   QVERIFY(result.has_value());

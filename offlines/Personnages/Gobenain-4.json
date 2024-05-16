@@ -7,8 +7,8 @@
     ],
     "Armure magique": [
         {
-            "Current": 100,
-            "Max": 100
+            "Current": 10000,
+            "Max": 10000
         }
     ],
     "Armure physique": [
@@ -20,8 +20,8 @@
     "Couleur": "red",
     "Cout critique": [
         {
-            "Current": 20,
-            "Max": 20
+            "Current": 30,
+            "Max": 30
         }
     ],
     "Esquive": [
@@ -41,14 +41,14 @@
 	"Photo": "Gobenain",
     "PV": [
         {
-            "Current": 1000,
-            "Max": 1000
+            "Current": 100000,
+            "Max": 100000
         }
     ],
     "Pouvoir magique": [
         {
-            "Current": 20,
-            "Max": 20
+            "Current": 220,
+            "Max": 220
         }
     ],
     "Pouvoir physique": [
@@ -112,6 +112,6 @@
             "Max": 0
         }
     ],
-	"Rang": 1
+	"Rang": 4
 }
 

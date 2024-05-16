@@ -8,13 +8,13 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 75
+            "value": 338
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 150
+            "value": 563
         }
     ],
     "Categorie": "Chaussures",
@@ -27,12 +27,12 @@
     "Esquive": [
         {
             "percent": 0,
-            "value": 3
+            "value": 5
         }
     ],
     "Mana": [
         {
-            "percent": 11,
+            "percent": 17,
             "value": 0
         }
     ],
@@ -40,14 +40,14 @@
     "Nom unique": "Chaussures des Hommes de Dale-3-2024-05-12-19-26-04",
     "PV": [
         {
-            "percent": 0,
+            "percent": 17,
             "value": 0
         }
     ],
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 90
         }
     ],
     "Pouvoir physique": [
@@ -65,13 +65,13 @@
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 0
+            "value": 6
         }
     ],
     "Regeneration Mana": [
         {
             "percent": 0,
-            "value": 0
+            "value": 12
         }
     ],
     "Regeneration PV": [
