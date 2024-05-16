@@ -175,7 +175,8 @@ void Character::LoadAtkJson() {
       AttaqueType atk;
       atk.name = json[ATK_NAME].toString();
       atk.namePhoto = json[ATK_PHOTO].toString();
-      atk.form = json[ATK_FORM].toString();
+      const auto form = json[ATK_FORM].toString();
+      atk.form = form.isEmpty() ? STANDARD_FORM : form;
       atk.level = static_cast<uint8_t>(json[ATK_LEVEL].toInt());
       atk.manaCost = static_cast<uint32_t>(json[ATK_MANA_COST].toInt());
       atk.vigorCost = static_cast<uint32_t>(json[ATK_VIGOR_COST].toInt());
