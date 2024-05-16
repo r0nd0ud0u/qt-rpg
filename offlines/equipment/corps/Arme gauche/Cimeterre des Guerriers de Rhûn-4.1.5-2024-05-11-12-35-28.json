@@ -14,14 +14,14 @@
     "Armure physique": [
         {
             "percent": 0,
-            "value": 150
+            "value": 273
         }
     ],
     "Categorie": "Arme gauche",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 8
+            "value": 20
         }
     ],
     "Esquive": [

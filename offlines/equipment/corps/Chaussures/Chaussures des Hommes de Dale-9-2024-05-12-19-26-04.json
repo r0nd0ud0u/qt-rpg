@@ -8,20 +8,20 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 338
+            "value": 263
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 563
+            "value": 375
         }
     ],
     "Categorie": "Chaussures",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 5
         }
     ],
     "Esquive": [
@@ -83,7 +83,7 @@
     "Regeneration vigueur": [
         {
             "percent": 0,
-            "value": 0
+            "value": 5
         }
     ],
     "Taux aggro": [
@@ -100,7 +100,7 @@
     ],
     "Vigueur": [
         {
-            "percent": 0,
+            "percent": 15,
             "value": 0
         }
     ],

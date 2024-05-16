@@ -21,7 +21,7 @@
     "Cout critique": [
         {
             "percent": 0,
-            "value": 5
+            "value": 10
         }
     ],
     "Esquive": [
@@ -32,7 +32,7 @@
     ],
     "Mana": [
         {
-            "percent": 15,
+            "percent": 30,
             "value": 0
         }
     ],
@@ -40,14 +40,14 @@
     "Nom unique": "Bague des Gardiens de la Citadelle-4-2024-05-10-16-26-33",
     "PV": [
         {
-            "percent": 15,
+            "percent": 30,
             "value": 0
         }
     ],
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 80
         }
     ],
     "Pouvoir physique": [
