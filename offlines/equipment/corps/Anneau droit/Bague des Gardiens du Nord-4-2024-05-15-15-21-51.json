@@ -8,7 +8,7 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 113
+            "value": 100
         }
     ],
     "Armure physique": [
@@ -17,27 +17,27 @@
             "value": 0
         }
     ],
-    "Categorie": "Collier",
+    "Categorie": "Anneau droit",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 6
+            "value": 5
         }
     ],
     "Esquive": [
         {
             "percent": 0,
-            "value": 9
+            "value": 4
         }
     ],
     "Mana": [
         {
-            "percent": 17,
+            "percent": 0,
             "value": 0
         }
     ],
-    "Nom": "Pendentif des Chevaliers de Dol Amroth",
-    "Nom unique": "Pendentif des Chevaliers de Dol Amroth-3-2024-05-12-00-22-43",
+    "Nom": "Bague des Gardiens du Nord",
+    "Nom unique": "Bague des Gardiens du Nord-4-2024-05-15-15-21-51",
     "PV": [
         {
             "percent": 0,
@@ -65,7 +65,7 @@
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 6
+            "value": 0
         }
     ],
     "Regeneration Mana": [
@@ -95,7 +95,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 2
+            "value": 4
         }
     ],
     "Vigueur": [

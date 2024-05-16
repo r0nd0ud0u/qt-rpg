@@ -8,46 +8,46 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 113
+            "value": 225
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 225
         }
     ],
-    "Categorie": "Collier",
+    "Categorie": "Chaussures",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 6
+            "value": 5
         }
     ],
     "Esquive": [
         {
             "percent": 0,
-            "value": 9
+            "value": 4
         }
     ],
     "Mana": [
         {
-            "percent": 17,
+            "percent": 11,
             "value": 0
         }
     ],
-    "Nom": "Pendentif des Chevaliers de Dol Amroth",
-    "Nom unique": "Pendentif des Chevaliers de Dol Amroth-3-2024-05-12-00-22-43",
+    "Nom": "Chaussures des Dunedain",
+    "Nom unique": "Chaussures des Dunedain-9-2024-05-12-00-22-43",
     "PV": [
         {
-            "percent": 0,
+            "percent": 11,
             "value": 0
         }
     ],
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 80
         }
     ],
     "Pouvoir physique": [
@@ -58,20 +58,20 @@
     ],
     "Rage": [
         {
-            "percent": 0,
+            "percent": 7,
             "value": 0
         }
     ],
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 6
+            "value": 0
         }
     ],
     "Regeneration Mana": [
         {
             "percent": 0,
-            "value": 0
+            "value": 3
         }
     ],
     "Regeneration PV": [
@@ -83,7 +83,7 @@
     "Regeneration vigueur": [
         {
             "percent": 0,
-            "value": 0
+            "value": 5
         }
     ],
     "Taux aggro": [
@@ -95,7 +95,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 2
+            "value": 3
         }
     ],
     "Vigueur": [

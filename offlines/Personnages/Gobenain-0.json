@@ -7,14 +7,14 @@
     ],
     "Armure magique": [
         {
-            "Current": 100,
-            "Max": 100
+            "Current": 1000,
+            "Max": 1000
         }
     ],
     "Armure physique": [
         {
-            "Current": 100,
-            "Max": 100
+            "Current": 1000,
+            "Max": 1000
         }
     ],
     "Couleur": "red",
@@ -26,8 +26,8 @@
     ],
     "Esquive": [
         {
-            "Current": 20,
-            "Max": 20
+            "Current": 10,
+            "Max": 10
         }
     ],
     "Mana": [
@@ -41,20 +41,20 @@
 	"Photo": "Gobenain",
     "PV": [
         {
-            "Current": 1000,
-            "Max": 1000
+            "Current": 100000,
+            "Max": 100000
         }
     ],
     "Pouvoir magique": [
         {
-            "Current": 20,
-            "Max": 20
+            "Current": 200,
+            "Max": 200
         }
     ],
     "Pouvoir physique": [
         {
-            "Current": 20,
-            "Max": 20
+            "Current": 200,
+            "Max": 200
         }
     ],
     "Rage": [
@@ -83,8 +83,8 @@
     ],
     "Regeneration vigueur": [
         {
-            "Current": 0,
-            "Max": 0
+            "Current": 1,
+            "Max": 1
         }
     ],
     "Taux aggro": [
@@ -112,6 +112,6 @@
             "Max": 0
         }
     ],
-	"Rang": 1
+	"Rang": 4
 }
 

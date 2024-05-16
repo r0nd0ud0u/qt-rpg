@@ -1,33 +1,33 @@
 {
     "Aggro": 0,
-    "Cible": "Ennemie",
-    "Coût de mana": 0,
+    "Cible": "Soi-meme",
+    "Coût de mana": 1,
     "Coût de rage": 0,
-    "Coût de vigueur": 1,
+    "Coût de vigueur": 0,
     "Durée": 1,
     "Dégâts": 0,
     "Effet": [
         {
-            "Cible": "Ennemie",
-            "Portée": "Individuel",
-            "Stat": "PV",
-            "Tours actifs": 1,
-            "Type": "Changement par valeur",
-            "Valeur de l'effet": 0,
-            "Value": -25
-        },
-        {
-           "Cible": "Ennemie",
+            "Cible": "Soi-meme",
             "Portée": "Individuel",
             "Stat": "Armure physique",
-            "Tours actifs": 3,
+            "Tours actifs": 2,
             "Type": "Up par %",
             "Valeur de l'effet": 0,
-            "Value": -20
+            "Value": -99
+        },
+        {
+            "Cible": "Soi-meme",
+            "Portée": "Individuel",
+            "Stat": "Armure magique",
+            "Tours actifs": 2,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": -99
         }
     ],
     "Niveau": 1,
-    "Nom": "Bourrin",
+    "Nom": "Avocat Devodra",
     "Photo": "default.png",
     "Portée": "Individuel",
     "Regen mana": 0,

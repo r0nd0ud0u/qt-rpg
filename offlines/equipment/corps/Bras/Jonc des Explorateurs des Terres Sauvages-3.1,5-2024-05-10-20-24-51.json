@@ -14,20 +14,20 @@
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 113
         }
     ],
-    "Categorie": "Collier",
+    "Categorie": "Bras",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 6
+            "value": 0
         }
     ],
     "Esquive": [
         {
             "percent": 0,
-            "value": 9
+            "value": 0
         }
     ],
     "Mana": [
@@ -36,8 +36,8 @@
             "value": 0
         }
     ],
-    "Nom": "Pendentif des Chevaliers de Dol Amroth",
-    "Nom unique": "Pendentif des Chevaliers de Dol Amroth-3-2024-05-12-00-22-43",
+    "Nom": "Jonc des Explorateurs des Terres Sauvages",
+    "Nom unique": "Jonc des Explorateurs des Terres Sauvages-3.1.5-2024-05-10-20-24-51",
     "PV": [
         {
             "percent": 0,
@@ -53,19 +53,19 @@
     "Pouvoir physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 90
         }
     ],
     "Rage": [
         {
-            "percent": 0,
+            "percent": 17,
             "value": 0
         }
     ],
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 6
+            "value": 0
         }
     ],
     "Regeneration Mana": [
@@ -95,7 +95,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 2
+            "value": 0
         }
     ],
     "Vigueur": [

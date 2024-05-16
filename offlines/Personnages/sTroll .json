@@ -7,27 +7,27 @@
     ],
     "Armure magique": [
         {
-            "Current": 1324,
-            "Max": 1342
+            "Current": 3000,
+            "Max": 3000
         }
     ],
     "Armure physique": [
         {
-            "Current": 1234,
-            "Max": 1234
+            "Current": 1000,
+            "Max": 1000
         }
     ],
-    "Couleur": "red",
+    "Couleur": "orange",
     "Cout critique": [
         {
-            "Current": 20,
-            "Max": 20
+            "Current": 25,
+            "Max": 25
         }
     ],
     "Esquive": [
         {
-            "Current": 20,
-            "Max": 20
+            "Current": 8,
+            "Max": 8
         }
     ],
     "Mana": [
@@ -37,24 +37,23 @@
         }
     ],
     "Niveau": 2147483647,
-    "Nom": "Gobenain-2",
-	"Photo": "Gobenain",
+    "Nom": "sTroll",
     "PV": [
         {
-            "Current": 100250,
-            "Max": 100250
+            "Current": 1111111,
+            "Max": 1111111
         }
     ],
     "Pouvoir magique": [
         {
-            "Current": 620,
-            "Max": 620
+            "Current": 18,
+            "Max": 18
         }
     ],
     "Pouvoir physique": [
         {
-            "Current": 120,
-            "Max": 120
+            "Current": 200,
+            "Max": 200
         }
     ],
     "Rage": [
@@ -65,14 +64,14 @@
     ],
     "Regen vitesse": [
         {
-            "Current": 20,
-            "Max": 20
+            "Current": 18,
+            "Max": 18
         }
     ],
     "Regeneration Mana": [
         {
-            "Current": 25,
-            "Max": 25
+            "Current": 0,
+            "Max": 0
         }
     ],
     "Regeneration PV": [
@@ -103,7 +102,7 @@
     "Vigueur": [
         {
             "Current": 9999,
-            "Max": 9999
+            "Max": 99999
         }
     ],
     "Vitesse": [
@@ -112,6 +111,6 @@
             "Max": 0
         }
     ],
-	"Rang": 3
+	"Rang": 4
 }
 

@@ -8,7 +8,7 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 113
+            "value": 0
         }
     ],
     "Armure physique": [
@@ -21,13 +21,13 @@
     "Cout critique": [
         {
             "percent": 0,
-            "value": 6
+            "value": 3
         }
     ],
     "Esquive": [
         {
             "percent": 0,
-            "value": 9
+            "value":5
         }
     ],
     "Mana": [
@@ -36,8 +36,8 @@
             "value": 0
         }
     ],
-    "Nom": "Pendentif des Chevaliers de Dol Amroth",
-    "Nom unique": "Pendentif des Chevaliers de Dol Amroth-3-2024-05-12-00-22-43",
+    "Nom": "Pendentif des Explorateurs des Terres Sauvages",
+    "Nom unique": "Pendentif des Explorateurs des Terres Sauvages-7-2024-05-11-14-33-42",
     "PV": [
         {
             "percent": 0,
@@ -58,26 +58,26 @@
     ],
     "Rage": [
         {
-            "percent": 0,
+            "percent": 17,
             "value": 0
         }
     ],
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 6
+            "value": 0
         }
     ],
     "Regeneration Mana": [
         {
             "percent": 0,
-            "value": 0
+            "value": 6
         }
     ],
     "Regeneration PV": [
         {
             "percent": 0,
-            "value": 0
+            "value": 6
         }
     ],
     "Regeneration vigueur": [
@@ -95,7 +95,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 2
+            "value": 5
         }
     ],
     "Vigueur": [

@@ -14,20 +14,20 @@
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 113
         }
     ],
-    "Categorie": "Collier",
+    "Categorie": "Chaussures",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 6
+            "value": 0
         }
     ],
     "Esquive": [
         {
             "percent": 0,
-            "value": 9
+            "value": 0
         }
     ],
     "Mana": [
@@ -36,8 +36,8 @@
             "value": 0
         }
     ],
-    "Nom": "Pendentif des Chevaliers de Dol Amroth",
-    "Nom unique": "Pendentif des Chevaliers de Dol Amroth-3-2024-05-12-00-22-43",
+    "Nom": "Bottes des Nains de la Montagne Solitaire",
+    "Nom unique": "Bottes des Nains de la Montagne Solitaire-3.1.5-2024-05-12-19-26-04",
     "PV": [
         {
             "percent": 0,
@@ -47,7 +47,7 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 90
         }
     ],
     "Pouvoir physique": [
@@ -65,7 +65,7 @@
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 6
+            "value": 0
         }
     ],
     "Regeneration Mana": [
@@ -95,7 +95,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 2
+            "value": 5
         }
     ],
     "Vigueur": [

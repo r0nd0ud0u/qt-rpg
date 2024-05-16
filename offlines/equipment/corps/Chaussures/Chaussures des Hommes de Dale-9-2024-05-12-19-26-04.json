@@ -8,26 +8,26 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 113
+            "value": 338
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 563
         }
     ],
-    "Categorie": "Collier",
+    "Categorie": "Chaussures",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 6
+            "value": 0
         }
     ],
     "Esquive": [
         {
             "percent": 0,
-            "value": 9
+            "value": 5
         }
     ],
     "Mana": [
@@ -36,18 +36,18 @@
             "value": 0
         }
     ],
-    "Nom": "Pendentif des Chevaliers de Dol Amroth",
-    "Nom unique": "Pendentif des Chevaliers de Dol Amroth-3-2024-05-12-00-22-43",
+    "Nom": "Chaussures des Hommes de Dale",
+    "Nom unique": "Chaussures des Hommes de Dale-9-2024-05-12-19-26-04",
     "PV": [
         {
-            "percent": 0,
+            "percent": 17,
             "value": 0
         }
     ],
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 90
         }
     ],
     "Pouvoir physique": [
@@ -71,7 +71,7 @@
     "Regeneration Mana": [
         {
             "percent": 0,
-            "value": 0
+            "value": 12
         }
     ],
     "Regeneration PV": [
@@ -95,7 +95,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 2
+            "value": 0
         }
     ],
     "Vigueur": [

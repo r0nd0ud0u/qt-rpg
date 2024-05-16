@@ -8,36 +8,36 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 113
+            "value": 150
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 75
         }
     ],
-    "Categorie": "Collier",
+    "Categorie": "Chaussures",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 6
+            "value": 0
         }
     ],
     "Esquive": [
         {
             "percent": 0,
-            "value": 9
+            "value": 0
         }
     ],
     "Mana": [
         {
-            "percent": 17,
+            "percent": 0,
             "value": 0
         }
     ],
-    "Nom": "Pendentif des Chevaliers de Dol Amroth",
-    "Nom unique": "Pendentif des Chevaliers de Dol Amroth-3-2024-05-12-00-22-43",
+    "Nom": "Bottes de la Lumière d'Earendil",
+    "Nom unique": "Bottes de la Lumière d'Earendil-3-2024-05-15-15-21-51",
     "PV": [
         {
             "percent": 0,
@@ -65,13 +65,13 @@
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 6
+            "value": 0
         }
     ],
     "Regeneration Mana": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Regeneration PV": [
@@ -83,7 +83,7 @@
     "Regeneration vigueur": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Taux aggro": [
@@ -95,7 +95,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 2
+            "value": 0
         }
     ],
     "Vigueur": [

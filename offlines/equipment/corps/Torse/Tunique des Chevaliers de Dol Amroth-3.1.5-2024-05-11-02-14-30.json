@@ -14,20 +14,20 @@
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 225
         }
     ],
-    "Categorie": "Collier",
+    "Categorie": "Torse",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 6
+            "value": 0
         }
     ],
     "Esquive": [
         {
             "percent": 0,
-            "value": 9
+            "value": 0
         }
     ],
     "Mana": [
@@ -36,8 +36,8 @@
             "value": 0
         }
     ],
-    "Nom": "Pendentif des Chevaliers de Dol Amroth",
-    "Nom unique": "Pendentif des Chevaliers de Dol Amroth-3-2024-05-12-00-22-43",
+    "Nom": "Tunique des Chevaliers de Dol Amroth",
+    "Nom unique": "Tunique des Chevaliers de Dol Amroth-3-2024-05-11-02-14-30",
     "PV": [
         {
             "percent": 0,
@@ -65,7 +65,7 @@
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 6
+            "value": 0
         }
     ],
     "Regeneration Mana": [
@@ -83,7 +83,7 @@
     "Regeneration vigueur": [
         {
             "percent": 0,
-            "value": 0
+            "value": 6
         }
     ],
     "Taux aggro": [
@@ -95,7 +95,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 2
+            "value": 0
         }
     ],
     "Vigueur": [

@@ -8,36 +8,36 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 113
+            "value": 75
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 75
         }
     ],
-    "Categorie": "Collier",
+    "Categorie": "Bras",
     "Cout critique": [
         {
             "percent": 0,
-            "value": 6
+            "value": 0
         }
     ],
     "Esquive": [
         {
             "percent": 0,
-            "value": 9
+            "value": 0
         }
     ],
     "Mana": [
         {
-            "percent": 17,
+            "percent": 0,
             "value": 0
         }
     ],
-    "Nom": "Pendentif des Chevaliers de Dol Amroth",
-    "Nom unique": "Pendentif des Chevaliers de Dol Amroth-3-2024-05-12-00-22-43",
+    "Nom": "Bracelet des Berserkers du Mordor",
+    "Nom unique": "Bracelet des Berserkers du Mordor-3-2024-05-15-15-21-51",
     "PV": [
         {
             "percent": 0,
@@ -58,14 +58,14 @@
     ],
     "Rage": [
         {
-            "percent": 0,
+            "percent": 11,
             "value": 0
         }
     ],
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 6
+            "value": 0
         }
     ],
     "Regeneration Mana": [
@@ -83,7 +83,7 @@
     "Regeneration vigueur": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Taux aggro": [
@@ -95,7 +95,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 2
+            "value": 3
         }
     ],
     "Vigueur": [
