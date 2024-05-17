@@ -86,6 +86,9 @@ void utils_tests::GetRandomNb_works() {
   auto result = Utils::GetRandomNb(0, 100);
   QVERIFY(result >= 0);
   QVERIFY(result <= 100);
+
+  result = Utils::GetRandomNb(0, 0);
+  QVERIFY(result == 0);
 }
 
 int main(int argc, char *argv[]) {

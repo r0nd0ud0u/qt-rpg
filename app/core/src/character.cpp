@@ -627,17 +627,15 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
     const auto gs = Application::GetInstance().m_GameManager->m_GameState;
     // Condition number of died ennemies
     if (effect.effect == CONDITION_ENNEMIES_DIED) {
-        const auto gs = Application::GetInstance().m_GameManager->m_GameState;
-        if (gs->m_CurrentTurnNb > 1 &&
-            gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb - 1) > 0) {
-        } else {
-            conditionsAreOk = false;
-            allResultEffects.append(
-                QString(
-                    "Pas d'effect %1 activé. Aucun ennemi mort au tour précédent\n")
-                    .arg(effect.effect));
-            break;
-        }
+      if (gs->m_CurrentTurnNb > 1 && gs->m_DiedEnnemies.count(static_cast<int>(
+                                         gs->m_CurrentTurnNb - 1)) == 0) {
+        conditionsAreOk = false;
+        allResultEffects.append(
+            QString(
+                "Pas d'effect %1 activé. Aucun ennemi mort au tour précédent\n")
+                .arg(effect.effect));
+        break;
+      }
     }
     // Atk launched if the character did some damages on the previous turn
     if (effect.effect == CONDITION_DMG_PREV_TURN) {
@@ -1371,8 +1369,9 @@ std::pair<bool, int> Character::ProcessCriticalStrike(const AttaqueType &atk) {
           ->get_is_passive_enabled();
 
   bool isCrit = false;
-  if (randNb = Utils::GetRandomNb(0, 100); (isCritByBuf && atk.nature.is_heal) ||
-                                      (randNb >= 0 && randNb <= maxCritUsed)) {
+  if (randNb = Utils::GetRandomNb(0, 100);
+      (isCritByBuf && atk.nature.is_heal) ||
+      (randNb >= 0 && randNb <= maxCritUsed)) {
     // update buf dmg by crit capped
     if (critStat.m_CurrentValue > critCapped) {
       UpdateBuf(BufTypes::damageCritCapped,
