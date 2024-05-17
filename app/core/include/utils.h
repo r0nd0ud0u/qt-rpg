@@ -12,7 +12,7 @@ struct EffectsTypeNb {
   int debuf = 0;
   int hot = 0;
   int dot = 0;
-  int oneTurnHotDot = 0;
+  int oneTurnEffect = 0;
 };
 
 class Utils {

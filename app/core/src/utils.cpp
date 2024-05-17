@@ -69,7 +69,7 @@ Utils::GetNbOfActiveEffects(const std::vector<GameAtkEffects> &table) {
           nbs.debuf++;
         } else if (EFFECTS_HOT_OR_DOT.count(gae.allAtkEffects.effect) > 0 &&
                    gae.allAtkEffects.nbTurns == 1) {
-          nbs.oneTurnHotDot++;
+          nbs.oneTurnEffect++;
         }
       }
     });

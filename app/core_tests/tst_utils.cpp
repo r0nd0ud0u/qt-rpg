@@ -13,6 +13,7 @@ class utils_tests : public QObject {
 private slots:
   void CompareByLevel_works();
   void GetNbOfActiveEffects_works();
+  void GetRandomNb_works();
 };
 
 void utils_tests::CompareByLevel_works() {
@@ -36,7 +37,7 @@ void utils_tests::CompareByLevel_works() {
 
 void utils_tests::GetNbOfActiveEffects_works() {
   auto testCh = GetTestCharacter();
-  AttaqueType atk1 =
+  AttaqueType& atk1 =
       testCh.m_AttakList["mana-vigor-berseck-changepercent-hero"];
   auto pm = Application::GetInstance().m_GameManager->m_PlayersManager;
   pm->AddGameEffectOnAtk("Test", atk1, "Test", atk1.m_AllEffects, 1);
@@ -50,7 +51,7 @@ void utils_tests::GetNbOfActiveEffects_works() {
   QCOMPARE(result.value().debuf, 0);
   QCOMPARE(result.value().hot, 0);
   QCOMPARE(result.value().dot, 0);
-  QCOMPARE(result.value().oneTurnHotDot, 3);
+  QCOMPARE(result.value().oneTurnEffect, 3);
 
   // Test with several effects
   pm->m_AllEffectsOnGame["Test"].clear();
@@ -58,15 +59,33 @@ void utils_tests::GetNbOfActiveEffects_works() {
   pm->AddGameEffectOnAtk("Test", atk2, "Test", atk2.m_AllEffects, 1);
   result = Utils::GetNbOfActiveEffects(pm->m_AllEffectsOnGame["Test"]);
   QVERIFY(result.has_value());
+  // mana changement par valeur, value > 0, turns: 2
+  // pv up par valeur, value > 0, turns: 2
+  // mana up par %, value > 0, turns: 2
   QCOMPARE(result.value().buf, 3);
-  QCOMPARE(result.value().debuf, 7);
-  QCOMPARE(result.value().hot, 0);
-  QCOMPARE(result.value().dot, 0);
-  QCOMPARE(result.value().oneTurnHotDot, 2);
+  // mana changement par valeur, value < 0, turns: 2
+  // mana up par %, value < 0, turns: 2
+  // pv up par valeur, value < 0, turns: 2
+  QCOMPARE(result.value().debuf, 3);
+  // PV changement par valeur, value > 0, turns: 2
+  QCOMPARE(result.value().hot, 1);
+  // PV changement par valeur, value < 0, turns: 2
+  QCOMPARE(result.value().dot, 1);
+  // PV changement par valeur, value < 0, turns: 1
+  // PV changement par valeur, value > 0, turns: 1
+  // mana changement par valeur, value < 0, turns: 1
+  // mana changement par valeur, value > 0, turns: 1
+  QCOMPARE(result.value().oneTurnEffect, 4);
   const auto sumBufNbs = result.value().buf + result.value().debuf +
                          result.value().hot + result.value().dot +
-                         result.value().oneTurnHotDot;
+                         result.value().oneTurnEffect;
   QCOMPARE(atk2.m_AllEffects.size(), sumBufNbs);
+}
+
+void utils_tests::GetRandomNb_works() {
+  auto result = Utils::GetRandomNb(0, 100);
+  QVERIFY(result >= 0);
+  QVERIFY(result <= 100);
 }
 
 int main(int argc, char *argv[]) {
