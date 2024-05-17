@@ -5,6 +5,7 @@
 #include <set>
 #include <unordered_map>
 
+// test
 #include "rust-rpg-bridge/buffers.h"
 
 const QString OFFLINE_IMG = "./offlines/attak/img/";
