@@ -421,9 +421,6 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
   if (target == nullptr) {
     return std::make_pair("No  target character", newEffects);
   }
-  if (target->IsDead()) {
-    return std::make_pair("", newEffects);
-  }
 
   QString result;
   // TODO pass turn by arg
@@ -631,14 +628,17 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
     const auto gs = Application::GetInstance().m_GameManager->m_GameState;
     // Condition number of died ennemies
     if (effect.effect == CONDITION_ENNEMIES_DIED) {
-      {
-        conditionsAreOk = false;
-        allResultEffects.append(
-            QString(
-                "Pas d'effect %1 activé. Aucun ennemi mort au tour précédent\n")
-                .arg(effect.effect));
-        break;
-      }
+        const auto gs = Application::GetInstance().m_GameManager->m_GameState;
+        if (gs->m_CurrentTurnNb > 1 &&
+            gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb - 1) > 0) {
+        } else {
+            conditionsAreOk = false;
+            allResultEffects.append(
+                QString(
+                    "Pas d'effect %1 activé. Aucun ennemi mort au tour précédent\n")
+                    .arg(effect.effect));
+            break;
+        }
     }
     // Atk launched if the character did some damages on the previous turn
     if (effect.effect == CONDITION_DMG_PREV_TURN) {
@@ -755,7 +755,9 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     } else {
       amount = nbOfApplies * ep.value;
     }
-  } else if (ep.effect == EFFECT_PERCENT_CHANGE) {
+  } else if (ep.effect == EFFECT_PERCENT_CHANGE && ep.statsName == STATS_HP &&
+             ep.statsName == STATS_MANA && ep.statsName == STATS_VIGOR &&
+             ep.statsName == STATS_BERSECK) {
     // example for mana
     amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
   } else {
@@ -767,6 +769,7 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
   }
 
   // Assess buf/debuf
+  double coeffCrit = AttaqueType::COEFF_CRIT_DMG;
   int bufDebuf = 0;
   if (ep.statsName == STATS_HP) {
     if (const bool isHeal = ALLIES_TARGETS.count(ep.target) > 0 && amount > 0;
@@ -812,9 +815,9 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
       // Launcher TX
       if (const auto *bufCrit =
               m_AllBufs[static_cast<int>(BufTypes::damageCritCapped)];
-          bufCrit != nullptr) {
-        bufDebuf += static_cast<int>(update_damage_by_buf(
-            bufCrit->get_value(), bufCrit->get_is_percent(), amount));
+          bufCrit != nullptr && bufCrit->get_value() > 0) {
+        // improve crit coeff
+        coeffCrit += static_cast<double>(bufCrit->get_value()) / 100.0;
       }
       // Receiver RX
       if (const auto *bufRx =
@@ -830,7 +833,7 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
 
   // is it a critical strike
   if (isCrit && ep.statsName == STATS_HP && launch) {
-    output = 2 * amount;
+    output = std::lround(coeffCrit * static_cast<double>(amount));
   } else if (isCrit && launch) {
     output = std::lround(AttaqueType::COEFF_CRIT_STATS *
                          static_cast<double>(amount));
@@ -1092,6 +1095,9 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
                                                      Character *target,
                                                      const AttaqueType &atk) {
   if (target == nullptr) {
+    return std::make_pair("", 0);
+  }
+  if (target->IsDead()) {
     return std::make_pair("", 0);
   }
 
@@ -1356,8 +1362,6 @@ QString Character::ProcessAggro(const int atkValue, const int aggroValue,
  * @return
  */
 std::pair<bool, int> Character::ProcessCriticalStrike(const AttaqueType &atk) {
-  return std::make_pair(true, 0);
-
   const auto &critStat = m_Stats.m_AllStatsTable.at(STATS_CRIT);
   int64_t randNb = -1;
   const int critCapped = 60;
@@ -1373,7 +1377,7 @@ std::pair<bool, int> Character::ProcessCriticalStrike(const AttaqueType &atk) {
     // update buf dmg by crit capped
     if (critStat.m_CurrentValue > critCapped) {
       UpdateBuf(BufTypes::damageCritCapped,
-                min(0, critStat.m_CurrentValue - critCapped), false, "");
+                critStat.m_CurrentValue - critCapped, false, "");
     }
     // Reset isCritByBuf if it has been used
     if (isCritByBuf) {

@@ -21,13 +21,13 @@
     "Cout critique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 5
         }
     ],
     "Esquive": [
         {
             "percent": 0,
-            "value": 4
+            "value": 0
         }
     ],
     "Mana": [
@@ -40,20 +40,20 @@
     "Nom unique": "Masse de la Tour de Barad-dûr-4-2024-05-11-12-36-16",
     "PV": [
         {
-            "percent": 0,
+            "percent": 15,
             "value": 0
         }
     ],
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 80
+            "value": 160
         }
     ],
     "Pouvoir physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 80
         }
     ],
     "Rage": [
@@ -65,7 +65,7 @@
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 5
+            "value": 10
         }
     ],
     "Regeneration Mana": [
@@ -77,7 +77,7 @@
     "Regeneration PV": [
         {
             "percent": 0,
-            "value": 5
+            "value": 10
         }
     ],
     "Regeneration vigueur": [

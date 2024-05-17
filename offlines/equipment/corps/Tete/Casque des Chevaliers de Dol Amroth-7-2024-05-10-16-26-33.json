@@ -21,7 +21,7 @@
     "Cout critique": [
         {
             "percent": 0,
-            "value": 6
+            "value": 11
         }
     ],
     "Esquive": [
@@ -32,7 +32,7 @@
     ],
     "Mana": [
         {
-            "percent": 17,
+            "percent": 32,
             "value": 0
         }
     ],
@@ -47,13 +47,13 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 160
         }
     ],
     "Pouvoir physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 80
         }
     ],
     "Rage": [

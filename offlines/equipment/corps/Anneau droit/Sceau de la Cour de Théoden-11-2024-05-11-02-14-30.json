@@ -21,7 +21,7 @@
     "Cout critique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 10
         }
     ],
     "Esquive": [
@@ -40,7 +40,7 @@
     "Nom unique": "Sceau de la Cour de Théoden-11-2024-05-11-02-14-30",
     "PV": [
         {
-            "percent": 26,
+            "percent": 37,
             "value": 0
         }
     ],
@@ -100,7 +100,7 @@
     ],
     "Vigueur": [
         {
-            "percent": 26,
+            "percent": 37,
             "value": 0
         }
     ],

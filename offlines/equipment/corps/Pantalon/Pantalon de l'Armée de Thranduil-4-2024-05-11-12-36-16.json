@@ -47,13 +47,13 @@
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 60
         }
     ],
     "Pouvoir physique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 120
         }
     ],
     "Rage": [

@@ -1,0 +1,38 @@
+{
+    "Aggro": 0,
+    "Cible": "Ennemie",
+    "Coût de mana": 0,
+    "Coût de rage": 0,
+    "Coût de vigueur": 1,
+    "Durée": 1,
+    "Dégâts": 0,
+    "Effet": [
+        {
+            "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "PV",
+            "Tours actifs": 1,
+            "Type": "Changement par valeur",
+            "Valeur de l'effet": 0,
+            "Value": -25
+        },
+        {
+           "Cible": "Ennemie",
+            "Portée": "Individuel",
+            "Stat": "Armure physique",
+            "Tours actifs": 3,
+            "Type": "Up par %",
+            "Valeur de l'effet": 0,
+            "Value": -20
+        }
+    ],
+    "Niveau": 1,
+    "Nom": "Bourrin",
+    "Photo": "default.png",
+    "Portée": "Individuel",
+    "Regen mana": 0,
+    "Regen rage": 0,
+    "Regen vigueur": 0,
+    "Soin": 0
+}
+

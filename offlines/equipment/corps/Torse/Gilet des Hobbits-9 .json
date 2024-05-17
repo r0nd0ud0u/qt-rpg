@@ -21,13 +21,13 @@
     "Cout critique": [
         {
             "percent": 0,
-            "value": 4
+            "value": 18
         }
     ],
     "Esquive": [
         {
             "percent": 0,
-            "value": 3
+            "value": 0
         }
     ],
     "Mana": [
@@ -40,7 +40,7 @@
     "Nom unique": "Gilet des Hobbits-9",
     "PV": [
         {
-            "percent": 0,
+            "percent": 15,
             "value": 0
         }
     ],

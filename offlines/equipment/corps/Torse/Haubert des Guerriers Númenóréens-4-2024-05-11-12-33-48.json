@@ -8,7 +8,7 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 100
+            "value": 200
         }
     ],
     "Armure physique": [
@@ -40,7 +40,7 @@
     "Nom unique": "Haubert des Guerriers Númenóréens-4-2024-05-11-12-33-48",
     "PV": [
         {
-            "percent": 0,
+            "percent": 30,
             "value": 0
         }
     ],
@@ -58,7 +58,7 @@
     ],
     "Rage": [
         {
-            "percent": 0,
+            "percent": 15,
             "value": 0
         }
     ],

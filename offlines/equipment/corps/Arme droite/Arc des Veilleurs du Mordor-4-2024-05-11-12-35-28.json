@@ -59,13 +59,13 @@
     "Rage": [
         {
             "percent": 0,
-            "value": 0
+            "value": 11
         }
     ],
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Regeneration Mana": [
@@ -100,7 +100,7 @@
     ],
     "Vigueur": [
         {
-            "percent": 15,
+            "percent": 26,
             "value": 0
         }
     ],

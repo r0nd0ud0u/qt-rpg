@@ -4,7 +4,7 @@
     "Coût de rage": 0,
     "Coût de vigueur": 0,
     "Effet": [
-      {
+        {
             "Cible": "Ennemie",
             "Portée": "Zone",
             "Stat": "PV",
@@ -13,7 +13,7 @@
             "Valeur de l'effet": 0,
             "Value": -220
         },
-       {
+        {
             "Cible": "Ennemie",
             "Portée": "Zone",
             "Stat": "Armure magique",
@@ -22,7 +22,7 @@
             "Valeur de l'effet": 0,
             "Value": -30
         },
-     {
+        {
             "Cible": "Ennemie",
             "Portée": "Zone",
             "Stat": "Armure physique",
@@ -38,3 +38,4 @@
     "Photo": "default.png",
     "Portée": "Zone"
 }
+
