@@ -21,7 +21,7 @@
     "Cout critique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 5
         }
     ],
     "Esquive": [
@@ -58,7 +58,7 @@
     ],
     "Rage": [
         {
-            "percent": 15,
+            "percent": 30,
             "value": 0
         }
     ],
@@ -95,7 +95,7 @@
     "Taux rage": [
         {
             "percent": 0,
-            "value": 4
+            "value": 8
         }
     ],
     "Vigueur": [

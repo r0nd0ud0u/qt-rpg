@@ -40,20 +40,20 @@
     "Nom unique": "Anneau des Explorateurs des Terres Sauvages-9-2024-05-12-00-31-47",
     "PV": [
         {
-            "percent": 17,
+            "percent": 32,
             "value": 0
         }
     ],
     "Pouvoir magique": [
         {
             "percent": 0,
-            "value": 0
+            "value": 80
         }
     ],
     "Pouvoir physique": [
         {
             "percent": 0,
-            "value": 60
+            "value": 300
         }
     ],
     "Rage": [

@@ -8,13 +8,13 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 300
+            "value": 400
         }
     ],
     "Armure physique": [
         {
             "percent": 0,
-            "value": 150
+            "value": 250
         }
     ],
     "Categorie": "Tete",
@@ -40,7 +40,7 @@
     "Nom unique": "Heaume des Guerriers de Rhûn-4.1.5-2024-05-12-19-30-14",
     "PV": [
         {
-            "percent": 0,
+            "percent": 15,
             "value": 0
         }
     ],
@@ -100,7 +100,7 @@
     ],
     "Vigueur": [
         {
-            "percent": 0,
+            "percent": 15,
             "value": 0
         }
     ],

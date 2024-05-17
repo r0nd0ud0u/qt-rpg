@@ -21,7 +21,7 @@
     "Cout critique": [
         {
             "percent": 0,
-            "value": 6
+            "value": 11
         }
     ],
     "Esquive": [
@@ -40,7 +40,7 @@
     "Nom unique": "Amulette des Hommes de Dale-3.1.5-2024-05-10-19-32-25",
     "PV": [
         {
-            "percent": 0,
+            "percent": 15,
             "value": 0
         }
     ],
@@ -65,7 +65,7 @@
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 6
+            "value": 11
         }
     ],
     "Regeneration Mana": [

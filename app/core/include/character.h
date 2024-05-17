@@ -39,6 +39,7 @@ public:
   AttaqueNature nature;
 
   static constexpr double COEFF_CRIT_STATS = 1.5;
+  static constexpr double COEFF_CRIT_DMG = 2.0;
 };
 
 enum class BufTypes {

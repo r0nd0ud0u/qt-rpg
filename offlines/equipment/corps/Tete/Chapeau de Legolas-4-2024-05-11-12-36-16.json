@@ -8,7 +8,7 @@
     "Armure magique": [
         {
             "percent": 0,
-            "value": 200
+            "value": 300
         }
     ],
     "Armure physique": [
@@ -27,7 +27,7 @@
     "Esquive": [
         {
             "percent": 0,
-            "value": 0
+            "value": 4
         }
     ],
     "Mana": [
@@ -65,7 +65,7 @@
     "Regen vitesse": [
         {
             "percent": 0,
-            "value": 0
+            "value": 5
         }
     ],
     "Regeneration Mana": [
