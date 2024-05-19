@@ -752,9 +752,9 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     } else {
       amount = nbOfApplies * ep.value;
     }
-  } else if (ep.effect == EFFECT_PERCENT_CHANGE && ep.statsName == STATS_HP &&
-             ep.statsName == STATS_MANA && ep.statsName == STATS_VIGOR &&
-             ep.statsName == STATS_BERSECK) {
+  } else if (ep.effect == EFFECT_PERCENT_CHANGE && (ep.statsName == STATS_HP ||
+             ep.statsName == STATS_MANA || ep.statsName == STATS_VIGOR ||
+                                                    ep.statsName == STATS_BERSECK)) {
     // example for mana
     amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
   } else {
