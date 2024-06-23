@@ -12,7 +12,7 @@ struct EffectsTypeNb {
   int debuf = 0;
   int hot = 0;
   int dot = 0;
-  int oneTurnHotDot = 0;
+  int oneTurnEffect = 0;
 };
 
 class Utils {
@@ -23,6 +23,7 @@ public:
   static QString getCurrentTimeAsString();
   static std::optional<EffectsTypeNb>
   GetNbOfActiveEffects(const std::vector<GameAtkEffects> &table);
+  static int64_t GetRandomNb(const int64_t min, const int64_t max );
 };
 
 #endif // UTILS_H

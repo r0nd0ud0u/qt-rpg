@@ -16,7 +16,7 @@ private slots:
   void GetBufDebufNumbers_works();
   void InitAggroOnTurn_works();
   void SetStatsOnEffect_works();
-  void TestAtkBlocked();
+  void ApplyAtkEffect_AtkBlocked();
 };
 
 void character_tests::TestThalia_works() {
@@ -200,7 +200,7 @@ void character_tests::SetStatsOnEffect_works(){
     QCOMPARE(100, armPhy.m_CurrentValue);
 }
 
-void character_tests::TestAtkBlocked() {
+void character_tests::ApplyAtkEffect_AtkBlocked() {
     // boss
     auto testCh = GetTestCharacter();
     testCh.m_type = characType::Boss;
