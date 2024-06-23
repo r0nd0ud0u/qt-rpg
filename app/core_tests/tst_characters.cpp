@@ -16,7 +16,7 @@ private slots:
   void GetBufDebufNumbers_works();
   void InitAggroOnTurn_works();
   void SetStatsOnEffect_works();
-  void ApplyAtkEffectAtkBlocked();
+  void ApplyAtkEffect_AtkBlocked();
 };
 
 void character_tests::TestThalia_works() {
