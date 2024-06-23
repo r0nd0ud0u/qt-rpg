@@ -15,6 +15,8 @@ public:
     explicit EditAtkPanel(QWidget *parent = nullptr);
     ~EditAtkPanel();
 
+    void UpdatePanel();
+
 private:
     Ui::EditAtkPanel *ui;
 };

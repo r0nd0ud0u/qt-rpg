@@ -12,3 +12,7 @@ EditAtkPanel::~EditAtkPanel()
 {
     delete ui;
 }
+
+void EditAtkPanel::UpdatePanel(){
+
+}

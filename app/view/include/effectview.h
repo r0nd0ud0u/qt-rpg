@@ -5,6 +5,8 @@
 
 #include "effect.h"
 
+#include "editatkpanel.h"
+
 namespace Ui {
 class EffectView;
 }
@@ -18,14 +20,18 @@ public:
     ~EffectView();
     // void InitComboBoxes();
     const std::vector<effectParam>& GetTable() const;
-    // void InitValues(const std::vector<effectParam>& table);
-    // void SetIndex(const int index);
-    // void SetVectorSize(const size_t size);
+    void SetVectorSize(const size_t size);
+    void InitValues(const std::vector<effectParam>& table);
+    void SetIndex(const int index);
+    std::vector<EditAtkPanel *> m_AtkPanels;
+    void InitEditAtkPanels();
 
 signals:
     void SigTableUpdated();
 
 private slots:
+
+    void AddEditAtkPanel(const effectParam& ep);
     // void on_effect_comboBox_currentTextChanged(const QString &arg1);
 
     // void on_value_spinBox_valueChanged(int arg1);
@@ -46,7 +52,7 @@ private slots:
 private:
     Ui::EffectView *ui;
     bool m_FirstShow = false;
-    std::vector<std::vector<effectParam>> m_EffectTable; // each atk contains 3 effects at max.
+    std::vector<std::vector<effectParam>> m_EffectTable;
     int m_Index = 0;
 
 

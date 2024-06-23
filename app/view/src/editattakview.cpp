@@ -60,9 +60,7 @@ void EditAttakView::InitView() {
   if (!m_AttakList.empty()) {
     const int firstIdx = 0;
     ui->atk_list_view->setCurrentIndex(model->index(firstIdx));
-    // send index of atk to update effect table
-    //ui->effect_widget->SetVectorSize(m_AttakList.size());
-    //ui->effect_widget->SetIndex(firstIdx);
+    ui->effect_widget->SetVectorSize(m_AttakList.size());
     InitComboBoxes();
     //ui->effect_widget->InitComboBoxes();
     UpdateValues(m_AttakList.front(), firstIdx);
@@ -260,8 +258,8 @@ void EditAttakView::UpdateValues(const EditAttak &selectedAttak,
   ui->level_spinBox->setValue(selectedAttak.type.level);
 
   // update effect
-  //ui->effect_widget->SetIndex(index);
-  //ui->effect_widget->InitValues(selectedAttak.type.m_AllEffects);
+  ui->effect_widget->SetIndex(index);
+  ui->effect_widget->InitValues(selectedAttak.type.m_AllEffects);
 }
 
 void EditAttakView::EnableAllWidgets(const bool value) const {

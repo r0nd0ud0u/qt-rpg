@@ -67,20 +67,13 @@ EffectView::~EffectView() { delete ui; }
 //   ReconnectComboSig();
 // }
 
-// void EffectView::SetIndex(const int index) {
-//     m_Index = index;
-//     std::vector<effectParam> newEffect;
-//     newEffect.resize(1);
-//     m_EffectTable.push_back(newEffect);
-// }
-
-// void EffectView::SetVectorSize(const size_t size){
-//     m_EffectTable.clear();
-//     m_EffectTable.resize(size);
-//     for(auto & effect : m_EffectTable){
-//         effect.resize(1);
-//     }
-// }
+void EffectView::SetVectorSize(const size_t size){
+    m_EffectTable.clear();
+    m_EffectTable.resize(size);
+}
+void EffectView::SetIndex(const int index) {
+    m_Index = index;
+}
 
 // void EffectView::on_effect_comboBox_currentTextChanged(const QString &arg1) {
 //   m_EffectTable[m_Index][0].effect = arg1;
@@ -129,7 +122,7 @@ const std::vector<effectParam> &EffectView::GetTable() const { return m_EffectTa
 //   emit SigTableUpdated();
 // }
 
-// void EffectView::InitValues(const std::vector<effectParam>& table){
+void EffectView::InitValues(const std::vector<effectParam>& table){
 //     DisconnectComboSig();
 
 //     if(!table.empty() && (!table[0].statsName.isEmpty() || !table[0].effect.isEmpty())){
@@ -155,17 +148,10 @@ const std::vector<effectParam> &EffectView::GetTable() const { return m_EffectTa
 
 //     ReconnectComboSig();
 
-//     //update effect list,
-//     for(int i= 0; i< table.size(); i++){
-//         if(i == 1){
-//             // TODO at the time we display only 3 effets
-//             // some effects such eveil de la foret has 5 effects, redesign should be done to display them
-//             break;
-//         }
-//         m_EffectTable[m_Index][i] = table[i];
-//     }
-
-// }
+    //update effect list,
+    m_EffectTable[m_Index] = table;
+    InitEditAtkPanels();
+}
 
 // void EffectView::on_reach_comboBox_currentTextChanged(const QString &arg1)
 // {
@@ -202,3 +188,33 @@ const std::vector<effectParam> &EffectView::GetTable() const { return m_EffectTa
 //     m_EffectTable[m_Index][0].updated = true;
 //     emit SigTableUpdated();
 // }
+
+void EffectView::InitEditAtkPanels() {
+    auto* layout = ui->main_widget->layout();
+    if(layout == nullptr){
+        return;
+    }
+    // for(int i = 0; i< ui->main_widget->layout()->count(); i++){
+    //     auto *widget = layout->itemAt(i)->widget();
+    //     widget->hide();
+    //     layout->removeItem(layout->itemAt(i));
+    //     layout->removeWidget(widget);
+    //     delete widget;
+    // }
+    while (auto item = layout->takeAt(0)) {
+        delete item->widget();
+    }
+    m_AtkPanels.clear();
+    for (const auto &it : m_EffectTable[m_Index]) {
+        AddEditAtkPanel(it);
+    }
+}
+
+void EffectView::AddEditAtkPanel(const effectParam& ep) {
+    auto *panel = new EditAtkPanel();
+    panel->UpdatePanel();
+    ui->main_widget->layout()->addWidget(panel);
+    m_AtkPanels.push_back(panel);
+    // connect(bossPanel, &BossPanel::SigSelectedCharacterOnPanel, this,
+    //         &BossesView::SlotClickedOnPanel);
+}
