@@ -69,11 +69,18 @@ Utils::GetNbOfActiveEffects(const std::vector<GameAtkEffects> &table) {
           nbs.debuf++;
         } else if (EFFECTS_HOT_OR_DOT.count(gae.allAtkEffects.effect) > 0 &&
                    gae.allAtkEffects.nbTurns == 1) {
-          nbs.oneTurnHotDot++;
+          nbs.oneTurnEffect++;
         }
       }
     });
     return std::optional(nbs);
   }
   return std::nullopt;
+}
+
+int64_t Utils::GetRandomNb(const int64_t min, const int64_t max ){
+    if(min == max){
+        return min;
+    }
+    return (rand() % (max - min)) + 1;
 }

@@ -34,7 +34,7 @@
     ],
     "Forme": "Standard",
     "Niveau": 1,
-    "Nom": "mana-vigor-berseck-changepercent-ennemy",
+    "Nom": "mana-vigor-berseck-changepercent-hero",
     "Photo": "default.png",
     "Portée": "Zone"
 }

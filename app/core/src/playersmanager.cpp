@@ -693,7 +693,7 @@ PlayersManager::ProcessDamageTXHealNeedyAlly(const characType &launcherType,
   if (alliesStr.empty()) {
     return "";
   }
-  const auto randNb = get_random_nb(0, alliesStr.size() - 1);
+  const auto randNb = Utils::GetRandomNb(0, alliesStr.size() - 1);
   auto *c = GetCharacterByName(alliesStr[randNb]);
   if (c == nullptr) {
     return "";
@@ -747,8 +747,8 @@ void PlayersManager::ProcessIsRandomTarget() const {
                 });
 
   // get random numbers
-  const int64_t randHeroNb = get_random_nb(0, m_HeroesList.size() - 1);
-  const int64_t randBossNb = get_random_nb(0, m_BossesList.size() - 1);
+  const int64_t randHeroNb = Utils::GetRandomNb(0, m_HeroesList.size() - 1);
+  const int64_t randBossNb = Utils::GetRandomNb(0, m_BossesList.size() - 1);
 
   // set who is the random reach
   auto *hero = m_HeroesList[randHeroNb];
@@ -802,7 +802,7 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
     return newStuffs;
   }
   for (int i = 0; i < nbOfLoots; i++) {
-    const auto randProba = static_cast<uint64_t>(get_random_nb(0, 100));
+    const auto randProba = static_cast<uint64_t>(Utils::GetRandomNb(0, 100));
     // Assess the rank of the loot
     for (int j = 0; j < probaLoot.size() - 1; j++) {
       if (randProba >= probaLoot[j] && randProba < probaLoot[j + 1]) {
@@ -818,10 +818,10 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
     // Create stuff
     Stuff stuff;
     // add name
-    const auto randEquipType = get_random_nb(0, RAND_EQUIP_ON_BODY.size() - 1);
+    const auto randEquipType = Utils::GetRandomNb(0, RAND_EQUIP_ON_BODY.size() - 1);
     const auto &equipType = RAND_EQUIP_ON_BODY.at(randEquipType);
     const auto indexEquipName =
-        get_random_nb(0, m_RandomEquipName[equipType].size() - 1);
+        Utils::GetRandomNb(0, m_RandomEquipName[equipType].size() - 1);
     stuff.m_UniqueName =
         QString("%1-%2-%3")
             .arg(m_RandomEquipName[equipType].at(indexEquipName))
@@ -847,7 +847,7 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
     // one stat can be updated only once
     for (int k = 0; k < nbOfEffets; k++) {
       // get a random bonus in index in bonusUsed
-      const auto index = get_random_nb(0, bonusUsed.size() - 1);
+      const auto index = Utils::GetRandomNb(0, bonusUsed.size() - 1);
       auto localBonusIt = bonusUsed.begin();
       std::advance(localBonusIt, index);
 
@@ -943,7 +943,7 @@ PlayersManager::GetHeroMostAggro() const {
           mostAggroCh.push_back(c);
         }
       });
-  const auto randNb = get_random_nb(0, mostAggroCh.size() - 1);
+  const auto randNb = Utils::GetRandomNb(0, mostAggroCh.size() - 1);
 
   return std::make_pair(mostAggroCh[randNb]->m_Name,
                         mostAggroCh[randNb]

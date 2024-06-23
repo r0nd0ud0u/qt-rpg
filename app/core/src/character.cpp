@@ -10,7 +10,6 @@
 #include <QtDebug>
 
 #include "Application.h"
-#include "rust-rpg-bridge/utils.h"
 
 #include "playersmanager.h"
 #include "utils.h"
@@ -628,17 +627,15 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
     const auto gs = Application::GetInstance().m_GameManager->m_GameState;
     // Condition number of died ennemies
     if (effect.effect == CONDITION_ENNEMIES_DIED) {
-        const auto gs = Application::GetInstance().m_GameManager->m_GameState;
-        if (gs->m_CurrentTurnNb > 1 &&
-            gs->m_DiedEnnemies.count(gs->m_CurrentTurnNb - 1) > 0) {
-        } else {
-            conditionsAreOk = false;
-            allResultEffects.append(
-                QString(
-                    "Pas d'effect %1 activé. Aucun ennemi mort au tour précédent\n")
-                    .arg(effect.effect));
-            break;
-        }
+      if (gs->m_CurrentTurnNb > 1 && gs->m_DiedEnnemies.count(static_cast<int>(
+                                         gs->m_CurrentTurnNb - 1)) == 0) {
+        conditionsAreOk = false;
+        allResultEffects.append(
+            QString(
+                "Pas d'effect %1 activé. Aucun ennemi mort au tour précédent\n")
+                .arg(effect.effect));
+        break;
+      }
     }
     // Atk launched if the character did some damages on the previous turn
     if (effect.effect == CONDITION_DMG_PREV_TURN) {
@@ -755,9 +752,9 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     } else {
       amount = nbOfApplies * ep.value;
     }
-  } else if (ep.effect == EFFECT_PERCENT_CHANGE && ep.statsName == STATS_HP &&
-             ep.statsName == STATS_MANA && ep.statsName == STATS_VIGOR &&
-             ep.statsName == STATS_BERSECK) {
+  } else if (ep.effect == EFFECT_PERCENT_CHANGE && (ep.statsName == STATS_HP ||
+             ep.statsName == STATS_MANA || ep.statsName == STATS_VIGOR ||
+                                                    ep.statsName == STATS_BERSECK)) {
     // example for mana
     amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
   } else {
@@ -958,7 +955,7 @@ int Character::ProcessDecreaseOnTurn(const effectParam &ep) const {
     // can be better and accurate but behavior is enough this way
     const int stepLimit = (intMax / ep.subValueEffect) + 1;
     const auto maxLimit = stepLimit * counter;
-    if (const auto randNb = get_random_nb(intMin, intMax);
+    if (const auto randNb = Utils::GetRandomNb(intMin, intMax);
         randNb >= 0 && randNb <= maxLimit) {
       nbOfApplies++;
     } else {
@@ -976,7 +973,7 @@ QString Character::ProcessDecreaseByTurn(const effectParam &ep) const {
   const int intMax = 100;
   const int stepLimit = (intMax / ep.nbTurns); // get percentual
   const auto maxLimit = stepLimit * (ep.nbTurns - ep.counterTurn);
-  if (const auto randNb = get_random_nb(intMin, intMax);
+  if (const auto randNb = Utils::GetRandomNb(intMin, intMax);
       !(randNb >= 0 && randNb <= maxLimit)) {
     output = QString("%1 n'a pas d'effet").arg(EFFECT_NB_DECREASE_BY_TURN);
   }
@@ -1283,7 +1280,7 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
     if (healTxTable.find(gs->m_CurrentTurnNb - 1) == healTxTable.end()) {
       output = QString("Attaque non répétée. Pas de heal au précédent tour.");
     } else {
-      const auto randNb = get_random_nb(0, effect.value);
+      const auto randNb = Utils::GetRandomNb(0, effect.value);
       if (randNb <= effect.value) {
         nbOfApplies += effect.subValueEffect;
         UpdateBuf(BufTypes::applyEffectInit, nbOfApplies, false, "");
@@ -1372,8 +1369,9 @@ std::pair<bool, int> Character::ProcessCriticalStrike(const AttaqueType &atk) {
           ->get_is_passive_enabled();
 
   bool isCrit = false;
-  if (randNb = get_random_nb(0, 100); (isCritByBuf && atk.nature.is_heal) ||
-                                      (randNb >= 0 && randNb <= maxCritUsed)) {
+  if (randNb = Utils::GetRandomNb(0, 100);
+      (isCritByBuf && atk.nature.is_heal) ||
+      (randNb >= 0 && randNb <= maxCritUsed)) {
     // update buf dmg by crit capped
     if (critStat.m_CurrentValue > critCapped) {
       UpdateBuf(BufTypes::damageCritCapped,
@@ -1409,7 +1407,7 @@ std::pair<bool, QString> Character::IsDodging(const AttaqueType &atk) const {
   const auto &stat = m_Stats.m_AllStatsTable.at(STATS_DODGE);
   const int DEFAULT_RAND = -1;
   int64_t randNb = DEFAULT_RAND;
-  if (randNb = get_random_nb(0, 100);
+  if (randNb = Utils::GetRandomNb(0, 100);
       randNb >= 0 && randNb <= stat.m_CurrentValue) {
     isDodging = true;
   }
@@ -1710,7 +1708,7 @@ std::optional<int> Character::GetRandomAtkNumber() {
   if (m_AttakList.empty()) {
     return nullopt;
   }
-  return static_cast<int>(get_random_nb(1, m_AttakList.size()));
+  return static_cast<int>(Utils::GetRandomNb(1, m_AttakList.size()));
 }
 
 /**
