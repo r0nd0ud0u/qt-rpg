@@ -32,6 +32,7 @@ signals:
 private slots:
 
     void AddEditAtkPanel(const effectParam& ep);
+    void SlotValueChange();
     // void on_effect_comboBox_currentTextChanged(const QString &arg1);
 
     // void on_value_spinBox_valueChanged(int arg1);

@@ -24,14 +24,14 @@
    <item>
     <widget class="QComboBox" name="stats_comboBox">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QComboBox" name="effect_comboBox">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -44,28 +44,28 @@
    <item>
     <widget class="QSpinBox" name="effect_value_spinbox">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QComboBox" name="target_comboBox">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QComboBox" name="reach_comboBox">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QSpinBox" name="value_spinBox">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="minimum">
       <number>-99999999</number>
@@ -78,7 +78,7 @@
    <item>
     <widget class="QSpinBox" name="nb_turns_spinBox">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
     </widget>
    </item>

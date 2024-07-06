@@ -95,23 +95,8 @@ void EditAttakView::Apply() {
   // disable button
   ui->apply_button->setEnabled(false);
 
-  // Because the current table of atk can make visible only 3 effects of one atk
-  // we have to copy the followings ones after applying.
-  std::vector<effectParam> tmpTable;
-  const int MAX_CUR_EFFECTS = 3;
-  if (m_AttakList[GetIndexSelectedRow()].type.m_AllEffects.size() >
-      MAX_CUR_EFFECTS) {
-    for (int i = MAX_CUR_EFFECTS;
-         i < m_AttakList[GetIndexSelectedRow()].type.m_AllEffects.size(); i++) {
-      tmpTable.push_back(
-          m_AttakList[GetIndexSelectedRow()].type.m_AllEffects[i]);
-    }
-  }
   m_AttakList[GetIndexSelectedRow()].type.m_AllEffects =
       ui->effect_widget->GetTable();
-  for (const auto &atk : tmpTable) {
-    m_AttakList[GetIndexSelectedRow()].type.m_AllEffects.push_back(atk);
-  }
 }
 
 void EditAttakView::Save() {

@@ -10,35 +10,6 @@ EffectView::EffectView(QWidget *parent)
 
 EffectView::~EffectView() { delete ui; }
 
-// void EffectView::DisconnectComboSig()
-// {
-//     disconnect(ui->effect_comboBox, &QComboBox::currentTextChanged, nullptr,
-//                nullptr);
-//     disconnect(ui->stats_comboBox, &QComboBox::currentTextChanged, nullptr,
-//                nullptr);
-//     // target
-//     disconnect(ui->target_comboBox, &QComboBox::currentTextChanged, nullptr,
-//                nullptr);
-//     // reach
-//     disconnect(ui->reach_comboBox, &QComboBox::currentTextChanged, nullptr,
-//                nullptr);
-// }
-
-// void EffectView::ReconnectComboSig()
-// {
-//     connect(ui->effect_comboBox, &QComboBox::currentTextChanged, this,
-//             &EffectView::on_effect_comboBox_currentTextChanged);
-//     // stats
-//     connect(ui->stats_comboBox, &QComboBox::currentTextChanged, this,
-//             &EffectView::on_stats_comboBox_currentTextChanged);
-//     // target
-//     connect(ui->target_comboBox, &QComboBox::currentTextChanged, this,
-//             &EffectView::on_target_comboBox_currentTextChanged);
-//     // reach
-//     connect(ui->reach_comboBox, &QComboBox::currentTextChanged, this,
-//             &EffectView::on_reach_comboBox_currentTextChanged);
-// }
-
 // void EffectView::InitComboBoxes() {
 //   // init only one the combo boxes
 //   if (m_FirstShow) {
@@ -123,31 +94,6 @@ const std::vector<effectParam> &EffectView::GetTable() const { return m_EffectTa
 // }
 
 void EffectView::InitValues(const std::vector<effectParam>& table){
-//     DisconnectComboSig();
-
-//     if(!table.empty() && (!table[0].statsName.isEmpty() || !table[0].effect.isEmpty())){
-//         ui->effect_comboBox->setCurrentText(table[0].effect);
-//         ui->value_spinBox->setValue(table[0].value);
-//         ui->nb_turns_spinBox->setValue(table[0].nbTurns);
-//         ui->target_comboBox->setCurrentText(table[0].target);
-//         ui->reach_comboBox->setCurrentText(table[0].reach);
-//         ui->stats_comboBox->setCurrentText(table[0].statsName);
-//         ui->effect_value_spinbox->setValue(table[0].subValueEffect);
-//         ui->checkBox->setCheckState(Qt::CheckState::Checked);
-//     } else{
-//         ui->effect_comboBox->setCurrentText("");
-//         ui->target_comboBox->setCurrentText("");
-//         ui->reach_comboBox->setCurrentText("");
-//         ui->stats_comboBox->setCurrentText("");
-//         ui->nb_turns_spinBox->setValue(0);
-//         ui->value_spinBox->setValue(0);
-//         ui->effect_value_spinbox->setEnabled(false);
-//         ui->checkBox->setEnabled(true);
-//         ui->checkBox->setCheckState(Qt::CheckState::Unchecked);
-//     }
-
-//     ReconnectComboSig();
-
     //update effect list,
     m_EffectTable[m_Index] = table;
     InitEditAtkPanels();
@@ -212,9 +158,18 @@ void EffectView::InitEditAtkPanels() {
 
 void EffectView::AddEditAtkPanel(const effectParam& ep) {
     auto *panel = new EditAtkPanel();
-    panel->UpdatePanel();
+    panel->UpdatePanel(ep);
     ui->main_widget->layout()->addWidget(panel);
     m_AtkPanels.push_back(panel);
-    // connect(bossPanel, &BossPanel::SigSelectedCharacterOnPanel, this,
-    //         &BossesView::SlotClickedOnPanel);
+    connect(panel, &EditAtkPanel::SigValueChanged, this,
+            &EffectView::SlotValueChange);
+}
+
+void EffectView::SlotValueChange(){
+    std::vector<effectParam> tmp;
+    for(const auto& panel : m_AtkPanels){
+        tmp.push_back(panel->GetEffectParam());
+    }
+    m_EffectTable[m_Index] = tmp;
+    emit SigTableUpdated();
 }
