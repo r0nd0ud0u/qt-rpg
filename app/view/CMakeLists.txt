@@ -34,6 +34,7 @@ set(SOURCES
         src/equiponbodypanel.cpp
         src/equiponbodyview.cpp
         src/gamecharacters.cpp
+        src/editatkpanel.cpp
 )
 
 set(HEADERS
@@ -63,6 +64,7 @@ set(HEADERS
         include/equiponbodypanel.h
         include/equiponbodyview.h
         include/gamecharacters.h
+        include/editatkpanel.h
 )
 
 set(FORMS
@@ -90,7 +92,7 @@ set(FORMS
         forms/equiponbodypanel.ui
         forms/equiponbodyview.ui
         forms/gamecharacters.ui
-
+        forms/editatkpanel.ui
     )
 
 set(RESOURCES

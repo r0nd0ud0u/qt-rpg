@@ -25,6 +25,10 @@ CharacterWindow::CharacterWindow(QWidget *parent)
 CharacterWindow::~CharacterWindow() { delete ui; }
 
 void CharacterWindow::InitWindow(const tabType &type, const bool setIndex) {
+  if (static_cast<int>(type) == ui->tabWidget->currentIndex()) {
+    // avoid to re-init twice the same window
+    return;
+  }
   if (setIndex) {
     ui->tabWidget->setCurrentIndex(static_cast<int>(type));
   }
@@ -54,43 +58,41 @@ void CharacterWindow::on_pushButton_clicked() {
     ui->edit_atk_tab->Save();
   }
   if (type == tabType::character) {
-      ui->character_def->AddCharacter(m_CurCharacter);
-      emit SigNewCharacter(m_CurCharacter);
-      m_CurCharacter = nullptr;
+    ui->character_def->AddCharacter(m_CurCharacter);
+    emit SigNewCharacter(m_CurCharacter);
+    m_CurCharacter = nullptr;
   }
   Apply();
 }
 
-void CharacterWindow::on_apply_pushButton_clicked() {
-    Apply();
-}
+void CharacterWindow::on_apply_pushButton_clicked() { Apply(); }
 
-void CharacterWindow::Apply(){
-    const auto type = static_cast<tabType>(ui->tabWidget->currentIndex());
-    auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
-    if (type == tabType::stuff) {
-        EditStuff es = ui->edit_stuff_view->Save();
-        if(es.m_Name.isEmpty()){
-            // name is empty at launch of the window
-            // and is reset to empty after one apply
-            // this way , no duplicate if "button apply" + "button save" pressed
-            // TODO handle behavior enable/disable apply button
-            return;
-        }
-        pm->m_Equipments[es.m_BodyPart][es.m_Name] = es.m_Stuff;
-        ui->use_stuff_view->AddItemInComboBox(es);
-        emit SigAddNewStuff();
+void CharacterWindow::Apply() {
+  const auto type = static_cast<tabType>(ui->tabWidget->currentIndex());
+  auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+  if (type == tabType::stuff) {
+    EditStuff es = ui->edit_stuff_view->Save();
+    if (es.m_Name.isEmpty()) {
+      // name is empty at launch of the window
+      // and is reset to empty after one apply
+      // this way , no duplicate if "button apply" + "button save" pressed
+      // TODO handle behavior enable/disable apply button
+      return;
     }
-    if (type == tabType::useStuff) {
-        if (auto *ch = pm->m_SelectedHero; ch != nullptr) {
-            const auto &table = ui->use_stuff_view->GetCurrentEquipmentTable();
-            ch->SetEquipment(table);
-            ch->ApplyEquipOnStats(pm->m_AllEffectsOnGame[ch->m_Name]);
-            ch->UpdateEquipmentOnJson();
-            emit SigUseNewStuff(ch->m_Name);
-        }
-        pm->LoadAllEquipmentsJson();
+    pm->m_Equipments[es.m_BodyPart][es.m_Name] = es.m_Stuff;
+    ui->use_stuff_view->AddItemInComboBox(es);
+    emit SigAddNewStuff();
+  }
+  if (type == tabType::useStuff) {
+    if (auto *ch = pm->m_SelectedHero; ch != nullptr) {
+      const auto &table = ui->use_stuff_view->GetCurrentEquipmentTable();
+      ch->SetEquipment(table);
+      ch->ApplyEquipOnStats(pm->m_AllEffectsOnGame[ch->m_Name]);
+      ch->UpdateEquipmentOnJson();
+      emit SigUseNewStuff(ch->m_Name);
     }
+    pm->LoadAllEquipmentsJson();
+  }
 }
 
 void CharacterWindow::on_tabWidget_currentChanged(int index) {
@@ -98,8 +100,8 @@ void CharacterWindow::on_tabWidget_currentChanged(int index) {
       static_cast<tabType>(index), false);
 }
 
-void CharacterWindow::UpdateView(const std::vector<EditStuff>& esTable){
-    for(const auto & es : esTable){
-       ui->use_stuff_view->AddItemInComboBox(es);
-    }
+void CharacterWindow::UpdateView(const std::vector<EditStuff> &esTable) {
+  for (const auto &es : esTable) {
+    ui->use_stuff_view->AddItemInComboBox(es);
+  }
 }

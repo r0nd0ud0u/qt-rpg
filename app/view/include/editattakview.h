@@ -49,7 +49,7 @@ private slots:
 
   void on_form_comboBox_currentTextChanged(const QString &arg1);
 
-  private:
+private:
   Ui::EditAttakView *ui;
   std::vector<EditAttak> m_AttakList;
   QString m_SelectedCharaName;

@@ -60,11 +60,8 @@ void EditAttakView::InitView() {
   if (!m_AttakList.empty()) {
     const int firstIdx = 0;
     ui->atk_list_view->setCurrentIndex(model->index(firstIdx));
-    // send index of atk to update effect table
     ui->effect_widget->SetVectorSize(m_AttakList.size());
-    ui->effect_widget->SetIndex(firstIdx);
     InitComboBoxes();
-    ui->effect_widget->InitComboBoxes();
     UpdateValues(m_AttakList.front(), firstIdx);
   } else {
     EnableAllWidgets(false);
@@ -97,23 +94,8 @@ void EditAttakView::Apply() {
   // disable button
   ui->apply_button->setEnabled(false);
 
-  // Because the current table of atk can make visible only 3 effects of one atk
-  // we have to copy the followings ones after applying.
-  std::vector<effectParam> tmpTable;
-  const int MAX_CUR_EFFECTS = 3;
-  if (m_AttakList[GetIndexSelectedRow()].type.m_AllEffects.size() >
-      MAX_CUR_EFFECTS) {
-    for (int i = MAX_CUR_EFFECTS;
-         i < m_AttakList[GetIndexSelectedRow()].type.m_AllEffects.size(); i++) {
-      tmpTable.push_back(
-          m_AttakList[GetIndexSelectedRow()].type.m_AllEffects[i]);
-    }
-  }
   m_AttakList[GetIndexSelectedRow()].type.m_AllEffects =
       ui->effect_widget->GetTable();
-  for (const auto &atk : tmpTable) {
-    m_AttakList[GetIndexSelectedRow()].type.m_AllEffects.push_back(atk);
-  }
 }
 
 void EditAttakView::Save() {
@@ -309,7 +291,6 @@ void EditAttakView::on_new_atk_button_clicked() {
   EnableAllWidgets(true);
   if (ui->atk_list_view->model()->rowCount() == 1) {
     InitComboBoxes();
-    ui->effect_widget->InitComboBoxes();
   }
   // send index of atk to update effect table
   ui->effect_widget->SetIndex(itemIndex.row());
