@@ -29,7 +29,7 @@ set(CMAKE_CXX_STANDARD 17)
 FetchContent_Declare(
     Corrosion
     GIT_REPOSITORY https://github.com/corrosion-rs/corrosion.git
-    GIT_TAG v0.4
+    GIT_TAG v0.5
 )
 FetchContent_MakeAvailable(Corrosion)
 
@@ -45,7 +45,7 @@ if (CXXBRIDGE STREQUAL "CXXBRIDGE-NOTFOUND")
 endif()
 
 corrosion_import_crate(MANIFEST_PATH app/submodules/lib-rpg/Cargo.toml)
-corrosion_add_cxxbridge(rust-rpg-bridge CRATE rust-rpg MANIFEST_PATH rust-rpg
+corrosion_add_cxxbridge(rust-rpg-bridge CRATE rust_rpg MANIFEST_PATH rust_rpg
     FILES
     utils.rs
     character.rs
