@@ -62,7 +62,7 @@ void EditAttakView::InitView() {
     ui->atk_list_view->setCurrentIndex(model->index(firstIdx));
     ui->effect_widget->SetVectorSize(m_AttakList.size());
     InitComboBoxes();
-    //ui->effect_widget->InitComboBoxes();
+    // ui->effect_widget->InitComboBoxes();
     UpdateValues(m_AttakList.front(), firstIdx);
   } else {
     EnableAllWidgets(false);
@@ -292,10 +292,10 @@ void EditAttakView::on_new_atk_button_clicked() {
   EnableAllWidgets(true);
   if (ui->atk_list_view->model()->rowCount() == 1) {
     InitComboBoxes();
-    //ui->effect_widget->InitComboBoxes();
+    // ui->effect_widget->InitComboBoxes();
   }
   // send index of atk to update effect table
-  //ui->effect_widget->SetIndex(itemIndex.row());
+  // ui->effect_widget->SetIndex(itemIndex.row());
 }
 // form layout value changed
 

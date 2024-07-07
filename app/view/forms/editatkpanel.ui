@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>554</width>
+    <width>586</width>
     <height>46</height>
    </rect>
   </property>
@@ -15,9 +15,15 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="QCheckBox" name="checkBox">
+    <widget class="QPushButton" name="removeButton">
+     <property name="maximumSize">
+      <size>
+       <width>50</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="text">
-      <string/>
+      <string>Remove</string>
      </property>
     </widget>
    </item>
@@ -46,6 +52,12 @@
      <property name="enabled">
       <bool>true</bool>
      </property>
+     <property name="maximumSize">
+      <size>
+       <width>40</width>
+       <height>16777215</height>
+      </size>
+     </property>
     </widget>
    </item>
    <item>
@@ -67,6 +79,12 @@
      <property name="enabled">
       <bool>true</bool>
      </property>
+     <property name="maximumSize">
+      <size>
+       <width>40</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="minimum">
       <number>-99999999</number>
      </property>
@@ -79,6 +97,12 @@
     <widget class="QSpinBox" name="nb_turns_spinBox">
      <property name="enabled">
       <bool>true</bool>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>40</width>
+       <height>16777215</height>
+      </size>
      </property>
     </widget>
    </item>

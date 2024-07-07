@@ -22,6 +22,7 @@ public:
 
 signals:
   void SigValueChanged();
+  void SigRemove(EditAtkPanel *panel);
 
 private:
   effectParam m_EffectParam;
@@ -40,6 +41,8 @@ private slots:
   void on_value_spinBox_valueChanged(int arg1);
 
   void on_nb_turns_spinBox_valueChanged(int arg1);
+
+  void on_removeButton_clicked();
 
 private:
   Ui::EditAtkPanel *ui;

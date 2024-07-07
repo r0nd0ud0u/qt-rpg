@@ -86,3 +86,9 @@ void EditAtkPanel::on_nb_turns_spinBox_valueChanged(int arg1)
     emit SigValueChanged();
 }
 
+
+void EditAtkPanel::on_removeButton_clicked()
+{
+    emit SigRemove(this);
+}
+
