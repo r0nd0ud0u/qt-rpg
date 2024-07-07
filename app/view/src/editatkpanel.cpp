@@ -38,57 +38,39 @@ void EditAtkPanel::InitComboBoxes() {
   }
 }
 
-void EditAtkPanel::on_stats_comboBox_currentTextChanged(const QString &arg1)
-{
-    m_EffectParam.statsName = arg1;
-    emit SigValueChanged();
+void EditAtkPanel::on_stats_comboBox_currentTextChanged(const QString &arg1) {
+  m_EffectParam.statsName = arg1;
+  emit SigValueChanged();
 }
 
-
-void EditAtkPanel::on_effect_comboBox_currentTextChanged(const QString &arg1)
-{
-    m_EffectParam.effect = arg1;
-    emit SigValueChanged();
+void EditAtkPanel::on_effect_comboBox_currentTextChanged(const QString &arg1) {
+  m_EffectParam.effect = arg1;
+  emit SigValueChanged();
 }
 
-
-void EditAtkPanel::on_effect_value_spinbox_valueChanged(int arg1)
-{
-    m_EffectParam.subValueEffect = arg1;
-    emit SigValueChanged();
+void EditAtkPanel::on_effect_value_spinbox_valueChanged(int arg1) {
+  m_EffectParam.subValueEffect = arg1;
+  emit SigValueChanged();
 }
 
-
-void EditAtkPanel::on_target_comboBox_currentTextChanged(const QString &arg1)
-{
-    m_EffectParam.target = arg1;
-    emit SigValueChanged();
+void EditAtkPanel::on_target_comboBox_currentTextChanged(const QString &arg1) {
+  m_EffectParam.target = arg1;
+  emit SigValueChanged();
 }
 
-
-void EditAtkPanel::on_reach_comboBox_currentTextChanged(const QString &arg1)
-{
-    m_EffectParam.reach = arg1;
-    emit SigValueChanged();
+void EditAtkPanel::on_reach_comboBox_currentTextChanged(const QString &arg1) {
+  m_EffectParam.reach = arg1;
+  emit SigValueChanged();
 }
 
-
-void EditAtkPanel::on_value_spinBox_valueChanged(int arg1)
-{
-    m_EffectParam.value = arg1;
-    emit SigValueChanged();
+void EditAtkPanel::on_value_spinBox_valueChanged(int arg1) {
+  m_EffectParam.value = arg1;
+  emit SigValueChanged();
 }
 
-
-void EditAtkPanel::on_nb_turns_spinBox_valueChanged(int arg1)
-{
-    m_EffectParam.nbTurns = arg1;
-    emit SigValueChanged();
+void EditAtkPanel::on_nb_turns_spinBox_valueChanged(int arg1) {
+  m_EffectParam.nbTurns = arg1;
+  emit SigValueChanged();
 }
 
-
-void EditAtkPanel::on_removeButton_clicked()
-{
-    emit SigRemove(this);
-}
-
+void EditAtkPanel::on_removeButton_clicked() { emit SigRemove(this); }
