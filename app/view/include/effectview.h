@@ -20,7 +20,6 @@ public:
   void SetVectorSize(const size_t size);
   void InitValues(const std::vector<effectParam> &table);
   void SetIndex(const int index);
-  std::vector<EditAtkPanel *> m_AtkPanels;
   void InitEditAtkPanels();
 
 signals:
@@ -39,6 +38,7 @@ private:
   bool m_FirstShow = false;
   std::vector<std::vector<effectParam>> m_EffectTable;
   int m_Index = 0;
+   std::vector<EditAtkPanel *> m_AtkPanels;
 };
 
 #endif // EFFECTVIEW_H

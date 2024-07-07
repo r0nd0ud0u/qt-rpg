@@ -18,7 +18,7 @@ public:
 
   void UpdatePanel(const effectParam &ep);
   void InitComboBoxes();
-  effectParam GetEffectParam() { return m_EffectParam; };
+  effectParam GetEffectParam() const { return m_EffectParam; };
 
 signals:
   void SigValueChanged();
