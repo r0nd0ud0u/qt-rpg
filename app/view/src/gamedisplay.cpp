@@ -9,7 +9,7 @@
 #include "heroesview.h"
 
 #include "stuff.h"
-#include "statsendgame.h"
+#include "statsingame.h"
 
 #include "rust-rpg-bridge/utils.h"
 
@@ -182,8 +182,6 @@ void GameDisplay::NewRound() {
                                   activePlayer->color);
         const auto addValue = static_cast<int>(-phyBuf->get_value() + hpRx);
         Character::SetStatsOnEffect(localStat, addValue, false, true);
-        qDebug() << QString("Montant total overheal prev tour: %1\n").arg(hpRx);
-        qDebug() << QString("Pow phy azrak: %1\n").arg(addValue);
         phyBuf->set_buffers(hpRx, phyBuf->get_is_percent());
       }
     }
@@ -316,7 +314,7 @@ void GameDisplay::EndOfGame() {
   emit SigUpdateChannelView("GameState", "Fin du jeu !!");
 
   // generate output file on game stats
-  StatsEndGame::GenerateStatsEndGame();
+  StatsInGame::GenerateStatsEndGame();
 }
 
 bool GameDisplay::ProcessAtk(

@@ -15,10 +15,11 @@ const QString OFFLINE_ROOT_EQUIPMENT = "./offlines/equipment/corps/";
 const QString OFFLINE_RAND_NAME_STUFF = "./offlines/equipment/random/";
 const QString OFFLINE_CHARACTERS = "./offlines/Personnages/";
 
-// inputs
+// outputs
 const QString OUTPUT_DIR = "./output/";
-const QString OUTPUT_ENDGAME = "./output/endgame.csv";
-
+const QString OUTPUT_ENDGAME = "./output/endgame_%1.csv";
+const QStringList ENDGAME_TITLE_BAR = {"Name", "Player Type", "Life status",
+                                       "Attaks used", "Attaks frequency" };
 // json keys
 // ATK keys
 const QString ATK_NAME = "Nom";
@@ -341,5 +342,8 @@ public:
       {STATS_REGEN_VIGOR, m_RegenVigor},
       {STATS_REGEN_SPEED, m_RegenSpeed}};
 };
+
+// IN GAME
+const int NB_TURN_SUM_AGGRO = 5;
 
 #endif // COMMON_H
