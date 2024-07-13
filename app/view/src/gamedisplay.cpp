@@ -7,7 +7,9 @@
 #include "bossesview.h"
 #include "channel.h"
 #include "heroesview.h"
+
 #include "stuff.h"
+#include "statsendgame.h"
 
 #include "rust-rpg-bridge/utils.h"
 
@@ -312,6 +314,9 @@ void GameDisplay::EndOfGame() {
       static_cast<int>(ActionsStackedWgType::defaultType));
   emit SigBossDead("");
   emit SigUpdateChannelView("GameState", "Fin du jeu !!");
+
+  // generate output file on game stats
+  StatsEndGame::GenerateStatsEndGame();
 }
 
 bool GameDisplay::ProcessAtk(

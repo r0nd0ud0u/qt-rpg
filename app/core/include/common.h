@@ -7,12 +7,17 @@
 
 #include "rust-rpg-bridge/buffers.h"
 
+// inputs
 const QString OFFLINE_IMG = "./offlines/attak/img/";
 const QString OFFLINE_ATK = "./offlines/attak/";
 const QString OFFLINE_WEARING_EQUIPMENT = "./offlines/equipment/Personnages/";
 const QString OFFLINE_ROOT_EQUIPMENT = "./offlines/equipment/corps/";
 const QString OFFLINE_RAND_NAME_STUFF = "./offlines/equipment/random/";
 const QString OFFLINE_CHARACTERS = "./offlines/Personnages/";
+
+// inputs
+const QString OUTPUT_DIR = "./output/";
+const QString OUTPUT_ENDGAME = "./output/endgame.csv";
 
 // json keys
 // ATK keys

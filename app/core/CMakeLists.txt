@@ -14,6 +14,7 @@ set(HEADERS
     include/effect.h
     include/utils.h
     include/bossclass.h
+    include/statsendgame.h
 
 )
 set(SOURCES
@@ -27,6 +28,7 @@ set(SOURCES
     src/effect.cpp
     src/utils.cpp
     src/bossclass.cpp
+    src/statsendgame.cpp
 )
 
 
