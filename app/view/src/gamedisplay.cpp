@@ -413,6 +413,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   activatedPlayer->ProcessCost(atkName);
   QStringList launchingStr;
   launchingStr.append(QString("lance %1.").arg(atkName));
+  // update stats in game info
+  activatedPlayer->m_StatsInGame.m_AllAtksInfo[atkName].nbOfUse++;
 
   // is Dodging
   // a tank cannot dodge

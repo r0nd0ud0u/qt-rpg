@@ -16,7 +16,7 @@ class StatsInGame
 public:
     bool m_IsPlaying = false;
     bool m_IsAlive = true;
-    std::vector<AtksInfo> m_AllAtksInfo;
+    std::unordered_map<QString, AtksInfo> m_AllAtksInfo;
 
     void StartGame(const bool isSelected);
 

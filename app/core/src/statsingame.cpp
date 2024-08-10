@@ -29,9 +29,9 @@ void StatsInGame::GenerateStatsEndGame() {
   if (pm == nullptr) {
     return;
   }
-
-  out << GetOutputEndGameByList(gm->m_PlayersManager->m_AllHeroesList) << "\n";
-  out << GetOutputEndGameByList(gm->m_PlayersManager->m_AllBossesList) << "\n";
+  out.setEncoding(QStringConverter::Encoding::Utf8);
+  out << GetOutputEndGameByList(gm->m_PlayersManager->m_AllHeroesList).toUtf8() << "\n";
+  out << GetOutputEndGameByList(gm->m_PlayersManager->m_AllBossesList).toUtf8() << "\n";
 }
 
 QString StatsInGame::GetOutputEndGameByList(const std::vector<Character *> &playerList) {
@@ -40,8 +40,7 @@ QString StatsInGame::GetOutputEndGameByList(const std::vector<Character *> &play
     }
 
     QString output;
-
-    QString values = QStringList({"%1", "%2", "%3", "%4", "%5"}).join(";\t");
+    const QString values = QStringList({"%1", "%2", "%3", "%4", "%5"}).join(";\t");
     for (const auto *h : playerList) {
         if (h != nullptr && h->m_StatsInGame.m_IsPlaying) {
             const auto type = (h->m_type == characType::Hero) ? "Hero" : "Boss";
@@ -49,6 +48,13 @@ QString StatsInGame::GetOutputEndGameByList(const std::vector<Character *> &play
             const auto atksUsed =
                 !h->m_StatsInGame.m_AllAtksInfo.empty() ? "OK" : "None";
             output += values.arg(h->m_Name, type, lifeStatus, atksUsed, atksUsed) + "\n";
+            for (const auto& atk : h->m_AttakList){
+                int nbOfUse = 0;
+                if(h->m_StatsInGame.m_AllAtksInfo.count(atk.first) > 0){
+                    nbOfUse = h->m_StatsInGame.m_AllAtksInfo.at(atk.first).nbOfUse;
+                }
+                output += QString(";;%1;%2").arg(atk.first).arg(nbOfUse) + "\n";
+            }
         }
     }
 
