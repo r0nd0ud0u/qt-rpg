@@ -6,7 +6,17 @@
 #include <QDir>
 #include <QFile>
 
+#include <numeric>
+
 void StatsInGame::GenerateStatsEndGame() {
+  const auto *gm = Application::GetInstance().m_GameManager.get();
+  if (gm == nullptr) {
+    return;
+  }
+  const auto *pm = gm->m_PlayersManager;
+  if (pm == nullptr) {
+    return;
+  }
   // output
   QFile file;
   QDir logDir;
@@ -21,44 +31,47 @@ void StatsInGame::GenerateStatsEndGame() {
   QTextStream out(&file);
   // title
   out << ENDGAME_TITLE_BAR.join(";\t") << "\n";
-  const auto *gm = Application::GetInstance().m_GameManager.get();
-  if (gm == nullptr) {
-    return;
-  }
-  const auto *pm = gm->m_PlayersManager;
-  if (pm == nullptr) {
-    return;
-  }
-  out.setEncoding(QStringConverter::Encoding::Utf8);
-  out << GetOutputEndGameByList(gm->m_PlayersManager->m_AllHeroesList).toUtf8() << "\n";
-  out << GetOutputEndGameByList(gm->m_PlayersManager->m_AllBossesList).toUtf8() << "\n";
+  out << GetOutputEndGameByList(gm->m_PlayersManager->m_AllHeroesList).toUtf8()
+      << "\n";
+  out << GetOutputEndGameByList(gm->m_PlayersManager->m_AllBossesList).toUtf8()
+      << "\n";
 }
 
-QString StatsInGame::GetOutputEndGameByList(const std::vector<Character *> &playerList) {
-    if (playerList.empty()) {
-        return "";
-    }
+QString StatsInGame::GetOutputEndGameByList(
+    const std::vector<Character *> &playerList) {
+  if (playerList.empty()) {
+    return "";
+  }
 
-    QString output;
-    const QString values = QStringList({"%1", "%2", "%3", "%4", "%5"}).join(";\t");
-    for (const auto *h : playerList) {
-        if (h != nullptr && h->m_StatsInGame.m_IsPlaying) {
-            const auto type = (h->m_type == characType::Hero) ? "Hero" : "Boss";
-            const auto lifeStatus = h->m_StatsInGame.m_IsAlive ? "Alive" : "Dead";
-            const auto atksUsed =
-                !h->m_StatsInGame.m_AllAtksInfo.empty() ? "OK" : "None";
-            output += values.arg(h->m_Name, type, lifeStatus, atksUsed, atksUsed) + "\n";
-            for (const auto& atk : h->m_AttakList){
-                int nbOfUse = 0;
-                if(h->m_StatsInGame.m_AllAtksInfo.count(atk.first) > 0){
-                    nbOfUse = h->m_StatsInGame.m_AllAtksInfo.at(atk.first).nbOfUse;
-                }
-                output += QString(";;%1;%2").arg(atk.first).arg(nbOfUse) + "\n";
-            }
+  QString output;
+  const QString values = QStringList({"%1", "%2", "%3"}).join(";\t");
+  for (const auto *h : playerList) {
+    if (h != nullptr && h->m_StatsInGame.m_IsPlaying) {
+      const auto type = (h->m_type == characType::Hero) ? "Hero" : "Boss";
+      const auto lifeStatus = h->m_StatsInGame.m_IsAlive ? "Alive" : "Dead";
+      output += values.arg(h->m_Name, type, lifeStatus) + "\n";
+      output += ";Attaks\n";
+      for (const auto &atk : h->m_AttakList) {
+        int nbOfUse = 0;
+        if (h->m_StatsInGame.m_AllAtksInfo.count(atk.first) > 0) {
+          nbOfUse = h->m_StatsInGame.m_AllAtksInfo.at(atk.first).nbOfUse;
         }
+        output += QString(";;%1;%2").arg(atk.first).arg(nbOfUse) + "\n";
+      }
+      // accumulate stats by turn RX TX
+      output += ";Stats RX TX\n";
+      for (int i = 0; i < h->m_LastTxRx.size(); i++) {
+        const auto &type = amountTypeStr[i];
+        uint64_t value = 0;
+        for (const auto &it : h->m_LastTxRx.at(i)) {
+          value += it.second;
+        }
+        output += QString(";;%1;%2").arg(type).arg(value) + "\n";
+      }
     }
+  }
 
-    return output;
+  return output;
 }
 
 void StatsInGame::StartGame(const bool isSelected) {

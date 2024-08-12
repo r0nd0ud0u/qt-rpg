@@ -68,6 +68,8 @@ enum class amountType {
   enumSize
 };
 
+const std::vector<QString> amountTypeStr{"damageRx", "damageTx", "healRx", "healTx", "overHealRx", "aggro"};
+
 enum class CharacterClass { Standard = 0, Tank, enumSize };
 
 class Character {
