@@ -543,6 +543,8 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
     } else if (realAmountSent < 0) {
       m_LastTxRx[static_cast<int>(amountType::damageTx)][gs->m_CurrentTurnNb] +=
           std::abs(realAmountSent);
+      target->m_LastTxRx[static_cast<int>(amountType::damageRx)]
+                        [gs->m_CurrentTurnNb] += std::abs(realAmountSent);
     }
     target->m_LastTxRx[static_cast<int>(amountType::overHealRx)]
                       [gs->m_CurrentTurnNb] += maxAmountSent - realAmountSent;
@@ -752,9 +754,9 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     } else {
       amount = nbOfApplies * ep.value;
     }
-  } else if (ep.effect == EFFECT_PERCENT_CHANGE && (ep.statsName == STATS_HP ||
-             ep.statsName == STATS_MANA || ep.statsName == STATS_VIGOR ||
-                                                    ep.statsName == STATS_BERSECK)) {
+  } else if (ep.effect == EFFECT_PERCENT_CHANGE &&
+             (ep.statsName == STATS_HP || ep.statsName == STATS_MANA ||
+              ep.statsName == STATS_VIGOR || ep.statsName == STATS_BERSECK)) {
     // example for mana
     amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
   } else {
@@ -1151,7 +1153,7 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
       auto &localStat = target->m_Stats.m_AllStatsTable[effect.statsName];
       const auto currentTurn = Application::GetInstance()
                                    .m_GameManager->m_GameState->m_CurrentTurnNb;
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < NB_TURN_SUM_AGGRO; i++) {
         target
             ->m_LastTxRx[static_cast<int>(amountType::aggro)][currentTurn - i] =
             0;
@@ -1765,12 +1767,15 @@ void Character::ProcessDeath() {
   auto &aggro = m_Stats.m_AllStatsTable[STATS_AGGRO];
   const auto currentTurn =
       Application::GetInstance().m_GameManager->m_GameState->m_CurrentTurnNb;
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < NB_TURN_SUM_AGGRO; i++) {
     m_LastTxRx[static_cast<int>(amountType::aggro)][currentTurn - i] = 0;
   }
   m_Stats.m_AllStatsTable[STATS_AGGRO].m_CurrentValue = 0;
   m_Stats.m_AllStatsTable[STATS_HP].m_CurrentValue = 0;
   m_Stats.m_AllStatsTable[STATS_SPEED].m_CurrentValue = 1;
+
+  // update stats in game
+  m_StatsInGame.m_IsAlive = false;
 }
 
 /**
@@ -1806,8 +1811,7 @@ std::optional<EffectsTypeNb> Character::GetBufDebufNumbers() const {
 void Character::InitAggroOnTurn(const int turnNb) {
   auto &aggroStat = m_Stats.m_AllStatsTable[STATS_AGGRO];
   aggroStat.m_CurrentValue = 0;
-  const int nbTurnOnAggro = 5;
-  for (int i = 1; i < nbTurnOnAggro + 1; i++) {
+  for (int i = 1; i < NB_TURN_SUM_AGGRO + 1; i++) {
     if (i <= m_LastTxRx[static_cast<int>(amountType::aggro)].size()) {
       aggroStat.m_CurrentValue +=
           m_LastTxRx[static_cast<int>(amountType::aggro)][turnNb - i];

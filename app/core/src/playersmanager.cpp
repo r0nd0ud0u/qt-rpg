@@ -85,6 +85,7 @@ bool PlayersManager::UpdateActivePlayers(const std::set<QString> &playersList) {
   std::for_each(m_AllHeroesList.begin(), m_AllHeroesList.end(),
                 [&](Character *c) {
                   if (c != nullptr && playersList.count(c->m_Name)) {
+                    c->m_StatsInGame.m_IsPlaying = true;
                     m_HeroesList.push_back(c);
                   }
                 });
@@ -95,6 +96,7 @@ bool PlayersManager::UpdateActivePlayers(const std::set<QString> &playersList) {
   std::for_each(m_AllBossesList.begin(), m_AllBossesList.end(),
                 [&](Character *c) {
                   if (c != nullptr && playersList.count(c->m_Name)) {
+                    c->m_StatsInGame.m_IsPlaying = true;
                     m_BossesList.push_back(c);
                   }
                 });
@@ -516,6 +518,7 @@ QStringList PlayersManager::CheckDiedPlayers(const characType &launcherType) {
             return false;
           }
           const bool isDead = pl->IsDead();
+          pl->m_StatsInGame.m_IsAlive = !isDead;
           if (isDead) {
             output.append(pl->m_Name);
           }
@@ -818,7 +821,8 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
     // Create stuff
     Stuff stuff;
     // add name
-    const auto randEquipType = Utils::GetRandomNb(0, RAND_EQUIP_ON_BODY.size() - 1);
+    const auto randEquipType =
+        Utils::GetRandomNb(0, RAND_EQUIP_ON_BODY.size() - 1);
     const auto &equipType = RAND_EQUIP_ON_BODY.at(randEquipType);
     const auto indexEquipName =
         Utils::GetRandomNb(0, m_RandomEquipName[equipType].size() - 1);
