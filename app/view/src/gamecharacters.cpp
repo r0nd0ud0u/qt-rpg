@@ -94,11 +94,13 @@ void GameCharacters::on_back_pushButton_clicked() {
 void GameCharacters::ActivatePanel(const QString &name) const {
   for (auto *hero : m_HeroesList) {
     if (name == hero->m_Heroe->m_Name) {
+      hero->m_Heroe->m_StatsInGame.StartGame(hero->GetActive());
       hero->SetActive(!hero->GetActive());
     }
   }
   for (auto *boss : m_BossesList) {
     if (name == boss->m_Boss->m_Name) {
+      boss->m_Boss->m_StatsInGame.StartGame(boss->GetActive());
       boss->SetActive(!boss->GetActive());
     }
   }

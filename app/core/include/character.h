@@ -14,6 +14,7 @@
 #include "effect.h"
 #include "stuff.h"
 #include "utils.h" // for EffectsTypeNb struct
+#include "statsingame.h"
 
 #include "rust-rpg-bridge/attaque.h"
 #include "rust-rpg-bridge/character.h"
@@ -66,6 +67,8 @@ enum class amountType {
   aggro,
   enumSize
 };
+
+const std::vector<QString> amountTypeStr{"damageRx", "damageTx", "healRx", "healTx", "overHealRx", "aggro"};
 
 enum class CharacterClass { Standard = 0, Tank, enumSize };
 
@@ -162,6 +165,7 @@ public:
   BossClass m_BossClass;
   CharacterClass m_Class = CharacterClass::Standard;
   bool m_IsBlockingAtk = false;
+  StatsInGame m_StatsInGame;
 
 private:
   static void ProcessAddEquip(StatsType &charStat, const StatsType &equipStat);

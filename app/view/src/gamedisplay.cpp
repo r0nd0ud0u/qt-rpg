@@ -7,7 +7,9 @@
 #include "bossesview.h"
 #include "channel.h"
 #include "heroesview.h"
+
 #include "stuff.h"
+#include "statsingame.h"
 
 #include "rust-rpg-bridge/utils.h"
 
@@ -180,8 +182,6 @@ void GameDisplay::NewRound() {
                                   activePlayer->color);
         const auto addValue = static_cast<int>(-phyBuf->get_value() + hpRx);
         Character::SetStatsOnEffect(localStat, addValue, false, true);
-        qDebug() << QString("Montant total overheal prev tour: %1\n").arg(hpRx);
-        qDebug() << QString("Pow phy azrak: %1\n").arg(addValue);
         phyBuf->set_buffers(hpRx, phyBuf->get_is_percent());
       }
     }
@@ -312,6 +312,9 @@ void GameDisplay::EndOfGame() {
       static_cast<int>(ActionsStackedWgType::defaultType));
   emit SigBossDead("");
   emit SigUpdateChannelView("GameState", "Fin du jeu !!");
+
+  // generate output file on game stats
+  StatsInGame::GenerateStatsEndGame();
 }
 
 bool GameDisplay::ProcessAtk(
@@ -410,6 +413,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   activatedPlayer->ProcessCost(atkName);
   QStringList launchingStr;
   launchingStr.append(QString("lance %1.").arg(atkName));
+  // update stats in game info
+  activatedPlayer->m_StatsInGame.m_AllAtksInfo[atkName].nbOfUse++;
 
   // is Dodging
   // a tank cannot dodge
