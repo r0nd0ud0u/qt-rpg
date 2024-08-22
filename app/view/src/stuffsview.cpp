@@ -61,6 +61,12 @@ EditStuff StuffsView::Save() {
   // clean edit stuff view after one save
   ui->name_textEdit->setText("");
   ui->body_comboBox->setCurrentText("");
+  for(auto* stuff : m_StuffList){
+      if(stuff == nullptr){
+          continue;
+      }
+      stuff->ResetValues();
+  }
 
   return editStuff;
 }
