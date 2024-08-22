@@ -25,13 +25,6 @@ CharacterWindow::CharacterWindow(QWidget *parent)
 CharacterWindow::~CharacterWindow() { delete ui; }
 
 void CharacterWindow::InitWindow(const tabType &type, const bool setIndex) {
-  if (static_cast<int>(type) == ui->tabWidget->currentIndex()) {
-    // avoid to re-init twice the same window
-    return;
-  }
-  if (setIndex) {
-    ui->tabWidget->setCurrentIndex(static_cast<int>(type));
-  }
   if (type == tabType::attak) {
     ui->edit_atk_tab->InitView();
     ui->tabWidget->setTabEnabled(1, true);
