@@ -77,6 +77,9 @@ void CharacterWindow::Apply() {
     emit SigAddNewStuff();
   }
   if (type == tabType::useStuff) {
+    // first synchronize the pm table
+    pm->LoadAllEquipmentsJson();
+    // Then update the equipments for each character
     if (auto *ch = pm->m_SelectedHero; ch != nullptr) {
       const auto &table = ui->use_stuff_view->GetCurrentEquipmentTable();
       ch->SetEquipment(table);
@@ -84,7 +87,6 @@ void CharacterWindow::Apply() {
       ch->UpdateEquipmentOnJson();
       emit SigUseNewStuff(ch->m_Name);
     }
-    pm->LoadAllEquipmentsJson();
   }
 }
 
