@@ -62,9 +62,7 @@ std::unordered_map<QString, QString>
 EquipOnBodyView::GetCurrentEquipmentTable() const {
   std::unordered_map<QString, QString> output;
   for (const auto &panel : m_PanelList) {
-    if (!panel->m_Equipment.isEmpty()) {
-      output[panel->m_BodyName] = panel->m_Equipment;
-    }
+    output[panel->m_BodyName] = panel->m_Equipment;
   }
   return output;
 }

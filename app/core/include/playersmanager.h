@@ -80,7 +80,7 @@ public:
   std::vector<Character *> m_BossesList;
   Character *m_SelectedHero = nullptr;
   Character *m_ActivePlayer = nullptr;
-  std::unordered_map<QString, std::unordered_map<QString, Stuff>>
+  std::unordered_map<QString, std::map<QString, Stuff>>
       m_Equipments; // key 1 body name, key2 {equipName, equip value-stats}
   std::unordered_map<QString, std::vector<GameAtkEffects>>
       m_AllEffectsOnGame; // key target

@@ -23,7 +23,7 @@ void EquipOnBodyPanel::on_equip_comboBox_currentTextChanged(const QString &arg1)
 void EquipOnBodyPanel::InitComboBox(const QString& name){
     const auto& pm = Application::GetInstance().m_GameManager->m_PlayersManager;
     ui->body_label->setText(name);
-    ui->equip_comboBox->addItem(""); // add one empty
+
     for(const auto& [equipName, equip] : pm->m_Equipments[name]){
         ui->equip_comboBox->addItem(equipName);
     }
