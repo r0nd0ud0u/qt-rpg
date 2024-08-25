@@ -24,7 +24,7 @@ CharacterWindow::CharacterWindow(QWidget *parent)
 
 CharacterWindow::~CharacterWindow() { delete ui; }
 
-void CharacterWindow::InitWindow(const tabType &type, const bool setIndex) {
+void CharacterWindow::InitWindow(const tabType &type) {
   if (type == tabType::attak) {
     ui->edit_atk_tab->InitView();
     ui->tabWidget->setTabEnabled(1, true);
@@ -92,7 +92,7 @@ void CharacterWindow::Apply() {
 
 void CharacterWindow::on_tabWidget_currentChanged(int index) {
   ApplicationView::GetInstance().GetCharacterWindow()->InitWindow(
-      static_cast<tabType>(index), false);
+      static_cast<tabType>(index));
 }
 
 void CharacterWindow::UpdateView(const std::vector<EditStuff> &esTable) {
