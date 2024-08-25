@@ -24,14 +24,7 @@ CharacterWindow::CharacterWindow(QWidget *parent)
 
 CharacterWindow::~CharacterWindow() { delete ui; }
 
-void CharacterWindow::InitWindow(const tabType &type, const bool setIndex) {
-  if (static_cast<int>(type) == ui->tabWidget->currentIndex()) {
-    // avoid to re-init twice the same window
-    return;
-  }
-  if (setIndex) {
-    ui->tabWidget->setCurrentIndex(static_cast<int>(type));
-  }
+void CharacterWindow::InitWindow(const tabType &type) {
   if (type == tabType::attak) {
     ui->edit_atk_tab->InitView();
     ui->tabWidget->setTabEnabled(1, true);
@@ -84,6 +77,9 @@ void CharacterWindow::Apply() {
     emit SigAddNewStuff();
   }
   if (type == tabType::useStuff) {
+    // first synchronize the pm table
+    pm->LoadAllEquipmentsJson();
+    // Then update the equipments for each character
     if (auto *ch = pm->m_SelectedHero; ch != nullptr) {
       const auto &table = ui->use_stuff_view->GetCurrentEquipmentTable();
       ch->SetEquipment(table);
@@ -91,13 +87,12 @@ void CharacterWindow::Apply() {
       ch->UpdateEquipmentOnJson();
       emit SigUseNewStuff(ch->m_Name);
     }
-    pm->LoadAllEquipmentsJson();
   }
 }
 
 void CharacterWindow::on_tabWidget_currentChanged(int index) {
   ApplicationView::GetInstance().GetCharacterWindow()->InitWindow(
-      static_cast<tabType>(index), false);
+      static_cast<tabType>(index));
 }
 
 void CharacterWindow::UpdateView(const std::vector<EditStuff> &esTable) {

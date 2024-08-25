@@ -1,6 +1,8 @@
 #include "stuffsview.h"
 #include "ui_stuffsview.h"
 
+#include "utils.h"
+
 StuffsView::StuffsView(QWidget *parent)
     : QWidget(parent), ui(new Ui::StuffsView) {
   ui->setupUi(this);
@@ -34,7 +36,8 @@ EditStuff StuffsView::Save() {
   EditStuff editStuff;
   editStuff.m_Name = ui->name_textEdit->toPlainText();
   editStuff.m_BodyPart = ui->body_comboBox->currentText();
-
+  editStuff.m_Stuff.m_Name = ui->name_textEdit->toPlainText();
+  editStuff.m_Stuff.m_UniqueName = ui->name_textEdit->toPlainText() +"-"+ Utils::getCurrentTimeAsString();
   // no name entered => nothing to save
   if (editStuff.m_Name.isEmpty()) {
     return EditStuff();
@@ -58,6 +61,12 @@ EditStuff StuffsView::Save() {
   // clean edit stuff view after one save
   ui->name_textEdit->setText("");
   ui->body_comboBox->setCurrentText("");
+  for(auto* stuff : m_StuffList){
+      if(stuff == nullptr){
+          continue;
+      }
+      stuff->ResetValues();
+  }
 
   return editStuff;
 }

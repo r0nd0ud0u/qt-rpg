@@ -15,6 +15,7 @@ public:
     explicit StuffPanel(QWidget *parent = nullptr);
     ~StuffPanel();
     void Init(const QString &name);
+    void ResetValues();
 
     QString m_Name;
     bool m_IsPercent = false;

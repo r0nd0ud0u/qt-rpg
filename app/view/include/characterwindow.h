@@ -19,7 +19,7 @@ class CharacterWindow : public QMainWindow {
 public:
   explicit CharacterWindow(QWidget *parent = nullptr);
   ~CharacterWindow();
-  void InitWindow(const tabType &type, const bool index = false);
+  void InitWindow(const tabType &type);
   void UpdateView(const std::vector<EditStuff>& esTable);
 
 signals:
