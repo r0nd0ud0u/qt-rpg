@@ -61,34 +61,21 @@ void GameCharacters::InitAllBossesPanel() {
       if (it == nullptr) {
         continue;
       }
-      auto *panel = new BossPanel();
-      panel->UpdatePanel(it);
-      ui->bossScrollAreaWidgetContents->layout()->addWidget(panel);
-      connect(panel, &BossPanel::SigSelectedCharacterOnPanel, this,
-              &GameCharacters::ActivatePanel);
-      panel->SetActive(false);
-      m_BossesList.push_back(panel);
+      // auto *panel = new BossPanel();
+      // panel->UpdatePanel(it);
+      // ui->bossScrollAreaWidgetContents->layout()->addWidget(panel);
+      // connect(panel, &BossPanel::SigSelectedCharacterOnPanel, this,
+      //         &GameCharacters::ActivatePanel);
+      // panel->SetActive(false);
+      // m_BossesList.push_back(panel);
     }
   }
 }
 
 void GameCharacters::on_back_pushButton_clicked() {
-  std::set<QString> activeCh;
-  std::for_each(m_HeroesList.begin(), m_HeroesList.end(),
-                [&](const HeroPanel *hp) {
-                  if (hp != nullptr && hp->GetActive()) {
-                    activeCh.insert(hp->m_Heroe->m_Name);
-                    return;
-                  }
-                });
-  std::for_each(m_BossesList.begin(), m_BossesList.end(),
-                [&](const BossPanel *bp) {
-                  if (bp != nullptr && bp->GetActive()) {
-                    activeCh.insert(bp->m_Boss->m_Name);
-                    return;
-                  }
-                });
-  emit SigBackToHostPage(activeCh);
+  m_HeroesList.clear();
+  m_BossesList.clear();
+  emit SigReturnToHostPage();
 }
 
 void GameCharacters::ActivatePanel(const QString &name) const {

@@ -7,27 +7,26 @@ namespace Ui {
 class HostPage;
 }
 
-class HostPage : public QWidget
-{
-    Q_OBJECT
+class HostPage : public QWidget {
+  Q_OBJECT
 
 public:
-    explicit HostPage(QWidget *parent = nullptr);
-    ~HostPage();
+  explicit HostPage(QWidget *parent = nullptr);
+  ~HostPage();
 
-    void ActiveNewGame(const bool value);
+  void ActiveNewGame(const bool value);
 
 signals:
-    void showGameDisplay();
-    void SigShowGameCharacters();
+  void showGameDisplay();
+  void SigShowGameCharacters();
 
 private slots:
-    void on_pushButton_clicked();
+  void on_newGamePushButton_clicked();
 
-    void on_charactersPushButton_clicked();
+  void on_loadGamePushButton_clicked();
 
 private:
-    Ui::HostPage *ui;
+  Ui::HostPage *ui;
 };
 
 #endif // HOSTPAGE_H

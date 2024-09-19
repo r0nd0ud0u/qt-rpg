@@ -18,7 +18,8 @@ public:
   ~GameCharacters();
 
 signals:
-  void SigBackToHostPage(const std::set<QString> &);
+  void SigDead(); // if i dont add this line; the call to 'emit SigReturnToHostPage' is crashing the app
+  void SigReturnToHostPage();
 
 private slots:
   void on_back_pushButton_clicked();

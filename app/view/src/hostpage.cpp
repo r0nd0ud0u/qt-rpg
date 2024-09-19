@@ -7,16 +7,14 @@ HostPage::HostPage(QWidget *parent) : QWidget(parent), ui(new Ui::HostPage) {
 
 HostPage::~HostPage() { delete ui; }
 
-void HostPage::on_pushButton_clicked() { emit showGameDisplay(); }
-
-void HostPage::on_charactersPushButton_clicked() {
-  emit SigShowGameCharacters();
-}
-
 /**
  * @brief HostPage::ActiveNewGame
  * Enable new game button to start the game display page
  */
-void HostPage::ActiveNewGame(const bool value){
-    ui->pushButton->setEnabled(value);
+void HostPage::ActiveNewGame(const bool value) {
+  ui->loadGamePushButton->setEnabled(value);
 }
+
+void HostPage::on_newGamePushButton_clicked() { emit SigShowGameCharacters(); }
+
+void HostPage::on_loadGamePushButton_clicked() { emit showGameDisplay(); }

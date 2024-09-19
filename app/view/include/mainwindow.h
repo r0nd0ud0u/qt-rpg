@@ -11,15 +11,11 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-// This enum represents the different objects represented on each
-// in ui, i dont why
-// host = page1
-// game display = page2
-// game characters = page3
 enum class SecondaryPages {
   hostPage = 0,
-  gameCharacters,
   gameDisplay,
+  heroGameCharacters,
+  bossGameCharacters,
   enumSize
 };
 

@@ -18,8 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
           &MainWindow::ShowPageGameDisplay);
   connect(ui->page, &HostPage::SigShowGameCharacters, this,
           &MainWindow::ShowGameCharacters);
-  connect(ui->page_3, &GameCharacters::SigBackToHostPage, this,
-          &MainWindow::UpdateActiveCharacters);
+  connect(ui->page_Hero, &GameCharacters::SigReturnToHostPage, this,
+          &MainWindow::ShowHostPage);
 
   // Connect: Functions on secondary pages
   connect(this, &MainWindow::SigNewCharacter, ui->page_2,
@@ -52,8 +52,7 @@ void MainWindow::ShowPageGameDisplay() {
 }
 
 void MainWindow::ShowGameCharacters() {
-  ui->stackedWidget->setCurrentIndex(
-      static_cast<int>(SecondaryPages::gameCharacters));
+  ui->stackedWidget->setCurrentIndex(static_cast<int>(SecondaryPages::heroGameCharacters));
 }
 
 void MainWindow::ShowHostPage() {
