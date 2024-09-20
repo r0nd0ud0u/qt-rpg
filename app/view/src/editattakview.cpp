@@ -298,8 +298,12 @@ void EditAttakView::on_new_atk_button_clicked() {
 // form layout value changed
 
 void EditAttakView::on_photo_comboBox_currentTextChanged(const QString &arg1) {
+  const QString photoPath = OFFLINE_IMG + arg1;
+  if (!Utils::FileExists(photoPath)) {
+    return;
+  }
   // Update image character
-  auto qp = QPixmap(OFFLINE_IMG + arg1);
+  auto qp = QPixmap(photoPath);
 
   // Resize the photo
   QPixmap scaledPixmap =

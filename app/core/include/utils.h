@@ -24,6 +24,7 @@ public:
   static std::optional<EffectsTypeNb>
   GetNbOfActiveEffects(const std::vector<GameAtkEffects> &table);
   static int64_t GetRandomNb(const int64_t min, const int64_t max );
+  static bool FileExists(const QString& path);
 };
 
 #endif // UTILS_H

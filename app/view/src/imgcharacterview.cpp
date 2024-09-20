@@ -2,15 +2,16 @@
 #include "ui_imgcharacterview.h"
 
 #include "Application.h"
-#include "gamedisplay.h"
 #include "gamecharacters.h"
+#include "gamedisplay.h"
 
 ImgCharacterView::ImgCharacterView(QWidget *parent)
     : QWidget(parent), ui(new Ui::ImgCharacterView) {
   ui->setupUi(this);
   connect((GameDisplay *)parentWidget(), &GameDisplay::selectCharacter, this,
           &ImgCharacterView::UpdateView);
-  connect((GameCharacters *)parentWidget(), &GameCharacters::SigSelectGameCharacter, this,
+  connect((GameCharacters *)parentWidget(),
+          &GameCharacters::SigSelectGameCharacter, this,
           &ImgCharacterView::UpdateView);
 }
 
@@ -28,12 +29,15 @@ void ImgCharacterView::UpdateView(QString name, const QString &photo) {
 }
 
 void ImgCharacterView::SetPixmap(const QString &name, const int scalingHeight) {
+  const QString photoPath = OFFLINE_IMG + name + ".png";
+  if (!Utils::FileExists(photoPath)) {
+    return;
+  }
   // Update image character
-    //return;
-  auto qp = QPixmap(OFFLINE_IMG + name + ".png");
+  // return;
+  auto qp = QPixmap(photoPath);
   QPixmap scaledPixmap =
       qp.scaledToHeight(scalingHeight); // Set the desired width and height
- // ui->img_label->setPixmap(qp.scaled(171, 300, Qt::KeepAspectRatio, Qt::SmoothTransformation));
   ui->img_label->setPixmap(scaledPixmap);
   ui->img_label->setScaledContents(true);
 }
