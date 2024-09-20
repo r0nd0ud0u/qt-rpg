@@ -1830,3 +1830,7 @@ void Character::InitAggroOnTurn(const int turnNb) {
 void Character::ProcessBlock(const bool isDodging) {
   m_IsBlockingAtk = m_Class == CharacterClass::Tank && isDodging;
 }
+
+QString Character::GetPhotoName() const {
+    return (m_PhotoName.isEmpty()) ? m_Name : m_PhotoName;
+}

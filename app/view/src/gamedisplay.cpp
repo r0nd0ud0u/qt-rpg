@@ -50,24 +50,12 @@ void GameDisplay::UpdateChannel() { ui->channel_lay->ShowPageStuffs(); }
 void GameDisplay::UpdateViews(const QString &name) {
   const auto &app = Application::GetInstance();
   QString photo;
-  // lambda function to add here
-  for (auto *hero : app.m_GameManager->m_PlayersManager->m_HeroesList) {
-    if (hero->m_Name == name) {
-      app.m_GameManager->m_PlayersManager->m_SelectedHero = hero;
-      break;
-    }
-  }
-  for (auto *boss : app.m_GameManager->m_PlayersManager->m_BossesList) {
-    if (boss->m_Name == name) {
-      app.m_GameManager->m_PlayersManager->m_SelectedHero = boss;
-      break;
-    }
-  }
+
+  app.m_GameManager->m_PlayersManager->SetSelectedHero(name);
+  // get photo name
   const auto *c = app.m_GameManager->m_PlayersManager->m_SelectedHero;
-  if (c == nullptr) {
-    photo = "";
-  } else {
-    photo = (c->m_PhotoName.isEmpty()) ? c->m_Name : c->m_PhotoName;
+  if (c != nullptr) {
+      photo = c->GetPhotoName();
   }
   emit selectCharacter(name, photo);
 }

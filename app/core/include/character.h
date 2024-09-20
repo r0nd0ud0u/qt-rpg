@@ -130,6 +130,7 @@ public:
   std::optional<EffectsTypeNb> GetBufDebufNumbers() const;
   void InitAggroOnTurn(const int turnNb);
   void ProcessBlock(const bool isDodging);
+  QString GetPhotoName() const;
 
   // Temporary
   std::vector<effectParam> LoadThaliaTalent() const;

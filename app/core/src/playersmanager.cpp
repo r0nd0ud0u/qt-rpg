@@ -1108,3 +1108,18 @@ void PlayersManager::ResetAllEffectsOnPlayer(const Character *chara) {
   }
   RemoveTerminatedEffectsOnPlayer(chara->m_Name);
 }
+
+void PlayersManager::SetSelectedHero(const QString& name){
+    for (auto *hero : m_HeroesList) {
+        if (hero->m_Name == name) {
+            m_SelectedHero = hero;
+            break;
+        }
+    }
+    for (auto *boss : m_BossesList) {
+        if (boss->m_Name == name) {
+            m_SelectedHero = boss;
+            break;
+        }
+    }
+}

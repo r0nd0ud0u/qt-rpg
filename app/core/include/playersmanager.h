@@ -71,6 +71,7 @@ public:
   void LoadAllCharactersJson();
   void ResetAllEffectsOnPlayer(const Character *chara);
   int GetNbOfActiveHotsOnHeroes() const;
+  void SetSelectedHero(const QString& name);
 
   // Available characters to create a party
   std::vector<Character *> m_AllHeroesList;
