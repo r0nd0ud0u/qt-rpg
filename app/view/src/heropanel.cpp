@@ -186,3 +186,23 @@ void HeroPanel::on_form_comboBox_currentTextChanged(const QString &arg1) {
   emit SigUpdateCharaForm(m_Heroe->m_Name, arg1);
   m_Heroe->m_SelectedForm = arg1;
 }
+
+void HeroPanel::on_pushButton_clicked()
+{
+    UpdateActiveRightWidget();
+    emit SigUpdateCharacterPlaying(m_Heroe->m_Name);
+}
+
+void HeroPanel::UpdateActiveRightWidget() {
+    if(!m_Heroe->m_StatsInGame.m_IsPlaying){
+        ui->pushButton->setText("Playing");
+        setStyleSheet("#right_widget{ background:     #40b1fe;  } ");
+    } else {
+        ui->pushButton->setText("Select");
+        setStyleSheet("#right_widget{ background:     grey;  } ");
+    }
+}
+
+void HeroPanel::SetSelectedGameChoiceBtn(const bool value){
+    ui->pushButton->setEnabled(value);
+}

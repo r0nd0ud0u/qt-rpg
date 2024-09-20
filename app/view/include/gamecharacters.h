@@ -17,13 +17,18 @@ public:
   explicit GameCharacters(QWidget *parent = nullptr);
   ~GameCharacters();
 
+  void UpdateSelected(const QString &name) const;
+
 signals:
-  void SigDead(); // if i dont add this line; the call to 'emit SigReturnToHostPage' is crashing the app
+  void SigDead(); // if i dont add this line; the call to 'emit
+                  // SigReturnToHostPage' is crashing the app
   void SigReturnToHostPage();
+  void SigSelectGameCharacter(const QString &name, const QString &photoName);
 
 private slots:
   void on_back_pushButton_clicked();
-  void ActivatePanel(const QString &name) const;
+  void SelectPanel(const QString &name);
+  void UpdateCharacterPlaying(const QString &name);
 
 private:
   Ui::GameCharacters *ui;

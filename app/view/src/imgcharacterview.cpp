@@ -3,11 +3,14 @@
 
 #include "Application.h"
 #include "gamedisplay.h"
+#include "gamecharacters.h"
 
 ImgCharacterView::ImgCharacterView(QWidget *parent)
     : QWidget(parent), ui(new Ui::ImgCharacterView) {
   ui->setupUi(this);
   connect((GameDisplay *)parentWidget(), &GameDisplay::selectCharacter, this,
+          &ImgCharacterView::UpdateView);
+  connect((GameCharacters *)parentWidget(), &GameCharacters::SigSelectGameCharacter, this,
           &ImgCharacterView::UpdateView);
 }
 

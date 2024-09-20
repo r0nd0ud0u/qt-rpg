@@ -24,6 +24,8 @@ public:
   void mousePressEvent(QMouseEvent *event) override;
   void SetPixmap(const QString &name);
   void InitComboBox();
+  void UpdateActiveRightWidget();
+  void SetSelectedGameChoiceBtn(const bool value);
 
   Character *m_Heroe = nullptr;
 
@@ -32,9 +34,12 @@ private slots:
 
   void on_form_comboBox_currentTextChanged(const QString &arg1);
 
-signals:
+  void on_pushButton_clicked();
+
+  signals:
   void SigPanelSelectCharacter(QString);
   void SigUpdateCharaForm(const QString &, const QString &);
+  void SigUpdateCharacterPlaying(const QString &);
 
 private:
   Ui::HeroPanel *ui;
