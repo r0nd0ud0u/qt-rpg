@@ -22,7 +22,10 @@ CharacterWindow::CharacterWindow(QWidget *parent)
           &MainWindow::UpdateStuffOnUse);
 }
 
-CharacterWindow::~CharacterWindow() { delete ui; }
+CharacterWindow::~CharacterWindow() {
+  m_CurCharacter = nullptr;
+  delete ui;
+}
 
 void CharacterWindow::InitWindow(const tabType &type) {
   if (type == tabType::attak) {

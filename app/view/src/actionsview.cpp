@@ -17,9 +17,9 @@ ActionsView::ActionsView(QWidget *parent)
 }
 
 ActionsView::~ActionsView() {
-  delete ui;
   m_CurPlayer = nullptr;
   m_TargetedList.clear();
+  delete ui;
 }
 
 void ActionsView::addActionRow(QAbstractItemModel *model,

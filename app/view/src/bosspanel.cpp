@@ -8,7 +8,10 @@ BossPanel::BossPanel(QWidget *parent) : QWidget(parent), ui(new Ui::BossPanel) {
   ui->setupUi(this);
 }
 
-BossPanel::~BossPanel() { delete ui; }
+BossPanel::~BossPanel() {
+  m_Boss = nullptr;
+  delete ui;
+}
 
 void BossPanel::UpdatePanel(Character *boss) {
   if (boss == nullptr) {

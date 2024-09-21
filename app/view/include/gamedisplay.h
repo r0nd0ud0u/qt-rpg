@@ -41,6 +41,7 @@ signals:
 
 private:
   Ui::GameDisplay *ui;
+
   void UpdateGameStatus();
   bool
   ProcessAtk(const TargetInfo *target, const AttaqueType &currentAtk,

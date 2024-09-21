@@ -21,7 +21,10 @@ EditAttakView::EditAttakView(QWidget *parent)
           &EditAttakView::UpdateEffectOn);
 }
 
-EditAttakView::~EditAttakView() { delete ui; }
+EditAttakView::~EditAttakView() {
+  m_AttakList.clear();
+  delete ui;
+}
 
 void EditAttakView::InitView() {
   const auto &app = Application::GetInstance();
@@ -209,7 +212,8 @@ void EditAttakView::InitComboBoxes() {
   QString directoryPath = OFFLINE_IMG; // Replace with the actual path
   QDir directory(directoryPath);
   if (!directory.exists()) {
-    Application::GetInstance().log(QString("Directory does not exist: %1").arg(directoryPath));
+    Application::GetInstance().log(
+        QString("Directory does not exist: %1").arg(directoryPath));
   }
   QStringList fileList =
       directory.entryList(QDir::Files | QDir::NoDotAndDotDot);
