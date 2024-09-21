@@ -8,8 +8,8 @@
 #include "channel.h"
 #include "heroesview.h"
 
-#include "stuff.h"
 #include "statsingame.h"
+#include "stuff.h"
 
 #include "rust-rpg-bridge/utils.h"
 
@@ -19,8 +19,6 @@ GameDisplay::GameDisplay(QWidget *parent)
     : QWidget(parent), ui(new Ui::GameDisplay) {
   ui->setupUi(this);
 
-  connect(ui->heroes_widget, &HeroesView::SigAddStuff, this,
-          &GameDisplay::UpdateChannel);
   connect(ui->heroes_widget, &HeroesView::SigClickedOnHeroPanel, this,
           &GameDisplay::UpdateViews);
   connect(ui->heroes_widget, &HeroesView::SigSelectedFormOnHeroPanel, this,
@@ -35,6 +33,8 @@ GameDisplay::GameDisplay(QWidget *parent)
           &GameDisplay::EndOfTurn);
   connect(ui->attak_page, &ActionsView::SigLaunchAttak, this,
           &GameDisplay::LaunchAttak);
+  connect(this, &GameDisplay::SigBossDead, ui->attak_page,
+          &ActionsView::RemoveTarget);
 
   // init display default page
   ui->stackedWidget->setCurrentIndex(
@@ -45,8 +45,6 @@ GameDisplay::GameDisplay(QWidget *parent)
 
 GameDisplay::~GameDisplay() { delete ui; }
 
-void GameDisplay::UpdateChannel() { ui->channel_lay->ShowPageStuffs(); }
-
 void GameDisplay::UpdateViews(const QString &name) {
   const auto &app = Application::GetInstance();
   QString photo;
@@ -55,7 +53,7 @@ void GameDisplay::UpdateViews(const QString &name) {
   // get photo name
   const auto *c = app.m_GameManager->m_PlayersManager->m_SelectedHero;
   if (c != nullptr) {
-      photo = c->GetPhotoName();
+    photo = c->GetPhotoName();
   }
   emit selectCharacter(name, photo);
 }
@@ -410,9 +408,9 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       currentAtk.reach == REACH_INDIVIDUAL) {
     const auto &[isDodging, plName, outputsRandNb] =
         gm->m_PlayersManager->IsDodging(targetList, currentAtk);
-    const auto indivTarget =
-        gm->m_PlayersManager->GetCharacterByName(plName);
-    if (indivTarget != nullptr && indivTarget->m_Class != CharacterClass::Tank) {
+    const auto indivTarget = gm->m_PlayersManager->GetCharacterByName(plName);
+    if (indivTarget != nullptr &&
+        indivTarget->m_Class != CharacterClass::Tank) {
       if (isDodging) {
         launchingStr.append(
             QString("%1 esquive.(%2)").arg(plName).arg(outputsRandNb.first()));

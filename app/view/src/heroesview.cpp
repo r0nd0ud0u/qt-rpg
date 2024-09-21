@@ -62,8 +62,6 @@ void HeroesView::InitHeroPanel() {
   }
 }
 
-void HeroesView::Dosomething() { emit SigAddStuff(); }
-
 void HeroesView::SlotClickedOnHeroPanel(const QString &name) {
 
   UpdateSelected(name);

@@ -209,7 +209,7 @@ void EditAttakView::InitComboBoxes() {
   QString directoryPath = OFFLINE_IMG; // Replace with the actual path
   QDir directory(directoryPath);
   if (!directory.exists()) {
-    qDebug() << "Directory does not exist: " << directoryPath;
+    Application::GetInstance().log(QString("Directory does not exist: %1").arg(directoryPath));
   }
   QStringList fileList =
       directory.entryList(QDir::Files | QDir::NoDotAndDotDot);

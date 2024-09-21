@@ -21,11 +21,9 @@ public:
   void ActivatePanel(const QString &);
 
 signals:
-  void SigAddStuff();
   void SigClickedOnHeroPanel(const QString &);
   void SigSelectedFormOnHeroPanel(const QString &E, const QString &);
 private slots:
-  void Dosomething();
   void SlotClickedOnHeroPanel(const QString &name);
   void SlotSelectedForm(const QString &name, const QString &form);
   void UpdateAllPanels(const std::unordered_map<QString, std::vector<GameAtkEffects>> &);

@@ -126,7 +126,6 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_6"/>
        </widget>
       </item>
       <item>
@@ -360,23 +359,6 @@
              <height>20</height>
             </size>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_3">
-            <property name="spacing">
-             <number>0</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-           </layout>
           </widget>
          </item>
         </layout>
@@ -432,7 +414,7 @@
   <customwidget>
    <class>DotView</class>
    <extends>QWidget</extends>
-   <header location="global">dotview.h</header>
+   <header>dotview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

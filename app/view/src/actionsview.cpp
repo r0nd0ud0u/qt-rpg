@@ -14,8 +14,6 @@
 ActionsView::ActionsView(QWidget *parent)
     : QWidget(parent), ui(new Ui::ActionsView) {
   ui->setupUi(this);
-  connect((GameDisplay *)parentWidget(), &GameDisplay::SigBossDead, this,
-          &ActionsView::RemoveTarget);
 }
 
 ActionsView::~ActionsView() {
@@ -31,7 +29,7 @@ void ActionsView::addActionRow(QAbstractItemModel *model,
   model->insertRow(index);
   model->setData(model->index(index, 0), action);
   if (reason != std::nullopt) {
-      model->setData(model->index(index, 1), reason.value());
+    model->setData(model->index(index, 1), reason.value());
   }
 }
 
@@ -297,7 +295,6 @@ void ActionsView::RemoveTarget(QString targetName) {
   if (targetName.isEmpty()) {
     return;
   }
-  auto *lay = ui->targets_widget->layout();
 
   int i = 0;
   for (const auto *it : m_TargetedList) {
@@ -318,6 +315,12 @@ void ActionsView::RemoveTarget(QString targetName) {
         }
       });
   m_TargetedList.erase(newEnd, m_TargetedList.end());
+
+  // delete widget
+  auto *lay = ui->targets_widget->layout();
+  if (lay == nullptr) {
+    return;
+  }
   auto *widget = lay->itemAt(i)->widget();
   widget->hide();
   lay->removeItem(lay->itemAt(i));

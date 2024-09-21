@@ -49,7 +49,6 @@ private:
              std::unordered_map<QString, std::vector<effectParam>> &newEffects);
 
 private slots:
-  void UpdateChannel();
   void on_attaque_button_clicked();
   void on_bag_button_clicked();
   void on_stackedWidget_currentChanged(const int arg1);

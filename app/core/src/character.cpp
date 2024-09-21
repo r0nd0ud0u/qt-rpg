@@ -142,10 +142,13 @@ void Character::AddAtq(const AttaqueType &atq) { m_AttakList[atq.name] = atq; }
 
 void Character::LoadAtkJson() {
   // List all attak for a character
-  const QString directoryPath = OFFLINE_ATK + m_Name; // Replace with the actual path
+  const QString directoryPath =
+      OFFLINE_ATK + m_Name; // Replace with the actual path
   const QDir directory(directoryPath);
   if (!directory.exists()) {
-    qDebug() << "Directory does not exist: " << directoryPath;
+    Application::GetInstance().log(
+        QString("Directory does not exist: %1").arg(directoryPath));
+    return;
   }
   const QStringList fileList =
       directory.entryList(QDir::Files | QDir::NoDotAndDotDot);
@@ -255,10 +258,12 @@ void Character::LoadAtkJson() {
 
 void Character::LoadStuffJson() {
 
-  QString directoryPath =
+  const QString directoryPath =
       OFFLINE_WEARING_EQUIPMENT; // Replace with the actual path
   if (QDir directory(directoryPath); !directory.exists()) {
-    qDebug() << "Directory does not exist: " << directoryPath;
+    Application::GetInstance().log(
+        QString("Directory does not exist: %1").arg(directoryPath));
+    return;
   }
   QFile json(directoryPath + "/" + m_Name + ".json");
   if (!json.open(QFile::ReadOnly | QFile::Text)) {
@@ -1486,10 +1491,12 @@ void Character::UpdateEquipmentOnJson() const {
   }
   // output attak json
   QJsonDocument doc(obj);
-  QString directoryPath =
+  const QString directoryPath =
       OFFLINE_WEARING_EQUIPMENT; // Replace with the actual path
   if (QDir directory(directoryPath); !directory.exists()) {
-    qDebug() << "Directory does not exist: " << directoryPath;
+    Application::GetInstance().log(
+        QString("Directory does not exist: %1").arg(directoryPath));
+    return;
   }
   QFile json(directoryPath + m_Name + ".json");
   if (!json.open(QFile::WriteOnly | QFile::Text)) {
@@ -1830,5 +1837,5 @@ void Character::ProcessBlock(const bool isDodging) {
 }
 
 QString Character::GetPhotoName() const {
-    return (m_PhotoName.isEmpty()) ? m_Name : m_PhotoName;
+  return (m_PhotoName.isEmpty()) ? m_Name : m_PhotoName;
 }

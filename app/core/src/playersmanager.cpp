@@ -109,7 +109,9 @@ void PlayersManager::LoadAllEquipmentsJson() {
       OFFLINE_ROOT_EQUIPMENT; // Replace with the actual path
   QDir directory(directoryPath);
   if (!directory.exists()) {
-    qDebug() << "Directory does not exist: " << directoryPath;
+    Application::GetInstance().log(
+        QString("Directory does not exist: %1").arg(directoryPath));
+    return;
   }
   // Detect all directories, each directory is a part of the body
   QStringList subdirectories =
@@ -118,7 +120,8 @@ void PlayersManager::LoadAllEquipmentsJson() {
   for (const auto &subdirPath : subdirectories) {
     QDir subdir(directoryPath + subdirPath);
     if (!subdir.exists()) {
-      qDebug() << "Directory does not exist: " << subdirPath;
+      Application::GetInstance().log(
+          QString("Directory does not exist: %1").arg(subdirPath));
     }
     QStringList fileList = subdir.entryList(QDir::Files | QDir::NoDotAndDotDot);
     for (const QString &file : fileList) {
@@ -1025,7 +1028,8 @@ void PlayersManager::LoadAllCharactersJson() {
   QString directoryPath = OFFLINE_CHARACTERS; // Replace with the actual path
   QDir directory(directoryPath);
   if (!directory.exists()) {
-    qDebug() << "Directory does not exist: " << directoryPath;
+    Application::GetInstance().log(QString("Directory does not exist: %1").arg(directoryPath));
+      return;
   }
   QStringList fileList =
       directory.entryList(QDir::Files | QDir::NoDotAndDotDot);
@@ -1109,17 +1113,17 @@ void PlayersManager::ResetAllEffectsOnPlayer(const Character *chara) {
   RemoveTerminatedEffectsOnPlayer(chara->m_Name);
 }
 
-void PlayersManager::SetSelectedHero(const QString& name){
-    for (auto *hero : m_HeroesList) {
-        if (hero->m_Name == name) {
-            m_SelectedHero = hero;
-            break;
-        }
+void PlayersManager::SetSelectedHero(const QString &name) {
+  for (auto *hero : m_HeroesList) {
+    if (hero->m_Name == name) {
+      m_SelectedHero = hero;
+      break;
     }
-    for (auto *boss : m_BossesList) {
-        if (boss->m_Name == name) {
-            m_SelectedHero = boss;
-            break;
-        }
+  }
+  for (auto *boss : m_BossesList) {
+    if (boss->m_Name == name) {
+      m_SelectedHero = boss;
+      break;
     }
+  }
 }
