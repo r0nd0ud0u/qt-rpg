@@ -56,7 +56,7 @@ void BossesView::AddBossPanel(Character *ch) {
   m_BossPanels.push_back(bossPanel);
   bossPanel->SetActive(false);
   bossPanel->SetSelected(false);
-  connect(bossPanel, &BossPanel::SigSelectedCharacterOnPanel, this,
+  connect(bossPanel, &BossPanel::SigPanelSelectCharacter, this,
           &BossesView::SlotClickedOnPanel);
 }
 

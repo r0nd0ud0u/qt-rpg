@@ -75,8 +75,35 @@ void BossPanel::SetSelected(const bool selected) {
 
 void BossPanel::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
-    emit SigSelectedCharacterOnPanel(m_Boss->m_Name);
+    emit SigPanelSelectCharacter(m_Boss->m_Name);
   }
 }
 
 bool BossPanel::GetActive() const { return ui->active_widget->isEnabled(); }
+
+void BossPanel::on_selectPushButton_clicked() {
+  UpdateActiveInfoWidget();
+  emit SigUpdateCharacterPlaying(m_Boss->m_Name);
+}
+
+void BossPanel::UpdateActiveInfoWidget() {
+  if (!m_Boss->m_StatsInGame.m_IsPlaying) {
+    SetPlayingStatus();
+  } else {
+    SetSelectStatus();
+  }
+}
+
+void BossPanel::SetPlayingStatus() {
+  ui->selectPushButton->setText("Playing");
+  setStyleSheet("#info_widget{ background:     #40b1fe;  } ");
+}
+
+void BossPanel::SetSelectStatus() {
+  ui->selectPushButton->setText("Select");
+  setStyleSheet("#info_widget{ background:     grey;  } ");
+}
+
+void BossPanel::SetSelectedGameChoiceBtn(const bool value) {
+  ui->selectPushButton->setEnabled(value);
+}

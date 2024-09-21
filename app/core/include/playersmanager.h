@@ -63,7 +63,7 @@ public:
   GetAllDeadliestAllies(const characType &launcherType) const;
   void ProcessIsRandomTarget() const;
   void ResetIsFirstRound() const;
-  bool UpdateActivePlayers(const std::set<QString> &playersList);
+  bool UpdateActivePlayers();
   std::vector<Stuff> LootNewEquipments(const QString& name);
   void InitRandomEquip();
   std::optional<std::pair<QString, int>> GetHeroMostAggro() const;

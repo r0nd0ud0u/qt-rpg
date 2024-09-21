@@ -195,12 +195,20 @@ void HeroPanel::on_pushButton_clicked()
 
 void HeroPanel::UpdateActiveRightWidget() {
     if(!m_Heroe->m_StatsInGame.m_IsPlaying){
-        ui->pushButton->setText("Playing");
-        setStyleSheet("#right_widget{ background:     #40b1fe;  } ");
+        SetPlayingStatus();
     } else {
-        ui->pushButton->setText("Select");
-        setStyleSheet("#right_widget{ background:     grey;  } ");
+        SetSelectStatus();
     }
+}
+
+void HeroPanel::SetPlayingStatus(){
+    ui->pushButton->setText("Playing");
+    setStyleSheet("#right_widget{ background:     #40b1fe;  } ");
+}
+
+void HeroPanel::SetSelectStatus(){
+    ui->pushButton->setText("Select");
+    setStyleSheet("#right_widget{ background:     grey;  } ");
 }
 
 void HeroPanel::SetSelectedGameChoiceBtn(const bool value){

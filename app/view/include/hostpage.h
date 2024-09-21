@@ -18,7 +18,8 @@ public:
 
 signals:
   void showGameDisplay();
-  void SigShowGameCharacters();
+  void SigShowHeroGameCharacters();
+  void SigShowBossGameCharacters();
 
 private slots:
   void on_newGamePushButton_clicked();

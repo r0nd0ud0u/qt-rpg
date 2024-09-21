@@ -77,15 +77,11 @@ void PlayersManager::ClearHeroBossList() {
   m_BossesList.clear();
 }
 
-bool PlayersManager::UpdateActivePlayers(const std::set<QString> &playersList) {
+bool PlayersManager::UpdateActivePlayers() {
   ClearHeroBossList();
-  if (playersList.empty()) {
-    return false;
-  }
   std::for_each(m_AllHeroesList.begin(), m_AllHeroesList.end(),
                 [&](Character *c) {
-                  if (c != nullptr && playersList.count(c->m_Name)) {
-                    c->m_StatsInGame.m_IsPlaying = true;
+                  if (c != nullptr && c->m_StatsInGame.m_IsPlaying) {
                     m_HeroesList.push_back(c);
                   }
                 });
@@ -95,8 +91,7 @@ bool PlayersManager::UpdateActivePlayers(const std::set<QString> &playersList) {
 
   std::for_each(m_AllBossesList.begin(), m_AllBossesList.end(),
                 [&](Character *c) {
-                  if (c != nullptr && playersList.count(c->m_Name)) {
-                    c->m_StatsInGame.m_IsPlaying = true;
+                  if (c != nullptr && c->m_StatsInGame.m_IsPlaying) {
                     m_BossesList.push_back(c);
                   }
                 });
@@ -1028,8 +1023,9 @@ void PlayersManager::LoadAllCharactersJson() {
   QString directoryPath = OFFLINE_CHARACTERS; // Replace with the actual path
   QDir directory(directoryPath);
   if (!directory.exists()) {
-    Application::GetInstance().log(QString("Directory does not exist: %1").arg(directoryPath));
-      return;
+    Application::GetInstance().log(
+        QString("Directory does not exist: %1").arg(directoryPath));
+    return;
   }
   QStringList fileList =
       directory.entryList(QDir::Files | QDir::NoDotAndDotDot);

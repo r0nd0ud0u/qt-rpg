@@ -24,8 +24,9 @@ public:
   void mousePressEvent(QMouseEvent *event) override;
   void SetPixmap(const QString &name);
   void InitComboBox();
-  void UpdateActiveRightWidget();
   void SetSelectedGameChoiceBtn(const bool value);
+  void SetPlayingStatus();
+  void SetSelectStatus();
 
   Character *m_Heroe = nullptr;
 
@@ -43,6 +44,8 @@ private slots:
 
 private:
   Ui::HeroPanel *ui;
+
+  void UpdateActiveRightWidget();
 };
 
 #endif // HEROPANEL_H

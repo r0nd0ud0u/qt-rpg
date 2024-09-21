@@ -38,12 +38,15 @@ signals:
 
 private:
   Ui::MainWindow *ui;
-  std::set<QString> m_ActivePlayers;
 
 private slots:
   void ShowPageGameDisplay();
-  void ShowGameCharacters();
+  void ShowHeroGameCharacters(const bool init);
+  void ShowBossGameCharacters();
+  void ProcessGameCharacterNextBtn(const bool value);
+  void ProcessGameCharacterBackBtn(const bool value);
   void ShowHostPage();
-  void UpdateActiveCharacters(const std::set<QString> &);
+  void UpdateActiveCharacters();
+  void RawDisplayHeroGameCh();
 };
 #endif // MAINWINDOW_H
