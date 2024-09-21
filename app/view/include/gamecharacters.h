@@ -28,7 +28,7 @@ signals:
 private slots:
   void on_back_pushButton_clicked();
   void SelectPanel(const QString &name);
-  void UpdateCharacterPlaying(const QString &name);
+  void UpdateCharacterPlaying(const QString &name) const;
 
 private:
   Ui::GameCharacters *ui;

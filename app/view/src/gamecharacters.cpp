@@ -106,14 +106,14 @@ void GameCharacters::UpdateSelected(const QString &name) const {
 
 void GameCharacters::SelectPanel(const QString &name) {
   UpdateSelected(name);
-  for (auto *hero : m_HeroesList) {
+  for (const auto *hero : m_HeroesList) {
     if (name == hero->m_Heroe->m_Name) {
       emit SigSelectGameCharacter(hero->m_Heroe->m_Name,
                                   hero->m_Heroe->GetPhotoName());
       break;
     }
   }
-  for (auto *boss : m_BossesList) {
+  for (const auto *boss : m_BossesList) {
     if (name == boss->m_Boss->m_Name) {
       emit SigSelectGameCharacter(boss->m_Boss->m_Name,
                                   boss->m_Boss->GetPhotoName());
@@ -122,7 +122,7 @@ void GameCharacters::SelectPanel(const QString &name) {
   }
 }
 
-void GameCharacters::UpdateCharacterPlaying(const QString &name) {
+void GameCharacters::UpdateCharacterPlaying(const QString &name) const{
   for (auto *hero : m_HeroesList) {
     if (name == hero->m_Heroe->m_Name) {
       hero->m_Heroe->m_StatsInGame.StartGame(
