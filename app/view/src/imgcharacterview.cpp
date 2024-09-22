@@ -29,12 +29,14 @@ void ImgCharacterView::UpdateView(QString name, const QString &photo) {
 }
 
 void ImgCharacterView::SetPixmap(const QString &name, const int scalingHeight) {
-  const QString photoPath = OFFLINE_IMG + name + ".png";
+  QString photoPath = OFFLINE_IMG + name + ".png";
   if (!Utils::FileExists(photoPath)) {
-    return;
+      photoPath = OFFLINE_IMG + "default.png";
+      if (!Utils::FileExists(photoPath)) {
+          return;
+      }
   }
   // Update image character
-  // return;
   auto qp = QPixmap(photoPath);
   QPixmap scaledPixmap =
       qp.scaledToHeight(scalingHeight); // Set the desired width and height
