@@ -28,7 +28,7 @@ public:
   Character *m_Boss = nullptr;
 
 signals:
-  void SigPanelSelectCharacter(const QString &);
+  void SigPanelSelectCharacter(const Character*);
   void SigUpdateCharacterPlaying(const QString &);
 
 private slots:

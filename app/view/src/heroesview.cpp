@@ -62,10 +62,10 @@ void HeroesView::InitHeroPanel() {
   }
 }
 
-void HeroesView::SlotClickedOnHeroPanel(const QString &name) {
+void HeroesView::SlotClickedOnHeroPanel(const Character *c) {
 
-  UpdateSelected(name);
-  emit SigClickedOnHeroPanel(name);
+  UpdateSelected(c);
+  emit SigClickedOnHeroPanel(c->m_Name);
 }
 
 void HeroesView::SlotSelectedForm(const QString &playerName,
@@ -73,12 +73,15 @@ void HeroesView::SlotSelectedForm(const QString &playerName,
   emit SigSelectedFormOnHeroPanel(playerName, form);
 }
 
-void HeroesView::UpdateSelected(const QString &name) const {
+void HeroesView::UpdateSelected(const Character *c) const {
+  if (c == nullptr) {
+    return;
+  }
   for (auto *hero : m_HeroPanels) {
     if (hero == nullptr) {
       continue;
     }
-    if (hero->m_Heroe->m_Name == name) {
+    if (hero->m_Heroe->m_Name == c->m_Name) {
       hero->SetSelected(true);
     } else {
       hero->SetSelected(false);

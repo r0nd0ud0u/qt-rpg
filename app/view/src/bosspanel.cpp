@@ -75,7 +75,7 @@ void BossPanel::SetSelected(const bool selected) {
 
 void BossPanel::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
-    emit SigPanelSelectCharacter(m_Boss->m_Name);
+    emit SigPanelSelectCharacter(m_Boss);
   }
 }
 

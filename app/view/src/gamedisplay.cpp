@@ -43,14 +43,8 @@ GameDisplay::~GameDisplay() { delete ui; }
 
 void GameDisplay::UpdateViews(const QString &name) {
   const auto &app = Application::GetInstance();
-  QString photo;
-
   app.m_GameManager->m_PlayersManager->SetSelectedHero(name);
-  // get photo name
-  if (const auto *c = app.m_GameManager->m_PlayersManager->m_SelectedHero; c != nullptr) {
-    photo = c->GetPhotoName();
-  }
-  emit selectCharacter(name, photo);
+  emit selectCharacter(app.m_GameManager->m_PlayersManager->m_SelectedHero);
 }
 
 void GameDisplay::on_attaque_button_clicked() {
@@ -230,7 +224,7 @@ void GameDisplay::NewRound() {
                                              .arg(gs->m_OrderToPlay.size()));
   // auto select hero
   gm->m_PlayersManager->m_SelectedHero = activePlayer;
-  emit selectCharacter(activePlayer->m_Name, activePlayer->m_PhotoName);
+  emit selectCharacter(activePlayer);
 
   // set atk view on
   // do it after hero has been activated and selected
@@ -541,7 +535,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   // update views of heroes and bosses
   emit SigUpdatePlayerPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
   // update stats view
-  emit SigUpdStatsOnSelCharacter();
+  emit SigUpdStatsOnSelCharacter(gm->m_PlayersManager->m_SelectedHero);
 
   // Check end of game
   if (gm->m_PlayersManager->m_BossesList.empty()) {
@@ -608,12 +602,8 @@ void GameDisplay::on_add_exp_button_clicked() {
       ui->exp_spinBox->value());
   // update level + exp label of each hero panel
   emit SigUpdatePlayerPanel({});
-  const auto *c = Application::GetInstance()
-                      .m_GameManager->m_PlayersManager->m_SelectedHero;
-  if (c == nullptr) {
-    return;
-  }
-  emit selectCharacter(c->m_Name, c->m_PhotoName);
+  emit selectCharacter(Application::GetInstance()
+                           .m_GameManager->m_PlayersManager->m_SelectedHero);
 }
 
 void GameDisplay::SlotUpdateActionViews(const QString &name,
@@ -644,8 +634,8 @@ void GameDisplay::SlotUpdateActionViews(const QString &name,
 }
 
 void GameDisplay::UpdateActivePlayers() {
-  emit SigGameDisplayStart();
-  const auto *pl = Application::GetInstance()
-                       .m_GameManager->m_PlayersManager->m_SelectedHero;
-  emit selectCharacter(pl->m_Name, pl->m_PhotoName);
+  const auto *c = Application::GetInstance()
+                      .m_GameManager->m_PlayersManager->m_SelectedHero;
+  emit SigGameDisplayStart(c);
+  emit selectCharacter(c);
 }

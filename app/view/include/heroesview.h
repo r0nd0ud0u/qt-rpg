@@ -24,11 +24,11 @@ signals:
   void SigClickedOnHeroPanel(const QString &);
   void SigSelectedFormOnHeroPanel(const QString &E, const QString &);
 private slots:
-  void SlotClickedOnHeroPanel(const QString &name);
+  void SlotClickedOnHeroPanel(const Character* c);
   void SlotSelectedForm(const QString &name, const QString &form);
   void UpdateAllPanels(const std::unordered_map<QString, std::vector<GameAtkEffects>> &);
   void SetFocusOn(const QString &name, const characType &);
-  void UpdateSelected(const QString &name) const;
+  void UpdateSelected(const Character* c) const;
   void InitHeroPanel();
 
 private:

@@ -17,7 +17,7 @@ public:
   explicit GameCharacters(QWidget *parent = nullptr);
   ~GameCharacters();
 
-  void UpdateSelected(const QString &name) const;
+  void UpdateSelected(const Character*) const;
   void InitAllHeroesPanel();
   void InitAllBossesPanel();
   void SetTextNextButton(const QString& str);
@@ -27,12 +27,12 @@ signals:
   void SigDead(); // if i dont add this line; the call to 'emit
                   // SigBackBtnPushed' is crashing the app
   void SigBackBtnPushed(const bool);
-  void SigSelectGameCharacter(const QString &name, const QString &photoName);
+  void SigSelectGameCharacter(const Character*);
   void SigNextButtonPushed(const bool);
 
 private slots:
   void on_back_pushButton_clicked();
-  void SelectPanel(const QString &name);
+  void SelectPanel(const Character*);
   void UpdateCharacterPlaying(const QString &name) const;
 
   void on_nextPushButton_clicked();

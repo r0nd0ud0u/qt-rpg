@@ -38,7 +38,7 @@ private slots:
   void on_pushButton_clicked();
 
   signals:
-  void SigPanelSelectCharacter(QString);
+  void SigPanelSelectCharacter(const Character*);
   void SigUpdateCharaForm(const QString &, const QString &);
   void SigUpdateCharacterPlaying(const QString &);
 

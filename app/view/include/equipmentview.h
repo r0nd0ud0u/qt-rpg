@@ -4,6 +4,8 @@
 #include <QStandardItemModel>
 #include <QWidget>
 
+#include "character.h"
+
 namespace Ui {
 class EquipmentView;
 }
@@ -21,9 +23,9 @@ private:
     void addEquipmentRow(QAbstractItemModel *model, const QString &body,
                                         const QString equipmentName) const;
   void InitView();
-  QAbstractItemModel *createEquipmentModel(QObject *parent);
+  QAbstractItemModel *createEquipmentModel(QObject *parent, const Character* c);
 private slots:
-  void UpdateEquipment(QString name);
+  void UpdateEquipment(const Character* c);
 };
 
 #endif // EQUIPMENTVIEW_H

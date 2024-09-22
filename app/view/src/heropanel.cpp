@@ -157,7 +157,7 @@ void HeroPanel::SetSelected(const bool selected) {
 
 void HeroPanel::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
-    emit SigPanelSelectCharacter(m_Heroe->m_Name);
+    emit SigPanelSelectCharacter(m_Heroe);
   }
 }
 

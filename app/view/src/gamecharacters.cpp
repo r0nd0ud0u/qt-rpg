@@ -85,51 +85,35 @@ void GameCharacters::on_back_pushButton_clicked() {
   emit SigBackBtnPushed(m_IsHeroType);
 }
 
-void GameCharacters::UpdateSelected(const QString &name) const {
+void GameCharacters::UpdateSelected(const Character* c) const {
   if (m_IsHeroType) {
     for (auto *hero : m_HeroesList) {
       if (hero == nullptr) {
         continue;
       }
-      if (hero->m_Heroe->m_Name == name) {
+      if (hero->m_Heroe->m_Name == c->m_Name) {
         hero->SetSelected(true);
       } else {
         hero->SetSelected(false);
       }
     }
   } else {
-    for (auto *c : m_BossesList) {
-      if (c == nullptr) {
+    for (auto *boss : m_BossesList) {
+      if (boss == nullptr) {
         continue;
       }
-      if (c->m_Boss->m_Name == name) {
-        c->SetSelected(true);
+      if (boss->m_Boss->m_Name == c->m_Name) {
+        boss->SetSelected(true);
       } else {
-        c->SetSelected(false);
+        boss->SetSelected(false);
       }
     }
   }
 }
 
-void GameCharacters::SelectPanel(const QString &name) {
-  UpdateSelected(name);
-  if (m_IsHeroType) {
-    for (const auto *hero : m_HeroesList) {
-      if (name == hero->m_Heroe->m_Name) {
-        emit SigSelectGameCharacter(hero->m_Heroe->m_Name,
-                                    hero->m_Heroe->GetPhotoName());
-        break;
-      }
-    }
-  } else {
-    for (const auto *boss : m_BossesList) {
-      if (name == boss->m_Boss->m_Name) {
-        emit SigSelectGameCharacter(boss->m_Boss->m_Name,
-                                    boss->m_Boss->GetPhotoName());
-        break;
-      }
-    }
-  }
+void GameCharacters::SelectPanel(const Character* c) {
+  UpdateSelected(c);
+  emit SigSelectGameCharacter(c);
 }
 
 void GameCharacters::UpdateCharacterPlaying(const QString &name) const {
