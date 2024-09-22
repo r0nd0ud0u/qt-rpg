@@ -22,7 +22,6 @@ private:
 
     void addEquipmentRow(QAbstractItemModel *model, const QString &body,
                                         const QString equipmentName) const;
-  void InitView();
   QAbstractItemModel *createEquipmentModel(QObject *parent, const Character* c);
 private slots:
   void UpdateEquipment(const Character* c);

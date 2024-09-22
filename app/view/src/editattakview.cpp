@@ -26,19 +26,14 @@ EditAttakView::~EditAttakView() {
   delete ui;
 }
 
-void EditAttakView::InitView() {
-  const auto &app = Application::GetInstance();
-  if (app.m_GameManager == nullptr ||
-      app.m_GameManager->m_PlayersManager == nullptr ||
-      app.m_GameManager->m_PlayersManager->m_SelectedHero == nullptr) {
-    return;
+void EditAttakView::InitView(const Character *c) {
+  if (c == nullptr) {
+    InitDefaultView();
   }
-  const auto &selectedHeroAtkList =
-      app.m_GameManager->m_PlayersManager->m_SelectedHero->m_AttakList;
+  const auto &atkList = c->m_AttakList;
 
   // init attributes
-  m_SelectedCharaName =
-      app.m_GameManager->m_PlayersManager->m_SelectedHero->m_Name;
+  m_SelectedCharaName = c->m_Name;
 
   // Create model
   auto *model = new QStringListModel(this);
@@ -46,7 +41,7 @@ void EditAttakView::InitView() {
   QStringList List;
   // Init List and m_AttakList
   m_AttakList.clear();
-  for (const auto &[atkName, atk] : selectedHeroAtkList) {
+  for (const auto &[atkName, atk] : atkList) {
     List << atkName;
     EditAttak editAtk;
     editAtk.type = atk;

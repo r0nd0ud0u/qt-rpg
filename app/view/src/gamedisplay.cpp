@@ -550,7 +550,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
 void GameDisplay::on_add_boss_button_clicked() {
   auto &appView = ApplicationView::GetInstance();
-  appView.GetCharacterWindow()->InitWindow(tabType::character);
+  appView.GetCharacterWindow()->InitWindow(tabType::character, nullptr);
   appView.ShowWindow(appView.GetCharacterWindow(), true);
 }
 

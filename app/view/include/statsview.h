@@ -22,7 +22,6 @@ private:
 
   QString m_CurPlayerName;
 
-  void InitView();
   QAbstractItemModel *createStatsModel(QObject *parent, const Character* c);
   void addStatRow(QAbstractItemModel *model, const QString &statsName,
                   const QVariant &value) const;
