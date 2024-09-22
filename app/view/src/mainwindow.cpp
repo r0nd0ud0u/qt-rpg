@@ -51,10 +51,9 @@ MainWindow::~MainWindow() { delete ui; }
  */
 void MainWindow::ShowPageGameDisplay() {
   if (const auto *gm = Application::GetInstance().m_GameManager.get();
-      gm != nullptr && gm->m_PlayersManager != nullptr) {
-    if (!gm->m_PlayersManager->UpdateActivePlayers()) {
-      return;
-    }
+      gm != nullptr && gm->m_PlayersManager != nullptr &&
+      !gm->m_PlayersManager->UpdateActivePlayers()) {
+    return;
   }
   emit SigUpdateActivePlayers();
   ui->stackedWidget->setCurrentIndex(
@@ -79,8 +78,7 @@ void MainWindow::ShowBossGameCharacters() {
       static_cast<int>(SecondaryPages::bossGameCharacters));
 }
 
-void MainWindow::ProcessGameCharacterNextBtn(
-    const bool value) {
+void MainWindow::ProcessGameCharacterNextBtn(const bool value) {
   if (value) {
     ShowBossGameCharacters();
   } else {
@@ -102,9 +100,7 @@ void MainWindow::ShowHostPage() {
   ui->page->ActiveNewGame(true);
 }
 
-void MainWindow::UpdateActiveCharacters() {
-  ShowPageGameDisplay();
-}
+void MainWindow::UpdateActiveCharacters() { ShowPageGameDisplay(); }
 
 void MainWindow::AddNewCharacter(Character *ch) { emit SigNewCharacter(ch); }
 

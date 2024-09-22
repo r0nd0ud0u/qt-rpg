@@ -171,4 +171,4 @@ void GameCharacters::SetTextNextButton(const QString &str) {
   ui->nextPushButton->setText(str);
 }
 
-void GameCharacters::ResetPages() { ResetAllCharacterPlaying(); }
+void GameCharacters::ResetPages() const { ResetAllCharacterPlaying(); }

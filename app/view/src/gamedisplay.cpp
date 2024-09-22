@@ -11,10 +11,6 @@
 #include "statsingame.h"
 #include "stuff.h"
 
-#include "rust-rpg-bridge/utils.h"
-
-#include <QDebug>
-
 GameDisplay::GameDisplay(QWidget *parent)
     : QWidget(parent), ui(new Ui::GameDisplay) {
   ui->setupUi(this);
@@ -51,8 +47,7 @@ void GameDisplay::UpdateViews(const QString &name) {
 
   app.m_GameManager->m_PlayersManager->SetSelectedHero(name);
   // get photo name
-  const auto *c = app.m_GameManager->m_PlayersManager->m_SelectedHero;
-  if (c != nullptr) {
+  if (const auto *c = app.m_GameManager->m_PlayersManager->m_SelectedHero; c != nullptr) {
     photo = c->GetPhotoName();
   }
   emit selectCharacter(name, photo);

@@ -21,7 +21,7 @@ public:
   void InitAllHeroesPanel();
   void InitAllBossesPanel();
   void SetTextNextButton(const QString& str);
-  void ResetPages();
+  void ResetPages() const;
 
 signals:
   void SigDead(); // if i dont add this line; the call to 'emit
