@@ -11,15 +11,11 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-// This enum represents the different objects represented on each
-// in ui, i dont why
-// host = page1
-// game display = page2
-// game characters = page3
 enum class SecondaryPages {
   hostPage = 0,
-  gameCharacters,
   gameDisplay,
+  heroGameCharacters,
+  bossGameCharacters,
   enumSize
 };
 
@@ -42,12 +38,15 @@ signals:
 
 private:
   Ui::MainWindow *ui;
-  std::set<QString> m_ActivePlayers;
 
 private slots:
   void ShowPageGameDisplay();
-  void ShowGameCharacters();
+  void ShowHeroGameCharacters(const bool init);
+  void ShowBossGameCharacters();
+  void ProcessGameCharacterNextBtn(const bool value);
+  void ProcessGameCharacterBackBtn(const bool value);
   void ShowHostPage();
-  void UpdateActiveCharacters(const std::set<QString> &);
+  void UpdateActiveCharacters();
+  void RawDisplayHeroGameCh();
 };
 #endif // MAINWINDOW_H

@@ -33,8 +33,8 @@ private slots:
   void RemoveBoss(QString);
   void AddBossPanel(Character *ch);
   void SetFocusOn(const QString &name, const characType &);
-  void SlotClickedOnPanel(const QString &);
-  void UpdateSelected(const QString &name) const;
+  void SlotClickedOnPanel(const Character* c);
+  void UpdateSelected(const Character* c) const;
   void InitBossPanels();
   ;
 };

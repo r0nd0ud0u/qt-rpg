@@ -6,6 +6,7 @@
 #include <chrono>
 #include <ctime> // for std::localtime
 #include <iomanip>
+#include <QFileInfo>
 
 // Define a comparison function for sorting based on the 'a' member
 bool Utils::CompareByLevel(const AttaqueType &obj1, const AttaqueType &obj2) {
@@ -83,4 +84,9 @@ int64_t Utils::GetRandomNb(const int64_t min, const int64_t max ){
         return min;
     }
     return (rand() % (max - min)) + 1;
+}
+
+bool Utils::FileExists(const QString& path) {
+    QFileInfo file(path);
+    return file.exists() && file.isFile();
 }

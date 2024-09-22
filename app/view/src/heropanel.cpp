@@ -157,13 +157,13 @@ void HeroPanel::SetSelected(const bool selected) {
 
 void HeroPanel::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
-    emit SigPanelSelectCharacter(m_Heroe->m_Name);
+    emit SigPanelSelectCharacter(m_Heroe);
   }
 }
 
 void HeroPanel::on_edit_button_clicked() const {
   auto &appView = ApplicationView::GetInstance();
-  appView.GetCharacterWindow()->InitWindow(tabType::attak, true);
+  appView.GetCharacterWindow()->InitWindow(tabType::attak, m_Heroe);
   appView.ShowWindow(appView.GetCharacterWindow(), true);
 }
 
@@ -185,4 +185,32 @@ void HeroPanel::InitComboBox() {
 void HeroPanel::on_form_comboBox_currentTextChanged(const QString &arg1) {
   emit SigUpdateCharaForm(m_Heroe->m_Name, arg1);
   m_Heroe->m_SelectedForm = arg1;
+}
+
+void HeroPanel::on_pushButton_clicked()
+{
+    UpdateActiveRightWidget();
+    emit SigUpdateCharacterPlaying(m_Heroe->m_Name);
+}
+
+void HeroPanel::UpdateActiveRightWidget() {
+    if(!m_Heroe->m_StatsInGame.m_IsPlaying){
+        SetPlayingStatus();
+    } else {
+        SetSelectStatus();
+    }
+}
+
+void HeroPanel::SetPlayingStatus(){
+    ui->pushButton->setText("Playing");
+    setStyleSheet("#right_widget{ background:     #40b1fe;  } ");
+}
+
+void HeroPanel::SetSelectStatus(){
+    ui->pushButton->setText("Select");
+    setStyleSheet("#right_widget{ background:     grey;  } ");
+}
+
+void HeroPanel::SetSelectedGameChoiceBtn(const bool value){
+    ui->pushButton->setEnabled(value);
 }

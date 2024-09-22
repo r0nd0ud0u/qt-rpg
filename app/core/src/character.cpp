@@ -142,16 +142,17 @@ void Character::AddAtq(const AttaqueType &atq) { m_AttakList[atq.name] = atq; }
 
 void Character::LoadAtkJson() {
   // List all attak for a character
-  QString directoryPath = OFFLINE_ATK + m_Name; // Replace with the actual path
-  QDir directory(directoryPath);
+  const QString directoryPath =
+      OFFLINE_ATK + m_Name; // Replace with the actual path
+  const QDir directory(directoryPath);
   if (!directory.exists()) {
-    qDebug() << "Directory does not exist: " << directoryPath;
+    Application::GetInstance().log(
+        QString("Directory does not exist: %1").arg(directoryPath));
+    return;
   }
-  QStringList fileList =
+  const QStringList fileList =
       directory.entryList(QDir::Files | QDir::NoDotAndDotDot);
-  qDebug() << "List of files in the directory:";
   for (const QString &file : fileList) {
-    qDebug() << file;
     QFile atkJson(directoryPath + "/" + file);
     if (!atkJson.open(QFile::ReadOnly | QFile::Text)) {
       Application::GetInstance().log(" Could not open the file for reading " +
@@ -166,10 +167,10 @@ void Character::LoadAtkJson() {
       out.setCodec("UTF-8");
 #endif
 
-      QString msg = out.readAll();
+      const QString msg = out.readAll();
       atkJson.close();
 
-      auto json = QJsonDocument::fromJson(msg.toUtf8());
+      const auto json = QJsonDocument::fromJson(msg.toUtf8());
       // decode json
       AttaqueType atk;
       atk.name = json[ATK_NAME].toString();
@@ -182,7 +183,7 @@ void Character::LoadAtkJson() {
       atk.berseckCost = static_cast<uint32_t>(json[ATK_BERSECK_COST].toInt());
       atk.reach = json[ATK_REACH].toString();
       atk.target = json[ATK_TARGET].toString();
-      QJsonArray effectArray = json[EFFECT_ARRAY].toArray();
+      const QJsonArray effectArray = json[EFFECT_ARRAY].toArray();
 #if QT_VERSION_MAJOR == 6
       for (const auto &effect : effectArray) {
         if (effect[EFFECT_STAT].toString().isEmpty() &&
@@ -257,10 +258,12 @@ void Character::LoadAtkJson() {
 
 void Character::LoadStuffJson() {
 
-  QString directoryPath =
+  const QString directoryPath =
       OFFLINE_WEARING_EQUIPMENT; // Replace with the actual path
   if (QDir directory(directoryPath); !directory.exists()) {
-    qDebug() << "Directory does not exist: " << directoryPath;
+    Application::GetInstance().log(
+        QString("Directory does not exist: %1").arg(directoryPath));
+    return;
   }
   QFile json(directoryPath + "/" + m_Name + ".json");
   if (!json.open(QFile::ReadOnly | QFile::Text)) {
@@ -1488,10 +1491,12 @@ void Character::UpdateEquipmentOnJson() const {
   }
   // output attak json
   QJsonDocument doc(obj);
-  QString directoryPath =
+  const QString directoryPath =
       OFFLINE_WEARING_EQUIPMENT; // Replace with the actual path
   if (QDir directory(directoryPath); !directory.exists()) {
-    qDebug() << "Directory does not exist: " << directoryPath;
+    Application::GetInstance().log(
+        QString("Directory does not exist: %1").arg(directoryPath));
+    return;
   }
   QFile json(directoryPath + m_Name + ".json");
   if (!json.open(QFile::WriteOnly | QFile::Text)) {
@@ -1829,4 +1834,8 @@ void Character::InitAggroOnTurn(const int turnNb) {
  */
 void Character::ProcessBlock(const bool isDodging) {
   m_IsBlockingAtk = m_Class == CharacterClass::Tank && isDodging;
+}
+
+QString Character::GetPhotoName() const {
+  return (m_PhotoName.isEmpty()) ? m_Name : m_PhotoName;
 }

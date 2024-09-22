@@ -6,7 +6,15 @@ EffectView::EffectView(QWidget *parent)
   ui->setupUi(this);
 }
 
-EffectView::~EffectView() { delete ui; }
+EffectView::~EffectView() {
+  m_EffectTable.clear();
+  for (auto *it : m_AtkPanels) {
+    delete it;
+    it = nullptr;
+  }
+  m_AtkPanels.clear();
+  delete ui;
+}
 
 void EffectView::SetVectorSize(const size_t size) {
   m_EffectTable.clear();

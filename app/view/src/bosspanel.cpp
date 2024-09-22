@@ -8,7 +8,10 @@ BossPanel::BossPanel(QWidget *parent) : QWidget(parent), ui(new Ui::BossPanel) {
   ui->setupUi(this);
 }
 
-BossPanel::~BossPanel() { delete ui; }
+BossPanel::~BossPanel() {
+  m_Boss = nullptr;
+  delete ui;
+}
 
 void BossPanel::UpdatePanel(Character *boss) {
   if (boss == nullptr) {
@@ -52,7 +55,7 @@ void BossPanel::SetActive(bool activated) {
 
 void BossPanel::on_edit_button_clicked() {
   auto &appView = ApplicationView::GetInstance();
-  appView.GetCharacterWindow()->InitWindow(tabType::attak);
+  appView.GetCharacterWindow()->InitWindow(tabType::attak, m_Boss);
   appView.ShowWindow(appView.GetCharacterWindow(), true);
 }
 
@@ -72,8 +75,35 @@ void BossPanel::SetSelected(const bool selected) {
 
 void BossPanel::mousePressEvent(QMouseEvent *event) {
   if (event->button() == Qt::LeftButton) {
-    emit SigSelectedCharacterOnPanel(m_Boss->m_Name);
+    emit SigPanelSelectCharacter(m_Boss);
   }
 }
 
 bool BossPanel::GetActive() const { return ui->active_widget->isEnabled(); }
+
+void BossPanel::on_selectPushButton_clicked() {
+  UpdateActiveInfoWidget();
+  emit SigUpdateCharacterPlaying(m_Boss->m_Name);
+}
+
+void BossPanel::UpdateActiveInfoWidget() {
+  if (!m_Boss->m_StatsInGame.m_IsPlaying) {
+    SetPlayingStatus();
+  } else {
+    SetSelectStatus();
+  }
+}
+
+void BossPanel::SetPlayingStatus() {
+  ui->selectPushButton->setText("Playing");
+  setStyleSheet("#info_widget{ background:     #40b1fe;  } ");
+}
+
+void BossPanel::SetSelectStatus() {
+  ui->selectPushButton->setText("Select");
+  setStyleSheet("#info_widget{ background:     grey;  } ");
+}
+
+void BossPanel::SetSelectedGameChoiceBtn(const bool value) {
+  ui->selectPushButton->setEnabled(value);
+}

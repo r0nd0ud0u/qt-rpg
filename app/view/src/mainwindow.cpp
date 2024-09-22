@@ -16,10 +16,16 @@ MainWindow::MainWindow(QWidget *parent)
   // Connect: Buttons on host page
   connect(ui->page, &HostPage::showGameDisplay, this,
           &MainWindow::ShowPageGameDisplay);
-  connect(ui->page, &HostPage::SigShowGameCharacters, this,
-          &MainWindow::ShowGameCharacters);
-  connect(ui->page_3, &GameCharacters::SigBackToHostPage, this,
-          &MainWindow::UpdateActiveCharacters);
+  connect(ui->page, &HostPage::SigShowHeroGameCharacters, this,
+          &MainWindow::RawDisplayHeroGameCh);
+  connect(ui->page_Hero, &GameCharacters::SigBackBtnPushed, this,
+          &MainWindow::ProcessGameCharacterBackBtn);
+  connect(ui->page_Hero, &GameCharacters::SigNextButtonPushed, this,
+          &MainWindow::ProcessGameCharacterNextBtn);
+  connect(ui->page_Boss, &GameCharacters::SigNextButtonPushed, this,
+          &MainWindow::ProcessGameCharacterNextBtn);
+  connect(ui->page_Boss, &GameCharacters::SigBackBtnPushed, this,
+          &MainWindow::ProcessGameCharacterBackBtn);
 
   // Connect: Functions on secondary pages
   connect(this, &MainWindow::SigNewCharacter, ui->page_2,
@@ -30,6 +36,10 @@ MainWindow::MainWindow(QWidget *parent)
           &GameDisplay::UpdateViews);
   connect(this, &MainWindow::SigUpdateActivePlayers, ui->page_2,
           &GameDisplay::UpdateActivePlayers);
+
+  // init game characters
+  ui->page_Hero->InitAllHeroesPanel();
+  ui->page_Boss->InitAllBossesPanel();
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -41,31 +51,56 @@ MainWindow::~MainWindow() { delete ui; }
  */
 void MainWindow::ShowPageGameDisplay() {
   if (const auto *gm = Application::GetInstance().m_GameManager.get();
-      gm != nullptr && gm->m_PlayersManager != nullptr) {
-    if (!gm->m_PlayersManager->UpdateActivePlayers(m_ActivePlayers)) {
-      return;
-    }
+      gm != nullptr && gm->m_PlayersManager != nullptr &&
+      !gm->m_PlayersManager->UpdateActivePlayers()) {
+    return;
   }
   emit SigUpdateActivePlayers();
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(SecondaryPages::gameDisplay));
 }
 
-void MainWindow::ShowGameCharacters() {
+void MainWindow::RawDisplayHeroGameCh() { ShowHeroGameCharacters(true); }
+
+void MainWindow::ShowHeroGameCharacters(const bool init) {
+  if (init) {
+    ui->page_Boss->ResetPages();
+    ui->page_Hero->ResetPages();
+  }
+  ui->page_Hero->SetTextNextButton("Suivant");
   ui->stackedWidget->setCurrentIndex(
-      static_cast<int>(SecondaryPages::gameCharacters));
+      static_cast<int>(SecondaryPages::heroGameCharacters));
+}
+
+void MainWindow::ShowBossGameCharacters() {
+  ui->page_Boss->SetTextNextButton("Valider");
+  ui->stackedWidget->setCurrentIndex(
+      static_cast<int>(SecondaryPages::bossGameCharacters));
+}
+
+void MainWindow::ProcessGameCharacterNextBtn(const bool value) {
+  if (value) {
+    ShowBossGameCharacters();
+  } else {
+    UpdateActiveCharacters();
+  }
+}
+
+void MainWindow::ProcessGameCharacterBackBtn(const bool value) {
+  if (value) {
+    ShowHostPage();
+  } else {
+    ShowHeroGameCharacters(false);
+  }
 }
 
 void MainWindow::ShowHostPage() {
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(SecondaryPages::hostPage));
-  ui->page->ActiveNewGame(!m_ActivePlayers.empty());
+  ui->page->ActiveNewGame(true);
 }
 
-void MainWindow::UpdateActiveCharacters(const std::set<QString> &playersList) {
-  m_ActivePlayers = playersList;
-  ShowHostPage();
-}
+void MainWindow::UpdateActiveCharacters() { ShowPageGameDisplay(); }
 
 void MainWindow::AddNewCharacter(Character *ch) { emit SigNewCharacter(ch); }
 

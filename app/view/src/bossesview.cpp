@@ -56,7 +56,7 @@ void BossesView::AddBossPanel(Character *ch) {
   m_BossPanels.push_back(bossPanel);
   bossPanel->SetActive(false);
   bossPanel->SetSelected(false);
-  connect(bossPanel, &BossPanel::SigSelectedCharacterOnPanel, this,
+  connect(bossPanel, &BossPanel::SigPanelSelectCharacter, this,
           &BossesView::SlotClickedOnPanel);
 }
 
@@ -70,7 +70,8 @@ void BossesView::ActivatePanel(const QString &bossName) {
   }
 }
 
-void BossesView::UpdateAllPanels([[maybe_unused]] const std::unordered_map<QString, std::vector<GameAtkEffects>> & table) {
+void BossesView::UpdateAllPanels([[maybe_unused]] const std::unordered_map<
+                                 QString, std::vector<GameAtkEffects>> &table) {
   for (auto &panel : m_BossPanels) {
     panel->UpdatePanel(panel->m_Boss);
   }
@@ -120,18 +121,20 @@ void BossesView::SetFocusOn(const QString &name, const characType &type) {
   }
 }
 
-void BossesView::SlotClickedOnPanel(const QString &name) {
-  UpdateSelected(name);
-
-  emit SigClickedOnPanel(name);
+void BossesView::SlotClickedOnPanel(const Character *c) {
+  UpdateSelected(c);
+  emit SigClickedOnPanel(c->m_Name);
 }
 
-void BossesView::UpdateSelected(const QString &name) const {
+void BossesView::UpdateSelected(const Character *c) const {
+  if (c == nullptr) {
+    return;
+  }
   for (auto *panel : m_BossPanels) {
     if (panel == nullptr) {
       continue;
     }
-    if (panel->m_Boss->m_Name == name) {
+    if (panel->m_Boss->m_Name == c->m_Name) {
       panel->SetSelected(true);
     } else {
       panel->SetSelected(false);

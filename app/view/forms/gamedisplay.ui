@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>899</width>
-    <height>723</height>
+    <height>724</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -84,23 +84,6 @@
          <height>100</height>
         </size>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-       </layout>
       </widget>
      </item>
      <item>
@@ -111,23 +94,6 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_5">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-       </layout>
       </widget>
      </item>
     </layout>
@@ -171,7 +137,6 @@
            <height>16777215</height>
           </size>
          </property>
-         <layout class="QVBoxLayout" name="image_character_lay"/>
         </widget>
        </item>
        <item>
@@ -194,7 +159,6 @@
            <height>300</height>
           </size>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3"/>
         </widget>
        </item>
        <item>
@@ -217,7 +181,6 @@
            <height>300</height>
           </size>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2"/>
         </widget>
        </item>
       </layout>
@@ -281,7 +244,7 @@
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="ActionsView" name="attak_page">
           <property name="sizePolicy">
@@ -369,13 +332,10 @@
            <height>16777215</height>
           </size>
          </property>
-         <layout class="QHBoxLayout" name="channel"/>
         </widget>
        </item>
        <item>
-        <widget class="AllEffectPanel" name="effect_panel_widget" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout_4"/>
-        </widget>
+        <widget class="AllEffectPanel" name="effect_panel_widget" native="true"/>
        </item>
       </layout>
      </item>

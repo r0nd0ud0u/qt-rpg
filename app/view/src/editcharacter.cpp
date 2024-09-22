@@ -12,7 +12,13 @@ EditCharacter::EditCharacter(QWidget *parent)
   InitEditCharacter();
 }
 
-EditCharacter::~EditCharacter() { delete ui; }
+EditCharacter::~EditCharacter() {
+    for (auto *it : m_PanelList) {
+        delete it;
+        it = nullptr;
+    }
+    m_PanelList.clear();
+    delete ui; }
 
 void EditCharacter::InitEditCharacter() {
 

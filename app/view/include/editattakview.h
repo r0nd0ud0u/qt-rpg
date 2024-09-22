@@ -23,7 +23,7 @@ class EditAttakView : public QWidget {
 public:
   explicit EditAttakView(QWidget *parent = nullptr);
   ~EditAttakView();
-  void InitView();
+  void InitView(const Character* c);
   void Save();
   void InitComboBoxes();
   void InitDefaultView();

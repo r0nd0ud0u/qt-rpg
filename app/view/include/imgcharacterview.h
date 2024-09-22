@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include "character.h"
+
 namespace Ui {
 class ImgCharacterView;
 }
@@ -22,7 +24,7 @@ private:
     Ui::ImgCharacterView *ui;
 
 private slots:
-    void UpdateView(QString name, const QString& photo);
+    void UpdateView(const Character* c);
 
 
 };

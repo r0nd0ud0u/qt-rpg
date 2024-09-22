@@ -8,19 +8,13 @@
 #include "channel.h"
 #include "heroesview.h"
 
-#include "stuff.h"
 #include "statsingame.h"
-
-#include "rust-rpg-bridge/utils.h"
-
-#include <QDebug>
+#include "stuff.h"
 
 GameDisplay::GameDisplay(QWidget *parent)
     : QWidget(parent), ui(new Ui::GameDisplay) {
   ui->setupUi(this);
 
-  connect(ui->heroes_widget, &HeroesView::SigAddStuff, this,
-          &GameDisplay::UpdateChannel);
   connect(ui->heroes_widget, &HeroesView::SigClickedOnHeroPanel, this,
           &GameDisplay::UpdateViews);
   connect(ui->heroes_widget, &HeroesView::SigSelectedFormOnHeroPanel, this,
@@ -35,6 +29,8 @@ GameDisplay::GameDisplay(QWidget *parent)
           &GameDisplay::EndOfTurn);
   connect(ui->attak_page, &ActionsView::SigLaunchAttak, this,
           &GameDisplay::LaunchAttak);
+  connect(this, &GameDisplay::SigBossDead, ui->attak_page,
+          &ActionsView::RemoveTarget);
 
   // init display default page
   ui->stackedWidget->setCurrentIndex(
@@ -45,31 +41,10 @@ GameDisplay::GameDisplay(QWidget *parent)
 
 GameDisplay::~GameDisplay() { delete ui; }
 
-void GameDisplay::UpdateChannel() { ui->channel_lay->ShowPageStuffs(); }
-
 void GameDisplay::UpdateViews(const QString &name) {
   const auto &app = Application::GetInstance();
-  QString photo;
-  // lambda function to add here
-  for (auto *hero : app.m_GameManager->m_PlayersManager->m_HeroesList) {
-    if (hero->m_Name == name) {
-      app.m_GameManager->m_PlayersManager->m_SelectedHero = hero;
-      break;
-    }
-  }
-  for (auto *boss : app.m_GameManager->m_PlayersManager->m_BossesList) {
-    if (boss->m_Name == name) {
-      app.m_GameManager->m_PlayersManager->m_SelectedHero = boss;
-      break;
-    }
-  }
-  const auto *c = app.m_GameManager->m_PlayersManager->m_SelectedHero;
-  if (c == nullptr) {
-    photo = "";
-  } else {
-    photo = (c->m_PhotoName.isEmpty()) ? c->m_Name : c->m_PhotoName;
-  }
-  emit selectCharacter(name, photo);
+  app.m_GameManager->m_PlayersManager->SetSelectedHero(name);
+  emit selectCharacter(app.m_GameManager->m_PlayersManager->m_SelectedHero);
 }
 
 void GameDisplay::on_attaque_button_clicked() {
@@ -249,7 +224,7 @@ void GameDisplay::NewRound() {
                                              .arg(gs->m_OrderToPlay.size()));
   // auto select hero
   gm->m_PlayersManager->m_SelectedHero = activePlayer;
-  emit selectCharacter(activePlayer->m_Name, activePlayer->m_PhotoName);
+  emit selectCharacter(activePlayer);
 
   // set atk view on
   // do it after hero has been activated and selected
@@ -422,9 +397,9 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       currentAtk.reach == REACH_INDIVIDUAL) {
     const auto &[isDodging, plName, outputsRandNb] =
         gm->m_PlayersManager->IsDodging(targetList, currentAtk);
-    const auto indivTarget =
-        gm->m_PlayersManager->GetCharacterByName(plName);
-    if (indivTarget != nullptr && indivTarget->m_Class != CharacterClass::Tank) {
+    const auto indivTarget = gm->m_PlayersManager->GetCharacterByName(plName);
+    if (indivTarget != nullptr &&
+        indivTarget->m_Class != CharacterClass::Tank) {
       if (isDodging) {
         launchingStr.append(
             QString("%1 esquive.(%2)").arg(plName).arg(outputsRandNb.first()));
@@ -560,7 +535,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   // update views of heroes and bosses
   emit SigUpdatePlayerPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
   // update stats view
-  emit SigUpdStatsOnSelCharacter();
+  emit SigUpdStatsOnSelCharacter(gm->m_PlayersManager->m_SelectedHero);
 
   // Check end of game
   if (gm->m_PlayersManager->m_BossesList.empty()) {
@@ -575,7 +550,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
 
 void GameDisplay::on_add_boss_button_clicked() {
   auto &appView = ApplicationView::GetInstance();
-  appView.GetCharacterWindow()->InitWindow(tabType::character);
+  appView.GetCharacterWindow()->InitWindow(tabType::character, nullptr);
   appView.ShowWindow(appView.GetCharacterWindow(), true);
 }
 
@@ -627,12 +602,8 @@ void GameDisplay::on_add_exp_button_clicked() {
       ui->exp_spinBox->value());
   // update level + exp label of each hero panel
   emit SigUpdatePlayerPanel({});
-  const auto *c = Application::GetInstance()
-                      .m_GameManager->m_PlayersManager->m_SelectedHero;
-  if (c == nullptr) {
-    return;
-  }
-  emit selectCharacter(c->m_Name, c->m_PhotoName);
+  emit selectCharacter(Application::GetInstance()
+                           .m_GameManager->m_PlayersManager->m_SelectedHero);
 }
 
 void GameDisplay::SlotUpdateActionViews(const QString &name,
@@ -663,8 +634,8 @@ void GameDisplay::SlotUpdateActionViews(const QString &name,
 }
 
 void GameDisplay::UpdateActivePlayers() {
-  emit SigGameDisplayStart();
-  const auto *pl = Application::GetInstance()
-                       .m_GameManager->m_PlayersManager->m_SelectedHero;
-  emit selectCharacter(pl->m_Name, pl->m_PhotoName);
+  const auto *c = Application::GetInstance()
+                      .m_GameManager->m_PlayersManager->m_SelectedHero;
+  emit SigGameDisplayStart(c);
+  emit selectCharacter(c);
 }

@@ -9,7 +9,7 @@ Character GetTestCharacter(){
     // add heroes
     pm->ClearHeroBossList();
     pm->LoadAllCharactersJson();
-    pm->UpdateActivePlayers(activePlayers);
+    pm->UpdateActivePlayers();
     auto testCh = pm->GetCharacterByName(testName);
 
     return *testCh;

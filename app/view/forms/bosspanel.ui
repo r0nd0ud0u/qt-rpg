@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>318</width>
+    <width>327</width>
     <height>83</height>
    </rect>
   </property>
@@ -155,6 +155,13 @@
           <widget class="Line" name="line">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="4">
+          <widget class="QPushButton" name="selectPushButton">
+           <property name="text">
+            <string>Select</string>
            </property>
           </widget>
          </item>

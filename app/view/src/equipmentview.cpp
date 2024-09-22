@@ -1,15 +1,18 @@
 #include "equipmentview.h"
 #include "ui_equipmentview.h"
 
-#include "Application.h"
 #include "gamedisplay.h"
+#include "gamecharacters.h"
 
 EquipmentView::EquipmentView(QWidget *parent)
     : QWidget(parent), ui(new Ui::EquipmentView) {
   ui->setupUi(this);
-  ui->equipment_table->setModel(createEquipmentModel(parent));
+  ui->equipment_table->setModel(createEquipmentModel(parent, nullptr));
 
   connect((GameDisplay *)parentWidget(), &GameDisplay::selectCharacter, this,
+          &EquipmentView::UpdateEquipment);
+  connect((GameCharacters *)parentWidget(),
+          &GameCharacters::SigSelectGameCharacter, this,
           &EquipmentView::UpdateEquipment);
 }
 
@@ -24,15 +27,14 @@ void EquipmentView::addEquipmentRow(QAbstractItemModel *model,
   model->setData(model->index(index, 1), equipmentName);
 }
 
-QAbstractItemModel *EquipmentView::createEquipmentModel(QObject *parent) {
+QAbstractItemModel *EquipmentView::createEquipmentModel(QObject *parent,
+                                                        const Character *c) {
   auto *model = new QStandardItemModel(0, 2, parent);
 
   model->setHeaderData(0, Qt::Horizontal, QObject::tr("Partie du corps"));
   model->setHeaderData(1, Qt::Horizontal, QObject::tr("Equipement"));
 
-  const auto *selectedHero =
-      Application::GetInstance().m_GameManager->GetSelectedHero();
-  if (selectedHero == nullptr) {
+  if (c == nullptr) {
     return nullptr;
   }
 
@@ -40,12 +42,12 @@ QAbstractItemModel *EquipmentView::createEquipmentModel(QObject *parent) {
     if (e.isEmpty()) {
       continue;
     }
-    addEquipmentRow(model, e, selectedHero->m_WearingEquipment.at(e).m_Name);
+    addEquipmentRow(model, e, c->m_WearingEquipment.at(e).m_Name);
   }
 
   return model;
 }
 
-void EquipmentView::UpdateEquipment(QString name) {
-  ui->equipment_table->setModel(createEquipmentModel(parentWidget()));
+void EquipmentView::UpdateEquipment(const Character *c) {
+  ui->equipment_table->setModel(createEquipmentModel(parentWidget(), c));
 }

@@ -37,7 +37,6 @@ private:
   void addRow(QAbstractItemModel *model, const effectParam *ep,
               const QString &launcher, const QString &targetName,
               const QString &atkName) const;
-  void InitView();
   QAbstractItemModel *createModel(QObject *parent) const;
 private slots:
   void ResetModelWithAllEffect(

@@ -53,7 +53,6 @@ private:
 signals:
   void SigLaunchAttak(const QString &atkName,
                       const std::vector<TargetInfo*> &targetList);
-
 private slots:
   // Slots Table atk
   void on_actions_table_view_clicked(const QModelIndex &index);

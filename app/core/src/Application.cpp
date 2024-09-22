@@ -44,7 +44,7 @@ void Application::Init() {
     m_GameManager->InitPlayers();
   }
   srand((unsigned) time(nullptr));
-  // ReadGlobalParameters("skycbt-mission-window.ini");
+  // ReadGlobalParameters("*.ini");
   // QDir logDir(QString::fromStdString(m_global_ini.GLOBAL.m_LOG_PATH));
   // logDir.mkpath(".");
 
@@ -58,7 +58,6 @@ void Application::Init() {
 }
 
 void Application::log(const QString &txt) {
-  return;
   if (!m_logFile.isOpen())
     return;
 

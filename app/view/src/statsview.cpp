@@ -3,18 +3,22 @@
 
 #include "Application.h"
 
+#include "gamecharacters.h"
 #include "gamedisplay.h"
 
 StatsView::StatsView(QWidget *parent) : QWidget(parent), ui(new Ui::StatsView) {
   ui->setupUi(this);
 
   connect((GameDisplay *)parentWidget(), &GameDisplay::selectCharacter, this,
-          &StatsView::UpdateStats);
+          &StatsView::UpdateDisplayedCharStats);
   connect((GameDisplay *)parentWidget(),
           &GameDisplay::SigUpdStatsOnSelCharacter, this,
           &StatsView::UpdateDisplayedCharStats);
+  connect((GameCharacters *)parentWidget(),
+          &GameCharacters::SigSelectGameCharacter, this,
+          &StatsView::UpdateDisplayedCharStats);
   connect((GameDisplay *)parentWidget(), &GameDisplay::SigGameDisplayStart,
-          this, &StatsView::UpdateStats);
+          this, &StatsView::UpdateDisplayedCharStats);
 }
 
 StatsView::~StatsView() { delete ui; }
@@ -27,22 +31,21 @@ void StatsView::addStatRow(QAbstractItemModel *model, const QString &statsName,
   model->setData(model->index(index, 1), value);
 }
 
-QAbstractItemModel *StatsView::createStatsModel(QObject *parent) {
+QAbstractItemModel *StatsView::createStatsModel(QObject *parent,
+                                                const Character *c) {
   auto *model = new QStandardItemModel(0, 2, parent);
 
   model->setHeaderData(0, Qt::Horizontal, QObject::tr("Stats"));
   model->setHeaderData(1, Qt::Horizontal, QObject::tr("Values"));
 
-  const auto *selectedHero =
-      Application::GetInstance().m_GameManager->GetSelectedHero();
-  if (selectedHero == nullptr) {
+  if (c == nullptr) {
     return nullptr;
   }
 
   // define curplayername
-  m_CurPlayerName = selectedHero->m_Name;
+  m_CurPlayerName = c->m_Name;
 
-  const auto &statsTable = selectedHero->m_Stats.m_AllStatsTable;
+  const auto &statsTable = c->m_Stats.m_AllStatsTable;
   for (const auto &stat : ALL_STATS) {
     if (stat.isEmpty()) {
       continue;
@@ -53,8 +56,6 @@ QAbstractItemModel *StatsView::createStatsModel(QObject *parent) {
   return model;
 }
 
-void StatsView::UpdateStats() {
-  ui->stats_table->setModel(createStatsModel(parentWidget()));
+void StatsView::UpdateDisplayedCharStats(const Character *c) {
+  ui->stats_table->setModel(createStatsModel(parentWidget(), c));
 }
-
-void StatsView::UpdateDisplayedCharStats() { UpdateStats(); }
