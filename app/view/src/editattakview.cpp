@@ -29,6 +29,7 @@ EditAttakView::~EditAttakView() {
 void EditAttakView::InitView(const Character *c) {
   if (c == nullptr) {
     InitDefaultView();
+    return;
   }
   const auto &atkList = c->m_AttakList;
 
