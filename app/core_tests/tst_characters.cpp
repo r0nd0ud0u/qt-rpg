@@ -22,12 +22,13 @@ private slots:
 void character_tests::TestThalia_works() {
   const QString thalia = "Thalia";
   const QString azrakRx = "Azrak Ombresang";
-  const std::set<QString> activePlayers{thalia, azrakRx};
   auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
   // add heroes
-  pm->UpdateActivePlayers(activePlayers);
   auto *thaliaCh = pm->GetCharacterByName(thalia);
   auto *AzrakChRx = pm->GetCharacterByName(azrakRx);
+  thaliaCh->m_StatsInGame.m_IsPlaying = true;
+  AzrakChRx->m_StatsInGame.m_IsPlaying = true;
+  pm->UpdateActivePlayers();
 
   // attaque 1
   AttaqueType atk1 = thaliaCh->m_AtksByLevel[0];

@@ -4,6 +4,8 @@
 #include <QStandardItemModel>
 #include <QWidget>
 
+#include "character.h"
+
 namespace Ui {
 class StatsView;
 }
@@ -20,13 +22,11 @@ private:
 
   QString m_CurPlayerName;
 
-  void InitView();
-  QAbstractItemModel *createStatsModel(QObject *parent);
+  QAbstractItemModel *createStatsModel(QObject *parent, const Character* c);
   void addStatRow(QAbstractItemModel *model, const QString &statsName,
                   const QVariant &value) const;
 private slots:
-  void UpdateStats();
-  void UpdateDisplayedCharStats();
+  void UpdateDisplayedCharStats(const Character* c);
 };
 
 #endif // STATSVIEW_H

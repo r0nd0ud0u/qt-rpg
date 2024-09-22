@@ -22,11 +22,16 @@ CharacterWindow::CharacterWindow(QWidget *parent)
           &MainWindow::UpdateStuffOnUse);
 }
 
-CharacterWindow::~CharacterWindow() { delete ui; }
+CharacterWindow::~CharacterWindow() {
+  m_CurCharacter = nullptr;
+  delete ui;
+}
 
-void CharacterWindow::InitWindow(const tabType &type) {
+void CharacterWindow::InitWindow(const tabType &type, Character *c) {
+  ui->tabWidget->setCurrentIndex(static_cast<int>(type));
+  m_CurCharacter = c;
   if (type == tabType::attak) {
-    ui->edit_atk_tab->InitView();
+    ui->edit_atk_tab->InitView(c);
     ui->tabWidget->setTabEnabled(1, true);
     ui->tabWidget->setTabEnabled(2, true);
   }
@@ -88,11 +93,6 @@ void CharacterWindow::Apply() {
       emit SigUseNewStuff(ch->m_Name);
     }
   }
-}
-
-void CharacterWindow::on_tabWidget_currentChanged(int index) {
-  ApplicationView::GetInstance().GetCharacterWindow()->InitWindow(
-      static_cast<tabType>(index));
 }
 
 void CharacterWindow::UpdateView(const std::vector<EditStuff> &esTable) {

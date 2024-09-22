@@ -15,19 +15,19 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="CompBigPrimaryButton" name="charactersPushButton">
+    <widget class="CompBigPrimaryButton" name="newGamePushButton">
      <property name="text">
-      <string>Choose Game Characters</string>
+      <string>Nouveau jeu</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="CompBigPrimaryButton" name="pushButton">
+    <widget class="CompBigPrimaryButton" name="loadGamePushButton">
      <property name="enabled">
       <bool>false</bool>
      </property>
      <property name="text">
-      <string>Start Game</string>
+      <string>Charger jeu</string>
      </property>
     </widget>
    </item>

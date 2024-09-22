@@ -7,16 +7,11 @@
 Channel::Channel(QWidget *parent) : QWidget(parent), ui(new Ui::Channel) {
   ui->setupUi(this);
 
-  ShowTurnPage();
   connect((GameDisplay*)parentWidget(), &GameDisplay::SigBossDead, this, &Channel::EndOfGame);
   connect((GameDisplay*)parentWidget(), &GameDisplay::SigUpdateChannelView, this, &Channel::UpdateLog);
 }
 
 Channel::~Channel() { delete ui; }
-
-void Channel::ShowPageStuffs() { ui->stackedWidget->setCurrentIndex(0); }
-
-void Channel::ShowTurnPage() { ui->stackedWidget->setCurrentIndex(1); }
 
 void Channel::on_next_turn_button_clicked() {
   ui->next_turn_button->setEnabled(false);

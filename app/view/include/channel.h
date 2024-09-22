@@ -15,9 +15,6 @@ public:
   explicit Channel(QWidget *parent = nullptr);
   ~Channel();
 
-  void ShowPageStuffs();
-  void ShowTurnPage();
-
 signals:
   void SigNextRound();
     void SigNewTurn();

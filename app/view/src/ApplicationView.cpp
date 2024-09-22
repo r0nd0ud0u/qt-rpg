@@ -1,13 +1,14 @@
 #include "ApplicationView.h"
 
-#include "gamedisplay.h"
-
 ApplicationView::ApplicationView(QObject *parent) : QObject{parent} {
 }
 
 ApplicationView::~ApplicationView() {
   if (m_main_window.get() != nullptr) {
     m_main_window->hide();
+  }
+  if (m_Character_Window.get() != nullptr) {
+      m_Character_Window->hide();
   }
 }
 

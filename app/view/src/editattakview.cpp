@@ -21,21 +21,20 @@ EditAttakView::EditAttakView(QWidget *parent)
           &EditAttakView::UpdateEffectOn);
 }
 
-EditAttakView::~EditAttakView() { delete ui; }
+EditAttakView::~EditAttakView() {
+  m_AttakList.clear();
+  delete ui;
+}
 
-void EditAttakView::InitView() {
-  const auto &app = Application::GetInstance();
-  if (app.m_GameManager == nullptr ||
-      app.m_GameManager->m_PlayersManager == nullptr ||
-      app.m_GameManager->m_PlayersManager->m_SelectedHero == nullptr) {
+void EditAttakView::InitView(const Character *c) {
+  if (c == nullptr) {
+    InitDefaultView();
     return;
   }
-  const auto &selectedHeroAtkList =
-      app.m_GameManager->m_PlayersManager->m_SelectedHero->m_AttakList;
+  const auto &atkList = c->m_AttakList;
 
   // init attributes
-  m_SelectedCharaName =
-      app.m_GameManager->m_PlayersManager->m_SelectedHero->m_Name;
+  m_SelectedCharaName = c->m_Name;
 
   // Create model
   auto *model = new QStringListModel(this);
@@ -43,7 +42,7 @@ void EditAttakView::InitView() {
   QStringList List;
   // Init List and m_AttakList
   m_AttakList.clear();
-  for (const auto &[atkName, atk] : selectedHeroAtkList) {
+  for (const auto &[atkName, atk] : atkList) {
     List << atkName;
     EditAttak editAtk;
     editAtk.type = atk;
@@ -209,7 +208,8 @@ void EditAttakView::InitComboBoxes() {
   QString directoryPath = OFFLINE_IMG; // Replace with the actual path
   QDir directory(directoryPath);
   if (!directory.exists()) {
-    qDebug() << "Directory does not exist: " << directoryPath;
+    Application::GetInstance().log(
+        QString("Directory does not exist: %1").arg(directoryPath));
   }
   QStringList fileList =
       directory.entryList(QDir::Files | QDir::NoDotAndDotDot);
@@ -298,8 +298,12 @@ void EditAttakView::on_new_atk_button_clicked() {
 // form layout value changed
 
 void EditAttakView::on_photo_comboBox_currentTextChanged(const QString &arg1) {
+  const QString photoPath = OFFLINE_IMG + arg1;
+  if (!Utils::FileExists(photoPath)) {
+    return;
+  }
   // Update image character
-  auto qp = QPixmap(OFFLINE_IMG + arg1);
+  auto qp = QPixmap(photoPath);
 
   // Resize the photo
   QPixmap scaledPixmap =
