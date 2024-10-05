@@ -313,7 +313,7 @@ void GameCharacters::RemoveHeroPanel(const HeroPanel *pnl) {
   delete widget;
 }
 
-void GameCharacters::RemoveBossPanel(BossPanel *pnl) {
+void GameCharacters::RemoveBossPanel(const BossPanel *pnl) {
   if (pnl == nullptr) {
     return;
   }
