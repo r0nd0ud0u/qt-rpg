@@ -31,8 +31,8 @@ GameCharacters::~GameCharacters() {
 void GameCharacters::InitAllHeroesPanel() {
   SetType(true);
   m_HeroesList.clear();
-  const auto &app = Application::GetInstance();
-  if (app.m_GameManager != nullptr &&
+  if (const auto &app = Application::GetInstance();
+      app.m_GameManager != nullptr &&
       app.m_GameManager->m_PlayersManager != nullptr) {
     for (const auto &it :
          app.m_GameManager->m_PlayersManager->m_AllHeroesList) {
@@ -50,8 +50,8 @@ void GameCharacters::InitAllHeroesPanel() {
 void GameCharacters::InitAllBossesPanel() {
   SetType(false);
   m_BossesList.clear();
-  const auto &app = Application::GetInstance();
-  if (app.m_GameManager != nullptr &&
+  if (const auto &app = Application::GetInstance();
+      app.m_GameManager != nullptr &&
       app.m_GameManager->m_PlayersManager != nullptr) {
     for (const auto &it :
          app.m_GameManager->m_PlayersManager->m_AllBossesList) {
@@ -257,9 +257,9 @@ void GameCharacters::UpdatePanelAfterEdit(Character *c) {
     }
   }
   for (auto *pnl : m_BossesList) {
-      if (pnl != nullptr && pnl->m_Boss != nullptr && pnl->m_Boss == c) {
-          pnl->UpdatePanel(c);
-      }
+    if (pnl != nullptr && pnl->m_Boss != nullptr && pnl->m_Boss == c) {
+      pnl->UpdatePanel(c);
+    }
   }
 }
 
@@ -275,7 +275,7 @@ void GameCharacters::SetFocusLastOnPanel() {
   }
 }
 
-void GameCharacters::RemoveHeroPanel(HeroPanel *pnl) {
+void GameCharacters::RemoveHeroPanel(const HeroPanel *pnl) {
   if (pnl == nullptr) {
     return;
   }

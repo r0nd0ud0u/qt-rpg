@@ -31,7 +31,7 @@ public:
 signals:
   void SigPanelSelectCharacter(const Character*);
   void SigUpdateCharacterPlaying(const QString &);
-  void SigRemovePanelByBtn(BossPanel* pnl);
+  void SigRemovePanelByBtn(const BossPanel* pnl);
 
 private slots:
   void on_edit_button_clicked();

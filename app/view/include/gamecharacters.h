@@ -56,8 +56,8 @@ private slots:
   void SetFocusOnBossPanel(const Character* c);
   void SetFocusOnHeroPanel(const Character* c);
   void SetFocusLastOnPanel();
-  void RemoveHeroPanel(HeroPanel* pnl);
-  void RemoveBossPanel(BossPanel* pnl);
+  void RemoveHeroPanel(const HeroPanel* pnl);
+  void RemoveBossPanel(const BossPanel* pnl);
 };
 
 #endif // GAMECHARACTERS_H

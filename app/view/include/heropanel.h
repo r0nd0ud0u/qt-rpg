@@ -44,7 +44,7 @@ private slots:
   void SigPanelSelectCharacter(const Character*);
   void SigUpdateCharaForm(const QString &, const QString &);
   void SigUpdateCharacterPlaying(const QString &);
-  void SigRemovePanelByBtn(HeroPanel* pnl);
+  void SigRemovePanelByBtn(const HeroPanel* pnl);
 
 private:
   Ui::HeroPanel *ui;

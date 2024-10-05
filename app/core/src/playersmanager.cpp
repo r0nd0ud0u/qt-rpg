@@ -1157,7 +1157,7 @@ void PlayersManager::SetSelectedHero(const QString &name) {
  * @brief PlayersManager::ProcessNewDefaultName
  * format `default` string name for a character
  */
-QString PlayersManager::ProcessNewDefaultName() {
+QString PlayersManager::ProcessNewDefaultName() const {
   return QString("default_%1").arg(GetMaxIndexDefaultName() + 1);
 }
 
@@ -1169,7 +1169,7 @@ int PlayersManager::GetMaxIndexDefaultName() const {
   const QString defaultName = "default_";
   int max = 0;
   for (const auto *hero : m_AllHeroesList) {
-    if (int idx = hero->m_Name.indexOf(defaultName);
+    if (auto idx = static_cast<int>(hero->m_Name.indexOf(defaultName));
         idx >= 0 && hero->m_Name.size() > idx) {
       const int tmp = hero->m_Name.sliced(defaultName.size()).toInt();
       if (max < tmp) {
@@ -1178,7 +1178,7 @@ int PlayersManager::GetMaxIndexDefaultName() const {
     }
   }
   for (const auto *boss : m_AllBossesList) {
-    if (int idx = boss->m_Name.indexOf(defaultName);
+    if (auto idx = static_cast<int>(boss->m_Name.indexOf(defaultName));
         idx >= 0 && boss->m_Name.size() > idx) {
       const int tmp = boss->m_Name.sliced(idx).toInt();
       if (max < tmp) {

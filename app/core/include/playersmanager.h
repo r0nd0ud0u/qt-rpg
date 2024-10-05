@@ -73,7 +73,7 @@ public:
   void ResetAllEffectsOnPlayer(const Character *chara);
   int GetNbOfActiveHotsOnHeroes() const;
   void SetSelectedHero(const QString &name);
-  QString ProcessNewDefaultName();
+  QString ProcessNewDefaultName() const;
   int GetMaxIndexDefaultName() const;
 
   // Available characters to create a party
