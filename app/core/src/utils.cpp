@@ -90,3 +90,7 @@ bool Utils::FileExists(const QString& path) {
     QFileInfo file(path);
     return file.exists() && file.isFile();
 }
+
+bool Utils::RemoveFile(const QString& path){
+    return FileExists(path) && QFile::remove(path);
+}

@@ -24,19 +24,23 @@ public:
   void SetSelectedGameChoiceBtn(const bool value);
   void SetPlayingStatus();
   void SetSelectStatus();
+  void ProcessPlayingMode();
 
   Character *m_Boss = nullptr;
 
 signals:
   void SigPanelSelectCharacter(const Character*);
   void SigUpdateCharacterPlaying(const QString &);
+  void SigRemovePanelByBtn(const BossPanel* pnl);
 
 private slots:
   void on_edit_button_clicked();
 
   void on_selectPushButton_clicked();
 
-private:
+  void on_removePushButton_clicked();
+
+  private:
   Ui::BossPanel *ui;
 
   void UpdateActiveInfoWidget();

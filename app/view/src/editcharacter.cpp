@@ -54,3 +54,13 @@ void EditCharacter::AddCharacter(Character *ch) const {
     panel->m_MaxValue = -1;
   }
 }
+
+void EditCharacter::Init(const Character* c){
+    if(c == nullptr){
+        return;
+    }
+    ui->boss_radio->setChecked(c->m_type == characType::Boss);
+    ui->boss_radio->setEnabled(c->m_type == characType::Boss);
+    ui->hero_radio->setChecked(c->m_type == characType::Hero);
+    ui->hero_radio->setEnabled(c->m_type == characType::Hero);
+}

@@ -36,7 +36,7 @@ signals:
       const std::unordered_map<QString, std::vector<GameAtkEffects>> &);
   void SigUpdStatsOnSelCharacter(const Character*);
   void SigAddCharacter(Character *);
-  void SigSetFocusOnActivePlayer(const QString &, const characType &);
+  void SigSetFocusOnActivePlayer(const Character*);
   void SigGameDisplayStart(const Character*);
 
 private:

@@ -107,3 +107,14 @@ void BossPanel::SetSelectStatus() {
 void BossPanel::SetSelectedGameChoiceBtn(const bool value) {
   ui->selectPushButton->setEnabled(value);
 }
+
+void BossPanel::on_removePushButton_clicked()
+{
+    emit SigRemovePanelByBtn(this);
+}
+
+void BossPanel::ProcessPlayingMode(){
+    ui->selectPushButton->hide();
+    ui->edit_button->hide();
+    ui->removePushButton->hide();
+}

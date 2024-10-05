@@ -89,7 +89,7 @@ Character *GameManager::GetCurrentPlayer() {
     return nullptr;
   }
   const auto nameChara = m_GameState->GetCurrentPlayerName();
-  return m_PlayersManager->GetCharacterByName(nameChara);
+  return m_PlayersManager->GetActiveCharacterByName(nameChara);
 }
 
 /////////////////////////////////////////

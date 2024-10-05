@@ -217,7 +217,7 @@ void GameDisplay::NewRound() {
   // actions views
   ui->attak_page->SetCurrentPlayer(activePlayer);
   // set focus on active player
-  emit SigSetFocusOnActivePlayer(activePlayer->m_Name, activePlayer->m_type);
+  emit SigSetFocusOnActivePlayer(activePlayer);
   emit SigUpdatePlayerPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
   emit SigUpdateChannelView("GameState", QString("Round %1/%2")
                                              .arg(gs->m_CurrentRound)
@@ -301,7 +301,7 @@ bool GameDisplay::ProcessAtk(
     return false;
   }
   if (auto *targetChara =
-          gm->m_PlayersManager->GetCharacterByName(target->get_name().data());
+      gm->m_PlayersManager->GetActiveCharacterByName(target->get_name().data());
       targetChara != nullptr) {
     // is dodging
     // a tank cannot dodge
@@ -375,7 +375,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       static_cast<int>(ActionsStackedWgType::defaultType));
 
   const auto &nameChara = gm->m_GameState->GetCurrentPlayerName();
-  auto *activatedPlayer = gm->m_PlayersManager->GetCharacterByName(nameChara);
+  auto *activatedPlayer = gm->m_PlayersManager->GetActiveCharacterByName(nameChara);
   if (activatedPlayer == nullptr) {
     return;
   }
@@ -397,7 +397,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       currentAtk.reach == REACH_INDIVIDUAL) {
     const auto &[isDodging, plName, outputsRandNb] =
         gm->m_PlayersManager->IsDodging(targetList, currentAtk);
-    const auto indivTarget = gm->m_PlayersManager->GetCharacterByName(plName);
+      const auto indivTarget = gm->m_PlayersManager->GetActiveCharacterByName(plName);
     if (indivTarget != nullptr &&
         indivTarget->m_Class != CharacterClass::Tank) {
       if (isDodging) {
@@ -554,17 +554,6 @@ void GameDisplay::on_add_boss_button_clicked() {
   appView.ShowWindow(appView.GetCharacterWindow(), true);
 }
 
-void GameDisplay::AddNewCharacter(Character *ch) {
-  emit SigAddCharacter(ch);
-  Application::GetInstance()
-      .m_GameManager->m_PlayersManager->m_BossesList.push_back(ch);
-}
-
-void GameDisplay::AddNewStuff() const {
-  // TODO useful ?
-  // emit
-}
-
 void GameDisplay::on_mana_potion_button_clicked() {
   auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
@@ -613,7 +602,7 @@ void GameDisplay::SlotUpdateActionViews(const QString &name,
   if (nameChara != name) {
     return;
   }
-  auto *activatedPlayer = gm->m_PlayersManager->GetCharacterByName(nameChara);
+  auto *activatedPlayer = gm->m_PlayersManager->GetActiveCharacterByName(nameChara);
   if (activatedPlayer == nullptr) {
     return;
   }
