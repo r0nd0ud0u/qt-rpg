@@ -23,7 +23,7 @@ public:
 private:
     Ui::ImgCharacterView *ui;
 
-private slots:
+public slots:
     void UpdateView(const Character* c);
 
 

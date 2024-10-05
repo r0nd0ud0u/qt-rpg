@@ -25,7 +25,7 @@ private:
   QAbstractItemModel *createStatsModel(QObject *parent, const Character* c);
   void addStatRow(QAbstractItemModel *model, const QString &statsName,
                   const QVariant &value) const;
-private slots:
+public slots:
   void UpdateDisplayedCharStats(const Character* c);
 };
 

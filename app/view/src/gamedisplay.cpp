@@ -31,6 +31,19 @@ GameDisplay::GameDisplay(QWidget *parent)
           &GameDisplay::LaunchAttak);
   connect(this, &GameDisplay::SigBossDead, ui->attak_page,
           &ActionsView::RemoveTarget);
+  // img view
+  connect(this, &GameDisplay::selectCharacter, ui->img_char_widget,
+          &ImgCharacterView::UpdateView);
+  // stats view
+  connect(this, &GameDisplay::selectCharacter, ui->stats_character,
+          &StatsView::UpdateDisplayedCharStats);
+  connect(this, &GameDisplay::SigUpdStatsOnSelCharacter, ui->stats_character,
+          &StatsView::UpdateDisplayedCharStats);
+  connect(this, &GameDisplay::SigGameDisplayStart, ui->stats_character,
+          &StatsView::UpdateDisplayedCharStats);
+  // equip view
+  connect(this, &GameDisplay::selectCharacter, ui->equipment_widget,
+          &EquipmentView::UpdateEquipment);
 
   // init display default page
   ui->stackedWidget->setCurrentIndex(
@@ -300,8 +313,8 @@ bool GameDisplay::ProcessAtk(
   if (target == nullptr) {
     return false;
   }
-  if (auto *targetChara =
-      gm->m_PlayersManager->GetActiveCharacterByName(target->get_name().data());
+  if (auto *targetChara = gm->m_PlayersManager->GetActiveCharacterByName(
+          target->get_name().data());
       targetChara != nullptr) {
     // is dodging
     // a tank cannot dodge
@@ -375,7 +388,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       static_cast<int>(ActionsStackedWgType::defaultType));
 
   const auto &nameChara = gm->m_GameState->GetCurrentPlayerName();
-  auto *activatedPlayer = gm->m_PlayersManager->GetActiveCharacterByName(nameChara);
+  auto *activatedPlayer =
+      gm->m_PlayersManager->GetActiveCharacterByName(nameChara);
   if (activatedPlayer == nullptr) {
     return;
   }
@@ -397,7 +411,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       currentAtk.reach == REACH_INDIVIDUAL) {
     const auto &[isDodging, plName, outputsRandNb] =
         gm->m_PlayersManager->IsDodging(targetList, currentAtk);
-      const auto indivTarget = gm->m_PlayersManager->GetActiveCharacterByName(plName);
+    const auto indivTarget =
+        gm->m_PlayersManager->GetActiveCharacterByName(plName);
     if (indivTarget != nullptr &&
         indivTarget->m_Class != CharacterClass::Tank) {
       if (isDodging) {
@@ -518,7 +533,6 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     ApplicationView::GetInstance().GetCharacterWindow()->UpdateView(allLoots);
 
     emit SigBossDead(dp);
-    ui->attak_page->RemoveTarget(dp);
     ui->add_exp_button->setEnabled(true);
     gm->m_GameState->RemoveDeadPlayerInTurn(dp);
     gm->m_GameState->m_DiedEnnemies[gm->m_GameState->m_CurrentTurnNb].push_back(
@@ -602,7 +616,8 @@ void GameDisplay::SlotUpdateActionViews(const QString &name,
   if (nameChara != name) {
     return;
   }
-  auto *activatedPlayer = gm->m_PlayersManager->GetActiveCharacterByName(nameChara);
+  auto *activatedPlayer =
+      gm->m_PlayersManager->GetActiveCharacterByName(nameChara);
   if (activatedPlayer == nullptr) {
     return;
   }
