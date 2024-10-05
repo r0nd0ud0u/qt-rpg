@@ -2,6 +2,7 @@
 #include "ui_gamecharacters.h"
 
 #include "Application.h"
+#include "ApplicationView.h"
 
 GameCharacters::GameCharacters(QWidget *parent)
     : QWidget(parent), ui(new Ui::GameCharacters) {
@@ -38,18 +39,11 @@ void GameCharacters::InitAllHeroesPanel() {
       if (it == nullptr) {
         continue;
       }
-      auto *heroPanel = new HeroPanel();
-      heroPanel->SetPixmap(it->m_Name);
-      heroPanel->UpdatePanel(it, {});
-      heroPanel->SetSelectedGameChoiceBtn(true);
-      ui->heroScrollAreaWidgetContents->layout()->addWidget(heroPanel);
-      connect(heroPanel, &HeroPanel::SigPanelSelectCharacter, this,
-              &GameCharacters::SelectPanel);
-      connect(heroPanel, &HeroPanel::SigUpdateCharacterPlaying, this,
-              &GameCharacters::UpdateCharacterPlaying);
-      heroPanel->SetActive(false);
-      m_HeroesList.push_back(heroPanel);
+      InitHero(it);
     }
+  }
+  if (!m_HeroesList.empty()) {
+    SelectPanel(m_HeroesList.front()->m_Heroe);
   }
 }
 
@@ -64,17 +58,11 @@ void GameCharacters::InitAllBossesPanel() {
       if (it == nullptr) {
         continue;
       }
-      auto *panel = new BossPanel();
-      panel->UpdatePanel(it);
-      panel->SetSelectedGameChoiceBtn(true);
-      ui->heroScrollAreaWidgetContents->layout()->addWidget(panel);
-      connect(panel, &BossPanel::SigPanelSelectCharacter, this,
-              &GameCharacters::SelectPanel);
-      connect(panel, &BossPanel::SigUpdateCharacterPlaying, this,
-              &GameCharacters::UpdateCharacterPlaying);
-      panel->SetActive(false);
-      m_BossesList.push_back(panel);
+      InitBoss(it);
     }
+  }
+  if (!m_BossesList.empty()) {
+    SelectPanel(m_BossesList.front()->m_Boss);
   }
 }
 
@@ -85,7 +73,7 @@ void GameCharacters::on_back_pushButton_clicked() {
   emit SigBackBtnPushed(m_IsHeroType);
 }
 
-void GameCharacters::UpdateSelected(const Character* c) const {
+void GameCharacters::UpdateSelected(const Character *c) const {
   if (m_IsHeroType) {
     for (auto *hero : m_HeroesList) {
       if (hero == nullptr) {
@@ -111,7 +99,7 @@ void GameCharacters::UpdateSelected(const Character* c) const {
   }
 }
 
-void GameCharacters::SelectPanel(const Character* c) {
+void GameCharacters::SelectPanel(const Character *c) {
   UpdateSelected(c);
   emit SigSelectGameCharacter(c);
 }
@@ -156,3 +144,207 @@ void GameCharacters::SetTextNextButton(const QString &str) {
 }
 
 void GameCharacters::ResetPages() const { ResetAllCharacterPlaying(); }
+
+void GameCharacters::on_addCharaPushButton_clicked() {
+  AddCharacter();
+  SetFocusLastOnPanel();
+}
+
+void GameCharacters::AddCharacter() {
+  const auto &app = Application::GetInstance();
+  if (app.m_GameManager == nullptr ||
+      app.m_GameManager->m_PlayersManager == nullptr) {
+    return;
+  }
+  auto *c = new Character();
+  c->m_Name = app.m_GameManager->m_PlayersManager->ProcessNewDefaultName();
+  if (m_IsHeroType) {
+    InitHero(c);
+    // in case of delete, responsqbility of m_PlayersManager
+    app.m_GameManager->m_PlayersManager->m_AllHeroesList.push_back(c);
+  } else {
+    InitBoss(c);
+    // in case of delete, responsqbility of m_PlayersManager
+    app.m_GameManager->m_PlayersManager->m_AllBossesList.push_back(c);
+  }
+  // display edit character window
+  auto &appView = ApplicationView::GetInstance();
+  appView.GetCharacterWindow()->InitWindow(tabType::character, c);
+  appView.ShowWindow(appView.GetCharacterWindow(), true);
+}
+
+void GameCharacters::InitHero(Character *c) {
+  if (c == nullptr) {
+    return;
+  }
+  c->m_type = characType::Hero;
+  auto *panel = new HeroPanel();
+  panel->SetPixmap(c->m_Name);
+  panel->UpdatePanel(c, {});
+  panel->SetSelectedGameChoiceBtn(true);
+  connect(panel, &HeroPanel::SigPanelSelectCharacter, this,
+          &GameCharacters::SelectPanel);
+  connect(panel, &HeroPanel::SigUpdateCharacterPlaying, this,
+          &GameCharacters::UpdateCharacterPlaying);
+  connect(panel, &HeroPanel::SigRemovePanelByBtn, this,
+          &GameCharacters::RemoveHeroPanel);
+  panel->SetActive(false);
+  m_HeroesList.push_back(panel);
+  SelectPanel(panel->m_Heroe); // must be after m_HeroesList.push_back
+  ui->heroScrollAreaWidgetContents->layout()->addWidget(panel);
+  panel->show(); // useful i dont know why for the ensure focus
+}
+
+void GameCharacters::InitBoss(Character *c) {
+  if (c == nullptr) {
+    return;
+  }
+  // define as boss
+  c->m_type = characType::Boss;
+  auto *panel = new BossPanel();
+  panel->UpdatePanel(c);
+  panel->SetSelectedGameChoiceBtn(true);
+  ui->heroScrollAreaWidgetContents->layout()->addWidget(panel);
+  connect(panel, &BossPanel::SigPanelSelectCharacter, this,
+          &GameCharacters::SelectPanel);
+  connect(panel, &BossPanel::SigUpdateCharacterPlaying, this,
+          &GameCharacters::UpdateCharacterPlaying);
+  connect(panel, &BossPanel::SigRemovePanelByBtn, this,
+          &GameCharacters::RemoveBossPanel);
+  panel->SetActive(false);
+  panel->SetSelected(false);
+  m_BossesList.push_back(panel);
+  SelectPanel(panel->m_Boss); // must be after m_BossesList.push_back
+  panel->show();              // useful i dont know why for the ensure focus
+}
+
+void GameCharacters::SetFocusOnBossPanel(const Character *c) {
+  if (c == nullptr) {
+    return;
+  }
+  for (int i = 0; i < ui->heroScrollAreaWidgetContents->layout()->count();
+       i++) {
+    auto *wg = static_cast<BossPanel *>(
+        ui->heroScrollAreaWidgetContents->layout()->itemAt(i)->widget());
+    if (wg != nullptr && wg->m_Boss->m_Name == c->m_Name) {
+      ui->bossScrollArea->ensureWidgetVisible(wg);
+    }
+  }
+}
+
+void GameCharacters::SetFocusOnHeroPanel(const Character *c) {
+  if (c == nullptr) {
+    return;
+  }
+  for (int i = 0; i < ui->heroScrollAreaWidgetContents->layout()->count();
+       i++) {
+    auto *wg = static_cast<HeroPanel *>(
+        ui->heroScrollAreaWidgetContents->layout()->itemAt(i)->widget());
+    if (wg != nullptr && wg->m_Heroe->m_Name == c->m_Name) {
+      ui->bossScrollArea->ensureWidgetVisible(wg, 0, 0);
+    }
+  }
+}
+
+void GameCharacters::UpdatePanelAfterEdit(Character *c) {
+  if (c == nullptr) {
+    return;
+  }
+  SetFocusLastOnPanel();
+  for (auto *pnl : m_HeroesList) {
+    if (pnl != nullptr && pnl->m_Heroe != nullptr && pnl->m_Heroe == c) {
+      pnl->UpdatePanel(c, {});
+    }
+  }
+  for (auto *pnl : m_BossesList) {
+      if (pnl != nullptr && pnl->m_Boss != nullptr && pnl->m_Boss == c) {
+          pnl->UpdatePanel(c);
+      }
+  }
+}
+
+void GameCharacters::SetFocusLastOnPanel() {
+  const auto nbWg = ui->heroScrollAreaWidgetContents->layout()->count();
+  if (nbWg == 0) {
+    return;
+  }
+  auto *wg = static_cast<HeroPanel *>(
+      ui->heroScrollAreaWidgetContents->layout()->itemAt(nbWg - 1)->widget());
+  if (wg != nullptr) {
+    ui->bossScrollArea->ensureWidgetVisible(wg, 0, 0);
+  }
+}
+
+void GameCharacters::RemoveHeroPanel(HeroPanel *pnl) {
+  if (pnl == nullptr) {
+    return;
+  }
+  auto *lay = ui->heroScrollAreaWidgetContents->layout();
+  if (lay == nullptr) {
+    return;
+  }
+  // find index of panel before being erase of panel list
+  int i = 0;
+  for (const auto *it : m_HeroesList) {
+    if (it == pnl) {
+      // Remove file
+      if (KERNEL_PLAYERS.count(it->m_Heroe->m_Name) == 0) {
+        Utils::RemoveFile(OFFLINE_CHARACTERS + it->m_Heroe->m_Name + ".json");
+        delete it->m_Heroe;
+      }
+      break;
+    }
+    i++;
+  }
+
+  // find iterator of panel
+  const auto newEnd = std::remove_if(
+      m_HeroesList.begin(), m_HeroesList.end(), [&](const HeroPanel *p) {
+        return p == pnl; // remove elements where this is true
+      });
+  // erase panel of panel list
+  m_HeroesList.erase(newEnd, m_HeroesList.end());
+
+  // remove widget thanks to index
+  auto *widget = lay->itemAt(i)->widget();
+  widget->hide();
+  lay->removeItem(lay->itemAt(i));
+  lay->removeWidget(widget);
+  delete widget;
+}
+
+void GameCharacters::RemoveBossPanel(BossPanel *pnl) {
+  if (pnl == nullptr) {
+    return;
+  }
+  auto *lay = ui->heroScrollAreaWidgetContents->layout();
+  if (lay == nullptr) {
+    return;
+  }
+  // find index of panel before being erase of panel list
+  int i = 0;
+  for (const auto *it : m_BossesList) {
+    if (it == pnl) {
+      // Remove file
+      Utils::RemoveFile(OFFLINE_CHARACTERS + it->m_Boss->m_Name + ".json");
+      delete it->m_Boss;
+      break;
+    }
+    i++;
+  }
+
+  // find iterator of panel
+  const auto newEnd = std::remove_if(
+      m_BossesList.begin(), m_BossesList.end(), [&](const BossPanel *p) {
+        return p == pnl; // remove elements where this is true
+      });
+  // erase panel of panel list
+  m_BossesList.erase(newEnd, m_BossesList.end());
+
+  // remove widget thanks to index
+  auto *widget = lay->itemAt(i)->widget();
+  widget->hide();
+  lay->removeItem(lay->itemAt(i));
+  lay->removeWidget(widget);
+  delete widget;
+}

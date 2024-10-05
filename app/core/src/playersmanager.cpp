@@ -176,13 +176,40 @@ void PlayersManager::LoadAllEquipmentsJson() {
   }
 }
 
-Character *PlayersManager::GetCharacterByName(const QString &name) {
+/**
+ * @brief PlayersManager::GetActiveCharacterByName
+ * Find the pointer of one character by name
+ * in the list of all `PLAYING` heros and bosses available
+ * Otherwise return nullpointer
+ */
+Character *PlayersManager::GetActiveCharacterByName(const QString &name) {
   for (auto *boss : m_BossesList) {
     if (name == boss->m_Name) {
       return boss;
     }
   }
   for (auto *hero : m_HeroesList) {
+    if (name == hero->m_Name) {
+      return hero;
+    }
+  }
+
+  return nullptr;
+}
+
+/**
+ * @brief PlayersManager::GetCharacterByName
+ * Find the pointer of one character by name
+ *  in the `RAW` list of heros and bosses
+ * Otherwise return nullpointer
+ */
+Character *PlayersManager::GetCharacterByName(const QString &name) {
+  for (auto *boss : m_AllBossesList) {
+    if (name == boss->m_Name) {
+      return boss;
+    }
+  }
+  for (auto *hero : m_AllHeroesList) {
     if (name == hero->m_Name) {
       return hero;
     }
@@ -228,7 +255,7 @@ PlayersManager::RemoveTerminatedEffectsOnPlayer(const QString &curPlayerName) {
         sl.push_back(terminated);
       }
       // remove malus effect from player
-      auto *player = GetCharacterByName(curPlayerName);
+      auto *player = GetActiveCharacterByName(curPlayerName);
       if (player != nullptr) {
         player->RemoveMalusEffect(it->allAtkEffects);
       }
@@ -252,7 +279,7 @@ QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName,
     return logs;
   }
   auto &gaeTable = m_AllEffectsOnGame[curPlayerName];
-  auto *targetPl = GetCharacterByName(curPlayerName);
+  auto *targetPl = GetActiveCharacterByName(curPlayerName);
 
   QStringList localLog;
 
@@ -276,7 +303,7 @@ QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName,
                             .arg(type)
                             .arg(gae.allAtkEffects.value)
                             .arg(gae.atk.name));
-      } else if (auto *launcherPl = GetCharacterByName(gae.launcher);
+      } else if (auto *launcherPl = GetActiveCharacterByName(gae.launcher);
                  launcherPl != nullptr) {
         const auto [output, _] = launcherPl->ApplyOneEffect(
             targetPl, gae.allAtkEffects, fromLaunch, gae.atk);
@@ -588,22 +615,24 @@ PlayersManager::IsDodging(const std::vector<TargetInfo *> &targetList,
                           const AttaqueType &atk) {
   QString plName;
   QStringList output;
-  const bool isDodging = std::any_of(
-      targetList.begin(), targetList.end(),
-      [this, &plName, &output, &atk](const TargetInfo *ti) {
-        if (ti == nullptr) {
-          return false;
-        }
-        if (ti->get_is_targeted()) {
-          auto *targetChara = this->GetCharacterByName(ti->get_name().data());
-          plName = ti->get_name().data();
-          const auto [charIsDodging, randNbStr] = targetChara->IsDodging(atk);
-          output.append(randNbStr);
-          targetChara->ProcessBlock(charIsDodging);
-          return charIsDodging;
-        }
-        return false;
-      });
+  const bool isDodging =
+      std::any_of(targetList.begin(), targetList.end(),
+                  [this, &plName, &output, &atk](const TargetInfo *ti) {
+                    if (ti == nullptr) {
+                      return false;
+                    }
+                    if (ti->get_is_targeted()) {
+                      auto *targetChara =
+                          this->GetActiveCharacterByName(ti->get_name().data());
+                      plName = ti->get_name().data();
+                      const auto [charIsDodging, randNbStr] =
+                          targetChara->IsDodging(atk);
+                      output.append(randNbStr);
+                      targetChara->ProcessBlock(charIsDodging);
+                      return charIsDodging;
+                    }
+                    return false;
+                  });
 
   return std::make_tuple(isDodging, plName, output);
 }
@@ -695,7 +724,7 @@ PlayersManager::ProcessDamageTXHealNeedyAlly(const characType &launcherType,
     return "";
   }
   const auto randNb = Utils::GetRandomNb(0, alliesStr.size() - 1);
-  auto *c = GetCharacterByName(alliesStr[randNb]);
+  auto *c = GetActiveCharacterByName(alliesStr[randNb]);
   if (c == nullptr) {
     return "";
   }
@@ -1122,4 +1151,40 @@ void PlayersManager::SetSelectedHero(const QString &name) {
       break;
     }
   }
+}
+
+/**
+ * @brief PlayersManager::ProcessNewDefaultName
+ * format `default` string name for a character
+ */
+QString PlayersManager::ProcessNewDefaultName() {
+  return QString("default_%1").arg(GetMaxIndexDefaultName() + 1);
+}
+
+/**
+ * @brief PlayersManager::GetMaxIndexDefaultName
+ * Find the max integer contained in default names among both heroes and bosses
+ */
+int PlayersManager::GetMaxIndexDefaultName() const {
+  const QString defaultName = "default_";
+  int max = 0;
+  for (const auto *hero : m_AllHeroesList) {
+    if (int idx = hero->m_Name.indexOf(defaultName);
+        idx >= 0 && hero->m_Name.size() > idx) {
+      const int tmp = hero->m_Name.sliced(defaultName.size()).toInt();
+      if (max < tmp) {
+        max = tmp;
+      }
+    }
+  }
+  for (const auto *boss : m_AllBossesList) {
+    if (int idx = boss->m_Name.indexOf(defaultName);
+        idx >= 0 && boss->m_Name.size() > idx) {
+      const int tmp = boss->m_Name.sliced(idx).toInt();
+      if (max < tmp) {
+        max = tmp;
+      }
+    }
+  }
+  return max;
 }

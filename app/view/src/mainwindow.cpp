@@ -28,10 +28,6 @@ MainWindow::MainWindow(QWidget *parent)
           &MainWindow::ProcessGameCharacterBackBtn);
 
   // Connect: Functions on secondary pages
-  connect(this, &MainWindow::SigNewCharacter, ui->page_2,
-          &GameDisplay::AddNewCharacter);
-  connect(this, &MainWindow::SigNewCharacter, ui->page_2,
-          &GameDisplay::AddNewStuff);
   connect(this, &MainWindow::SigNewStuffOnUse, ui->page_2,
           &GameDisplay::UpdateViews);
   connect(this, &MainWindow::SigUpdateActivePlayers, ui->page_2,
@@ -102,7 +98,13 @@ void MainWindow::ShowHostPage() {
 
 void MainWindow::UpdateActiveCharacters() { ShowPageGameDisplay(); }
 
-void MainWindow::AddNewCharacter(Character *ch) { emit SigNewCharacter(ch); }
+void MainWindow::UpdateNewCharacter(Character *ch) {
+    if(ch->m_type == characType::Hero){
+        ui->page_Hero->UpdatePanelAfterEdit(ch);
+    } else {
+        ui->page_Boss->UpdatePanelAfterEdit(ch);
+    }
+}
 
 void MainWindow::AddNewStuff() { emit SigAddNewStuff(); }
 

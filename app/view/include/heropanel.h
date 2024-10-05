@@ -27,6 +27,7 @@ public:
   void SetSelectedGameChoiceBtn(const bool value);
   void SetPlayingStatus();
   void SetSelectStatus();
+  void ProcessPlayingMode();
 
   Character *m_Heroe = nullptr;
 
@@ -37,13 +38,18 @@ private slots:
 
   void on_pushButton_clicked();
 
+  void on_removePushButton_clicked();
+
   signals:
   void SigPanelSelectCharacter(const Character*);
   void SigUpdateCharaForm(const QString &, const QString &);
   void SigUpdateCharacterPlaying(const QString &);
+  void SigRemovePanelByBtn(HeroPanel* pnl);
 
 private:
   Ui::HeroPanel *ui;
+
+    void SetHero(Character* c);
 
   void UpdateActiveRightWidget();
 };

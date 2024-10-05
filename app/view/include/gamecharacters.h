@@ -6,6 +6,8 @@
 #include "bosspanel.h"
 #include "heropanel.h"
 
+#include "playersmanager.h"
+
 namespace Ui {
 class GameCharacters;
 }
@@ -22,6 +24,7 @@ public:
   void InitAllBossesPanel();
   void SetTextNextButton(const QString& str);
   void ResetPages() const;
+  void UpdatePanelAfterEdit(Character* c);
 
 signals:
   void SigDead(); // if i dont add this line; the call to 'emit
@@ -29,6 +32,7 @@ signals:
   void SigBackBtnPushed(const bool);
   void SigSelectGameCharacter(const Character*);
   void SigNextButtonPushed(const bool);
+  void SigStartEditCharacter(const Character*);
 
 private slots:
   void on_back_pushButton_clicked();
@@ -37,13 +41,23 @@ private slots:
 
   void on_nextPushButton_clicked();
 
-private:
+  void on_addCharaPushButton_clicked();
+
+  private:
   Ui::GameCharacters *ui;
   std::vector<HeroPanel *> m_HeroesList;
   std::vector<BossPanel *> m_BossesList;
   bool m_IsHeroType = false;
   void ResetAllCharacterPlaying() const;
-  void SetType(const bool value) { m_IsHeroType = value; };
+  void SetType(const bool value) { m_IsHeroType = value; }
+  void AddCharacter();
+  void InitHero(Character* c);
+  void InitBoss(Character* c);
+  void SetFocusOnBossPanel(const Character* c);
+  void SetFocusOnHeroPanel(const Character* c);
+  void SetFocusLastOnPanel();
+  void RemoveHeroPanel(HeroPanel* pnl);
+  void RemoveBossPanel(BossPanel* pnl);
 };
 
 #endif // GAMECHARACTERS_H

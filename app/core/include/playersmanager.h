@@ -26,6 +26,7 @@ public:
   void InitBosses();
   void ClearHeroBossList();
   void LoadAllEquipmentsJson();
+  Character *GetActiveCharacterByName(const QString &name);
   Character *GetCharacterByName(const QString &name);
   void AddGameEffectOnAtk(const QString &launcherName, const AttaqueType &atk,
                           const QString &targetName,
@@ -64,14 +65,16 @@ public:
   void ProcessIsRandomTarget() const;
   void ResetIsFirstRound() const;
   bool UpdateActivePlayers();
-  std::vector<Stuff> LootNewEquipments(const QString& name);
+  std::vector<Stuff> LootNewEquipments(const QString &name);
   void InitRandomEquip();
   std::optional<std::pair<QString, int>> GetHeroMostAggro() const;
-  void OutputCharactersInJson(const std::vector<Character*>& l) const;
+  void OutputCharactersInJson(const std::vector<Character *> &l) const;
   void LoadAllCharactersJson();
   void ResetAllEffectsOnPlayer(const Character *chara);
   int GetNbOfActiveHotsOnHeroes() const;
-  void SetSelectedHero(const QString& name);
+  void SetSelectedHero(const QString &name);
+  QString ProcessNewDefaultName();
+  int GetMaxIndexDefaultName() const;
 
   // Available characters to create a party
   std::vector<Character *> m_AllHeroesList;
