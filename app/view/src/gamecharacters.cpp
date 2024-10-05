@@ -12,6 +12,15 @@ GameCharacters::GameCharacters(QWidget *parent)
                 "QLabel{color: white;}} "
                 "#heroScrollAreaWidgetContents{background:     #808080;} "
                 "QLabel{color: white;}");
+  // img
+  connect(this, &GameCharacters::SigSelectGameCharacter, ui->img,
+          &ImgCharacterView::UpdateView);
+  // stats
+  connect(this, &GameCharacters::SigSelectGameCharacter, ui->stats,
+          &StatsView::UpdateDisplayedCharStats);
+  // equip
+  connect(this, &GameCharacters::SigSelectGameCharacter, ui->equip,
+          &EquipmentView::UpdateEquipment);
 }
 
 GameCharacters::~GameCharacters() {
