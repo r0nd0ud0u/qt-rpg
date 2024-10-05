@@ -19,6 +19,7 @@ public:
     ~EditCharacter();
     void InitEditCharacter();
     void AddCharacter(Character* ch) const;
+    void Init(const Character* c);
 
 private:
     Ui::EditCharacter *ui;

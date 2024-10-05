@@ -24,8 +24,8 @@ void character_tests::TestThalia_works() {
   const QString azrakRx = "Azrak Ombresang";
   auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
   // add heroes
-  auto *thaliaCh = pm->GetCharacterByName(thalia);
-  auto *AzrakChRx = pm->GetCharacterByName(azrakRx);
+  auto *thaliaCh = pm->GetActiveCharacterByName(thalia);
+  auto *AzrakChRx = pm->GetActiveCharacterByName(azrakRx);
   thaliaCh->m_StatsInGame.m_IsPlaying = true;
   AzrakChRx->m_StatsInGame.m_IsPlaying = true;
   pm->UpdateActivePlayers();
@@ -102,7 +102,7 @@ void character_tests::GetBufDebufNumbers_works() {
 
   // reset
   for (int i = 0; i < static_cast<int>(BufTypes::enumSize); i++) {
-      testCh.m_AllBufs[i]->set_buffers(0, false);
+    testCh.m_AllBufs[i]->set_buffers(0, false);
   }
 }
 
@@ -130,101 +130,101 @@ void character_tests::InitAggroOnTurn_works() {
   QCOMPARE(aggroStat, 40);
 }
 
-void character_tests::SetStatsOnEffect_works(){
-    Stats stats;
-    auto& hp = stats.m_HP;
-    //init current value
-    hp.m_MaxValue = 100;
-    hp.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
-    hp.m_BufEffectPercent = 0;
-    hp.m_BufEffectValue = 0;
+void character_tests::SetStatsOnEffect_works() {
+  Stats stats;
+  auto &hp = stats.m_HP;
+  // init current value
+  hp.m_MaxValue = 100;
+  hp.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
+  hp.m_BufEffectPercent = 0;
+  hp.m_BufEffectValue = 0;
 
-    // raw value 0 => stat is not changing
-    hp.m_RawMaxValue = 0;
-    Character::SetStatsOnEffect(hp, 10, true, false);
-    QCOMPARE(100, hp.m_MaxValue);
-    QCOMPARE(50, hp.m_CurrentValue);
-    QCOMPARE(0, hp.m_RawMaxValue);
+  // raw value 0 => stat is not changing
+  hp.m_RawMaxValue = 0;
+  Character::SetStatsOnEffect(hp, 10, true, false);
+  QCOMPARE(100, hp.m_MaxValue);
+  QCOMPARE(50, hp.m_CurrentValue);
+  QCOMPARE(0, hp.m_RawMaxValue);
 
-    // no update of effect
-    hp.m_RawMaxValue = 100;
-    Character::SetStatsOnEffect(hp, 10, true, false);
-    QCOMPARE(100, hp.m_MaxValue);
-    QCOMPARE(50, hp.m_CurrentValue);
-    // effect
-    // percent
-    //init current value
-    hp.m_MaxValue = 100;
-    hp.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
-    hp.m_BufEffectPercent = 0;
-    hp.m_BufEffectValue = 0;
-    Character::SetStatsOnEffect(hp, 10, true, true);
-    QCOMPARE(110, hp.m_MaxValue);
-    QCOMPARE(55, hp.m_CurrentValue);
-    // value
-    //init current value
-    hp.m_MaxValue = 100;
-    hp.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
-    hp.m_BufEffectPercent = 0;
-    hp.m_BufEffectValue = 0;
-    Character::SetStatsOnEffect(hp, 10, false, true);
-    QCOMPARE(110, hp.m_MaxValue);
-    QCOMPARE(55, hp.m_CurrentValue);
+  // no update of effect
+  hp.m_RawMaxValue = 100;
+  Character::SetStatsOnEffect(hp, 10, true, false);
+  QCOMPARE(100, hp.m_MaxValue);
+  QCOMPARE(50, hp.m_CurrentValue);
+  // effect
+  // percent
+  // init current value
+  hp.m_MaxValue = 100;
+  hp.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
+  hp.m_BufEffectPercent = 0;
+  hp.m_BufEffectValue = 0;
+  Character::SetStatsOnEffect(hp, 10, true, true);
+  QCOMPARE(110, hp.m_MaxValue);
+  QCOMPARE(55, hp.m_CurrentValue);
+  // value
+  // init current value
+  hp.m_MaxValue = 100;
+  hp.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
+  hp.m_BufEffectPercent = 0;
+  hp.m_BufEffectValue = 0;
+  Character::SetStatsOnEffect(hp, 10, false, true);
+  QCOMPARE(110, hp.m_MaxValue);
+  QCOMPARE(55, hp.m_CurrentValue);
 
-    // negative value
-    // percent
-    //init current value
-    hp.m_MaxValue = 100;
-    hp.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
-    hp.m_BufEffectPercent = 0;
-    hp.m_BufEffectValue = 0;
-    Character::SetStatsOnEffect(hp, -10, true, true);
-    QCOMPARE(90, hp.m_MaxValue);
-    QCOMPARE(45, hp.m_CurrentValue);
-    // value
-    //init current value
-    hp.m_MaxValue = 100;
-    hp.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
-    hp.m_BufEffectPercent = 0;
-    hp.m_BufEffectValue = 0;
-    Character::SetStatsOnEffect(hp, -10, false, true);
-    QCOMPARE(90, hp.m_MaxValue);
-    QCOMPARE(45, hp.m_CurrentValue);
+  // negative value
+  // percent
+  // init current value
+  hp.m_MaxValue = 100;
+  hp.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
+  hp.m_BufEffectPercent = 0;
+  hp.m_BufEffectValue = 0;
+  Character::SetStatsOnEffect(hp, -10, true, true);
+  QCOMPARE(90, hp.m_MaxValue);
+  QCOMPARE(45, hp.m_CurrentValue);
+  // value
+  // init current value
+  hp.m_MaxValue = 100;
+  hp.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
+  hp.m_BufEffectPercent = 0;
+  hp.m_BufEffectValue = 0;
+  Character::SetStatsOnEffect(hp, -10, false, true);
+  QCOMPARE(90, hp.m_MaxValue);
+  QCOMPARE(45, hp.m_CurrentValue);
 
-    auto& armPhy = stats.m_ArmPhy;
-    armPhy.m_MaxValue = 100;
-    armPhy.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
-    armPhy.m_BufEffectPercent = 0;
-    armPhy.m_BufEffectValue = 0;
-    Character::SetStatsOnEffect(armPhy, 100, true, true);
-    QCOMPARE(100, armPhy.m_MaxValue);
-    QCOMPARE(100, armPhy.m_CurrentValue);
+  auto &armPhy = stats.m_ArmPhy;
+  armPhy.m_MaxValue = 100;
+  armPhy.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
+  armPhy.m_BufEffectPercent = 0;
+  armPhy.m_BufEffectValue = 0;
+  Character::SetStatsOnEffect(armPhy, 100, true, true);
+  QCOMPARE(100, armPhy.m_MaxValue);
+  QCOMPARE(100, armPhy.m_CurrentValue);
 }
 
 void character_tests::ApplyAtkEffect_AtkBlocked() {
-    // boss
-    auto testCh = GetTestCharacter();
-    testCh.m_type = characType::Boss;
-    // hero
-    auto ch2 = GetTestCharacter();
-    ch2.m_type = characType::Hero;
-    // to make calculs easy on mana at
-    testCh.m_Stats.m_AllStatsTable[STATS_POW_MAG].m_CurrentValue = 0;
-    ch2.m_Stats.m_AllStatsTable[STATS_ARM_MAG].m_CurrentValue = 0;
-    // init hp
-    ch2.m_Stats.m_AllStatsTable[STATS_HP].m_CurrentValue = 50;
-    ch2.m_Stats.m_AllStatsTable[STATS_HP].m_MaxValue = 50;
-    const auto &[conditionsOk, resultEffects, appliedEffects] =
-        testCh.ApplyAtkEffect(true, SimpleAtkMana(), &ch2, false);
+  // boss
+  auto testCh = GetTestCharacter();
+  testCh.m_type = characType::Boss;
+  // hero
+  auto ch2 = GetTestCharacter();
+  ch2.m_type = characType::Hero;
+  // to make calculs easy on mana at
+  testCh.m_Stats.m_AllStatsTable[STATS_POW_MAG].m_CurrentValue = 0;
+  ch2.m_Stats.m_AllStatsTable[STATS_ARM_MAG].m_CurrentValue = 0;
+  // init hp
+  ch2.m_Stats.m_AllStatsTable[STATS_HP].m_CurrentValue = 50;
+  ch2.m_Stats.m_AllStatsTable[STATS_HP].m_MaxValue = 50;
+  const auto &[conditionsOk, resultEffects, appliedEffects] =
+      testCh.ApplyAtkEffect(true, SimpleAtkMana(), &ch2, false);
 
-    QCOMPARE(40, ch2.m_Stats.m_AllStatsTable[STATS_HP].m_CurrentValue);
+  QCOMPARE(40, ch2.m_Stats.m_AllStatsTable[STATS_HP].m_CurrentValue);
 
-    ch2.m_IsBlockingAtk = true;
-    const auto &[conditionsOk2, resultEffects2, appliedEffects2] =
-        testCh.ApplyAtkEffect(true, SimpleAtkMana(), &ch2, false);
+  ch2.m_IsBlockingAtk = true;
+  const auto &[conditionsOk2, resultEffects2, appliedEffects2] =
+      testCh.ApplyAtkEffect(true, SimpleAtkMana(), &ch2, false);
 
-    // 10% of 10 = 1 => 40 -1 = 39
-    QCOMPARE(39, ch2.m_Stats.m_AllStatsTable[STATS_HP].m_CurrentValue);
+  // 10% of 10 = 1 => 40 -1 = 39
+  QCOMPARE(39, ch2.m_Stats.m_AllStatsTable[STATS_HP].m_CurrentValue);
 }
 
 int main(int argc, char *argv[]) {

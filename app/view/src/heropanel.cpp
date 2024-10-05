@@ -16,7 +16,7 @@ void HeroPanel::UpdatePanel(Character *hero,
     return;
   }
 
-  m_Heroe = hero;
+  SetHero(hero);
 
   // update level exp
   ui->hero_level->setText(
@@ -63,28 +63,6 @@ void HeroPanel::UpdatePanel(Character *hero,
   }
   ui->vigor_bar->setValue(vigorValue);
 
-  // for all hot/dot and buf/debuf updates
-  int nbBufs = 0;
-  int nbDebufs = 0;
-  // hot, dot, buf, debuf by ongoing effects
-  if (const auto effectsNbs = Utils::GetNbOfActiveEffects(table);
-      effectsNbs.has_value()) {
-    ui->verticalWidget->SetHotDotValues(effectsNbs->hot, effectsNbs->dot);
-    nbBufs += effectsNbs->buf;
-    nbDebufs += effectsNbs->debuf;
-  } else {
-      ui->verticalWidget->SetHotDotValues(0, 0);
-  }
-
-  // buf/debuf nbs by ongoing buf/debuf table
-  if (const auto bufDebufNbs = hero->GetBufDebufNumbers();
-      bufDebufNbs.has_value()) {
-    nbBufs += bufDebufNbs->buf;
-    nbDebufs += bufDebufNbs->debuf;
-  }
-
-  ui->verticalWidget->SetBufDebufValues(nbBufs, nbDebufs);
-
   ui->hp_Bar->setStyleSheet(
       "QProgressBar{text-align: center; border-style: solid; padding: 1px; "
       "padding-left:1px; padding-right: 1px; border-color: grey; border: "
@@ -126,6 +104,28 @@ void HeroPanel::UpdatePanel(Character *hero,
       "width: 10px;"
       "border-bottom-right-radius: 10px;"
       "border-bottom-left-radius: 10px;}");
+
+  // for all hot/dot and buf/debuf updates
+  int nbBufs = 0;
+  int nbDebufs = 0;
+  // hot, dot, buf, debuf by ongoing effects
+  if (const auto effectsNbs = Utils::GetNbOfActiveEffects(table);
+      effectsNbs.has_value()) {
+      ui->verticalWidget->SetHotDotValues(effectsNbs->hot, effectsNbs->dot);
+      nbBufs += effectsNbs->buf;
+      nbDebufs += effectsNbs->debuf;
+  } else {
+      ui->verticalWidget->SetHotDotValues(0, 0);
+  }
+
+  // buf/debuf nbs by ongoing buf/debuf table
+  if (const auto bufDebufNbs = hero->GetBufDebufNumbers();
+      bufDebufNbs.has_value()) {
+      nbBufs += bufDebufNbs->buf;
+      nbDebufs += bufDebufNbs->debuf;
+  }
+
+  ui->verticalWidget->SetBufDebufValues(nbBufs, nbDebufs);
 }
 
 void HeroPanel::SetActive(const bool activated) {
@@ -213,4 +213,20 @@ void HeroPanel::SetSelectStatus(){
 
 void HeroPanel::SetSelectedGameChoiceBtn(const bool value){
     ui->pushButton->setEnabled(value);
+}
+
+void HeroPanel::on_removePushButton_clicked()
+{
+    emit SigRemovePanelByBtn(this);
+}
+
+void HeroPanel::SetHero(Character* c){
+    m_Heroe = c;
+}
+
+void HeroPanel::ProcessPlayingMode(){
+    ui->removePushButton->hide();
+    ui->pushButton->hide();
+    ui->edit_button->hide();
+
 }

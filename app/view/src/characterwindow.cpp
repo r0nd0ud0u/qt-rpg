@@ -13,7 +13,7 @@ CharacterWindow::CharacterWindow(QWidget *parent)
 
   connect(this, &CharacterWindow::SigNewCharacter,
           ApplicationView::GetInstance().GetMainWindow(),
-          &MainWindow::AddNewCharacter);
+          &MainWindow::UpdateNewCharacter);
   connect(this, &CharacterWindow::SigAddNewStuff,
           ApplicationView::GetInstance().GetMainWindow(),
           &MainWindow::AddNewStuff);
@@ -42,6 +42,7 @@ void CharacterWindow::InitWindow(const tabType &type, Character *c) {
     if (m_CurCharacter == nullptr) {
       m_CurCharacter = new Character();
     }
+    ui->character_def->Init(c);
   }
   const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
   if (type == tabType::useStuff) {
@@ -52,12 +53,15 @@ void CharacterWindow::InitWindow(const tabType &type, Character *c) {
 void CharacterWindow::on_pushButton_clicked() {
   hide();
   const auto type = static_cast<tabType>(ui->tabWidget->currentIndex());
+  const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
   if (type == tabType::attak) {
     ui->edit_atk_tab->Save();
   }
   if (type == tabType::character) {
     ui->character_def->AddCharacter(m_CurCharacter);
     emit SigNewCharacter(m_CurCharacter);
+    // output json update
+    pm->OutputCharactersInJson(std::vector<Character*>{m_CurCharacter});
     m_CurCharacter = nullptr;
   }
   Apply();

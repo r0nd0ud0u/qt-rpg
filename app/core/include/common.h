@@ -19,7 +19,7 @@ const QString OFFLINE_CHARACTERS = "./offlines/Personnages/";
 const QString OUTPUT_DIR = "./output/";
 const QString OUTPUT_ENDGAME = "./output/endgame_%1.csv";
 const QStringList ENDGAME_TITLE_BAR = {"Name", "Player Type", "Life status",
-                                       "Attaks used", "Attaks frequency" };
+                                       "Attaks used", "Attaks frequency"};
 // json keys
 // ATK keys
 const QString ATK_NAME = "Nom";
@@ -345,5 +345,9 @@ public:
 
 // IN GAME
 const int NB_TURN_SUM_AGGRO = 5;
+
+const std::set<QString> KERNEL_PLAYERS = {"Thalia", "Thrain", "Azrak Ombresang",
+                                          "Elara la guerisseuse de la Lorien",
+                                          "Test"};
 
 #endif // COMMON_H

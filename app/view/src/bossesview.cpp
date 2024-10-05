@@ -56,6 +56,7 @@ void BossesView::AddBossPanel(Character *ch) {
   m_BossPanels.push_back(bossPanel);
   bossPanel->SetActive(false);
   bossPanel->SetSelected(false);
+  bossPanel->ProcessPlayingMode();
   connect(bossPanel, &BossPanel::SigPanelSelectCharacter, this,
           &BossesView::SlotClickedOnPanel);
 }
@@ -108,14 +109,14 @@ void BossesView::RemoveBoss(QString bossName) {
   delete widget;
 }
 
-void BossesView::SetFocusOn(const QString &name, const characType &type) {
-  if (type != characType::Boss) {
+void BossesView::SetFocusOn(const Character* c) {
+    if (c->m_type != characType::Boss) {
     return;
   }
   for (int i = 0; i < ui->main_widget->layout()->count(); i++) {
     auto *wg = static_cast<BossPanel *>(
         ui->main_widget->layout()->itemAt(i)->widget());
-    if (wg != nullptr && wg->m_Boss->m_Name == name) {
+      if (wg != nullptr && wg->m_Boss->m_Name == c->m_Name) {
       ui->scrollArea->ensureWidgetVisible(wg);
     }
   }

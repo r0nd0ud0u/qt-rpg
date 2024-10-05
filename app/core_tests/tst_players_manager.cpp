@@ -19,6 +19,7 @@ private slots:
   void GetNbOfActiveHotsOnHeroes_works();
   void RemoveTerminatedEffectsOnPlayer_works();
   void ResetAllEffectsOnPlayer_works();
+  void GetMaxIndexDefaultName_works();
 };
 
 void player_manager_tests::GetDeadliestAlly_works() {
@@ -140,22 +141,34 @@ void player_manager_tests::RemoveTerminatedEffectsOnPlayer_works() {
   QCOMPARE(1, pm->m_AllEffectsOnGame["Test"].size());
 }
 
-void player_manager_tests::ResetAllEffectsOnPlayer_works(){
-    auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
-    auto testCh = GetTestCharacter();
-    pm->m_AllEffectsOnGame.clear();
-    pm->ResetAllEffectsOnPlayer(&testCh);
+void player_manager_tests::ResetAllEffectsOnPlayer_works() {
+  auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+  auto testCh = GetTestCharacter();
+  pm->m_AllEffectsOnGame.clear();
+  pm->ResetAllEffectsOnPlayer(&testCh);
 
-    QCOMPARE(0, pm->m_AllEffectsOnGame["Test"].size());
+  QCOMPARE(0, pm->m_AllEffectsOnGame["Test"].size());
 
-    AttaqueType atk1 = SimpleHot();
-    pm->AddGameEffectOnAtk("Test", atk1, "Test", atk1.m_AllEffects, 1);
+  AttaqueType atk1 = SimpleHot();
+  pm->AddGameEffectOnAtk("Test", atk1, "Test", atk1.m_AllEffects, 1);
 
-    AttaqueType atk2 = SimpleHot();
-    pm->AddGameEffectOnAtk("Test", atk2, "Test", atk2.m_AllEffects, 1);
-    pm->ResetAllEffectsOnPlayer(&testCh);
+  AttaqueType atk2 = SimpleHot();
+  pm->AddGameEffectOnAtk("Test", atk2, "Test", atk2.m_AllEffects, 1);
+  pm->ResetAllEffectsOnPlayer(&testCh);
 
-    QCOMPARE(0, pm->m_AllEffectsOnGame["Test"].size());
+  QCOMPARE(0, pm->m_AllEffectsOnGame["Test"].size());
+}
+
+void player_manager_tests::GetMaxIndexDefaultName_works() {
+  auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
+  auto result = pm->GetMaxIndexDefaultName();
+  QCOMPARE(result, 0);
+
+  Stats stats;
+  pm->m_AllHeroesList.push_back(
+      new Character("default_1", characType::Hero, stats));
+  result = pm->GetMaxIndexDefaultName();
+  QCOMPARE(result, 1);
 }
 
 int main(int argc, char *argv[]) {

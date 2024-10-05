@@ -50,6 +50,7 @@ void HeroesView::InitHeroPanel() {
       heroPanel->InitComboBox();
       heroPanel->SetActive(false);
       heroPanel->SetSelected(false);
+      heroPanel->ProcessPlayingMode();
       connect(heroPanel, &HeroPanel::SigPanelSelectCharacter, this,
               &HeroesView::SlotClickedOnHeroPanel);
       connect(heroPanel, &HeroPanel::SigUpdateCharaForm, this,
@@ -116,14 +117,14 @@ void HeroesView::UpdateAllPanels(
   }
 }
 
-void HeroesView::SetFocusOn(const QString &name, const characType &type) {
-  if (type != characType::Hero) {
+void HeroesView::SetFocusOn(const Character* c ) {
+    if (c->m_type != characType::Hero) {
     return;
   }
   for (int i = 0; i < ui->left_widget->layout()->count(); i++) {
     auto *wg = static_cast<HeroPanel *>(
         ui->left_widget->layout()->itemAt(i)->widget());
-    if (wg != nullptr && wg->m_Heroe->m_Name == name) {
+      if (wg != nullptr && wg->m_Heroe->m_Name == c->m_Name) {
       ui->scrollArea->ensureWidgetVisible(wg);
     }
   }
