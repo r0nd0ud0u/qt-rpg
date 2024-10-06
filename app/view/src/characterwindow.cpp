@@ -11,9 +11,9 @@ CharacterWindow::CharacterWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::CharacterWindow) {
   ui->setupUi(this);
 
-  connect(this, &CharacterWindow::SigNewCharacter,
+    connect(this, &CharacterWindow::SigUpdateCharacterViews,
           ApplicationView::GetInstance().GetMainWindow(),
-          &MainWindow::UpdateNewCharacter);
+          &MainWindow::UpdatCharacterViews);
   connect(this, &CharacterWindow::SigAddNewStuff,
           ApplicationView::GetInstance().GetMainWindow(),
           &MainWindow::AddNewStuff);
@@ -101,7 +101,7 @@ void CharacterWindow::Apply() {
   m_CurCharacter->UpdateEquipmentOnJson();
   emit SigUseNewStuff(m_CurCharacter->m_Name);
   // update panel
-  emit SigNewCharacter(m_CurCharacter);
+  emit SigUpdateCharacterViews(m_CurCharacter);
 }
 
 void CharacterWindow::UpdateView(const std::vector<EditStuff> &esTable) {

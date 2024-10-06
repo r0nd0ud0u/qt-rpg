@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>899</width>
-    <height>724</height>
+    <width>908</width>
+    <height>485</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -58,22 +58,12 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QPushButton" name="add_boss_button">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="text">
-          <string>Add Boss</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
      <item>
       <widget class="BossesView" name="bosses_widget" native="true">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -101,26 +91,26 @@
    <item>
     <layout class="QVBoxLayout" name="right_layout">
      <property name="spacing">
-      <number>0</number>
+      <number>5</number>
      </property>
      <property name="leftMargin">
-      <number>0</number>
+      <number>5</number>
      </property>
      <property name="topMargin">
-      <number>0</number>
+      <number>5</number>
      </property>
      <property name="rightMargin">
-      <number>0</number>
+      <number>5</number>
      </property>
      <property name="bottomMargin">
-      <number>0</number>
+      <number>5</number>
      </property>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="ImgCharacterView" name="img_char_widget" native="true">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -134,7 +124,7 @@
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>16777215</height>
+           <height>250</height>
           </size>
          </property>
         </widget>
@@ -142,7 +132,7 @@
        <item>
         <widget class="StatsView" name="stats_character" native="true">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -150,13 +140,13 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>300</height>
+           <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>300</height>
+           <height>250</height>
           </size>
          </property>
         </widget>
@@ -164,7 +154,7 @@
        <item>
         <widget class="EquipmentView" name="equipment_widget" native="true">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -172,18 +162,31 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>300</height>
+           <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>300</height>
+           <height>250</height>
           </size>
          </property>
         </widget>
        </item>
       </layout>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item>
       <layout class="QHBoxLayout" name="atk_heal_lay">
@@ -238,7 +241,7 @@
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -248,26 +251,44 @@
          </property>
          <widget class="ActionsView" name="attak_page">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>250</height>
+           </size>
           </property>
          </widget>
          <widget class="QWidget" name="default_page">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>250</height>
+           </size>
+          </property>
          </widget>
          <widget class="QWidget" name="inventory_page">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>250</height>
+           </size>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <item>
@@ -311,31 +332,51 @@
       </layout>
      </item>
      <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
         <widget class="Channel" name="channel_lay" native="true">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>200</height>
-          </size>
-         </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>16777215</height>
+           <height>250</height>
           </size>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="AllEffectPanel" name="effect_panel_widget" native="true"/>
+        <widget class="AllEffectPanel" name="effect_panel_widget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>250</height>
+          </size>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

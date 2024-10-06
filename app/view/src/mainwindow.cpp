@@ -51,9 +51,9 @@ void MainWindow::ShowPageGameDisplay() {
       !gm->m_PlayersManager->UpdateActivePlayers()) {
     return;
   }
-  emit SigUpdateActivePlayers();
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(SecondaryPages::gameDisplay));
+  emit SigUpdateActivePlayers();
 }
 
 void MainWindow::RawDisplayHeroGameCh() { ShowHeroGameCharacters(true); }
@@ -79,6 +79,7 @@ void MainWindow::ProcessGameCharacterNextBtn(const bool value) {
     ShowBossGameCharacters();
   } else {
     UpdateActiveCharacters();
+    setWindowState(Qt::WindowMaximized);
   }
 }
 
@@ -98,12 +99,14 @@ void MainWindow::ShowHostPage() {
 
 void MainWindow::UpdateActiveCharacters() { ShowPageGameDisplay(); }
 
-void MainWindow::UpdateNewCharacter(Character *ch) {
-    if(ch->m_type == characType::Hero){
-        ui->page_Hero->UpdatePanelAfterEdit(ch);
-    } else {
-        ui->page_Boss->UpdatePanelAfterEdit(ch);
-    }
+void MainWindow::UpdatCharacterViews(Character *ch) {
+  if (ch->m_type == characType::Hero) {
+    ui->page_Hero->UpdatePanelAfterEdit(ch);
+    ui->page_Hero->UpdateViews(ch);
+  } else {
+    ui->page_Boss->UpdatePanelAfterEdit(ch);
+    ui->page_Boss->UpdateViews(ch);
+  }
 }
 
 void MainWindow::AddNewStuff() { emit SigAddNewStuff(); }

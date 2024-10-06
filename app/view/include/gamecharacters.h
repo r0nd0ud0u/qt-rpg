@@ -23,6 +23,7 @@ public:
   void SetTextNextButton(const QString& str);
   void ResetPages() const;
   void UpdatePanelAfterEdit(Character* c);
+  void UpdateViews(Character* c);
 
 signals:
   void SigDead(); // if i dont add this line; the call to 'emit

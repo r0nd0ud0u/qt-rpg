@@ -58,7 +58,6 @@ private slots:
   void EndOfGame();
   void NewRound();
   void LaunchAttak(const QString &atkName, const std::vector<TargetInfo *> &);
-  void on_add_boss_button_clicked();
   void on_mana_potion_button_clicked();
   void on_hp_potion_button_clicked();
   void on_berseck_potion_button_clicked();
