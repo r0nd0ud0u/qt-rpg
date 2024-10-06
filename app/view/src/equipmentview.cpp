@@ -1,19 +1,10 @@
 #include "equipmentview.h"
 #include "ui_equipmentview.h"
 
-#include "gamedisplay.h"
-#include "gamecharacters.h"
-
 EquipmentView::EquipmentView(QWidget *parent)
     : QWidget(parent), ui(new Ui::EquipmentView) {
   ui->setupUi(this);
   ui->equipment_table->setModel(createEquipmentModel(parent, nullptr));
-
-  connect((GameDisplay *)parentWidget(), &GameDisplay::selectCharacter, this,
-          &EquipmentView::UpdateEquipment);
-  connect((GameCharacters *)parentWidget(),
-          &GameCharacters::SigSelectGameCharacter, this,
-          &EquipmentView::UpdateEquipment);
 }
 
 EquipmentView::~EquipmentView() { delete ui; }
