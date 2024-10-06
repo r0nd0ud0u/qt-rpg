@@ -3,22 +3,8 @@
 
 #include "Application.h"
 
-#include "gamecharacters.h"
-#include "gamedisplay.h"
-
 StatsView::StatsView(QWidget *parent) : QWidget(parent), ui(new Ui::StatsView) {
   ui->setupUi(this);
-
-  connect((GameDisplay *)parentWidget(), &GameDisplay::selectCharacter, this,
-          &StatsView::UpdateDisplayedCharStats);
-  connect((GameDisplay *)parentWidget(),
-          &GameDisplay::SigUpdStatsOnSelCharacter, this,
-          &StatsView::UpdateDisplayedCharStats);
-  connect((GameCharacters *)parentWidget(),
-          &GameCharacters::SigSelectGameCharacter, this,
-          &StatsView::UpdateDisplayedCharStats);
-  connect((GameDisplay *)parentWidget(), &GameDisplay::SigGameDisplayStart,
-          this, &StatsView::UpdateDisplayedCharStats);
 }
 
 StatsView::~StatsView() { delete ui; }

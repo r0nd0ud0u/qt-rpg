@@ -23,7 +23,7 @@ private:
     void addEquipmentRow(QAbstractItemModel *model, const QString &body,
                                         const QString equipmentName) const;
   QAbstractItemModel *createEquipmentModel(QObject *parent, const Character* c);
-private slots:
+public slots:
   void UpdateEquipment(const Character* c);
 };
 
