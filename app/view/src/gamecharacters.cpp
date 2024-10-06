@@ -108,7 +108,7 @@ void GameCharacters::UpdateSelected(const Character *c) const {
   }
 }
 
-void GameCharacters::SelectPanel(const Character *c) {
+void GameCharacters::SelectPanel(Character *c) {
   UpdateSelected(c);
   emit SigSelectGameCharacter(c);
 }
@@ -259,7 +259,11 @@ void GameCharacters::UpdatePanelAfterEdit(Character *c) {
   if (c == nullptr) {
     return;
   }
-  SetFocusLastOnPanel();
+  if (c->m_type == characType::Hero) {
+    SetFocusOnHeroPanel(c);
+  } else {
+    SetFocusOnBossPanel(c);
+  }
   for (auto *pnl : m_HeroesList) {
     if (pnl != nullptr && pnl->m_Heroe != nullptr && pnl->m_Heroe == c) {
       pnl->UpdatePanel(c, {});
@@ -356,4 +360,10 @@ void GameCharacters::RemoveBossPanel(const BossPanel *pnl) {
   lay->removeItem(lay->itemAt(i));
   lay->removeWidget(widget);
   delete widget;
+}
+
+void GameCharacters::UpdateViews(Character *c) {
+  ui->img->UpdateView(c);
+  ui->equip->UpdateEquipment(c);
+  ui->stats->UpdateDisplayedCharStats(c);
 }

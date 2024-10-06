@@ -1,14 +1,13 @@
 #include "ApplicationView.h"
 
-ApplicationView::ApplicationView(QObject *parent) : QObject{parent} {
-}
+ApplicationView::ApplicationView(QObject *parent) : QObject{parent} {}
 
 ApplicationView::~ApplicationView() {
   if (m_main_window.get() != nullptr) {
     m_main_window->hide();
   }
   if (m_Character_Window.get() != nullptr) {
-      m_Character_Window->hide();
+    m_Character_Window->hide();
   }
 }
 
@@ -26,12 +25,12 @@ void ApplicationView::StartMainWindow() {
 }
 
 void ApplicationView::StartCharacterWindow() {
-    if (m_Character_Window == nullptr) {
-        m_Character_Window = std::make_unique<CharacterWindow>();
-        m_Character_Window->setWindowState(Qt::WindowMaximized);
-        m_Character_Window->setWindowModality(Qt::WindowModality::ApplicationModal);
-        m_Character_Window->hide();
-    }
+  if (m_Character_Window == nullptr) {
+    m_Character_Window = std::make_unique<CharacterWindow>();
+    m_Character_Window->setWindowState(Qt::WindowMaximized);
+    m_Character_Window->setWindowModality(Qt::WindowModality::ApplicationModal);
+    m_Character_Window->hide();
+  }
 }
 
 void ApplicationView::ShowWindow(QMainWindow *mw, bool show) const {

@@ -23,9 +23,10 @@ public:
   void UpdateView(const std::vector<EditStuff> &esTable);
 
 signals:
-  void SigNewCharacter(Character *);
+  void SigUpdateCharacterViews(Character *);
   void SigAddNewStuff();
   void SigUseNewStuff(const QString &);
+  void SigUpdateViews(Character *);
 
 private slots:
   void on_pushButton_clicked();

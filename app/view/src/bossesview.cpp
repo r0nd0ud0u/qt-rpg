@@ -36,7 +36,6 @@ BossesView::~BossesView() {
 }
 
 void BossesView::InitBossPanels() {
-
   const auto &app = Application::GetInstance();
   if (app.m_GameManager != nullptr &&
       app.m_GameManager->m_PlayersManager != nullptr) {
@@ -109,14 +108,14 @@ void BossesView::RemoveBoss(QString bossName) {
   delete widget;
 }
 
-void BossesView::SetFocusOn(const Character* c) {
-    if (c->m_type != characType::Boss) {
+void BossesView::SetFocusOn(const Character *c) {
+  if (c->m_type != characType::Boss) {
     return;
   }
   for (int i = 0; i < ui->main_widget->layout()->count(); i++) {
     auto *wg = static_cast<BossPanel *>(
         ui->main_widget->layout()->itemAt(i)->widget());
-      if (wg != nullptr && wg->m_Boss->m_Name == c->m_Name) {
+    if (wg != nullptr && wg->m_Boss->m_Name == c->m_Name) {
       ui->scrollArea->ensureWidgetVisible(wg);
     }
   }

@@ -6,8 +6,6 @@
 #include "bosspanel.h"
 #include "heropanel.h"
 
-#include "playersmanager.h"
-
 namespace Ui {
 class GameCharacters;
 }
@@ -25,18 +23,19 @@ public:
   void SetTextNextButton(const QString& str);
   void ResetPages() const;
   void UpdatePanelAfterEdit(Character* c);
+  void UpdateViews(Character* c);
 
 signals:
   void SigDead(); // if i dont add this line; the call to 'emit
                   // SigBackBtnPushed' is crashing the app
   void SigBackBtnPushed(const bool);
-  void SigSelectGameCharacter(const Character*);
+  void SigSelectGameCharacter(Character*);
   void SigNextButtonPushed(const bool);
   void SigStartEditCharacter(const Character*);
 
 private slots:
   void on_back_pushButton_clicked();
-  void SelectPanel(const Character*);
+  void SelectPanel(Character*);
   void UpdateCharacterPlaying(const QString &name) const;
 
   void on_nextPushButton_clicked();

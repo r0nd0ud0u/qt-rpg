@@ -26,7 +26,7 @@ EditAttakView::~EditAttakView() {
   delete ui;
 }
 
-void EditAttakView::InitView(const Character *c) {
+void EditAttakView::InitView(Character *c) {
   if (c == nullptr) {
     InitDefaultView();
     return;
@@ -34,7 +34,7 @@ void EditAttakView::InitView(const Character *c) {
   const auto &atkList = c->m_AttakList;
 
   // init attributes
-  m_SelectedCharaName = c->m_Name;
+  m_CurCharacter = c;
 
   // Create model
   auto *model = new QStringListModel(this);
@@ -92,9 +92,10 @@ void EditAttakView::on_apply_button_clicked() { Apply(); }
 void EditAttakView::Apply() {
   // disable button
   ui->apply_button->setEnabled(false);
-
-  m_AttakList[GetIndexSelectedRow()].type.m_AllEffects =
-      ui->effect_widget->GetTable();
+  const auto &idx = GetIndexSelectedRow();
+  if (idx >= 0 && idx < m_AttakList.size()) {
+    m_AttakList[idx].type.m_AllEffects = ui->effect_widget->GetTable();
+  }
 }
 
 void EditAttakView::Save() {
@@ -103,7 +104,7 @@ void EditAttakView::Save() {
 
   QFile file;
   QDir logDir;
-  QString pathAtkChara = OFFLINE_ATK + m_SelectedCharaName + "/";
+  QString pathAtkChara = OFFLINE_ATK + m_CurCharacter->m_Name + "/";
   logDir.mkpath(pathAtkChara);
 
   if (const int index = ui->atk_list_view->currentIndex().row();
@@ -167,13 +168,12 @@ void EditAttakView::Save() {
     out << doc.toJson() << "\n";
   }
 
-  // update selected character
-  auto &selectedHeroAtkList =
-      Application::GetInstance()
-          .m_GameManager->m_PlayersManager->m_SelectedHero->m_AttakList;
-  selectedHeroAtkList.clear();
-  for (const auto &atk : m_AttakList) {
-    selectedHeroAtkList[atk.type.name] = atk.type;
+  // update cur character
+  if (m_CurCharacter != nullptr) {
+    m_CurCharacter->m_AttakList.clear();
+    for (const auto &atk : m_AttakList) {
+      m_CurCharacter->m_AttakList[atk.type.name] = atk.type;
+    }
   }
 }
 

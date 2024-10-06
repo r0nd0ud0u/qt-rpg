@@ -39,15 +39,9 @@ GameDisplay::GameDisplay(QWidget *parent)
           &StatsView::UpdateDisplayedCharStats);
   connect(this, &GameDisplay::SigUpdStatsOnSelCharacter, ui->stats_character,
           &StatsView::UpdateDisplayedCharStats);
-  connect(this, &GameDisplay::SigGameDisplayStart, ui->stats_character,
-          &StatsView::UpdateDisplayedCharStats);
-  // equip view
+  //equip view
   connect(this, &GameDisplay::selectCharacter, ui->equipment_widget,
           &EquipmentView::UpdateEquipment);
-
-  // init display default page
-  ui->stackedWidget->setCurrentIndex(
-      static_cast<int>(ActionsStackedWgType::defaultType));
   // init status page
   ui->turn_label->setText("Tour 0");
 }
@@ -562,12 +556,6 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   }
 }
 
-void GameDisplay::on_add_boss_button_clicked() {
-  auto &appView = ApplicationView::GetInstance();
-  appView.GetCharacterWindow()->InitWindow(tabType::character, nullptr);
-  appView.ShowWindow(appView.GetCharacterWindow(), true);
-}
-
 void GameDisplay::on_mana_potion_button_clicked() {
   auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
@@ -638,8 +626,8 @@ void GameDisplay::SlotUpdateActionViews(const QString &name,
 }
 
 void GameDisplay::UpdateActivePlayers() {
-  const auto *c = Application::GetInstance()
-                      .m_GameManager->m_PlayersManager->m_SelectedHero;
+  auto *c = Application::GetInstance()
+                .m_GameManager->m_PlayersManager->m_SelectedHero;
   emit SigGameDisplayStart(c);
   emit selectCharacter(c);
 }

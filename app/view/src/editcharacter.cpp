@@ -49,6 +49,7 @@ void EditCharacter::AddCharacter(Character *ch) const {
     if (panel->m_MaxValue == -1) {
       panel->m_MaxValue = 0;
     }
+    // update stats character
     ch->m_Stats.m_AllStatsTable[panel->m_Name].InitValues(panel->m_MaxValue, panel->m_MaxValue);
     // reset panel
     panel->m_MaxValue = -1;
@@ -59,8 +60,23 @@ void EditCharacter::Init(const Character* c){
     if(c == nullptr){
         return;
     }
+    // update name
+    ui->name_edit->setText(c->m_Name);
+    // update hero/boss button
     ui->boss_radio->setChecked(c->m_type == characType::Boss);
     ui->boss_radio->setEnabled(c->m_type == characType::Boss);
     ui->hero_radio->setChecked(c->m_type == characType::Hero);
     ui->hero_radio->setEnabled(c->m_type == characType::Hero);
+    // init stats value on panel
+    for (auto * panel: m_PanelList) {
+        if(panel == nullptr){
+            continue;
+        }
+        const auto& stat = panel->m_Name;
+        if (c->m_Stats.m_AllStatsTable.count(stat) == 0) {
+            continue;
+        }
+        panel->m_MaxValue = c->m_Stats.m_AllStatsTable.at(stat).m_RawMaxValue;
+        panel->SetStatsValue(c->m_Stats.m_AllStatsTable.at(stat));
+    }
 }

@@ -11,9 +11,9 @@ CharacterWindow::CharacterWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::CharacterWindow) {
   ui->setupUi(this);
 
-  connect(this, &CharacterWindow::SigNewCharacter,
+  connect(this, &CharacterWindow::SigUpdateCharacterViews,
           ApplicationView::GetInstance().GetMainWindow(),
-          &MainWindow::UpdateNewCharacter);
+          &MainWindow::UpdatCharacterViews);
   connect(this, &CharacterWindow::SigAddNewStuff,
           ApplicationView::GetInstance().GetMainWindow(),
           &MainWindow::AddNewStuff);
@@ -30,73 +30,77 @@ CharacterWindow::~CharacterWindow() {
 void CharacterWindow::InitWindow(const tabType &type, Character *c) {
   ui->tabWidget->setCurrentIndex(static_cast<int>(type));
   m_CurCharacter = c;
+  // atk
+  ui->edit_atk_tab->InitView(c);
+  // character
+  ui->edit_atk_tab->InitDefaultView();
+  // use stuff
+  ui->use_stuff_view->InitView(c);
+  // character + stats
+  ui->character_def->Init(c);
+
   if (type == tabType::attak) {
-    ui->edit_atk_tab->InitView(c);
     ui->tabWidget->setTabEnabled(1, true);
     ui->tabWidget->setTabEnabled(2, true);
   }
   if (type == tabType::character) {
-    ui->edit_atk_tab->InitDefaultView();
     ui->tabWidget->setTabEnabled(1, false);
     ui->tabWidget->setTabEnabled(2, false);
     if (m_CurCharacter == nullptr) {
       m_CurCharacter = new Character();
     }
-    ui->character_def->Init(c);
-  }
-  const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
-  if (type == tabType::useStuff) {
-    ui->use_stuff_view->InitView(pm->m_SelectedHero);
   }
 }
 
 void CharacterWindow::on_pushButton_clicked() {
   hide();
-  const auto type = static_cast<tabType>(ui->tabWidget->currentIndex());
-  const auto &pm = Application::GetInstance().m_GameManager->m_PlayersManager;
-  if (type == tabType::attak) {
-    ui->edit_atk_tab->Save();
-  }
-  if (type == tabType::character) {
-    ui->character_def->AddCharacter(m_CurCharacter);
-    emit SigNewCharacter(m_CurCharacter);
-    // output json update
-    pm->OutputCharactersInJson(std::vector<Character*>{m_CurCharacter});
-    m_CurCharacter = nullptr;
-  }
+  // atk + stats+ character + stuff + use stuff
   Apply();
+  // reset cur character
+  m_CurCharacter = nullptr;
 }
 
 void CharacterWindow::on_apply_pushButton_clicked() { Apply(); }
 
 void CharacterWindow::Apply() {
-  const auto type = static_cast<tabType>(ui->tabWidget->currentIndex());
+  if (m_CurCharacter == nullptr) {
+    return;
+  }
+  if (m_CurCharacter->m_Name.isEmpty()) {
+    return;
+  }
   auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
-  if (type == tabType::stuff) {
-    EditStuff es = ui->edit_stuff_view->Save();
-    if (es.m_Name.isEmpty()) {
-      // name is empty at launch of the window
-      // and is reset to empty after one apply
-      // this way , no duplicate if "button apply" + "button save" pressed
-      // TODO handle behavior enable/disable apply button
-      return;
-    }
+  // atk
+  ui->edit_atk_tab->Save();
+  // stats + character
+  // update stats
+  ui->character_def->AddCharacter(m_CurCharacter);
+  // output json update on character
+  pm->OutputCharactersInJson(std::vector<Character *>{m_CurCharacter});
+  // stuff
+  if (const auto es = ui->edit_stuff_view->Save(); !es.m_Name.isEmpty()) {
+    // name is empty at launch of the window
+    // and is reset to empty after one apply
+    // this way , no duplicate if "button apply" + "button save" pressed
+    // TODO handle behavior enable/disable apply button
     pm->m_Equipments[es.m_BodyPart][es.m_Name] = es.m_Stuff;
     ui->use_stuff_view->AddItemInComboBox(es);
     emit SigAddNewStuff();
   }
-  if (type == tabType::useStuff) {
-    // first synchronize the pm table
-    pm->LoadAllEquipmentsJson();
-    // Then update the equipments for each character
-    if (auto *ch = pm->m_SelectedHero; ch != nullptr) {
-      const auto &table = ui->use_stuff_view->GetCurrentEquipmentTable();
-      ch->SetEquipment(table);
-      ch->ApplyEquipOnStats(pm->m_AllEffectsOnGame[ch->m_Name]);
-      ch->UpdateEquipmentOnJson();
-      emit SigUseNewStuff(ch->m_Name);
-    }
-  }
+  // Init/Update the stats of character first
+  // Then update the equipments
+  // use stuff
+  // first synchronize the pm table
+  pm->LoadAllEquipmentsJson();
+  // Then update the equipments for each character
+  const auto &table = ui->use_stuff_view->GetCurrentEquipmentTable();
+  m_CurCharacter->SetEquipment(table);
+  m_CurCharacter->ApplyEquipOnStats(
+      pm->m_AllEffectsOnGame[m_CurCharacter->m_Name]);
+  m_CurCharacter->UpdateEquipmentOnJson();
+  emit SigUseNewStuff(m_CurCharacter->m_Name);
+  // update panel
+  emit SigUpdateCharacterViews(m_CurCharacter);
 }
 
 void CharacterWindow::UpdateView(const std::vector<EditStuff> &esTable) {

@@ -79,7 +79,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>83</width>
+            <width>110</width>
             <height>145</height>
            </rect>
           </property>
@@ -90,7 +90,7 @@
        <item>
         <widget class="ImgCharacterView" name="img" native="true">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>

@@ -29,7 +29,7 @@ public:
   Character *m_Boss = nullptr;
 
 signals:
-  void SigPanelSelectCharacter(const Character*);
+  void SigPanelSelectCharacter(Character*);
   void SigUpdateCharacterPlaying(const QString &);
   void SigRemovePanelByBtn(const BossPanel* pnl);
 
