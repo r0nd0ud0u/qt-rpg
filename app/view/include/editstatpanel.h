@@ -17,6 +17,7 @@ public:
   ~EditStatPanel();
 
   void Init(const QString &name, const Stats &stats);
+  void SetStatsValue(const StatsType &statsType);
 
   QString m_Name;
   int m_MaxValue = -1;

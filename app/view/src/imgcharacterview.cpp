@@ -15,7 +15,7 @@ void ImgCharacterView::UpdateView(const Character *c) {
   }
   const auto localPhoto =
       (c->m_PhotoName.isEmpty()) ? c->m_Name : c->m_PhotoName;
-  SetPixmap(localPhoto, 300);
+  SetPixmap(localPhoto, 200);
 }
 
 void ImgCharacterView::SetPixmap(const QString &name, const int scalingHeight) {

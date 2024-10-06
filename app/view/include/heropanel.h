@@ -41,7 +41,7 @@ private slots:
   void on_removePushButton_clicked();
 
   signals:
-  void SigPanelSelectCharacter(const Character*);
+  void SigPanelSelectCharacter(Character*);
   void SigUpdateCharaForm(const QString &, const QString &);
   void SigUpdateCharacterPlaying(const QString &);
   void SigRemovePanelByBtn(const HeroPanel* pnl);

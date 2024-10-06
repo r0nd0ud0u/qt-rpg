@@ -163,7 +163,7 @@ void HeroPanel::mousePressEvent(QMouseEvent *event) {
 
 void HeroPanel::on_edit_button_clicked() const {
   auto &appView = ApplicationView::GetInstance();
-  appView.GetCharacterWindow()->InitWindow(tabType::attak, m_Heroe);
+  appView.GetCharacterWindow()->InitWindow(tabType::character, m_Heroe);
   appView.ShowWindow(appView.GetCharacterWindow(), true);
 }
 

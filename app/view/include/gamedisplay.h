@@ -26,7 +26,7 @@ public slots:
   void UpdateViews(const QString &name);
   void UpdateActivePlayers();
 signals:
-  void selectCharacter(const Character*);
+  void selectCharacter(Character*);
   void SigUpdatePlayerPanel(const std::unordered_map<QString, std::vector<GameAtkEffects>> &);
   void SigBossDead(QString);
   void SigEndOfGame();
@@ -34,10 +34,10 @@ signals:
                             const QColor = QColor("purple"));
   void SigUpdateAllEffectPanel(
       const std::unordered_map<QString, std::vector<GameAtkEffects>> &);
-  void SigUpdStatsOnSelCharacter(const Character*);
+  void SigUpdStatsOnSelCharacter(Character*);
   void SigAddCharacter(Character *);
   void SigSetFocusOnActivePlayer(const Character*);
-  void SigGameDisplayStart(const Character*);
+  void SigGameDisplayStart(Character*);
 
 private:
   Ui::GameDisplay *ui;
@@ -58,7 +58,6 @@ private slots:
   void EndOfGame();
   void NewRound();
   void LaunchAttak(const QString &atkName, const std::vector<TargetInfo *> &);
-  void on_add_boss_button_clicked();
   void on_mana_potion_button_clicked();
   void on_hp_potion_button_clicked();
   void on_berseck_potion_button_clicked();

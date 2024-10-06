@@ -23,7 +23,7 @@ class EditAttakView : public QWidget {
 public:
   explicit EditAttakView(QWidget *parent = nullptr);
   ~EditAttakView();
-  void InitView(const Character* c);
+  void InitView(Character* c);
   void Save();
   void InitComboBoxes();
   void InitDefaultView();
@@ -52,7 +52,7 @@ private slots:
 private:
   Ui::EditAttakView *ui;
   std::vector<EditAttak> m_AttakList;
-  QString m_SelectedCharaName;
+  Character* m_CurCharacter = nullptr;
 
   void UpdateValues(const EditAttak &selectedAttak, const int index);
   void Apply();

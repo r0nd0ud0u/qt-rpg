@@ -13,3 +13,7 @@ void EditStatPanel::Init(const QString &name, const Stats &stats) {
 }
 
 void EditStatPanel::on_max_spinBox_valueChanged(int arg1) { m_MaxValue = arg1; }
+
+void EditStatPanel::SetStatsValue(const StatsType &statsType){
+    ui->max_spinBox->setValue(statsType.m_RawMaxValue);
+}

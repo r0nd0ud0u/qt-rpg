@@ -26,7 +26,7 @@ public:
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
 public slots:
-  void UpdateNewCharacter(Character *);
+  void UpdatCharacterViews(Character *);
   void AddNewStuff();
   void UpdateStuffOnUse(const QString &playerName);
 
