@@ -1,8 +1,6 @@
 #include "statsview.h"
 #include "ui_statsview.h"
 
-#include "Application.h"
-
 StatsView::StatsView(QWidget *parent) : QWidget(parent), ui(new Ui::StatsView) {
   ui->setupUi(this);
 }
@@ -17,8 +15,7 @@ void StatsView::addStatRow(QAbstractItemModel *model, const QString &statsName,
   model->setData(model->index(index, 1), value);
 }
 
-QAbstractItemModel *StatsView::createStatsModel(QObject *parent,
-                                                const Character *c) {
+QAbstractItemModel *StatsView::createStatsModel(QObject *parent, Character *c) {
   auto *model = new QStandardItemModel(0, 2, parent);
 
   model->setHeaderData(0, Qt::Horizontal, QObject::tr("Stats"));
@@ -29,7 +26,7 @@ QAbstractItemModel *StatsView::createStatsModel(QObject *parent,
   }
 
   // define curplayername
-  m_CurPlayerName = c->m_Name;
+  m_CurCharacter = c;
 
   const auto &statsTable = c->m_Stats.m_AllStatsTable;
   for (const auto &stat : ALL_STATS) {
@@ -42,6 +39,6 @@ QAbstractItemModel *StatsView::createStatsModel(QObject *parent,
   return model;
 }
 
-void StatsView::UpdateDisplayedCharStats(const Character *c) {
+void StatsView::UpdateDisplayedCharStats(Character *c) {
   ui->stats_table->setModel(createStatsModel(parentWidget(), c));
 }

@@ -638,7 +638,7 @@ void GameDisplay::SlotUpdateActionViews(const QString &name,
 }
 
 void GameDisplay::UpdateActivePlayers() {
-  const auto *c = Application::GetInstance()
+  auto *c = Application::GetInstance()
                       .m_GameManager->m_PlayersManager->m_SelectedHero;
   emit SigGameDisplayStart(c);
   emit selectCharacter(c);

@@ -19,7 +19,7 @@ void EquipmentView::addEquipmentRow(QAbstractItemModel *model,
 }
 
 QAbstractItemModel *EquipmentView::createEquipmentModel(QObject *parent,
-                                                        const Character *c) {
+                                                        Character *c) {
   auto *model = new QStandardItemModel(0, 2, parent);
 
   model->setHeaderData(0, Qt::Horizontal, QObject::tr("Partie du corps"));
@@ -39,6 +39,6 @@ QAbstractItemModel *EquipmentView::createEquipmentModel(QObject *parent,
   return model;
 }
 
-void EquipmentView::UpdateEquipment(const Character *c) {
+void EquipmentView::UpdateEquipment(Character *c) {
   ui->equipment_table->setModel(createEquipmentModel(parentWidget(), c));
 }

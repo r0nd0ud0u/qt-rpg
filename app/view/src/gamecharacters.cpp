@@ -108,7 +108,7 @@ void GameCharacters::UpdateSelected(const Character *c) const {
   }
 }
 
-void GameCharacters::SelectPanel(const Character *c) {
+void GameCharacters::SelectPanel(Character *c) {
   UpdateSelected(c);
   emit SigSelectGameCharacter(c);
 }
