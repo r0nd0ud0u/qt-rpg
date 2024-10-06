@@ -11,7 +11,7 @@ CharacterWindow::CharacterWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::CharacterWindow) {
   ui->setupUi(this);
 
-    connect(this, &CharacterWindow::SigUpdateCharacterViews,
+  connect(this, &CharacterWindow::SigUpdateCharacterViews,
           ApplicationView::GetInstance().GetMainWindow(),
           &MainWindow::UpdatCharacterViews);
   connect(this, &CharacterWindow::SigAddNewStuff,
@@ -66,8 +66,8 @@ void CharacterWindow::Apply() {
   if (m_CurCharacter == nullptr) {
     return;
   }
-  if(m_CurCharacter->m_Name.isEmpty()){
-      return;
+  if (m_CurCharacter->m_Name.isEmpty()) {
+    return;
   }
   auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
   // atk
@@ -78,8 +78,7 @@ void CharacterWindow::Apply() {
   // output json update on character
   pm->OutputCharactersInJson(std::vector<Character *>{m_CurCharacter});
   // stuff
-  EditStuff es = ui->edit_stuff_view->Save();
-  if (!es.m_Name.isEmpty()) {
+  if (const auto es = ui->edit_stuff_view->Save(); !es.m_Name.isEmpty()) {
     // name is empty at launch of the window
     // and is reset to empty after one apply
     // this way , no duplicate if "button apply" + "button save" pressed

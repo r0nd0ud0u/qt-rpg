@@ -72,7 +72,7 @@ void EditCharacter::Init(const Character* c){
         if(panel == nullptr){
             continue;
         }
-        const auto stat = panel->m_Name;
+        const auto& stat = panel->m_Name;
         if (c->m_Stats.m_AllStatsTable.count(stat) == 0) {
             continue;
         }
