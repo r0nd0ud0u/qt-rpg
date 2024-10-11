@@ -393,15 +393,6 @@ QString PlayersManager::FormatAtkOnEnnemy(const int damage) {
   return QString("fait %1 de dégâts!").arg(damage);
 }
 
-QString PlayersManager::FormatAtkOnAlly(const int damage) {
-  return QString("soigne de %4 PV!").arg(damage);
-}
-
-QString PlayersManager::FormatAtk(const QString player2,
-                                  const QString &atkName) {
-  return QString("utilise %2 sur %3!").arg(atkName).arg(player2);
-}
-
 int PlayersManager::GetNbOfStatsInEffectList(const Character *chara,
                                              const QString &statsName) const {
   if (chara == nullptr || m_AllEffectsOnGame.count(chara->m_Name) == 0) {
@@ -986,16 +977,14 @@ PlayersManager::GetHeroMostAggro() const {
  * @brief PlayersManager::OutputCharactersInJson
  * output in json all the characters from a list of Character object
  */
-void PlayersManager::OutputCharactersInJson(
-    const std::vector<Character *> &l) const {
+void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
+                                            const QString &outputPath) const {
   for (const auto *h : l) {
     if (h == nullptr) {
       continue;
     }
-    QFile file;
     QDir logDir;
-    QString path = OFFLINE_CHARACTERS;
-    logDir.mkpath(path);
+    logDir.mkpath(outputPath);
     // init json doc
     QJsonObject obj;
 
@@ -1008,10 +997,8 @@ void PlayersManager::OutputCharactersInJson(
     obj.insert(CH_COLOR, h->m_ColorStr);
     obj.insert(CH_RANK, h->m_BossClass.m_Rank);
     obj.insert(CH_FORM, h->m_SelectedForm);
-    auto classCh = STANDARD_CLASS;
-    if (h->m_Class == CharacterClass::Tank) {
-      classCh = TANK_CLASS;
-    }
+    const auto classCh =
+        (h->m_Class == CharacterClass::Tank) ? TANK_CLASS : STANDARD_CLASS;
     obj.insert(CH_CLASS, classCh);
 
     for (const auto &stats : ALL_STATS) {
@@ -1020,9 +1007,9 @@ void PlayersManager::OutputCharactersInJson(
       }
       const auto &st = h->m_Stats.m_AllStatsTable.at(stats);
       QJsonObject item;
-      QJsonArray jsonArray;
       item[CH_CURRENT_VALUE] = st.m_CurrentValue;
       item[CH_MAX_VALUE] = st.m_MaxValue;
+      QJsonArray jsonArray;
       jsonArray.append(item);
       if (!jsonArray.empty()) {
         obj[stats] = jsonArray;
@@ -1031,7 +1018,8 @@ void PlayersManager::OutputCharactersInJson(
 
     // output json
     QJsonDocument doc(obj);
-    QString logFilePath = logDir.filePath(path + h->m_Name + ".json");
+    const QString logFilePath = logDir.filePath(outputPath + h->m_Name + ".json");
+    QFile file;
     file.setFileName(logFilePath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
       Application::GetInstance().log(" Could not open the file for writing " +

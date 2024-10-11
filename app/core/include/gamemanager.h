@@ -26,6 +26,8 @@ public:
   void ProcessOrderToPlay(std::vector<QString> &orderToPlay) const;
   Character *GetCurrentPlayer();
   QString ProcessLogOrderToPlay() const;
+  void SaveGame(const PlayersManager* pm);
+  void LoadGame();
 };
 
 #endif // GAMEMANAGER_H

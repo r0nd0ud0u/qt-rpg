@@ -5,6 +5,7 @@
 #include <set>
 #include <unordered_map>
 
+// common include
 #include "rust-rpg-bridge/buffers.h"
 
 // inputs
@@ -14,6 +15,9 @@ const QString OFFLINE_WEARING_EQUIPMENT = "./offlines/equipment/Personnages/";
 const QString OFFLINE_ROOT_EQUIPMENT = "./offlines/equipment/corps/";
 const QString OFFLINE_RAND_NAME_STUFF = "./offlines/equipment/random/";
 const QString OFFLINE_CHARACTERS = "./offlines/Personnages/";
+
+// save/load games
+const QString GAMES_CHARACTERS = "./offlines/games/characters";
 
 // outputs
 const QString OUTPUT_DIR = "./output/";

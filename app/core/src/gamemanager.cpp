@@ -107,3 +107,24 @@ void GameState::RemoveDeadPlayerInTurn(const QString &name) {
       });
   m_OrderToPlay.erase(newEnd, m_OrderToPlay.end());
 }
+
+void GameManager::SaveGame(const PlayersManager* pm){
+    if(pm == nullptr){
+        return;
+    }
+    // output characters
+    pm->OutputCharactersInJson(pm->m_HeroesList, GAMES_CHARACTERS);
+    pm->OutputCharactersInJson(pm->m_BossesList, GAMES_CHARACTERS);
+    // output equipments
+
+    // output effects
+
+    // output current turn
+
+    // output current round
+
+    // output stats in game
+
+    // output loot equipment
+
+}

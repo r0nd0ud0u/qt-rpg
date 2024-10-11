@@ -39,8 +39,6 @@ public:
   void ApplyRegenStats(const characType &type);
 
   static QString FormatAtkOnEnnemy(const int damage);
-  static QString FormatAtkOnAlly(const int damage);
-  static QString FormatAtk(const QString player2, const QString &atkName);
   int GetNbOfStatsInEffectList(const Character *chara,
                                const QString &statsName) const;
   void ResetCounterOnOneStatsEffect(const Character *chara,
@@ -68,7 +66,8 @@ public:
   std::vector<Stuff> LootNewEquipments(const QString &name);
   void InitRandomEquip();
   std::optional<std::pair<QString, int>> GetHeroMostAggro() const;
-  void OutputCharactersInJson(const std::vector<Character *> &l) const;
+  void OutputCharactersInJson(const std::vector<Character *> &l,
+                              const QString &outputPath) const;
   void LoadAllCharactersJson();
   void ResetAllEffectsOnPlayer(const Character *chara);
   int GetNbOfActiveHotsOnHeroes() const;

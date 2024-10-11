@@ -76,7 +76,7 @@ void CharacterWindow::Apply() {
   // update stats
   ui->character_def->AddCharacter(m_CurCharacter);
   // output json update on character
-  pm->OutputCharactersInJson(std::vector<Character *>{m_CurCharacter});
+  pm->OutputCharactersInJson(std::vector<Character *>{m_CurCharacter},OFFLINE_CHARACTERS);
   // stuff
   if (const auto es = ui->edit_stuff_view->Save(); !es.m_Name.isEmpty()) {
     // name is empty at launch of the window
