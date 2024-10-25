@@ -362,22 +362,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="AllEffectPanel" name="effect_panel_widget" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>250</height>
-          </size>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
     </layout>
@@ -425,12 +409,6 @@
    <class>ActionsView</class>
    <extends>QWidget</extends>
    <header location="global">actionsview.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>AllEffectPanel</class>
-   <extends>QWidget</extends>
-   <header location="global">alleffectpanel.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

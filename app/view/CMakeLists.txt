@@ -28,7 +28,6 @@ set(SOURCES
         src/characterwindow.cpp
         src/editattakview.cpp
         src/effectview.cpp
-        src/alleffectpanel.cpp
         src/editcharacter.cpp
         src/editstatpanel.cpp
         src/equiponbodypanel.cpp
@@ -59,7 +58,6 @@ set(HEADERS
         include/characterwindow.h
         include/editattakview.h
         include/effectview.h
-        include/alleffectpanel.h
         include/editcharacter.h
         include/editstatpanel.h
         include/equiponbodypanel.h
@@ -88,7 +86,6 @@ set(FORMS
         forms/characterwindow.ui
         forms/editattakview.ui
         forms/effectview.ui
-        forms/alleffectpanel.ui
         forms/editcharacter.ui
         forms/editstatpanel.ui
         forms/equiponbodypanel.ui
