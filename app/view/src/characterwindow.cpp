@@ -33,19 +33,15 @@ void CharacterWindow::InitWindow(const tabType &type, Character *c) {
   // atk
   ui->edit_atk_tab->InitView(c);
   // character
-  ui->edit_atk_tab->InitDefaultView();
+  if(c == nullptr){
+    ui->edit_atk_tab->InitDefaultView();
+  }
   // use stuff
   ui->use_stuff_view->InitView(c);
   // character + stats
   ui->character_def->Init(c);
 
-  if (type == tabType::attak) {
-    ui->tabWidget->setTabEnabled(1, true);
-    ui->tabWidget->setTabEnabled(2, true);
-  }
   if (type == tabType::character) {
-    ui->tabWidget->setTabEnabled(1, false);
-    ui->tabWidget->setTabEnabled(2, false);
     if (m_CurCharacter == nullptr) {
       m_CurCharacter = new Character();
     }
