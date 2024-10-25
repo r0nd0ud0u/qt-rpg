@@ -109,23 +109,25 @@ void HeroPanel::UpdatePanel(Character *hero,
   int nbBufs = 0;
   int nbDebufs = 0;
   // hot, dot, buf, debuf by ongoing effects
-  if (const auto effectsNbs = Utils::GetNbOfActiveEffects(table);
-      effectsNbs.has_value()) {
-      ui->verticalWidget->SetHotDotValues(effectsNbs->hot, effectsNbs->dot);
-      nbBufs += effectsNbs->buf;
-      nbDebufs += effectsNbs->debuf;
+  const auto effects = Utils::GetActiveEffects(table);
+  if (effects.has_value()) {
+    ui->verticalWidget->SetHotDotValues(effects->hot.nb, effects->dot.nb);
+    nbBufs += effects->buf.nb;
+    nbDebufs += effects->debuf.nb;
   } else {
-      ui->verticalWidget->SetHotDotValues(0, 0);
+    ui->verticalWidget->SetHotDotValues(0, 0);
   }
 
   // buf/debuf nbs by ongoing buf/debuf table
-  if (const auto bufDebufNbs = hero->GetBufDebufNumbers();
-      bufDebufNbs.has_value()) {
-      nbBufs += bufDebufNbs->buf;
-      nbDebufs += bufDebufNbs->debuf;
+  const auto bufDebuf = hero->GetBufDebuf();
+  if (bufDebuf.has_value()) {
+    nbBufs += bufDebuf->buf.nb;
+    nbDebufs += bufDebuf->debuf.nb;
   }
-
   ui->verticalWidget->SetBufDebufValues(nbBufs, nbDebufs);
+
+  // update tables of dotview
+  ui->verticalWidget->UpdateData(effects, bufDebuf);
 }
 
 void HeroPanel::SetActive(const bool activated) {
@@ -187,46 +189,41 @@ void HeroPanel::on_form_comboBox_currentTextChanged(const QString &arg1) {
   m_Heroe->m_SelectedForm = arg1;
 }
 
-void HeroPanel::on_pushButton_clicked()
-{
-    UpdateActiveRightWidget();
-    emit SigUpdateCharacterPlaying(m_Heroe->m_Name);
+void HeroPanel::on_pushButton_clicked() {
+  UpdateActiveRightWidget();
+  emit SigUpdateCharacterPlaying(m_Heroe->m_Name);
 }
 
 void HeroPanel::UpdateActiveRightWidget() {
-    if(!m_Heroe->m_StatsInGame.m_IsPlaying){
-        SetPlayingStatus();
-    } else {
-        SetSelectStatus();
-    }
+  if (!m_Heroe->m_StatsInGame.m_IsPlaying) {
+    SetPlayingStatus();
+  } else {
+    SetSelectStatus();
+  }
 }
 
-void HeroPanel::SetPlayingStatus(){
-    ui->pushButton->setText("Playing");
-    setStyleSheet("#right_widget{ background:     #40b1fe;  } ");
+void HeroPanel::SetPlayingStatus() {
+  ui->pushButton->setText("Playing");
+  setStyleSheet("#right_widget{ background:     #40b1fe;  } ");
 }
 
-void HeroPanel::SetSelectStatus(){
-    ui->pushButton->setText("Select");
-    setStyleSheet("#right_widget{ background:     grey;  } ");
+void HeroPanel::SetSelectStatus() {
+  ui->pushButton->setText("Select");
+  setStyleSheet("#right_widget{ background:     grey;  } ");
 }
 
-void HeroPanel::SetSelectedGameChoiceBtn(const bool value){
-    ui->pushButton->setEnabled(value);
+void HeroPanel::SetSelectedGameChoiceBtn(const bool value) {
+  ui->pushButton->setEnabled(value);
 }
 
-void HeroPanel::on_removePushButton_clicked()
-{
-    emit SigRemovePanelByBtn(this);
+void HeroPanel::on_removePushButton_clicked() {
+  emit SigRemovePanelByBtn(this);
 }
 
-void HeroPanel::SetHero(Character* c){
-    m_Heroe = c;
-}
+void HeroPanel::SetHero(Character *c) { m_Heroe = c; }
 
-void HeroPanel::ProcessPlayingMode(){
-    ui->removePushButton->hide();
-    ui->pushButton->hide();
-    ui->edit_button->hide();
-
+void HeroPanel::ProcessPlayingMode() {
+  ui->removePushButton->hide();
+  ui->pushButton->hide();
+  ui->edit_button->hide();
 }

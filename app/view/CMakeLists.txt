@@ -35,6 +35,7 @@ set(SOURCES
         src/equiponbodyview.cpp
         src/gamecharacters.cpp
         src/editatkpanel.cpp
+        src/complabel.cpp
 )
 
 set(HEADERS
@@ -65,6 +66,7 @@ set(HEADERS
         include/equiponbodyview.h
         include/gamecharacters.h
         include/editatkpanel.h
+        include/complabel.h
 )
 
 set(FORMS
