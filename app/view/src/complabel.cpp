@@ -10,10 +10,6 @@ CompLabel::CompLabel(QWidget* parent)
 {
 }
 
-void CompLabel::mousePressEvent(QMouseEvent *event){
-    //emit SigCompLabelClicked();
-}
-
 void CompLabel::mouseMoveEvent(QMouseEvent *event){
     emit SigCompLabelClicked();
 }

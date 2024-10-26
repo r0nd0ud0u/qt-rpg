@@ -3,16 +3,13 @@
 
 #include <QLabel>
 
-class CompLabel: public QLabel
-{
-    Q_OBJECT
+class CompLabel : public QLabel {
+  Q_OBJECT
 public:
-
-    explicit CompLabel(QWidget* parent = nullptr);
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
+  explicit CompLabel(QWidget *parent = nullptr);
+  void mouseMoveEvent(QMouseEvent *event) override;
 signals:
-    void SigCompLabelClicked();
+  void SigCompLabelClicked();
 };
 
 #endif // COMPLABEL_H
