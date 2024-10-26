@@ -127,7 +127,7 @@ public:
   bool IsDead() const;
   void ProcessDeath();
   int GetMaxNbOfApplies(const AttaqueType &atk) const;
-  std::optional<EffectsTypeNb> GetBufDebufNumbers() const;
+  std::optional<AllEffectsType> GetBufDebuf() const;
   void InitAggroOnTurn(const int turnNb);
   void ProcessBlock(const bool isDodging);
   QString GetPhotoName() const;

@@ -83,7 +83,7 @@ void character_tests::GetMaxNbOfApplies_works() {
 
 void character_tests::GetBufDebufNumbers_works() {
   auto testCh = GetTestCharacter();
-  auto result = testCh.GetBufDebufNumbers();
+  auto result = testCh.GetBufDebuf();
   QVERIFY(result.has_value());
 
   for (int i = 0; i < static_cast<int>(BufTypes::enumSize); i++) {
@@ -93,12 +93,12 @@ void character_tests::GetBufDebufNumbers_works() {
       testCh.m_AllBufs[i]->set_buffers(10, false);
     }
   }
-  result = testCh.GetBufDebufNumbers();
+  result = testCh.GetBufDebuf();
   QVERIFY(result.has_value());
-  QCOMPARE(result->hot, 0);
-  QCOMPARE(result->dot, 0);
-  QCOMPARE(result->debuf, 0);
-  QCOMPARE(result->buf, static_cast<int>(BufTypes::enumSize));
+  QCOMPARE(result->hot.nb, 0);
+  QCOMPARE(result->dot.nb, 0);
+  QCOMPARE(result->debuf.nb, 0);
+  QCOMPARE(result->buf.nb, static_cast<int>(BufTypes::enumSize));
 
   // reset
   for (int i = 0; i < static_cast<int>(BufTypes::enumSize); i++) {

@@ -17,7 +17,7 @@ class HeroPanel : public QWidget {
 public:
   explicit HeroPanel(QWidget *parent = nullptr);
   ~HeroPanel();
-  void UpdatePanel(Character *hero, const std::vector<GameAtkEffects>& table);
+  void UpdatePanel(Character *hero, const std::vector<GameAtkEffects> &table);
   void SetActive(const bool activated);
   bool GetActive() const;
   void SetSelected(const bool selected);
@@ -40,16 +40,16 @@ private slots:
 
   void on_removePushButton_clicked();
 
-  signals:
-  void SigPanelSelectCharacter(Character*);
+signals:
+  void SigPanelSelectCharacter(Character *);
   void SigUpdateCharaForm(const QString &, const QString &);
   void SigUpdateCharacterPlaying(const QString &);
-  void SigRemovePanelByBtn(const HeroPanel* pnl);
+  void SigRemovePanelByBtn(const HeroPanel *pnl);
 
 private:
   Ui::HeroPanel *ui;
 
-    void SetHero(Character* c);
+  void SetHero(Character *c);
 
   void UpdateActiveRightWidget();
 };

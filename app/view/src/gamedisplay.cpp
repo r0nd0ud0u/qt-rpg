@@ -125,7 +125,6 @@ void GameDisplay::NewRound() {
     emit SigUpdateChannelView(activePlayer->m_Name,
                               terminatedEffects.join("\n"),
                               activePlayer->color);
-    emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
 
     // Update effect
     const QStringList effectsLogs = gm->m_PlayersManager->ApplyEffectsOnPlayer(
@@ -538,8 +537,6 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     emit SigUpdateChannelView("GameState", QString("%1 est mort.").arg(dp));
   }
 
-  // update all effect panel
-  emit SigUpdateAllEffectPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
   // update views of heroes and bosses
   emit SigUpdatePlayerPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
   // update stats view
