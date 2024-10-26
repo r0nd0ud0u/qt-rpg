@@ -46,8 +46,9 @@ Utils::GetActiveEffects(const std::vector<GameAtkEffects> &table) {
     std::for_each(table.begin(), table.end(), [&](const GameAtkEffects &gae) {
       if (!gae.allAtkEffects.passiveTalent) {
         const auto effect =
-            QString("%1, valeur:%2, ~%3 tours (par %4)")
+            QString("%1, stats: %2 valeur:%3, ~%4 tours (par %5)")
                 .arg(gae.allAtkEffects.effect)
+                .arg(gae.allAtkEffects.statsName)
                 .arg(gae.allAtkEffects.value)
                 .arg(gae.allAtkEffects.nbTurns - gae.allAtkEffects.counterTurn)
                 .arg(gae.launcher);
