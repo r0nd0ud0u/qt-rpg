@@ -30,7 +30,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QLabel" name="hot_label">
+    <widget class="CompLabel" name="hot_label">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -48,6 +48,12 @@
        <width>20</width>
        <height>20</height>
       </size>
+     </property>
+     <property name="mouseTracking">
+      <bool>true</bool>
+     </property>
+     <property name="statusTip">
+      <string extracomment="hahahha"/>
      </property>
      <property name="text">
       <string/>
@@ -83,7 +89,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="dot_label">
+    <widget class="CompLabel" name="dot_label">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -101,6 +107,9 @@
        <width>20</width>
        <height>20</height>
       </size>
+     </property>
+     <property name="mouseTracking">
+      <bool>true</bool>
      </property>
      <property name="text">
       <string/>
@@ -136,7 +145,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="buf_label">
+    <widget class="CompLabel" name="buf_label">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -154,6 +163,9 @@
        <width>20</width>
        <height>20</height>
       </size>
+     </property>
+     <property name="mouseTracking">
+      <bool>true</bool>
      </property>
      <property name="text">
       <string/>
@@ -189,7 +201,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="debuf_label">
+    <widget class="CompLabel" name="debuf_label">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -207,6 +219,9 @@
        <width>20</width>
        <height>20</height>
       </size>
+     </property>
+     <property name="mouseTracking">
+      <bool>true</bool>
      </property>
      <property name="text">
       <string/>
@@ -256,6 +271,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CompLabel</class>
+   <extends>QLabel</extends>
+   <header>complabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

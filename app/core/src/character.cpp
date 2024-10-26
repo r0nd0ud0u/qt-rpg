@@ -1784,28 +1784,28 @@ void Character::ProcessDeath() {
 }
 
 /**
- * @brief Character::GetBufDebufNumbers
+ * @brief Character::GetBufDebuf
  * @return Returns the numbers of buf and debuf assessed in the list of
  * buf/debuf.
  */
-std::optional<EffectsTypeNb> Character::GetBufDebufNumbers() const {
-  EffectsTypeNb nbs;
+std::optional<AllEffectsType> Character::GetBufDebuf() const {
+  AllEffectsType effects;
   const auto &buffs = m_AllBufs;
   for (int i = 0; i < buffs.size(); i++) {
     const auto &value = buffs[i]->get_value();
     if (i == static_cast<int>(BufTypes::damageRx)) {
       if (value < 0) {
-        nbs.buf++;
+        effects.buf.nb++;
       } else if (value > 0) {
-        nbs.debuf++;
+        effects.debuf.nb++;
       }
     } else if (value > 0) {
-      nbs.buf++;
+      effects.buf.nb++;
     } else if (value < 0) {
-      nbs.debuf++;
+      effects.debuf.nb++;
     }
   }
-  return (!buffs.empty()) ? std::optional(nbs) : std::nullopt;
+  return (!buffs.empty()) ? std::optional(effects) : std::nullopt;
 }
 
 /**
