@@ -42,7 +42,7 @@ QString StatsInGame::GetOutputEndGameByList(
   QString output;
   const QString values = QStringList({"%1", "%2", "%3"}).join(";\t");
   for (const auto *h : playerList) {
-    if (h == nullptr || h->m_StatsInGame.m_IsPlaying) {
+    if (h == nullptr || !h->m_StatsInGame.m_IsPlaying) {
       continue;
     }
     const auto charaType = (h->m_type == characType::Hero) ? "Hero" : "Boss";
