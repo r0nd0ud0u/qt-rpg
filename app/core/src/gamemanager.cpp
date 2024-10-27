@@ -2,6 +2,8 @@
 
 #include "utils.h"
 
+#include <QDir>
+
 void GameManager::InitPlayers() {
   // init the game
   m_GameState = new GameState();
@@ -16,6 +18,12 @@ void GameManager::InitPlayers() {
   m_PlayersManager->LoadAllCharactersJson();
   m_PlayersManager->InitHeroes();
   m_PlayersManager->InitBosses();
+
+  // make directories
+  QDir directory(OFFLINE_SAVES);
+  if (!directory.exists()) {
+    directory.mkdir(OFFLINE_SAVES);
+  }
 }
 
 Character *GameManager::GetSelectedHero() {
@@ -31,9 +39,10 @@ Character *GameManager::GetSelectedHero() {
  * @brief GameManager::ProcessOrderToPlay
  * Each turn the order of playing for the characters is processed.
  * First the hero are playing one turn. Then the bosses, one turn.
- * The order of round between heroes and separately bosses is determined by the highest speed.
- * If one hero is dead, he will be last on the list of playing heroes (maybe he can be revived).
- * Then there is a process to assess a supplementary turn for heroes and for bosses.
+ * The order of round between heroes and separately bosses is determined by the
+ * highest speed. If one hero is dead, he will be last on the list of playing
+ * heroes (maybe he can be revived). Then there is a process to assess a
+ * supplementary turn for heroes and for bosses.
  */
 void GameManager::ProcessOrderToPlay(std::vector<QString> &orderToPlay) const {
   // to be improved with stats
@@ -41,22 +50,23 @@ void GameManager::ProcessOrderToPlay(std::vector<QString> &orderToPlay) const {
   orderToPlay.clear();
 
   // sort by speed
-  std::sort(m_PlayersManager->m_HeroesList.begin(), m_PlayersManager->m_HeroesList.end(), Utils::CompareBySpeed);
+  std::sort(m_PlayersManager->m_HeroesList.begin(),
+            m_PlayersManager->m_HeroesList.end(), Utils::CompareBySpeed);
   std::vector<QString> deadHeroes;
   for (const auto &hero : m_PlayersManager->m_HeroesList) {
     if (!hero->IsDead()) {
       orderToPlay.push_back(hero->m_Name);
     } else {
-        deadHeroes.push_back(hero->m_Name);
+      deadHeroes.push_back(hero->m_Name);
     }
   }
   // add dead heroes
-  std::for_each(deadHeroes.begin(), deadHeroes.end(), [&](const QString& name){
-      orderToPlay.push_back(name);
-  });
+  std::for_each(deadHeroes.begin(), deadHeroes.end(),
+                [&](const QString &name) { orderToPlay.push_back(name); });
   // add bosses
   // sort by speed
-  std::sort(m_PlayersManager->m_BossesList.begin(), m_PlayersManager->m_BossesList.end(), Utils::CompareBySpeed);
+  std::sort(m_PlayersManager->m_BossesList.begin(),
+            m_PlayersManager->m_BossesList.end(), Utils::CompareBySpeed);
   for (const auto &boss : m_PlayersManager->m_BossesList) {
     orderToPlay.push_back(boss->m_Name);
   }
@@ -108,23 +118,41 @@ void GameState::RemoveDeadPlayerInTurn(const QString &name) {
   m_OrderToPlay.erase(newEnd, m_OrderToPlay.end());
 }
 
-void GameManager::SaveGame(const PlayersManager* pm){
-    if(pm == nullptr){
-        return;
+void GameManager::SaveGame() {
+  if (m_PlayersManager == nullptr) {
+    return;
+  }
+  // output characters
+  m_PlayersManager->OutputCharactersInJson(m_PlayersManager->m_HeroesList,
+                                           m_Paths.characterPath);
+  m_PlayersManager->OutputCharactersInJson(m_PlayersManager->m_BossesList,
+                                           m_Paths.characterPath);
+  // output equipments
+  for (const auto *c : m_PlayersManager->m_HeroesList) {
+    if (c != nullptr) {
+      c->UpdateEquipmentOnJson(m_Paths.equipmentPath);
     }
-    // output characters
-    pm->OutputCharactersInJson(pm->m_HeroesList, GAMES_CHARACTERS);
-    pm->OutputCharactersInJson(pm->m_BossesList, GAMES_CHARACTERS);
-    // output equipments
+  }
+  // output effects
 
-    // output effects
+  // output current turn
 
-    // output current turn
+  // output current round
 
-    // output current round
+  // output stats in game
 
-    // output stats in game
+  // output loot equipment
+}
 
-    // output loot equipment
-
+void GameManager::StartGame() {
+  // create name of exercise
+  const auto timeStr = Utils::getCurrentTimeAsString();
+  m_GameState->m_GameName = QString("Game_%1").arg(timeStr);
+  // update paths
+  m_Paths.characterPath =
+      QString("%1%2/%3/")
+          .arg(GAMES_DIR, m_GameState->m_GameName, GAMES_CHARACTERS);
+  m_Paths.equipmentPath =
+      QString("%1%2/%3/")
+          .arg(GAMES_DIR, m_GameState->m_GameName, GAMES_EQUIPMENT);
 }

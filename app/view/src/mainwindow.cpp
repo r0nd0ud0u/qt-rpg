@@ -36,6 +36,8 @@ MainWindow::MainWindow(QWidget *parent)
   // init game characters
   ui->page_Hero->InitAllHeroesPanel();
   ui->page_Boss->InitAllBossesPanel();
+  ui->actionSave->setEnabled(false);
+  ui->actionQuit->setEnabled(false);
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -54,6 +56,8 @@ void MainWindow::ShowPageGameDisplay() {
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(SecondaryPages::gameDisplay));
   emit SigUpdateActivePlayers();
+  ui->actionSave->setEnabled(true);
+  ui->actionQuit->setEnabled(true);
 }
 
 void MainWindow::RawDisplayHeroGameCh() { ShowHeroGameCharacters(true); }
@@ -66,12 +70,19 @@ void MainWindow::ShowHeroGameCharacters(const bool init) {
   ui->page_Hero->SetTextNextButton("Suivant");
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(SecondaryPages::heroGameCharacters));
+  ui->actionSave->setEnabled(false);
+  ui->actionQuit->setEnabled(true);
+
+  // start game
+  Application::GetInstance().m_GameManager->StartGame();
 }
 
 void MainWindow::ShowBossGameCharacters() {
   ui->page_Boss->SetTextNextButton("Valider");
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(SecondaryPages::bossGameCharacters));
+  ui->actionSave->setEnabled(false);
+  ui->actionQuit->setEnabled(true);
 }
 
 void MainWindow::ProcessGameCharacterNextBtn(const bool value) {
@@ -95,6 +106,8 @@ void MainWindow::ShowHostPage() {
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(SecondaryPages::hostPage));
   ui->page->ActiveNewGame(true);
+  ui->actionSave->setEnabled(false);
+  ui->actionQuit->setEnabled(false);
 }
 
 void MainWindow::UpdateActiveCharacters() { ShowPageGameDisplay(); }
@@ -113,4 +126,16 @@ void MainWindow::AddNewStuff() { emit SigAddNewStuff(); }
 
 void MainWindow::UpdateStuffOnUse(const QString &playerName) {
   emit SigNewStuffOnUse(playerName);
+}
+
+void MainWindow::on_actionSave_triggered() {
+  // save jsons in dir
+  auto *gm = Application::GetInstance().m_GameManager.get();
+  if (gm != nullptr) {
+    gm->SaveGame();
+  }
+}
+
+void MainWindow::on_actionQuit_triggered() {
+   ShowHostPage();
 }

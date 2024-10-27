@@ -1480,7 +1480,9 @@ void Character::SetEquipment(
   }
 }
 
-void Character::UpdateEquipmentOnJson() const {
+void Character::UpdateEquipmentOnJson(const QString &dirPath) const {
+  QDir directory;
+  directory.mkpath(dirPath);
   // init json doc
   QJsonObject obj;
   for (const auto &[bodyPart, equip] : m_WearingEquipment) {
@@ -1491,17 +1493,10 @@ void Character::UpdateEquipmentOnJson() const {
   }
   // output attak json
   QJsonDocument doc(obj);
-  const QString directoryPath =
-      OFFLINE_WEARING_EQUIPMENT; // Replace with the actual path
-  if (QDir directory(directoryPath); !directory.exists()) {
-    Application::GetInstance().log(
-        QString("Directory does not exist: %1").arg(directoryPath));
-    return;
-  }
-  QFile json(directoryPath + m_Name + ".json");
+  QFile json(dirPath + m_Name + ".json");
   if (!json.open(QFile::WriteOnly | QFile::Text)) {
     Application::GetInstance().log(" Could not open the file for reading " +
-                                   directoryPath + m_Name + ".json");
+                                   dirPath + m_Name + ".json");
   }
   QTextStream out(&json);
 #if QT_VERSION_MAJOR == 6

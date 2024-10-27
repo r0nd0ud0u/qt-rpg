@@ -91,7 +91,7 @@ void CharacterWindow::Apply() {
   m_CurCharacter->SetEquipment(table);
   m_CurCharacter->ApplyEquipOnStats(
       pm->m_AllEffectsOnGame[m_CurCharacter->m_Name]);
-  m_CurCharacter->UpdateEquipmentOnJson();
+  m_CurCharacter->UpdateEquipmentOnJson(OFFLINE_WEARING_EQUIPMENT);
   emit SigUseNewStuff(m_CurCharacter->m_Name);
   // update panel
   emit SigUpdateCharacterViews(m_CurCharacter);

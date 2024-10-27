@@ -48,5 +48,7 @@ private slots:
   void ShowHostPage();
   void UpdateActiveCharacters();
   void RawDisplayHeroGameCh();
+  void on_actionSave_triggered();
+  void on_actionQuit_triggered();
 };
 #endif // MAINWINDOW_H

@@ -109,7 +109,7 @@ public:
   void UsePotion(const QString &statsName);
   void AddExp(const int newXp);
   void SetEquipment(const std::unordered_map<QString, QString> &);
-  void UpdateEquipmentOnJson() const;
+  void UpdateEquipmentOnJson(const QString& dirPath) const;
   void ApplyEffeftOnStats(const bool updateEffect,
                           const std::vector<GameAtkEffects> &allGae);
   std::pair<bool, int>

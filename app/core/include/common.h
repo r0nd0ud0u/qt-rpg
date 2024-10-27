@@ -15,9 +15,12 @@ const QString OFFLINE_WEARING_EQUIPMENT = "./offlines/equipment/Personnages/";
 const QString OFFLINE_ROOT_EQUIPMENT = "./offlines/equipment/corps/";
 const QString OFFLINE_RAND_NAME_STUFF = "./offlines/equipment/random/";
 const QString OFFLINE_CHARACTERS = "./offlines/Personnages/";
+const QString OFFLINE_SAVES = "./offlines/Games";
 
 // save/load games
-const QString GAMES_CHARACTERS = "./offlines/games/characters";
+const QString GAMES_DIR = "./offlines/games/";
+const QString GAMES_CHARACTERS = "characters";
+const QString GAMES_EQUIPMENT = "equipments";
 
 // outputs
 const QString OUTPUT_DIR = "./output/";
