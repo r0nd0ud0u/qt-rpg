@@ -74,6 +74,7 @@ public:
   void SetSelectedHero(const QString &name);
   QString ProcessNewDefaultName() const;
   int GetMaxIndexDefaultName() const;
+  void OutputAllOnGoingEffectToJson(const QString& filepath) const;
 
   // Available characters to create a party
   std::vector<Character *> m_AllHeroesList;

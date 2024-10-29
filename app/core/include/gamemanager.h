@@ -19,6 +19,7 @@ public:
 struct GamePaths{
     QString characterPath;
     QString equipmentPath;
+    QString ongoingEffectsPath;
 };
 
 class GameManager {

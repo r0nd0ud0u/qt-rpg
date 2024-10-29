@@ -1176,3 +1176,38 @@ int PlayersManager::GetMaxIndexDefaultName() const {
   }
   return max;
 }
+
+void PlayersManager::OutputAllOnGoingEffectToJson(const QString& filepath) const{
+    QJsonArray ja;
+    for(const auto& [pl, gaeTable] : m_AllEffectsOnGame){
+        for(const auto& gae: gaeTable){
+            auto item = gae.allAtkEffects.EffectToJsonArray();
+            item["target"] = pl;
+            item["launcher"] = gae.launcher;
+            item[ATK_NAME] = gae.atk.name;
+            item["index tour"] = gae.launchingTurn;
+            ja.append(item);
+        }
+    }
+    QJsonObject obj;
+    if (!ja.empty()) {
+        obj[EFFECT_ARRAY] = ja;
+    }
+
+    // output ongoing effects json
+    QJsonDocument doc(obj);
+    QFile file;
+    QDir logDir;
+    file.setFileName(logDir.filePath(filepath));
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        // add log
+        return;
+    }
+    QTextStream out(&file);
+#if QT_VERSION_MAJOR == 6
+    out.setEncoding(QStringConverter::Encoding::Utf8);
+#else
+    out.setCodec("UTF-8");
+#endif
+    out << doc.toJson() << "\n";
+}

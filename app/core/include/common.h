@@ -21,6 +21,7 @@ const QString OFFLINE_SAVES = "./offlines/Games";
 const QString GAMES_DIR = "./offlines/games/";
 const QString GAMES_CHARACTERS = "characters";
 const QString GAMES_EQUIPMENT = "equipments";
+const QString GAMES_EFFECTS = "effects";
 
 // outputs
 const QString OUTPUT_DIR = "./output/";
@@ -274,6 +275,9 @@ const QString EFFECT_REACH = "Portée";
 const QString EFFECT_STAT = "Stat";
 const QString EFFECT_ACTIVE_TURNS = "Tours actifs";
 const QString EFFECT_SUB_VALUE = "Valeur de l'effet";
+const QString EFFECT_PASSIVE_TALENT = "Passif";
+const QString EFFECT_COUNTER_TURN = "Compteur";
+const QString EFFECT_IS_MAGIC = "Est Magique";
 
 // Form keys
 const QString ENT_FORM = "Ent";

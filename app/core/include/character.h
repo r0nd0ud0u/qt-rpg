@@ -4,7 +4,6 @@
 #include <QColor>
 #include <QString>
 
-#include <deque>
 #include <tuple>
 #include <unordered_map>
 #include <vector>

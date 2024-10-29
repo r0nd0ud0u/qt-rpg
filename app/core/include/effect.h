@@ -13,10 +13,10 @@ struct effectParam {
   QString reach;
   QString statsName;
   // processed
-  bool updated = false;
   int counterTurn = 0;
   bool isMagicAtk = false; // magical or physical effect
   bool passiveTalent = false;
+  QJsonObject EffectToJsonArray() const;
 };
 
 struct EffectType {
@@ -30,12 +30,6 @@ struct AllEffectsType {
   EffectType hot;
   EffectType dot;
   int oneTurnEffect = 0;
-};
-
-class Effect : public QObject {
-  Q_OBJECT
-public:
-  explicit Effect(QObject *parent = nullptr);
 };
 
 #endif // EFFECT_H

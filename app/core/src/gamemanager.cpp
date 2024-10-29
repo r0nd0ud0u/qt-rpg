@@ -133,7 +133,8 @@ void GameManager::SaveGame() {
       c->UpdateEquipmentOnJson(m_Paths.equipmentPath);
     }
   }
-  // output effects
+  // output ongoing effects
+  m_PlayersManager->OutputAllOnGoingEffectToJson(m_Paths.ongoingEffectsPath);
 
   // output current turn
 
@@ -155,4 +156,7 @@ void GameManager::StartGame() {
   m_Paths.equipmentPath =
       QString("%1%2/%3/")
           .arg(GAMES_DIR, m_GameState->m_GameName, GAMES_EQUIPMENT);
+  m_Paths.ongoingEffectsPath =
+      QString("%1%2/%3.json")
+          .arg(GAMES_DIR, m_GameState->m_GameName, GAMES_EFFECTS);
 }
