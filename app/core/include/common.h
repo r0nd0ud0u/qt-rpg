@@ -15,21 +15,23 @@ const QString OFFLINE_WEARING_EQUIPMENT = "./offlines/equipment/Personnages/";
 const QString OFFLINE_ROOT_EQUIPMENT = "./offlines/equipment/corps/";
 const QString OFFLINE_RAND_NAME_STUFF = "./offlines/equipment/random/";
 const QString OFFLINE_CHARACTERS = "./offlines/Personnages/";
-const QString OFFLINE_SAVES = "./offlines/Games";
+const QString OFFLINE_SAVES = "./offlines/games";
 
 // save/load games
 // paths
 const QString GAMES_DIR = "./offlines/games/";
 const QString GAMES_CHARACTERS = "characters";
-const QString GAMES_EQUIPMENT = "equipments";
+const QString GAMES_EQUIPMENT = "equipment";
 const QString GAMES_EFFECTS = "effects";
 const QString GAMES_STATE = "game-state";
+const QString GAMES_LOOT_EQUIPMENT = "equipment/body";
 // game state
 const QString GAME_STATE_DIED_ENNEMIES = "died-ennemies";
 const QString GAME_STATE_ORDER_PLAYERS = "order-players-last-turn";
 const QString GAME_STATE_CURRENT_TURN = "current-turn";
 const QString GAME_STATE_CURRENT_ROUND = "current-round";
 const QString GAME_STATE_GAME_NAME = "game-name";
+const QString GAME_STATE_STATS_IN_GAME = "/stats_in_game_%1.csv";
 
 // outputs
 const QString OUTPUT_DIR = "./output/";

@@ -838,6 +838,7 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
 
     // Create stuff
     Stuff stuff;
+    stuff.m_IsLoot = true;
     // add name
     const auto randEquipType =
         Utils::GetRandomNb(0, RAND_EQUIP_ON_BODY.size() - 1);

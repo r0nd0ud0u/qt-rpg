@@ -20,7 +20,7 @@ public:
 
     void StartGame(const bool isSelected);
 
-    static void GenerateStatsEndGame();
+    static void GenerateStatsEndGame(const QString& filepath);
     static QString GetOutputEndGameByList(const std::vector<Character *> &playerList);
 };
 

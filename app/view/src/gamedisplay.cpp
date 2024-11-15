@@ -295,7 +295,7 @@ void GameDisplay::EndOfGame() {
   emit SigUpdateChannelView("GameState", "Fin du jeu !!");
 
   // generate output file on game stats
-  StatsInGame::GenerateStatsEndGame();
+  StatsInGame::GenerateStatsEndGame(OUTPUT_ENDGAME);
 }
 
 bool GameDisplay::ProcessAtk(

@@ -20,8 +20,10 @@ public:
 struct GamePaths{
     QString characterPath;
     QString equipmentPath;
+    QString lootEquipment;
     QString ongoingEffectsPath;
     QString gameState;
+    QString statsInGame;
 };
 
 class GameManager {
@@ -39,6 +41,7 @@ public:
   void SaveGame();
   void LoadGame();
   void StartGame();
+  QString GetEquipmentPath(const bool isLoot)const;
 };
 
 #endif // GAMEMANAGER_H

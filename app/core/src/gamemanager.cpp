@@ -1,6 +1,7 @@
 #include "gamemanager.h"
 
 #include "utils.h"
+#include "statsingame.h"
 
 #include <QDir>
 #include <QJsonObject>
@@ -22,9 +23,9 @@ void GameManager::InitPlayers() {
   m_PlayersManager->InitBosses();
 
   // make directories
-  QDir directory(OFFLINE_SAVES);
+  QDir directory(GAMES_DIR);
   if (!directory.exists()) {
-    directory.mkdir(OFFLINE_SAVES);
+    directory.mkdir(GAMES_DIR);
   }
 }
 
@@ -186,9 +187,8 @@ void GameManager::SaveGame() {
   // output game state
   m_GameState->OutputGameStateOnJson(m_Paths.gameState);
 
-  // output stats in game
-
-  // output loot equipment
+  // save outputs stats in game
+  StatsInGame::GenerateStatsEndGame(m_Paths.statsInGame);
 }
 
 void GameManager::StartGame() {
@@ -208,4 +208,18 @@ void GameManager::StartGame() {
   m_Paths.gameState =
       QString("%1%2/%3.json")
           .arg(GAMES_DIR, m_GameState->m_GameName, GAMES_STATE);
+  m_Paths.statsInGame =
+      QString("%1%2")
+          .arg(GAMES_DIR, m_GameState->m_GameName) + GAME_STATE_STATS_IN_GAME;
+  m_Paths.lootEquipment =
+      QString("%1%2/%3/")
+          .arg(GAMES_DIR, m_GameState->m_GameName, GAMES_LOOT_EQUIPMENT);
+}
+
+QString GameManager::GetEquipmentPath(const bool isLoot) const{
+    QString filepath = OFFLINE_ROOT_EQUIPMENT;
+    if(isLoot){
+        filepath = m_Paths.lootEquipment;
+    }
+    return filepath;
 }
