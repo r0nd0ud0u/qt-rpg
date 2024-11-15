@@ -18,10 +18,18 @@ const QString OFFLINE_CHARACTERS = "./offlines/Personnages/";
 const QString OFFLINE_SAVES = "./offlines/Games";
 
 // save/load games
+// paths
 const QString GAMES_DIR = "./offlines/games/";
 const QString GAMES_CHARACTERS = "characters";
 const QString GAMES_EQUIPMENT = "equipments";
 const QString GAMES_EFFECTS = "effects";
+const QString GAMES_STATE = "game-state";
+// game state
+const QString GAME_STATE_DIED_ENNEMIES = "died-ennemies";
+const QString GAME_STATE_ORDER_PLAYERS = "order-players-last-turn";
+const QString GAME_STATE_CURRENT_TURN = "current-turn";
+const QString GAME_STATE_CURRENT_ROUND = "current-round";
+const QString GAME_STATE_GAME_NAME = "game-name";
 
 // outputs
 const QString OUTPUT_DIR = "./output/";

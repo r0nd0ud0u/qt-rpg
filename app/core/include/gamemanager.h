@@ -14,12 +14,14 @@ public:
 
   QString GetCurrentPlayerName();
   void RemoveDeadPlayerInTurn(const QString &name);
+  void OutputGameStateOnJson(const QString& filepath);
 };
 
 struct GamePaths{
     QString characterPath;
     QString equipmentPath;
     QString ongoingEffectsPath;
+    QString gameState;
 };
 
 class GameManager {

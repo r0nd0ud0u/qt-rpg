@@ -3,6 +3,8 @@
 #include "utils.h"
 
 #include <QDir>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 void GameManager::InitPlayers() {
   // init the game
@@ -118,6 +120,51 @@ void GameState::RemoveDeadPlayerInTurn(const QString &name) {
   m_OrderToPlay.erase(newEnd, m_OrderToPlay.end());
 }
 
+void GameState::OutputGameStateOnJson(const QString& filepath){
+    QJsonObject obj;
+    // died bosses by turn
+    QJsonObject diedBoss;
+    for(const auto& [nbTurn, diedBossPl] : m_DiedEnnemies){
+        diedBoss[QString::number(nbTurn)] = diedBossPl;
+    }
+    if (!diedBoss.empty()) {
+        obj[GAME_STATE_DIED_ENNEMIES] = diedBoss;
+    }
+    // current round
+    obj[GAME_STATE_CURRENT_ROUND] = QString::number(m_CurrentRound);
+    // current turn
+    obj[GAME_STATE_CURRENT_TURN] = QString::number(m_CurrentTurnNb);
+    // order players
+    QJsonObject orderPlayers;
+    int i = 0;
+    for(const auto& pl: m_OrderToPlay){
+        orderPlayers[QString::number(i)] = pl;
+        i++;
+    }
+    if (!diedBoss.empty()) {
+        obj[GAME_STATE_ORDER_PLAYERS] = orderPlayers;
+    }
+    // game name
+    obj[GAME_STATE_GAME_NAME] = m_GameName;
+
+    // output ongoing effects json
+    QJsonDocument doc(obj);
+    QFile file;
+    QDir logDir;
+    file.setFileName(logDir.filePath(filepath));
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        // add log
+        return;
+    }
+    QTextStream out(&file);
+#if QT_VERSION_MAJOR == 6
+    out.setEncoding(QStringConverter::Encoding::Utf8);
+#else
+    out.setCodec("UTF-8");
+#endif
+    out << doc.toJson() << "\n";
+}
+
 void GameManager::SaveGame() {
   if (m_PlayersManager == nullptr) {
     return;
@@ -136,9 +183,8 @@ void GameManager::SaveGame() {
   // output ongoing effects
   m_PlayersManager->OutputAllOnGoingEffectToJson(m_Paths.ongoingEffectsPath);
 
-  // output current turn
-
-  // output current round
+  // output game state
+  m_GameState->OutputGameStateOnJson(m_Paths.gameState);
 
   // output stats in game
 
@@ -159,4 +205,7 @@ void GameManager::StartGame() {
   m_Paths.ongoingEffectsPath =
       QString("%1%2/%3.json")
           .arg(GAMES_DIR, m_GameState->m_GameName, GAMES_EFFECTS);
+  m_Paths.gameState =
+      QString("%1%2/%3.json")
+          .arg(GAMES_DIR, m_GameState->m_GameName, GAMES_STATE);
 }
