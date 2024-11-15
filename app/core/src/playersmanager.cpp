@@ -1182,6 +1182,10 @@ void PlayersManager::OutputAllOnGoingEffectToJson(const QString& filepath) const
     QJsonArray ja;
     for(const auto& [pl, gaeTable] : m_AllEffectsOnGame){
         for(const auto& gae: gaeTable){
+            if(gae.allAtkEffects.passiveTalent){
+                // passive effect is not saved, it is not a new effect from the game
+                continue;
+            }
             auto item = gae.allAtkEffects.EffectToJsonArray();
             item["target"] = pl;
             item["launcher"] = gae.launcher;
