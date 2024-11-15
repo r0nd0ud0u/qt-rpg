@@ -16,6 +16,7 @@ enum class SecondaryPages {
   gameDisplay,
   heroGameCharacters,
   bossGameCharacters,
+  loadGame,
   enumSize
 };
 
@@ -50,5 +51,7 @@ private slots:
   void RawDisplayHeroGameCh();
   void on_actionSave_triggered();
   void on_actionQuit_triggered();
+  void ShowLoadGamePage();
+  void LoadGame(const QString& gameName);
 };
 #endif // MAINWINDOW_H

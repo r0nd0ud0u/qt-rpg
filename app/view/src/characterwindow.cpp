@@ -102,3 +102,10 @@ void CharacterWindow::UpdateView(const std::vector<EditStuff> &esTable) {
     ui->use_stuff_view->AddItemInComboBox(es);
   }
 }
+
+void CharacterWindow::UpdateViewAtGameStart(){
+    ui->tabWidget->setTabVisible(static_cast<int>(tabType::character), false);
+    ui->tabWidget->setTabVisible(static_cast<int>(tabType::attak), false);
+    ui->tabWidget->setTabVisible(static_cast<int>(tabType::stuff), false);
+    ui->tabWidget->setTabVisible(static_cast<int>(tabType::useStuff), true);
+}

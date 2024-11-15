@@ -24,6 +24,7 @@
       <widget class="GameDisplay" name="page_2"/>
       <widget class="GameCharacters" name="page_Hero"/>
       <widget class="GameCharacters" name="page_Boss"/>
+      <widget class="LoadGame" name="page_LoadGame"/>
      </widget>
     </item>
    </layout>
@@ -87,6 +88,12 @@
    <class>GameCharacters</class>
    <extends>QWidget</extends>
    <header location="global">gamecharacters.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LoadGame</class>
+   <extends>QWidget</extends>
+   <header location="global">loadgame.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

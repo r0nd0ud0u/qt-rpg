@@ -11,7 +11,7 @@
 
 #include "character.h"
 #include "effectview.h"
-#include <Application.h>
+#include "Application.h"
 
 EditAttakView::EditAttakView(QWidget *parent)
     : QWidget(parent), ui(new Ui::EditAttakView) {

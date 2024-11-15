@@ -17,4 +17,5 @@ void HostPage::ActiveNewGame(const bool value) {
 
 void HostPage::on_newGamePushButton_clicked() { emit SigShowHeroGameCharacters(); }
 
-void HostPage::on_loadGamePushButton_clicked() { emit showGameDisplay(); }
+void HostPage::on_loadGamePushButton_clicked() { emit SigShowLoadGamePage(); }
+

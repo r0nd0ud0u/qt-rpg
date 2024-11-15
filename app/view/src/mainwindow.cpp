@@ -2,6 +2,7 @@
 #include "./ui_mainwindow.h"
 
 #include "Application.h"
+#include "ApplicationView.h"
 #include "Stylizer.h"
 #include "hostpage.h"
 
@@ -14,8 +15,8 @@ MainWindow::MainWindow(QWidget *parent)
   Stylizer::ApplyTheme(this);
 
   // Connect: Buttons on host page
-  connect(ui->page, &HostPage::showGameDisplay, this,
-          &MainWindow::ShowPageGameDisplay);
+  connect(ui->page, &HostPage::SigShowLoadGamePage, this,
+          &MainWindow::ShowLoadGamePage);
   connect(ui->page, &HostPage::SigShowHeroGameCharacters, this,
           &MainWindow::RawDisplayHeroGameCh);
   connect(ui->page_Hero, &GameCharacters::SigBackBtnPushed, this,
@@ -26,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
           &MainWindow::ProcessGameCharacterNextBtn);
   connect(ui->page_Boss, &GameCharacters::SigBackBtnPushed, this,
           &MainWindow::ProcessGameCharacterBackBtn);
+  connect(ui->page_LoadGame, &LoadGame::SigStartGame, this,
+          &MainWindow::LoadGame);
 
   // Connect: Functions on secondary pages
   connect(this, &MainWindow::SigNewStuffOnUse, ui->page_2,
@@ -58,6 +61,8 @@ void MainWindow::ShowPageGameDisplay() {
   emit SigUpdateActivePlayers();
   ui->actionSave->setEnabled(true);
   ui->actionQuit->setEnabled(true);
+  auto &appView = ApplicationView::GetInstance();
+  appView.GetCharacterWindow()->UpdateViewAtGameStart();
 }
 
 void MainWindow::RawDisplayHeroGameCh() { ShowHeroGameCharacters(true); }
@@ -136,6 +141,43 @@ void MainWindow::on_actionSave_triggered() {
   }
 }
 
-void MainWindow::on_actionQuit_triggered() {
-   ShowHostPage();
+void MainWindow::on_actionQuit_triggered() { ShowHostPage(); }
+
+void MainWindow::ShowLoadGamePage() {
+  ui->actionSave->setEnabled(false);
+  ui->actionQuit->setEnabled(true);
+  ui->stackedWidget->setCurrentIndex(
+      static_cast<int>(SecondaryPages::loadGame));
+  auto *gm = Application::GetInstance().m_GameManager.get();
+  if (gm != nullptr) {
+    auto *gm = Application::GetInstance().m_GameManager.get();
+    if (gm != nullptr) {
+      ui->page_LoadGame->InitView(gm->GetListOfGames());
+    }
+  }
+}
+
+void MainWindow::LoadGame(const QString &gameName) {
+  if (gameName.isEmpty()) {
+    return;
+  }
+  auto *gm = Application::GetInstance().m_GameManager.get();
+  if (gm == nullptr || gm->m_PlayersManager != nullptr) {
+    return;
+  }
+  // update gamemanager
+  gm->Reset();
+
+  // update data on player manager
+  // hero list and boss list
+
+  // update effects for player manager
+
+  // load root equipment for characters
+
+  // load loot equipments for characters
+
+  // update characters with equipment
+
+  ShowPageGameDisplay();
 }

@@ -15,6 +15,7 @@ public:
   QString GetCurrentPlayerName();
   void RemoveDeadPlayerInTurn(const QString &name);
   void OutputGameStateOnJson(const QString& filepath);
+  void Reset();
 };
 
 struct GamePaths{
@@ -33,6 +34,7 @@ public:
   GameState *m_GameState;
   GamePaths m_Paths;
 
+  void InitGamemanager();
   void InitPlayers();
   Character *GetSelectedHero();
   void ProcessOrderToPlay(std::vector<QString> &orderToPlay) const;
@@ -42,6 +44,8 @@ public:
   void LoadGame();
   void StartGame();
   QString GetEquipmentPath(const bool isLoot)const;
+  QStringList GetListOfGames() const;
+  void Reset();
 };
 
 #endif // GAMEMANAGER_H

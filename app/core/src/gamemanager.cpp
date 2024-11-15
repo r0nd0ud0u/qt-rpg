@@ -7,11 +7,19 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
+void GameManager::InitGamemanager(){
+    // init the game
+    m_GameState = new GameState();
+    // init the players
+    m_PlayersManager = new PlayersManager();
+    // make directories
+    QDir directory(GAMES_DIR);
+    if (!directory.exists()) {
+        directory.mkdir(GAMES_DIR);
+    }
+}
 void GameManager::InitPlayers() {
-  // init the game
-  m_GameState = new GameState();
-  // init the players
-  m_PlayersManager = new PlayersManager();
+
   // order is important
   // first equipment
   // then heroes or bosses
@@ -22,11 +30,13 @@ void GameManager::InitPlayers() {
   m_PlayersManager->InitHeroes();
   m_PlayersManager->InitBosses();
 
-  // make directories
-  QDir directory(GAMES_DIR);
-  if (!directory.exists()) {
-    directory.mkdir(GAMES_DIR);
-  }
+void GameManager::Reset(){
+    if(m_PlayersManager != nullptr){
+        m_PlayersManager->Reset();
+    }
+    if(m_GameState != nullptr){
+        m_GameState->Reset();
+    }
 }
 
 Character *GameManager::GetSelectedHero() {

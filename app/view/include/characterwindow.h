@@ -21,6 +21,7 @@ public:
   ~CharacterWindow();
   void InitWindow(const tabType &type, Character *c);
   void UpdateView(const std::vector<EditStuff> &esTable);
+  void UpdateViewAtGameStart();
 
 signals:
   void SigUpdateCharacterViews(Character *);
