@@ -628,3 +628,9 @@ void GameDisplay::UpdateActivePlayers() {
   emit SigGameDisplayStart(c);
   emit selectCharacter(c);
 }
+
+void GameDisplay::ResetUi(){
+    ui->bosses_widget->ResetUi();
+    ui->heroes_widget->ResetUi();
+    ui->channel_lay->ResetUi();
+}

@@ -19,6 +19,7 @@ public:
   explicit HeroesView(QWidget *parent = nullptr);
   ~HeroesView() final;
   void ActivatePanel(const QString &);
+  void ResetUi();
 
 signals:
   void SigClickedOnHeroPanel(const QString &);

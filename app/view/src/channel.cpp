@@ -45,3 +45,7 @@ void Channel::UpdateLog(const QString& topic, const QString& log, const QColor c
     ui->channel_textEdit->setTextColor("dark");
     ui->channel_textEdit->append(log);
 }
+
+void Channel::ResetUi(){
+    ui->channel_textEdit->clear();
+}

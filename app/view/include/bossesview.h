@@ -20,6 +20,7 @@ public:
   explicit BossesView(QWidget *parent = nullptr);
   ~BossesView() final;
   void ActivatePanel(const QString &);
+  void ResetUi();
 
 signals:
   void SigClickedOnPanel(const QString &);

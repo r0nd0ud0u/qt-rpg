@@ -21,6 +21,7 @@ public:
   ~GameDisplay();
   void AddNewCharacter(Character *);
   void AddNewStuff() const;
+  void ResetUi();
 public slots:
   // slots which can be called by other windows
   void UpdateViews(const QString &name);

@@ -144,6 +144,7 @@ void MainWindow::on_actionSave_triggered() {
 }
 
 void MainWindow::on_actionQuit_triggered() {
+    ResetGameDisplay();
     ShowHostPage();
 }
 
@@ -174,4 +175,6 @@ void MainWindow::LoadGame(const QString &gameName) {
   }
 }
 
+void MainWindow::ResetGameDisplay(){
+    ui->page_2->ResetUi();
 }

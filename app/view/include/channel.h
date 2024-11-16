@@ -14,6 +14,7 @@ class Channel : public QWidget {
 public:
   explicit Channel(QWidget *parent = nullptr);
   ~Channel();
+  void ResetUi();
 
 signals:
   void SigNextRound();

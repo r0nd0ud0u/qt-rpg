@@ -53,5 +53,6 @@ private slots:
   void on_actionQuit_triggered();
   void ShowLoadGamePage();
   void LoadGame(const QString& gameName);
+  void ResetGameDisplay();
 };
 #endif // MAINWINDOW_H
