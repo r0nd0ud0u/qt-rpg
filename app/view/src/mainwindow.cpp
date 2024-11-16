@@ -129,8 +129,6 @@ void MainWindow::UpdatCharacterViews(Character *ch) {
   }
 }
 
-void MainWindow::AddNewStuff() { emit SigAddNewStuff(); }
-
 void MainWindow::UpdateStuffOnUse(const QString &playerName) {
   emit SigNewStuffOnUse(playerName);
 }
@@ -144,8 +142,8 @@ void MainWindow::on_actionSave_triggered() {
 }
 
 void MainWindow::on_actionQuit_triggered() {
-    ResetGameDisplay();
-    ShowHostPage();
+  ResetGameDisplay();
+  ShowHostPage();
 }
 
 void MainWindow::ShowLoadGamePage() {
@@ -171,10 +169,9 @@ void MainWindow::LoadGame(const QString &gameName) {
     return;
   }
   if (gm->LoadGame(gameName)) {
+    ui->page_2->UpdateAtLoadGame(gm->m_GameState);
     ShowPageGameDisplay();
   }
 }
 
-void MainWindow::ResetGameDisplay(){
-    ui->page_2->ResetUi();
-}
+void MainWindow::ResetGameDisplay() { ui->page_2->ResetUi(); }

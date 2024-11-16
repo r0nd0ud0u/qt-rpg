@@ -33,19 +33,6 @@ void EquipOnBodyView::InitEditEquipment() {
   }
 }
 
-// Add new equipment in 'use stuff' tab for the selected character
-void EquipOnBodyView::AddItemInComboBox(const EditStuff &es) const {
-  for (const auto &panel : m_PanelList) {
-    if (panel->m_BodyName == es.m_BodyPart) {
-      const auto name = (es.m_Stuff.m_UniqueName.isEmpty())
-                            ? es.m_Name
-                            : es.m_Stuff.m_UniqueName;
-      panel->AddItemInComboBox(name);
-      break;
-    }
-  }
-}
-
 // Init the view with the selected hero or boss
 void EquipOnBodyView::InitView(Character *player) const {
   if (player == nullptr) {
@@ -53,7 +40,8 @@ void EquipOnBodyView::InitView(Character *player) const {
   }
   for (const auto &panel : m_PanelList) {
     if (player->m_WearingEquipment.count(panel->m_BodyName) > 0) {
-      panel->SetValue(player->m_WearingEquipment.at(panel->m_BodyName).m_UniqueName);
+      panel->SetValue(
+          player->m_WearingEquipment.at(panel->m_BodyName).m_UniqueName);
     }
   }
 }
@@ -65,4 +53,16 @@ EquipOnBodyView::GetCurrentEquipmentTable() const {
     output[panel->m_BodyName] = panel->m_Equipment;
   }
   return output;
+}
+
+void EquipOnBodyView::ResetUi() {
+  for (const auto &panel : m_PanelList) {
+    panel->ResetUi();
+  }
+}
+
+void EquipOnBodyView::UpdateView() {
+  for (const auto &panel : m_PanelList) {
+        panel->InitComboBox(panel->m_BodyName);
+  }
 }

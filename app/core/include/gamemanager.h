@@ -16,6 +16,7 @@ public:
   void RemoveDeadPlayerInTurn(const QString &name);
   void OutputGameStateOnJson(const QString& filepath);
   void Reset();
+  void LoadGameState(const QString& filepath);
 };
 
 struct GamePaths{

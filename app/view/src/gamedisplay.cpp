@@ -39,7 +39,7 @@ GameDisplay::GameDisplay(QWidget *parent)
           &StatsView::UpdateDisplayedCharStats);
   connect(this, &GameDisplay::SigUpdStatsOnSelCharacter, ui->stats_character,
           &StatsView::UpdateDisplayedCharStats);
-  //equip view
+  // equip view
   connect(this, &GameDisplay::selectCharacter, ui->equipment_widget,
           &EquipmentView::UpdateEquipment);
   // init status page
@@ -74,12 +74,14 @@ void GameDisplay::on_stackedWidget_currentChanged(const int arg1) {
   ui->attak_page->UpdateActions(static_cast<ActionsStackedWgType>(arg1));
 }
 
-void GameDisplay::UpdateGameStatus() {
-  const auto &gameState = Application::GetInstance().m_GameManager->m_GameState;
+void GameDisplay::UpdateGameStatus(const GameState *gs) {
+  if (gs == nullptr) {
+    ui->turn_label->setText("no game state");
+  }
   ui->turn_label->setText(QString("Tour %1, Round %2/%3")
-                              .arg(gameState->m_CurrentTurnNb)
-                              .arg(gameState->m_CurrentRound)
-                              .arg(gameState->m_OrderToPlay.size()));
+                              .arg(gs->m_CurrentTurnNb)
+                              .arg(gs->m_CurrentRound)
+                              .arg(gs->m_OrderToPlay.size()));
 }
 
 void GameDisplay::NewRound() {
@@ -93,7 +95,7 @@ void GameDisplay::NewRound() {
     return;
   }
   gs->m_CurrentRound++;
-  UpdateGameStatus();
+  UpdateGameStatus(gs);
 
   // Get current player
   auto *activePlayer = gm->GetCurrentPlayer();
@@ -270,7 +272,7 @@ void GameDisplay::StartNewTurn() {
       "GameState", QString("Tour %1").arg(gm->m_GameState->m_CurrentTurnNb));
   NewRound();
   // Then, update the display
-  UpdateGameStatus();
+  UpdateGameStatus(gm->m_GameState);
   // game is just starting at turn 1
   // some first init to do for the views
   if (gm->m_GameState->m_CurrentTurnNb == 1) {
@@ -497,7 +499,6 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   for (const auto &dp : diedBossList) {
     emit SigUpdateChannelView("GameState", QString("%1 est mort.").arg(dp));
     // LOOT
-    std::vector<EditStuff> allLoots;
     for (const auto *hero : gm->m_PlayersManager->m_HeroesList) {
       if (hero == nullptr) {
         continue;
@@ -509,7 +510,6 @@ void GameDisplay::LaunchAttak(const QString &atkName,
         logLoot.append(QString("Loot pour %1:").arg(hero->m_Name));
       }
       for (const auto &e : newEquip) {
-        gm->m_PlayersManager->m_Equipments[e.m_BodyPart][e.m_UniqueName] = e;
         logLoot.append(QString("- %1").arg(e.m_UniqueName));
       }
       std::for_each(newEquip.begin(), newEquip.end(), [&](const Stuff &s) {
@@ -518,12 +518,11 @@ void GameDisplay::LaunchAttak(const QString &atkName,
         es.m_BodyPart = s.m_BodyPart;
         es.m_Name = s.m_UniqueName;
         EditStuff::SaveStuffInJson(es, s.m_BodyPart);
-        allLoots.push_back(es);
       });
       emit SigUpdateChannelView("GameState", logLoot.join('\n'));
     }
     // update view for the equipments
-    ApplicationView::GetInstance().GetCharacterWindow()->UpdateView(allLoots);
+    ApplicationView::GetInstance().GetCharacterWindow()->UpdateViewUseStuff(gm->m_PlayersManager->m_Equipments);
 
     emit SigBossDead(dp);
     ui->add_exp_button->setEnabled(true);
@@ -629,8 +628,12 @@ void GameDisplay::UpdateActivePlayers() {
   emit selectCharacter(c);
 }
 
-void GameDisplay::ResetUi(){
-    ui->bosses_widget->ResetUi();
-    ui->heroes_widget->ResetUi();
-    ui->channel_lay->ResetUi();
+void GameDisplay::ResetUi() {
+  ui->bosses_widget->ResetUi();
+  ui->heroes_widget->ResetUi();
+  ui->channel_lay->ResetUi();
+}
+
+void GameDisplay::UpdateAtLoadGame(const GameState *gs) {
+  UpdateGameStatus(gs);
 }

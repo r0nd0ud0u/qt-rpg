@@ -14,9 +14,6 @@ CharacterWindow::CharacterWindow(QWidget *parent)
   connect(this, &CharacterWindow::SigUpdateCharacterViews,
           ApplicationView::GetInstance().GetMainWindow(),
           &MainWindow::UpdatCharacterViews);
-  connect(this, &CharacterWindow::SigAddNewStuff,
-          ApplicationView::GetInstance().GetMainWindow(),
-          &MainWindow::AddNewStuff);
   connect(this, &CharacterWindow::SigUseNewStuff,
           ApplicationView::GetInstance().GetMainWindow(),
           &MainWindow::UpdateStuffOnUse);
@@ -65,48 +62,54 @@ void CharacterWindow::Apply() {
   }
   auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
   // atk
-  ui->edit_atk_tab->Save();
+  if (ui->edit_atk_tab->isEnabled()) {
+    ui->edit_atk_tab->Save();
+  }
   // stats + character
   // update stats
-  ui->character_def->AddCharacter(m_CurCharacter);
-  // output json update on character
-  pm->OutputCharactersInJson(std::vector<Character *>{m_CurCharacter},OFFLINE_CHARACTERS);
-  // stuff
-  if (const auto es = ui->edit_stuff_view->Save(); !es.m_Name.isEmpty()) {
-    // name is empty at launch of the window
-    // and is reset to empty after one apply
-    // this way , no duplicate if "button apply" + "button save" pressed
-    // TODO handle behavior enable/disable apply button
-    pm->m_Equipments[es.m_BodyPart][es.m_Name] = es.m_Stuff;
-    ui->use_stuff_view->AddItemInComboBox(es);
-    emit SigAddNewStuff();
+  if (ui->character_def->isEnabled()) {
+    ui->character_def->AddCharacter(m_CurCharacter);
+    // output json update on character
+    pm->OutputCharactersInJson(std::vector<Character *>{m_CurCharacter},
+                               OFFLINE_CHARACTERS);
   }
+
+  // add new stuff
+  if (ui->edit_stuff_view->isEnabled()) {
+    if (const auto es = ui->edit_stuff_view->Save(); !es.m_Name.isEmpty()) {
+      pm->m_Equipments[es.m_BodyPart][es.m_Name] = es.m_Stuff;
+    }
+  }
+
   // Init/Update the stats of character first
   // Then update the equipments
   // use stuff
   // first synchronize the pm table
-  pm->LoadEquipmentsJson(OFFLINE_ROOT_EQUIPMENT);
-  pm->LoadEquipmentsJson(GAMES_LOOT_EQUIPMENT);
   // Then update the equipments for each character
   const auto &table = ui->use_stuff_view->GetCurrentEquipmentTable();
   m_CurCharacter->SetEquipment(table);
   m_CurCharacter->ApplyEquipOnStats(
       pm->m_AllEffectsOnGame[m_CurCharacter->m_Name]);
   m_CurCharacter->UpdateEquipmentOnJson(OFFLINE_WEARING_EQUIPMENT);
+  // update views
+  // use stuff
+  // TODO assess if a value has been change to perform the update view and the initView
+  UpdateViewUseStuff(pm->m_Equipments);
+  ui->use_stuff_view->InitView(m_CurCharacter);
   emit SigUseNewStuff(m_CurCharacter->m_Name);
   // update panel
   emit SigUpdateCharacterViews(m_CurCharacter);
 }
 
-void CharacterWindow::UpdateView(const std::vector<EditStuff> &esTable) {
-  for (const auto &es : esTable) {
-    ui->use_stuff_view->AddItemInComboBox(es);
-  }
+void CharacterWindow::UpdateViewUseStuff(
+    const std::unordered_map<QString, std::map<QString, Stuff>> table) {
+  ui->use_stuff_view->ResetUi();
+  ui->use_stuff_view->UpdateView();
 }
 
-void CharacterWindow::UpdateViewAtGameStart(){
-    ui->tabWidget->setTabVisible(static_cast<int>(tabType::character), false);
-    ui->tabWidget->setTabVisible(static_cast<int>(tabType::attak), false);
-    ui->tabWidget->setTabVisible(static_cast<int>(tabType::stuff), false);
-    ui->tabWidget->setTabVisible(static_cast<int>(tabType::useStuff), true);
+void CharacterWindow::UpdateViewAtGameStart() {
+  ui->tabWidget->setTabVisible(static_cast<int>(tabType::character), false);
+  ui->tabWidget->setTabVisible(static_cast<int>(tabType::attak), false);
+  ui->tabWidget->setTabVisible(static_cast<int>(tabType::stuff), false);
+  ui->tabWidget->setTabVisible(static_cast<int>(tabType::useStuff), true);
 }

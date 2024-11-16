@@ -289,7 +289,8 @@ const QString EFFECT_SUB_VALUE = "Valeur de l'effet";
 const QString EFFECT_PASSIVE_TALENT = "Passif";
 const QString EFFECT_COUNTER_TURN = "Compteur";
 const QString EFFECT_IS_MAGIC = "Est Magique";
-
+const QString EFFECT_LAUNCHER = "launcher";
+const QString EFFECT_INDEX_TURN = "index tour";
 // Form keys
 const QString ENT_FORM = "Ent";
 const QString BEAR_FORM = "Ours";

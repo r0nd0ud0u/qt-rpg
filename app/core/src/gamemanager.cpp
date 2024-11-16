@@ -1,9 +1,11 @@
 #include "gamemanager.h"
 
+#include "Application.h"
 #include "statsingame.h"
 #include "utils.h"
 
 #include <QDir>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 
@@ -143,9 +145,9 @@ void GameState::OutputGameStateOnJson(const QString &filepath) {
     obj[GAME_STATE_DIED_ENNEMIES] = diedBoss;
   }
   // current round
-  obj[GAME_STATE_CURRENT_ROUND] = QString::number(m_CurrentRound);
+  obj[GAME_STATE_CURRENT_ROUND] = static_cast<int>(m_CurrentRound);
   // current turn
-  obj[GAME_STATE_CURRENT_TURN] = QString::number(m_CurrentTurnNb);
+  obj[GAME_STATE_CURRENT_TURN] = static_cast<int>(m_CurrentTurnNb);
   // order players
   QJsonObject orderPlayers;
   int i = 0;
@@ -153,7 +155,7 @@ void GameState::OutputGameStateOnJson(const QString &filepath) {
     orderPlayers[QString::number(i)] = pl;
     i++;
   }
-  if (!diedBoss.empty()) {
+  if (!orderPlayers.empty()) {
     obj[GAME_STATE_ORDER_PLAYERS] = orderPlayers;
   }
   // game name
@@ -183,6 +185,44 @@ void GameState::Reset() {
   m_OrderToPlay.clear();
   m_CurrentRound = 0; // max value = size of m_OrderToPlay
   m_GameName = "";
+}
+
+void GameState::LoadGameState(const QString &filepath) {
+  QFile json(filepath);
+  if (!json.open(QFile::ReadOnly | QFile::Text)) {
+    Application::GetInstance().log(" Could not open the file for reading " +
+                                   filepath);
+    return;
+  } else {
+    // Convert json file to QString
+    QTextStream out(&json);
+#if QT_VERSION_MAJOR == 6
+    out.setEncoding(QStringConverter::Encoding::Utf8);
+#else
+    out.setCodec("UTF-8");
+#endif
+    const QString msg = out.readAll();
+    json.close();
+    const auto jsonDoc = QJsonDocument::fromJson(msg.toUtf8());
+    // decode json
+    m_CurrentRound = static_cast<uint64_t>(jsonDoc[GAME_STATE_CURRENT_ROUND].toInt());
+    m_CurrentTurnNb = jsonDoc[GAME_STATE_CURRENT_TURN].toInt();
+    m_GameName = jsonDoc[GAME_STATE_GAME_NAME].toString();
+    const QJsonArray diedEnnemiesArray =
+        jsonDoc[GAME_STATE_DIED_ENNEMIES].toArray();
+    const QJsonArray orderToPlArray =
+        jsonDoc[GAME_STATE_ORDER_PLAYERS].toArray();
+#if QT_VERSION_MAJOR == 6
+    int i = 0;
+    for (const auto &val : diedEnnemiesArray) {
+      m_DiedEnnemies[i].push_back(val.toString());
+    }
+    i = 0;
+    for (const auto &val : orderToPlArray) {
+      m_OrderToPlay[i].push_back(val.toString());
+    }
+  }
+#endif
 }
 
 void GameManager::SaveGame() {
@@ -252,23 +292,24 @@ void GameManager::BuildPaths(const QString &gameName) {
           .arg(GAMES_DIR, m_GameState->m_GameName, GAMES_LOOT_EQUIPMENT);
 }
 
-bool GameManager::LoadGame(const QString& gameName){
-    if (m_PlayersManager == nullptr) {
-        return false;
-    }
-    // reset
-    Reset();
-    m_PlayersManager->Reset();
-    // update gamemanager
-    BuildPaths(gameName);
-    m_PlayersManager->LoadEquipmentsJson(OFFLINE_ROOT_EQUIPMENT);
-    // load loot equipments for characters
-    m_PlayersManager->LoadEquipmentsJson(GAMES_LOOT_EQUIPMENT);
-    m_PlayersManager->LoadAllCharactersJson(true, m_Paths.characterPath);
-    // update effects for player manager
-    m_PlayersManager->LoadAllEffects();
-    m_PlayersManager->InitBosses(m_PlayersManager->m_BossesList);
-    m_PlayersManager->InitHeroes(m_PlayersManager->m_HeroesList);
+bool GameManager::LoadGame(const QString &gameName) {
+  if (m_PlayersManager == nullptr || m_GameState == nullptr) {
+    return false;
+  }
+  // reset
+  Reset();
+  m_PlayersManager->Reset();
+  // update gamemanager
+  BuildPaths(gameName);
+  m_GameState->LoadGameState(m_Paths.gameState);
+  m_PlayersManager->LoadEquipmentsJson(OFFLINE_ROOT_EQUIPMENT);
+  // load loot equipments for characters
+  m_PlayersManager->LoadEquipmentsJson(GAMES_LOOT_EQUIPMENT);
+  m_PlayersManager->LoadAllCharactersJson(true, m_Paths.characterPath);
+  // update effects for player manager
+  m_PlayersManager->LoadAllEffects(m_Paths.ongoingEffectsPath);
+  m_PlayersManager->InitBosses(m_PlayersManager->m_BossesList);
+  m_PlayersManager->InitHeroes(m_PlayersManager->m_HeroesList);
 
-   return  m_PlayersManager->UpdateStartingPlayers(true);
+  return m_PlayersManager->UpdateStartingPlayers(true);
 }

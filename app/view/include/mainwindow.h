@@ -28,12 +28,10 @@ public:
   ~MainWindow();
 public slots:
   void UpdatCharacterViews(Character *);
-  void AddNewStuff();
   void UpdateStuffOnUse(const QString &playerName);
 
 signals:
   void SigNewCharacter(Character *);
-  void SigAddNewStuff();
   void SigNewStuffOnUse(const QString &);
   void SigUpdateActivePlayers();
 

@@ -1606,8 +1606,8 @@ std::vector<effectParam> Character::LoadThrainTalent() const {
   param1.statsName = STATS_DODGE;
   param1.target = TARGET_HIMSELF;
   param1.subValueEffect = 0;
-  epTable.push_back(param1);
   param1.passiveTalent = true;
+  epTable.push_back(param1);
 
   effectParam param2;
   param2.effect = EFFECT_IMPROVEMENT_STAT_BY_VALUE;

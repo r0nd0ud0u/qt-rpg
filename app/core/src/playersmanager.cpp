@@ -914,6 +914,10 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
     newStuffs.push_back(stuff);
   }
 
+  for (auto &s : newStuffs) {
+    m_Equipments[s.m_BodyPart][s.m_UniqueName] = s;
+  }
+
   return newStuffs;
 }
 
@@ -1016,7 +1020,7 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
                                ? static_cast<double>(st.m_CurrentValue) /
                                      static_cast<double>(st.m_MaxValue)
                                : 1;
-      item[CH_CURRENT_VALUE] = ratio*st.m_RawMaxValue;
+      item[CH_CURRENT_VALUE] = ratio * st.m_RawMaxValue;
       item[CH_MAX_VALUE] = st.m_RawMaxValue;
       QJsonArray jsonArray;
       jsonArray.append(item);
@@ -1093,6 +1097,7 @@ void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
                       ? characType::Boss
                       : characType::Hero;
       c->m_Level = static_cast<int>(jsonDoc[CH_LEVEL].toDouble());
+      c->m_Exp = static_cast<int>(jsonDoc[CH_EXP].toDouble());
       c->color = QColor(jsonDoc[CH_COLOR].toString());
       c->m_ColorStr = jsonDoc[CH_COLOR].toString();
       c->m_BossClass.m_Rank = static_cast<int>(jsonDoc[CH_RANK].toDouble());
@@ -1209,10 +1214,10 @@ void PlayersManager::OutputAllOnGoingEffectToJson(
         continue;
       }
       auto item = gae.allAtkEffects.EffectToJsonArray();
-      item["target"] = pl;
-      item["launcher"] = gae.launcher;
+      item[EFFECT_TARGET] = pl;
+      item[EFFECT_LAUNCHER] = gae.launcher;
       item[ATK_NAME] = gae.atk.name;
-      item["index tour"] = gae.launchingTurn;
+      item[EFFECT_INDEX_TURN] = gae.launchingTurn;
       ja.append(item);
     }
   }
@@ -1254,4 +1259,49 @@ void PlayersManager::Reset() {
   m_Equipments.clear();
 }
 
-void PlayersManager::LoadAllEffects() {}
+void PlayersManager::LoadAllEffects(const QString &filepath) {
+  QFile json(filepath);
+  if (!json.open(QFile::ReadOnly | QFile::Text)) {
+    Application::GetInstance().log(" Could not open the file for reading " +
+                                   filepath);
+    return;
+  } else {
+    // Convert json file to QString
+    QTextStream out(&json);
+#if QT_VERSION_MAJOR == 6
+    out.setEncoding(QStringConverter::Encoding::Utf8);
+#else
+    out.setCodec("UTF-8");
+#endif
+    const QString msg = out.readAll();
+    json.close();
+    const auto jsonDoc = QJsonDocument::fromJson(msg.toUtf8());
+    // decode json
+    const QJsonArray effectArray = jsonDoc[EFFECT_ARRAY].toArray();
+#if QT_VERSION_MAJOR == 6
+    for (const auto &effect : effectArray) {
+      if (effect[EFFECT_STAT].toString().isEmpty() ||
+          effect[EFFECT_TYPE].toString().isEmpty()) {
+        continue;
+      }
+      GameAtkEffects gae;
+      gae.launcher = effect[EFFECT_LAUNCHER].toString();
+      gae.atk.name = effect[ATK_NAME].toString();
+      gae.target = effect[EFFECT_TARGET].toString();
+      // effect param
+      gae.allAtkEffects.target = gae.target;
+      gae.allAtkEffects.effect = effect[EFFECT_TYPE].toString();
+      gae.allAtkEffects.value = effect[EFFECT_VALUE].toInt();
+      gae.allAtkEffects.nbTurns = effect[EFFECT_ACTIVE_TURNS].toInt();
+      gae.allAtkEffects.reach = effect[EFFECT_REACH].toString();
+      gae.allAtkEffects.statsName = effect[EFFECT_STAT].toString();
+      gae.allAtkEffects.subValueEffect = effect[EFFECT_SUB_VALUE].toInt();
+      gae.allAtkEffects.counterTurn = effect[EFFECT_COUNTER_TURN].toInt();
+      // processed
+      gae.allAtkEffects.isMagicAtk = effect[EFFECT_IS_MAGIC].toBool();
+
+      m_AllEffectsOnGame[gae.target].push_back(gae);
+    }
+  }
+#endif
+}

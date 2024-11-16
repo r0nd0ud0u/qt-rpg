@@ -5,6 +5,7 @@
 #include <QWidget>
 
 #include "playersmanager.h"
+#include "gamemanager.h"
 
 // The different types of the actions to perform by a player
 enum class ActionsStackedWgType { attak, defaultType, inventory, enumSize };
@@ -22,6 +23,7 @@ public:
   void AddNewCharacter(Character *);
   void AddNewStuff() const;
   void ResetUi();
+  void UpdateAtLoadGame(const GameState* gs);
 public slots:
   // slots which can be called by other windows
   void UpdateViews(const QString &name);
@@ -41,7 +43,7 @@ signals:
 private:
   Ui::GameDisplay *ui;
 
-  void UpdateGameStatus();
+  void UpdateGameStatus(const GameState* gs);
   bool
   ProcessAtk(const TargetInfo *target, const AttaqueType &currentAtk,
              Character *activatedPlayer, const bool isCrit,

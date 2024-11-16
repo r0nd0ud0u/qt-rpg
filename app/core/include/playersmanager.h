@@ -76,7 +76,7 @@ public:
   int GetMaxIndexDefaultName() const;
   void OutputAllOnGoingEffectToJson(const QString& filepath) const;
   void Reset();
-  void LoadAllEffects();
+  void LoadAllEffects(const QString& filepath);
 
   // Available characters to create a party
   std::vector<Character *> m_AllHeroesList;

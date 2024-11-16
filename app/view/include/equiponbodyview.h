@@ -19,9 +19,10 @@ public:
   explicit EquipOnBodyView(QWidget *parent = nullptr);
   ~EquipOnBodyView();
   void InitEditEquipment();
-  void AddItemInComboBox(const EditStuff &es) const;
   void InitView(Character *player) const;
   std::unordered_map<QString, QString> GetCurrentEquipmentTable() const;
+  void ResetUi();
+  void UpdateView();
 
 private:
   Ui::EquipOnBodyView *ui;
