@@ -17,24 +17,23 @@
 
 #include <fstream>
 
-void PlayersManager::InitHeroes() {
-  std::for_each(m_AllHeroesList.begin(), m_AllHeroesList.end(),
-                [&](Character *h) {
-                  h->LoadAtkJson();
-                  h->SortAtkByLevel();
-                  h->LoadStuffJson();
-                  std::unordered_map<QString, QString> table;
-                  for (auto &[bodypart, stuff] : h->m_WearingEquipment) {
-                    if (!bodypart.isEmpty()) {
-                      table[bodypart] = stuff.m_UniqueName;
-                    }
-                  }
-                  h->SetEquipment(table);
-                  h->ApplyEquipOnStats(m_AllEffectsOnGame[h->m_Name]);
-                });
+void PlayersManager::InitHeroes(std::vector<Character *> &heroList) {
+  std::for_each(heroList.begin(), heroList.end(), [&](Character *h) {
+    h->LoadAtkJson();
+    h->SortAtkByLevel();
+    h->LoadStuffJson();
+    std::unordered_map<QString, QString> table;
+    for (auto &[bodypart, stuff] : h->m_WearingEquipment) {
+      if (!bodypart.isEmpty()) {
+        table[bodypart] = stuff.m_UniqueName;
+      }
+    }
+    h->SetEquipment(table);
+    h->ApplyEquipOnStats(m_AllEffectsOnGame[h->m_Name]);
+  });
 
   // Hard-coded passive talents
-  for (const auto &h : m_AllHeroesList) {
+  for (const auto &h : heroList) {
     if (h->m_Name == "Thalia") {
       const auto epParamTalent1 = h->LoadThaliaTalent();
       AddGameEffectOnAtk(h->m_Name, AttaqueType(), h->m_Name, epParamTalent1,
@@ -62,8 +61,8 @@ void PlayersManager::InitHeroes() {
   }
 }
 
-void PlayersManager::InitBosses() {
-  for (const auto &boss : m_AllBossesList) {
+void PlayersManager::InitBosses(std::vector<Character *> bossList) {
+  for (const auto &boss : bossList) {
     boss->m_ColorStr = "red";
     boss->LoadAtkJson();
     boss->SortAtkByLevel();
@@ -77,39 +76,40 @@ void PlayersManager::ClearHeroBossList() {
   m_BossesList.clear();
 }
 
-bool PlayersManager::UpdateActivePlayers() {
-  ClearHeroBossList();
-  std::for_each(m_AllHeroesList.begin(), m_AllHeroesList.end(),
-                [&](Character *c) {
-                  if (c != nullptr && c->m_StatsInGame.m_IsPlaying) {
-                    Character *newC = new Character();
-                    *newC = *c;
-                    m_HeroesList.push_back(newC);
-                  }
-                });
+bool PlayersManager::UpdateStartingPlayers(const bool isLoadingGame) {
+  if (!isLoadingGame) {
+    ClearHeroBossList();
+    std::for_each(m_AllHeroesList.begin(), m_AllHeroesList.end(),
+                  [&](Character *c) {
+                    if (c != nullptr && c->m_StatsInGame.m_IsPlaying) {
+                      Character *newC = new Character();
+                      *newC = *c;
+                      m_HeroesList.push_back(newC);
+                    }
+                  });
+    std::for_each(m_AllBossesList.begin(), m_AllBossesList.end(),
+                  [&](Character *c) {
+                    if (c != nullptr && c->m_StatsInGame.m_IsPlaying) {
+                      Character *newC = new Character();
+                      *newC = *c;
+                      m_BossesList.push_back(newC);
+                    }
+                  });
+  }
+
   if (!m_HeroesList.empty()) {
     m_SelectedHero = m_HeroesList.front();
   }
 
-  std::for_each(m_AllBossesList.begin(), m_AllBossesList.end(),
-                [&](Character *c) {
-                  if (c != nullptr && c->m_StatsInGame.m_IsPlaying) {
-                    Character *newC = new Character();
-                    *newC = *c;
-                    m_BossesList.push_back(newC);
-                  }
-                });
   return (m_HeroesList.size() > 0 && m_BossesList.size() > 0);
 }
 
-void PlayersManager::LoadAllEquipmentsJson() {
+void PlayersManager::LoadEquipmentsJson(const QString &dirpath) {
   // List all equipment
-  QString directoryPath =
-      OFFLINE_ROOT_EQUIPMENT; // Replace with the actual path
-  QDir directory(directoryPath);
+  QDir directory(dirpath);
   if (!directory.exists()) {
     Application::GetInstance().log(
-        QString("Directory does not exist: %1").arg(directoryPath));
+        QString("Directory does not exist: %1").arg(dirpath));
     return;
   }
   // Detect all directories, each directory is a part of the body
@@ -117,17 +117,17 @@ void PlayersManager::LoadAllEquipmentsJson() {
       directory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
   for (const auto &subdirPath : subdirectories) {
-    QDir subdir(directoryPath + subdirPath);
+    QDir subdir(dirpath + subdirPath);
     if (!subdir.exists()) {
       Application::GetInstance().log(
           QString("Directory does not exist: %1").arg(subdirPath));
     }
     QStringList fileList = subdir.entryList(QDir::Files | QDir::NoDotAndDotDot);
     for (const QString &file : fileList) {
-      QFile json(directoryPath + subdirPath + "/" + file);
+      QFile json(dirpath + subdirPath + "/" + file);
       if (!json.open(QFile::ReadOnly | QFile::Text)) {
         Application::GetInstance().log(" Could not open the file for reading " +
-                                       directoryPath + "/" + file);
+                                       dirpath + "/" + file);
         return;
       } else {
         // Convert json file to QString
@@ -1023,7 +1023,8 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
 
     // output json
     QJsonDocument doc(obj);
-    const QString logFilePath = logDir.filePath(outputPath + h->m_Name + ".json");
+    const QString logFilePath =
+        logDir.filePath(outputPath + h->m_Name + ".json");
     QFile file;
     file.setFileName(logFilePath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -1040,11 +1041,15 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
   }
 }
 
-void PlayersManager::LoadAllCharactersJson() {
+void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
+                                           const QString &pathForLoadingGame) {
   // List all characters
   QString directoryPath = OFFLINE_CHARACTERS; // Replace with the actual path
+  if (isLoadingGame) {
+    directoryPath = pathForLoadingGame;
+  }
   QDir directory(directoryPath);
-  if (!directory.exists()) {
+  if (directoryPath.isEmpty() || !directory.exists()) {
     Application::GetInstance().log(
         QString("Directory does not exist: %1").arg(directoryPath));
     return;
@@ -1103,6 +1108,19 @@ void PlayersManager::LoadAllCharactersJson() {
             const auto max = static_cast<int>(item[CH_MAX_VALUE].toDouble());
             c->m_Stats.m_AllStatsTable[stats].InitValues(current, max);
           }
+        }
+      }
+      if (isLoadingGame) {
+        if (c->m_type == characType::Hero) {
+          m_HeroesList.push_back(c);
+        } else {
+          m_BossesList.push_back(c);
+        }
+      } else {
+        if (c->m_type == characType::Hero) {
+          m_AllHeroesList.push_back(c);
+        } else {
+          m_AllBossesList.push_back(c);
         }
       }
       if (c->m_type == characType::Hero) {
@@ -1231,13 +1249,10 @@ void PlayersManager::Reset() {
     delete c;
   }
   m_BossesList.clear();
-  // // Used characters in a party
   m_SelectedHero = nullptr;
   m_ActivePlayer = nullptr;
   m_AllEffectsOnGame.clear();
-  // std::unordered_map<QString, std::map<QString, Stuff>>
-  //     m_Equipments; // key 1 body name, key2 {equipName, equip value-stats}
-  // std::unordered_map<QString, std::vector<GameAtkEffects>>
-  //     m_AllEffectsOnGame; // key target
-  // std::unordered_map<QString, std::vector<QString>> m_RandomEquipName;
+  m_Equipments.clear();
 }
+
+void PlayersManager::LoadAllEffects() {}

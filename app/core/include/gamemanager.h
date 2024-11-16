@@ -41,11 +41,12 @@ public:
   Character *GetCurrentPlayer();
   QString ProcessLogOrderToPlay() const;
   void SaveGame();
-  void LoadGame();
+  void LoadGame(const QString& gameName);
   void StartGame();
   QString GetEquipmentPath(const bool isLoot)const;
   QStringList GetListOfGames() const;
   void Reset();
+  void LoadPaths(const QString &gameName);
 };
 
 #endif // GAMEMANAGER_H

@@ -51,11 +51,6 @@ MainWindow::~MainWindow() { delete ui; }
  * and at least one hero have been chosen in "game characters" page beforehand
  */
 void MainWindow::ShowPageGameDisplay() {
-  if (const auto *gm = Application::GetInstance().m_GameManager.get();
-      gm != nullptr && gm->m_PlayersManager != nullptr &&
-      !gm->m_PlayersManager->UpdateActivePlayers()) {
-    return;
-  }
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(SecondaryPages::gameDisplay));
   emit SigUpdateActivePlayers();
@@ -115,7 +110,14 @@ void MainWindow::ShowHostPage() {
   ui->actionQuit->setEnabled(false);
 }
 
-void MainWindow::UpdateActiveCharacters() { ShowPageGameDisplay(); }
+void MainWindow::UpdateActiveCharacters() {
+  if (const auto *gm = Application::GetInstance().m_GameManager.get();
+      gm != nullptr && gm->m_PlayersManager != nullptr &&
+      !gm->m_PlayersManager->UpdateStartingPlayers(false)) {
+    return;
+  }
+  ShowPageGameDisplay();
+}
 
 void MainWindow::UpdatCharacterViews(Character *ch) {
   if (ch->m_type == characType::Hero) {
@@ -141,7 +143,9 @@ void MainWindow::on_actionSave_triggered() {
   }
 }
 
-void MainWindow::on_actionQuit_triggered() { ShowHostPage(); }
+void MainWindow::on_actionQuit_triggered() {
+    ShowHostPage();
+}
 
 void MainWindow::ShowLoadGamePage() {
   ui->actionSave->setEnabled(false);
@@ -162,22 +166,12 @@ void MainWindow::LoadGame(const QString &gameName) {
     return;
   }
   auto *gm = Application::GetInstance().m_GameManager.get();
-  if (gm == nullptr || gm->m_PlayersManager != nullptr) {
+  if (gm == nullptr) {
     return;
   }
-  // update gamemanager
-  gm->Reset();
+  if (gm->LoadGame(gameName)) {
+    ShowPageGameDisplay();
+  }
+}
 
-  // update data on player manager
-  // hero list and boss list
-
-  // update effects for player manager
-
-  // load root equipment for characters
-
-  // load loot equipments for characters
-
-  // update characters with equipment
-
-  ShowPageGameDisplay();
 }

@@ -22,10 +22,10 @@ public:
 class PlayersManager {
 public:
   PlayersManager() = default;
-  void InitHeroes();
-  void InitBosses();
+  void InitHeroes(std::vector<Character*>& heroList);
+  void InitBosses(std::vector<Character*> bossList);
   void ClearHeroBossList();
-  void LoadAllEquipmentsJson();
+  void LoadEquipmentsJson(const QString& filepath);
   Character *GetActiveCharacterByName(const QString &name);
   Character *GetCharacterByName(const QString &name);
   void AddGameEffectOnAtk(const QString &launcherName, const AttaqueType &atk,
@@ -62,13 +62,13 @@ public:
   GetAllDeadliestAllies(const characType &launcherType) const;
   void ProcessIsRandomTarget() const;
   void ResetIsFirstRound() const;
-  bool UpdateActivePlayers();
+  bool UpdateStartingPlayers(const bool isLoadingGame);
   std::vector<Stuff> LootNewEquipments(const QString &name);
   void InitRandomEquip();
   std::optional<std::pair<QString, int>> GetHeroMostAggro() const;
   void OutputCharactersInJson(const std::vector<Character *> &l,
                               const QString &outputPath) const;
-  void LoadAllCharactersJson();
+  void LoadAllCharactersJson(const bool isLoadingGame, const QString& pathForLoadingGame);
   void ResetAllEffectsOnPlayer(const Character *chara);
   int GetNbOfActiveHotsOnHeroes() const;
   void SetSelectedHero(const QString &name);
@@ -76,6 +76,7 @@ public:
   int GetMaxIndexDefaultName() const;
   void OutputAllOnGoingEffectToJson(const QString& filepath) const;
   void Reset();
+  void LoadAllEffects();
 
   // Available characters to create a party
   std::vector<Character *> m_AllHeroesList;
@@ -87,6 +88,8 @@ public:
   Character *m_ActivePlayer = nullptr;
   std::unordered_map<QString, std::map<QString, Stuff>>
       m_Equipments; // key 1 body name, key2 {equipName, equip value-stats}
+  std::unordered_map<QString, std::map<QString, Stuff>>
+      m_LootEquipments; // key 1 body name, key2 {equipName, equip value-stats}
   std::unordered_map<QString, std::vector<GameAtkEffects>>
       m_AllEffectsOnGame; // key target
   std::unordered_map<QString, std::vector<QString>> m_RandomEquipName;

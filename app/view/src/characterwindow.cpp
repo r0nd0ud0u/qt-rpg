@@ -85,7 +85,8 @@ void CharacterWindow::Apply() {
   // Then update the equipments
   // use stuff
   // first synchronize the pm table
-  pm->LoadAllEquipmentsJson();
+  pm->LoadEquipmentsJson(OFFLINE_ROOT_EQUIPMENT);
+  pm->LoadEquipmentsJson(GAMES_LOOT_EQUIPMENT);
   // Then update the equipments for each character
   const auto &table = ui->use_stuff_view->GetCurrentEquipmentTable();
   m_CurCharacter->SetEquipment(table);
