@@ -215,6 +215,7 @@ void GameManager::StartGame() {
   const auto timeStr = Utils::getCurrentTimeAsString();
   m_GameState->m_GameName = QString("Game_%1").arg(timeStr);
   // update paths
+  BuildPaths(m_GameState->m_GameName);
 }
 
 QString GameManager::GetEquipmentPath(const bool isLoot) const {
@@ -230,7 +231,7 @@ QStringList GameManager::GetListOfGames() const {
   return dir.entryList(QDir::AllDirs | QDir::NoDotDot | QDir::NoDot);
 }
 
-void GameManager::LoadPaths(const QString &gameName) {
+void GameManager::BuildPaths(const QString &gameName) {
   m_GameState->m_GameName = gameName;
   m_Paths.characterPath =
       QString("%1%2/%3/")
@@ -251,15 +252,15 @@ void GameManager::LoadPaths(const QString &gameName) {
           .arg(GAMES_DIR, m_GameState->m_GameName, GAMES_LOOT_EQUIPMENT);
 }
 
-void GameManager::LoadGame(const QString& gameName){
+bool GameManager::LoadGame(const QString& gameName){
     if (m_PlayersManager == nullptr) {
-        return;
+        return false;
     }
     // reset
     Reset();
     m_PlayersManager->Reset();
     // update gamemanager
-    LoadPaths(gameName);
+    BuildPaths(gameName);
     m_PlayersManager->LoadEquipmentsJson(OFFLINE_ROOT_EQUIPMENT);
     // load loot equipments for characters
     m_PlayersManager->LoadEquipmentsJson(GAMES_LOOT_EQUIPMENT);
@@ -268,4 +269,6 @@ void GameManager::LoadGame(const QString& gameName){
     m_PlayersManager->LoadAllEffects();
     m_PlayersManager->InitBosses(m_PlayersManager->m_BossesList);
     m_PlayersManager->InitHeroes(m_PlayersManager->m_HeroesList);
+
+   return  m_PlayersManager->UpdateStartingPlayers(true);
 }

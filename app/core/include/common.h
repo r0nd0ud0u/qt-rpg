@@ -135,6 +135,7 @@ const QString CH_TYPE_BOSS = "Boss";
 const QString CH_CURRENT_VALUE = "Current";
 const QString CH_MAX_VALUE = "Max";
 const QString CH_LEVEL = "Niveau";
+const QString CH_EXP = "Exp";
 const QString CH_COLOR = "Couleur";
 const QString CH_RANK = "Rang";
 const QString CH_FORM = "Forme";

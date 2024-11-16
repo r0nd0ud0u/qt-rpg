@@ -1012,8 +1012,12 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
       }
       const auto &st = h->m_Stats.m_AllStatsTable.at(stats);
       QJsonObject item;
-      item[CH_CURRENT_VALUE] = st.m_CurrentValue;
-      item[CH_MAX_VALUE] = st.m_MaxValue;
+      const double ratio = (st.m_MaxValue > 0)
+                               ? static_cast<double>(st.m_CurrentValue) /
+                                     static_cast<double>(st.m_MaxValue)
+                               : 1;
+      item[CH_CURRENT_VALUE] = ratio*st.m_RawMaxValue;
+      item[CH_MAX_VALUE] = st.m_RawMaxValue;
       QJsonArray jsonArray;
       jsonArray.append(item);
       if (!jsonArray.empty()) {
@@ -1122,11 +1126,6 @@ void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
         } else {
           m_AllBossesList.push_back(c);
         }
-      }
-      if (c->m_type == characType::Hero) {
-        m_AllHeroesList.push_back(c);
-      } else {
-        m_AllBossesList.push_back(c);
       }
     }
   }
