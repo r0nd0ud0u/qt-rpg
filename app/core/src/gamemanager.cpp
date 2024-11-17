@@ -299,7 +299,13 @@ bool GameManager::LoadGame(const QString &gameName) {
 
   QString curPlName;
   if (m_GameState->m_CurrentRound <= m_GameState->m_OrderToPlay.size()) {
-    curPlName = m_GameState->m_OrderToPlay[m_GameState->m_CurrentRound - 1];
+    int rnd = m_GameState->m_CurrentRound;
+    if (rnd == 0) {
+      rnd++;
+    }
+    if (rnd - 1 < m_GameState->m_OrderToPlay.size()) {
+      curPlName = m_GameState->m_OrderToPlay[rnd - 1];
+    }
   }
   m_PlayersManager->m_SelectedPlayer =
       m_PlayersManager->GetActiveCharacterByName(curPlName);
