@@ -376,20 +376,34 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
     // hp
     hp.m_CurrentValue =
         std::min(hp.m_MaxValue, hp.m_CurrentValue + regenHp.m_CurrentValue);
+    hp.m_CurrentRawValue = Utils::CalcRatio(hp.m_CurrentValue, hp.m_MaxValue) *
+                           hp.m_CurrentRawValue;
     // mana
     mana.m_CurrentValue = std::min(
         mana.m_MaxValue, mana.m_CurrentValue + regenMana.m_CurrentValue);
+    mana.m_CurrentRawValue =
+        Utils::CalcRatio(mana.m_CurrentValue, mana.m_MaxValue) *
+        mana.m_CurrentRawValue;
     // vigor
     vigor.m_CurrentValue = std::min(
         vigor.m_MaxValue, vigor.m_CurrentValue + regenVigor.m_CurrentValue);
+    vigor.m_CurrentRawValue =
+        Utils::CalcRatio(vigor.m_CurrentValue, vigor.m_MaxValue) *
+        vigor.m_CurrentRawValue;
     // berseck
     berseck.m_CurrentValue =
         std::min(berseck.m_MaxValue,
                  berseck.m_CurrentValue + regenBerseck.m_CurrentValue);
+    berseck.m_CurrentRawValue =
+        Utils::CalcRatio(berseck.m_CurrentValue, berseck.m_MaxValue) *
+        berseck.m_CurrentRawValue;
     // speed
     speed.m_CurrentValue += regenSpeed.m_CurrentValue;
     speed.m_MaxValue += regenSpeed.m_CurrentValue;
     speed.m_RawMaxValue += regenSpeed.m_CurrentValue;
+    speed.m_CurrentRawValue =
+        Utils::CalcRatio(speed.m_CurrentValue, speed.m_MaxValue) *
+        speed.m_CurrentRawValue;
   }
 }
 
@@ -586,18 +600,19 @@ void PlayersManager::AddSupAtkTurn(
     if (pl1->IsDead()) {
       continue;
     }
-    auto &speedPl1 =
-        pl1->m_Stats.m_AllStatsTable.at(STATS_SPEED).m_CurrentValue;
+    auto &spd1 = pl1->m_Stats.m_AllStatsTable.at(STATS_SPEED);
+    auto &curSpeedPl1 = spd1.m_CurrentValue;
     for (const auto &pl2 : playerList2) {
-      const auto &speedpl2 =
-          pl2->m_Stats.m_AllStatsTable.at(STATS_SPEED).m_CurrentValue;
-      if (speedPl1 - speedpl2 >= speedThreshold) {
+      auto &spd2 = pl2->m_Stats.m_AllStatsTable.at(STATS_SPEED);
+      const auto &speedpl2 = spd2.m_CurrentValue;
+      if (curSpeedPl1 - speedpl2 >= speedThreshold) {
         // Update of current value and max value
-        speedPl1 -= speedThreshold;
-        pl1->m_Stats.m_AllStatsTable.at(STATS_SPEED).m_MaxValue -=
-            speedThreshold;
-        pl1->m_Stats.m_AllStatsTable.at(STATS_SPEED).m_RawMaxValue -=
-            speedThreshold;
+        curSpeedPl1 -= speedThreshold;
+        spd1.m_MaxValue -= speedThreshold;
+        spd1.m_RawMaxValue -= speedThreshold;
+        spd1.m_CurrentRawValue =
+            Utils::CalcRatio(spd1.m_CurrentValue, spd1.m_MaxValue) *
+            spd1.m_CurrentRawValue;
         playerOrderTable.push_back(pl1->m_Name);
         break;
       }
@@ -1014,12 +1029,9 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
       if (h->m_Stats.m_AllStatsTable.count(stats) == 0) {
         continue;
       }
-      const auto &st = h->m_Stats.m_AllStatsTable.at(stats);
       QJsonObject item;
-      const double ratio = (st.m_MaxValue > 0)
-                               ? static_cast<double>(st.m_CurrentValue) /
-                                     static_cast<double>(st.m_MaxValue)
-                               : 1;
+      const auto &st = h->m_Stats.m_AllStatsTable.at(stats);
+      const double ratio = Utils::CalcRatio(st.m_CurrentValue, st.m_MaxValue);
       item[CH_CURRENT_VALUE] = ratio * st.m_RawMaxValue;
       item[CH_MAX_VALUE] = st.m_RawMaxValue;
       QJsonArray jsonArray;

@@ -1526,6 +1526,7 @@ void Character::UpdateStatsToNextLevel() {
                              : 1;
     // update the raw value by 10%
     localStat.m_RawMaxValue += localStat.m_RawMaxValue * 10 / 100;
+    localStat.m_CurrentRawValue += localStat.m_RawMaxValue * ratio;
 
     // recalcultate with equipment and effect
     localStat.m_MaxValue =
@@ -1533,6 +1534,7 @@ void Character::UpdateStatsToNextLevel() {
         localStat.m_RawMaxValue * localStat.m_BufEquipPercent / 100 +
         localStat.m_BufEffectValue +
         localStat.m_RawMaxValue * localStat.m_BufEffectPercent / 100;
+
 
     // recompute current value by ratio
     localStat.m_CurrentValue =

@@ -20,6 +20,7 @@ public:
   static int64_t GetRandomNb(const int64_t min, const int64_t max);
   static bool FileExists(const QString &path);
   static bool RemoveFile(const QString &path);
+  static double CalcRatio(const int val1, const int val2);
 };
 
 #endif // UTILS_H

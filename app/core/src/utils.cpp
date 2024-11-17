@@ -105,3 +105,7 @@ bool Utils::FileExists(const QString &path) {
 bool Utils::RemoveFile(const QString &path) {
   return FileExists(path) && QFile::remove(path);
 }
+
+double Utils::CalcRatio(const int val1, const int val2) {
+    return (val2 > 0) ? static_cast<double>(val1) / static_cast<double>(val2) : 1;
+}

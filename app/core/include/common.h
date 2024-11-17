@@ -310,6 +310,7 @@ public:
   int m_MaxValue = 0;
   int m_BaseEquipValue = 0;
   int m_RawMaxValue = 0;
+  int m_CurrentRawValue = 0;
   QString m_Type;
   int m_BufEffectValue = 0;
   int m_BufEffectPercent = 0;
@@ -317,6 +318,7 @@ public:
   int m_BufEquipPercent = 0;
   void InitValues(int current, int max) {
     m_CurrentValue = current;
+    m_CurrentRawValue = current;
     m_MaxValue = max;
     m_RawMaxValue = max;
   };

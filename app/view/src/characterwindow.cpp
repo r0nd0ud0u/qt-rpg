@@ -68,6 +68,7 @@ void CharacterWindow::Apply() {
   // stats + character
   // update stats
   if (ui->character_def->isEnabled()) {
+    //  use values stats without effect
     ui->character_def->AddCharacter(m_CurCharacter);
     // output json update on character
     pm->OutputCharactersInJson(std::vector<Character *>{m_CurCharacter},
@@ -93,7 +94,8 @@ void CharacterWindow::Apply() {
   m_CurCharacter->UpdateEquipmentOnJson(OFFLINE_WEARING_EQUIPMENT);
   // update views
   // use stuff
-  // TODO assess if a value has been change to perform the update view and the initView
+  // TODO assess if a value has been change to perform the update view and the
+  // initView
   UpdateViewUseStuff(pm->m_Equipments);
   ui->use_stuff_view->InitView(m_CurCharacter);
   emit SigUseNewStuff(m_CurCharacter->m_Name);
@@ -112,4 +114,8 @@ void CharacterWindow::UpdateViewAtGameStart() {
   ui->tabWidget->setTabVisible(static_cast<int>(tabType::attak), false);
   ui->tabWidget->setTabVisible(static_cast<int>(tabType::stuff), false);
   ui->tabWidget->setTabVisible(static_cast<int>(tabType::useStuff), true);
+  ui->character_def->setEnabled(false);
+  ui->edit_stuff_view->setEnabled(false);
+  ui->edit_atk_tab->setEnabled(false);
+  ui->use_stuff_view->setEnabled(true);
 }
