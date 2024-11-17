@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>559</width>
+    <height>389</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,57 +15,171 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="1">
+      <widget class="QLabel" name="is_damage_tx_heal_needy_ally">
        <property name="text">
-        <string>Nom</string>
+        <string>is_damage_tx_heal_needy_ally</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QTextEdit" name="name_edit">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>30</height>
-        </size>
+     <item row="4" column="1">
+      <widget class="QLabel" name="is_heal_atk_blocked">
+       <property name="text">
+        <string>is_heal_atk_blocked</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QLabel" name="label_2">
+     <item row="5" column="1">
+      <widget class="QLabel" name="is_first_round">
        <property name="text">
-        <string>Type</string>
+        <string>is_first_round</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QRadioButton" name="hero_radio">
+     <item row="6" column="1">
+      <widget class="QLabel" name="is_blocking_atk">
        <property name="text">
-        <string>Hero</string>
+        <string>is_blocking_atk</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QRadioButton" name="boss_radio">
+     <item row="2" column="1">
+      <widget class="QLabel" name="is_crit_heal_after_crit">
        <property name="text">
-        <string>Boss</string>
+        <string>is_crit_heal_after_crit</string>
        </property>
-       <property name="checked">
-        <bool>true</bool>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="leftMargin">
+        <number>7</number>
+       </property>
+       <property name="topMargin">
+        <number>7</number>
+       </property>
+       <property name="rightMargin">
+        <number>7</number>
+       </property>
+       <property name="bottomMargin">
+        <number>7</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Nom</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="name_edit">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>30</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Type</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="hero_radio">
+         <property name="text">
+          <string>Hero</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="boss_radio">
+         <property name="text">
+          <string>Boss</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="7" column="1">
+      <widget class="QLabel" name="max_actions_in_rnd">
+       <property name="text">
+        <string>Max actions in round</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="is_random_target">
+       <property name="text">
+        <string>is_random_target</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="cb_is_damage_tx_heal_needy_ally">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="cb_is_crit_heal_after_crit">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QCheckBox" name="cb_is_random_target">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QCheckBox" name="cb_is_heal_atk_blocked">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QCheckBox" name="cb_is_first_round">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QCheckBox" name="cb_is_blocking_atk">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QSpinBox" name="spinBox">
+       <property name="value">
+        <number>1</number>
        </property>
       </widget>
      </item>
@@ -87,8 +201,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>380</width>
-        <height>242</height>
+        <width>535</width>
+        <height>114</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout"/>

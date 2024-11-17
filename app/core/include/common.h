@@ -141,6 +141,8 @@ const QString CH_RANK = "Rang";
 const QString CH_FORM = "Forme";
 const QString CH_CLASS = "Classe";
 const QString CH_ACTIONS_IN_ROUND =  "nb-actions-in-round";
+const QString CH_BLOCKING_ATK = "is-blocking-atk";
+const QString CH_MAX_NB_ACTIONS_ROUND = "m_MaxNbActionsInRound";
 // buf - debuf
 const QString CH_BUF_DEBUF =  "Buf-debuf";
 const QString CH_BUF_ALL_STATS =  "Buf-all-stats";
@@ -148,6 +150,17 @@ const QString CH_BUF_VALUE =  "Buf-value";
 const QString CH_BUF_PASSIVE_ENABLED =  "buf-passive-enabled";
 const QString CH_BUF_IS_PERCENT =  "Buf-is-percent";
 const QString CH_BUF_TYPE = "Buf-type";
+// last tx rx
+const QString CH_TXRX_TYPE = "Tx-rx-type";
+const QString CH_TXRX = "Tx-rx";
+const QString CH_TXRX_SIZE = "Tx-rx-size";
+// powers
+const QString CH_POWERS_CRIT_AFTER_HEAL = "is_crit_heal_after_crit";
+const QString CH_POWERS_DMG_TX_ALLY = "is_damage_tx_heal_needy_ally";
+// extended character
+const QString CH_EXT_RAND_TARGET = "is_random_target";
+const QString CH_EXT_HEAL_ATK_BLOCKED = "is_heal_atk_blocked";
+const QString CH_EXT_FIRST_ROUND = "is_first_round";
 
 // equipment keys
 const QString EQUIP_HEAD = "Tete";

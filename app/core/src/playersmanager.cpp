@@ -1031,10 +1031,10 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
     QJsonObject bufObj;
     QJsonArray bufJa;
     for (int i = 0; i < static_cast<int>(BufTypes::enumSize); i++) {
-        if (i >= h->m_AllBufs.size()) {
+      if (i >= h->m_AllBufs.size()) {
         break;
       }
-        const auto b = h->m_AllBufs[i];
+      const auto b = h->m_AllBufs[i];
       const auto stats = b->get_all_stat_name();
       QString strStats;
       std::for_each(stats.begin(), stats.end(), [&](const ::rust::String &str) {
@@ -1050,6 +1050,39 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
     if (!bufJa.empty()) {
       obj[CH_BUF_DEBUF] = bufJa;
     }
+
+    // m_LastTxRx
+    QJsonObject lastTxRxObj;
+    QJsonArray lastTxRxJa;
+    for (int i = 0; i < static_cast<int>(BufTypes::enumSize); i++) {
+      if (i >= h->m_LastTxRx.size()) {
+        break;
+      }
+      const auto val = h->m_LastTxRx[i];
+      QJsonObject valByTurnObj;
+      QJsonArray valByTurnJa;
+      lastTxRxObj[CH_TXRX_TYPE] = i;
+      lastTxRxObj[CH_TXRX_SIZE] = static_cast<int>(val.size());
+      for (const auto &[k, v] : val) {
+        lastTxRxObj[QString::number(k)] = static_cast<int>(v);
+      }
+      lastTxRxJa.append(lastTxRxObj);
+    }
+    if (!lastTxRxJa.empty()) {
+      obj[CH_TXRX] = lastTxRxJa;
+    }
+
+    // powers
+    obj[CH_POWERS_CRIT_AFTER_HEAL] = h->m_Power.is_crit_heal_after_crit;
+    obj[CH_POWERS_DMG_TX_ALLY] = h->m_Power.is_damage_tx_heal_needy_ally;
+    // extended character
+    obj[CH_EXT_HEAL_ATK_BLOCKED] = h->m_ExtCharacter->get_is_heal_atk_blocked();
+    obj[CH_EXT_RAND_TARGET] = h->m_ExtCharacter->get_is_random_target();
+    obj[CH_EXT_FIRST_ROUND] = h->m_ExtCharacter->get_is_first_round();
+    // blocking atk
+    obj[CH_BLOCKING_ATK] = h->m_IsBlockingAtk;
+    // max actions in round
+    obj[CH_MAX_NB_ACTIONS_ROUND] = h->m_MaxNbActionsInRound;
 
     // output json
     QJsonDocument doc(obj);
@@ -1132,6 +1165,41 @@ void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
           }
         }
       }
+    }
+
+    // tx rx
+    const QJsonArray txRxArray = jsonObj[CH_TXRX].toArray();
+    for (const auto &elem : txRxArray) {
+      if (elem.isObject()) {
+        const QJsonObject item = elem.toObject();
+        const auto idx = item[CH_TXRX_TYPE].toInt();
+        const auto size = item[CH_TXRX_SIZE].toInt();
+        std::unordered_map<uint64_t, uint64_t> tmp;
+        for (int i = 0; i < size; i++) {
+          if (i < item.size()) {
+            tmp[i] = item[QString::number(i)].toInt();
+          }
+        }
+        if(idx < c->m_LastTxRx.size()){
+            c->m_LastTxRx[idx] = tmp;
+        }
+      }
+    }
+
+    // powers
+    c->m_Power.is_crit_heal_after_crit = jsonObj[CH_POWERS_CRIT_AFTER_HEAL].toBool();
+    c->m_Power.is_damage_tx_heal_needy_ally = jsonObj[CH_POWERS_DMG_TX_ALLY].toBool();
+    // extended character
+    c->m_ExtCharacter->set_is_heal_atk_blocked(jsonObj[CH_EXT_HEAL_ATK_BLOCKED].toBool());
+    c->m_ExtCharacter->set_is_random_target(jsonObj[CH_EXT_RAND_TARGET].toBool());
+    c->m_ExtCharacter->set_is_first_round(jsonObj[CH_EXT_FIRST_ROUND].toBool());
+    // blocking atk
+    c->m_IsBlockingAtk = jsonObj[CH_BLOCKING_ATK].toBool();
+    // max actions in round
+    c->m_MaxNbActionsInRound = jsonObj[CH_MAX_NB_ACTIONS_ROUND].toInt();
+    // TOD0 to remove someday hehe
+    if(c->m_MaxNbActionsInRound == 0){
+        c->m_MaxNbActionsInRound =1;
     }
 
     for (const auto &stats : ALL_STATS) {

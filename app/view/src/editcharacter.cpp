@@ -60,6 +60,13 @@ void EditCharacter::AddCharacter(Character *ch) const {
     panel->m_RawMax = -1;
     panel->m_CurrRaw = -1;
   }
+  ch->m_IsBlockingAtk = ui->cb_is_blocking_atk->isChecked();
+  ch->m_Power.is_crit_heal_after_crit = ui->cb_is_crit_heal_after_crit->isChecked();
+  ch->m_Power.is_damage_tx_heal_needy_ally = ui->cb_is_damage_tx_heal_needy_ally->isChecked();
+  ch->m_ExtCharacter->set_is_heal_atk_blocked(ui->cb_is_heal_atk_blocked->isChecked());
+  ch->m_ExtCharacter->set_is_first_round(ui->cb_is_first_round->isChecked());
+  ch->m_ExtCharacter->set_is_random_target(ui->cb_is_random_target->isChecked());
+  ch->m_MaxNbActionsInRound = ui->spinBox->value();
 }
 
 void EditCharacter::Init(const Character *c) {
@@ -84,4 +91,12 @@ void EditCharacter::Init(const Character *c) {
     }
     panel->SetStatsValue(c->m_Stats.m_AllStatsTable.at(stat));
   }
+  ui->cb_is_blocking_atk->setChecked(c->m_IsBlockingAtk);
+  ui->cb_is_crit_heal_after_crit->setChecked(c->m_Power.is_crit_heal_after_crit);
+  ui->cb_is_damage_tx_heal_needy_ally->setChecked(c->m_Power.is_damage_tx_heal_needy_ally);
+  ui->cb_is_heal_atk_blocked->setChecked(c->m_ExtCharacter->get_is_heal_atk_blocked());
+  ui->cb_is_first_round->setChecked(c->m_ExtCharacter->get_is_first_round());
+  ui->cb_is_random_target->setChecked(c->m_ExtCharacter->get_is_random_target());
+  ui->spinBox->setValue(c->m_MaxNbActionsInRound);
 }
+
