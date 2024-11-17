@@ -8,7 +8,7 @@ Character GetTestCharacter() {
   auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
   // add heroes
   pm->ClearHeroBossList();
-  pm->LoadAllCharactersJson();
+  pm->LoadAllCharactersJson(false, "");
   auto testCh = pm->GetCharacterByName(testName);
 
   return *testCh;

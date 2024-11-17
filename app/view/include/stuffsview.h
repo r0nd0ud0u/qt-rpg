@@ -23,7 +23,6 @@ public:
 private:
     Ui::StuffsView *ui;
     std::vector<StuffPanel*> m_StuffList;
-    std::vector<EditStuff> m_EditStuffList;
 
     void InitEditStuffsView();
 };

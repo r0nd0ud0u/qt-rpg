@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "character.h"
+#include "gamemanager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -16,6 +17,7 @@ enum class SecondaryPages {
   gameDisplay,
   heroGameCharacters,
   bossGameCharacters,
+  loadGame,
   enumSize
 };
 
@@ -27,26 +29,28 @@ public:
   ~MainWindow();
 public slots:
   void UpdatCharacterViews(Character *);
-  void AddNewStuff();
   void UpdateStuffOnUse(const QString &playerName);
 
 signals:
   void SigNewCharacter(Character *);
-  void SigAddNewStuff();
   void SigNewStuffOnUse(const QString &);
-  void SigUpdateActivePlayers();
 
 private:
   Ui::MainWindow *ui;
 
 private slots:
-  void ShowPageGameDisplay();
+  void PrepareAndShowPageGameDisplay(const GameManager *gm, const bool isLoadingGame);
   void ShowHeroGameCharacters(const bool init);
   void ShowBossGameCharacters();
   void ProcessGameCharacterNextBtn(const bool value);
   void ProcessGameCharacterBackBtn(const bool value);
   void ShowHostPage();
-  void UpdateActiveCharacters();
+  void StartGameFromScratch();
   void RawDisplayHeroGameCh();
+  void on_actionSave_triggered();
+  void on_actionQuit_triggered();
+  void ShowLoadGamePage();
+  void LoadGame(const QString& gameName);
+  void ResetGameDisplay();
 };
 #endif // MAINWINDOW_H

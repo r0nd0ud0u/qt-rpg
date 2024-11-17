@@ -10,6 +10,8 @@
 
 #include "rust-rpg-bridge/players_manager.h"
 
+class GameState;
+
 class GameAtkEffects {
 public:
   effectParam allAtkEffects;
@@ -22,10 +24,10 @@ public:
 class PlayersManager {
 public:
   PlayersManager() = default;
-  void InitHeroes();
-  void InitBosses();
+  void InitHeroes(std::vector<Character*>& heroList);
+  void InitBosses(std::vector<Character*>& bossList);
   void ClearHeroBossList();
-  void LoadAllEquipmentsJson();
+  void LoadEquipmentsJson(const QString& filepath);
   Character *GetActiveCharacterByName(const QString &name);
   Character *GetCharacterByName(const QString &name);
   void AddGameEffectOnAtk(const QString &launcherName, const AttaqueType &atk,
@@ -39,8 +41,6 @@ public:
   void ApplyRegenStats(const characType &type);
 
   static QString FormatAtkOnEnnemy(const int damage);
-  static QString FormatAtkOnAlly(const int damage);
-  static QString FormatAtk(const QString player2, const QString &atkName);
   int GetNbOfStatsInEffectList(const Character *chara,
                                const QString &statsName) const;
   void ResetCounterOnOneStatsEffect(const Character *chara,
@@ -64,17 +64,21 @@ public:
   GetAllDeadliestAllies(const characType &launcherType) const;
   void ProcessIsRandomTarget() const;
   void ResetIsFirstRound() const;
-  bool UpdateActivePlayers();
+  bool UpdateStartingPlayers(const bool isLoadingGame);
   std::vector<Stuff> LootNewEquipments(const QString &name);
   void InitRandomEquip();
   std::optional<std::pair<QString, int>> GetHeroMostAggro() const;
-  void OutputCharactersInJson(const std::vector<Character *> &l) const;
-  void LoadAllCharactersJson();
+  void OutputCharactersInJson(const std::vector<Character *> &l,
+                              const QString &outputPath) const;
+  void LoadAllCharactersJson(const bool isLoadingGame, const QString& pathForLoadingGame);
   void ResetAllEffectsOnPlayer(const Character *chara);
   int GetNbOfActiveHotsOnHeroes() const;
-  void SetSelectedHero(const QString &name);
+  void SetSelectedPlayer(const QString &name);
   QString ProcessNewDefaultName() const;
   int GetMaxIndexDefaultName() const;
+  void OutputAllOnGoingEffectToJson(const QString& filepath) const;
+  void Reset();
+  void LoadAllEffects(const QString& filepath);
 
   // Available characters to create a party
   std::vector<Character *> m_AllHeroesList;
@@ -82,10 +86,12 @@ public:
   // Used characters in a party
   std::vector<Character *> m_HeroesList;
   std::vector<Character *> m_BossesList;
-  Character *m_SelectedHero = nullptr;
+  Character *m_SelectedPlayer = nullptr;
   Character *m_ActivePlayer = nullptr;
   std::unordered_map<QString, std::map<QString, Stuff>>
       m_Equipments; // key 1 body name, key2 {equipName, equip value-stats}
+  std::unordered_map<QString, std::map<QString, Stuff>>
+      m_LootEquipments; // key 1 body name, key2 {equipName, equip value-stats}
   std::unordered_map<QString, std::vector<GameAtkEffects>>
       m_AllEffectsOnGame; // key target
   std::unordered_map<QString, std::vector<QString>> m_RandomEquipName;

@@ -15,6 +15,7 @@ public:
     QString m_Name;
     QString m_BodyPart;
     int m_Rank = 0;
+    bool m_IsLoot = false;
     std::vector<QString> m_StatsUpByLoot;
 };
 

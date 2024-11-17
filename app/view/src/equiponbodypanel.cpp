@@ -29,10 +29,10 @@ void EquipOnBodyPanel::InitComboBox(const QString& name){
     }
 }
 
-void EquipOnBodyPanel::AddItemInComboBox(const QString& name) const{
-    ui->equip_comboBox->addItem(name);
-}
-
 void EquipOnBodyPanel::SetValue(const QString& value){
     ui->equip_comboBox->setCurrentText(value);
+}
+
+void EquipOnBodyPanel::ResetUi(){
+    ui->equip_comboBox->clear();
 }

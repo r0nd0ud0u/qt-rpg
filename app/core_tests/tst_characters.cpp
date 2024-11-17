@@ -28,7 +28,7 @@ void character_tests::TestThalia_works() {
   auto *AzrakChRx = pm->GetActiveCharacterByName(azrakRx);
   thaliaCh->m_StatsInGame.m_IsPlaying = true;
   AzrakChRx->m_StatsInGame.m_IsPlaying = true;
-  pm->UpdateActivePlayers();
+  pm->UpdateStartingPlayers(false);
 
   // attaque 1
   AttaqueType atk1 = thaliaCh->m_AtksByLevel[0];

@@ -20,11 +20,12 @@ public:
   explicit CharacterWindow(QWidget *parent = nullptr);
   ~CharacterWindow();
   void InitWindow(const tabType &type, Character *c);
-  void UpdateView(const std::vector<EditStuff> &esTable);
+  void UpdateViewUseStuff();
+  void UpdateViewAtGameStart();
+  void UpdateViewAtNewGame();
 
 signals:
   void SigUpdateCharacterViews(Character *);
-  void SigAddNewStuff();
   void SigUseNewStuff(const QString &);
   void SigUpdateViews(Character *);
 

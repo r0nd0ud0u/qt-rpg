@@ -15,9 +15,8 @@ public:
   ~HostPage();
 
   void ActiveNewGame(const bool value);
-
 signals:
-  void showGameDisplay();
+  void SigShowLoadGamePage();
   void SigShowHeroGameCharacters();
   void SigShowBossGameCharacters();
 

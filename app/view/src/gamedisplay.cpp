@@ -39,7 +39,7 @@ GameDisplay::GameDisplay(QWidget *parent)
           &StatsView::UpdateDisplayedCharStats);
   connect(this, &GameDisplay::SigUpdStatsOnSelCharacter, ui->stats_character,
           &StatsView::UpdateDisplayedCharStats);
-  //equip view
+  // equip view
   connect(this, &GameDisplay::selectCharacter, ui->equipment_widget,
           &EquipmentView::UpdateEquipment);
   // init status page
@@ -50,8 +50,8 @@ GameDisplay::~GameDisplay() { delete ui; }
 
 void GameDisplay::UpdateViews(const QString &name) {
   const auto &app = Application::GetInstance();
-  app.m_GameManager->m_PlayersManager->SetSelectedHero(name);
-  emit selectCharacter(app.m_GameManager->m_PlayersManager->m_SelectedHero);
+  app.m_GameManager->m_PlayersManager->SetSelectedPlayer(name);
+  emit selectCharacter(app.m_GameManager->m_PlayersManager->m_SelectedPlayer);
 }
 
 void GameDisplay::on_attaque_button_clicked() {
@@ -74,40 +74,44 @@ void GameDisplay::on_stackedWidget_currentChanged(const int arg1) {
   ui->attak_page->UpdateActions(static_cast<ActionsStackedWgType>(arg1));
 }
 
-void GameDisplay::UpdateGameStatus() {
-  const auto &gameState = Application::GetInstance().m_GameManager->m_GameState;
+void GameDisplay::UpdateGameStatus(const GameState *gs) {
+  if (gs == nullptr) {
+    ui->turn_label->setText("no game state");
+    return;
+  }
   ui->turn_label->setText(QString("Tour %1, Round %2/%3")
-                              .arg(gameState->m_CurrentTurnNb)
-                              .arg(gameState->m_CurrentRound)
-                              .arg(gameState->m_OrderToPlay.size()));
+                              .arg(gs->m_CurrentTurnNb)
+                              .arg(gs->m_CurrentRound)
+                              .arg(gs->m_OrderToPlay.size()));
 }
 
-void GameDisplay::NewRound() {
+bool GameDisplay::NewRound() {
   auto *gm = Application::GetInstance().m_GameManager.get();
   if (gm == nullptr) {
-    return;
+    return false;
   }
   // First update the game state
   auto *gs = gm->m_GameState;
   if (gs == nullptr) {
-    return;
+    return false;
   }
   gs->m_CurrentRound++;
-  UpdateGameStatus();
+  UpdateGameStatus(gs);
 
   // Get current player
   auto *activePlayer = gm->GetCurrentPlayer();
   if (activePlayer == nullptr) {
     emit SigUpdateChannelView("Debug", "NewRound nullptr active player");
-    return;
+    return false;
   }
   // The player can play the round only if alive
   if (activePlayer->IsDead()) {
     emit SigUpdateChannelView(activePlayer->m_Name, "est mort.",
                               activePlayer->color);
-    return;
+    return false;
   }
-
+  // update character
+  activePlayer->m_ActionsDoneInRound = 0;
   // Apply effects
   // Assess first round for the player
   // TODO create a method to do only on first round
@@ -215,39 +219,21 @@ void GameDisplay::NewRound() {
   // Update views
   // Update views after stats changes
   // Players panels views
-  ui->heroes_widget->ActivatePanel(activePlayer->m_Name);
-  ui->bosses_widget->ActivatePanel(activePlayer->m_Name);
-  // Activate actions buttons
-  ui->bag_button->setEnabled(true);
-  ui->attaque_button->setEnabled(true);
-  // actions views
-  ui->attak_page->SetCurrentPlayer(activePlayer);
-  // set focus on active player
-  emit SigSetFocusOnActivePlayer(activePlayer);
-  emit SigUpdatePlayerPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
-  emit SigUpdateChannelView("GameState", QString("Round %1/%2")
-                                             .arg(gs->m_CurrentRound)
-                                             .arg(gs->m_OrderToPlay.size()));
-  // auto select hero
-  gm->m_PlayersManager->m_SelectedHero = activePlayer;
-  emit selectCharacter(activePlayer);
-
-  // set atk view on
-  // do it after hero has been activated and selected
-  ui->attak_page->ResetActionsParam();
-  ui->stackedWidget->setCurrentIndex(
-      static_cast<int>(ActionsStackedWgType::attak));
-  ui->attaque_button->setEnabled(false);
-  ui->bag_button->setEnabled(true);
-  ui->attak_page->UpdateActions(ActionsStackedWgType::attak);
+  UpdateViewAtRoundStart(activePlayer, gm);
   // TODO update channel
   // choice of talent
   // if dead -> choice to take a potion
+
+  return true;
 }
 
 void GameDisplay::StartNewTurn() {
   // TODO game state , check if boss is dead
-  const auto &gm = Application::GetInstance().m_GameManager;
+  const auto *gm = Application::GetInstance().m_GameManager.get();
+  if (gm == nullptr || gm->m_GameState == nullptr ||
+      gm->m_PlayersManager == nullptr) {
+    return;
+  }
 
   // Increment turn effects
   gm->m_PlayersManager->IncrementCounterEffect();
@@ -270,11 +256,11 @@ void GameDisplay::StartNewTurn() {
       "GameState", QString("Tour %1").arg(gm->m_GameState->m_CurrentTurnNb));
   NewRound();
   // Then, update the display
-  UpdateGameStatus();
+  UpdateGameStatus(gm->m_GameState);
   // game is just starting at turn 1
   // some first init to do for the views
   if (gm->m_GameState->m_CurrentTurnNb == 1) {
-    ui->attak_page->InitTargetsWidget();
+    ui->attak_page->InitTargetsWidget(gm->m_PlayersManager);
   }
 }
 
@@ -295,7 +281,7 @@ void GameDisplay::EndOfGame() {
   emit SigUpdateChannelView("GameState", "Fin du jeu !!");
 
   // generate output file on game stats
-  StatsInGame::GenerateStatsEndGame();
+  StatsInGame::GenerateStatsEndGame(OUTPUT_ENDGAME);
 }
 
 bool GameDisplay::ProcessAtk(
@@ -387,6 +373,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     return;
   }
   // launch atk
+  activatedPlayer->m_ActionsDoneInRound++;
   if (activatedPlayer->m_AttakList.count(atkName) == 0) {
     return;
   }
@@ -497,7 +484,6 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   for (const auto &dp : diedBossList) {
     emit SigUpdateChannelView("GameState", QString("%1 est mort.").arg(dp));
     // LOOT
-    std::vector<EditStuff> allLoots;
     for (const auto *hero : gm->m_PlayersManager->m_HeroesList) {
       if (hero == nullptr) {
         continue;
@@ -509,7 +495,6 @@ void GameDisplay::LaunchAttak(const QString &atkName,
         logLoot.append(QString("Loot pour %1:").arg(hero->m_Name));
       }
       for (const auto &e : newEquip) {
-        gm->m_PlayersManager->m_Equipments[e.m_BodyPart][e.m_UniqueName] = e;
         logLoot.append(QString("- %1").arg(e.m_UniqueName));
       }
       std::for_each(newEquip.begin(), newEquip.end(), [&](const Stuff &s) {
@@ -518,12 +503,11 @@ void GameDisplay::LaunchAttak(const QString &atkName,
         es.m_BodyPart = s.m_BodyPart;
         es.m_Name = s.m_UniqueName;
         EditStuff::SaveStuffInJson(es, s.m_BodyPart);
-        allLoots.push_back(es);
       });
       emit SigUpdateChannelView("GameState", logLoot.join('\n'));
     }
     // update view for the equipments
-    ApplicationView::GetInstance().GetCharacterWindow()->UpdateView(allLoots);
+    ApplicationView::GetInstance().GetCharacterWindow()->UpdateViewUseStuff();
 
     emit SigBossDead(dp);
     ui->add_exp_button->setEnabled(true);
@@ -540,7 +524,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   // update views of heroes and bosses
   emit SigUpdatePlayerPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
   // update stats view
-  emit SigUpdStatsOnSelCharacter(gm->m_PlayersManager->m_SelectedHero);
+  emit SigUpdStatsOnSelCharacter(gm->m_PlayersManager->m_SelectedPlayer);
 
   // Check end of game
   if (gm->m_PlayersManager->m_BossesList.empty()) {
@@ -591,7 +575,7 @@ void GameDisplay::on_add_exp_button_clicked() {
   // update level + exp label of each hero panel
   emit SigUpdatePlayerPanel({});
   emit selectCharacter(Application::GetInstance()
-                           .m_GameManager->m_PlayersManager->m_SelectedHero);
+                           .m_GameManager->m_PlayersManager->m_SelectedPlayer);
 }
 
 void GameDisplay::SlotUpdateActionViews(const QString &name,
@@ -622,9 +606,78 @@ void GameDisplay::SlotUpdateActionViews(const QString &name,
   ui->attak_page->UpdateActions(ActionsStackedWgType::attak);
 }
 
-void GameDisplay::UpdateActivePlayers() {
-  auto *c = Application::GetInstance()
-                .m_GameManager->m_PlayersManager->m_SelectedHero;
+void GameDisplay::UpdateActivePlayers(const bool isLoadingGame,
+                                      const GameManager *gm) {
+  if (gm == nullptr) {
+    return;
+  }
+  auto *c = gm->m_PlayersManager->m_SelectedPlayer;
   emit SigGameDisplayStart(c);
   emit selectCharacter(c);
+  if (isLoadingGame) {
+    UpdateAtLoadGame(gm);
+  };
+}
+
+void GameDisplay::ResetUi() {
+  ui->bosses_widget->ResetUi();
+  ui->heroes_widget->ResetUi();
+  ui->channel_lay->ResetUi();
+}
+
+void GameDisplay::UpdateAtLoadGame(const GameManager *gm) {
+  if (gm == nullptr || gm->m_PlayersManager == nullptr ||
+      gm->m_PlayersManager->m_SelectedPlayer == nullptr) {
+    return;
+  }
+  // the selected player is the player to start playing at loading
+  ui->attak_page->InitTargetsWidget(gm->m_PlayersManager);
+  UpdateViewAtRoundStart(gm->m_PlayersManager->m_SelectedPlayer, gm);
+  const bool endOfRound =
+      gm->m_PlayersManager->m_SelectedPlayer->m_ActionsDoneInRound ==
+      gm->m_PlayersManager->m_SelectedPlayer->m_MaxNbActionsInRound;
+  if (endOfRound &&
+      gm->m_GameState->m_CurrentRound < gm->m_GameState->m_OrderToPlay.size()) {
+    ui->channel_lay->UpdateTurnsButtons(false);
+    ui->stackedWidget->setCurrentIndex(
+        static_cast<int>(ActionsStackedWgType::defaultType));
+    ui->attaque_button->setEnabled(false);
+    ui->bag_button->setEnabled(false);
+  } else {
+    ui->channel_lay->UpdateTurnsButtons(true);
+  }
+}
+
+void GameDisplay::UpdateViewAtRoundStart(Character *activePlayer,
+                                         const GameManager *gm) {
+  if (activePlayer == nullptr || gm == nullptr ||
+      gm->m_PlayersManager == nullptr || gm->m_GameState == nullptr) {
+    return;
+  }
+  ui->heroes_widget->ActivatePanel(activePlayer->m_Name);
+  ui->bosses_widget->ActivatePanel(activePlayer->m_Name);
+  // Activate actions buttons
+  ui->bag_button->setEnabled(true);
+  ui->attaque_button->setEnabled(true);
+  // actions views
+  ui->attak_page->SetCurrentPlayer(activePlayer);
+  // set focus on active player
+  emit SigSetFocusOnActivePlayer(activePlayer);
+  emit SigUpdatePlayerPanel(gm->m_PlayersManager->m_AllEffectsOnGame);
+  emit SigUpdateChannelView("GameState",
+                            QString("Round %1/%2")
+                                .arg(gm->m_GameState->m_CurrentRound)
+                                .arg(gm->m_GameState->m_OrderToPlay.size()));
+  // auto select hero
+  gm->m_PlayersManager->m_SelectedPlayer = activePlayer;
+  emit selectCharacter(activePlayer);
+
+  // set atk view on
+  // do it after hero has been activated and selected
+  ui->attak_page->ResetActionsParam();
+  ui->stackedWidget->setCurrentIndex(
+      static_cast<int>(ActionsStackedWgType::attak));
+  ui->attaque_button->setEnabled(false);
+  ui->bag_button->setEnabled(true);
+  ui->attak_page->UpdateActions(ActionsStackedWgType::attak);
 }

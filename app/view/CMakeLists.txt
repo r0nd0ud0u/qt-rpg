@@ -35,6 +35,7 @@ set(SOURCES
         src/gamecharacters.cpp
         src/editatkpanel.cpp
         src/complabel.cpp
+        src/loadgame.cpp
 )
 
 set(HEADERS
@@ -65,6 +66,7 @@ set(HEADERS
         include/gamecharacters.h
         include/editatkpanel.h
         include/complabel.h
+        include/loadgame.h
 )
 
 set(FORMS
@@ -92,13 +94,14 @@ set(FORMS
         forms/equiponbodyview.ui
         forms/gamecharacters.ui
         forms/editatkpanel.ui
+        forms/loadgame.ui
     )
 
 set(RESOURCES
     ${CMAKE_SOURCE_DIR}/resources/resource.qrc
 )
 
-add_library(view STATIC ${SOURCES} ${HEADERS} ${FORMS} ${RESOURCES})
+add_library(view STATIC ${SOURCES} ${HEADERS} ${FORMS} ${RESOURCES} )
 target_include_directories(view PUBLIC include forms)
 
 target_link_libraries(view

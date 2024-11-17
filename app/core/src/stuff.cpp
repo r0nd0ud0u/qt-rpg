@@ -16,8 +16,10 @@ void EditStuff::SaveStuffInJson(const EditStuff &es, const QString &bodyPart) {
   }
   QFile file;
   QDir logDir;
-  QString path = OFFLINE_ROOT_EQUIPMENT;
-  logDir.mkpath(path);
+  const auto * gm = Application::GetInstance().m_GameManager.get();
+  if(gm == nullptr || gm->m_GameState == nullptr){
+      return;
+  }
   // init json doc
   QJsonObject obj;
 
@@ -42,12 +44,14 @@ void EditStuff::SaveStuffInJson(const EditStuff &es, const QString &bodyPart) {
 
   // output json
   QJsonDocument doc(obj);
-  QString logFilePath =
-      logDir.filePath(path + bodyPart + "/" + es.m_Name + ".json");
-  file.setFileName(logFilePath);
+  const QString filepath = gm->GetEquipmentPath(es.m_Stuff.m_IsLoot);
+  const QString equipFilePath = filepath + bodyPart + "/" + es.m_Name + ".json";
+  QString dirTmp = QFileInfo(equipFilePath).absoluteFilePath();
+  logDir.mkpath(QFileInfo(equipFilePath).absolutePath());
+  file.setFileName(equipFilePath);
   if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
     Application::GetInstance().log(" Could not open the file for writing " +
-                                   logFilePath);
+                                   equipFilePath);
   }
   QTextStream out(&file);
 #if QT_VERSION_MAJOR == 6

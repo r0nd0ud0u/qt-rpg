@@ -41,9 +41,10 @@ Application &Application::GetInstance() { return *g_pApp; }
 void Application::Init() {
   m_GameManager = std::make_unique<GameManager>();
   if (m_GameManager != nullptr) {
+    m_GameManager->InitGamemanager();
     m_GameManager->InitPlayers();
   }
-  srand((unsigned) time(nullptr));
+  srand((unsigned)time(nullptr));
   // ReadGlobalParameters("*.ini");
   // QDir logDir(QString::fromStdString(m_global_ini.GLOBAL.m_LOG_PATH));
   // logDir.mkpath(".");

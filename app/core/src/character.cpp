@@ -1423,6 +1423,7 @@ void Character::UsePotion(const QString &statsName) {
   if (m_Stats.m_AllStatsTable.count(statsName) == 0) {
     return;
   }
+  m_ActionsDoneInRound++;
   auto &stat = m_Stats.m_AllStatsTable.at(statsName);
   int boost = 0;
   if (statsName == STATS_HP) {
@@ -1480,7 +1481,9 @@ void Character::SetEquipment(
   }
 }
 
-void Character::UpdateEquipmentOnJson() const {
+void Character::UpdateEquipmentOnJson(const QString &dirPath) const {
+  QDir directory;
+  directory.mkpath(dirPath);
   // init json doc
   QJsonObject obj;
   for (const auto &[bodyPart, equip] : m_WearingEquipment) {
@@ -1491,17 +1494,10 @@ void Character::UpdateEquipmentOnJson() const {
   }
   // output attak json
   QJsonDocument doc(obj);
-  const QString directoryPath =
-      OFFLINE_WEARING_EQUIPMENT; // Replace with the actual path
-  if (QDir directory(directoryPath); !directory.exists()) {
-    Application::GetInstance().log(
-        QString("Directory does not exist: %1").arg(directoryPath));
-    return;
-  }
-  QFile json(directoryPath + m_Name + ".json");
+  QFile json(dirPath + m_Name + ".json");
   if (!json.open(QFile::WriteOnly | QFile::Text)) {
     Application::GetInstance().log(" Could not open the file for reading " +
-                                   directoryPath + m_Name + ".json");
+                                   dirPath + m_Name + ".json");
   }
   QTextStream out(&json);
 #if QT_VERSION_MAJOR == 6
@@ -1531,8 +1527,10 @@ void Character::UpdateStatsToNextLevel() {
                              : 1;
     // update the raw value by 10%
     localStat.m_RawMaxValue += localStat.m_RawMaxValue * 10 / 100;
+    localStat.m_CurrentRawValue +=
+        static_cast<int>(static_cast<double>(localStat.m_RawMaxValue) * ratio);
 
-    // recalcultate with equipment and effect
+    // recalcultate with equipment JsonArrayToEffect effect
     localStat.m_MaxValue =
         localStat.m_RawMaxValue + localStat.m_BufEquipValue +
         localStat.m_RawMaxValue * localStat.m_BufEquipPercent / 100 +
@@ -1611,8 +1609,8 @@ std::vector<effectParam> Character::LoadThrainTalent() const {
   param1.statsName = STATS_DODGE;
   param1.target = TARGET_HIMSELF;
   param1.subValueEffect = 0;
-  epTable.push_back(param1);
   param1.passiveTalent = true;
+  epTable.push_back(param1);
 
   effectParam param2;
   param2.effect = EFFECT_IMPROVEMENT_STAT_BY_VALUE;

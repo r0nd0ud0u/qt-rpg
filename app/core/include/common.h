@@ -5,6 +5,7 @@
 #include <set>
 #include <unordered_map>
 
+// common include
 #include "rust-rpg-bridge/buffers.h"
 
 // inputs
@@ -14,6 +15,23 @@ const QString OFFLINE_WEARING_EQUIPMENT = "./offlines/equipment/Personnages/";
 const QString OFFLINE_ROOT_EQUIPMENT = "./offlines/equipment/corps/";
 const QString OFFLINE_RAND_NAME_STUFF = "./offlines/equipment/random/";
 const QString OFFLINE_CHARACTERS = "./offlines/Personnages/";
+const QString OFFLINE_SAVES = "./offlines/games";
+
+// save/load games
+// paths
+const QString GAMES_DIR = "./offlines/games/";
+const QString GAMES_CHARACTERS = "characters";
+const QString GAMES_EQUIPMENT = "equipment";
+const QString GAMES_EFFECTS = "effects";
+const QString GAMES_STATE = "game-state";
+const QString GAMES_LOOT_EQUIPMENT = "equipment/body";
+// game state
+const QString GAME_STATE_DIED_ENNEMIES = "died-ennemies";
+const QString GAME_STATE_ORDER_PLAYERS = "order-players-last-turn";
+const QString GAME_STATE_CURRENT_TURN = "current-turn";
+const QString GAME_STATE_CURRENT_ROUND = "current-round";
+const QString GAME_STATE_GAME_NAME = "game-name";
+const QString GAME_STATE_STATS_IN_GAME = "/stats_in_game_%1.csv";
 
 // outputs
 const QString OUTPUT_DIR = "./output/";
@@ -117,10 +135,32 @@ const QString CH_TYPE_BOSS = "Boss";
 const QString CH_CURRENT_VALUE = "Current";
 const QString CH_MAX_VALUE = "Max";
 const QString CH_LEVEL = "Niveau";
+const QString CH_EXP = "Exp";
 const QString CH_COLOR = "Couleur";
 const QString CH_RANK = "Rang";
 const QString CH_FORM = "Forme";
 const QString CH_CLASS = "Classe";
+const QString CH_ACTIONS_IN_ROUND =  "nb-actions-in-round";
+const QString CH_BLOCKING_ATK = "is-blocking-atk";
+const QString CH_MAX_NB_ACTIONS_ROUND = "m_MaxNbActionsInRound";
+// buf - debuf
+const QString CH_BUF_DEBUF =  "Buf-debuf";
+const QString CH_BUF_ALL_STATS =  "Buf-all-stats";
+const QString CH_BUF_VALUE =  "Buf-value";
+const QString CH_BUF_PASSIVE_ENABLED =  "buf-passive-enabled";
+const QString CH_BUF_IS_PERCENT =  "Buf-is-percent";
+const QString CH_BUF_TYPE = "Buf-type";
+// last tx rx
+const QString CH_TXRX_TYPE = "Tx-rx-type";
+const QString CH_TXRX = "Tx-rx";
+const QString CH_TXRX_SIZE = "Tx-rx-size";
+// powers
+const QString CH_POWERS_CRIT_AFTER_HEAL = "is_crit_heal_after_crit";
+const QString CH_POWERS_DMG_TX_ALLY = "is_damage_tx_heal_needy_ally";
+// extended character
+const QString CH_EXT_RAND_TARGET = "is_random_target";
+const QString CH_EXT_HEAL_ATK_BLOCKED = "is_heal_atk_blocked";
+const QString CH_EXT_FIRST_ROUND = "is_first_round";
 
 // equipment keys
 const QString EQUIP_HEAD = "Tete";
@@ -267,7 +307,11 @@ const QString EFFECT_REACH = "Portée";
 const QString EFFECT_STAT = "Stat";
 const QString EFFECT_ACTIVE_TURNS = "Tours actifs";
 const QString EFFECT_SUB_VALUE = "Valeur de l'effet";
-
+const QString EFFECT_PASSIVE_TALENT = "Passif";
+const QString EFFECT_COUNTER_TURN = "Compteur";
+const QString EFFECT_IS_MAGIC = "Est Magique";
+const QString EFFECT_LAUNCHER = "launcher";
+const QString EFFECT_INDEX_TURN = "index tour";
 // Form keys
 const QString ENT_FORM = "Ent";
 const QString BEAR_FORM = "Ours";
@@ -287,6 +331,7 @@ public:
   int m_MaxValue = 0;
   int m_BaseEquipValue = 0;
   int m_RawMaxValue = 0;
+  int m_CurrentRawValue = 0;
   QString m_Type;
   int m_BufEffectValue = 0;
   int m_BufEffectPercent = 0;
@@ -294,6 +339,7 @@ public:
   int m_BufEquipPercent = 0;
   void InitValues(int current, int max) {
     m_CurrentValue = current;
+    m_CurrentRawValue = current;
     m_MaxValue = max;
     m_RawMaxValue = max;
   };

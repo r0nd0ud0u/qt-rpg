@@ -45,3 +45,12 @@ void Channel::UpdateLog(const QString& topic, const QString& log, const QColor c
     ui->channel_textEdit->setTextColor("dark");
     ui->channel_textEdit->append(log);
 }
+
+void Channel::ResetUi(){
+    ui->channel_textEdit->clear();
+}
+
+void Channel::UpdateTurnsButtons(const bool isNextTurn){
+    ui->next_turn_button->setEnabled(isNextTurn);
+    ui->end_round_button->setEnabled(!isNextTurn);
+}
