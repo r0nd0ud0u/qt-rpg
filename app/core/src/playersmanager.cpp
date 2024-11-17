@@ -124,58 +124,43 @@ void PlayersManager::LoadEquipmentsJson(const QString &dirpath) {
     }
     QStringList fileList = subdir.entryList(QDir::Files | QDir::NoDotAndDotDot);
     for (const QString &file : fileList) {
-      QFile json(dirpath + subdirPath + "/" + file);
-      if (!json.open(QFile::ReadOnly | QFile::Text)) {
-        Application::GetInstance().log(" Could not open the file for reading " +
-                                       dirpath + "/" + file);
-        return;
-      } else {
-        // Convert json file to QString
-        QTextStream out(&json);
-#if QT_VERSION_MAJOR == 6
-        out.setEncoding(QStringConverter::Encoding::Utf8);
-#else
-        out.setCodec("UTF-8");
-#endif
-        QString msg = out.readAll();
-        json.close();
-        const auto jsonDoc = QJsonDocument::fromJson(msg.toUtf8());
-        // decode json
+        const auto [jsonObj, err] = Utils::LoadJsonFile(dirpath + subdirPath + "/" + file);
+      if (!err.isEmpty()) {
+        Application::GetInstance().log(err);
+      }
+      // decode json
+      Stuff stuff;
+      stuff.m_Name = jsonObj[EQUIP_NAME].toString();
+      stuff.m_UniqueName = jsonObj[EQUIP_UNIQUE_NAME].toString();
 
-        Stuff stuff;
-        stuff.m_Name = jsonDoc[EQUIP_NAME].toString();
-        stuff.m_UniqueName = jsonDoc[EQUIP_UNIQUE_NAME].toString();
-
-        for (const auto &stats : ALL_STATS) {
-          if (stuff.m_Stats.m_AllStatsTable.count(stats) == 0) {
-            continue;
-          }
-          // init
-          auto &stuffStat = stuff.m_Stats.m_AllStatsTable[stats];
-          stuffStat.InitValues(0, 0);
-          QJsonArray jsonArray = jsonDoc[stats].toArray();
-          for (const auto &elem : jsonArray) {
-            if (elem.isObject()) {
-              const QJsonObject item = elem.toObject();
-              for (const auto &key : item.keys()) {
-                const auto &val = item[key];
-                if (val.isDouble()) {
-                  if (key == "percent") {
-                    stuffStat.m_BufEquipPercent =
-                        static_cast<int>(val.toDouble());
-                  } else if (key == "value") {
-                    stuffStat.m_BufEquipValue =
-                        static_cast<int>(val.toDouble());
-                  }
+      for (const auto &stats : ALL_STATS) {
+        if (stuff.m_Stats.m_AllStatsTable.count(stats) == 0) {
+          continue;
+        }
+        // init
+        auto &stuffStat = stuff.m_Stats.m_AllStatsTable[stats];
+        stuffStat.InitValues(0, 0);
+        QJsonArray jsonArray = jsonObj[stats].toArray();
+        for (const auto &elem : jsonArray) {
+          if (elem.isObject()) {
+            const QJsonObject item = elem.toObject();
+            for (const auto &key : item.keys()) {
+              const auto &val = item[key];
+              if (val.isDouble()) {
+                if (key == "percent") {
+                  stuffStat.m_BufEquipPercent =
+                      static_cast<int>(val.toDouble());
+                } else if (key == "value") {
+                  stuffStat.m_BufEquipValue = static_cast<int>(val.toDouble());
                 }
               }
             }
           }
         }
-        const auto name =
-            (stuff.m_UniqueName.isEmpty()) ? stuff.m_Name : stuff.m_UniqueName;
-        m_Equipments[jsonDoc[EQUIP_CATEGORY].toString()][name] = stuff;
       }
+      const auto name =
+          (stuff.m_UniqueName.isEmpty()) ? stuff.m_Name : stuff.m_UniqueName;
+      m_Equipments[jsonObj[EQUIP_CATEGORY].toString()][name] = stuff;
     }
   }
 }
@@ -1077,72 +1062,58 @@ void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
   QStringList fileList =
       directory.entryList(QDir::Files | QDir::NoDotAndDotDot);
   for (const QString &file : fileList) {
-    QFile json(directoryPath + file);
-    if (!json.open(QFile::ReadOnly | QFile::Text)) {
-      Application::GetInstance().log(" Could not open the file for reading " +
-                                     directoryPath + "/" + file);
-      return;
+      const auto [jsonObj, err] = Utils::LoadJsonFile(directoryPath + file);
+    if (!err.isEmpty()) {
+      Application::GetInstance().log(err);
+    }
+    // decode json
+    auto *c = new Character("", characType::Hero, {});
+    c->m_Name = jsonObj[CH_NAME].toString();
+    c->m_SelectedForm = jsonObj[CH_FORM].toString();
+    if (const auto &classCh = jsonObj[CH_CLASS].toString();
+        classCh == TANK_CLASS) {
+      c->m_Class = CharacterClass::Tank;
     } else {
-      // Convert json file to QString
-      QTextStream out(&json);
-#if QT_VERSION_MAJOR == 6
-      out.setEncoding(QStringConverter::Encoding::Utf8);
-#else
-      out.setCodec("UTF-8");
-#endif
-      QString msg = out.readAll();
-      json.close();
-      const auto jsonDoc = QJsonDocument::fromJson(msg.toUtf8());
-      // decode json
+      c->m_Class = CharacterClass::Standard;
+    }
+    c->m_PhotoName = jsonObj[CH_PHOTO_NAME].toString();
+    c->m_type = (jsonObj[CH_TYPE].toString() == CH_TYPE_BOSS)
+                    ? characType::Boss
+                    : characType::Hero;
+    c->m_Level = static_cast<int>(jsonObj[CH_LEVEL].toDouble());
+    c->m_Exp = static_cast<int>(jsonObj[CH_EXP].toDouble());
+    c->color = QColor(jsonObj[CH_COLOR].toString());
+    c->m_ColorStr = jsonObj[CH_COLOR].toString();
+    c->m_BossClass.m_Rank = static_cast<int>(jsonObj[CH_RANK].toDouble());
 
-      auto *c = new Character("", characType::Hero, {});
-      c->m_Name = jsonDoc[CH_NAME].toString();
-      c->m_SelectedForm = jsonDoc[CH_FORM].toString();
-      if (const auto &classCh = jsonDoc[CH_CLASS].toString();
-          classCh == TANK_CLASS) {
-        c->m_Class = CharacterClass::Tank;
-      } else {
-        c->m_Class = CharacterClass::Standard;
+    for (const auto &stats : ALL_STATS) {
+      if (c->m_Stats.m_AllStatsTable.count(stats) == 0) {
+        continue;
       }
-      c->m_PhotoName = jsonDoc[CH_PHOTO_NAME].toString();
-      c->m_type = (jsonDoc[CH_TYPE].toString() == CH_TYPE_BOSS)
-                      ? characType::Boss
-                      : characType::Hero;
-      c->m_Level = static_cast<int>(jsonDoc[CH_LEVEL].toDouble());
-      c->m_Exp = static_cast<int>(jsonDoc[CH_EXP].toDouble());
-      c->color = QColor(jsonDoc[CH_COLOR].toString());
-      c->m_ColorStr = jsonDoc[CH_COLOR].toString();
-      c->m_BossClass.m_Rank = static_cast<int>(jsonDoc[CH_RANK].toDouble());
 
-      for (const auto &stats : ALL_STATS) {
-        if (c->m_Stats.m_AllStatsTable.count(stats) == 0) {
-          continue;
-        }
-
-        // init
-        const QJsonArray jsonArray = jsonDoc[stats].toArray();
-        for (const auto &elem : jsonArray) {
-          if (elem.isObject()) {
-            const QJsonObject item = elem.toObject();
-            const auto current =
-                static_cast<int>(item[CH_CURRENT_VALUE].toDouble());
-            const auto max = static_cast<int>(item[CH_MAX_VALUE].toDouble());
-            c->m_Stats.m_AllStatsTable[stats].InitValues(current, max);
-          }
+      // init
+      const QJsonArray jsonArray = jsonObj[stats].toArray();
+      for (const auto &elem : jsonArray) {
+        if (elem.isObject()) {
+          const QJsonObject item = elem.toObject();
+          const auto current =
+              static_cast<int>(item[CH_CURRENT_VALUE].toDouble());
+          const auto max = static_cast<int>(item[CH_MAX_VALUE].toDouble());
+          c->m_Stats.m_AllStatsTable[stats].InitValues(current, max);
         }
       }
-      if (isLoadingGame) {
-        if (c->m_type == characType::Hero) {
-          m_HeroesList.push_back(c);
-        } else {
-          m_BossesList.push_back(c);
-        }
+    }
+    if (isLoadingGame) {
+      if (c->m_type == characType::Hero) {
+        m_HeroesList.push_back(c);
       } else {
-        if (c->m_type == characType::Hero) {
-          m_AllHeroesList.push_back(c);
-        } else {
-          m_AllBossesList.push_back(c);
-        }
+        m_BossesList.push_back(c);
+      }
+    } else {
+      if (c->m_type == characType::Hero) {
+        m_AllHeroesList.push_back(c);
+      } else {
+        m_AllBossesList.push_back(c);
       }
     }
   }
@@ -1272,48 +1243,35 @@ void PlayersManager::Reset() {
 }
 
 void PlayersManager::LoadAllEffects(const QString &filepath) {
-  QFile json(filepath);
-  if (!json.open(QFile::ReadOnly | QFile::Text)) {
-    Application::GetInstance().log(" Could not open the file for reading " +
-                                   filepath);
-    return;
-  } else {
-    // Convert json file to QString
-    QTextStream out(&json);
+    const auto [jsonObj, err] = Utils::LoadJsonFile(filepath);
+  if (!err.isEmpty()) {
+    Application::GetInstance().log(err);
+  }
+  // decode json
+  const QJsonArray effectArray = jsonObj[EFFECT_ARRAY].toArray();
 #if QT_VERSION_MAJOR == 6
-    out.setEncoding(QStringConverter::Encoding::Utf8);
-#else
-    out.setCodec("UTF-8");
-#endif
-    const QString msg = out.readAll();
-    json.close();
-    const auto jsonDoc = QJsonDocument::fromJson(msg.toUtf8());
-    // decode json
-    const QJsonArray effectArray = jsonDoc[EFFECT_ARRAY].toArray();
-#if QT_VERSION_MAJOR == 6
-    for (const auto &effect : effectArray) {
-      if (effect[EFFECT_STAT].toString().isEmpty() ||
-          effect[EFFECT_TYPE].toString().isEmpty()) {
-        continue;
-      }
-      GameAtkEffects gae;
-      gae.launcher = effect[EFFECT_LAUNCHER].toString();
-      gae.atk.name = effect[ATK_NAME].toString();
-      gae.target = effect[EFFECT_TARGET].toString();
-      // effect param
-      gae.allAtkEffects.target = gae.target;
-      gae.allAtkEffects.effect = effect[EFFECT_TYPE].toString();
-      gae.allAtkEffects.value = effect[EFFECT_VALUE].toInt();
-      gae.allAtkEffects.nbTurns = effect[EFFECT_ACTIVE_TURNS].toInt();
-      gae.allAtkEffects.reach = effect[EFFECT_REACH].toString();
-      gae.allAtkEffects.statsName = effect[EFFECT_STAT].toString();
-      gae.allAtkEffects.subValueEffect = effect[EFFECT_SUB_VALUE].toInt();
-      gae.allAtkEffects.counterTurn = effect[EFFECT_COUNTER_TURN].toInt();
-      // processed
-      gae.allAtkEffects.isMagicAtk = effect[EFFECT_IS_MAGIC].toBool();
-
-      m_AllEffectsOnGame[gae.target].push_back(gae);
+  for (const auto &effect : effectArray) {
+    if (effect[EFFECT_STAT].toString().isEmpty() ||
+        effect[EFFECT_TYPE].toString().isEmpty()) {
+      continue;
     }
+    GameAtkEffects gae;
+    gae.launcher = effect[EFFECT_LAUNCHER].toString();
+    gae.atk.name = effect[ATK_NAME].toString();
+    gae.target = effect[EFFECT_TARGET].toString();
+    // effect param
+    gae.allAtkEffects.target = gae.target;
+    gae.allAtkEffects.effect = effect[EFFECT_TYPE].toString();
+    gae.allAtkEffects.value = effect[EFFECT_VALUE].toInt();
+    gae.allAtkEffects.nbTurns = effect[EFFECT_ACTIVE_TURNS].toInt();
+    gae.allAtkEffects.reach = effect[EFFECT_REACH].toString();
+    gae.allAtkEffects.statsName = effect[EFFECT_STAT].toString();
+    gae.allAtkEffects.subValueEffect = effect[EFFECT_SUB_VALUE].toInt();
+    gae.allAtkEffects.counterTurn = effect[EFFECT_COUNTER_TURN].toInt();
+    // processed
+    gae.allAtkEffects.isMagicAtk = effect[EFFECT_IS_MAGIC].toBool();
+
+    m_AllEffectsOnGame[gae.target].push_back(gae);
   }
 #endif
 }

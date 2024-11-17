@@ -119,3 +119,14 @@ void CharacterWindow::UpdateViewAtGameStart() {
   ui->edit_atk_tab->setEnabled(false);
   ui->use_stuff_view->setEnabled(true);
 }
+
+void CharacterWindow::UpdateViewAtNewGame() {
+    ui->tabWidget->setTabVisible(static_cast<int>(tabType::character), true);
+    ui->tabWidget->setTabVisible(static_cast<int>(tabType::attak), true);
+    ui->tabWidget->setTabVisible(static_cast<int>(tabType::stuff), true);
+    ui->tabWidget->setTabVisible(static_cast<int>(tabType::useStuff), true);
+    ui->character_def->setEnabled(true);
+    ui->edit_stuff_view->setEnabled(true);
+    ui->edit_atk_tab->setEnabled(true);
+    ui->use_stuff_view->setEnabled(true);
+}

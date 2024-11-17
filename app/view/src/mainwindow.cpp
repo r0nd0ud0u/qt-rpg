@@ -75,6 +75,8 @@ void MainWindow::ShowHeroGameCharacters(const bool init) {
 
   // start game
   Application::GetInstance().m_GameManager->StartGame();
+  auto &appView = ApplicationView::GetInstance();
+  appView.GetCharacterWindow()->UpdateViewAtNewGame();
 }
 
 void MainWindow::ShowBossGameCharacters() {

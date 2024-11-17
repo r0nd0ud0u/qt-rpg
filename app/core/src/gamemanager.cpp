@@ -188,40 +188,24 @@ void GameState::Reset() {
 }
 
 void GameState::LoadGameState(const QString &filepath) {
-  QFile json(filepath);
-  if (!json.open(QFile::ReadOnly | QFile::Text)) {
-    Application::GetInstance().log(" Could not open the file for reading " +
-                                   filepath);
-    return;
-  } else {
-    // Convert json file to QString
-    QTextStream out(&json);
-#if QT_VERSION_MAJOR == 6
-    out.setEncoding(QStringConverter::Encoding::Utf8);
-#else
-    out.setCodec("UTF-8");
-#endif
-    const QString msg = out.readAll();
-    json.close();
-    const auto jsonDoc = QJsonDocument::fromJson(msg.toUtf8());
+    const auto [jsonObj, err] = Utils::LoadJsonFile(filepath);
+    if (!err.isEmpty()) {
+        Application::GetInstance().log(err);
+    }
     // decode json
-    m_CurrentRound = static_cast<uint64_t>(jsonDoc[GAME_STATE_CURRENT_ROUND].toInt());
-    m_CurrentTurnNb = jsonDoc[GAME_STATE_CURRENT_TURN].toInt();
-    m_GameName = jsonDoc[GAME_STATE_GAME_NAME].toString();
-    const QJsonArray diedEnnemiesArray =
-        jsonDoc[GAME_STATE_DIED_ENNEMIES].toArray();
-    const QJsonArray orderToPlArray =
-        jsonDoc[GAME_STATE_ORDER_PLAYERS].toArray();
+    m_CurrentRound =
+        static_cast<uint64_t>(jsonObj[GAME_STATE_CURRENT_ROUND].toInt());
+    m_CurrentTurnNb = jsonObj[GAME_STATE_CURRENT_TURN].toInt();
+    m_GameName = jsonObj[GAME_STATE_GAME_NAME].toString();
+    const auto diedEnnemiesObj = jsonObj[GAME_STATE_DIED_ENNEMIES].toObject();
+    const auto orderToPlObj = jsonObj[GAME_STATE_ORDER_PLAYERS].toObject();
 #if QT_VERSION_MAJOR == 6
-    int i = 0;
-    for (const auto &val : diedEnnemiesArray) {
-      m_DiedEnnemies[i].push_back(val.toString());
+    for (const auto &key : orderToPlObj.keys()) {
+      m_OrderToPlay.push_back(orderToPlObj[key].toString());
     }
-    i = 0;
-    for (const auto &val : orderToPlArray) {
-      m_OrderToPlay[i].push_back(val.toString());
+    for (const auto &key : diedEnnemiesObj.keys()) {
+        m_DiedEnnemies[key.toInt()].push_back(diedEnnemiesObj[key].toString());
     }
-  }
 #endif
 }
 

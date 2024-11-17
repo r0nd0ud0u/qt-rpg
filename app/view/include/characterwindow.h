@@ -22,6 +22,7 @@ public:
   void InitWindow(const tabType &type, Character *c);
   void UpdateViewUseStuff(const std::unordered_map<QString, std::map<QString, Stuff>>);
   void UpdateViewAtGameStart();
+  void UpdateViewAtNewGame();
 
 signals:
   void SigUpdateCharacterViews(Character *);
