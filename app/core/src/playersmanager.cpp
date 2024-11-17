@@ -1180,26 +1180,30 @@ void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
             tmp[i] = item[QString::number(i)].toInt();
           }
         }
-        if(idx < c->m_LastTxRx.size()){
-            c->m_LastTxRx[idx] = tmp;
+        if (idx < c->m_LastTxRx.size()) {
+          c->m_LastTxRx[idx] = tmp;
         }
       }
     }
 
     // powers
-    c->m_Power.is_crit_heal_after_crit = jsonObj[CH_POWERS_CRIT_AFTER_HEAL].toBool();
-    c->m_Power.is_damage_tx_heal_needy_ally = jsonObj[CH_POWERS_DMG_TX_ALLY].toBool();
+    c->m_Power.is_crit_heal_after_crit =
+        jsonObj[CH_POWERS_CRIT_AFTER_HEAL].toBool();
+    c->m_Power.is_damage_tx_heal_needy_ally =
+        jsonObj[CH_POWERS_DMG_TX_ALLY].toBool();
     // extended character
-    c->m_ExtCharacter->set_is_heal_atk_blocked(jsonObj[CH_EXT_HEAL_ATK_BLOCKED].toBool());
-    c->m_ExtCharacter->set_is_random_target(jsonObj[CH_EXT_RAND_TARGET].toBool());
+    c->m_ExtCharacter->set_is_heal_atk_blocked(
+        jsonObj[CH_EXT_HEAL_ATK_BLOCKED].toBool());
+    c->m_ExtCharacter->set_is_random_target(
+        jsonObj[CH_EXT_RAND_TARGET].toBool());
     c->m_ExtCharacter->set_is_first_round(jsonObj[CH_EXT_FIRST_ROUND].toBool());
     // blocking atk
     c->m_IsBlockingAtk = jsonObj[CH_BLOCKING_ATK].toBool();
     // max actions in round
     c->m_MaxNbActionsInRound = jsonObj[CH_MAX_NB_ACTIONS_ROUND].toInt();
     // TOD0 to remove someday hehe
-    if(c->m_MaxNbActionsInRound == 0){
-        c->m_MaxNbActionsInRound =1;
+    if (c->m_MaxNbActionsInRound == 0) {
+      c->m_MaxNbActionsInRound = 1;
     }
 
     for (const auto &stats : ALL_STATS) {
