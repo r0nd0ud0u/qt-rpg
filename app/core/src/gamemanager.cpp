@@ -134,7 +134,7 @@ void GameState::RemoveDeadPlayerInTurn(const QString &name) {
   m_OrderToPlay.erase(newEnd, m_OrderToPlay.end());
 }
 
-void GameState::OutputGameStateOnJson(const QString &filepath) {
+void GameState::OutputGameStateOnJson(const QString &filepath) const{
   QJsonObject obj;
   // died bosses by turn
   QJsonObject diedBoss;

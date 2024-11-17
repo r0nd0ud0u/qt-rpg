@@ -21,8 +21,8 @@ public:
   void InitEditEquipment();
   void InitView(Character *player) const;
   std::unordered_map<QString, QString> GetCurrentEquipmentTable() const;
-  void ResetUi();
-  void UpdateView();
+  void ResetUi() const;
+  void UpdateView() const;
 
 private:
   Ui::EquipOnBodyView *ui;

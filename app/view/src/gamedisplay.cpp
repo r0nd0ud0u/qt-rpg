@@ -77,6 +77,7 @@ void GameDisplay::on_stackedWidget_currentChanged(const int arg1) {
 void GameDisplay::UpdateGameStatus(const GameState *gs) {
   if (gs == nullptr) {
     ui->turn_label->setText("no game state");
+    return;
   }
   ui->turn_label->setText(QString("Tour %1, Round %2/%3")
                               .arg(gs->m_CurrentTurnNb)
@@ -522,7 +523,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
       emit SigUpdateChannelView("GameState", logLoot.join('\n'));
     }
     // update view for the equipments
-    ApplicationView::GetInstance().GetCharacterWindow()->UpdateViewUseStuff(gm->m_PlayersManager->m_Equipments);
+    ApplicationView::GetInstance().GetCharacterWindow()->UpdateViewUseStuff();
 
     emit SigBossDead(dp);
     ui->add_exp_button->setEnabled(true);

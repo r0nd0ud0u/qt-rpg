@@ -23,7 +23,7 @@ class PlayersManager {
 public:
   PlayersManager() = default;
   void InitHeroes(std::vector<Character*>& heroList);
-  void InitBosses(std::vector<Character*> bossList);
+  void InitBosses(std::vector<Character*>& bossList);
   void ClearHeroBossList();
   void LoadEquipmentsJson(const QString& filepath);
   Character *GetActiveCharacterByName(const QString &name);

@@ -55,14 +55,14 @@ EquipOnBodyView::GetCurrentEquipmentTable() const {
   return output;
 }
 
-void EquipOnBodyView::ResetUi() {
+void EquipOnBodyView::ResetUi() const {
   for (const auto &panel : m_PanelList) {
     panel->ResetUi();
   }
 }
 
-void EquipOnBodyView::UpdateView() {
+void EquipOnBodyView::UpdateView() const {
   for (const auto &panel : m_PanelList) {
-        panel->InitComboBox(panel->m_BodyName);
+    panel->InitComboBox(panel->m_BodyName);
   }
 }

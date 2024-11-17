@@ -130,3 +130,7 @@ std::pair<QJsonObject, QString> Utils::LoadJsonFile(const QString &filepath) {
     return std::make_pair(QJsonDocument::fromJson(msg.toUtf8()).object(), "");
   }
 }
+
+int Utils::MultiplyIntByDouble(int i, double d){
+    return static_cast<int>(static_cast<double>(i)*d);
+}

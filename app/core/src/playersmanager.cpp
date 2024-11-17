@@ -61,7 +61,7 @@ void PlayersManager::InitHeroes(std::vector<Character *> &heroList) {
   }
 }
 
-void PlayersManager::InitBosses(std::vector<Character *> bossList) {
+void PlayersManager::InitBosses(std::vector<Character *> &bossList) {
   for (const auto &boss : bossList) {
     boss->m_ColorStr = "red";
     boss->LoadAtkJson();
@@ -80,17 +80,17 @@ bool PlayersManager::UpdateStartingPlayers(const bool isLoadingGame) {
   if (!isLoadingGame) {
     ClearHeroBossList();
     std::for_each(m_AllHeroesList.begin(), m_AllHeroesList.end(),
-                  [&](Character *c) {
+                  [&](const Character *c) {
                     if (c != nullptr && c->m_StatsInGame.m_IsPlaying) {
-                      Character *newC = new Character();
+                      auto *newC = new Character();
                       *newC = *c;
                       m_HeroesList.push_back(newC);
                     }
                   });
     std::for_each(m_AllBossesList.begin(), m_AllBossesList.end(),
-                  [&](Character *c) {
+                  [&](const Character *c) {
                     if (c != nullptr && c->m_StatsInGame.m_IsPlaying) {
-                      Character *newC = new Character();
+                      auto *newC = new Character();
                       *newC = *c;
                       m_BossesList.push_back(newC);
                     }
@@ -124,7 +124,8 @@ void PlayersManager::LoadEquipmentsJson(const QString &dirpath) {
     }
     QStringList fileList = subdir.entryList(QDir::Files | QDir::NoDotAndDotDot);
     for (const QString &file : fileList) {
-        const auto [jsonObj, err] = Utils::LoadJsonFile(dirpath + subdirPath + "/" + file);
+      const auto [jsonObj, err] =
+          Utils::LoadJsonFile(dirpath + subdirPath + "/" + file);
       if (!err.isEmpty()) {
         Application::GetInstance().log(err);
       }
@@ -361,34 +362,35 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
     // hp
     hp.m_CurrentValue =
         std::min(hp.m_MaxValue, hp.m_CurrentValue + regenHp.m_CurrentValue);
-    hp.m_CurrentRawValue = Utils::CalcRatio(hp.m_CurrentValue, hp.m_MaxValue) *
-                           hp.m_CurrentRawValue;
+    hp.m_CurrentRawValue = Utils::MultiplyIntByDouble(
+        hp.m_RawMaxValue,
+        Utils::CalcRatio(hp.m_CurrentValue, hp.m_MaxValue));
     // mana
     mana.m_CurrentValue = std::min(
         mana.m_MaxValue, mana.m_CurrentValue + regenMana.m_CurrentValue);
-    mana.m_CurrentRawValue =
-        Utils::CalcRatio(mana.m_CurrentValue, mana.m_MaxValue) *
-        mana.m_CurrentRawValue;
+    mana.m_CurrentRawValue = Utils::MultiplyIntByDouble(
+        mana.m_RawMaxValue,
+        Utils::CalcRatio(mana.m_CurrentValue, mana.m_MaxValue));
     // vigor
     vigor.m_CurrentValue = std::min(
         vigor.m_MaxValue, vigor.m_CurrentValue + regenVigor.m_CurrentValue);
-    vigor.m_CurrentRawValue =
-        Utils::CalcRatio(vigor.m_CurrentValue, vigor.m_MaxValue) *
-        vigor.m_CurrentRawValue;
+    vigor.m_CurrentRawValue = Utils::MultiplyIntByDouble(
+        vigor.m_RawMaxValue,
+        Utils::CalcRatio(vigor.m_CurrentValue, vigor.m_MaxValue));
     // berseck
     berseck.m_CurrentValue =
         std::min(berseck.m_MaxValue,
                  berseck.m_CurrentValue + regenBerseck.m_CurrentValue);
-    berseck.m_CurrentRawValue =
-        Utils::CalcRatio(berseck.m_CurrentValue, berseck.m_MaxValue) *
-        berseck.m_CurrentRawValue;
+    berseck.m_RawMaxValue = Utils::MultiplyIntByDouble(
+        berseck.m_CurrentRawValue,
+        Utils::CalcRatio(berseck.m_CurrentValue, berseck.m_MaxValue));
     // speed
     speed.m_CurrentValue += regenSpeed.m_CurrentValue;
     speed.m_MaxValue += regenSpeed.m_CurrentValue;
     speed.m_RawMaxValue += regenSpeed.m_CurrentValue;
-    speed.m_CurrentRawValue =
-        Utils::CalcRatio(speed.m_CurrentValue, speed.m_MaxValue) *
-        speed.m_CurrentRawValue;
+    speed.m_CurrentRawValue = Utils::MultiplyIntByDouble(
+        speed.m_RawMaxValue,
+        Utils::CalcRatio(speed.m_CurrentValue, speed.m_MaxValue));
   }
 }
 
@@ -588,16 +590,17 @@ void PlayersManager::AddSupAtkTurn(
     auto &spd1 = pl1->m_Stats.m_AllStatsTable.at(STATS_SPEED);
     auto &curSpeedPl1 = spd1.m_CurrentValue;
     for (const auto &pl2 : playerList2) {
-      auto &spd2 = pl2->m_Stats.m_AllStatsTable.at(STATS_SPEED);
+      const auto &spd2 = pl2->m_Stats.m_AllStatsTable.at(STATS_SPEED);
       const auto &speedpl2 = spd2.m_CurrentValue;
       if (curSpeedPl1 - speedpl2 >= speedThreshold) {
         // Update of current value and max value
         curSpeedPl1 -= speedThreshold;
         spd1.m_MaxValue -= speedThreshold;
         spd1.m_RawMaxValue -= speedThreshold;
-        spd1.m_CurrentRawValue =
-            Utils::CalcRatio(spd1.m_CurrentValue, spd1.m_MaxValue) *
-            spd1.m_CurrentRawValue;
+        spd1.m_CurrentRawValue = Utils::MultiplyIntByDouble(
+            spd1.m_RawMaxValue,
+            Utils::CalcRatio(spd1.m_CurrentValue, spd1.m_MaxValue));
+
         playerOrderTable.push_back(pl1->m_Name);
         break;
       }
@@ -914,7 +917,7 @@ std::vector<Stuff> PlayersManager::LootNewEquipments(const QString &name) {
     newStuffs.push_back(stuff);
   }
 
-  for (auto &s : newStuffs) {
+  for (const auto &s : newStuffs) {
     m_Equipments[s.m_BodyPart][s.m_UniqueName] = s;
   }
 
@@ -1062,7 +1065,7 @@ void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
   QStringList fileList =
       directory.entryList(QDir::Files | QDir::NoDotAndDotDot);
   for (const QString &file : fileList) {
-      const auto [jsonObj, err] = Utils::LoadJsonFile(directoryPath + file);
+    const auto [jsonObj, err] = Utils::LoadJsonFile(directoryPath + file);
     if (!err.isEmpty()) {
       Application::GetInstance().log(err);
     }
@@ -1243,7 +1246,7 @@ void PlayersManager::Reset() {
 }
 
 void PlayersManager::LoadAllEffects(const QString &filepath) {
-    const auto [jsonObj, err] = Utils::LoadJsonFile(filepath);
+  const auto [jsonObj, err] = Utils::LoadJsonFile(filepath);
   if (!err.isEmpty()) {
     Application::GetInstance().log(err);
   }

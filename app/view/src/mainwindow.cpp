@@ -153,12 +153,9 @@ void MainWindow::ShowLoadGamePage() {
   ui->actionQuit->setEnabled(true);
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(SecondaryPages::loadGame));
-  auto *gm = Application::GetInstance().m_GameManager.get();
+  const auto *gm = Application::GetInstance().m_GameManager.get();
   if (gm != nullptr) {
-    auto *gm = Application::GetInstance().m_GameManager.get();
-    if (gm != nullptr) {
-      ui->page_LoadGame->InitView(gm->GetListOfGames());
-    }
+    ui->page_LoadGame->InitView(gm->GetListOfGames());
   }
 }
 

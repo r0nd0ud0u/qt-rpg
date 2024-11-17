@@ -22,6 +22,7 @@ public:
   static bool RemoveFile(const QString &path);
   static double CalcRatio(const int val1, const int val2);
   static std::pair<QJsonObject, QString> LoadJsonFile(const QString& filepath);
+  static int MultiplyIntByDouble(int i, double d);
 };
 
 #endif // UTILS_H

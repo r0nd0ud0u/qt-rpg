@@ -20,7 +20,7 @@ public:
   explicit CharacterWindow(QWidget *parent = nullptr);
   ~CharacterWindow();
   void InitWindow(const tabType &type, Character *c);
-  void UpdateViewUseStuff(const std::unordered_map<QString, std::map<QString, Stuff>>);
+  void UpdateViewUseStuff();
   void UpdateViewAtGameStart();
   void UpdateViewAtNewGame();
 

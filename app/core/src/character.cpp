@@ -1526,9 +1526,9 @@ void Character::UpdateStatsToNextLevel() {
                              : 1;
     // update the raw value by 10%
     localStat.m_RawMaxValue += localStat.m_RawMaxValue * 10 / 100;
-    localStat.m_CurrentRawValue += localStat.m_RawMaxValue * ratio;
+    localStat.m_CurrentRawValue += static_cast<int>(static_cast<double>(localStat.m_RawMaxValue) * ratio);
 
-    // recalcultate with equipment and effect
+    // recalcultate with equipment JsonArrayToEffect effect
     localStat.m_MaxValue =
         localStat.m_RawMaxValue + localStat.m_BufEquipValue +
         localStat.m_RawMaxValue * localStat.m_BufEquipPercent / 100 +

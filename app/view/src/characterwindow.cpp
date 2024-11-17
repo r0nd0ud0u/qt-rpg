@@ -96,15 +96,14 @@ void CharacterWindow::Apply() {
   // use stuff
   // TODO assess if a value has been change to perform the update view and the
   // initView
-  UpdateViewUseStuff(pm->m_Equipments);
+  UpdateViewUseStuff();
   ui->use_stuff_view->InitView(m_CurCharacter);
   emit SigUseNewStuff(m_CurCharacter->m_Name);
   // update panel
   emit SigUpdateCharacterViews(m_CurCharacter);
 }
 
-void CharacterWindow::UpdateViewUseStuff(
-    const std::unordered_map<QString, std::map<QString, Stuff>> table) {
+void CharacterWindow::UpdateViewUseStuff(){
   ui->use_stuff_view->ResetUi();
   ui->use_stuff_view->UpdateView();
 }
