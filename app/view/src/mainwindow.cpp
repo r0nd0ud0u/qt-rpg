@@ -33,9 +33,6 @@ MainWindow::MainWindow(QWidget *parent)
   // Connect: Functions on secondary pages
   connect(this, &MainWindow::SigNewStuffOnUse, ui->page_2,
           &GameDisplay::UpdateViews);
-  connect(this, &MainWindow::SigUpdateActivePlayers, ui->page_2,
-          &GameDisplay::UpdateActivePlayers);
-
   // init game characters
   ui->page_Hero->InitAllHeroesPanel();
   ui->page_Boss->InitAllBossesPanel();
@@ -46,18 +43,23 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() { delete ui; }
 
 /**
- * @brief MainWindow::ShowPageGameDisplay
+ * @brief MainWindow::PrepareAndShowPageGameDisplay
  * The game display will be shown only if at least one boss
  * and at least one hero have been chosen in "game characters" page beforehand
  */
-void MainWindow::ShowPageGameDisplay() {
+void MainWindow::PrepareAndShowPageGameDisplay(const GameManager *gm, const bool isLoadingGame) {
+  if (gm == nullptr) {
+    return;
+  }
+  ui->page_2->UpdateGameStatus(gm->m_GameState);
+
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(SecondaryPages::gameDisplay));
-  emit SigUpdateActivePlayers();
   ui->actionSave->setEnabled(true);
   ui->actionQuit->setEnabled(true);
   auto &appView = ApplicationView::GetInstance();
   appView.GetCharacterWindow()->UpdateViewAtGameStart();
+  ui->page_2->UpdateActivePlayers(isLoadingGame, gm);
 }
 
 void MainWindow::RawDisplayHeroGameCh() { ShowHeroGameCharacters(true); }
@@ -91,7 +93,7 @@ void MainWindow::ProcessGameCharacterNextBtn(const bool value) {
   if (value) {
     ShowBossGameCharacters();
   } else {
-    UpdateActiveCharacters();
+      StartGameFromScratch();
     setWindowState(Qt::WindowMaximized);
   }
 }
@@ -105,6 +107,10 @@ void MainWindow::ProcessGameCharacterBackBtn(const bool value) {
 }
 
 void MainWindow::ShowHostPage() {
+  auto *gm = Application::GetInstance().m_GameManager.get();
+  if (gm != nullptr) {
+    gm->Reset();
+  }
   ui->stackedWidget->setCurrentIndex(
       static_cast<int>(SecondaryPages::hostPage));
   ui->page->ActiveNewGame(true);
@@ -112,13 +118,20 @@ void MainWindow::ShowHostPage() {
   ui->actionQuit->setEnabled(false);
 }
 
-void MainWindow::UpdateActiveCharacters() {
-  if (const auto *gm = Application::GetInstance().m_GameManager.get();
-      gm != nullptr && gm->m_PlayersManager != nullptr &&
-      !gm->m_PlayersManager->UpdateStartingPlayers(false)) {
+void MainWindow::StartGameFromScratch() {
+  const auto *gm = Application::GetInstance().m_GameManager.get();
+  if (gm == nullptr || gm->m_PlayersManager == nullptr) {
     return;
   }
-  ShowPageGameDisplay();
+  if (!gm->m_PlayersManager->UpdateStartingPlayers(false)) {
+    return;
+  }
+  // 1st hero is selected to start the game
+  if (!gm->m_PlayersManager->m_HeroesList.empty()) {
+    gm->m_PlayersManager->m_SelectedPlayer =
+        gm->m_PlayersManager->m_HeroesList.front();
+  }
+  PrepareAndShowPageGameDisplay(gm, false);
 }
 
 void MainWindow::UpdatCharacterViews(Character *ch) {
@@ -168,8 +181,7 @@ void MainWindow::LoadGame(const QString &gameName) {
     return;
   }
   if (gm->LoadGame(gameName)) {
-    ui->page_2->UpdateAtLoadGame(gm->m_GameState);
-    ShowPageGameDisplay();
+    PrepareAndShowPageGameDisplay(gm, true);
   }
 }
 

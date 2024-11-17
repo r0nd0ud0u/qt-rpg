@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "character.h"
+#include "gamemanager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -33,19 +34,18 @@ public slots:
 signals:
   void SigNewCharacter(Character *);
   void SigNewStuffOnUse(const QString &);
-  void SigUpdateActivePlayers();
 
 private:
   Ui::MainWindow *ui;
 
 private slots:
-  void ShowPageGameDisplay();
+  void PrepareAndShowPageGameDisplay(const GameManager *gm, const bool isLoadingGame);
   void ShowHeroGameCharacters(const bool init);
   void ShowBossGameCharacters();
   void ProcessGameCharacterNextBtn(const bool value);
   void ProcessGameCharacterBackBtn(const bool value);
   void ShowHostPage();
-  void UpdateActiveCharacters();
+  void StartGameFromScratch();
   void RawDisplayHeroGameCh();
   void on_actionSave_triggered();
   void on_actionQuit_triggered();

@@ -140,6 +140,7 @@ const QString CH_COLOR = "Couleur";
 const QString CH_RANK = "Rang";
 const QString CH_FORM = "Forme";
 const QString CH_CLASS = "Classe";
+const QString CH_ACTIONS_IN_ROUND =  "nb-actions-in-round";
 
 // equipment keys
 const QString EQUIP_HEAD = "Tete";

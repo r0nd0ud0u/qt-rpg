@@ -15,6 +15,7 @@ public:
   explicit Channel(QWidget *parent = nullptr);
   ~Channel();
   void ResetUi();
+  void UpdateTurnsButtons(const bool isNextTurn);
 
 signals:
   void SigNextRound();

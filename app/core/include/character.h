@@ -166,6 +166,8 @@ public:
   CharacterClass m_Class = CharacterClass::Standard;
   bool m_IsBlockingAtk = false;
   StatsInGame m_StatsInGame;
+  int m_ActionsDoneInRound = 0;
+  int m_MaxNbActionsInRound = 1;
 
 private:
   static void ProcessAddEquip(StatsType &charStat, const StatsType &equipStat);

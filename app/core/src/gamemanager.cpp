@@ -44,11 +44,11 @@ void GameManager::Reset() {
 
 Character *GameManager::GetSelectedHero() {
   if (m_PlayersManager == nullptr ||
-      m_PlayersManager->m_SelectedHero == nullptr) {
+        m_PlayersManager->m_SelectedPlayer == nullptr) {
     return nullptr;
   }
 
-  return m_PlayersManager->m_SelectedHero;
+  return m_PlayersManager->m_SelectedPlayer;
 }
 
 /**
@@ -294,6 +294,12 @@ bool GameManager::LoadGame(const QString &gameName) {
   m_PlayersManager->LoadAllEffects(m_Paths.ongoingEffectsPath);
   m_PlayersManager->InitBosses(m_PlayersManager->m_BossesList);
   m_PlayersManager->InitHeroes(m_PlayersManager->m_HeroesList);
+
+  QString curPlName;
+  if (m_GameState->m_CurrentRound <= m_GameState->m_OrderToPlay.size()) {
+      curPlName = m_GameState->m_OrderToPlay[m_GameState->m_CurrentRound-1];
+  }
+  m_PlayersManager->m_SelectedPlayer = m_PlayersManager->GetActiveCharacterByName(curPlName);
 
   return m_PlayersManager->UpdateStartingPlayers(true);
 }

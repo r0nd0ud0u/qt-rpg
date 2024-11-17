@@ -18,11 +18,12 @@ class ActionsView : public QWidget {
 public:
   explicit ActionsView(QWidget *parent = nullptr);
   ~ActionsView();
+  void ClearTargetList();
   void UpdateActions(const ActionsStackedWgType &type);
   void SetCurrentPlayer(Character *player);
   void ResetActionsParam();
-  void InitTargetsWidget();
-  void SetForm(const QString & form);
+  void InitTargetsWidget(const PlayersManager *pm);
+  void SetForm(const QString &form);
   void RemoveTarget(QString);
 
 private:
@@ -31,14 +32,15 @@ private:
   AttaqueType m_CurAtk;
   QString m_CurObject;
   Character *m_CurPlayer = nullptr;
-  std::vector<TargetInfo*> m_TargetedList;
+  std::vector<TargetInfo *> m_TargetedList;
   ActionsStackedWgType m_CurPage = ActionsStackedWgType::defaultType;
   QString m_Form = STANDARD_FORM;
 
   // Table of attaks
   QAbstractItemModel *createModel(QObject *parent,
                                   const ActionsStackedWgType &typePage);
-  void addActionRow(QAbstractItemModel *model, const QVariant &action, const std::optional<QString>& reason) const;
+  void addActionRow(QAbstractItemModel *model, const QVariant &action,
+                    const std::optional<QString> &reason) const;
   // Table of stats of the selected atk
   QAbstractItemModel *createInfoModel(QObject *parent,
                                       const ActionsStackedWgType &typePage);
@@ -46,13 +48,12 @@ private:
                         const QVariant &value) const;
   // Target available of the selected atk
   void DisableTargetsBox() const;
-  void CreateTargetCheckBoxes(const QString &activePlayerName,
-                              const std::vector<Character *> &playerList);
+  void CreateTargetCheckBoxes(const std::vector<Character *> &playerList);
   void ProcessEnableTargetsBoxes();
 
 signals:
   void SigLaunchAttak(const QString &atkName,
-                      const std::vector<TargetInfo*> &targetList);
+                      const std::vector<TargetInfo *> &targetList);
 private slots:
   // Slots Table atk
   void on_actions_table_view_clicked(const QModelIndex &index);

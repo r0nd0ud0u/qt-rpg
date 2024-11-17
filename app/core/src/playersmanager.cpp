@@ -11,6 +11,7 @@
 
 #include "bossclass.h"
 #include "utils.h"
+#include "gamemanager.h"
 
 #include "rust-rpg-bridge/attaque.h"
 #include "rust-rpg-bridge/utils.h"
@@ -95,10 +96,6 @@ bool PlayersManager::UpdateStartingPlayers(const bool isLoadingGame) {
                       m_BossesList.push_back(newC);
                     }
                   });
-  }
-
-  if (!m_HeroesList.empty()) {
-    m_SelectedHero = m_HeroesList.front();
   }
 
   return (m_HeroesList.size() > 0 && m_BossesList.size() > 0);
@@ -363,8 +360,7 @@ void PlayersManager::ApplyRegenStats(const characType &type) {
     hp.m_CurrentValue =
         std::min(hp.m_MaxValue, hp.m_CurrentValue + regenHp.m_CurrentValue);
     hp.m_CurrentRawValue = Utils::MultiplyIntByDouble(
-        hp.m_RawMaxValue,
-        Utils::CalcRatio(hp.m_CurrentValue, hp.m_MaxValue));
+        hp.m_RawMaxValue, Utils::CalcRatio(hp.m_CurrentValue, hp.m_MaxValue));
     // mana
     mana.m_CurrentValue = std::min(
         mana.m_MaxValue, mana.m_CurrentValue + regenMana.m_CurrentValue);
@@ -1012,6 +1008,7 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
     const auto classCh =
         (h->m_Class == CharacterClass::Tank) ? TANK_CLASS : STANDARD_CLASS;
     obj.insert(CH_CLASS, classCh);
+    obj.insert(CH_ACTIONS_IN_ROUND, h->m_ActionsDoneInRound);
 
     for (const auto &stats : ALL_STATS) {
       if (h->m_Stats.m_AllStatsTable.count(stats) == 0) {
@@ -1085,6 +1082,8 @@ void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
                     : characType::Hero;
     c->m_Level = static_cast<int>(jsonObj[CH_LEVEL].toDouble());
     c->m_Exp = static_cast<int>(jsonObj[CH_EXP].toDouble());
+    c->m_ActionsDoneInRound =
+        static_cast<int>(jsonObj[CH_ACTIONS_IN_ROUND].toDouble());
     c->color = QColor(jsonObj[CH_COLOR].toString());
     c->m_ColorStr = jsonObj[CH_COLOR].toString();
     c->m_BossClass.m_Rank = static_cast<int>(jsonObj[CH_RANK].toDouble());
@@ -1139,16 +1138,22 @@ void PlayersManager::ResetAllEffectsOnPlayer(const Character *chara) {
   RemoveTerminatedEffectsOnPlayer(chara->m_Name);
 }
 
-void PlayersManager::SetSelectedHero(const QString &name) {
+void PlayersManager::SetSelectedPlayer(const QString &name) {
   for (auto *hero : m_HeroesList) {
+    if (hero == nullptr) {
+      continue;
+    }
     if (hero->m_Name == name) {
-      m_SelectedHero = hero;
+      m_SelectedPlayer = hero;
       break;
     }
   }
   for (auto *boss : m_BossesList) {
+    if (boss == nullptr) {
+      continue;
+    }
     if (boss->m_Name == name) {
-      m_SelectedHero = boss;
+      m_SelectedPlayer = boss;
       break;
     }
   }
@@ -1239,7 +1244,7 @@ void PlayersManager::Reset() {
     delete c;
   }
   m_BossesList.clear();
-  m_SelectedHero = nullptr;
+  m_SelectedPlayer = nullptr;
   m_ActivePlayer = nullptr;
   m_AllEffectsOnGame.clear();
   m_Equipments.clear();
