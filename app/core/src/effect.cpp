@@ -4,7 +4,7 @@
 
 #include <QJsonObject>
 
-QJsonObject effectParam::EffectToJsonArray() const{
+QJsonObject effectParam::EffectToJsonObject() const{
     QJsonObject item;
     item[EFFECT_TYPE] = effect;
     item[EFFECT_VALUE] = value;

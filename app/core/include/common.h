@@ -141,6 +141,13 @@ const QString CH_RANK = "Rang";
 const QString CH_FORM = "Forme";
 const QString CH_CLASS = "Classe";
 const QString CH_ACTIONS_IN_ROUND =  "nb-actions-in-round";
+// buf - debuf
+const QString CH_BUF_DEBUF =  "Buf-debuf";
+const QString CH_BUF_ALL_STATS =  "Buf-all-stats";
+const QString CH_BUF_VALUE =  "Buf-value";
+const QString CH_BUF_PASSIVE_ENABLED =  "buf-passive-enabled";
+const QString CH_BUF_IS_PERCENT =  "Buf-is-percent";
+const QString CH_BUF_TYPE = "Buf-type";
 
 // equipment keys
 const QString EQUIP_HEAD = "Tete";

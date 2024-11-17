@@ -10,13 +10,15 @@
 #include <QJsonObject>
 
 #include "bossclass.h"
-#include "utils.h"
 #include "gamemanager.h"
+#include "utils.h"
 
 #include "rust-rpg-bridge/attaque.h"
 #include "rust-rpg-bridge/utils.h"
 
 #include <fstream>
+
+const QString STATS_NAME_DELIMITER = ",";
 
 void PlayersManager::InitHeroes(std::vector<Character *> &heroList) {
   std::for_each(heroList.begin(), heroList.end(), [&](Character *h) {
@@ -1025,6 +1027,29 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
         obj[stats] = jsonArray;
       }
     }
+    // buf - debuf
+    QJsonObject bufObj;
+    QJsonArray bufJa;
+    for (int i = 0; i < static_cast<int>(BufTypes::enumSize); i++) {
+        if (i >= h->m_AllBufs.size()) {
+        break;
+      }
+        const auto b = h->m_AllBufs[i];
+      const auto stats = b->get_all_stat_name();
+      QString strStats;
+      std::for_each(stats.begin(), stats.end(), [&](const ::rust::String &str) {
+        strStats += str.data() + STATS_NAME_DELIMITER;
+      });
+      bufObj[CH_BUF_ALL_STATS] = strStats;
+      bufObj[CH_BUF_IS_PERCENT] = b->get_is_percent();
+      bufObj[CH_BUF_PASSIVE_ENABLED] = b->get_is_passive_enabled();
+      bufObj[CH_BUF_VALUE] = b->get_value();
+      bufObj[CH_BUF_TYPE] = i;
+      bufJa.append(bufObj);
+    }
+    if (!bufJa.empty()) {
+      obj[CH_BUF_DEBUF] = bufJa;
+    }
 
     // output json
     QJsonDocument doc(obj);
@@ -1087,6 +1112,27 @@ void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
     c->color = QColor(jsonObj[CH_COLOR].toString());
     c->m_ColorStr = jsonObj[CH_COLOR].toString();
     c->m_BossClass.m_Rank = static_cast<int>(jsonObj[CH_RANK].toDouble());
+
+    // load buf - debuf
+    const QJsonArray bufDebufArray = jsonObj[CH_BUF_DEBUF].toArray();
+    for (const auto &elem : bufDebufArray) {
+      if (elem.isObject()) {
+        const QJsonObject item = elem.toObject();
+        const auto idx = item[CH_BUF_TYPE].toInt();
+        const auto allstats = item[CH_BUF_ALL_STATS].toString();
+        const auto isPercent = item[CH_BUF_IS_PERCENT].toBool();
+        const auto isPassive = item[CH_BUF_PASSIVE_ENABLED].toBool();
+        const auto value = item[CH_BUF_VALUE].toInt();
+        if (idx < c->m_AllBufs.size()) {
+          c->m_AllBufs[idx]->set_buffers(value, isPercent);
+          c->m_AllBufs[idx]->set_is_passive_enabled(isPassive);
+          const auto splits = allstats.split(STATS_NAME_DELIMITER);
+          for (const auto &s : splits) {
+            c->m_AllBufs[idx]->add_stat_name(s.toStdString());
+          }
+        }
+      }
+    }
 
     for (const auto &stats : ALL_STATS) {
       if (c->m_Stats.m_AllStatsTable.count(stats) == 0) {
@@ -1204,7 +1250,7 @@ void PlayersManager::OutputAllOnGoingEffectToJson(
         // passive effect is not saved, it is not a new effect from the game
         continue;
       }
-      auto item = gae.allAtkEffects.EffectToJsonArray();
+      auto item = gae.allAtkEffects.EffectToJsonObject();
       item[EFFECT_TARGET] = pl;
       item[EFFECT_LAUNCHER] = gae.launcher;
       item[ATK_NAME] = gae.atk.name;

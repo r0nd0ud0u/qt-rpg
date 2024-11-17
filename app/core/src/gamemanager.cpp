@@ -44,7 +44,7 @@ void GameManager::Reset() {
 
 Character *GameManager::GetSelectedHero() {
   if (m_PlayersManager == nullptr ||
-        m_PlayersManager->m_SelectedPlayer == nullptr) {
+      m_PlayersManager->m_SelectedPlayer == nullptr) {
     return nullptr;
   }
 
@@ -134,7 +134,7 @@ void GameState::RemoveDeadPlayerInTurn(const QString &name) {
   m_OrderToPlay.erase(newEnd, m_OrderToPlay.end());
 }
 
-void GameState::OutputGameStateOnJson(const QString &filepath) const{
+void GameState::OutputGameStateOnJson(const QString &filepath) const {
   QJsonObject obj;
   // died bosses by turn
   QJsonObject diedBoss;
@@ -188,24 +188,24 @@ void GameState::Reset() {
 }
 
 void GameState::LoadGameState(const QString &filepath) {
-    const auto [jsonObj, err] = Utils::LoadJsonFile(filepath);
-    if (!err.isEmpty()) {
-        Application::GetInstance().log(err);
-    }
-    // decode json
-    m_CurrentRound =
-        static_cast<uint64_t>(jsonObj[GAME_STATE_CURRENT_ROUND].toInt());
-    m_CurrentTurnNb = jsonObj[GAME_STATE_CURRENT_TURN].toInt();
-    m_GameName = jsonObj[GAME_STATE_GAME_NAME].toString();
-    const auto diedEnnemiesObj = jsonObj[GAME_STATE_DIED_ENNEMIES].toObject();
-    const auto orderToPlObj = jsonObj[GAME_STATE_ORDER_PLAYERS].toObject();
+  const auto [jsonObj, err] = Utils::LoadJsonFile(filepath);
+  if (!err.isEmpty()) {
+    Application::GetInstance().log(err);
+  }
+  // decode json
+  m_CurrentRound =
+      static_cast<uint64_t>(jsonObj[GAME_STATE_CURRENT_ROUND].toInt());
+  m_CurrentTurnNb = jsonObj[GAME_STATE_CURRENT_TURN].toInt();
+  m_GameName = jsonObj[GAME_STATE_GAME_NAME].toString();
+  const auto diedEnnemiesObj = jsonObj[GAME_STATE_DIED_ENNEMIES].toObject();
+  const auto orderToPlObj = jsonObj[GAME_STATE_ORDER_PLAYERS].toObject();
 #if QT_VERSION_MAJOR == 6
-    for (const auto &key : orderToPlObj.keys()) {
-      m_OrderToPlay.push_back(orderToPlObj[key].toString());
-    }
-    for (const auto &key : diedEnnemiesObj.keys()) {
-        m_DiedEnnemies[key.toInt()].push_back(diedEnnemiesObj[key].toString());
-    }
+  for (const auto &key : orderToPlObj.keys()) {
+    m_OrderToPlay.push_back(orderToPlObj[key].toString());
+  }
+  for (const auto &key : diedEnnemiesObj.keys()) {
+    m_DiedEnnemies[key.toInt()].push_back(diedEnnemiesObj[key].toString());
+  }
 #endif
 }
 
@@ -257,6 +257,8 @@ QStringList GameManager::GetListOfGames() const {
 
 void GameManager::BuildPaths(const QString &gameName) {
   m_GameState->m_GameName = gameName;
+  const auto fullPathGameDir =
+      QString("%1%2/").arg(GAMES_DIR, m_GameState->m_GameName);
   m_Paths.characterPath =
       QString("%1%2/%3/")
           .arg(GAMES_DIR, m_GameState->m_GameName, GAMES_CHARACTERS);
@@ -297,9 +299,10 @@ bool GameManager::LoadGame(const QString &gameName) {
 
   QString curPlName;
   if (m_GameState->m_CurrentRound <= m_GameState->m_OrderToPlay.size()) {
-      curPlName = m_GameState->m_OrderToPlay[m_GameState->m_CurrentRound-1];
+    curPlName = m_GameState->m_OrderToPlay[m_GameState->m_CurrentRound - 1];
   }
-  m_PlayersManager->m_SelectedPlayer = m_PlayersManager->GetActiveCharacterByName(curPlName);
+  m_PlayersManager->m_SelectedPlayer =
+      m_PlayersManager->GetActiveCharacterByName(curPlName);
 
   return m_PlayersManager->UpdateStartingPlayers(true);
 }

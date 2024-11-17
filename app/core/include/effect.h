@@ -16,7 +16,7 @@ struct effectParam {
   int counterTurn = 0;
   bool isMagicAtk = false; // magical or physical effect
   bool passiveTalent = false;
-  QJsonObject EffectToJsonArray() const;
+  QJsonObject EffectToJsonObject() const;
 };
 
 struct EffectType {
