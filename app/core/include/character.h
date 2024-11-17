@@ -4,7 +4,6 @@
 #include <QColor>
 #include <QString>
 
-#include <deque>
 #include <tuple>
 #include <unordered_map>
 #include <vector>
@@ -109,7 +108,7 @@ public:
   void UsePotion(const QString &statsName);
   void AddExp(const int newXp);
   void SetEquipment(const std::unordered_map<QString, QString> &);
-  void UpdateEquipmentOnJson() const;
+  void UpdateEquipmentOnJson(const QString& dirPath) const;
   void ApplyEffeftOnStats(const bool updateEffect,
                           const std::vector<GameAtkEffects> &allGae);
   std::pair<bool, int>
@@ -167,6 +166,8 @@ public:
   CharacterClass m_Class = CharacterClass::Standard;
   bool m_IsBlockingAtk = false;
   StatsInGame m_StatsInGame;
+  int m_ActionsDoneInRound = 0;
+  int m_MaxNbActionsInRound = 1;
 
 private:
   static void ProcessAddEquip(StatsType &charStat, const StatsType &equipStat);

@@ -11,7 +11,7 @@
 
 #include "character.h"
 #include "effectview.h"
-#include <Application.h>
+#include "Application.h"
 
 EditAttakView::EditAttakView(QWidget *parent)
     : QWidget(parent), ui(new Ui::EditAttakView) {
@@ -114,14 +114,9 @@ void EditAttakView::Save() {
   for (const auto &atk : m_AttakList) {
     // init json doc
     QJsonObject obj;
-
-    const bool effectUpdate =
-        std::any_of(atk.type.m_AllEffects.begin(), atk.type.m_AllEffects.end(),
-                    [](effectParam effect) { return effect.updated; });
-    if (!atk.updated && !effectUpdate) {
+    if (!atk.updated) {
       continue;
     }
-
     obj.insert(ATK_NAME, atk.type.name);
     obj.insert(ATK_TARGET, atk.type.target);
     obj.insert(ATK_REACH, atk.type.reach);

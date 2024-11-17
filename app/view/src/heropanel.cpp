@@ -165,7 +165,7 @@ void HeroPanel::mousePressEvent(QMouseEvent *event) {
 
 void HeroPanel::on_edit_button_clicked() const {
   auto &appView = ApplicationView::GetInstance();
-  appView.GetCharacterWindow()->InitWindow(tabType::character, m_Heroe);
+  appView.GetCharacterWindow()->InitWindow(tabType::useStuff, m_Heroe);
   appView.ShowWindow(appView.GetCharacterWindow(), true);
 }
 
@@ -225,5 +225,4 @@ void HeroPanel::SetHero(Character *c) { m_Heroe = c; }
 void HeroPanel::ProcessPlayingMode() {
   ui->removePushButton->hide();
   ui->pushButton->hide();
-  ui->edit_button->hide();
 }

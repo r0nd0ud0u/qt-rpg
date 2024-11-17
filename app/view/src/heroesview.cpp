@@ -25,11 +25,7 @@ HeroesView::HeroesView(QWidget *parent)
 }
 
 HeroesView::~HeroesView() {
-  for (auto *it : m_HeroPanels) {
-    delete it;
-    it = nullptr;
-  }
-  m_HeroPanels.clear();
+  ResetUi();
   delete ui;
 }
 
@@ -117,15 +113,23 @@ void HeroesView::UpdateAllPanels(
   }
 }
 
-void HeroesView::SetFocusOn(const Character* c ) {
-    if (c->m_type != characType::Hero) {
+void HeroesView::SetFocusOn(const Character *c) {
+  if (c->m_type != characType::Hero) {
     return;
   }
   for (int i = 0; i < ui->left_widget->layout()->count(); i++) {
     auto *wg = static_cast<HeroPanel *>(
         ui->left_widget->layout()->itemAt(i)->widget());
-      if (wg != nullptr && wg->m_Heroe->m_Name == c->m_Name) {
+    if (wg != nullptr && wg->m_Heroe->m_Name == c->m_Name) {
       ui->scrollArea->ensureWidgetVisible(wg);
     }
   }
+}
+
+void HeroesView::ResetUi() {
+  for (auto *it : m_HeroPanels) {
+    delete it;
+    it = nullptr;
+  }
+  m_HeroPanels.clear();
 }

@@ -4,6 +4,8 @@
 #include "playersmanager.h"
 
 #include <QFileInfo>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <chrono>
 #include <ctime> // for std::localtime
 #include <iomanip>
@@ -104,4 +106,31 @@ bool Utils::FileExists(const QString &path) {
 
 bool Utils::RemoveFile(const QString &path) {
   return FileExists(path) && QFile::remove(path);
+}
+
+double Utils::CalcRatio(const int val1, const int val2) {
+  return (val2 > 0) ? static_cast<double>(val1) / static_cast<double>(val2) : 1;
+}
+
+std::pair<QJsonObject, QString> Utils::LoadJsonFile(const QString &filepath) {
+  QFile json(filepath);
+  if (!json.open(QFile::ReadOnly | QFile::Text)) {
+    return std::make_pair(QJsonObject{},
+                          " Could not open the file for reading " + filepath);
+  } else {
+    // Convert json file to QString
+    QTextStream out(&json);
+#if QT_VERSION_MAJOR == 6
+    out.setEncoding(QStringConverter::Encoding::Utf8);
+#else
+    out.setCodec("UTF-8");
+#endif
+    const QString msg = out.readAll();
+    json.close();
+    return std::make_pair(QJsonDocument::fromJson(msg.toUtf8()).object(), "");
+  }
+}
+
+int Utils::MultiplyIntByDouble(int i, double d){
+    return static_cast<int>(static_cast<double>(i)*d);
 }

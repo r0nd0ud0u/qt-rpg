@@ -4,6 +4,7 @@
 #include <QColor>
 #include <QWidget>
 
+#include "gamemanager.h"
 #include "playersmanager.h"
 
 // The different types of the actions to perform by a player
@@ -21,32 +22,35 @@ public:
   ~GameDisplay();
   void AddNewCharacter(Character *);
   void AddNewStuff() const;
+  void ResetUi();
+  void UpdateAtLoadGame(const GameManager *gm);
 public slots:
   // slots which can be called by other windows
   void UpdateViews(const QString &name);
-  void UpdateActivePlayers();
+  void UpdateActivePlayers(const bool isLoadingGame, const GameManager *gm);
+  void UpdateGameStatus(const GameState *gs);
 signals:
-  void selectCharacter(Character*);
-  void SigUpdatePlayerPanel(const std::unordered_map<QString, std::vector<GameAtkEffects>> &);
+  void selectCharacter(Character *);
+  void SigUpdatePlayerPanel(
+      const std::unordered_map<QString, std::vector<GameAtkEffects>> &);
   void SigBossDead(QString);
   void SigEndOfGame();
   void SigUpdateChannelView(const QString &, const QString &,
                             const QColor = QColor("purple"));
-  void SigUpdStatsOnSelCharacter(Character*);
+  void SigUpdStatsOnSelCharacter(Character *);
   void SigAddCharacter(Character *);
-  void SigSetFocusOnActivePlayer(const Character*);
-  void SigGameDisplayStart(Character*);
+  void SigSetFocusOnActivePlayer(const Character *);
+  void SigGameDisplayStart(Character *);
 
 private:
   Ui::GameDisplay *ui;
-
-  void UpdateGameStatus();
   bool
   ProcessAtk(const TargetInfo *target, const AttaqueType &currentAtk,
              Character *activatedPlayer, const bool isCrit,
              const QString &nameChara,
              std::unordered_map<QString, std::vector<effectParam>> &newEffects);
-
+  void UpdateViewAtRoundStart(Character *activePlayer,
+                              const GameManager* gm);
 private slots:
   void on_attaque_button_clicked();
   void on_bag_button_clicked();
@@ -54,7 +58,7 @@ private slots:
   void StartNewTurn();
   void EndOfTurn();
   void EndOfGame();
-  void NewRound();
+  bool NewRound();
   void LaunchAttak(const QString &atkName, const std::vector<TargetInfo *> &);
   void on_mana_potion_button_clicked();
   void on_hp_potion_button_clicked();

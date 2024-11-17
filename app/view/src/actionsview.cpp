@@ -22,6 +22,11 @@ ActionsView::~ActionsView() {
   delete ui;
 }
 
+void ActionsView::ClearTargetList() {
+  // TODO delete pointers from array
+  m_TargetedList.clear();
+}
+
 void ActionsView::addActionRow(QAbstractItemModel *model,
                                const QVariant &action,
                                const std::optional<QString> &reason) const {
@@ -151,9 +156,11 @@ void ActionsView::on_validate_action_clicked() {
 }
 
 void ActionsView::CreateTargetCheckBoxes(
-    const QString &activePlayerName,
     const std::vector<Character *> &playerList) {
-  for (const auto &ply : playerList) {
+  for (const auto *ply : playerList) {
+    if (ply == nullptr) {
+      continue;
+    }
     auto *checkbox = new QCheckBox();
     checkbox->setText(ply->m_Name);
     checkbox->setEnabled(false);
@@ -171,15 +178,13 @@ void ActionsView::CreateTargetCheckBoxes(
   }
 }
 
-void ActionsView::InitTargetsWidget() {
-  if (m_CurPlayer == nullptr) {
+void ActionsView::InitTargetsWidget(const PlayersManager *pm) {
+  if (pm == nullptr) {
     return;
   }
-  const auto &gm = Application::GetInstance().m_GameManager;
-  const auto &heroList = gm->m_PlayersManager->m_HeroesList;
-  const auto &bossList = gm->m_PlayersManager->m_BossesList;
-  CreateTargetCheckBoxes(m_CurPlayer->m_Name, heroList);
-  CreateTargetCheckBoxes(m_CurPlayer->m_Name, bossList);
+  ClearTargetList();
+  CreateTargetCheckBoxes(pm->m_HeroesList);
+  CreateTargetCheckBoxes(pm->m_BossesList);
 }
 
 void ActionsView::UpdateTargetList(const QString &name) {

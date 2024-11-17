@@ -6,7 +6,7 @@
 #include <QDir>
 #include <QFile>
 
-void StatsInGame::GenerateStatsEndGame() {
+void StatsInGame::GenerateStatsEndGame(const QString& filepath) {
   const auto *gm = Application::GetInstance().m_GameManager.get();
   if (gm == nullptr) {
     return;
@@ -18,10 +18,10 @@ void StatsInGame::GenerateStatsEndGame() {
   // output
   QFile file;
   QDir logDir;
-  logDir.mkpath(OUTPUT_DIR);
   const QString logFilePath = logDir.filePath(
-      QString(OUTPUT_ENDGAME).arg(Utils::getCurrentTimeAsString()));
+      QString(filepath).arg(Utils::getCurrentTimeAsString()));
   file.setFileName(logFilePath);
+  logDir.mkpath(QFileInfo(filepath).absolutePath());
   if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
     Application::GetInstance().log(" Could not open the file for writing " +
                                    logFilePath);

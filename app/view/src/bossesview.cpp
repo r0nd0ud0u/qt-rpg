@@ -27,11 +27,7 @@ BossesView::BossesView(QWidget *parent)
 }
 
 BossesView::~BossesView() {
-  for (auto *it : m_BossPanels) {
-    delete it;
-    it = nullptr;
-  }
-  m_BossPanels.clear();
+  ResetUi();
   delete ui;
 }
 
@@ -140,4 +136,12 @@ void BossesView::UpdateSelected(const Character *c) const {
       panel->SetSelected(false);
     }
   }
+}
+
+void BossesView::ResetUi() {
+  for (auto *it : m_BossPanels) {
+    delete it;
+    it = nullptr;
+  }
+  m_BossPanels.clear();
 }

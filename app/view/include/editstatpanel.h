@@ -20,10 +20,13 @@ public:
   void SetStatsValue(const StatsType &statsType);
 
   QString m_Name;
-  int m_MaxValue = -1;
+  int m_RawMax = -1;
+  int m_CurrRaw = -1;
 
 private slots:
   void on_max_spinBox_valueChanged(int arg1);
+
+    void on_spinBox_valueChanged(int arg1);
 
 private:
   Ui::EditStatPanel *ui;

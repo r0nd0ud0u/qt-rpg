@@ -15,7 +15,6 @@ StuffsView::~StuffsView() {
     it = nullptr;
   }
   m_StuffList.clear();
-  m_EditStuffList.clear();
   delete ui;
 }
 
@@ -52,6 +51,7 @@ EditStuff StuffsView::Save() {
     return EditStuff();
   }
 
+  // reset the stuff panel
   for (const auto &panel : m_StuffList) {
     auto &stat = editStuff.m_Stuff.m_Stats.m_AllStatsTable[panel->m_Name];
     if (panel->m_IsPercent) {
@@ -62,8 +62,6 @@ EditStuff StuffsView::Save() {
       stat.m_BufEquipPercent = 0;
     }
   }
-  m_EditStuffList.clear();
-  m_EditStuffList.push_back(editStuff);
 
   EditStuff::SaveStuffInJson(editStuff, ui->body_comboBox->currentText());
 
