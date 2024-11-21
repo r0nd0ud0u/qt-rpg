@@ -48,6 +48,7 @@ void Channel::UpdateLog(const QString& topic, const QString& log, const QColor c
 
 void Channel::ResetUi(){
     ui->channel_textEdit->clear();
+    UpdateTurnsButtons(true);
 }
 
 void Channel::UpdateTurnsButtons(const bool isNextTurn){

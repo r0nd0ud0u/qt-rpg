@@ -36,8 +36,7 @@ const QString GAME_STATE_STATS_IN_GAME = "/stats_in_game_%1.csv";
 // outputs
 const QString OUTPUT_DIR = "./output/";
 const QString OUTPUT_ENDGAME = "./output/endgame_%1.csv";
-const QStringList ENDGAME_TITLE_BAR = {"Name", "Player Type", "Life status",
-                                       "Attaks used", "Attaks frequency"};
+const QStringList ENDGAME_TITLE_BAR = {"Name", "Player Type", "Life status"};
 // json keys
 // ATK keys
 const QString ATK_NAME = "Nom";
@@ -140,15 +139,15 @@ const QString CH_COLOR = "Couleur";
 const QString CH_RANK = "Rang";
 const QString CH_FORM = "Forme";
 const QString CH_CLASS = "Classe";
-const QString CH_ACTIONS_IN_ROUND =  "nb-actions-in-round";
+const QString CH_ACTIONS_IN_ROUND = "nb-actions-in-round";
 const QString CH_BLOCKING_ATK = "is-blocking-atk";
 const QString CH_MAX_NB_ACTIONS_ROUND = "m_MaxNbActionsInRound";
 // buf - debuf
-const QString CH_BUF_DEBUF =  "Buf-debuf";
-const QString CH_BUF_ALL_STATS =  "Buf-all-stats";
-const QString CH_BUF_VALUE =  "Buf-value";
-const QString CH_BUF_PASSIVE_ENABLED =  "buf-passive-enabled";
-const QString CH_BUF_IS_PERCENT =  "Buf-is-percent";
+const QString CH_BUF_DEBUF = "Buf-debuf";
+const QString CH_BUF_ALL_STATS = "Buf-all-stats";
+const QString CH_BUF_VALUE = "Buf-value";
+const QString CH_BUF_PASSIVE_ENABLED = "buf-passive-enabled";
+const QString CH_BUF_IS_PERCENT = "Buf-is-percent";
 const QString CH_BUF_TYPE = "Buf-type";
 // last tx rx
 const QString CH_TXRX_TYPE = "Tx-rx-type";

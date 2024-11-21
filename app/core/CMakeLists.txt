@@ -15,6 +15,7 @@ set(HEADERS
     include/utils.h
     include/bossclass.h
     include/statsingame.h
+    include/attack.h
 
 )
 set(SOURCES
@@ -29,6 +30,7 @@ set(SOURCES
     src/utils.cpp
     src/bossclass.cpp
     src/statsingame.cpp
+    src/attack.cpp
 )
 
 

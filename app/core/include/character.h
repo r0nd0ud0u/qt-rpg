@@ -14,6 +14,7 @@
 #include "stuff.h"
 #include "utils.h" // for EffectsTypeNb struct
 #include "statsingame.h"
+#include "attack.h"
 
 #include "rust-rpg-bridge/attaque.h"
 #include "rust-rpg-bridge/character.h"
@@ -23,24 +24,6 @@
 class GameAtkEffects;
 
 enum class characType { Hero, Boss };
-
-class AttaqueType {
-public:
-  QString name = "Atq";
-  uint8_t level = 1;
-  uint32_t manaCost = 0;
-  uint32_t vigorCost = 0;
-  uint32_t berseckCost = 0;
-  QString target = TARGET_ENNEMY;
-  QString reach = REACH_INDIVIDUAL;
-  QString namePhoto = "default.png";
-  std::vector<effectParam> m_AllEffects = {};
-  QString form = STANDARD_FORM;
-  AttaqueNature nature;
-
-  static constexpr double COEFF_CRIT_STATS = 1.5;
-  static constexpr double COEFF_CRIT_DMG = 2.0;
-};
 
 enum class BufTypes {
   defaultBuf = 0,
@@ -87,8 +70,7 @@ public:
   CanBeLaunched(const AttaqueType &atk) const;
 
   // Effect
-  std::pair<QString, std::vector<effectParam>>
-  ApplyOneEffect(Character *target, effectParam &effect, const bool fromLaunch,
+  EffectOutcome ApplyOneEffect(Character *target, effectParam &effect, const bool fromLaunch,
                  const AttaqueType &atk, const bool reload = false,
                  const bool isCrit = false);
   std::tuple<bool, QStringList, std::vector<effectParam>>
@@ -130,6 +112,7 @@ public:
   void InitAggroOnTurn(const int turnNb);
   void ProcessBlock(const bool isDodging);
   QString GetPhotoName() const;
+  void UpdateByProcessedEffect(const EffectOutcome& outcome);
 
   // Temporary
   std::vector<effectParam> LoadThaliaTalent() const;

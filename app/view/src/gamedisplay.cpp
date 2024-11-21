@@ -576,6 +576,8 @@ void GameDisplay::on_add_exp_button_clicked() {
   emit SigUpdatePlayerPanel({});
   emit selectCharacter(Application::GetInstance()
                            .m_GameManager->m_PlayersManager->m_SelectedPlayer);
+  // update atk view
+  ui->attak_page->UpdateActions(ActionsStackedWgType::attak);
 }
 
 void GameDisplay::SlotUpdateActionViews(const QString &name,
@@ -614,15 +616,19 @@ void GameDisplay::UpdateActivePlayers(const bool isLoadingGame,
   auto *c = gm->m_PlayersManager->m_SelectedPlayer;
   emit SigGameDisplayStart(c);
   emit selectCharacter(c);
+  // reset at load game
   if (isLoadingGame) {
     UpdateAtLoadGame(gm);
-  };
+  }
 }
 
 void GameDisplay::ResetUi() {
   ui->bosses_widget->ResetUi();
   ui->heroes_widget->ResetUi();
   ui->channel_lay->ResetUi();
+  ui->attak_page->ResetUi();
+  ui->stackedWidget->setCurrentIndex(
+      static_cast<int>(ActionsStackedWgType::defaultType));
 }
 
 void GameDisplay::UpdateAtLoadGame(const GameManager *gm) {
