@@ -18,13 +18,13 @@ class ActionsView : public QWidget {
 public:
   explicit ActionsView(QWidget *parent = nullptr);
   ~ActionsView();
-  void ClearTargetList();
   void UpdateActions(const ActionsStackedWgType &type);
   void SetCurrentPlayer(Character *player);
   void ResetActionsParam();
   void InitTargetsWidget(const PlayersManager *pm);
   void SetForm(const QString &form);
   void RemoveTarget(QString);
+  void ResetUi();
 
 private:
   Ui::ActionsView *ui;
@@ -50,6 +50,7 @@ private:
   void DisableTargetsBox() const;
   void CreateTargetCheckBoxes(const std::vector<Character *> &playerList);
   void ProcessEnableTargetsBoxes();
+  void RemoveAllTargets();
 
 signals:
   void SigLaunchAttak(const QString &atkName,

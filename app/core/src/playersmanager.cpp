@@ -235,13 +235,12 @@ PlayersManager::RemoveTerminatedEffectsOnPlayer(const QString &curPlayerName) {
           build_effect_name(it->allAtkEffects.effect.toStdString(),
                             it->allAtkEffects.statsName.toStdString(), true)
               .data();
-      const auto terminated = QString("L'effet %1 sur %2 est terminé.(%3)")
-                                  .arg(effectName)
-                                  .arg(curPlayerName)
-                                  .arg(it->atk.name);
       // One-turn effect are not logged out
       if (it->allAtkEffects.nbTurns > 1) {
-        sl.push_back(terminated);
+        sl.push_back(QString("L'effet %1 sur %2 est terminé.(%3)")
+                                      .arg(effectName)
+                                      .arg(curPlayerName)
+                                      .arg(it->atk.name));
       }
       // remove malus effect from player
       auto *player = GetActiveCharacterByName(curPlayerName);
@@ -294,10 +293,10 @@ QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName,
                             .arg(gae.atk.name));
       } else if (auto *launcherPl = GetActiveCharacterByName(gae.launcher);
                  launcherPl != nullptr) {
-        const auto [output, _] = launcherPl->ApplyOneEffect(
+        const auto effectOutcome = launcherPl->ApplyOneEffect(
             targetPl, gae.allAtkEffects, fromLaunch, gae.atk);
-        if (!output.isEmpty()) {
-          localLog.append(output);
+        if (!effectOutcome.logDisplay.isEmpty()) {
+          localLog.append(effectOutcome.logDisplay);
         }
       }
     }
@@ -670,8 +669,10 @@ PlayersManager::GetAllDeadliestAllies(const characType &launcherType) const {
         const auto &stat2 = char2->m_Stats.m_AllStatsTable.at(STATS_HP);
 
         // ratio
-        const double ratio1 = Utils::CalcRatio(stat1.m_CurrentValue, stat1.m_MaxValue);
-        const double ratio2 = Utils::CalcRatio(stat2.m_CurrentValue, stat2.m_MaxValue);
+        const double ratio1 =
+            Utils::CalcRatio(stat1.m_CurrentValue, stat1.m_MaxValue);
+        const double ratio2 =
+            Utils::CalcRatio(stat2.m_CurrentValue, stat2.m_MaxValue);
 
         return ratio1 < ratio2;
       });
@@ -998,6 +999,7 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
         (h->m_type == characType::Boss) ? CH_TYPE_BOSS : CH_TYPE_HERO;
     obj.insert(CH_TYPE, type);
     obj.insert(CH_LEVEL, h->m_Level);
+    obj.insert(CH_EXP, h->m_Exp);
     obj.insert(CH_COLOR, h->m_ColorStr);
     obj.insert(CH_RANK, h->m_BossClass.m_Rank);
     obj.insert(CH_FORM, h->m_SelectedForm);
@@ -1218,6 +1220,7 @@ void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
       }
     }
     if (isLoadingGame) {
+      c->m_StatsInGame.m_IsPlaying = true;
       if (c->m_type == characType::Hero) {
         m_HeroesList.push_back(c);
       } else {
