@@ -576,6 +576,8 @@ void GameDisplay::on_add_exp_button_clicked() {
   emit SigUpdatePlayerPanel({});
   emit selectCharacter(Application::GetInstance()
                            .m_GameManager->m_PlayersManager->m_SelectedPlayer);
+  // update atk view
+  ui->attak_page->UpdateActions(ActionsStackedWgType::attak);
 }
 
 void GameDisplay::SlotUpdateActionViews(const QString &name,
