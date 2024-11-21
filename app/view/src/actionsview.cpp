@@ -22,8 +22,19 @@ ActionsView::~ActionsView() {
   delete ui;
 }
 
-void ActionsView::ClearTargetList() {
-  // TODO delete pointers from array
+void ActionsView::RemoveAllTargets() {
+  // delete widget
+  auto *lay = ui->targets_widget->layout();
+  if(lay ==nullptr){
+      return;
+  }
+  while (QLayoutItem *item = lay->takeAt(0)) {
+      if (QWidget *widget = item->widget()) {
+          widget->hide();
+          widget->deleteLater();
+      }
+      delete item; // Deletes the layout item
+  }
   m_TargetedList.clear();
 }
 
@@ -182,7 +193,7 @@ void ActionsView::InitTargetsWidget(const PlayersManager *pm) {
   if (pm == nullptr) {
     return;
   }
-  ClearTargetList();
+  RemoveAllTargets();
   CreateTargetCheckBoxes(pm->m_HeroesList);
   CreateTargetCheckBoxes(pm->m_BossesList);
 }
@@ -326,9 +337,16 @@ void ActionsView::RemoveTarget(QString targetName) {
   if (lay == nullptr) {
     return;
   }
+  if (lay->count() <= i) {
+    return;
+  }
   auto *widget = lay->itemAt(i)->widget();
   widget->hide();
   lay->removeItem(lay->itemAt(i));
   lay->removeWidget(widget);
   delete widget;
+}
+
+void ActionsView::ResetUi(){
+    RemoveAllTargets();
 }
