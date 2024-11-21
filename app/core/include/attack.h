@@ -31,7 +31,7 @@ public:
 class Attack
 {
 public:
-    Attack();
+    Attack() = default;
 };
 
 struct EffectOutcome{
