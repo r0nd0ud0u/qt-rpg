@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>590</width>
-    <height>187</height>
+    <height>211</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -151,7 +151,7 @@
          </property>
          <item row="1" column="1">
           <widget class="QWidget" name="hero_info" native="true">
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <layout class="QVBoxLayout" name="verticalLayout">
             <property name="spacing">
              <number>0</number>
             </property>
@@ -196,7 +196,7 @@
               </property>
               <property name="font">
                <font>
-                <pointsize>11</pointsize>
+                <pointsize>9</pointsize>
                 <bold>true</bold>
                </font>
               </property>

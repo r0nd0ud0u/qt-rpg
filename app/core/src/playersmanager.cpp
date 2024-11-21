@@ -670,14 +670,8 @@ PlayersManager::GetAllDeadliestAllies(const characType &launcherType) const {
         const auto &stat2 = char2->m_Stats.m_AllStatsTable.at(STATS_HP);
 
         // ratio
-        const double ratio1 = (stat1.m_MaxValue > 0)
-                                  ? static_cast<double>(stat1.m_CurrentValue) /
-                                        static_cast<double>(stat1.m_MaxValue)
-                                  : 1;
-        const double ratio2 = (stat2.m_MaxValue > 0)
-                                  ? static_cast<double>(stat2.m_CurrentValue) /
-                                        static_cast<double>(stat2.m_MaxValue)
-                                  : 1;
+        const double ratio1 = Utils::CalcRatio(stat1.m_CurrentValue, stat1.m_MaxValue);
+        const double ratio2 = Utils::CalcRatio(stat2.m_CurrentValue, stat2.m_MaxValue);
 
         return ratio1 < ratio2;
       });

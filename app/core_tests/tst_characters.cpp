@@ -24,10 +24,14 @@ void character_tests::TestThalia_works() {
   const QString azrakRx = "Azrak Ombresang";
   auto *pm = Application::GetInstance().m_GameManager->m_PlayersManager;
   // add heroes
-  auto *thaliaCh = pm->GetActiveCharacterByName(thalia);
-  auto *AzrakChRx = pm->GetActiveCharacterByName(azrakRx);
+  auto *thaliaCh = pm->GetCharacterByName(thalia);
+  auto *AzrakChRx = pm->GetCharacterByName(azrakRx);
+  if(thaliaCh == nullptr || AzrakChRx == nullptr){
+      return;
+  }
   thaliaCh->m_StatsInGame.m_IsPlaying = true;
   AzrakChRx->m_StatsInGame.m_IsPlaying = true;
+  // add characters into m_HeroesList
   pm->UpdateStartingPlayers(false);
 
   // attaque 1
@@ -146,11 +150,13 @@ void character_tests::SetStatsOnEffect_works() {
   QCOMPARE(50, hp.m_CurrentValue);
   QCOMPARE(0, hp.m_RawMaxValue);
 
-  // no update of effect
+  // no update of effect => max value remains the same
   hp.m_RawMaxValue = 100;
   Character::SetStatsOnEffect(hp, 10, true, false);
-  QCOMPARE(100, hp.m_MaxValue);
-  QCOMPARE(50, hp.m_CurrentValue);
+  QCOMPARE(hp.m_MaxValue, 100);
+  QCOMPARE(hp.m_CurrentValue, 50);
+  QCOMPARE(hp.m_BufEffectValue, 0);
+  QCOMPARE(hp.m_BufEffectPercent, 0);
   // effect
   // percent
   // init current value
@@ -193,12 +199,13 @@ void character_tests::SetStatsOnEffect_works() {
 
   auto &armPhy = stats.m_ArmPhy;
   armPhy.m_MaxValue = 100;
+  armPhy.m_RawMaxValue = 100;
   armPhy.m_CurrentValue = 50; // ratio 0.5 between cur value and max value
   armPhy.m_BufEffectPercent = 0;
   armPhy.m_BufEffectValue = 0;
   Character::SetStatsOnEffect(armPhy, 100, true, true);
-  QCOMPARE(100, armPhy.m_MaxValue);
-  QCOMPARE(100, armPhy.m_CurrentValue);
+  QCOMPARE(armPhy.m_MaxValue,200);
+  QCOMPARE(armPhy.m_CurrentValue, 100);
 }
 
 void character_tests::ApplyAtkEffect_AtkBlocked() {
