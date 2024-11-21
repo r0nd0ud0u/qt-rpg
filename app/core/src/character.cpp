@@ -330,10 +330,7 @@ void Character::ProcessAddEquip(StatsType &charStat,
   charStat.m_BufEquipValue += equipStat.m_BufEquipValue;
   charStat.m_BufEquipPercent += equipStat.m_BufEquipPercent;
 
-  const double ratio = (charStat.m_MaxValue > 0)
-                           ? static_cast<double>(charStat.m_CurrentValue) /
-                                 static_cast<double>(charStat.m_MaxValue)
-                           : 1;
+  const double ratio = Utils::CalcRatio(charStat.m_CurrentValue, charStat.m_MaxValue);
   charStat.m_MaxValue =
       charStat.m_RawMaxValue + charStat.m_BufEquipValue +
       charStat.m_RawMaxValue * charStat.m_BufEquipPercent / 100;
@@ -350,10 +347,7 @@ void Character::ProcessRemoveEquip(StatsType &charStat,
   charStat.m_BufEquipValue -= equipStat.m_BufEquipValue;
   charStat.m_BufEquipPercent -= equipStat.m_BufEquipPercent;
 
-  const double ratio = (charStat.m_MaxValue > 0)
-                           ? static_cast<double>(charStat.m_CurrentValue) /
-                                 static_cast<double>(charStat.m_MaxValue)
-                           : 1;
+  const double ratio = Utils::CalcRatio(charStat.m_CurrentValue, charStat.m_MaxValue);
   charStat.m_MaxValue =
       charStat.m_RawMaxValue + charStat.m_BufEquipValue +
       charStat.m_RawMaxValue * charStat.m_BufEquipPercent / 100;
@@ -1017,10 +1011,7 @@ void Character::ResetBuf(const BufTypes &bufType) {
 void Character::SetStatsOnEffect(StatsType &stat, const int value,
                                  const bool isPercent,
                                  const bool updateEffect) {
-  const double ratio = (stat.m_MaxValue > 0)
-                           ? static_cast<double>(stat.m_CurrentValue) /
-                                 static_cast<double>(stat.m_MaxValue)
-                           : 1;
+  const double ratio = Utils::CalcRatio(stat.m_CurrentValue, stat.m_MaxValue);
   if (stat.m_RawMaxValue == 0) {
     return;
   }
@@ -1521,10 +1512,7 @@ void Character::UpdateStatsToNextLevel() {
     auto &localStat = m_Stats.m_AllStatsTable[stat];
 
     // store the ratio between max value and current value
-    const double ratio = (localStat.m_MaxValue > 0)
-                             ? static_cast<double>(localStat.m_CurrentValue) /
-                                   static_cast<double>(localStat.m_MaxValue)
-                             : 1;
+    const double ratio = Utils::CalcRatio(localStat.m_CurrentValue, localStat.m_MaxValue);
     // update the raw value by 10%
     localStat.m_RawMaxValue += localStat.m_RawMaxValue * 10 / 100;
     localStat.m_CurrentRawValue +=

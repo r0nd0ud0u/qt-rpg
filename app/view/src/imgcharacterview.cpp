@@ -31,5 +31,4 @@ void ImgCharacterView::SetPixmap(const QString &name, const int scalingHeight) {
   QPixmap scaledPixmap =
       qp.scaledToHeight(scalingHeight); // Set the desired width and height
   ui->img_label->setPixmap(scaledPixmap);
-  ui->img_label->setScaledContents(true);
 }
