@@ -1,11 +1,13 @@
 #ifndef STATSENDGAME_H
 #define STATSENDGAME_H
 
-#include "qobject.h"
+#include <QObject>
+#include "unordered_map"
 
 struct AtksInfo{
     QString atkName;
     int nbOfUse = 0;
+    std::unordered_map<QString, int> allDamagesByTarget; // key target
 };
 
 // Forward declaration

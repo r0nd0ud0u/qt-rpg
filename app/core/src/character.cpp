@@ -476,7 +476,7 @@ EffectOutcome Character::ApplyOneEffect(Character *target, effectParam &effect,
 
   // TODO should be static and not on target ? pass target by argument
   result += target->ProcessOutputLogOnEffect(
-      effect, maxAmountSent, fromLaunch, nbOfApplies, atk.name, realAmountSent);
+      effect, realAmountSent, fromLaunch, nbOfApplies, atk.name, maxAmountSent);
   // Apply regen effect turning into damage for all bosses
   // can be processed only after calcul of amount of atk
   if (!reload) {
@@ -550,11 +550,13 @@ EffectOutcome Character::ApplyOneEffect(Character *target, effectParam &effect,
     result += QString("Ajout Overheal pour tour%1: %2\n")
                   .arg(gs->m_CurrentTurnNb)
                   .arg(maxAmountSent - realAmountSent);
+    output.fullAtkAmountTx = maxAmountSent;
+    output.realAmountTx = realAmountSent;
   }
 
   output.logDisplay = result;
-  output.fullAtkAmountTx = maxAmountSent;
-  output.realAmountTx = realAmountSent;
+  output.atk = atk;
+  output.targetName = target->m_Name;
   return output;
 }
 
@@ -667,6 +669,8 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
     std::for_each(
         effectOutcome.newEffects.begin(), effectOutcome.newEffects.end(),
         [&](const effectParam &e) { allAppliedEffects.push_back(e); });
+    // update stats in game
+    UpdateByProcessedEffect(effectOutcome);
   }
 
   return std::make_tuple(conditionsAreOk, allResultEffects, allAppliedEffects);
@@ -884,7 +888,7 @@ QString Character::ProcessOutputLogOnEffect(
 
   QString output;
   QString healOrDamageLog;
-  int displayedValue = amount;
+  int displayedValue = maxAmount;
   QString effectName;
   if (ep.effect.isEmpty() || !fromLaunch) {
     effectName = ep.statsName;
@@ -917,8 +921,8 @@ QString Character::ProcessOutputLogOnEffect(
       }
       output += QString("%1 %2/%3 PV avec l'effet %4 (appliqué %5/%6).")
                     .arg(healOrDamageLog)
+                    .arg(amount)
                     .arg(maxAmount)
-                    .arg(QString::number(displayedValue))
                     .arg(effectName)
                     .arg(nbOfApplies)
                     .arg(QString::number(potentialAttempts));
@@ -1342,7 +1346,7 @@ QString Character::ProcessAggro(const int atkValue, const int aggroValue,
   const QString aggroItems =
       QString::number(m_LastTxRx[static_cast<int>(amountType::aggro)][nbTurn]);
 
-  return QString("Gen Aggro:%1 pour %2, old: %3, new: %4\n")
+  return QString("Gen Aggro:%1 pour %2, old: %3, new: %4, on that turn:%5\n")
       .arg(localAggro)
       .arg(m_Name)
       .arg(oldAggro)
@@ -1830,4 +1834,9 @@ void Character::ProcessBlock(const bool isDodging) {
 
 QString Character::GetPhotoName() const {
   return (m_PhotoName.isEmpty()) ? m_Name : m_PhotoName;
+}
+
+void Character::UpdateByProcessedEffect(const EffectOutcome& outcome){
+    m_StatsInGame.m_AllAtksInfo[outcome.atk.name].atkName = outcome.atk.name;
+    m_StatsInGame.m_AllAtksInfo[outcome.atk.name].allDamagesByTarget[outcome.targetName] += outcome.realAmountTx;
 }

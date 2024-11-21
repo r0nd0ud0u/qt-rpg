@@ -670,8 +670,10 @@ PlayersManager::GetAllDeadliestAllies(const characType &launcherType) const {
         const auto &stat2 = char2->m_Stats.m_AllStatsTable.at(STATS_HP);
 
         // ratio
-        const double ratio1 = Utils::CalcRatio(stat1.m_CurrentValue, stat1.m_MaxValue);
-        const double ratio2 = Utils::CalcRatio(stat2.m_CurrentValue, stat2.m_MaxValue);
+        const double ratio1 =
+            Utils::CalcRatio(stat1.m_CurrentValue, stat1.m_MaxValue);
+        const double ratio2 =
+            Utils::CalcRatio(stat2.m_CurrentValue, stat2.m_MaxValue);
 
         return ratio1 < ratio2;
       });
@@ -998,6 +1000,7 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
         (h->m_type == characType::Boss) ? CH_TYPE_BOSS : CH_TYPE_HERO;
     obj.insert(CH_TYPE, type);
     obj.insert(CH_LEVEL, h->m_Level);
+    obj.insert(CH_EXP, h->m_Exp);
     obj.insert(CH_COLOR, h->m_ColorStr);
     obj.insert(CH_RANK, h->m_BossClass.m_Rank);
     obj.insert(CH_FORM, h->m_SelectedForm);
@@ -1218,6 +1221,7 @@ void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
       }
     }
     if (isLoadingGame) {
+      c->m_StatsInGame.m_IsPlaying = true;
       if (c->m_type == characType::Hero) {
         m_HeroesList.push_back(c);
       } else {

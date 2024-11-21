@@ -29,8 +29,8 @@ void StatsInGame::GenerateStatsEndGame(const QString &filepath) {
   QTextStream out(&file);
   // title
   out << ENDGAME_TITLE_BAR.join(";\t") << "\n";
-  out << GetOutputEndGameByList(pm->m_AllHeroesList).toUtf8() << "\n";
-  out << GetOutputEndGameByList(pm->m_AllBossesList).toUtf8() << "\n";
+  out << GetOutputEndGameByList(pm->m_HeroesList).toUtf8() << "\n";
+  out << GetOutputEndGameByList(pm->m_BossesList).toUtf8() << "\n";
 }
 
 QString StatsInGame::GetOutputEndGameByList(
@@ -40,7 +40,8 @@ QString StatsInGame::GetOutputEndGameByList(
   }
 
   QString output;
-  const QString values = QStringList({"%1", "%2", "%3"}).join(";\t");
+  // 5 columns
+  const QString values = QStringList({"%1", "%2", "%3", "", ""}).join(";\t");
   for (const auto *h : playerList) {
     if (h == nullptr || !h->m_StatsInGame.m_IsPlaying) {
       continue;
@@ -50,13 +51,28 @@ QString StatsInGame::GetOutputEndGameByList(
     // update output with header
     output += values.arg(h->m_Name, charaType, lifeStatus) + "\n";
     // update output attacks
-    output += ";Attaks\n";
+    output += ";Attaks;Attaks used;Attaks frequency;Dmgs on target\n";
     for (const auto &[atkName, atkType] : h->m_AttakList) {
       int nbOfUse = 0;
+      QString damageByTarget;
       if (h->m_StatsInGame.m_AllAtksInfo.count(atkName) > 0) {
         nbOfUse = h->m_StatsInGame.m_AllAtksInfo.at(atkName).nbOfUse;
+        for (const auto &[name, dmg] :
+             h->m_StatsInGame.m_AllAtksInfo.at(atkName).allDamagesByTarget) {
+          damageByTarget += QString(";;;;%1:%2\n").arg(name).arg(dmg);
+        }
       }
-      output += QString(";;%1;%2").arg(atkName).arg(nbOfUse) + "\n";
+      output += QString(";;%1;%2\n").arg(atkName).arg(nbOfUse);
+      output += damageByTarget;
+    }
+    std::unordered_map<QString, int> allDmgByTarget;
+    for (const auto &[atkName, info] : h->m_StatsInGame.m_AllAtksInfo) {
+      for (const auto &[target, dmg] : info.allDamagesByTarget)
+        allDmgByTarget[target] += dmg;
+    }
+    output += ";Stats on all targets\n";
+    for (const auto &[target, dmg] : allDmgByTarget) {
+      output += QString(";;%1;%2\n").arg(target).arg(dmg);
     }
     // update output with stats by turn RX TX
     output += ";Stats RX TX\n";
