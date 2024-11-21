@@ -235,13 +235,12 @@ PlayersManager::RemoveTerminatedEffectsOnPlayer(const QString &curPlayerName) {
           build_effect_name(it->allAtkEffects.effect.toStdString(),
                             it->allAtkEffects.statsName.toStdString(), true)
               .data();
-      const auto terminated = QString("L'effet %1 sur %2 est terminé.(%3)")
-                                  .arg(effectName)
-                                  .arg(curPlayerName)
-                                  .arg(it->atk.name);
       // One-turn effect are not logged out
       if (it->allAtkEffects.nbTurns > 1) {
-        sl.push_back(terminated);
+        sl.push_back(QString("L'effet %1 sur %2 est terminé.(%3)")
+                                      .arg(effectName)
+                                      .arg(curPlayerName)
+                                      .arg(it->atk.name));
       }
       // remove malus effect from player
       auto *player = GetActiveCharacterByName(curPlayerName);
