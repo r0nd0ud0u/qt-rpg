@@ -299,7 +299,7 @@ bool GameManager::LoadGame(const QString &gameName) {
 
   QString curPlName;
   if (m_GameState->m_CurrentRound <= m_GameState->m_OrderToPlay.size()) {
-    int rnd = m_GameState->m_CurrentRound;
+    auto rnd = m_GameState->m_CurrentRound;
     if (rnd == 0) {
       rnd++;
     }

@@ -1017,10 +1017,7 @@ void Character::ResetBuf(const BufTypes &bufType) {
 void Character::SetStatsOnEffect(StatsType &stat, const int value,
                                  const bool isPercent,
                                  const bool updateEffect) {
-  const double ratio = (stat.m_MaxValue > 0)
-                           ? static_cast<double>(stat.m_CurrentValue) /
-                                 static_cast<double>(stat.m_MaxValue)
-                           : 1;
+  const double ratio = Utils::CalcRatio(stat.m_CurrentValue, stat.m_MaxValue);
   if (stat.m_RawMaxValue == 0) {
     return;
   }
