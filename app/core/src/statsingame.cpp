@@ -6,7 +6,7 @@
 #include <QDir>
 #include <QFile>
 
-void StatsInGame::GenerateStatsEndGame(const QString& filepath) {
+void StatsInGame::GenerateStatsEndGame(const QString &filepath) {
   const auto *gm = Application::GetInstance().m_GameManager.get();
   if (gm == nullptr) {
     return;
@@ -18,8 +18,8 @@ void StatsInGame::GenerateStatsEndGame(const QString& filepath) {
   // output
   QFile file;
   QDir logDir;
-  const QString logFilePath = logDir.filePath(
-      QString(filepath).arg(Utils::getCurrentTimeAsString()));
+  const QString logFilePath =
+      logDir.filePath(QString(filepath).arg(Utils::getCurrentTimeAsString()));
   file.setFileName(logFilePath);
   logDir.mkpath(QFileInfo(filepath).absolutePath());
   if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
