@@ -330,7 +330,8 @@ void Character::ProcessAddEquip(StatsType &charStat,
   charStat.m_BufEquipValue += equipStat.m_BufEquipValue;
   charStat.m_BufEquipPercent += equipStat.m_BufEquipPercent;
 
-  const double ratio = Utils::CalcRatio(charStat.m_CurrentValue, charStat.m_MaxValue);
+  const double ratio =
+      Utils::CalcRatio(charStat.m_CurrentValue, charStat.m_MaxValue);
   charStat.m_MaxValue =
       charStat.m_RawMaxValue + charStat.m_BufEquipValue +
       charStat.m_RawMaxValue * charStat.m_BufEquipPercent / 100;
@@ -347,7 +348,8 @@ void Character::ProcessRemoveEquip(StatsType &charStat,
   charStat.m_BufEquipValue -= equipStat.m_BufEquipValue;
   charStat.m_BufEquipPercent -= equipStat.m_BufEquipPercent;
 
-  const double ratio = Utils::CalcRatio(charStat.m_CurrentValue, charStat.m_MaxValue);
+  const double ratio =
+      Utils::CalcRatio(charStat.m_CurrentValue, charStat.m_MaxValue);
   charStat.m_MaxValue =
       charStat.m_RawMaxValue + charStat.m_BufEquipValue +
       charStat.m_RawMaxValue * charStat.m_BufEquipPercent / 100;
@@ -409,13 +411,13 @@ Character::CanBeLaunched(const AttaqueType &atk) const {
  * @brief Character::ApplyOneEffect
  * Effect is not processed if target is already dead
  */
-std::pair<QString, std::vector<effectParam>>
-Character::ApplyOneEffect(Character *target, effectParam &effect,
-                          const bool fromLaunch, const AttaqueType &atk,
-                          const bool reload, const bool isCrit) {
-  std::vector<effectParam> newEffects = {};
+EffectOutcome Character::ApplyOneEffect(Character *target, effectParam &effect,
+                                        const bool fromLaunch,
+                                        const AttaqueType &atk,
+                                        const bool reload, const bool isCrit) {
+  EffectOutcome output;
   if (target == nullptr) {
-    return std::make_pair("No  target character", newEffects);
+    return EffectOutcome{.logDisplay = "No  target character"};
   }
 
   QString result;
@@ -434,17 +436,17 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
 
   // Apply some effects only at launch
   if (!fromLaunch && ACTIVE_EFFECTS_ON_LAUNCH.count(effect.effect) > 0) {
-    return std::make_pair("", newEffects);
+    return EffectOutcome{};
   }
   // up/down % stats must be effective only at launch
   if ((effect.statsName == STATS_DODGE || effect.statsName == STATS_CRIT) &&
       (!fromLaunch && !reload)) {
-    return std::make_pair("", newEffects);
+    return EffectOutcome{};
   }
   // Stats other than HOT or DOT should not be updated each turn
   if (effect.statsName != STATS_HP && effect.effect == EFFECT_VALUE_CHANGE &&
       (!fromLaunch && !reload)) {
-    return std::make_pair("", newEffects);
+    return EffectOutcome{};
   }
 
   // Apply crit on effects
@@ -499,7 +501,7 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
         // TODO should be static and not on target ? pass target by argument
         result += target->ProcessOutputLogOnEffect(ep, ep.value, fromLaunch, 1,
                                                    atk.name, ep.value);
-        newEffects.push_back(ep);
+        output.newEffects.push_back(ep);
       });
     }
   }
@@ -550,7 +552,10 @@ Character::ApplyOneEffect(Character *target, effectParam &effect,
                   .arg(maxAmountSent - realAmountSent);
   }
 
-  return std::make_pair(result, newEffects);
+  output.logDisplay = result;
+  output.fullAtkAmountTx = maxAmountSent;
+  output.realAmountTx = realAmountSent;
+  return output;
 }
 
 // Apply effect after launch of atk
@@ -651,16 +656,16 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
 
     effectParam appliedEffect = effect;
     // appliedEffect is modified in ApplyOneEffect
-    const auto [resultEffect, newEffects] =
+    const auto effectOutcome =
         ApplyOneEffect(target, appliedEffect, true, atk, false, isCrit);
     // an one-occurence(one turn) or more effect available is displayed
-    if (!resultEffect.isEmpty()) {
-      allResultEffects.append(resultEffect);
+    if (!effectOutcome.logDisplay.isEmpty()) {
+      allResultEffects.append(effectOutcome.logDisplay);
     }
     allAppliedEffects.push_back(appliedEffect);
     // update allAppliedEffects by newEffects created
     std::for_each(
-        newEffects.begin(), newEffects.end(),
+        effectOutcome.newEffects.begin(), effectOutcome.newEffects.end(),
         [&](const effectParam &e) { allAppliedEffects.push_back(e); });
   }
 
@@ -1512,7 +1517,8 @@ void Character::UpdateStatsToNextLevel() {
     auto &localStat = m_Stats.m_AllStatsTable[stat];
 
     // store the ratio between max value and current value
-    const double ratio = Utils::CalcRatio(localStat.m_CurrentValue, localStat.m_MaxValue);
+    const double ratio =
+        Utils::CalcRatio(localStat.m_CurrentValue, localStat.m_MaxValue);
     // update the raw value by 10%
     localStat.m_RawMaxValue += localStat.m_RawMaxValue * 10 / 100;
     localStat.m_CurrentRawValue +=

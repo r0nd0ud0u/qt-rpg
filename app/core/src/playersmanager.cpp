@@ -294,10 +294,10 @@ QStringList PlayersManager::ApplyEffectsOnPlayer(const QString &curPlayerName,
                             .arg(gae.atk.name));
       } else if (auto *launcherPl = GetActiveCharacterByName(gae.launcher);
                  launcherPl != nullptr) {
-        const auto [output, _] = launcherPl->ApplyOneEffect(
+        const auto effectOutcome = launcherPl->ApplyOneEffect(
             targetPl, gae.allAtkEffects, fromLaunch, gae.atk);
-        if (!output.isEmpty()) {
-          localLog.append(output);
+        if (!effectOutcome.logDisplay.isEmpty()) {
+          localLog.append(effectOutcome.logDisplay);
         }
       }
     }

@@ -14,6 +14,7 @@
 #include "stuff.h"
 #include "utils.h" // for EffectsTypeNb struct
 #include "statsingame.h"
+#include "attack.h"
 
 #include "rust-rpg-bridge/attaque.h"
 #include "rust-rpg-bridge/character.h"
@@ -87,8 +88,7 @@ public:
   CanBeLaunched(const AttaqueType &atk) const;
 
   // Effect
-  std::pair<QString, std::vector<effectParam>>
-  ApplyOneEffect(Character *target, effectParam &effect, const bool fromLaunch,
+  EffectOutcome ApplyOneEffect(Character *target, effectParam &effect, const bool fromLaunch,
                  const AttaqueType &atk, const bool reload = false,
                  const bool isCrit = false);
   std::tuple<bool, QStringList, std::vector<effectParam>>
