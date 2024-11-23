@@ -6,6 +6,7 @@
 #include "actionsview.h"
 #include "bossesview.h"
 #include "channel.h"
+#include "fightsoundlog.h"
 #include "heroesview.h"
 
 #include "statsingame.h"
@@ -44,6 +45,7 @@ GameDisplay::GameDisplay(QWidget *parent)
           &EquipmentView::UpdateEquipment);
   // init status page
   ui->turn_label->setText("Tour 0");
+  m_FightSound = FightSoundLog();
 }
 
 GameDisplay::~GameDisplay() { delete ui; }
@@ -304,10 +306,10 @@ bool GameDisplay::ProcessAtk(
       if (isDodgingZone) {
         // can dodge ?
         if (targetChara->m_Class != CharacterClass::Tank) {
-          emit SigUpdateChannelView(
-              targetChara->m_Name,
-              QString("esquive.(%1)").arg(outputsRandnbZone),
-              targetChara->color);
+          emit SigUpdateChannelView(targetChara->m_Name,
+                                    FightSoundLog::OutputDodge(
+                                        targetChara->m_Name, outputsRandnbZone),
+                                    targetChara->color);
           return true;
         } else {
           emit SigUpdateChannelView(
@@ -359,7 +361,7 @@ bool GameDisplay::ProcessAtk(
 void GameDisplay::LaunchAttak(const QString &atkName,
                               const std::vector<TargetInfo *> &targetList) {
   const auto &gm = Application::GetInstance().m_GameManager;
-
+  m_FightSound.LaunchFailAtkOnBossSound(true);
   // Desactivate actions buttons
   ui->bag_button->setEnabled(false);
   ui->attaque_button->setEnabled(false);
@@ -397,9 +399,11 @@ void GameDisplay::LaunchAttak(const QString &atkName,
         indivTarget->m_Class != CharacterClass::Tank) {
       if (isDodging) {
         launchingStr.append(
-            QString("%1 esquive.(%2)").arg(plName).arg(outputsRandNb.first()));
+            FightSoundLog::OutputDodge(nameChara, outputsRandNb.first()));
         emit SigUpdateChannelView(nameChara, launchingStr.join("\n"),
                                   activatedPlayer->color);
+        m_FightSound.LaunchFailAtkOnBossSound(indivTarget->m_type ==
+                                                characType::Boss);
         return;
       } else {
         launchingStr.append(QString("%1 n'esquive pas.(%2)")

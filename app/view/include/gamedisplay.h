@@ -6,6 +6,7 @@
 
 #include "gamemanager.h"
 #include "playersmanager.h"
+#include "fightsoundlog.h"
 
 // The different types of the actions to perform by a player
 enum class ActionsStackedWgType { attak, defaultType, inventory, enumSize };
@@ -44,13 +45,14 @@ signals:
 
 private:
   Ui::GameDisplay *ui;
+  FightSoundLog m_FightSound;
+
   bool
   ProcessAtk(const TargetInfo *target, const AttaqueType &currentAtk,
              Character *activatedPlayer, const bool isCrit,
              const QString &nameChara,
              std::unordered_map<QString, std::vector<effectParam>> &newEffects);
-  void UpdateViewAtRoundStart(Character *activePlayer,
-                              const GameManager* gm);
+  void UpdateViewAtRoundStart(Character *activePlayer, const GameManager *gm);
 private slots:
   void on_attaque_button_clicked();
   void on_bag_button_clicked();

@@ -25,6 +25,10 @@ const QString GAMES_EQUIPMENT = "equipment";
 const QString GAMES_EFFECTS = "effects";
 const QString GAMES_STATE = "game-state";
 const QString GAMES_LOOT_EQUIPMENT = "equipment/body";
+
+// sounds
+const QString SOUNDS_DIR = "./offlines/sounds/";
+
 // game state
 const QString GAME_STATE_DIED_ENNEMIES = "died-ennemies";
 const QString GAME_STATE_ORDER_PLAYERS = "order-players-last-turn";
