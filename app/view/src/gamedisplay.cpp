@@ -310,6 +310,8 @@ bool GameDisplay::ProcessAtk(
                                     FightSoundLog::OutputDodge(
                                         targetChara->m_Name, outputsRandnbZone),
                                     targetChara->color);
+          m_FightSound.PlayDodgingSound(targetChara->m_type ==
+                                        characType::Boss);
           return true;
         } else {
           emit SigUpdateChannelView(
@@ -361,7 +363,6 @@ bool GameDisplay::ProcessAtk(
 void GameDisplay::LaunchAttak(const QString &atkName,
                               const std::vector<TargetInfo *> &targetList) {
   const auto &gm = Application::GetInstance().m_GameManager;
-  m_FightSound.LaunchFailAtkOnBossSound(true);
   // Desactivate actions buttons
   ui->bag_button->setEnabled(false);
   ui->attaque_button->setEnabled(false);
@@ -402,8 +403,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
             FightSoundLog::OutputDodge(nameChara, outputsRandNb.first()));
         emit SigUpdateChannelView(nameChara, launchingStr.join("\n"),
                                   activatedPlayer->color);
-        m_FightSound.LaunchFailAtkOnBossSound(indivTarget->m_type ==
-                                                characType::Boss);
+        m_FightSound.PlayDodgingSound(indivTarget->m_type == characType::Boss);
         return;
       } else {
         launchingStr.append(QString("%1 n'esquive pas.(%2)")

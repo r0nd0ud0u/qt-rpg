@@ -2,13 +2,11 @@
 
 #include "common.h"
 
-#include <QAudioOutput>
-#include <QMediaPlayer>
-
 FightSoundLog::FightSoundLog() {
   m_MediaPlayer = std::make_unique<QMediaPlayer>();
-  auto audioOutput = std::make_unique<QAudioOutput>();
-  m_MediaPlayer->setAudioOutput(audioOutput.get());
+  m_AudioOutput = std::make_unique<QAudioOutput>();
+  m_MediaPlayer->setAudioOutput(m_AudioOutput.get());
+  m_AudioOutput->setVolume(50.);
 }
 
 QString FightSoundLog::OutputDodge(const QString &name,
@@ -16,11 +14,17 @@ QString FightSoundLog::OutputDodge(const QString &name,
   return QString("%1 esquive.(%2)").arg(name, randType);
 }
 
-void FightSoundLog::LaunchFailAtkOnBossSound(const bool isBoss) {
-  if (!isBoss) {
+void FightSoundLog::PlayDodgingSound(const bool isBossDodging) {
+  if (m_MediaPlayer == nullptr) {
     return;
   }
-  m_MediaPlayer->setSource(QUrl::fromLocalFile(SOUNDS_DIR + "goat.wav"));
-  m_MediaPlayer->audioOutput()->setVolume(50);
+  QString soundsPath = SOUNDS_DIR;
+  if (isBossDodging) {
+    soundsPath += "on-boss-dodging.wav";
+  } else {
+    soundsPath += "on-hero-dodging.ogg";
+  }
+  m_MediaPlayer->setSource(soundsPath);
+
   m_MediaPlayer->play();
 }
