@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.27)
 
 project(qt-rpg VERSION 0.1 LANGUAGES CXX)
 
@@ -17,9 +17,6 @@ endif(MSVC)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets Network Sql)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Network Sql Multimedia)
-
-#include(${CMAKE_SOURCE_DIR}/build_conan/${CMAKE_BUILD_TYPE}/conanbuildinfo.cmake)
-#conan_basic_setup()
 
 include(FetchContent)
 
