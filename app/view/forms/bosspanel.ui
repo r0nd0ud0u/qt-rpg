@@ -125,13 +125,6 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="3">
-          <widget class="Line" name="line">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="4">
           <widget class="CompSecondaryButton" name="selectPushButton">
            <property name="text">
