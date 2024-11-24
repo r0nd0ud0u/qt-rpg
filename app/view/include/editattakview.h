@@ -49,7 +49,9 @@ private slots:
 
   void on_form_comboBox_currentTextChanged(const QString &arg1);
 
-private:
+  void on_sound_comboBox_currentTextChanged(const QString &arg1);
+
+  private:
   Ui::EditAttakView *ui;
   std::vector<EditAttak> m_AttakList;
   Character* m_CurCharacter = nullptr;

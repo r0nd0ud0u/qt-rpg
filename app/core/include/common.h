@@ -60,6 +60,7 @@ const QString ATK_LEVEL = "Niveau";
 const QString ATK_REGEN_VIGOR = "Regen vigueur";
 const QString ATK_REGEN_BERSECK = "Regen rage";
 const QString ATK_FORM = "Forme";
+const QString ATK_SOUND = "Sound";
 // Reach keys
 const QString REACH_ZONE = "Zone";
 const QString REACH_INDIVIDUAL = "Individuel";

@@ -18,13 +18,20 @@ void FightSoundLog::PlayDodgingSound(const bool isBossDodging) {
   if (m_MediaPlayer == nullptr) {
     return;
   }
-  QString soundsPath = SOUNDS_DIR;
+  QString soundName;
   if (isBossDodging) {
-    soundsPath += "on-boss-dodging.wav";
+    soundName += "on-boss-dodging.wav";
   } else {
-    soundsPath += "on-hero-dodging.ogg";
+    soundName += "on-hero-dodging.ogg";
   }
-  m_MediaPlayer->setSource(soundsPath);
+  LaunchSound(soundName);
+}
 
+void FightSoundLog::LaunchSound(const QString &soundName) {
+  if (soundName.isEmpty()) {
+    return;
+  }
+  QString soundPath = SOUNDS_DIR + soundName;
+  m_MediaPlayer->setSource(soundPath);
   m_MediaPlayer->play();
 }

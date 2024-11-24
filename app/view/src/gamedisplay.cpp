@@ -385,6 +385,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   activatedPlayer->ProcessCost(atkName);
   QStringList launchingStr;
   launchingStr.append(QString("lance %1.").arg(atkName));
+  // process sound
+  m_FightSound.LaunchSound(currentAtk.atkSoundPath);
   // update stats in game info
   activatedPlayer->m_StatsInGame.m_AllAtksInfo[atkName].nbOfUse++;
 
@@ -400,7 +402,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
         indivTarget->m_Class != CharacterClass::Tank) {
       if (isDodging) {
         launchingStr.append(
-            FightSoundLog::OutputDodge(nameChara, outputsRandNb.first()));
+              FightSoundLog::OutputDodge(indivTarget->m_Name, outputsRandNb.first()));
         emit SigUpdateChannelView(nameChara, launchingStr.join("\n"),
                                   activatedPlayer->color);
         m_FightSound.PlayDodgingSound(indivTarget->m_type == characType::Boss);
