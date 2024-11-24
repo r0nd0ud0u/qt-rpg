@@ -105,7 +105,7 @@ void BossesView::RemoveBoss(QString bossName) {
 }
 
 void BossesView::SetFocusOn(const Character *c) {
-  if (c->m_type != characType::Boss) {
+    if (c->m_Type != characType::Boss) {
     return;
   }
   for (int i = 0; i < ui->main_widget->layout()->count(); i++) {

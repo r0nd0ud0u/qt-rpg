@@ -199,6 +199,9 @@ void Stylizer::ApplyTheme(QWidget* widgetToChange)
             padding: 2px 5px 2px 5px; \
             min-width: 1.5em; \
         } \
+        QFrame { \
+                border-radius: 4px; \
+        } \
         #mark_list {\
             border-radius: 4px; \
             border: 0px solid black; \
@@ -379,10 +382,10 @@ void Stylizer::ApplyTheme(QWidget* widgetToChange)
             border-radius: 2px; \
         } \
         QScrollBar:vertical { \
-            width: 6px; \
+            width: 9px; \
         } \
         QScrollBar:horizontal { \
-            height: 6px; \
+            height: 9px; \
         } \
         QScrollBar::add-line, QScrollBar::sub-line { \
             width:0;height:0 \

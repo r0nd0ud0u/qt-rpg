@@ -54,6 +54,7 @@
     "Niveau": 2,
     "Nom": "Offrande vitale",
     "Photo": "default.png",
-    "Portée": "Individuel"
+    "Portée": "Individuel",
+    "Sound": ""
 }
 

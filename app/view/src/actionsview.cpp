@@ -173,7 +173,7 @@ void ActionsView::CreateTargetCheckBoxes(
       continue;
     }
     auto *checkbox = new QCheckBox();
-    checkbox->setText(ply->m_Name);
+    checkbox->setText(ply->m_ShortName);
     checkbox->setEnabled(false);
     ui->targets_widget->layout()->addWidget(checkbox);
     // init target
@@ -181,7 +181,7 @@ void ActionsView::CreateTargetCheckBoxes(
     const auto t = ply->m_Name.toStdString();
     target->set_name(ply->m_Name.toStdString());
     target->set_is_targeted(false);
-    target->set_is_boss(ply->m_type == characType::Boss);
+    target->set_is_boss(ply->m_Type == characType::Boss);
     m_TargetedList.push_back(target);
     const QString &name = target->get_name().data();
     connect(checkbox, &QCheckBox::clicked, this,
@@ -215,14 +215,14 @@ void ActionsView::UpdateTargetList(const QString &name) {
 
     if (name == target->get_name().data()) {
       target->set_is_targeted(!target->get_is_targeted());
-
-    } else if ((m_CurPlayer->m_type == characType::Hero &&
+        
+    } else if ((m_CurPlayer->m_Type == characType::Hero &&
                 !target->get_is_boss()) ||
-               (m_CurPlayer->m_type == characType::Boss &&
+               (m_CurPlayer->m_Type == characType::Boss &&
                 target->get_is_boss()) ||
-               (m_CurPlayer->m_type == characType::Hero &&
+               (m_CurPlayer->m_Type == characType::Hero &&
                 target->get_is_boss()) ||
-               (m_CurPlayer->m_type == characType::Boss &&
+               (m_CurPlayer->m_Type == characType::Boss &&
                 !target->get_is_boss())) {
       if (m_CurAtk.reach == REACH_ZONE) {
         target->set_is_targeted(!target->get_is_targeted());
@@ -272,7 +272,7 @@ void ActionsView::ProcessEnableTargetsBoxes() {
       if (m_CurAtk.target == TARGET_HIMSELF &&
           target->get_name().data() != m_CurPlayer->m_Name) {
         continue;
-      } else if (m_CurPlayer->m_type == characType::Hero) {
+      } else if (m_CurPlayer->m_Type == characType::Hero) {
         // TODO never entering here
         if (target->get_is_boss() && m_CurAtk.target != TARGET_ENNEMY) {
           continue;
@@ -287,7 +287,7 @@ void ActionsView::ProcessEnableTargetsBoxes() {
                                         m_CurAtk.target == TARGET_HIMSELF)) {
           continue;
         }
-      } else if (m_CurPlayer->m_type == characType::Boss) {
+      } else if (m_CurPlayer->m_Type == characType::Boss) {
         if (target->get_is_boss() && m_CurAtk.target == TARGET_ENNEMY) {
           continue;
         }

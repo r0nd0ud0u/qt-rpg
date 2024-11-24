@@ -63,6 +63,7 @@
     "Niveau": 10,
     "Nom": "Prière du desespoir",
     "Photo": "default.png",
-    "Portée": "Zone"
+    "Portée": "Zone",
+    "Sound": ""
 }
 

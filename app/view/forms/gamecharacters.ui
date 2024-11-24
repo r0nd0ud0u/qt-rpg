@@ -46,7 +46,7 @@
         <number>10</number>
        </property>
        <item>
-        <widget class="QPushButton" name="addCharaPushButton">
+        <widget class="CompSecondaryButton" name="addCharaPushButton">
          <property name="text">
           <string>Add character</string>
          </property>
@@ -131,14 +131,14 @@
         <number>10</number>
        </property>
        <item>
-        <widget class="QPushButton" name="nextPushButton">
+        <widget class="CompBigPrimaryButton" name="nextPushButton">
          <property name="text">
           <string>Suivant</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="back_pushButton">
+        <widget class="CompBigPrimaryButton" name="back_pushButton">
          <property name="text">
           <string>Retour</string>
          </property>
@@ -151,6 +151,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>CompSecondaryButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">CompButtons.h</header>
+  </customwidget>
   <customwidget>
    <class>ImgCharacterView</class>
    <extends>QWidget</extends>
@@ -168,6 +173,11 @@
    <extends>QWidget</extends>
    <header location="global">equipmentview.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CompBigPrimaryButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">CompButtons.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -121,8 +121,9 @@ public:
   std::vector<effectParam> LoadElaraTalent() const;
 
   QString m_Name = "default";
+  QString m_ShortName = "default";
   QString m_PhotoName;
-  characType m_type = characType::Hero;
+  characType m_Type = characType::Hero;
   Stats m_Stats;
   std::unordered_map<QString, Stuff>
       m_WearingEquipment; // key: body, value: equipmentName

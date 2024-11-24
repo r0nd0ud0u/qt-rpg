@@ -54,6 +54,7 @@
     "Niveau": 4,
     "Nom": "Fleur de vie sanguinaire",
     "Photo": "default.png",
-    "Portée": "Individuel"
+    "Portée": "Individuel",
+    "Sound": ""
 }
 

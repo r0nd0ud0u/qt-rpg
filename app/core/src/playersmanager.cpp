@@ -994,9 +994,14 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
     QJsonObject obj;
 
     obj.insert(CH_NAME, h->m_Name);
+    QString shortName = h->m_ShortName;
+    if(shortName.isEmpty()){
+        shortName = h->m_Name;
+    }
+    obj.insert(CH_SHORT_NAME, shortName);
     obj.insert(CH_PHOTO_NAME, h->m_PhotoName);
     const auto type =
-        (h->m_type == characType::Boss) ? CH_TYPE_BOSS : CH_TYPE_HERO;
+        (h->m_Type == characType::Boss) ? CH_TYPE_BOSS : CH_TYPE_HERO;
     obj.insert(CH_TYPE, type);
     obj.insert(CH_LEVEL, h->m_Level);
     obj.insert(CH_EXP, h->m_Exp);
@@ -1124,6 +1129,10 @@ void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
     // decode json
     auto *c = new Character("", characType::Hero, {});
     c->m_Name = jsonObj[CH_NAME].toString();
+    c->m_ShortName = jsonObj[CH_SHORT_NAME].toString();
+    if(c->m_ShortName.isEmpty()){
+        c->m_ShortName = c->m_Name;
+    }
     c->m_SelectedForm = jsonObj[CH_FORM].toString();
     if (const auto &classCh = jsonObj[CH_CLASS].toString();
         classCh == TANK_CLASS) {
@@ -1132,7 +1141,7 @@ void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
       c->m_Class = CharacterClass::Standard;
     }
     c->m_PhotoName = jsonObj[CH_PHOTO_NAME].toString();
-    c->m_type = (jsonObj[CH_TYPE].toString() == CH_TYPE_BOSS)
+    c->m_Type = (jsonObj[CH_TYPE].toString() == CH_TYPE_BOSS)
                     ? characType::Boss
                     : characType::Hero;
     c->m_Level = static_cast<int>(jsonObj[CH_LEVEL].toDouble());
@@ -1222,13 +1231,13 @@ void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
     }
     if (isLoadingGame) {
       c->m_StatsInGame.m_IsPlaying = true;
-      if (c->m_type == characType::Hero) {
+        if (c->m_Type == characType::Hero) {
         m_HeroesList.push_back(c);
       } else {
         m_BossesList.push_back(c);
       }
     } else {
-      if (c->m_type == characType::Hero) {
+        if (c->m_Type == characType::Hero) {
         m_AllHeroesList.push_back(c);
       } else {
         m_AllBossesList.push_back(c);
@@ -1401,7 +1410,7 @@ void PlayersManager::LoadAllEffects(const QString &filepath) {
 #endif
 }
 
-bool PlayersManager::CheckGameOver() {
+bool PlayersManager::CheckGameOver() const{
   for (const auto *h : m_HeroesList) {
     if (h != nullptr && !h->IsDead()) {
       return false;
