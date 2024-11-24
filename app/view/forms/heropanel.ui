@@ -374,7 +374,7 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QPushButton" name="edit_button">
+          <widget class="CompSecondaryButton" name="edit_button">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -387,7 +387,7 @@
           <widget class="QComboBox" name="form_comboBox"/>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="CompSecondaryButton" name="pushButton">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -397,7 +397,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="removePushButton">
+          <widget class="CompSecondaryButton" name="removePushButton">
            <property name="text">
             <string>Remove</string>
            </property>
@@ -412,6 +412,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>CompSecondaryButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">CompButtons.h</header>
+  </customwidget>
   <customwidget>
    <class>ImgCharacterView</class>
    <extends>QWidget</extends>

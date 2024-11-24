@@ -55,7 +55,7 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QPushButton" name="removeButton">
+    <widget class="CompSecondaryButton" name="removeButton">
      <property name="maximumSize">
       <size>
        <width>50</width>
@@ -163,6 +163,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CompSecondaryButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">CompButtons.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

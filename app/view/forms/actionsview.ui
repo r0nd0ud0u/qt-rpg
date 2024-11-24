@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>464</width>
+    <width>520</width>
     <height>372</height>
    </rect>
   </property>
@@ -86,7 +86,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="validate_action">
+    <widget class="CompBigSecondaryButton" name="validate_action">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -97,6 +97,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CompBigSecondaryButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">CompButtons.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

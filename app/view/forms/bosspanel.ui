@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>327</width>
-    <height>83</height>
+    <height>113</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -133,7 +133,7 @@
           </widget>
          </item>
          <item row="1" column="4">
-          <widget class="QPushButton" name="selectPushButton">
+          <widget class="CompSecondaryButton" name="selectPushButton">
            <property name="text">
             <string>Select</string>
            </property>
@@ -159,14 +159,14 @@
           </widget>
          </item>
          <item row="0" column="4">
-          <widget class="QPushButton" name="edit_button">
+          <widget class="CompSecondaryButton" name="edit_button">
            <property name="text">
             <string>Edit</string>
            </property>
           </widget>
          </item>
          <item row="2" column="4">
-          <widget class="QPushButton" name="removePushButton">
+          <widget class="CompSecondaryButton" name="removePushButton">
            <property name="text">
             <string>Remove</string>
            </property>
@@ -180,6 +180,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CompSecondaryButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">CompButtons.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

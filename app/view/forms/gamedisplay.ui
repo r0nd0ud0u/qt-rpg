@@ -181,7 +181,7 @@
        <item>
         <layout class="QFormLayout" name="formLayout">
          <item row="0" column="0">
-          <widget class="QPushButton" name="attaque_button">
+          <widget class="CompSecondaryButton" name="attaque_button">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -191,7 +191,7 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QPushButton" name="bag_button">
+          <widget class="CompSecondaryButton" name="bag_button">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -208,7 +208,7 @@
           </widget>
          </item>
          <item row="8" column="0">
-          <widget class="QPushButton" name="add_exp_button">
+          <widget class="CompSecondaryButton" name="add_exp_button">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -358,9 +358,26 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>CompSecondaryButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">CompButtons.h</header>
+  </customwidget>
+  <customwidget>
    <class>ImgCharacterView</class>
    <extends>QWidget</extends>
    <header location="global">imgcharacterview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>StatsView</class>
+   <extends>QWidget</extends>
+   <header location="global">statsview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>EquipmentView</class>
+   <extends>QWidget</extends>
+   <header location="global">equipmentview.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -379,18 +396,6 @@
    <class>BossesView</class>
    <extends>QWidget</extends>
    <header location="global">bossesview.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>StatsView</class>
-   <extends>QWidget</extends>
-   <header location="global">statsview.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>EquipmentView</class>
-   <extends>QWidget</extends>
-   <header location="global">equipmentview.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

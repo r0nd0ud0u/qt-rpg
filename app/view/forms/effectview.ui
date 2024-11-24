@@ -23,7 +23,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QPushButton" name="add_effect_Button">
+         <widget class="CompSecondaryButton" name="add_effect_Button">
           <property name="text">
            <string>New effect</string>
           </property>
@@ -54,8 +54,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>502</width>
-           <height>205</height>
+           <width>494</width>
+           <height>187</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2"/>
@@ -67,6 +67,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CompSecondaryButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">CompButtons.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
