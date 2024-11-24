@@ -41,9 +41,9 @@ void EditCharacter::AddCharacter(Character *ch) const {
     return;
   }
   ch->m_Name = ui->name_edit->toPlainText();
-  ch->m_type = characType::Hero;
+  ch->m_Type = characType::Hero;
   if (ui->boss_radio->isChecked()) {
-    ch->m_type = characType::Boss;
+      ch->m_Type = characType::Boss;
   }
 
   for (const auto &panel : m_PanelList) {
@@ -76,10 +76,10 @@ void EditCharacter::Init(const Character *c) {
   // update name
   ui->name_edit->setText(c->m_Name);
   // update hero/boss button
-  ui->boss_radio->setChecked(c->m_type == characType::Boss);
-  ui->boss_radio->setEnabled(c->m_type == characType::Boss);
-  ui->hero_radio->setChecked(c->m_type == characType::Hero);
-  ui->hero_radio->setEnabled(c->m_type == characType::Hero);
+  ui->boss_radio->setChecked(c->m_Type == characType::Boss);
+  ui->boss_radio->setEnabled(c->m_Type == characType::Boss);
+  ui->hero_radio->setChecked(c->m_Type == characType::Hero);
+  ui->hero_radio->setEnabled(c->m_Type == characType::Hero);
   // init stats value on panel
   for (auto *panel : m_PanelList) {
     if (panel == nullptr) {

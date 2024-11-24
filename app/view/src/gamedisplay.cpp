@@ -110,7 +110,7 @@ bool GameDisplay::NewRound() {
   if (activePlayer->IsDead()) {
     emit SigUpdateChannelView(activePlayer->m_Name, "est mort.",
                               activePlayer->color);
-    if (activePlayer->m_type == characType::Hero) {
+      if (activePlayer->m_Type == characType::Hero) {
       m_FightSound.LaunchSound(PLAYER_DEATH_SOUND);
     }
     return false;
@@ -197,7 +197,7 @@ bool GameDisplay::NewRound() {
     if (activePlayer->m_Power.is_damage_tx_heal_needy_ally &&
         isDamageTxLastTurn) {
       gm->m_PlayersManager->ProcessDamageTXHealNeedyAlly(
-          activePlayer->m_type, damageTx.at(gs->m_CurrentTurnNb - 1));
+            activePlayer->m_Type, damageTx.at(gs->m_CurrentTurnNb - 1));
     }
   }
 
@@ -313,7 +313,7 @@ bool GameDisplay::ProcessAtk(
                                     FightSoundLog::OutputDodge(
                                         targetChara->m_Name, outputsRandnbZone),
                                     targetChara->color);
-          m_FightSound.PlayDodgingSound(targetChara->m_type ==
+            m_FightSound.PlayDodgingSound(targetChara->m_Type ==
                                         characType::Boss);
           return true;
         } else {
@@ -408,7 +408,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
                                                        outputsRandNb.first()));
         emit SigUpdateChannelView(nameChara, launchingStr.join("\n"),
                                   activatedPlayer->color);
-        m_FightSound.PlayDodgingSound(indivTarget->m_type == characType::Boss);
+        m_FightSound.PlayDodgingSound(indivTarget->m_Type == characType::Boss);
         return;
       } else {
         launchingStr.append(QString("%1 n'esquive pas.(%2)")

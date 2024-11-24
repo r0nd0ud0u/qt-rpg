@@ -135,7 +135,7 @@ void MainWindow::StartGameFromScratch() {
 }
 
 void MainWindow::UpdatCharacterViews(Character *ch) {
-  if (ch->m_type == characType::Hero) {
+    if (ch->m_Type == characType::Hero) {
     ui->page_Hero->UpdatePanelAfterEdit(ch);
     ui->page_Hero->UpdateViews(ch);
   } else {
