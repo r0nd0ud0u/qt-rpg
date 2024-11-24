@@ -994,6 +994,11 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
     QJsonObject obj;
 
     obj.insert(CH_NAME, h->m_Name);
+    QString shortName = h->m_ShortName;
+    if(shortName.isEmpty()){
+        shortName = h->m_Name;
+    }
+    obj.insert(CH_SHORT_NAME, shortName);
     obj.insert(CH_PHOTO_NAME, h->m_PhotoName);
     const auto type =
         (h->m_Type == characType::Boss) ? CH_TYPE_BOSS : CH_TYPE_HERO;
@@ -1124,6 +1129,10 @@ void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
     // decode json
     auto *c = new Character("", characType::Hero, {});
     c->m_Name = jsonObj[CH_NAME].toString();
+    c->m_ShortName = jsonObj[CH_SHORT_NAME].toString();
+    if(c->m_ShortName.isEmpty()){
+        c->m_ShortName = c->m_Name;
+    }
     c->m_SelectedForm = jsonObj[CH_FORM].toString();
     if (const auto &classCh = jsonObj[CH_CLASS].toString();
         classCh == TANK_CLASS) {

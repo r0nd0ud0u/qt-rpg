@@ -173,7 +173,7 @@ void ActionsView::CreateTargetCheckBoxes(
       continue;
     }
     auto *checkbox = new QCheckBox();
-    checkbox->setText(ply->m_Name);
+    checkbox->setText(ply->m_ShortName);
     checkbox->setEnabled(false);
     ui->targets_widget->layout()->addWidget(checkbox);
     // init target

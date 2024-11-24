@@ -121,6 +121,7 @@ public:
   std::vector<effectParam> LoadElaraTalent() const;
 
   QString m_Name = "default";
+  QString m_ShortName = "default";
   QString m_PhotoName;
   characType m_Type = characType::Hero;
   Stats m_Stats;

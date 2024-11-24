@@ -70,18 +70,6 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimumSize">
-      <size>
-       <width>210</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>210</width>
-       <height>350</height>
-      </size>
-     </property>
      <layout class="QVBoxLayout" name="target_lay"/>
     </widget>
    </item>
