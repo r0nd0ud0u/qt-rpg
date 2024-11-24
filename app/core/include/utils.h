@@ -23,6 +23,7 @@ public:
   static double CalcRatio(const int val1, const int val2);
   static std::pair<QJsonObject, QString> LoadJsonFile(const QString& filepath);
   static int MultiplyIntByDouble(int i, double d);
+  static QStringList GetAllFilesInDir(const QString& dirPath);
 };
 
 #endif // UTILS_H

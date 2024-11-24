@@ -6,6 +6,7 @@
 #include "actionsview.h"
 #include "bossesview.h"
 #include "channel.h"
+#include "fightsoundlog.h"
 #include "heroesview.h"
 
 #include "statsingame.h"
@@ -44,6 +45,7 @@ GameDisplay::GameDisplay(QWidget *parent)
           &EquipmentView::UpdateEquipment);
   // init status page
   ui->turn_label->setText("Tour 0");
+  m_FightSound = FightSoundLog();
 }
 
 GameDisplay::~GameDisplay() { delete ui; }
@@ -108,6 +110,9 @@ bool GameDisplay::NewRound() {
   if (activePlayer->IsDead()) {
     emit SigUpdateChannelView(activePlayer->m_Name, "est mort.",
                               activePlayer->color);
+    if (activePlayer->m_type == characType::Hero) {
+      m_FightSound.LaunchSound(PLAYER_DEATH_SOUND);
+    }
     return false;
   }
   // update character
@@ -304,10 +309,12 @@ bool GameDisplay::ProcessAtk(
       if (isDodgingZone) {
         // can dodge ?
         if (targetChara->m_Class != CharacterClass::Tank) {
-          emit SigUpdateChannelView(
-              targetChara->m_Name,
-              QString("esquive.(%1)").arg(outputsRandnbZone),
-              targetChara->color);
+          emit SigUpdateChannelView(targetChara->m_Name,
+                                    FightSoundLog::OutputDodge(
+                                        targetChara->m_Name, outputsRandnbZone),
+                                    targetChara->color);
+          m_FightSound.PlayDodgingSound(targetChara->m_type ==
+                                        characType::Boss);
           return true;
         } else {
           emit SigUpdateChannelView(
@@ -359,7 +366,6 @@ bool GameDisplay::ProcessAtk(
 void GameDisplay::LaunchAttak(const QString &atkName,
                               const std::vector<TargetInfo *> &targetList) {
   const auto &gm = Application::GetInstance().m_GameManager;
-
   // Desactivate actions buttons
   ui->bag_button->setEnabled(false);
   ui->attaque_button->setEnabled(false);
@@ -382,6 +388,8 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   activatedPlayer->ProcessCost(atkName);
   QStringList launchingStr;
   launchingStr.append(QString("lance %1.").arg(atkName));
+  // process sound
+  m_FightSound.LaunchSound(currentAtk.atkSoundPath);
   // update stats in game info
   activatedPlayer->m_StatsInGame.m_AllAtksInfo[atkName].nbOfUse++;
 
@@ -396,10 +404,11 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     if (indivTarget != nullptr &&
         indivTarget->m_Class != CharacterClass::Tank) {
       if (isDodging) {
-        launchingStr.append(
-            QString("%1 esquive.(%2)").arg(plName).arg(outputsRandNb.first()));
+        launchingStr.append(FightSoundLog::OutputDodge(indivTarget->m_Name,
+                                                       outputsRandNb.first()));
         emit SigUpdateChannelView(nameChara, launchingStr.join("\n"),
                                   activatedPlayer->color);
+        m_FightSound.PlayDodgingSound(indivTarget->m_type == characType::Boss);
         return;
       } else {
         launchingStr.append(QString("%1 n'esquive pas.(%2)")
@@ -415,6 +424,7 @@ void GameDisplay::LaunchAttak(const QString &atkName,
   QString critStr;
   if (isCrit) {
     critStr = "Coup critique";
+    m_FightSound.LaunchSound(CRITICAL_SOUND);
   } else {
     critStr = "Pas de coup critique";
   }
@@ -514,6 +524,9 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     gm->m_GameState->RemoveDeadPlayerInTurn(dp);
     gm->m_GameState->m_DiedEnnemies[gm->m_GameState->m_CurrentTurnNb].push_back(
         dp);
+    if (!dp.isEmpty()) {
+      m_FightSound.LaunchSound(KILL_SOUND);
+    }
   }
   const QStringList diedHeroesList =
       gm->m_PlayersManager->CheckDiedPlayers(characType::Hero);
@@ -534,6 +547,21 @@ void GameDisplay::LaunchAttak(const QString &atkName,
     //      if not end of game!!
 
     EndOfGame();
+    m_FightSound.LaunchSound(VICTORY_SOUND);
+  }
+  if (gm->m_PlayersManager->m_BossesList.empty()) {
+    // update buttons
+    // TODO new boss to add ? or new phase ?
+    // if yes -> start new turn with new boss
+    //      if not end of game!!
+
+    EndOfGame();
+    m_FightSound.LaunchSound(VICTORY_SOUND);
+  }
+  // check game over
+  if (gm->m_PlayersManager->CheckGameOver()) {
+    EndOfGame();
+    m_FightSound.LaunchSound(GAME_OVER_SOUND);
   }
 }
 
@@ -541,6 +569,7 @@ void GameDisplay::on_mana_potion_button_clicked() {
   auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_MANA);
+    m_FightSound.LaunchSound(POTION_SOUND);
     emit SigUpdatePlayerPanel({});
   }
 }
@@ -549,6 +578,7 @@ void GameDisplay::on_hp_potion_button_clicked() {
   auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_HP);
+    m_FightSound.LaunchSound(POTION_SOUND);
     emit SigUpdatePlayerPanel({});
   }
 }
@@ -557,6 +587,7 @@ void GameDisplay::on_berseck_potion_button_clicked() {
   auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_BERSECK);
+    m_FightSound.LaunchSound(POTION_SOUND);
     emit SigUpdatePlayerPanel({});
   }
 }
@@ -565,6 +596,7 @@ void GameDisplay::on_vigor_potion_button_clicked() {
   auto *hero = Application::GetInstance().m_GameManager->GetCurrentPlayer();
   if (hero != nullptr) {
     hero->UsePotion(STATS_VIGOR);
+    m_FightSound.LaunchSound(POTION_SOUND);
     emit SigUpdatePlayerPanel({});
   }
 }

@@ -31,6 +31,7 @@ void StatsInGame::GenerateStatsEndGame(const QString &filepath) {
   out << ENDGAME_TITLE_BAR.join(";\t") << "\n";
   out << GetOutputEndGameByList(pm->m_HeroesList).toUtf8() << "\n";
   out << GetOutputEndGameByList(pm->m_BossesList).toUtf8() << "\n";
+  file.close();
 }
 
 QString StatsInGame::GetOutputEndGameByList(

@@ -60,4 +60,5 @@ void EditStuff::SaveStuffInJson(const EditStuff &es, const QString &bodyPart) {
   out.setCodec("UTF-8");
 #endif
   out << doc.toJson() << "\n";
+  file.close();
 }

@@ -16,6 +16,7 @@ set(HEADERS
     include/bossclass.h
     include/statsingame.h
     include/attack.h
+    include/fightsoundlog.h
 
 )
 set(SOURCES
@@ -31,6 +32,7 @@ set(SOURCES
     src/bossclass.cpp
     src/statsingame.cpp
     src/attack.cpp
+    src/fightsoundlog.cpp
 )
 
 
@@ -43,5 +45,6 @@ target_link_libraries(core
     Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Network
+    Qt${QT_VERSION_MAJOR}::Multimedia
     rust-rpg-bridge
 )

@@ -22,6 +22,7 @@ public:
     std::vector<effectParam> m_AllEffects = {};
     QString form = STANDARD_FORM;
     AttaqueNature nature;
+    QString atkSoundPath;
 
     static constexpr double COEFF_CRIT_STATS = 1.5;
     static constexpr double COEFF_CRIT_DMG = 2.0;

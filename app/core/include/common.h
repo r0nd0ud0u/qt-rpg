@@ -9,66 +9,71 @@
 #include "rust-rpg-bridge/buffers.h"
 
 // inputs
-const QString OFFLINE_IMG = "./offlines/attak/img/";
-const QString OFFLINE_ATK = "./offlines/attak/";
-const QString OFFLINE_WEARING_EQUIPMENT = "./offlines/equipment/Personnages/";
-const QString OFFLINE_ROOT_EQUIPMENT = "./offlines/equipment/corps/";
-const QString OFFLINE_RAND_NAME_STUFF = "./offlines/equipment/random/";
-const QString OFFLINE_CHARACTERS = "./offlines/Personnages/";
-const QString OFFLINE_SAVES = "./offlines/games";
+inline const QString OFFLINE_IMG = "./offlines/attak/img/";
+inline const QString OFFLINE_ATK = "./offlines/attak/";
+inline const QString OFFLINE_WEARING_EQUIPMENT = "./offlines/equipment/Personnages/";
+inline const QString OFFLINE_ROOT_EQUIPMENT = "./offlines/equipment/corps/";
+inline const QString OFFLINE_RAND_NAME_STUFF = "./offlines/equipment/random/";
+inline const QString OFFLINE_CHARACTERS = "./offlines/Personnages/";
+inline const QString OFFLINE_SAVES = "./offlines/games";
 
 // save/load games
 // paths
-const QString GAMES_DIR = "./offlines/games/";
-const QString GAMES_CHARACTERS = "characters";
-const QString GAMES_EQUIPMENT = "equipment";
-const QString GAMES_EFFECTS = "effects";
-const QString GAMES_STATE = "game-state";
-const QString GAMES_LOOT_EQUIPMENT = "equipment/body";
+inline const QString GAMES_DIR = "./offlines/games/";
+inline const QString GAMES_CHARACTERS = "characters";
+inline const QString GAMES_EQUIPMENT = "equipment";
+inline const QString GAMES_EFFECTS = "effects";
+inline const QString GAMES_STATE = "game-state";
+inline const QString GAMES_LOOT_EQUIPMENT = "equipment/body";
+
+// sounds
+inline const QString SOUNDS_DIR = "./offlines/sounds/";
+
 // game state
-const QString GAME_STATE_DIED_ENNEMIES = "died-ennemies";
-const QString GAME_STATE_ORDER_PLAYERS = "order-players-last-turn";
-const QString GAME_STATE_CURRENT_TURN = "current-turn";
-const QString GAME_STATE_CURRENT_ROUND = "current-round";
-const QString GAME_STATE_GAME_NAME = "game-name";
-const QString GAME_STATE_STATS_IN_GAME = "/stats_in_game_%1.csv";
+inline const QString GAME_STATE_DIED_ENNEMIES = "died-ennemies";
+inline const QString GAME_STATE_ORDER_PLAYERS = "order-players-last-turn";
+inline const QString GAME_STATE_CURRENT_TURN = "current-turn";
+inline const QString GAME_STATE_CURRENT_ROUND = "current-round";
+inline const QString GAME_STATE_GAME_NAME = "game-name";
+inline const QString GAME_STATE_STATS_IN_GAME = "/stats_in_game_%1.csv";
 
 // outputs
-const QString OUTPUT_DIR = "./output/";
-const QString OUTPUT_ENDGAME = "./output/endgame_%1.csv";
-const QStringList ENDGAME_TITLE_BAR = {"Name", "Player Type", "Life status"};
+inline const QString OUTPUT_DIR = "./output/";
+inline const QString OUTPUT_ENDGAME = "./output/endgame_%1.csv";
+inline const QStringList ENDGAME_TITLE_BAR = {"Name", "Player Type", "Life status"};
 // json keys
 // ATK keys
-const QString ATK_NAME = "Nom";
-const QString ATK_TARGET = "Cible";
-const QString ATK_REACH = "Portée";
-const QString ATK_DURATION = "Durée";
-const QString ATK_MANA_COST = "Coût de mana";
-const QString ATK_VIGOR_COST = "Coût de vigueur";
-const QString ATK_BERSECK_COST = "Coût de rage";
-const QString ATK_AGGRO = "Aggro";
-const QString ATK_PHOTO = "Photo";
-const QString ATK_DAMAGE = "Dégâts";
-const QString ATK_HEAL = "Soin";
-const QString ATK_REGEN_MANA = "Regen mana";
-const QString ATK_EFFECT = "Effet";
-const QString ATK_LEVEL = "Niveau";
-const QString ATK_REGEN_VIGOR = "Regen vigueur";
-const QString ATK_REGEN_BERSECK = "Regen rage";
-const QString ATK_FORM = "Forme";
+inline const QString ATK_NAME = "Nom";
+inline const QString ATK_TARGET = "Cible";
+inline const QString ATK_REACH = "Portée";
+inline const QString ATK_DURATION = "Durée";
+inline const QString ATK_MANA_COST = "Coût de mana";
+inline const QString ATK_VIGOR_COST = "Coût de vigueur";
+inline const QString ATK_BERSECK_COST = "Coût de rage";
+inline const QString ATK_AGGRO = "Aggro";
+inline const QString ATK_PHOTO = "Photo";
+inline const QString ATK_DAMAGE = "Dégâts";
+inline const QString ATK_HEAL = "Soin";
+inline const QString ATK_REGEN_MANA = "Regen mana";
+inline const QString ATK_EFFECT = "Effet";
+inline const QString ATK_LEVEL = "Niveau";
+inline const QString ATK_REGEN_VIGOR = "Regen vigueur";
+inline const QString ATK_REGEN_BERSECK = "Regen rage";
+inline const QString ATK_FORM = "Forme";
+inline const QString ATK_SOUND = "Sound";
 // Reach keys
-const QString REACH_ZONE = "Zone";
-const QString REACH_INDIVIDUAL = "Individuel";
-const QString REACH_RAND_INDIVIDUAL = "Aleatoire Individuel";
-const std::set<QString> ALL_REACH = {"", REACH_ZONE, REACH_INDIVIDUAL,
+inline const QString REACH_ZONE = "Zone";
+inline const QString REACH_INDIVIDUAL = "Individuel";
+inline const QString REACH_RAND_INDIVIDUAL = "Aleatoire Individuel";
+inline const std::set<QString> ALL_REACH = {"", REACH_ZONE, REACH_INDIVIDUAL,
                                      REACH_RAND_INDIVIDUAL};
 // Target keys
-const QString TARGET_ENNEMY = "Ennemie";
-const QString TARGET_ALLY = "Allié";
-const QString TARGET_ONLY_ALLY = "Seulement les alliés";
-const QString TARGET_ALL_HEROES = "Tous les heroes";
-const QString TARGET_HIMSELF = "Soi-même";
-const std::set<QString> ALL_TARGETS = {
+inline const QString TARGET_ENNEMY = "Ennemie";
+inline const QString TARGET_ALLY = "Allié";
+inline const QString TARGET_ONLY_ALLY = "Seulement les alliés";
+inline const QString TARGET_ALL_HEROES = "Tous les heroes";
+inline const QString TARGET_HIMSELF = "Soi-même";
+inline const std::set<QString> ALL_TARGETS = {
     "",
     TARGET_ENNEMY,
     TARGET_ALLY,
@@ -76,33 +81,33 @@ const std::set<QString> ALL_TARGETS = {
     TARGET_HIMSELF,
     TARGET_ONLY_ALLY,
 };
-const std::set<QString> ALLIES_TARGETS = {
+inline const std::set<QString> ALLIES_TARGETS = {
     TARGET_ALLY,
     TARGET_ALL_HEROES,
     TARGET_HIMSELF,
     TARGET_ONLY_ALLY,
 };
 // Stats keys
-const QString STATS_HP = "PV";
-const QString STATS_MANA = "Mana";
-const QString STATS_VIGOR = "Vigueur";
-const QString STATS_BERSECK = "Rage";
-const QString STATS_ARM_PHY = "Armure physique";
-const QString STATS_ARM_MAG = "Armure magique";
-const QString STATS_POW_PHY = "Pouvoir physique";
-const QString STATS_POW_MAG = "Pouvoir magique";
-const QString STATS_AGGRO = "Aggro";
-const QString STATS_SPEED = "Vitesse";
-const QString STATS_CRIT = "Cout critique";
-const QString STATS_DODGE = "Esquive";
-const QString STATS_REGEN_HP = "Regeneration PV";
-const QString STATS_REGEN_MANA = "Regeneration Mana";
-const QString STATS_REGEN_VIGOR = "Regeneration vigueur";
-const QString STATS_RATE_BERSECK = "Taux rage";
-const QString STATS_RATE_AGGRO = "Taux aggro";
-const QString STATS_REGEN_SPEED = "Regen vitesse";
+inline const QString STATS_HP = "PV";
+inline const QString STATS_MANA = "Mana";
+inline const QString STATS_VIGOR = "Vigueur";
+inline const QString STATS_BERSECK = "Rage";
+inline const QString STATS_ARM_PHY = "Armure physique";
+inline const QString STATS_ARM_MAG = "Armure magique";
+inline const QString STATS_POW_PHY = "Pouvoir physique";
+inline const QString STATS_POW_MAG = "Pouvoir magique";
+inline const QString STATS_AGGRO = "Aggro";
+inline const QString STATS_SPEED = "Vitesse";
+inline const QString STATS_CRIT = "Cout critique";
+inline const QString STATS_DODGE = "Esquive";
+inline const QString STATS_REGEN_HP = "Regeneration PV";
+inline const QString STATS_REGEN_MANA = "Regeneration Mana";
+inline const QString STATS_REGEN_VIGOR = "Regeneration vigueur";
+inline const QString STATS_RATE_BERSECK = "Taux rage";
+inline const QString STATS_RATE_AGGRO = "Taux aggro";
+inline const QString STATS_REGEN_SPEED = "Regen vitesse";
 
-const std::set<QString> ALL_STATS = {"",
+inline const std::set<QString> ALL_STATS = {"",
                                      STATS_HP,
                                      STATS_MANA,
                                      STATS_VIGOR,
@@ -121,64 +126,64 @@ const std::set<QString> ALL_STATS = {"",
                                      STATS_RATE_BERSECK,
                                      STATS_RATE_AGGRO,
                                      STATS_REGEN_SPEED};
-const std::set<QString> ON_PERCENT_STATS = {STATS_MANA, STATS_VIGOR};
-const std::set<QString> STATS_TO_LEVEL_UP = {STATS_HP, STATS_MANA, STATS_VIGOR,
+inline const std::set<QString> ON_PERCENT_STATS = {STATS_MANA, STATS_VIGOR};
+inline const std::set<QString> STATS_TO_LEVEL_UP = {STATS_HP, STATS_MANA, STATS_VIGOR,
                                              STATS_POW_PHY, STATS_POW_MAG};
 
 // Characters keys
-const QString CH_NAME = "Nom";
-const QString CH_PHOTO_NAME = "Photo";
-const QString CH_TYPE = "Type";
-const QString CH_TYPE_HERO = "Hero";
-const QString CH_TYPE_BOSS = "Boss";
-const QString CH_CURRENT_VALUE = "Current";
-const QString CH_MAX_VALUE = "Max";
-const QString CH_LEVEL = "Niveau";
-const QString CH_EXP = "Exp";
-const QString CH_COLOR = "Couleur";
-const QString CH_RANK = "Rang";
-const QString CH_FORM = "Forme";
-const QString CH_CLASS = "Classe";
-const QString CH_ACTIONS_IN_ROUND = "nb-actions-in-round";
-const QString CH_BLOCKING_ATK = "is-blocking-atk";
-const QString CH_MAX_NB_ACTIONS_ROUND = "m_MaxNbActionsInRound";
+inline const QString CH_NAME = "Nom";
+inline const QString CH_PHOTO_NAME = "Photo";
+inline const QString CH_TYPE = "Type";
+inline const QString CH_TYPE_HERO = "Hero";
+inline const QString CH_TYPE_BOSS = "Boss";
+inline const QString CH_CURRENT_VALUE = "Current";
+inline const QString CH_MAX_VALUE = "Max";
+inline const QString CH_LEVEL = "Niveau";
+inline const QString CH_EXP = "Exp";
+inline const QString CH_COLOR = "Couleur";
+inline const QString CH_RANK = "Rang";
+inline const QString CH_FORM = "Forme";
+inline const QString CH_CLASS = "Classe";
+inline const QString CH_ACTIONS_IN_ROUND = "nb-actions-in-round";
+inline const QString CH_BLOCKING_ATK = "is-blocking-atk";
+inline const QString CH_MAX_NB_ACTIONS_ROUND = "m_MaxNbActionsInRound";
 // buf - debuf
-const QString CH_BUF_DEBUF = "Buf-debuf";
-const QString CH_BUF_ALL_STATS = "Buf-all-stats";
-const QString CH_BUF_VALUE = "Buf-value";
-const QString CH_BUF_PASSIVE_ENABLED = "buf-passive-enabled";
-const QString CH_BUF_IS_PERCENT = "Buf-is-percent";
-const QString CH_BUF_TYPE = "Buf-type";
+inline const QString CH_BUF_DEBUF = "Buf-debuf";
+inline const QString CH_BUF_ALL_STATS = "Buf-all-stats";
+inline const QString CH_BUF_VALUE = "Buf-value";
+inline const QString CH_BUF_PASSIVE_ENABLED = "buf-passive-enabled";
+inline const QString CH_BUF_IS_PERCENT = "Buf-is-percent";
+inline const QString CH_BUF_TYPE = "Buf-type";
 // last tx rx
-const QString CH_TXRX_TYPE = "Tx-rx-type";
-const QString CH_TXRX = "Tx-rx";
-const QString CH_TXRX_SIZE = "Tx-rx-size";
+inline const QString CH_TXRX_TYPE = "Tx-rx-type";
+inline const QString CH_TXRX = "Tx-rx";
+inline const QString CH_TXRX_SIZE = "Tx-rx-size";
 // powers
-const QString CH_POWERS_CRIT_AFTER_HEAL = "is_crit_heal_after_crit";
-const QString CH_POWERS_DMG_TX_ALLY = "is_damage_tx_heal_needy_ally";
+inline const QString CH_POWERS_CRIT_AFTER_HEAL = "is_crit_heal_after_crit";
+inline const QString CH_POWERS_DMG_TX_ALLY = "is_damage_tx_heal_needy_ally";
 // extended character
-const QString CH_EXT_RAND_TARGET = "is_random_target";
-const QString CH_EXT_HEAL_ATK_BLOCKED = "is_heal_atk_blocked";
-const QString CH_EXT_FIRST_ROUND = "is_first_round";
+inline const QString CH_EXT_RAND_TARGET = "is_random_target";
+inline const QString CH_EXT_HEAL_ATK_BLOCKED = "is_heal_atk_blocked";
+inline const QString CH_EXT_FIRST_ROUND = "is_first_round";
 
 // equipment keys
-const QString EQUIP_HEAD = "Tete";
-const QString EQUIP_NECKLACE = "Collier";
-const QString EQUIP_CHEST = "Torse";
-const QString EQUIP_PANTS = "Pantalon";
-const QString EQUIP_SHOES = "Chaussures";
-const QString EQUIP_ARM = "Bras";
-const QString EQUIP_RING_RIGHT = "Anneau droit";
-const QString EQUIP_RING_LEFT = "Anneau gauche";
-const QString EQUIP_NAME = "Nom";
-const QString EQUIP_UNIQUE_NAME = "Nom unique";
-const QString EQUIP_RIGHT_WEAPON = "Arme gauche";
-const QString EQUIP_LEFT_WEAPON = "Arme droite";
-const QString EQUIP_CATEGORY = "Categorie";
-const QString EQUIP_RUNIQUE_TATOO_1 = "Tatouage 1";
-const QString EQUIP_RUNIQUE_TATOO_2 = "Tatouage 2";
-const QString EQUIP_RUNIQUE_TATOO_3 = "Tatouage 3";
-const std::set<QString> ALL_EQUIP{EQUIP_HEAD,
+inline const QString EQUIP_HEAD = "Tete";
+inline const QString EQUIP_NECKLACE = "Collier";
+inline const QString EQUIP_CHEST = "Torse";
+inline const QString EQUIP_PANTS = "Pantalon";
+inline const QString EQUIP_SHOES = "Chaussures";
+inline const QString EQUIP_ARM = "Bras";
+inline const QString EQUIP_RING_RIGHT = "Anneau droit";
+inline const QString EQUIP_RING_LEFT = "Anneau gauche";
+inline const QString EQUIP_NAME = "Nom";
+inline const QString EQUIP_UNIQUE_NAME = "Nom unique";
+inline const QString EQUIP_RIGHT_WEAPON = "Arme gauche";
+inline const QString EQUIP_LEFT_WEAPON = "Arme droite";
+inline const QString EQUIP_CATEGORY = "Categorie";
+inline const QString EQUIP_RUNIQUE_TATOO_1 = "Tatouage 1";
+inline const QString EQUIP_RUNIQUE_TATOO_2 = "Tatouage 2";
+inline const QString EQUIP_RUNIQUE_TATOO_3 = "Tatouage 3";
+inline const std::set<QString> ALL_EQUIP{EQUIP_HEAD,
                                   EQUIP_NECKLACE,
                                   EQUIP_CHEST,
                                   EQUIP_SHOES,
@@ -193,7 +198,7 @@ const std::set<QString> ALL_EQUIP{EQUIP_HEAD,
                                   EQUIP_RUNIQUE_TATOO_1,
                                   EQUIP_RUNIQUE_TATOO_2,
                                   EQUIP_RUNIQUE_TATOO_3};
-const std::set<QString> ALL_EQUIP_ON_BODY{"",
+inline const std::set<QString> ALL_EQUIP_ON_BODY{"",
                                           EQUIP_HEAD,
                                           EQUIP_NECKLACE,
                                           EQUIP_CHEST,
@@ -213,52 +218,52 @@ const std::vector<QString> RAND_EQUIP_ON_BODY{
     EQUIP_RIGHT_WEAPON, EQUIP_LEFT_WEAPON,
 };
 // Effect keys
-const QString EFFECT_REINIT = "Reinit";
-const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";
+inline const QString EFFECT_REINIT = "Reinit";
+inline const QString EFFECT_NB_COOL_DOWN = "Tours de recharge";
 // Effect to execute an atk with a decreasing success rate defined by a step
 // on effect value
-const QString EFFECT_NB_DECREASE_ON_TURN = "Decroissement pendant le tour";
+inline const QString EFFECT_NB_DECREASE_ON_TURN = "Decroissement pendant le tour";
 // not used
-const QString EFFECT_NB_DECREASE_BY_TURN = "Decroissement par tour";
+inline const QString EFFECT_NB_DECREASE_BY_TURN = "Decroissement par tour";
 // Effect to improve cuurent value of a stat by value
-const QString EFFECT_VALUE_CHANGE = "Changement par valeur";
+inline const QString EFFECT_VALUE_CHANGE = "Changement par valeur";
 // Effect to improve cuurent value of a stat by percent
-const QString EFFECT_PERCENT_CHANGE = "Changement par %";
-const QString EFFECT_DELETE_BAD = "Supprime effet néfaste";
-const QString EFFECT_INTO_DAMAGE = "% (stats) en dégâts";
-const QString EFFECT_IMPROVE_HOTS = "Boost chaque HOT de .. %";
-const QString EFFECT_BOOSTED_BY_HOTS =
+inline const QString EFFECT_PERCENT_CHANGE = "Changement par %";
+inline const QString EFFECT_DELETE_BAD = "Supprime effet néfaste";
+inline const QString EFFECT_INTO_DAMAGE = "% (stats) en dégâts";
+inline const QString EFFECT_IMPROVE_HOTS = "Boost chaque HOT de .. %";
+inline const QString EFFECT_BOOSTED_BY_HOTS =
     "Boost l'effet par nb HOTS presents en %";
-const QString EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT = "Up/down degats en %";
-const QString EFFECT_CHANGE_DAMAGES_RX_BY_PERCENT = "Up/down degats RX en %";
-const QString EFFECT_CHANGE_HEAL_RX_BY_PERCENT = "Up/down heal RX en %";
-const QString EFFECT_CHANGE_HEAL_TX_BY_PERCENT = "Up/down heal TX en %";
+inline const QString EFFECT_CHANGE_MAX_DAMAGES_BY_PERCENT = "Up/down degats en %";
+inline const QString EFFECT_CHANGE_DAMAGES_RX_BY_PERCENT = "Up/down degats RX en %";
+inline const QString EFFECT_CHANGE_HEAL_RX_BY_PERCENT = "Up/down heal RX en %";
+inline const QString EFFECT_CHANGE_HEAL_TX_BY_PERCENT = "Up/down heal TX en %";
 // Assess the nob of applies for a stat
-const QString EFFECT_REPEAT_AS_MANY_AS = "Répète tant que possible";
+inline const QString EFFECT_REPEAT_AS_MANY_AS = "Répète tant que possible";
 // Effect to improve max value of a stat by percent (current value is updated by
 // ratio)
-const QString EFFECT_IMPROVE_BY_PERCENT_CHANGE = "Up par %";
+inline const QString EFFECT_IMPROVE_BY_PERCENT_CHANGE = "Up par %";
 // Effect to improve max value of a stat by value (current value is updated by
 // ratio)
-const QString EFFECT_IMPROVEMENT_STAT_BY_VALUE = "Up par valeur";
-const QString EFFECT_NEXT_HEAL_IS_CRIT = "Prochaine attaque heal est crit";
-const QString EFFECT_BUF_MULTI = "Buf multi";
-const QString EFFECT_BLOCK_HEAL_ATK = "Bloque attaque de soin";
+inline const QString EFFECT_IMPROVEMENT_STAT_BY_VALUE = "Up par valeur";
+inline const QString EFFECT_NEXT_HEAL_IS_CRIT = "Prochaine attaque heal est crit";
+inline const QString EFFECT_BUF_MULTI = "Buf multi";
+inline const QString EFFECT_BLOCK_HEAL_ATK = "Bloque attaque de soin";
 // Conditions on effect
 // Atk is enable if damages are been tx during previous turn
-const QString EFFECT_COND_DMG_PREV_TURN =
+inline const QString EFFECT_COND_DMG_PREV_TURN =
     "Active effet si Dégâts au tour précédent";
 // Condition on atk
 // Atk is enable if damages are been tx during previous turn
-const QString CONDITION_DMG_PREV_TURN = "Dégâts au tour précédent";
-const QString CONDITION_ENNEMIES_DIED = "Ennemis morts tours précédents";
-const QString EFFECT_REPEAT_IF_HEAL =
+inline const QString CONDITION_DMG_PREV_TURN = "Dégâts au tour précédent";
+inline const QString CONDITION_ENNEMIES_DIED = "Ennemis morts tours précédents";
+inline const QString EFFECT_REPEAT_IF_HEAL =
     "Répète l'attaque(en % de chance) après heal tour prec.";
-const QString EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL =
+inline const QString EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL =
     "Buf par valeur d'autant de PV";
 // Effect to modify the regen rate of stats such as vigor, mana, speed, hp,
 // berseck by value.
-const std::set<QString> EFFECTS{"",
+inline const std::set<QString> EFFECTS{"",
                                 EFFECT_REINIT,
                                 EFFECT_NB_COOL_DOWN,
                                 EFFECT_NB_DECREASE_ON_TURN,
@@ -280,7 +285,7 @@ const std::set<QString> EFFECTS{"",
                                 EFFECT_REPEAT_IF_HEAL,
                                 EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL,
                                 EFFECT_COND_DMG_PREV_TURN};
-const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
+inline const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_NB_DECREASE_BY_TURN,
     EFFECT_NB_COOL_DOWN,
     EFFECT_REINIT,
@@ -295,32 +300,32 @@ const std::set<QString> ACTIVE_EFFECTS_ON_LAUNCH = {
     EFFECT_BUF_MULTI,
     EFFECT_BLOCK_HEAL_ATK,
     EFFECT_BUF_VALUE_AS_MUCH_AS_HEAL};
-const std::set<QString> EFFECTS_HOT_OR_DOT = {
+inline const std::set<QString> EFFECTS_HOT_OR_DOT = {
     EFFECT_VALUE_CHANGE, EFFECT_REPEAT_AS_MANY_AS, EFFECT_PERCENT_CHANGE,
     EFFECT_NB_DECREASE_ON_TURN};
-const QString EFFECT_ARRAY = "Effet";
-const QString EFFECT_TYPE = "Type";
-const QString EFFECT_VALUE = "Value";
-const QString EFFECT_TARGET = "Cible";
-const QString EFFECT_REACH = "Portée";
-const QString EFFECT_STAT = "Stat";
-const QString EFFECT_ACTIVE_TURNS = "Tours actifs";
-const QString EFFECT_SUB_VALUE = "Valeur de l'effet";
-const QString EFFECT_PASSIVE_TALENT = "Passif";
-const QString EFFECT_COUNTER_TURN = "Compteur";
-const QString EFFECT_IS_MAGIC = "Est Magique";
-const QString EFFECT_LAUNCHER = "launcher";
-const QString EFFECT_INDEX_TURN = "index tour";
+inline const QString EFFECT_ARRAY = "Effet";
+inline const QString EFFECT_TYPE = "Type";
+inline const QString EFFECT_VALUE = "Value";
+inline const QString EFFECT_TARGET = "Cible";
+inline const QString EFFECT_REACH = "Portée";
+inline const QString EFFECT_STAT = "Stat";
+inline const QString EFFECT_ACTIVE_TURNS = "Tours actifs";
+inline const QString EFFECT_SUB_VALUE = "Valeur de l'effet";
+inline const QString EFFECT_PASSIVE_TALENT = "Passif";
+inline const QString EFFECT_COUNTER_TURN = "Compteur";
+inline const QString EFFECT_IS_MAGIC = "Est Magique";
+inline const QString EFFECT_LAUNCHER = "launcher";
+inline const QString EFFECT_INDEX_TURN = "index tour";
 // Form keys
-const QString ENT_FORM = "Ent";
-const QString BEAR_FORM = "Ours";
-const QString STANDARD_FORM = "Standard";
-const std::set<QString> ALL_FORMS = {STANDARD_FORM, ENT_FORM, BEAR_FORM};
+inline const QString ENT_FORM = "Ent";
+inline const QString BEAR_FORM = "Ours";
+inline const QString STANDARD_FORM = "Standard";
+inline const std::set<QString> ALL_FORMS = {STANDARD_FORM, ENT_FORM, BEAR_FORM};
 
 // Class keys
-const QString STANDARD_CLASS = "standard";
-const QString TANK_CLASS = "tank";
-const std::set<QString> ALL_CLASSES = {STANDARD_CLASS, TANK_CLASS};
+inline const QString STANDARD_CLASS = "standard";
+inline const QString TANK_CLASS = "tank";
+inline const std::set<QString> ALL_CLASSES = {STANDARD_CLASS, TANK_CLASS};
 
 class StatsType {
 public:
@@ -391,8 +396,16 @@ public:
 // IN GAME
 const int NB_TURN_SUM_AGGRO = 5;
 
-const std::set<QString> KERNEL_PLAYERS = {"Thalia", "Thrain", "Azrak Ombresang",
+inline const std::set<QString> KERNEL_PLAYERS = {"Thalia", "Thrain", "Azrak Ombresang",
                                           "Elara la guerisseuse de la Lorien",
                                           "Test"};
+
+// sounds
+inline const QString CRITICAL_SOUND = "critical-hit.mp3";
+inline const QString VICTORY_SOUND = "victory.mp3";
+inline const QString PLAYER_DEATH_SOUND = "player-death-sound.mp3";
+inline const QString GAME_OVER_SOUND = "game-over.mp3";
+inline const QString POTION_SOUND = "potion.mp3";
+inline const QString KILL_SOUND = "kill.mp3";
 
 #endif // COMMON_H
