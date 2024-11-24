@@ -63,6 +63,7 @@
     "Niveau": 9,
     "Nom": "Don de vie",
     "Photo": "default.png",
-    "Portée": "Individuel"
+    "Portée": "Individuel",
+    "Sound": ""
 }
 
