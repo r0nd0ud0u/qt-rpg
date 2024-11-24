@@ -238,9 +238,9 @@ PlayersManager::RemoveTerminatedEffectsOnPlayer(const QString &curPlayerName) {
       // One-turn effect are not logged out
       if (it->allAtkEffects.nbTurns > 1) {
         sl.push_back(QString("L'effet %1 sur %2 est terminé.(%3)")
-                                      .arg(effectName)
-                                      .arg(curPlayerName)
-                                      .arg(it->atk.name));
+                         .arg(effectName)
+                         .arg(curPlayerName)
+                         .arg(it->atk.name));
       }
       // remove malus effect from player
       auto *player = GetActiveCharacterByName(curPlayerName);
@@ -1097,6 +1097,7 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
     out.setCodec("UTF-8");
 #endif
     out << doc.toJson() << "\n";
+    file.close();
   }
 }
 
@@ -1348,6 +1349,7 @@ void PlayersManager::OutputAllOnGoingEffectToJson(
   out.setCodec("UTF-8");
 #endif
   out << doc.toJson() << "\n";
+  file.close();
 }
 
 void PlayersManager::Reset() {
@@ -1397,4 +1399,13 @@ void PlayersManager::LoadAllEffects(const QString &filepath) {
     m_AllEffectsOnGame[gae.target].push_back(gae);
   }
 #endif
+}
+
+bool PlayersManager::CheckGameOver() {
+  for (const auto *h : m_HeroesList) {
+    if (h != nullptr && !h->IsDead()) {
+      return false;
+    }
+  }
+  return true;
 }

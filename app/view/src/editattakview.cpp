@@ -162,6 +162,7 @@ void EditAttakView::Save() {
     out.setCodec("UTF-8");
 #endif
     out << doc.toJson() << "\n";
+    file.close();
   }
 
   // update cur character
@@ -171,6 +172,7 @@ void EditAttakView::Save() {
       m_CurCharacter->m_AttakList[atk.type.name] = atk.type;
     }
   }
+  file.close();
 }
 
 void EditAttakView::InitComboBoxes() {
@@ -208,6 +210,8 @@ void EditAttakView::InitComboBoxes() {
     ui->photo_comboBox->addItem(file);
   }
   // sound
+  // add empty line
+  ui->sound_comboBox->addItem("");
   const auto SoundFilesList = Utils::GetAllFilesInDir(SOUNDS_DIR);
   for (const QString &file : SoundFilesList) {
       ui->sound_comboBox->addItem(file);

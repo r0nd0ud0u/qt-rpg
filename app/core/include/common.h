@@ -400,4 +400,12 @@ const std::set<QString> KERNEL_PLAYERS = {"Thalia", "Thrain", "Azrak Ombresang",
                                           "Elara la guerisseuse de la Lorien",
                                           "Test"};
 
+// sounds
+inline const QString CRITICAL_SOUND = "critical-hit.mp3";
+inline const QString VICTORY_SOUND = "victory.mp3";
+inline const QString PLAYER_DEATH_SOUND = "player-death-sound.mp3";
+inline const QString GAME_OVER_SOUND = "game-over.mp3";
+inline const QString POTION_SOUND = "potion.mp3";
+inline const QString KILL_SOUND = "kill.mp3";
+
 #endif // COMMON_H
