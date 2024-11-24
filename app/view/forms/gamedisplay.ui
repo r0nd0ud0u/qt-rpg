@@ -227,6 +227,9 @@
          </item>
          <item row="7" column="0">
           <widget class="QSpinBox" name="exp_spinBox">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="maximum">
             <number>99999</number>
            </property>
