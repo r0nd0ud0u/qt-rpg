@@ -22,11 +22,11 @@ Character::Character() { InitTables(); }
 
 Character::Character(const QString name, const characType type,
                      const Stats &stats)
-    : m_Name(name), m_type(type), m_Stats(stats) {
+    : m_Name(name), m_Type(type), m_Stats(stats) {
   InitTables();
   m_ExtCharacter = try_new_ext_character().into_raw();
   m_ExtCharacter->set_is_first_round(true);
-  if (m_type == characType::Boss) {
+  if (m_Type == characType::Boss) {
     m_Level = INT_MAX;
   }
 }
@@ -89,9 +89,9 @@ QString Character::RegenIntoDamage(const int atkValue,
 
   QString channelLog;
   std::vector<Character *> playerList;
-  if (m_type == characType::Boss) {
+  if (m_Type == characType::Boss) {
     playerList = pm->m_HeroesList;
-  } else if (m_type == characType::Hero) {
+  } else if (m_Type == characType::Hero) {
     playerList = pm->m_BossesList;
   }
 
@@ -580,7 +580,7 @@ Character::ApplyAtkEffect(const bool targetedOnMainAtk, const AttaqueType &atk,
   const auto &allEffects = atk.m_AllEffects;
   std::vector<effectParam> allAppliedEffects;
   QStringList allResultEffects;
-  const bool isAlly = target->m_type == m_type;
+  const bool isAlly = target->m_Type == m_Type;
 
   for (const auto &effect : allEffects) {
     if (effect.target == TARGET_HIMSELF && m_Name != target->m_Name) {
@@ -1176,7 +1176,7 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
     }
   }
   if (effect.effect == EFFECT_IMPROVE_HOTS) {
-    pm->ImproveHotsOnPlayers(effect.value, target->m_type);
+      pm->ImproveHotsOnPlayers(effect.value, target->m_Type);
     output = QString("Les HOTs sont boostés de %1%.").arg(effect.value);
   }
   if (effect.effect == EFFECT_BOOSTED_BY_HOTS) {
@@ -1706,7 +1706,7 @@ void Character::SetValuesForThalia(const bool isBear) {
  * The random number is included in [1; m_AttakList size]
  */
 std::optional<int> Character::GetRandomAtkNumber() {
-  if (m_type == characType::Hero) {
+    if (m_Type == characType::Hero) {
     return nullopt;
   }
   if (m_AttakList.empty()) {

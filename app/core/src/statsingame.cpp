@@ -47,7 +47,7 @@ QString StatsInGame::GetOutputEndGameByList(
     if (h == nullptr || !h->m_StatsInGame.m_IsPlaying) {
       continue;
     }
-    const auto charaType = (h->m_type == characType::Hero) ? "Hero" : "Boss";
+    const auto charaType = (h->m_Type == characType::Hero) ? "Hero" : "Boss";
     const auto lifeStatus = h->m_StatsInGame.m_IsAlive ? "Alive" : "Dead";
     // update output with header
     output += values.arg(h->m_Name, charaType, lifeStatus) + "\n";

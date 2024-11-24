@@ -1,4 +1,4 @@
-	{
+{
     "Aggro": [
         {
             "Current": 0,
@@ -17,6 +17,93 @@
             "Max": 0
         }
     ],
+    "Buf-debuf": [
+        {
+            "Buf-all-stats": "",
+            "Buf-is-percent": false,
+            "Buf-type": 0,
+            "Buf-value": 0,
+            "buf-passive-enabled": false
+        },
+        {
+            "Buf-all-stats": "",
+            "Buf-is-percent": false,
+            "Buf-type": 1,
+            "Buf-value": 0,
+            "buf-passive-enabled": false
+        },
+        {
+            "Buf-all-stats": "",
+            "Buf-is-percent": false,
+            "Buf-type": 2,
+            "Buf-value": 0,
+            "buf-passive-enabled": false
+        },
+        {
+            "Buf-all-stats": "",
+            "Buf-is-percent": false,
+            "Buf-type": 3,
+            "Buf-value": 0,
+            "buf-passive-enabled": false
+        },
+        {
+            "Buf-all-stats": "",
+            "Buf-is-percent": false,
+            "Buf-type": 4,
+            "Buf-value": 0,
+            "buf-passive-enabled": false
+        },
+        {
+            "Buf-all-stats": "",
+            "Buf-is-percent": false,
+            "Buf-type": 5,
+            "Buf-value": 0,
+            "buf-passive-enabled": false
+        },
+        {
+            "Buf-all-stats": "",
+            "Buf-is-percent": false,
+            "Buf-type": 6,
+            "Buf-value": 0,
+            "buf-passive-enabled": false
+        },
+        {
+            "Buf-all-stats": "",
+            "Buf-is-percent": false,
+            "Buf-type": 7,
+            "Buf-value": 0,
+            "buf-passive-enabled": false
+        },
+        {
+            "Buf-all-stats": "",
+            "Buf-is-percent": false,
+            "Buf-type": 8,
+            "Buf-value": 0,
+            "buf-passive-enabled": false
+        },
+        {
+            "Buf-all-stats": "",
+            "Buf-is-percent": false,
+            "Buf-type": 9,
+            "Buf-value": 0,
+            "buf-passive-enabled": false
+        },
+        {
+            "Buf-all-stats": "",
+            "Buf-is-percent": false,
+            "Buf-type": 10,
+            "Buf-value": 0,
+            "buf-passive-enabled": false
+        },
+        {
+            "Buf-all-stats": "",
+            "Buf-is-percent": false,
+            "Buf-type": 11,
+            "Buf-value": 0,
+            "buf-passive-enabled": false
+        }
+    ],
+    "Classe": "standard",
     "Couleur": "green",
     "Cout critique": [
         {
@@ -30,6 +117,8 @@
             "Max": 5
         }
     ],
+    "Exp": 0,
+    "Forme": "",
     "Mana": [
         {
             "Current": 160,
@@ -44,6 +133,7 @@
             "Max": 135
         }
     ],
+    "Photo": "",
     "Pouvoir magique": [
         {
             "Current": 20,
@@ -62,6 +152,7 @@
             "Max": 0
         }
     ],
+    "Rang": 4,
     "Regen vitesse": [
         {
             "Current": 12,
@@ -98,6 +189,32 @@
             "Max": 0
         }
     ],
+    "Tx-rx": [
+        {
+            "Tx-rx-size": 0,
+            "Tx-rx-type": 0
+        },
+        {
+            "Tx-rx-size": 0,
+            "Tx-rx-type": 1
+        },
+        {
+            "Tx-rx-size": 0,
+            "Tx-rx-type": 2
+        },
+        {
+            "Tx-rx-size": 0,
+            "Tx-rx-type": 3
+        },
+        {
+            "Tx-rx-size": 0,
+            "Tx-rx-type": 4
+        },
+        {
+            "Tx-rx-size": 0,
+            "Tx-rx-type": 5
+        }
+    ],
     "Type": "Hero",
     "Vigueur": [
         {
@@ -111,6 +228,13 @@
             "Max": 12
         }
     ],
-	"Rang": 4
+    "is-blocking-atk": false,
+    "is_crit_heal_after_crit": false,
+    "is_damage_tx_heal_needy_ally": false,
+    "is_first_round": false,
+    "is_heal_atk_blocked": false,
+    "is_random_target": false,
+    "m_MaxNbActionsInRound": 1,
+    "nb-actions-in-round": 0
 }
 

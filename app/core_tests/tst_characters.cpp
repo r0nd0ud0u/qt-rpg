@@ -211,10 +211,10 @@ void character_tests::SetStatsOnEffect_works() {
 void character_tests::ApplyAtkEffect_AtkBlocked() {
   // boss
   auto testCh = GetTestCharacter();
-  testCh.m_type = characType::Boss;
+  testCh.m_Type = characType::Boss;
   // hero
   auto ch2 = GetTestCharacter();
-  ch2.m_type = characType::Hero;
+  ch2.m_Type = characType::Hero;
   // to make calculs easy on mana at
   testCh.m_Stats.m_AllStatsTable[STATS_POW_MAG].m_CurrentValue = 0;
   ch2.m_Stats.m_AllStatsTable[STATS_ARM_MAG].m_CurrentValue = 0;

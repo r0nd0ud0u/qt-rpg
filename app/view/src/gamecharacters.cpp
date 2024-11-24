@@ -186,7 +186,7 @@ void GameCharacters::InitHero(Character *c) {
   if (c == nullptr) {
     return;
   }
-  c->m_type = characType::Hero;
+  c->m_Type = characType::Hero;
   auto *panel = new HeroPanel();
   panel->SetPixmap(c->m_Name);
   panel->UpdatePanel(c, {});
@@ -209,7 +209,7 @@ void GameCharacters::InitBoss(Character *c) {
     return;
   }
   // define as boss
-  c->m_type = characType::Boss;
+  c->m_Type = characType::Boss;
   auto *panel = new BossPanel();
   panel->UpdatePanel(c);
   panel->SetSelectedGameChoiceBtn(true);
@@ -259,7 +259,7 @@ void GameCharacters::UpdatePanelAfterEdit(Character *c) {
   if (c == nullptr) {
     return;
   }
-  if (c->m_type == characType::Hero) {
+  if (c->m_Type == characType::Hero) {
     SetFocusOnHeroPanel(c);
   } else {
     SetFocusOnBossPanel(c);

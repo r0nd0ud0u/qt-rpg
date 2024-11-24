@@ -45,14 +45,14 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="CompBigSecondaryButton" name="pushButton">
         <property name="text">
          <string>Ok</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="apply_pushButton">
+       <widget class="CompBigSecondaryButton" name="apply_pushButton">
         <property name="text">
          <string>Apply</string>
         </property>
@@ -98,6 +98,11 @@
    <extends>QWidget</extends>
    <header location="global">equiponbodyview.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CompBigSecondaryButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">CompButtons.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

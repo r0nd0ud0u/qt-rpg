@@ -3,7 +3,8 @@
     "Coût de mana": 23,
     "Coût de rage": 0,
     "Coût de vigueur": 0,
-    "Effet": [{
+    "Effet": [
+        {
             "Cible": "Tous les heroes",
             "Portée": "Zone",
             "Stat": "Pouvoir magique",
@@ -11,7 +12,8 @@
             "Type": "Up par %",
             "Valeur de l'effet": 0,
             "Value": 10
-        }, {
+        },
+        {
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "",
@@ -19,7 +21,8 @@
             "Type": "Boost l'effet par nb HOTS presents en %",
             "Valeur de l'effet": 0,
             "Value": 20
-        }, {
+        },
+        {
             "Cible": "Tous les heroes",
             "Portée": "Zone",
             "Stat": "PV",
@@ -27,7 +30,8 @@
             "Type": "Reinit",
             "Valeur de l'effet": 0,
             "Value": 0
-        }, {
+        },
+        {
             "Cible": "Allié",
             "Portée": "Zone",
             "Stat": "PV",
@@ -35,7 +39,8 @@
             "Type": "Changement par valeur",
             "Valeur de l'effet": 0,
             "Value": 80
-        }, {
+        },
+        {
             "Cible": "Allié",
             "Portée": "Zone",
             "Stat": "",
@@ -43,7 +48,8 @@
             "Type": "Supprime effet néfaste",
             "Valeur de l'effet": 1000,
             "Value": 0
-        }, {
+        },
+        {
             "Cible": "Soi-même",
             "Portée": "Individuel",
             "Stat": "",
@@ -51,7 +57,8 @@
             "Type": "Tours de recharge",
             "Valeur de l'effet": 1000,
             "Value": 10
-        }, {
+        },
+        {
             "Cible": "Tous les heroes",
             "Portée": "Zone",
             "Stat": "",
@@ -65,5 +72,7 @@
     "Niveau": 13,
     "Nom": "Eveil de la forêt",
     "Photo": "Thalia.png",
-    "Portée": "Zone"
+    "Portée": "Zone",
+    "Sound": "super-saiyan.mp3"
 }
+

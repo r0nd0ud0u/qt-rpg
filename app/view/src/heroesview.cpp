@@ -114,7 +114,7 @@ void HeroesView::UpdateAllPanels(
 }
 
 void HeroesView::SetFocusOn(const Character *c) {
-  if (c->m_type != characType::Hero) {
+    if (c->m_Type != characType::Hero) {
     return;
   }
   for (int i = 0; i < ui->left_widget->layout()->count(); i++) {

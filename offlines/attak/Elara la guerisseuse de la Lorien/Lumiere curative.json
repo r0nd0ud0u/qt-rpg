@@ -36,6 +36,7 @@
     "Niveau": 5,
     "Nom": "Lumiere curative",
     "Photo": "default.png",
-    "Portée": "Individuel"
+    "Portée": "Individuel",
+    "Sound": ""
 }
 

@@ -4,12 +4,15 @@
 #include "Application.h"
 #include "ApplicationView.h"
 #include "mainwindow.h"
+#include "Stylizer.h"
 
 #include "stuffsview.h"
 
 CharacterWindow::CharacterWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::CharacterWindow) {
   ui->setupUi(this);
+
+  Stylizer::ApplyTheme(this);
 
   connect(this, &CharacterWindow::SigUpdateCharacterViews,
           ApplicationView::GetInstance().GetMainWindow(),

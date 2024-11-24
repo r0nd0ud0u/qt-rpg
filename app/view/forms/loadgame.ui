@@ -37,7 +37,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btn_start_game">
+        <widget class="CompBigPrimaryButton" name="btn_start_game">
          <property name="text">
           <string>Start game</string>
          </property>
@@ -49,6 +49,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CompBigPrimaryButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">CompButtons.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

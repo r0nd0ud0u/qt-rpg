@@ -132,6 +132,7 @@ inline const std::set<QString> STATS_TO_LEVEL_UP = {STATS_HP, STATS_MANA, STATS_
 
 // Characters keys
 inline const QString CH_NAME = "Nom";
+inline const QString CH_SHORT_NAME = "Nom court";
 inline const QString CH_PHOTO_NAME = "Photo";
 inline const QString CH_TYPE = "Type";
 inline const QString CH_TYPE_HERO = "Hero";

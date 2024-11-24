@@ -151,7 +151,7 @@
    <item>
     <layout class="QVBoxLayout" name="setup_lay">
      <item>
-      <widget class="QPushButton" name="new_atk_button">
+      <widget class="CompSecondaryButton" name="new_atk_button">
        <property name="text">
         <string>Nouvel Attaque</string>
        </property>
@@ -173,7 +173,7 @@
      <item>
       <layout class="QHBoxLayout" name="buttons_lay">
        <item>
-        <widget class="QPushButton" name="apply_button">
+        <widget class="CompBigSecondaryButton" name="apply_button">
          <property name="enabled">
           <bool>false</bool>
          </property>
@@ -190,10 +190,20 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>CompSecondaryButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">CompButtons.h</header>
+  </customwidget>
+  <customwidget>
    <class>EffectView</class>
    <extends>QWidget</extends>
    <header location="global">effectview.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CompBigSecondaryButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">CompButtons.h</header>
   </customwidget>
  </customwidgets>
  <resources>

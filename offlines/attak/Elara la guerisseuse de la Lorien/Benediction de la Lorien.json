@@ -36,6 +36,7 @@
     "Niveau": 7,
     "Nom": "Benediction de la Lorien",
     "Photo": "default.png",
-    "Portée": "Individuel"
+    "Portée": "Individuel",
+    "Sound": ""
 }
 
