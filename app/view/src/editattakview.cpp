@@ -126,6 +126,7 @@ void EditAttakView::Save() {
     obj.insert(ATK_PHOTO, atk.type.namePhoto);
     obj.insert(ATK_LEVEL, static_cast<int>(atk.type.level));
     obj.insert(ATK_FORM, atk.type.form);
+    obj.insert(ATK_SOUND, atk.type.atkSoundPath);
 
     QJsonArray jsonArray;
     for (const auto &effect : atk.type.m_AllEffects) {
@@ -161,6 +162,7 @@ void EditAttakView::Save() {
     out.setCodec("UTF-8");
 #endif
     out << doc.toJson() << "\n";
+    file.close();
   }
 
   // update cur character
@@ -170,6 +172,7 @@ void EditAttakView::Save() {
       m_CurCharacter->m_AttakList[atk.type.name] = atk.type;
     }
   }
+  file.close();
 }
 
 void EditAttakView::InitComboBoxes() {
@@ -188,6 +191,8 @@ void EditAttakView::InitComboBoxes() {
              nullptr);
   disconnect(ui->form_comboBox, &QComboBox::currentTextChanged, nullptr,
              nullptr);
+  disconnect(ui->sound_comboBox, &QComboBox::currentTextChanged, nullptr,
+             nullptr);
 
   ui->target_comboBox->setEnabled(true);
   for (const auto &target : ALL_TARGETS) {
@@ -200,18 +205,17 @@ void EditAttakView::InitComboBoxes() {
     ui->form_comboBox->addItem(form);
   }
   // List all attak png string and add them to photo_comboBox
-  QString directoryPath = OFFLINE_IMG; // Replace with the actual path
-  QDir directory(directoryPath);
-  if (!directory.exists()) {
-    Application::GetInstance().log(
-        QString("Directory does not exist: %1").arg(directoryPath));
-  }
-  QStringList fileList =
-      directory.entryList(QDir::Files | QDir::NoDotAndDotDot);
-  for (const QString &file : fileList) {
+  const auto imgFilesList = Utils::GetAllFilesInDir(OFFLINE_IMG);
+  for (const QString &file : imgFilesList) {
     ui->photo_comboBox->addItem(file);
   }
-
+  // sound
+  // add empty line
+  ui->sound_comboBox->addItem("");
+  const auto SoundFilesList = Utils::GetAllFilesInDir(SOUNDS_DIR);
+  for (const QString &file : SoundFilesList) {
+      ui->sound_comboBox->addItem(file);
+  }
   // Re-activate them
   connect(ui->target_comboBox, &QComboBox::currentTextChanged, this,
           &EditAttakView::on_target_comboBox_currentTextChanged);
@@ -221,6 +225,8 @@ void EditAttakView::InitComboBoxes() {
           &EditAttakView::on_photo_comboBox_currentTextChanged);
   connect(ui->form_comboBox, &QComboBox::currentTextChanged, this,
           &EditAttakView::on_form_comboBox_currentTextChanged);
+  connect(ui->sound_comboBox, &QComboBox::currentTextChanged, this,
+          &EditAttakView::on_sound_comboBox_currentTextChanged);
 }
 
 void EditAttakView::UpdateValues(const EditAttak &selectedAttak,
@@ -239,6 +245,8 @@ void EditAttakView::UpdateValues(const EditAttak &selectedAttak,
   // update effect
   ui->effect_widget->SetIndex(index);
   ui->effect_widget->InitValues(selectedAttak.type.m_AllEffects);
+  // sound
+  ui->sound_comboBox->setCurrentText(selectedAttak.type.atkSoundPath);
 }
 
 void EditAttakView::EnableAllWidgets(const bool value) const {
@@ -351,3 +359,10 @@ void EditAttakView::on_form_comboBox_currentTextChanged(const QString &arg1) {
   m_AttakList[GetIndexSelectedRow()].type.form = arg1;
 }
 // end form layout changed
+
+void EditAttakView::on_sound_comboBox_currentTextChanged(const QString &arg1)
+{
+    OnValueChange(GetIndexSelectedRow());
+    m_AttakList[GetIndexSelectedRow()].type.atkSoundPath = arg1;
+}
+

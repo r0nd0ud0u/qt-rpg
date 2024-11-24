@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.27)
 
 project(qt-rpg VERSION 0.1 LANGUAGES CXX)
 
@@ -16,10 +16,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
 endif(MSVC)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Widgets Network Sql)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Network Sql)
-
-#include(${CMAKE_SOURCE_DIR}/build_conan/${CMAKE_BUILD_TYPE}/conanbuildinfo.cmake)
-#conan_basic_setup()
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Network Sql Multimedia)
 
 include(FetchContent)
 
@@ -92,6 +89,7 @@ target_link_libraries(qt-rpg PRIVATE
     Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::Network
     Qt${QT_VERSION_MAJOR}::Sql
+    Qt${QT_VERSION_MAJOR}::Multimedia
     view
     rust-rpg-bridge
 )

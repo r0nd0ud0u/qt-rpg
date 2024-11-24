@@ -177,6 +177,7 @@ void GameState::OutputGameStateOnJson(const QString &filepath) const {
   out.setCodec("UTF-8");
 #endif
   out << doc.toJson() << "\n";
+  file.close();
 }
 
 void GameState::Reset() {

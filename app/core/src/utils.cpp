@@ -1,8 +1,10 @@
 #include "utils.h"
 
+#include "Application.h"
 #include "character.h"
 #include "playersmanager.h"
 
+#include <QDir>
 #include <QFileInfo>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -131,6 +133,15 @@ std::pair<QJsonObject, QString> Utils::LoadJsonFile(const QString &filepath) {
   }
 }
 
-int Utils::MultiplyIntByDouble(int i, double d){
-    return static_cast<int>(static_cast<double>(i)*d);
+int Utils::MultiplyIntByDouble(int i, double d) {
+  return static_cast<int>(static_cast<double>(i) * d);
+}
+
+QStringList Utils::GetAllFilesInDir(const QString &dirPath) {
+  QDir directory(dirPath);
+  if (!directory.exists()) {
+    Application::GetInstance().log(
+        QString("Directory does not exist: %1").arg(dirPath));
+  }
+  return directory.entryList(QDir::Files | QDir::NoDotAndDotDot);
 }
