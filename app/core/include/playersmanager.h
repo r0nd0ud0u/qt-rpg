@@ -79,7 +79,7 @@ public:
   void OutputAllOnGoingEffectToJson(const QString& filepath) const;
   void Reset();
   void LoadAllEffects(const QString& filepath);
-  bool CheckGameOver();
+  bool CheckGameOver() const;
 
   // Available characters to create a party
   std::vector<Character *> m_AllHeroesList;

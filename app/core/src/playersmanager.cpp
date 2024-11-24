@@ -1401,7 +1401,7 @@ void PlayersManager::LoadAllEffects(const QString &filepath) {
 #endif
 }
 
-bool PlayersManager::CheckGameOver() {
+bool PlayersManager::CheckGameOver() const{
   for (const auto *h : m_HeroesList) {
     if (h != nullptr && !h->IsDead()) {
       return false;
