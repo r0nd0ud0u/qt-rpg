@@ -418,7 +418,8 @@ EffectOutcome Character::ApplyOneEffect(Character *target, effectParam &effect,
                                         const bool reload, const bool isCrit) {
   EffectOutcome output;
   if (target == nullptr) {
-    return EffectOutcome{.logDisplay = "No  target character"};
+      output.logDisplay = "No  target character";
+    return output;
   }
 
   QString result;
