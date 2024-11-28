@@ -1,4 +1,4 @@
-WINDEPLOYQT="D:\\Qt\\Qt6\\6.6.1\\msvc2019_64\\bin\\windeployqt.exe"
-EXE_PATH="..\\build-qt-rpg-Desktop_Qt_6_6_1_MSVC2019_64bit-Release\\bin\\qt-rpg.exe"
+WINDEPLOYQT="D:\\Qt\\6.8.0\\mingw_64\\bin\\windeployqt.exe"
+EXE_PATH="..\\build\\Desktop_Qt_6_8_0_MinGW_64_bit-Debug\\bin\\qt-rpg.exe"
 
 "${WINDEPLOYQT}" "${EXE_PATH}"
