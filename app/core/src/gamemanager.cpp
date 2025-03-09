@@ -31,6 +31,12 @@ void GameManager::InitPlayers() {
   m_PlayersManager->LoadAllCharactersJson(false, "");
   m_PlayersManager->InitHeroes(m_PlayersManager->m_AllHeroesList);
   m_PlayersManager->InitBosses(m_PlayersManager->m_AllBossesList);
+  const QString characterPath =
+      QString("./offlines/new_characters/");
+  m_PlayersManager->OutputCharactersInJson(m_PlayersManager->m_AllHeroesList,
+                                           characterPath);
+  m_PlayersManager->OutputCharactersInJson(m_PlayersManager->m_AllBossesList,
+                                           characterPath);
 }
 
 void GameManager::Reset() {

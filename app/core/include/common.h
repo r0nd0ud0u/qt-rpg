@@ -126,6 +126,29 @@ inline const std::set<QString> ALL_STATS = {"",
                                      STATS_RATE_BERSECK,
                                      STATS_RATE_AGGRO,
                                      STATS_REGEN_SPEED};
+
+inline const std::unordered_map<QString, QString> conv = {
+    {STATS_HP, "HP"},
+    {STATS_MANA, "Mana"},
+    {STATS_VIGOR, "Vigor"},
+    {STATS_BERSECK, "Berseck"},
+    {STATS_ARM_PHY, "Physical armor"},
+    {STATS_ARM_MAG, "Magical armor"},
+    {STATS_POW_PHY, "Physical power"},
+    {STATS_POW_MAG, "Magical power"},
+    {STATS_AGGRO, "Aggro"},
+    {STATS_SPEED, "Speed"},
+    {STATS_CRIT, "Critical strike"},
+    {STATS_DODGE, "Dodge"},
+    {STATS_REGEN_HP, "HP regeneration"},
+    {STATS_REGEN_MANA, "Mana regeneration"},
+    {STATS_REGEN_VIGOR, "Vigor regeneration"},
+    {STATS_RATE_BERSECK, "Berseck rate"},
+    {STATS_RATE_AGGRO, "Aggro rate"},
+    {STATS_REGEN_SPEED, "Speed regeneration"},
+    };
+
+
 inline const std::set<QString> ON_PERCENT_STATS = {STATS_MANA, STATS_VIGOR};
 inline const std::set<QString> STATS_TO_LEVEL_UP = {STATS_HP, STATS_MANA, STATS_VIGOR,
                                              STATS_POW_PHY, STATS_POW_MAG};
@@ -147,12 +170,12 @@ inline const QString CH_FORM = "Forme";
 inline const QString CH_CLASS = "Classe";
 inline const QString CH_ACTIONS_IN_ROUND = "nb-actions-in-round";
 inline const QString CH_BLOCKING_ATK = "is-blocking-atk";
-inline const QString CH_MAX_NB_ACTIONS_ROUND = "m_MaxNbActionsInRound";
+inline const QString CH_MAX_NB_ACTIONS_ROUND = "max_actions_by_round";
 // buf - debuf
 inline const QString CH_BUF_DEBUF = "Buf-debuf";
 inline const QString CH_BUF_ALL_STATS = "Buf-all-stats";
 inline const QString CH_BUF_VALUE = "Buf-value";
-inline const QString CH_BUF_PASSIVE_ENABLED = "buf-passive-enabled";
+inline const QString CH_BUF_PASSIVE_ENABLED = "Buf-passive-enabled";
 inline const QString CH_BUF_IS_PERCENT = "Buf-is-percent";
 inline const QString CH_BUF_TYPE = "Buf-type";
 // last tx rx
@@ -324,8 +347,8 @@ inline const QString STANDARD_FORM = "Standard";
 inline const std::set<QString> ALL_FORMS = {STANDARD_FORM, ENT_FORM, BEAR_FORM};
 
 // Class keys
-inline const QString STANDARD_CLASS = "standard";
-inline const QString TANK_CLASS = "tank";
+inline const QString STANDARD_CLASS = "Standard";
+inline const QString TANK_CLASS = "Tank";
 inline const std::set<QString> ALL_CLASSES = {STANDARD_CLASS, TANK_CLASS};
 
 class StatsType {
