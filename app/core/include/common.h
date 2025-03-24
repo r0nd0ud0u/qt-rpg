@@ -170,7 +170,7 @@ inline const QString CH_FORM = "Forme";
 inline const QString CH_CLASS = "Classe";
 inline const QString CH_ACTIONS_IN_ROUND = "nb-actions-in-round";
 inline const QString CH_BLOCKING_ATK = "is-blocking-atk";
-inline const QString CH_MAX_NB_ACTIONS_ROUND = "max_actions_by_round";
+inline const QString CH_MAX_NB_ACTIONS_ROUND = "max-actions-by-round";
 // buf - debuf
 inline const QString CH_BUF_DEBUF = "Buf-debuf";
 inline const QString CH_BUF_ALL_STATS = "Buf-all-stats";
