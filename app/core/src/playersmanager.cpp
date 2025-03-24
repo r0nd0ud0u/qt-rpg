@@ -1023,11 +1023,7 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
       const double ratio = Utils::CalcRatio(st.m_CurrentValue, st.m_MaxValue);
       item["Current"] = ratio * st.m_RawMaxValue;
       item["Max"] = st.m_RawMaxValue;
-      QJsonArray jsonArray;
-      jsonArray.append(item);
-      if (!jsonArray.empty()) {
-        allStats[conv.at(stats)] = jsonArray;
-      }
+      allStats[conv.at(stats)] = item;
     }
     obj.insert("Stats", allStats);
     // buf - debuf
