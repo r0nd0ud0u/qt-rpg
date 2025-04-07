@@ -144,8 +144,13 @@ void GameState::OutputGameStateOnJson(const QString &filepath) const {
   QJsonObject obj;
   // died bosses by turn
   QJsonObject diedBoss;
+  QJsonArray diedBossArray;
   for (const auto &[nbTurn, diedBossPl] : m_DiedEnnemies) {
-    diedBoss[QString::number(nbTurn)] = diedBossPl;
+      // TODO because not tested
+      for(const auto& pl : diedBossPl) {
+          diedBossArray.append(pl);
+      }
+    diedBoss[QString::number(nbTurn)]= diedBossArray;
   }
   if (!diedBoss.empty()) {
     obj[GAME_STATE_DIED_ENNEMIES] = diedBoss;
