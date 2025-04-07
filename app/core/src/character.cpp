@@ -737,7 +737,7 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
   // HP
   if (ep.statsName == STATS_HP && ep.effect == EFFECT_NB_DECREASE_ON_TURN) {
     if (launch) {
-      // HOT
+      // prepare for HOT
       const auto &launcherPowMag =
           launcherStats.m_AllStatsTable.at(STATS_POW_MAG);
       amount =
@@ -751,10 +751,11 @@ std::pair<int, int> Character::ProcessCurrentValueOnEffect(
     if (ep.effect == EFFECT_PERCENT_CHANGE) {
       amount = nbOfApplies * localStat.m_MaxValue * ep.value / 100;
     } else if (ep.value < 0) {
+    // DOT
       amount = nbOfApplies * DamageByAtk(launcherStats, target->m_Stats,
                                          ep.isMagicAtk, ep.value, ep.nbTurns);
     } else if (ep.isMagicAtk) {
-      // HOT or DOT
+      // HOT because ep.value > 0
       const auto &launcherPowMag =
           launcherStats.m_AllStatsTable.at(STATS_POW_MAG);
       amount =
@@ -1115,10 +1116,6 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
         m_AllBufs[static_cast<int>(BufTypes::applyEffectInit)]->get_value());
   }
 
-  if (effect.effect == EFFECT_NB_DECREASE_BY_TURN) {
-    // TODO not ready to be used yet
-    output = ProcessDecreaseByTurn(effect);
-  }
   if (effect.effect == EFFECT_NB_COOL_DOWN) {
     // Must be filled before changing value of nbTurns
     output = (m_Name == target->m_Name)
@@ -1154,6 +1151,7 @@ std::pair<QString, int> Character::ProcessEffectType(effectParam &effect,
         output = "Chaque HOT est reinit.";
       }
     }
+    // reset all aggro i guess
     if (effect.statsName == STATS_AGGRO) {
       auto &localStat = target->m_Stats.m_AllStatsTable[effect.statsName];
       const auto currentTurn = Application::GetInstance()

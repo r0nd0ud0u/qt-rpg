@@ -6,7 +6,7 @@
 class GameState {
 public:
   uint64_t m_CurrentTurnNb = 0;
-  std::unordered_map<int, QString>
+  std::unordered_map<int, QStringList>
       m_DiedEnnemies; // key turn number, value name
   std::vector<QString> m_OrderToPlay;
   uint64_t m_CurrentRound = 0; // max value = size of m_OrderToPlay
