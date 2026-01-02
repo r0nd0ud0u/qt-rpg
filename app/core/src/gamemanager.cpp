@@ -37,6 +37,16 @@ void GameManager::InitPlayers() {
                                            characterPath);
   m_PlayersManager->OutputCharactersInJson(m_PlayersManager->m_AllBossesList,
                                            characterPath);
+  for(const auto& [body, equip] : m_PlayersManager->m_Equipments){
+      for(const auto& e : equip){
+          EditStuff es;
+          es.m_Stuff = e.second;
+          es.m_BodyPart = body;
+          es.m_Name = e.second.m_UniqueName;
+          EditStuff::SaveStuffInJson(es, body);
+      }
+  }
+
 }
 
 void GameManager::Reset() {
@@ -258,6 +268,8 @@ QString GameManager::GetEquipmentPath(const bool isLoot) const {
   QString filepath = OFFLINE_ROOT_EQUIPMENT;
   if (isLoot) {
     filepath = m_Paths.lootEquipment;
+  } else {
+      filepath =  "./offlines/new_equipments/equipment/corps/";
   }
   return filepath;
 }

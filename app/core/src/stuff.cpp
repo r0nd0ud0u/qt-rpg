@@ -26,21 +26,19 @@ void EditStuff::SaveStuffInJson(const EditStuff &es, const QString &bodyPart) {
   obj.insert(EQUIP_NAME, es.m_Stuff.m_Name);
   obj.insert(EQUIP_UNIQUE_NAME, es.m_Stuff.m_UniqueName);
   obj.insert(EQUIP_CATEGORY, bodyPart);
+  QJsonObject item;
   for (const auto &stats : ALL_STATS) {
     if (es.m_Stuff.m_Stats.m_AllStatsTable.count(stats) == 0) {
       continue;
     }
     const auto &equipStats = es.m_Stuff.m_Stats.m_AllStatsTable.at(stats);
-    QJsonObject item;
-    QJsonArray jsonArray;
-    obj.insert(stats, equipStats.m_CurrentValue);
-    item["percent"] = equipStats.m_BufEquipPercent;
-    item["value"] = equipStats.m_BufEquipValue;
-    jsonArray.append(item);
-    if (!jsonArray.empty()) {
-      obj[stats] = jsonArray;
-    }
+    QJsonObject values;
+    //obj.insert(stats, equipStats.m_CurrentValue);
+    values["equip_percent"] = equipStats.m_BufEquipPercent;
+    values["equip_value"] = equipStats.m_BufEquipValue;
+    item[conv.at(stats)] = values;
   }
+  obj.insert("Stats", item);
 
   // output json
   QJsonDocument doc(obj);
