@@ -41,6 +41,8 @@ void FightSoundLog::onStateChanged(QMediaPlayer::PlaybackState state) {
 }
 
 void FightSoundLog::playNext() {
+  // sound disabled
+  return;
   if (!m_Queue.isEmpty()) {
     QString nextSound = m_Queue.dequeue();
     m_MediaPlayer->setSource(QUrl::fromLocalFile(nextSound));
