@@ -39,10 +39,17 @@ After selecting, click on the "Retour" button at the top of the window.
 Games can be loaded from 'offlines\games' at root directory.
 
 ## Start the game
-
 Then the button "Start Game" is enabled and you can click on it to start the game.
 
-![image](https://github.com/r0nd0ud0u/qt-rpg/assets/57643172/56f0da82-0c15-4895-a596-addee30f1bd7)
+- Click "Prochain tour"
+- Select your atk
+- Click "Valide action"
+- See the logs on the console bottom right
+- Click "Fin du round"
+
+
+<img width="1918" height="1016" alt="image" src="https://github.com/user-attachments/assets/26b78d2a-a0ce-481a-8650-126f63109918" />
+)
 
 ## Basic commands
 - To start a turn, click on the button "Prochain tour"
