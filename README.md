@@ -26,7 +26,17 @@ First, you have to choose your characters (bosses and heroes)
 By left-clicking once on a panel of a character, you can select a character and twice you unselect.
 ![image](https://github.com/r0nd0ud0u/qt-rpg/assets/57643172/9f03849d-b19d-4d0b-b5c3-ce49d5a0a708)
 
+It is possible to edit one character, that is:
+- edit the stats
+- create new stuffs
+- select stuffs
+- add/edit attaks
+
 After selecting, click on the "Retour" button at the top of the window.
+
+## Load Game
+
+Games can be loaded from 'offlines\games' at root directory.
 
 ## Start the game
 
@@ -40,3 +50,11 @@ Then the button "Start Game" is enabled and you can click on it to start the gam
   - one atk
   - use as much potions as you want in the bag
 When your actions are done, click on "Fin du round" button.
+- Save one game
+- Check the logs to know the stats of one game (root directory)
+
+## Other features
+- ongoing: after one atk, sounds are played
+  	- critical hit
+  	- miss
+  	- nominal sound atk
