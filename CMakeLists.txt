@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.27)
 
-project(qt-rpg VERSION 0.1 LANGUAGES CXX)
+project(qt-rpg VERSION 0.2.1 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
