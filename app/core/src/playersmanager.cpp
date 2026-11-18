@@ -993,26 +993,27 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
     // init json doc
     QJsonObject obj;
 
-    obj.insert(CH_NAME, h->m_Name);
+    obj.insert("Name", h->m_Name);
     QString shortName = h->m_ShortName;
-    if(shortName.isEmpty()){
-        shortName = h->m_Name;
+    if (shortName.isEmpty()) {
+      shortName = h->m_Name;
     }
-    obj.insert(CH_SHORT_NAME, shortName);
-    obj.insert(CH_PHOTO_NAME, h->m_PhotoName);
+    obj.insert("Short name", shortName);
+    obj.insert("Photo", h->m_PhotoName);
     const auto type =
         (h->m_Type == characType::Boss) ? CH_TYPE_BOSS : CH_TYPE_HERO;
-    obj.insert(CH_TYPE, type);
-    obj.insert(CH_LEVEL, h->m_Level);
-    obj.insert(CH_EXP, h->m_Exp);
-    obj.insert(CH_COLOR, h->m_ColorStr);
-    obj.insert(CH_RANK, h->m_BossClass.m_Rank);
-    obj.insert(CH_FORM, h->m_SelectedForm);
+    obj.insert("Type", type);
+    obj.insert("Level", h->m_Level);
+    obj.insert("Experience", h->m_Exp);
+    obj.insert("Color", h->m_ColorStr);
+    obj.insert("Rank", h->m_BossClass.m_Rank);
+    obj.insert("Shape", h->m_SelectedForm);
     const auto classCh =
         (h->m_Class == CharacterClass::Tank) ? TANK_CLASS : STANDARD_CLASS;
-    obj.insert(CH_CLASS, classCh);
-    obj.insert(CH_ACTIONS_IN_ROUND, h->m_ActionsDoneInRound);
+    obj.insert("Class", classCh);
+    obj.insert("nb-actions-in-round", h->m_ActionsDoneInRound);
 
+    QJsonObject allStats;
     for (const auto &stats : ALL_STATS) {
       if (h->m_Stats.m_AllStatsTable.count(stats) == 0) {
         continue;
@@ -1020,17 +1021,15 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
       QJsonObject item;
       const auto &st = h->m_Stats.m_AllStatsTable.at(stats);
       const double ratio = Utils::CalcRatio(st.m_CurrentValue, st.m_MaxValue);
-      item[CH_CURRENT_VALUE] = ratio * st.m_RawMaxValue;
-      item[CH_MAX_VALUE] = st.m_RawMaxValue;
-      QJsonArray jsonArray;
-      jsonArray.append(item);
-      if (!jsonArray.empty()) {
-        obj[stats] = jsonArray;
-      }
+      item["Current"] = std::round(ratio * st.m_RawMaxValue);
+      item["Max"] = st.m_RawMaxValue;
+      allStats[conv.at(stats)] = item;
     }
+    obj.insert("Stats", allStats);
     // buf - debuf
     QJsonObject bufObj;
     QJsonArray bufJa;
+    QJsonArray bufJaAllStats;
     for (int i = 0; i < static_cast<int>(BufTypes::enumSize); i++) {
       if (i >= h->m_AllBufs.size()) {
         break;
@@ -1039,9 +1038,10 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
       const auto stats = b->get_all_stat_name();
       QString strStats;
       std::for_each(stats.begin(), stats.end(), [&](const ::rust::String &str) {
-        strStats += str.data() + STATS_NAME_DELIMITER;
+        if (!str.empty())
+          bufJaAllStats.append(str.data());
       });
-      bufObj[CH_BUF_ALL_STATS] = strStats;
+      bufObj[CH_BUF_ALL_STATS] = bufJaAllStats;
       bufObj[CH_BUF_IS_PERCENT] = b->get_is_percent();
       bufObj[CH_BUF_PASSIVE_ENABLED] = b->get_is_passive_enabled();
       bufObj[CH_BUF_VALUE] = b->get_value();
@@ -1062,8 +1062,6 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
       const auto val = h->m_LastTxRx[i];
       QJsonObject valByTurnObj;
       QJsonArray valByTurnJa;
-      lastTxRxObj[CH_TXRX_TYPE] = i;
-      lastTxRxObj[CH_TXRX_SIZE] = static_cast<int>(val.size());
       for (const auto &[k, v] : val) {
         lastTxRxObj[QString::number(k)] = static_cast<int>(v);
       }
@@ -1074,12 +1072,17 @@ void PlayersManager::OutputCharactersInJson(const std::vector<Character *> &l,
     }
 
     // powers
-    obj[CH_POWERS_CRIT_AFTER_HEAL] = h->m_Power.is_crit_heal_after_crit;
-    obj[CH_POWERS_DMG_TX_ALLY] = h->m_Power.is_damage_tx_heal_needy_ally;
+    QJsonObject powersJson;
+    powersJson[CH_POWERS_CRIT_AFTER_HEAL] = h->m_Power.is_crit_heal_after_crit;
+    powersJson[CH_POWERS_DMG_TX_ALLY] = h->m_Power.is_damage_tx_heal_needy_ally;
+    obj["Powers"] = powersJson;
     // extended character
-    obj[CH_EXT_HEAL_ATK_BLOCKED] = h->m_ExtCharacter->get_is_heal_atk_blocked();
-    obj[CH_EXT_RAND_TARGET] = h->m_ExtCharacter->get_is_random_target();
-    obj[CH_EXT_FIRST_ROUND] = h->m_ExtCharacter->get_is_first_round();
+    QJsonObject extJson;
+    extJson[CH_EXT_HEAL_ATK_BLOCKED] =
+        h->m_ExtCharacter->get_is_heal_atk_blocked();
+    extJson[CH_EXT_RAND_TARGET] = h->m_ExtCharacter->get_is_random_target();
+    extJson[CH_EXT_FIRST_ROUND] = h->m_ExtCharacter->get_is_first_round();
+    obj["ExtendedCharacter"] = extJson;
     // blocking atk
     obj[CH_BLOCKING_ATK] = h->m_IsBlockingAtk;
     // max actions in round
@@ -1130,8 +1133,8 @@ void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
     auto *c = new Character("", characType::Hero, {});
     c->m_Name = jsonObj[CH_NAME].toString();
     c->m_ShortName = jsonObj[CH_SHORT_NAME].toString();
-    if(c->m_ShortName.isEmpty()){
-        c->m_ShortName = c->m_Name;
+    if (c->m_ShortName.isEmpty()) {
+      c->m_ShortName = c->m_Name;
     }
     c->m_SelectedForm = jsonObj[CH_FORM].toString();
     if (const auto &classCh = jsonObj[CH_CLASS].toString();
@@ -1167,6 +1170,9 @@ void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
           c->m_AllBufs[idx]->set_is_passive_enabled(isPassive);
           const auto splits = allstats.split(STATS_NAME_DELIMITER);
           for (const auto &s : splits) {
+            if (s.isEmpty()) {
+              continue;
+            }
             c->m_AllBufs[idx]->add_stat_name(s.toStdString());
           }
         }
@@ -1231,13 +1237,13 @@ void PlayersManager::LoadAllCharactersJson(const bool isLoadingGame,
     }
     if (isLoadingGame) {
       c->m_StatsInGame.m_IsPlaying = true;
-        if (c->m_Type == characType::Hero) {
+      if (c->m_Type == characType::Hero) {
         m_HeroesList.push_back(c);
       } else {
         m_BossesList.push_back(c);
       }
     } else {
-        if (c->m_Type == characType::Hero) {
+      if (c->m_Type == characType::Hero) {
         m_AllHeroesList.push_back(c);
       } else {
         m_AllBossesList.push_back(c);
@@ -1410,7 +1416,7 @@ void PlayersManager::LoadAllEffects(const QString &filepath) {
 #endif
 }
 
-bool PlayersManager::CheckGameOver() const{
+bool PlayersManager::CheckGameOver() const {
   for (const auto *h : m_HeroesList) {
     if (h != nullptr && !h->IsDead()) {
       return false;

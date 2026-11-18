@@ -31,6 +31,22 @@ void GameManager::InitPlayers() {
   m_PlayersManager->LoadAllCharactersJson(false, "");
   m_PlayersManager->InitHeroes(m_PlayersManager->m_AllHeroesList);
   m_PlayersManager->InitBosses(m_PlayersManager->m_AllBossesList);
+  const QString characterPath =
+      QString("./offlines/new_characters/");
+  m_PlayersManager->OutputCharactersInJson(m_PlayersManager->m_AllHeroesList,
+                                           characterPath);
+  m_PlayersManager->OutputCharactersInJson(m_PlayersManager->m_AllBossesList,
+                                           characterPath);
+  for(const auto& [body, equip] : m_PlayersManager->m_Equipments){
+      for(const auto& e : equip){
+          EditStuff es;
+          es.m_Stuff = e.second;
+          es.m_BodyPart = body;
+          es.m_Name = e.second.m_UniqueName;
+          EditStuff::SaveStuffInJson(es, body);
+      }
+  }
+
 }
 
 void GameManager::Reset() {
@@ -138,8 +154,13 @@ void GameState::OutputGameStateOnJson(const QString &filepath) const {
   QJsonObject obj;
   // died bosses by turn
   QJsonObject diedBoss;
+  QJsonArray diedBossArray;
   for (const auto &[nbTurn, diedBossPl] : m_DiedEnnemies) {
-    diedBoss[QString::number(nbTurn)] = diedBossPl;
+      // TODO because not tested
+      for(const auto& pl : diedBossPl) {
+          diedBossArray.append(pl);
+      }
+    diedBoss[QString::number(nbTurn)]= diedBossArray;
   }
   if (!diedBoss.empty()) {
     obj[GAME_STATE_DIED_ENNEMIES] = diedBoss;
@@ -247,6 +268,8 @@ QString GameManager::GetEquipmentPath(const bool isLoot) const {
   QString filepath = OFFLINE_ROOT_EQUIPMENT;
   if (isLoot) {
     filepath = m_Paths.lootEquipment;
+  } else {
+      filepath =  "./offlines/new_equipments/equipment/corps/";
   }
   return filepath;
 }
